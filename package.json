@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Scrap publicly available data from different web pages",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node src\\index",
     "dev": "nodemon src\\index",

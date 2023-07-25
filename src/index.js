@@ -1,4 +1,4 @@
-const puppeteer = require('puppeteer');
+import puppeteer from 'puppeteer';
 
 async function scrapData() {
     const browser = await puppeteer.launch();
