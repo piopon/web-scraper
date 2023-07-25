@@ -1,5 +1,7 @@
 import puppeteer from "puppeteer";
 
+let intervalId = undefined;
+
 async function scrapData() {
   const browser = await puppeteer.launch({ headless: "new" });
   const page = await browser.newPage();
@@ -18,4 +20,15 @@ async function scrapData() {
   await browser.close();
 }
 
-scrapData();
+function start() {
+    scrapData();
+    intervalId = setInterval(scrapData, 30_000);
+}
+
+function stop() {
+    if (intervalId !== undefined) {
+        clearInterval(intervalId);
+    }
+}
+
+start();
