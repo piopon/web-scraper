@@ -16,7 +16,13 @@ async function scrapData() {
         price: dataContainer.querySelector('span[class^="last"] span').innerHTML
     };
   });
-  fs.writeFile('../data/data.json', JSON.stringify(data), (err) => {
+  const fileContent = [
+    {
+      group : "tradingview.com",
+      items : [ data ],
+    }
+  ];
+  fs.writeFile('../data/data.json', JSON.stringify(fileContent, null, 2), (err) => {
     if (err) throw err;
   })
 
