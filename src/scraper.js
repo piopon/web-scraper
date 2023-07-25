@@ -1,4 +1,6 @@
 import puppeteer from "puppeteer";
+import path from 'path';
+import url from 'url';
 import fs from 'fs';
 
 let intervalId = undefined;
@@ -22,6 +24,10 @@ async function scrapData() {
       items : [ data ],
     }
   ];
+  const dataDirectory = path.join(path.dirname(url.fileURLToPath(import.meta.url)), '..', 'data');
+  if (!fs.existsSync(dataDirectory)) {
+    fs.mkdirSync(dataDirectory);
+  }
   fs.writeFile('../data/data.json', JSON.stringify(fileContent, null, 2), (err) => {
     if (err) throw err;
   })
