@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer";
+import fs from 'fs';
 
 let intervalId = undefined;
 
@@ -15,7 +16,9 @@ async function scrapData() {
         price: dataContainer.querySelector('span[class^="last"] span').innerHTML
     };
   });
-  console.log(data);
+  fs.writeFile('../data/data.json', JSON.stringify(data), (err) => {
+    if (err) throw err;
+  })
 
   await browser.close();
 }
