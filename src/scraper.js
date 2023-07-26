@@ -34,7 +34,7 @@ async function scrapData() {
 
   const fileContent = [
     {
-      domain : "tradingview.com",
+      name : "stock",
       items : data,
     }
   ];
