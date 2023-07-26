@@ -1,6 +1,6 @@
-import { DataComponent } from "./data-component";
+import { DataComponent } from "./scrap-component";
 
-export class DataObserver {
+export class ScrapObserver {
     #path;
     #history;
     #title;

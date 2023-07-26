@@ -1,4 +1,4 @@
-export class DataComponent {
+export class ScrapComponent {
     #interval;
     #selector;
     #attribute;
