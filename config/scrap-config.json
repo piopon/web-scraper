@@ -1,0 +1,47 @@
+[
+  {
+    "name": "stock",
+    "domain": "https://www.tradingview.com",
+    "observers": [
+      {
+        "path": "symbols/GPW-CDR/",
+        "history": "off",
+        "title": {
+          "interval": "P1M",
+          "selector": "h1",
+          "attribute": "innerHTML"
+        },
+        "image": {
+          "interval": "P1M",
+          "selector": "img[class^=tv-circle-logo]",
+          "attribute": "src"
+        },
+        "price": {
+          "interval": "PT30S",
+          "selector": "span[class^=last] span",
+          "attribute": "innerHTML"
+        }
+      },
+      {
+        "path": "symbols/NYSE-T/",
+        "history": "off",
+        "title": {
+          "interval": "P1M",
+          "selector": "h1",
+          "attribute": "innerHTML"
+        },
+        "image": {
+          "interval": "P1M",
+          "selector": "img[class^=tv-circle-logo]",
+          "attribute": "src"
+        },
+        "price": {
+          "interval": "PT30S",
+          "selector": "span[class^=last] span",
+          "attribute": "innerHTML"
+        }
+      }
+    ]
+  },
+  {}
+]
