@@ -22,6 +22,7 @@ async function scrapData() {
       const dataContainer = document.querySelector('div[class^=symbolRow]');
       return {
         name: dataContainer.querySelector('h1').innerHTML,
+        icon: dataContainer.querySelector('img[class^=tv-circle-logo]').src,
         price: dataContainer.querySelector('span[class^=last] span').innerHTML
       };
     });
