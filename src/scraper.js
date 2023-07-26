@@ -17,12 +17,12 @@ async function scrapData() {
 
   for (let i = 0; i < sourcePages.length; i++) {
     await page.goto(sourcePages[i]);
-    await page.waitForSelector('span[class^="last"] span', {visible: true});
+    await page.waitForSelector('span[class^=last] span', {visible: true});
     const obj = await page.evaluate(() => {
-      const dataContainer = document.querySelector('div[class^="symbolRow"]');
+      const dataContainer = document.querySelector('div[class^=symbolRow]');
       return {
-          name: dataContainer.querySelector('h1').innerHTML,
-          price: dataContainer.querySelector('span[class^="last"] span').innerHTML
+        name: dataContainer.querySelector('h1').innerHTML,
+        price: dataContainer.querySelector('span[class^=last] span').innerHTML
       };
     });
     data.push(obj);
