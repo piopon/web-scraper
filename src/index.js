@@ -1,3 +1,3 @@
-import * as scraper from "./scraper.js";
+import * as scraper from "./components/scraper.js";
 
 scraper.start();
