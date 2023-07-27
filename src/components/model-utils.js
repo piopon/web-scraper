@@ -18,11 +18,15 @@ export function getArrayOfModels(Clazz, items) {
   return array;
 }
 
-export function hasPropertyOf(clazz, obj) {
-  const model = new clazz();
+export function hasPropertyOf(Clazz, obj) {
+  if (Clazz == null || obj == null) {
+    return false;
+  }
+  const model = new Clazz();
   const modelKeys = Object.keys(model);
-  for (const key of modelKeys) {
-    if (obj.hasOwnProperty(key)) {
+  for (let i = 0, keys = modelKeys; i < keys.length; i++) {
+    const key = keys[i];
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
       return true;
     }
   }
