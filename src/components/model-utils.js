@@ -1,22 +1,20 @@
-export function getArray(objs) {
-  objs = objs != null ? objs : [];
-  let array = [];
-  if (Array.isArray(objs)) {
-    array = objs;
-  } else {
-    array = [objs];
-  }
-  return array;
+function getValueOrDefault(value, defaultValue) {
+    return value == null ? defaultValue : value;
 }
 
-export function getArrayOfModels(clazz, objs) {
-  objs = ArrayUtils.getArray(objs);
-  const array = [];
-  for (const obj of objs) {
-    if (ModelUtils.hasPropertyOf(clazz, obj)) {
-      array.push(new clazz(obj));
+function getArray(items) {
+  const objs = getValueOrDefault(items, []);
+  return (Array.isArray(objs)) ? objs : [objs];
+}
+
+export function getArrayOfModels(Clazz, items) {
+  const objs = getArray(items);
+  let array = [];
+  objs.forEach((obj) => {
+    if (hasPropertyOf(Clazz, obj)) {
+      array.push(new Clazz(obj));
     }
-  }
+  });
   return array;
 }
 
