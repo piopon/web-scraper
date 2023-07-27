@@ -1,4 +1,4 @@
-import { DataComponent } from "./scrap-component";
+import { ScrapComponent } from "./scrap-component";
 
 export class ScrapObserver {
     #path;
@@ -11,9 +11,9 @@ export class ScrapObserver {
         object = object != null ? object : {};
         this.#path = object.path != null ? object.path : "";
         this.#history = object.history != null ? object.history : "";
-        this.#title = new DataComponent(object.title);
-        this.#image = new DataComponent(object.image);
-        this.#price = new DataComponent(object.price);
+        this.#title = new ScrapComponent(object.title);
+        this.#image = new ScrapComponent(object.image);
+        this.#price = new ScrapComponent(object.price);
     }
 
     getPath() {
