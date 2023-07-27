@@ -32,3 +32,18 @@ export function hasPropertyOf(Clazz, obj) {
   }
   return false;
 }
+
+export function isInstanceOf(Clazz, obj) {
+  if (Clazz == null || obj == null) {
+    return false;
+  }
+  const model = new Clazz();
+  const modelKeys = Object.keys(model);
+  for (let i = 0, keys = modelKeys; i < keys.length; i++) {
+    const key = keys[i];
+    if (!Object.prototype.hasOwnProperty.call(obj, key)) {
+      return false;
+    }
+  }
+  return true;
+}
