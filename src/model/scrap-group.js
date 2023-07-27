@@ -1,5 +1,5 @@
-import { ScrapObserver } from "./scrap-observer";
-import { getArrayOfModels } from '../components/model-utils'
+import { ScrapObserver } from "./scrap-observer.js";
+import { getArrayOfModels } from '../components/model-utils.js'
 
 export class ScrapGroup {
     #name;

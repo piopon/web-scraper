@@ -1,4 +1,4 @@
-import { ScrapComponent } from "./scrap-component";
+import { ScrapComponent } from "./scrap-component.js";
 
 export class ScrapObserver {
     #path;
