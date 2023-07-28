@@ -1,3 +1,5 @@
+import { ScrapConfig } from "../model/scrap-config.js";
+
 import puppeteer from "puppeteer";
 import path from "path";
 import url from "url";
@@ -7,8 +9,8 @@ export class WebScraper {
   #intervalId = undefined;
   #scrapConfig = undefined;
 
-  constructor(object) {
-    this.#scrapConfig = new ScrapComponent(object);
+  constructor(jsonConfig) {
+    this.#scrapConfig = new ScrapConfig(jsonConfig);
   }
 
   async #scrapData() {
