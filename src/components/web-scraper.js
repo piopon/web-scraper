@@ -24,14 +24,14 @@ export class WebScraper {
         const page = new URL(observer.path, group.domain);
         await this.#page.goto(page);
         await this.#page.waitForSelector(observer.price.selector, { visible: true });
-        const obj = await this.#page.evaluate(() => {
+        const obj = await this.#page.evaluate((observer) => {
           const dataContainer = document.querySelector(observer.container);
           return {
             name: dataContainer.querySelector("h1").innerHTML,
             icon: dataContainer.querySelector("img[class^=tv-circle-logo]").src,
             price: dataContainer.querySelector("span[class^=last] span").innerHTML,
           };
-        });
+        }, observer);
         data.push(obj);
       }
     }
