@@ -26,12 +26,11 @@ export class WebScraper {
         await this.#page.waitForSelector(observer.price.selector, { visible: true });
         const obj = await this.#page.evaluate((observer) => {
           const dataContainer = document.querySelector(observer.container);
-          const getData = (parent, selector, attribute) =>
-            parent == null ? undefined : parent.querySelector(selector)[attribute];
+          const getData = (selector, attribute) => dataContainer.querySelector(selector)[attribute];
           return {
-            name: getData(dataContainer, observer.title.selector, observer.title.attribute),
-            icon: getData(dataContainer, observer.image.selector, observer.image.attribute),
-            price: getData(dataContainer, observer.price.selector, observer.price.attribute),
+            name: getData(observer.title.selector, observer.title.attribute),
+            icon: getData(observer.image.selector, observer.image.attribute),
+            price: getData(observer.price.selector, observer.price.attribute),
           };
         }, observer);
         data.push(obj);
