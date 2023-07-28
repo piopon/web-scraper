@@ -15,6 +15,21 @@ export class WebScraper {
     this.#scrapConfig = new ScrapConfig(jsonConfig);
   }
 
+  async start() {
+    this.#browser = await puppeteer.launch({ headless: "new" });
+    this.#page = await this.#browser.newPage();
+    this.#scrapData();
+    this.#intervalId = setInterval(() => this.#scrapData(), 30_000);
+  }
+
+  async stop() {
+    if (this.#intervalId !== undefined) {
+      clearInterval(intervalId);
+    }
+    await this.#page.close();
+    await this.#browser.close();
+  }
+
   async #scrapData() {
     const data = [];
     for (let groupIndex = 0; groupIndex < this.#scrapConfig.groups.length; groupIndex++) {
@@ -51,20 +66,5 @@ export class WebScraper {
     fs.writeFile(path.join(dataDirectory, "data.json"), JSON.stringify(fileContent, null, 2), (err) => {
       if (err) throw err;
     });
-  }
-
-  async start() {
-    this.#browser = await puppeteer.launch({ headless: "new" });
-    this.#page = await this.#browser.newPage();
-    this.#scrapData();
-    this.#intervalId = setInterval(() => this.#scrapData(), 30_000);
-  }
-
-  async stop() {
-    if (this.#intervalId !== undefined) {
-      clearInterval(intervalId);
-    }
-    await this.#page.close();
-    await this.#browser.close();
   }
 }
