@@ -25,7 +25,7 @@ export class WebScraper {
         await this.#page.goto(page);
         await this.#page.waitForSelector(observer.price.selector, { visible: true });
         const obj = await this.#page.evaluate(() => {
-          const dataContainer = document.querySelector("div[class^=symbolRow]");
+          const dataContainer = document.querySelector(observer.container);
           return {
             name: dataContainer.querySelector("h1").innerHTML,
             icon: dataContainer.querySelector("img[class^=tv-circle-logo]").src,

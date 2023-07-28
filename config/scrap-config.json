@@ -8,6 +8,7 @@
         {
           "path": "symbols/GPW-CDR/",
           "history": "off",
+          "container": "div[class^=symbolRow]",
           "title": {
             "interval": "P1M",
             "selector": "h1",
@@ -27,6 +28,7 @@
         {
           "path": "symbols/NYSE-T/",
           "history": "off",
+          "container": "div[class^=symbolRow]",
           "title": {
             "interval": "P1M",
             "selector": "h1",
