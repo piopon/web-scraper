@@ -1,3 +1,9 @@
-import * as scraper from "./components/scraper.js";
+import { WebScraper } from "./components/web-scraper.js";
 
-scraper.start();
+import fs from 'fs';
+
+const jsonPath = "./config/scrap-config.json"
+const jsonConfig = JSON.parse(fs.readFileSync(jsonPath));
+const webScraper = new WebScraper(jsonConfig);
+
+webScraper.start();
