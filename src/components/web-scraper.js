@@ -56,7 +56,7 @@ export class WebScraper {
     this.#browser = await puppeteer.launch({ headless: "new" });
     this.#page = await this.#browser.newPage();
     this.#scrapData();
-    this.#intervalId = setInterval(this.#scrapData, 30_000);
+    this.#intervalId = setInterval(() => this.#scrapData(), 30_000);
   }
 
   async stop() {
