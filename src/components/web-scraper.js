@@ -14,6 +14,10 @@ export class WebScraper {
   }
 
   async #scrapData() {
+    const sourcePages = [
+      "https://www.tradingview.com/symbols/GPW-CDR/",
+      "https://www.tradingview.com/symbols/NYSE-T/"
+    ];
     const data = [];
     const browser = await puppeteer.launch({ headless: "new" });
     const page = await browser.newPage();
