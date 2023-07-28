@@ -27,9 +27,9 @@ export class WebScraper {
         const obj = await this.#page.evaluate((observer) => {
           const dataContainer = document.querySelector(observer.container);
           return {
-            name: dataContainer.querySelector("h1").innerHTML,
-            icon: dataContainer.querySelector("img[class^=tv-circle-logo]").src,
-            price: dataContainer.querySelector("span[class^=last] span").innerHTML,
+            name: this.#getData(dataContainer, observer.title.selector, observer.title.attribute),
+            icon: this.#getData(dataContainer, observer.image.selector, observer.image.attribute),
+            price: this.#getData(dataContainer, observer.price.selector, observer.price.attribute),
           };
         }, observer);
         data.push(obj);
@@ -50,6 +50,20 @@ export class WebScraper {
     fs.writeFile(path.join(dataDirectory, "data.json"), JSON.stringify(fileContent, null, 2), (err) => {
       if (err) throw err;
     });
+  }
+
+  #getData(parent, selector, attribute) {
+    if (parent == null) {
+      return undefined;
+    }
+    switch (attribute) {
+      case "innerHTML":
+        return parent.querySelector(selector).innerHTML;
+      case "src":
+        return parent.querySelector(selector).src;
+      default:
+        return parent.querySelector(selector).innerText;
+    }
   }
 
   async start() {
