@@ -17,23 +17,23 @@ export class WebScraper {
 
   async #scrapData() {
     const data = [];
-    const sourcePages = [
-      "https://www.tradingview.com/symbols/GPW-CDR/",
-      "https://www.tradingview.com/symbols/NYSE-T/"
-    ];
-
-    for (let i = 0; i < sourcePages.length; i++) {
-      await this.#page.goto(sourcePages[i]);
-      await this.#page.waitForSelector("span[class^=last] span", { visible: true });
-      const obj = await this.#page.evaluate(() => {
-        const dataContainer = document.querySelector("div[class^=symbolRow]");
-        return {
-          name: dataContainer.querySelector("h1").innerHTML,
-          icon: dataContainer.querySelector("img[class^=tv-circle-logo]").src,
-          price: dataContainer.querySelector("span[class^=last] span").innerHTML,
-        };
-      });
-      data.push(obj);
+    for (let groupIndex = 0; groupIndex < this.#scrapConfig.groups.length; groupIndex++) {
+      const group = this.#scrapConfig.groups[groupIndex];
+      for (let observerIndex = 0; observerIndex < group.observers.length; observerIndex++) {
+        const observer = group.observers[observerIndex];
+        const page = new URL(observer.path, group.domain);
+        await this.#page.goto(page);
+        await this.#page.waitForSelector("span[class^=last] span", { visible: true });
+        const obj = await this.#page.evaluate(() => {
+          const dataContainer = document.querySelector("div[class^=symbolRow]");
+          return {
+            name: dataContainer.querySelector("h1").innerHTML,
+            icon: dataContainer.querySelector("img[class^=tv-circle-logo]").src,
+            price: dataContainer.querySelector("span[class^=last] span").innerHTML,
+          };
+        });
+        data.push(obj);
+      }
     }
 
     const fileContent = [
