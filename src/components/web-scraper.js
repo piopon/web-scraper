@@ -6,26 +6,26 @@ import url from "url";
 import fs from "fs";
 
 export class WebScraper {
-  #intervalId = undefined;
   #scrapConfig = undefined;
+  #intervalId = undefined;
+  #browser = undefined;
+  #page = undefined;
 
   constructor(jsonConfig) {
     this.#scrapConfig = new ScrapConfig(jsonConfig);
   }
 
   async #scrapData() {
+    const data = [];
     const sourcePages = [
       "https://www.tradingview.com/symbols/GPW-CDR/",
       "https://www.tradingview.com/symbols/NYSE-T/"
     ];
-    const data = [];
-    const browser = await puppeteer.launch({ headless: "new" });
-    const page = await browser.newPage();
 
     for (let i = 0; i < sourcePages.length; i++) {
-      await page.goto(sourcePages[i]);
-      await page.waitForSelector("span[class^=last] span", { visible: true });
-      const obj = await page.evaluate(() => {
+      await this.#page.goto(sourcePages[i]);
+      await this.#page.waitForSelector("span[class^=last] span", { visible: true });
+      const obj = await this.#page.evaluate(() => {
         const dataContainer = document.querySelector("div[class^=symbolRow]");
         return {
           name: dataContainer.querySelector("h1").innerHTML,
@@ -35,9 +35,6 @@ export class WebScraper {
       });
       data.push(obj);
     }
-
-    await page.close();
-    await browser.close();
 
     const fileContent = [
       {
@@ -55,14 +52,18 @@ export class WebScraper {
     });
   }
 
-  start() {
+  async start() {
+    this.#browser = await puppeteer.launch({ headless: "new" });
+    this.#page = await this.#browser.newPage();
     this.#scrapData();
     this.#intervalId = setInterval(this.#scrapData, 30_000);
   }
 
-  stop() {
+  async stop() {
     if (this.#intervalId !== undefined) {
       clearInterval(intervalId);
     }
+    await this.#page.close();
+    await this.#browser.close();
   }
 }
