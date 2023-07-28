@@ -46,11 +46,11 @@ export class WebScraper {
       },
     ];
 
-    const dataDirectory = path.join(path.dirname(url.fileURLToPath(import.meta.url)), "..", "data");
+    const dataDirectory = path.join(path.dirname(url.fileURLToPath(import.meta.url)), "..", "..", "data");
     if (!fs.existsSync(dataDirectory)) {
       fs.mkdirSync(dataDirectory);
     }
-    fs.writeFile("../data/data.json", JSON.stringify(fileContent, null, 2), (err) => {
+    fs.writeFile(path.join(dataDirectory, "data.json"), JSON.stringify(fileContent, null, 2), (err) => {
       if (err) throw err;
     });
   }
