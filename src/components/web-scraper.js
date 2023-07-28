@@ -23,7 +23,7 @@ export class WebScraper {
         const observer = group.observers[observerIndex];
         const page = new URL(observer.path, group.domain);
         await this.#page.goto(page);
-        await this.#page.waitForSelector("span[class^=last] span", { visible: true });
+        await this.#page.waitForSelector(observer.price.selector, { visible: true });
         const obj = await this.#page.evaluate(() => {
           const dataContainer = document.querySelector("div[class^=symbolRow]");
           return {
