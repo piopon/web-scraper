@@ -13,13 +13,16 @@ export class WebScraper {
 
   constructor(config) {
     this.#scraperConfig = config;
-    const scrapJson = JSON.parse(fs.readFileSync(this.#scraperConfig.srcFile));
-    this.#scrapConfig = new ScrapConfig(scrapJson);
   }
 
   async start() {
+    // parse source scraper configuration file to a config class
+    const scrapJson = JSON.parse(fs.readFileSync(this.#scraperConfig.srcFile));
+    this.#scrapConfig = new ScrapConfig(scrapJson);
+    // open new Puppeteer virtual browser and an initial web page
     this.#browser = await puppeteer.launch({ headless: "new" });
     this.#page = await this.#browser.newPage();
+    // invoke scrap data action initially and setup interval calls
     this.#scrapData();
     this.#intervalId = setInterval(() => this.#scrapData(), 30_000);
   }
