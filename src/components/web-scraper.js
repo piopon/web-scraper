@@ -2,7 +2,6 @@ import { ScrapConfig } from "../model/scrap-config.js";
 
 import puppeteer from "puppeteer";
 import path from "path";
-import url from "url";
 import fs from "fs";
 
 export class WebScraper {
@@ -14,7 +13,7 @@ export class WebScraper {
 
   constructor(config) {
     this.#scraperConfig = config;
-    const scrapJson = JSON.parse(fs.readFileSync(this.#scraperConfig.inFile));
+    const scrapJson = JSON.parse(fs.readFileSync(this.#scraperConfig.srcFile));
     this.#scrapConfig = new ScrapConfig(scrapJson);
   }
 
@@ -60,11 +59,11 @@ export class WebScraper {
   }
 
   #saveData(dataToSave) {
-    const dataDirectory = path.join(path.dirname(url.fileURLToPath(import.meta.url)), "..", "..", "data");
+    const dataDirectory = path.dirname(this.#scraperConfig.dstFile);
     if (!fs.existsSync(dataDirectory)) {
       fs.mkdirSync(dataDirectory);
     }
-    fs.writeFile(path.join(dataDirectory, "data.json"), JSON.stringify(dataToSave, null, 2), (err) => {
+    fs.writeFile(this.#scraperConfig.dstFile, JSON.stringify(dataToSave, null, 2), (err) => {
       if (err) throw err;
     });
   }
