@@ -6,13 +6,16 @@ import url from "url";
 import fs from "fs";
 
 export class WebScraper {
+  #scraperConfig = undefined;
   #scrapConfig = undefined;
   #intervalId = undefined;
   #browser = undefined;
   #page = undefined;
 
-  constructor(jsonConfig) {
-    this.#scrapConfig = new ScrapConfig(jsonConfig);
+  constructor(config) {
+    this.#scraperConfig = config;
+    const scrapJson = JSON.parse(fs.readFileSync(this.#scraperConfig.inFile));
+    this.#scrapConfig = new ScrapConfig(scrapJson);
   }
 
   async start() {

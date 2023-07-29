@@ -1,9 +1,7 @@
+import { AppConfig } from "../config/app-config.js";
 import { WebScraper } from "./components/web-scraper.js";
 
-import fs from 'fs';
-
-const jsonPath = "./config/scrap-config.json"
-const jsonConfig = JSON.parse(fs.readFileSync(jsonPath));
-const webScraper = new WebScraper(jsonConfig);
+const config = new AppConfig().getConfig();
+const webScraper = new WebScraper(config.scraperConfig);
 
 webScraper.start();
