@@ -34,12 +34,13 @@ export class WebScraper {
     const data = [];
     for (let groupIndex = 0; groupIndex < this.#scrapConfig.groups.length; groupIndex++) {
       const group = this.#scrapConfig.groups[groupIndex];
+      const groupObject = { name: group.name, items: [] };
       for (let observerIndex = 0; observerIndex < group.observers.length; observerIndex++) {
         const observer = group.observers[observerIndex];
         const page = new URL(observer.path, group.domain);
         await this.#page.goto(page);
         await this.#page.waitForSelector(observer.price.selector, { visible: true });
-        const obj = await this.#page.evaluate((observer) => {
+        const dataObj = await this.#page.evaluate((observer) => {
           const dataContainer = document.querySelector(observer.container);
           const getData = (selector, attribute) => dataContainer.querySelector(selector)[attribute];
           return {
@@ -48,22 +49,16 @@ export class WebScraper {
             price: getData(observer.price.selector, observer.price.attribute),
           };
         }, observer);
-        data.push(obj);
+        groupObject.items.push(dataObj);
       }
+      data.push(groupObject);
     }
-
-    const fileContent = [
-      {
-        name: "stock",
-        items: data,
-      },
-    ];
 
     const dataDirectory = path.join(path.dirname(url.fileURLToPath(import.meta.url)), "..", "..", "data");
     if (!fs.existsSync(dataDirectory)) {
       fs.mkdirSync(dataDirectory);
     }
-    fs.writeFile(path.join(dataDirectory, "data.json"), JSON.stringify(fileContent, null, 2), (err) => {
+    fs.writeFile(path.join(dataDirectory, "data.json"), JSON.stringify(data, null, 2), (err) => {
       if (err) throw err;
     });
   }
