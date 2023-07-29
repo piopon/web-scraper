@@ -46,6 +46,27 @@
           }
         }
       ]
+    },
+    {
+      "name": "clothes",
+      "domain": "https://www2.hm.com",
+      "observers": [
+        {
+          "path": "pl_pl/productpage.0684021202.html",
+          "history": "off",
+          "container": "div.inner",
+          "title": {
+            "interval": "P1M",
+            "selector": "h1",
+            "attribute": "innerHTML"
+          },
+          "price": {
+            "interval": "PT30S",
+            "selector": "div.price span",
+            "attribute": "innerHTML"
+          }
+        }
+      ]
     }
   ]
 }

@@ -47,7 +47,8 @@ export class WebScraper {
         await this.#page.waitForSelector(observer.price.selector, { visible: true });
         const dataObj = await this.#page.evaluate((observer) => {
           const dataContainer = document.querySelector(observer.container);
-          const getData = (selector, attribute) => dataContainer.querySelector(selector)[attribute];
+          const getData = (selector, attribute) =>
+            selector || attribute ? dataContainer.querySelector(selector)[attribute] : "";
           return {
             name: getData(observer.title.selector, observer.title.attribute),
             icon: getData(observer.image.selector, observer.image.attribute),
