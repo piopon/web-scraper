@@ -53,12 +53,15 @@ export class WebScraper {
       }
       data.push(groupObject);
     }
+    this.#saveData(data);
+  }
 
+  #saveData(dataToSave) {
     const dataDirectory = path.join(path.dirname(url.fileURLToPath(import.meta.url)), "..", "..", "data");
     if (!fs.existsSync(dataDirectory)) {
       fs.mkdirSync(dataDirectory);
     }
-    fs.writeFile(path.join(dataDirectory, "data.json"), JSON.stringify(data, null, 2), (err) => {
+    fs.writeFile(path.join(dataDirectory, "data.json"), JSON.stringify(dataToSave, null, 2), (err) => {
       if (err) throw err;
     });
   }
