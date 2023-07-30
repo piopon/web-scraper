@@ -16,6 +16,11 @@ export class WebScraper {
   }
 
   async start() {
+    // create a new empty configuration file if none exists
+    if (!fs.existsSync(this.#scraperConfig.srcFile)) {
+      const newConfig = { "user": 0, "groups": [] };
+      fs.writeFileSync(this.#scraperConfig.srcFile, JSON.stringify(newConfig, null, 2));
+    }
     // parse source scraper configuration file to a config class
     const scrapJson = JSON.parse(fs.readFileSync(this.#scraperConfig.srcFile));
     this.#scrapConfig = new ScrapConfig(scrapJson);
