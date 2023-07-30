@@ -16,7 +16,11 @@ export class WebScraper {
   }
 
   async start() {
-    // create a new empty configuration file if none exists
+    // create a new empty configuration file and directory if none exists
+    const configDirectory = path.dirname(this.#scraperConfig.srcFile);
+    if (!fs.existsSync(configDirectory)) {
+      fs.mkdirSync(configDirectory, { recursive: true });
+    }
     if (!fs.existsSync(this.#scraperConfig.srcFile)) {
       const newConfig = { "user": 0, "groups": [] };
       fs.writeFileSync(this.#scraperConfig.srcFile, JSON.stringify(newConfig, null, 2));
@@ -71,7 +75,7 @@ export class WebScraper {
   #saveData(dataToSave) {
     const dataDirectory = path.dirname(this.#scraperConfig.dstFile);
     if (!fs.existsSync(dataDirectory)) {
-      fs.mkdirSync(dataDirectory);
+      fs.mkdirSync(dataDirectory, { recursive: true });
     }
     fs.writeFile(this.#scraperConfig.dstFile, JSON.stringify(dataToSave, null, 2), (err) => {
       if (err) throw err;
