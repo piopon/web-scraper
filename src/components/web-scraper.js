@@ -29,7 +29,7 @@ export class WebScraper {
       fs.mkdirSync(configDirectory, { recursive: true });
     }
     if (!fs.existsSync(this.#scraperConfig.srcFile)) {
-      const newConfig = { "user": 0, "groups": [] };
+      const newConfig = { user: 0, groups: [] };
       fs.writeFileSync(this.#scraperConfig.srcFile, JSON.stringify(newConfig, null, 2));
     }
     // parse source scraper configuration file to a config class
@@ -47,17 +47,25 @@ export class WebScraper {
    * Method used to stop web scraping action
    */
   async stop() {
-    if (this.#intervalId !== undefined) {
+    if (this.#intervalId != null) {
       clearInterval(intervalId);
     }
-    await this.#page.close();
-    await this.#browser.close();
+    if (this.#page != null) {
+      await this.#page.close();
+    }
+    if (this.#browser != null) {
+      await this.#browser.close();
+    }
   }
 
   /**
    * Method containing core web scraping logic (according to scrap user settings)
    */
   async #scrapData() {
+    if (this.#scrapConfig == null) {
+      this.stop();
+      return;
+    }
     const data = [];
     for (let groupIndex = 0; groupIndex < this.#scrapConfig.groups.length; groupIndex++) {
       const group = this.#scrapConfig.groups[groupIndex];
@@ -75,7 +83,7 @@ export class WebScraper {
             name: getData(observer.title.selector, observer.title.attribute, observer.title.auxiliary),
             icon: getData(observer.image.selector, observer.image.attribute, observer.image.auxiliary),
             price: getData(observer.price.selector, observer.price.attribute),
-            currency: observer.price.auxiliary
+            currency: observer.price.auxiliary,
           };
         }, observer);
         groupObject.items.push(this.#formatData(dataObj));
@@ -106,7 +114,7 @@ export class WebScraper {
    */
   #formatData(dataObj) {
     // assure that price attribute contains only value with dot
-    dataObj.price = dataObj.price.replace(',', '.').match(/\d+(?:\.\d+)?/g)[0];
+    dataObj.price = dataObj.price.replace(",", ".").match(/\d+(?:\.\d+)?/g)[0];
     return dataObj;
   }
 }
