@@ -11,10 +11,17 @@ export class WebScraper {
   #browser = undefined;
   #page = undefined;
 
+  /**
+   * Creates a new web scraper with specified configuration
+   * @param {Object} config object containing the scraper configuration
+   */
   constructor(config) {
     this.#scraperConfig = config;
   }
 
+  /**
+   * Method used to start web scraping action
+   */
   async start() {
     // create a new empty configuration file and directory if none exists
     const configDirectory = path.dirname(this.#scraperConfig.srcFile);
@@ -36,6 +43,9 @@ export class WebScraper {
     this.#intervalId = setInterval(() => this.#scrapData(), this.#scraperConfig.interval);
   }
 
+  /**
+   * Method used to stop web scraping action
+   */
   async stop() {
     if (this.#intervalId !== undefined) {
       clearInterval(intervalId);
@@ -44,6 +54,9 @@ export class WebScraper {
     await this.#browser.close();
   }
 
+  /**
+   * Method containing core web scraping logic (according to scrap user settings)
+   */
   async #scrapData() {
     const data = [];
     for (let groupIndex = 0; groupIndex < this.#scrapConfig.groups.length; groupIndex++) {
@@ -72,6 +85,10 @@ export class WebScraper {
     this.#saveData(data);
   }
 
+  /**
+   * Method used to save specified object to be saved in destination file (stored in configuration object)
+   * @param {Object} dataToSave data object to save in destination file
+   */
   #saveData(dataToSave) {
     const dataDirectory = path.dirname(this.#scraperConfig.dstFile);
     if (!fs.existsSync(dataDirectory)) {
@@ -82,7 +99,13 @@ export class WebScraper {
     });
   }
 
+  /**
+   * Method used to format data in the passed data object
+   * @param {Object} dataObj the object which we want to format
+   * @returns formatted object
+   */
   #formatData(dataObj) {
+    // assure that price attribute contains only value with dot
     dataObj.price = dataObj.price.replace(',', '.').match(/\d+(?:\.\d+)?/g)[0];
     return dataObj;
   }
