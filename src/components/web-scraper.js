@@ -47,12 +47,13 @@ export class WebScraper {
         await this.#page.waitForSelector(observer.price.selector, { visible: true });
         const dataObj = await this.#page.evaluate((observer) => {
           const dataContainer = document.querySelector(observer.container);
-          const getData = (selector, attribute) =>
-            selector || attribute ? dataContainer.querySelector(selector)[attribute] : "";
+          const getData = (selector, attribute, auxiliary) =>
+            selector || attribute ? dataContainer.querySelector(selector)[attribute] : auxiliary;
           return {
-            name: getData(observer.title.selector, observer.title.attribute),
-            icon: getData(observer.image.selector, observer.image.attribute),
+            name: getData(observer.title.selector, observer.title.attribute, observer.title.auxiliary),
+            icon: getData(observer.image.selector, observer.image.attribute, observer.image.auxiliary),
             price: getData(observer.price.selector, observer.price.attribute),
+            currency: observer.price.auxiliary
           };
         }, observer);
         groupObject.items.push(dataObj);
