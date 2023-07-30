@@ -14,7 +14,7 @@ export class WebScraper {
 
   /**
    * Creates a new web scraper with specified configuration
-   * @param {Object} config object containing the scraper configuration
+   * @param {Object} config The object containing scraper configuration
    */
   constructor(config) {
     this.#scraperConfig = config;
@@ -46,7 +46,7 @@ export class WebScraper {
 
   /**
    * Method used to stop web scraping action
-   * @param {String} reason Optional message with the reason for stopping the scraping.
+   * @param {String} reason Optional message with the reason for stopping the web scraping.
    *                        Non-empty value will be interpreted as error.
    */
   async stop(reason = "") {
@@ -129,7 +129,7 @@ export class WebScraper {
 
   /**
    * Method used to save specified object to be saved in destination file (stored in configuration object)
-   * @param {Object} dataToSave data object to save in destination file
+   * @param {Object} dataToSave The data object to save in destination file
    */
   #saveData(dataToSave) {
     const dataDirectory = path.dirname(this.#scraperConfig.dstFile);
@@ -143,7 +143,7 @@ export class WebScraper {
 
   /**
    * Method used to format data in the passed data object
-   * @param {Object} dataObj the object which we want to format
+   * @param {Object} dataObj The object which we want to format
    * @returns formatted object
    */
   #formatData(dataObj) {
