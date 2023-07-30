@@ -69,6 +69,29 @@ export class WebScraper {
   }
 
   /**
+   * Method used to receive current working status of web scraper
+   * @returns String with web scraper working status (OK or ERROR)
+   */
+  getStatus() {
+    const invalidStateMessage = "Invalid internal state";
+    if (this.#intervalId == null) {
+      // scraper is NOT running in selected intervals
+      if (this.#status === "OK") {
+        // incorrect state - update field
+        this.#status = `ERROR: ${invalidStateMessage}`;
+      }
+      return this.#status;
+    } else {
+      // scraper is running in selected intervals
+      if (this.#status !== "OK") {
+        // incorrect state - since it's running then we must stop it
+        this.stop(invalidStateMessage);
+      }
+      return this.#status;
+    }
+  }
+
+  /**
    * Method containing core web scraping logic (according to scrap user settings)
    */
   async #scrapData() {
