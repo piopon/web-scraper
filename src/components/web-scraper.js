@@ -56,7 +56,7 @@ export class WebScraper {
             currency: observer.price.auxiliary
           };
         }, observer);
-        groupObject.items.push(dataObj);
+        groupObject.items.push(this.#formatData(dataObj));
       }
       data.push(groupObject);
     }
@@ -71,5 +71,10 @@ export class WebScraper {
     fs.writeFile(this.#scraperConfig.dstFile, JSON.stringify(dataToSave, null, 2), (err) => {
       if (err) throw err;
     });
+  }
+
+  #formatData(dataObj) {
+    dataObj.price = dataObj.price.replace(',', '.').match(/\d+(?:\.\d+)?/g)[0];
+    return dataObj;
   }
 }
