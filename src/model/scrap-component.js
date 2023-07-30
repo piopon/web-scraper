@@ -4,5 +4,6 @@ export class ScrapComponent {
         this.interval = object.interval != null ? object.interval : "";
         this.selector = object.selector != null ? object.selector : "";
         this.attribute = object.attribute != null ? object.attribute : "";
+        this.auxiliary = object.auxiliary != null ? object.auxiliary : "";
     }
 }

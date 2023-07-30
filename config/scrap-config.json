@@ -13,17 +13,20 @@
           "title": {
             "interval": "P1M",
             "selector": "h1",
-            "attribute": "innerHTML"
+            "attribute": "innerHTML",
+            "auxiliary": ""
           },
           "image": {
             "interval": "P1M",
             "selector": "img[class^=tv-circle-logo]",
-            "attribute": "src"
+            "attribute": "src",
+            "auxiliary": ""
           },
           "price": {
             "interval": "PT30S",
             "selector": "span[class^=last] span",
-            "attribute": "innerHTML"
+            "attribute": "innerHTML",
+            "auxiliary": "PLN"
           }
         },
         {
@@ -33,17 +36,20 @@
           "title": {
             "interval": "P1M",
             "selector": "h1",
-            "attribute": "innerHTML"
+            "attribute": "innerHTML",
+            "auxiliary": ""
           },
           "image": {
             "interval": "P1M",
             "selector": "img[class^=tv-circle-logo]",
-            "attribute": "src"
+            "attribute": "src",
+            "auxiliary": ""
           },
           "price": {
             "interval": "PT30S",
             "selector": "span[class^=last] span",
-            "attribute": "innerHTML"
+            "attribute": "innerHTML",
+            "auxiliary": "USD"
           }
         }
       ]
@@ -60,12 +66,20 @@
           "title": {
             "interval": "P1M",
             "selector": "h1",
-            "attribute": "innerHTML"
+            "attribute": "innerHTML",
+            "auxiliary": ""
+          },
+          "image": {
+            "interval": "",
+            "selector": "",
+            "attribute": "",
+            "auxiliary": "thsirt-1.png"
           },
           "price": {
             "interval": "PT30S",
             "selector": "div.price span",
-            "attribute": "innerHTML"
+            "attribute": "innerHTML",
+            "auxiliary": "PLN"
           }
         }
       ]
