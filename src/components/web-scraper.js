@@ -5,6 +5,7 @@ import path from "path";
 import fs from "fs";
 
 export class WebScraper {
+  #status = "OK";
   #scraperConfig = undefined;
   #scrapConfig = undefined;
   #intervalId = undefined;
@@ -45,8 +46,10 @@ export class WebScraper {
 
   /**
    * Method used to stop web scraping action
+   * @param {String} reason Optional message with the reason for stopping the scraping.
+   *                        Non-empty value will be interpreted as error.
    */
-  async stop() {
+  async stop(reason = "") {
     if (this.#intervalId != null) {
       clearInterval(intervalId);
     }
@@ -56,6 +59,13 @@ export class WebScraper {
     if (this.#browser != null) {
       await this.#browser.close();
     }
+    if (reason.length === 0) {
+      this.#status = "OK";
+    } else {
+      const errorMessage = `ERROR: ${reason}`;
+      console.error(errorMessage);
+      this.#status = errorMessage;
+    }
   }
 
   /**
@@ -63,7 +73,7 @@ export class WebScraper {
    */
   async #scrapData() {
     if (this.#scrapConfig == null) {
-      this.stop();
+      this.stop("Incorrect object created: missing configuration");
       return;
     }
     const data = [];
