@@ -39,7 +39,7 @@ export class WebScraper {
     const data = [];
     for (let groupIndex = 0; groupIndex < this.#scrapConfig.groups.length; groupIndex++) {
       const group = this.#scrapConfig.groups[groupIndex];
-      const groupObject = { name: group.name, items: [] };
+      const groupObject = { name: group.name, category: group.category, items: [] };
       for (let observerIndex = 0; observerIndex < group.observers.length; observerIndex++) {
         const observer = group.observers[observerIndex];
         const page = new URL(observer.path, group.domain);

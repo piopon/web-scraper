@@ -3,6 +3,7 @@
   "groups": [
     {
       "name": "stock",
+      "category": "📈",
       "domain": "https://www.tradingview.com",
       "observers": [
         {
@@ -49,6 +50,7 @@
     },
     {
       "name": "clothes",
+      "category": "👕",
       "domain": "https://www2.hm.com",
       "observers": [
         {
