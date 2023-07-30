@@ -24,7 +24,7 @@ export class WebScraper {
     this.#page = await this.#browser.newPage();
     // invoke scrap data action initially and setup interval calls
     this.#scrapData();
-    this.#intervalId = setInterval(() => this.#scrapData(), 30_000);
+    this.#intervalId = setInterval(() => this.#scrapData(), this.#scraperConfig.interval);
   }
 
   async stop() {

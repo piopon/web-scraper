@@ -13,6 +13,7 @@ export class AppConfig {
   getConfig() {
     return {
       scraperConfig: {
+        interval: 30_000,
         srcFile: path.join(this.#currDir, "scrap-config.json"),
         dstFile: path.join(this.#rootDir, "data", "data.json"),
       },
