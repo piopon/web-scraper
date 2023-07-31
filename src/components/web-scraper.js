@@ -120,6 +120,10 @@ export class WebScraper {
             currency: observer.price.auxiliary,
           };
         }, observer);
+        if (!this.#validateData(dataObj)) {
+          this.stop("Invalid scraped data");
+          return;
+        }
         groupObject.items.push(this.#formatData(dataObj));
       }
       data.push(groupObject);
@@ -150,5 +154,14 @@ export class WebScraper {
     // assure that price attribute contains only value with dot
     dataObj.price = dataObj.price.replace(",", ".").match(/\d+(?:\.\d+)?/g)[0];
     return dataObj;
+  }
+
+  /**
+   * Method used to validate data in the passed data object
+   * @param {Object} dataObj The object which we want to validate
+   * @returns true if passed object is valid, false otherwise
+   */
+  #validateData(dataObj) {
+    return dataObj.price != null && dataObj.price.length > 0;
   }
 }
