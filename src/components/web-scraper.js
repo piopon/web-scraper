@@ -111,12 +111,23 @@ export class WebScraper {
         await this.#page.waitForSelector(observer.price.selector, { visible: true });
         const dataObj = await this.#page.evaluate((observer) => {
           try {
+            // try to get data container
             const dataContainer = document.querySelector(observer.container);
             if (dataContainer == null) {
               throw new Error("Cannot find data container");
             }
-            const getData = (selector, attribute, auxiliary) =>
-              selector && attribute ? dataContainer.querySelector(selector)[attribute] : auxiliary;
+            // define data getter function
+            const getData = (selector, attribute, auxiliary) => {
+              if (selector && attribute) {
+                const element = dataContainer.querySelector(selector);
+                if (element == null) {
+                  throw new Error(`Cannot find '${selector}'`);
+                }
+                return element[attribute];
+              }
+              return auxiliary;
+            }
+            // return an object with collected data
             return {
               name: getData(observer.title.selector, observer.title.attribute, observer.title.auxiliary),
               icon: getData(observer.image.selector, observer.image.attribute, observer.image.auxiliary),
