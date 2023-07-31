@@ -127,6 +127,10 @@ export class WebScraper {
             return { err: error.message };
           }
         }, observer);
+        if (dataObj.err != null) {
+          this.stop("Incorrect scrap settings: " + dataObj.err);
+          return;
+        }
         if (!this.#validateData(dataObj)) {
           this.stop("Invalid scraped data");
           return;
