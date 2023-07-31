@@ -51,8 +51,8 @@ export class WebScraper {
    */
   async stop(reason = "") {
     if (this.#intervalId != null) {
-      clearInterval(intervalId);
-      intervalId = undefined;
+      clearInterval(this.#intervalId);
+      this.#intervalId = undefined;
     }
     if (this.#page != null) {
       await this.#page.close();
