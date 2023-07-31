@@ -119,12 +119,16 @@ export class WebScraper {
             // define data getter function
             const getData = (selector, attribute, auxiliary) => {
               if (selector && attribute) {
+                const component = Object.keys(observer).filter(key => observer[key].selector === selector);
                 const element = dataContainer.querySelector(selector);
                 if (element == null) {
-                  const component = Object.keys(observer).filter(key => observer[key].selector === selector);
-                  throw new Error(`Cannot find ${component} component in ${observer.path}`);
+                  throw new Error(`Cannot find ${component} element of ${observer.path}`);
                 }
-                return element[attribute];
+                const value = element[attribute];
+                if (value == null) {
+                  throw new Error(`Cannot find ${component} value of ${observer.path}`);
+                }
+                return value;
               }
               return auxiliary;
             }
