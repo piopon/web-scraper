@@ -110,15 +110,22 @@ export class WebScraper {
         await this.#page.goto(page);
         await this.#page.waitForSelector(observer.price.selector, { visible: true });
         const dataObj = await this.#page.evaluate((observer) => {
-          const dataContainer = document.querySelector(observer.container);
-          const getData = (selector, attribute, auxiliary) =>
-            selector || attribute ? dataContainer.querySelector(selector)[attribute] : auxiliary;
-          return {
-            name: getData(observer.title.selector, observer.title.attribute, observer.title.auxiliary),
-            icon: getData(observer.image.selector, observer.image.attribute, observer.image.auxiliary),
-            price: getData(observer.price.selector, observer.price.attribute),
-            currency: observer.price.auxiliary,
-          };
+          try {
+            const dataContainer = document.querySelector(observer.container);
+            if (dataContainer == null) {
+              throw new Error("Cannot find data container");
+            }
+            const getData = (selector, attribute, auxiliary) =>
+              selector && attribute ? dataContainer.querySelector(selector)[attribute] : auxiliary;
+            return {
+              name: getData(observer.title.selector, observer.title.attribute, observer.title.auxiliary),
+              icon: getData(observer.image.selector, observer.image.attribute, observer.image.auxiliary),
+              price: getData(observer.price.selector, observer.price.attribute),
+              currency: observer.price.auxiliary,
+            };
+          } catch (error) {
+            return { err: error.message };
+          }
         }, observer);
         if (!this.#validateData(dataObj)) {
           this.stop("Invalid scraped data");
