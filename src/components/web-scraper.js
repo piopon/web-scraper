@@ -121,7 +121,8 @@ export class WebScraper {
               if (selector && attribute) {
                 const element = dataContainer.querySelector(selector);
                 if (element == null) {
-                  throw new Error(`Cannot find '${selector}'`);
+                  const component = Object.keys(observer).filter(key => observer[key].selector === selector);
+                  throw new Error(`Cannot find ${component} component in ${observer.path}`);
                 }
                 return element[attribute];
               }
