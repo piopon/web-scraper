@@ -66,8 +66,8 @@ export class WebScraper {
       if (this.#browser != null) {
         await this.#browser.close();
       }
-    } catch (error) {
-      console.warn(`WARNING: Issue while stopping: ${error.message}`);
+    } catch (warning) {
+      console.warn(`WARNING: Stop issue: ${warning.message}`);
     }
     if (reason.length === 0) {
       this.#status = "OK";
@@ -108,7 +108,7 @@ export class WebScraper {
    */
   async #scrapData() {
     if (this.#scrapConfig == null) {
-      this.stop("Incorrect object created: missing configuration");
+      this.stop("Missing scrap configuration");
       return;
     }
     const data = [];
@@ -160,7 +160,7 @@ export class WebScraper {
           }
         }, observer);
         if (dataObj.err != null) {
-          this.stop("Incorrect scrap settings: " + dataObj.err);
+          this.stop("Incorrect scrap configuration: " + dataObj.err);
           return;
         }
         if (!this.#validateData(dataObj)) {
