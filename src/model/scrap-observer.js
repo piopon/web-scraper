@@ -2,12 +2,12 @@ import { ScrapComponent } from "./scrap-component.js";
 
 export class ScrapObserver {
     constructor(object) {
-        object = object != null ? object : {};
-        this.path = object.path != null ? object.path : "";
-        this.history = object.history != null ? object.history : "";
-        this.container = object.container != null ? object.container : "";
-        this.title = new ScrapComponent(object.title);
-        this.image = new ScrapComponent(object.image);
-        this.price = new ScrapComponent(object.price);
+        const input = object != null ? object : {};
+        this.path = input.path != null ? input.path : "";
+        this.history = input.history != null ? input.history : "";
+        this.container = input.container != null ? input.container : "";
+        this.title = new ScrapComponent(input.title);
+        this.image = new ScrapComponent(input.image);
+        this.price = new ScrapComponent(input.price);
     }
 }

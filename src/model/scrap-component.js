@@ -1,9 +1,9 @@
 export class ScrapComponent {
     constructor(object) {
-        object = object != null ? object : {};
-        this.interval = object.interval != null ? object.interval : "";
-        this.selector = object.selector != null ? object.selector : "";
-        this.attribute = object.attribute != null ? object.attribute : "";
-        this.auxiliary = object.auxiliary != null ? object.auxiliary : "";
+        const input = object != null ? object : {};
+        this.interval = input.interval != null ? input.interval : "";
+        this.selector = input.selector != null ? input.selector : "";
+        this.attribute = input.attribute != null ? input.attribute : "";
+        this.auxiliary = input.auxiliary != null ? input.auxiliary : "";
     }
 }

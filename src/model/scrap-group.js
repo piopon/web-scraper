@@ -3,10 +3,10 @@ import { getArrayOfModels } from '../components/model-utils.js'
 
 export class ScrapGroup {
     constructor(object) {
-        object = object != null ? object : {};
-        this.name = object.name != null ? object.name : "";
-        this.category = object.category != null ? object.category : "";
-        this.domain = object.domain != null ? object.domain : "";
-        this.observers = getArrayOfModels(ScrapObserver, object.observers);
+        const input = object != null ? object : {};
+        this.name = input.name != null ? input.name : "";
+        this.category = input.category != null ? input.category : "";
+        this.domain = input.domain != null ? input.domain : "";
+        this.observers = getArrayOfModels(ScrapObserver, input.observers);
     }
 }
