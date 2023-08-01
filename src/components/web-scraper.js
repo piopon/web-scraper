@@ -124,7 +124,7 @@ export class WebScraper {
             // define data getter function
             const getData = (selector, attribute, auxiliary) => {
               if (selector && attribute) {
-                const component = Object.keys(observer).filter(key => observer[key].selector === selector);
+                const component = Object.keys(observer).filter((key) => observer[key].selector === selector);
                 const element = dataContainer.querySelector(selector);
                 if (element == null) {
                   throw new Error(`Cannot find ${component} element of ${observer.path}`);
@@ -136,7 +136,7 @@ export class WebScraper {
                 return value;
               }
               return auxiliary;
-            }
+            };
             // return an object with collected data
             return {
               name: getData(observer.title.selector, observer.title.attribute, observer.title.auxiliary),

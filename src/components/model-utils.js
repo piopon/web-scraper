@@ -1,10 +1,10 @@
 function getValueOrDefault(value, defaultValue) {
-    return value == null ? defaultValue : value;
+  return value == null ? defaultValue : value;
 }
 
 function getArray(items) {
   const objs = getValueOrDefault(items, []);
-  return (Array.isArray(objs)) ? objs : [objs];
+  return Array.isArray(objs) ? objs : [objs];
 }
 
 export function getArrayOfModels(Clazz, items) {
