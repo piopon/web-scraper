@@ -55,15 +55,19 @@ export class WebScraper {
    *                        Non-empty value will be interpreted as error.
    */
   async stop(reason = "") {
-    if (this.#intervalId != null) {
-      clearInterval(this.#intervalId);
-      this.#intervalId = undefined;
-    }
-    if (this.#page != null) {
-      await this.#page.close();
-    }
-    if (this.#browser != null) {
-      await this.#browser.close();
+    try {
+      if (this.#intervalId != null) {
+        clearInterval(this.#intervalId);
+        this.#intervalId = undefined;
+      }
+      if (this.#page != null) {
+        await this.#page.close();
+      }
+      if (this.#browser != null) {
+        await this.#browser.close();
+      }
+    } catch (error) {
+      console.warn(`WARNING: Issue while stopping: ${error.message}`);
     }
     if (reason.length === 0) {
       this.#status = "OK";
