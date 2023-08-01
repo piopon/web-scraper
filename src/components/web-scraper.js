@@ -112,8 +112,13 @@ export class WebScraper {
       for (let observerIndex = 0; observerIndex < group.observers.length; observerIndex++) {
         const observer = group.observers[observerIndex];
         const page = new URL(observer.path, group.domain);
-        await this.#page.goto(page);
-        await this.#page.waitForSelector(observer.price.selector, { visible: true });
+        try {
+          await this.#page.goto(page);
+          await this.#page.waitForSelector(observer.price.selector, { visible: true });
+        } catch (error) {
+          this.stop("Incorrect scrap configuration: Cannot find price element");
+          return;
+        }
         const dataObj = await this.#page.evaluate((observer) => {
           try {
             // try to get data container
