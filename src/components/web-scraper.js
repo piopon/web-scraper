@@ -34,8 +34,13 @@ export class WebScraper {
       fs.writeFileSync(this.#scraperConfig.srcFile, JSON.stringify(newConfig, null, 2));
     }
     // parse source scraper configuration file to a config class
-    const scrapJson = JSON.parse(fs.readFileSync(this.#scraperConfig.srcFile));
-    this.#scrapConfig = new ScrapConfig(scrapJson);
+    try {
+      const scrapJson = JSON.parse(fs.readFileSync(this.#scraperConfig.srcFile));
+      this.#scrapConfig = new ScrapConfig(scrapJson);
+    } catch (error) {
+      this.stop(`Cannot create scrap config: ${error.message}`);
+      return;
+    }
     // open new Puppeteer virtual browser and an initial web page
     this.#browser = await puppeteer.launch({ headless: "new" });
     this.#page = await this.#browser.newPage();
