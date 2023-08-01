@@ -8,5 +8,12 @@ export class ScrapGroup {
         this.category = input.category != null ? input.category : "";
         this.domain = input.domain != null ? input.domain : "";
         this.observers = getArrayOfModels(ScrapObserver, input.observers);
+        // check values only when object was passed (we use empty constructor call to get keys)
+        if (object) {
+            // domain is needed so the scraper will know the page URL to scan
+            if (!this.domain) {
+                throw Error(`Missing group domain`);
+            }
+        }
     }
 }
