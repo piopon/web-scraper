@@ -73,8 +73,10 @@ export class WebScraper {
       this.#status = "OK";
     } else {
       const errorMessage = `ERROR: ${reason}`;
-      console.error(errorMessage);
-      this.#status = errorMessage;
+      if (this.#status !== errorMessage) {
+        this.#status = errorMessage;
+        console.error(errorMessage);
+      }
     }
   }
 
