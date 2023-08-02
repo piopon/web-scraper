@@ -1,11 +1,12 @@
+import { ModelUtils } from "../utils/model-utils.js";
 import { ScrapComponent } from "./scrap-component.js";
 
 export class ScrapObserver {
   constructor(object) {
-    const input = object != null ? object : {};
-    this.path = input.path != null ? input.path : "";
-    this.history = input.history != null ? input.history : "";
-    this.container = input.container != null ? input.container : "";
+    const input = ModelUtils.getValueOrDefault(object, {});
+    this.path = ModelUtils.getValueOrDefault(input.path, "");
+    this.history = ModelUtils.getValueOrDefault(input.history, "");
+    this.container = ModelUtils.getValueOrDefault(input.container, "");
     this.title = new ScrapComponent(input.title);
     this.image = new ScrapComponent(input.image);
     this.price = new ScrapComponent(input.price);

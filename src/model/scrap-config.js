@@ -3,8 +3,8 @@ import { ScrapGroup } from "./scrap-group.js";
 
 export class ScrapConfig {
   constructor(object) {
-    const input = object != null ? object : {};
-    this.user = input.user != null ? input.user : "";
+    const input = ModelUtils.getValueOrDefault(object, {});
+    this.user = ModelUtils.getValueOrDefault(input.user, "");
     this.groups = ModelUtils.getArrayOfModels(ScrapGroup, input.groups);
   }
 }

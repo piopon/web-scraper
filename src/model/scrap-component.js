@@ -1,9 +1,11 @@
+import { ModelUtils } from "../utils/model-utils.js";
+
 export class ScrapComponent {
   constructor(object) {
-    const input = object != null ? object : {};
-    this.interval = input.interval != null ? input.interval : "";
-    this.selector = input.selector != null ? input.selector : "";
-    this.attribute = input.attribute != null ? input.attribute : "";
-    this.auxiliary = input.auxiliary != null ? input.auxiliary : "";
+    const input = ModelUtils.getValueOrDefault(object, {});
+    this.interval = ModelUtils.getValueOrDefault(input.interval, "");
+    this.selector = ModelUtils.getValueOrDefault(input.selector, "");
+    this.attribute = ModelUtils.getValueOrDefault(input.attribute, "");
+    this.auxiliary = ModelUtils.getValueOrDefault(input.auxiliary, "");
   }
 }
