@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export class StatusLogger {
   #status = [];
   #name = undefined;
@@ -8,18 +10,21 @@ export class StatusLogger {
   }
 
   log(message) {
-    this.#status.push({ type: "info", message: message });
-    console.log(`[${this.#name}] INFO: ${message}`);
+    const dateTimeNow = moment().format("YYYY-MM-DD HH:mm:ss");
+    this.#status.push({ timestamp: dateTimeNow, type: "info", message: message });
+    console.log(`${dateTimeNow} [${this.#name}] INFO: ${message}`);
   }
 
   warning(message) {
-    this.#status.push({ type: "warning", message: message });
-    console.warn(`[${this.#name}] WARNING: ${message}`);
+    const dateTimeNow = moment().format("YYYY-MM-DD HH:mm:ss");
+    this.#status.push({ timestamp: dateTimeNow, type: "warning", message: message });
+    console.warn(`${dateTimeNow} [${this.#name}] WARNING: ${message}`);
   }
 
   error(message) {
-    this.#status.push({ type: "error", message: message });
-    console.error(`[${this.#name}] ERROR: ${message}`);
+    const dateTimeNow = moment().format("YYYY-MM-DD HH:mm:ss");
+    this.#status.push({ timestamp: dateTimeNow, type: "error", message: message });
+    console.error(`${dateTimeNow} [${this.#name}] ERROR: ${message}`);
   }
 
   getStatus() {
