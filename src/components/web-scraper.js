@@ -7,6 +7,8 @@ import path from "path";
 import fs from "fs";
 
 export class WebScraper {
+  static #RUNNING_STATUS = "Running";
+
   #status = new StatusLogger("web-scraper");
   #scraperConfig = undefined;
   #scrapConfig = undefined;
@@ -49,7 +51,7 @@ export class WebScraper {
     // invoke scrap data action initially and setup interval calls
     this.#scrapData();
     this.#intervalId = setInterval(() => this.#scrapData(), this.#scraperConfig.interval);
-    this.#status.log("Running");
+    this.#status.log(WebScraper.#RUNNING_STATUS);
   }
 
   /**
@@ -75,7 +77,7 @@ export class WebScraper {
     if (reason.length === 0) {
       this.#status.log("Stopped");
     } else {
-      if (this.#status.getStatus() !== reason) {
+      if (this.#status.getStatus().message !== reason) {
         this.#status.error(reason);
       }
     }
@@ -89,13 +91,13 @@ export class WebScraper {
     const invalidStateMessage = "Invalid internal state";
     if (this.#intervalId == null) {
       // scraper is NOT running in selected intervals
-      if (this.#status.getStatus() === "Running") {
+      if (this.#status.getStatus().message === WebScraper.#RUNNING_STATUS) {
         // incorrect state - update field
         this.#status.error(invalidStateMessage);
       }
     } else {
       // scraper is running in selected intervals
-      if (this.#status.getStatus() !== "Running") {
+      if (this.#status.getStatus().message !== WebScraper.#RUNNING_STATUS) {
         // incorrect state - since it's running then we must stop it
         this.stop(invalidStateMessage);
       }
