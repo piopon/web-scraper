@@ -25,4 +25,8 @@ export class StatusLogger {
   getStatus() {
     return this.#status.slice(-1);
   }
+
+  getHistory() {
+    return JSON.stringify(this.#status, null, 2);
+  }
 }
