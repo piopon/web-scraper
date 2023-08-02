@@ -159,10 +159,6 @@ export class WebScraper {
             return { err: error.message };
           }
         }, observer);
-        if (dataObj.err != null) {
-          this.stop("Incorrect scrap configuration: " + dataObj.err);
-          return;
-        }
         const validationResult = this.#validateData(dataObj);
         if (validationResult.length > 0) {
           this.stop(validationResult);
@@ -206,6 +202,9 @@ export class WebScraper {
    * @returns empty string if passed object is valid, non-empty string otherwise
    */
   #validateData(dataObj) {
+    if (dataObj.err != null) {
+      return `Incorrect scrap configuration: ${dataObj.err}`;
+    }
     const objectName = dataObj.name ? dataObj.name : "[unnamed]";
     if (dataObj.price == null || dataObj.price.length === 0) {
       return `Invalid scraped data: Missing price value for ${objectName}`;
