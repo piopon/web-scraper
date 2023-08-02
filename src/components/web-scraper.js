@@ -195,7 +195,7 @@ export class WebScraper {
    */
   #formatData(dataObj) {
     // assure that price attribute contains only value with dot
-    dataObj.price = dataObj.price.replace(",", ".").match(/\d+(?:\.\d+)?/g)[0];
+    dataObj.price = this.#getPriceValue(dataObj)[0];
     return dataObj;
   }
 
@@ -205,6 +205,14 @@ export class WebScraper {
    * @returns true if passed object is valid, false otherwise
    */
   #validateData(dataObj) {
-    return dataObj.price != null && dataObj.price.length > 0;
+    if (dataObj.price != null && dataObj.price.length > 0) {
+      const priceParsed = this.#getPriceValue(dataObj);
+      return priceParsed && priceParsed.length === 1;
+    }
+    return false;
+  }
+
+  #getPriceValue(dataObj) {
+    return dataObj.price.replace(",", ".").match(/\d+(?:\.\d+)?/g);
   }
 }
