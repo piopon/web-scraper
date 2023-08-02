@@ -3,23 +3,23 @@ export class ModelUtils {
     return value == null ? defaultValue : value;
   }
 
-  static getArray(items) {
-    const objs = this.getValueOrDefault(items, []);
-    return Array.isArray(objs) ? objs : [objs];
-  }
-
   static getArrayOfModels(Clazz, items) {
-    const objs = this.getArray(items);
+    const objs = this.#getArray(items);
     let array = [];
     objs.forEach((obj) => {
-      if (this.hasPropertyOf(Clazz, obj)) {
+      if (this.#hasPropertyOf(Clazz, obj)) {
         array.push(new Clazz(obj));
       }
     });
     return array;
   }
 
-  static hasPropertyOf(Clazz, obj) {
+  static #getArray(items) {
+    const objs = this.getValueOrDefault(items, []);
+    return Array.isArray(objs) ? objs : [objs];
+  }
+
+  static #hasPropertyOf(Clazz, obj) {
     if (Clazz == null || obj == null) {
       return false;
     }
@@ -34,7 +34,7 @@ export class ModelUtils {
     return false;
   }
 
-  static isInstanceOf(Clazz, obj) {
+  static #isInstanceOf(Clazz, obj) {
     if (Clazz == null || obj == null) {
       return false;
     }
