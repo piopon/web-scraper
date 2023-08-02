@@ -75,7 +75,7 @@ export class WebScraper {
     if (reason.length === 0) {
       this.#status.log("Stopped");
     } else {
-      if (this.#status.getStatus() !== errorMessage) {
+      if (this.#status.getStatus() !== reason) {
         this.#status.error(reason);
       }
     }
