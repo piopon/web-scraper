@@ -1,4 +1,5 @@
 import { ScrapConfig } from "../model/scrap-config.js";
+import { RegexUtils } from "../utils/regex-utils.js";
 
 import puppeteer from "puppeteer";
 import path from "path";
@@ -192,7 +193,7 @@ export class WebScraper {
    */
   #formatData(dataObj) {
     // assure that price attribute contains only value with dot
-    dataObj.price = this.#getPriceValue(dataObj)[0];
+    dataObj.price = RegexUtils.getPrices(dataObj.price)[0];
     return dataObj;
   }
 
@@ -209,14 +210,10 @@ export class WebScraper {
     if (dataObj.price == null || dataObj.price.length === 0) {
       return `Invalid scraped data: Missing price value for ${objectName}`;
     }
-    const priceParsed = this.#getPriceValue(dataObj);
+    const priceParsed = RegexUtils.getPrices(dataObj.price);
     if (priceParsed == null || priceParsed.length !== 1) {
       return `Invalid scraped data: Incorrect price value for ${objectName}`;
     }
     return "";
-  }
-
-  #getPriceValue(dataObj) {
-    return dataObj.price.replace(",", ".").match(/\d+(?:\.\d+)?/g);
   }
 }
