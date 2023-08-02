@@ -1,25 +1,25 @@
 export class StatusLogger {
   #status = [];
+  #name = undefined;
 
-  constructor(initialLogMessage) {
-    if (initialLogMessage) {
-      this.log(initialLogMessage);
-    }
+  constructor(name) {
+    this.#name = name;
+    this.log("Started");
   }
 
   log(message) {
     this.#status.push({ type: "info", message: message });
-    console.log(`INFO: ${message}`);
+    console.log(`[${this.#name}] INFO: ${message}`);
   }
 
   warning(message) {
     this.#status.push({ type: "warning", message: message });
-    console.warn(`WARNING: ${message}`);
+    console.warn(`[${this.#name}] WARNING: ${message}`);
   }
 
   error(message) {
     this.#status.push({ type: "error", message: message });
-    console.error(`ERROR: ${message}`);
+    console.error(`[${this.#name}] ERROR: ${message}`);
   }
 
   getStatus() {

@@ -7,7 +7,7 @@ import path from "path";
 import fs from "fs";
 
 export class WebScraper {
-  #status = new StatusLogger("Started");
+  #status = new StatusLogger("web-scraper");
   #scraperConfig = undefined;
   #scrapConfig = undefined;
   #intervalId = undefined;
