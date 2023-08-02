@@ -1,12 +1,13 @@
-import { ScrapConfig } from "../model/scrap-config.js";
 import { RegexUtils } from "../utils/regex-utils.js";
+import { ScrapConfig } from "../model/scrap-config.js";
+import { StatusLogger } from "./status-logger.js";
 
 import puppeteer from "puppeteer";
 import path from "path";
 import fs from "fs";
 
 export class WebScraper {
-  #status = ["Started"];
+  #status = new StatusLogger("Started");
   #scraperConfig = undefined;
   #scrapConfig = undefined;
   #intervalId = undefined;
@@ -48,7 +49,7 @@ export class WebScraper {
     // invoke scrap data action initially and setup interval calls
     this.#scrapData();
     this.#intervalId = setInterval(() => this.#scrapData(), this.#scraperConfig.interval);
-    this.#status.push("Running");
+    this.#status.log("Running");
   }
 
   /**
@@ -69,15 +70,13 @@ export class WebScraper {
         await this.#browser.close();
       }
     } catch (warning) {
-      console.warn(`WARNING: Stop issue: ${warning.message}`);
+      this.#status.warning(`Stop issue: ${warning.message}`);
     }
     if (reason.length === 0) {
-      this.#status.push("Stopped");
+      this.#status.log("Stopped");
     } else {
-      const errorMessage = `ERROR: ${reason}`;
-      if (this.#status.slice(-1) !== errorMessage) {
-        this.#status.push(errorMessage);
-        console.error(errorMessage);
+      if (this.#status.getStatus() !== errorMessage) {
+        this.#status.error(reason);
       }
     }
   }
@@ -90,18 +89,18 @@ export class WebScraper {
     const invalidStateMessage = "Invalid internal state";
     if (this.#intervalId == null) {
       // scraper is NOT running in selected intervals
-      if (this.#status.slice(-1) === "Running") {
+      if (this.#status.getStatus() === "Running") {
         // incorrect state - update field
-        this.#status.push(`ERROR: ${invalidStateMessage}`);
+        this.#status.error(invalidStateMessage);
       }
     } else {
       // scraper is running in selected intervals
-      if (this.#status.slice(-1) !== "Running") {
+      if (this.#status.getStatus() !== "Running") {
         // incorrect state - since it's running then we must stop it
         this.stop(invalidStateMessage);
       }
     }
-    return this.#status.slice(-1);
+    return this.#status.getStatus();
   }
 
   /**
