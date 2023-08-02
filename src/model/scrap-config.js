@@ -1,5 +1,5 @@
 import { ScrapGroup } from "./scrap-group.js";
-import { getArrayOfModels } from "../components/model-utils.js";
+import { getArrayOfModels } from "../utils/model-utils.js";
 
 export class ScrapConfig {
   constructor(object) {
