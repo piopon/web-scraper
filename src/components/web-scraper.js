@@ -163,8 +163,9 @@ export class WebScraper {
           this.stop("Incorrect scrap configuration: " + dataObj.err);
           return;
         }
-        if (!this.#validateData(dataObj)) {
-          this.stop("Invalid scraped data");
+        const validationResult = this.#validateData(dataObj);
+        if (validationResult.length > 0) {
+          this.stop(validationResult);
           return;
         }
         groupObject.items.push(this.#formatData(dataObj));
@@ -202,14 +203,18 @@ export class WebScraper {
   /**
    * Method used to validate data in the passed data object
    * @param {Object} dataObj The object which we want to validate
-   * @returns true if passed object is valid, false otherwise
+   * @returns empty string if passed object is valid, non-empty string otherwise
    */
   #validateData(dataObj) {
-    if (dataObj.price != null && dataObj.price.length > 0) {
-      const priceParsed = this.#getPriceValue(dataObj);
-      return priceParsed && priceParsed.length === 1;
+    const objectName = dataObj.name ? dataObj.name : "[unnamed]";
+    if (dataObj.price == null || dataObj.price.length === 0) {
+      return `Invalid scraped data: Missing price value for ${objectName}`;
     }
-    return false;
+    const priceParsed = this.#getPriceValue(dataObj);
+    if (priceParsed == null || priceParsed.length !== 1) {
+      return `Invalid scraped data: Incorrect price value for ${objectName}`;
+    }
+    return "";
   }
 
   #getPriceValue(dataObj) {
