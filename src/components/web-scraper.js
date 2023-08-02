@@ -6,7 +6,7 @@ import path from "path";
 import fs from "fs";
 
 export class WebScraper {
-  #status = "OK";
+  #status = ["Started"];
   #scraperConfig = undefined;
   #scrapConfig = undefined;
   #intervalId = undefined;
@@ -48,6 +48,7 @@ export class WebScraper {
     // invoke scrap data action initially and setup interval calls
     this.#scrapData();
     this.#intervalId = setInterval(() => this.#scrapData(), this.#scraperConfig.interval);
+    this.#status.push("Running");
   }
 
   /**
@@ -71,11 +72,11 @@ export class WebScraper {
       console.warn(`WARNING: Stop issue: ${warning.message}`);
     }
     if (reason.length === 0) {
-      this.#status = "OK";
+      this.#status.push("Stopped");
     } else {
       const errorMessage = `ERROR: ${reason}`;
-      if (this.#status !== errorMessage) {
-        this.#status = errorMessage;
+      if (this.#status.slice(-1) !== errorMessage) {
+        this.#status.push(errorMessage);
         console.error(errorMessage);
       }
     }
@@ -89,19 +90,18 @@ export class WebScraper {
     const invalidStateMessage = "Invalid internal state";
     if (this.#intervalId == null) {
       // scraper is NOT running in selected intervals
-      if (this.#status === "OK") {
+      if (this.#status.slice(-1) === "Running") {
         // incorrect state - update field
-        this.#status = `ERROR: ${invalidStateMessage}`;
+        this.#status.push(`ERROR: ${invalidStateMessage}`);
       }
-      return this.#status;
     } else {
       // scraper is running in selected intervals
-      if (this.#status !== "OK") {
+      if (this.#status.slice(-1) !== "Running") {
         // incorrect state - since it's running then we must stop it
         this.stop(invalidStateMessage);
       }
-      return this.#status;
     }
+    return this.#status.slice(-1);
   }
 
   /**
