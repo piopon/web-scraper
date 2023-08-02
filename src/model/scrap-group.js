@@ -1,5 +1,5 @@
+import { ModelUtils } from "../utils/model-utils.js";
 import { ScrapObserver } from "./scrap-observer.js";
-import { getArrayOfModels } from "../utils/model-utils.js";
 
 export class ScrapGroup {
   constructor(object) {
@@ -7,7 +7,7 @@ export class ScrapGroup {
     this.name = input.name != null ? input.name : "";
     this.category = input.category != null ? input.category : "";
     this.domain = input.domain != null ? input.domain : "";
-    this.observers = getArrayOfModels(ScrapObserver, input.observers);
+    this.observers = ModelUtils.getArrayOfModels(ScrapObserver, input.observers);
     // check values only when object was passed (we use empty constructor call to get keys)
     if (object) {
       // domain is needed so the scraper will know the page URL to scan
