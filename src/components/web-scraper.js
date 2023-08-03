@@ -55,9 +55,10 @@ export class WebScraper {
     this.#browser = await puppeteer.launch({ headless: "new" });
     this.#page = await this.#browser.newPage();
     // invoke scrap data action initially and setup interval calls
-    this.#scrapData();
-    this.#intervalId = setInterval(() => this.#scrapData(), this.#scraperConfig.interval);
-    this.#status.log(WebScraper.#RUNNING_STATUS);
+     if (true === this.#scrapData()) {
+      this.#intervalId = setInterval(() => this.#scrapData(), this.#scraperConfig.interval);
+      this.#status.log(WebScraper.#RUNNING_STATUS);
+    }
   }
 
   /**
@@ -123,11 +124,12 @@ export class WebScraper {
 
   /**
    * Method containing core web scraping logic (according to scrap user settings)
+   * @returns true if scrap logic completed with no errors, false otherwise
    */
   async #scrapData() {
     if (this.#scrapConfig == null) {
       this.stop("Missing scrap configuration");
-      return;
+      return false;
     }
     const data = [];
     for (let groupIndex = 0; groupIndex < this.#scrapConfig.groups.length; groupIndex++) {
@@ -141,7 +143,7 @@ export class WebScraper {
           await this.#page.waitForSelector(observer.price.selector, { visible: true });
         } catch (error) {
           this.stop("Incorrect scrap configuration: Cannot find price element");
-          return;
+          return false;
         }
         const dataObj = await this.#page.evaluate((observer) => {
           try {
@@ -180,13 +182,14 @@ export class WebScraper {
         const validationResult = this.#validateData(dataObj);
         if (validationResult.length > 0) {
           this.stop(validationResult);
-          return;
+          return false;
         }
         groupObject.items.push(this.#formatData(dataObj));
       }
       data.push(groupObject);
     }
     this.#saveData(data);
+    return true;
   }
 
   /**
