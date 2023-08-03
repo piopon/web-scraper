@@ -39,7 +39,9 @@ export class WebScraper {
     if (!fs.existsSync(this.#scraperConfig.srcFile)) {
       const newConfig = { user: 0, groups: [] };
       fs.writeFileSync(this.#scraperConfig.srcFile, JSON.stringify(newConfig, null, 2));
+      this.#status.log(`Created new ${path.basename(this.#scraperConfig.srcFile)}`);
     }
+    this.#status.log("Reading configuration");
     // parse source scraper configuration file to a config class
     try {
       var scrapJson = JSON.parse(fs.readFileSync(this.#scraperConfig.srcFile));
@@ -54,6 +56,7 @@ export class WebScraper {
         return;
       }
     }
+    this.#status.log("Initializing");
     // open new Puppeteer virtual browser and an initial web page
     this.#browser = await puppeteer.launch({ headless: "new" });
     this.#page = await this.#browser.newPage();
