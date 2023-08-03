@@ -1,5 +1,6 @@
 import { RegexUtils } from "../utils/regex-utils.js";
 import { ScrapConfig } from "../model/scrap-config.js";
+import { ScrapError } from "../model/scrap-exception.js";
 import { StatusLogger } from "./status-logger.js";
 
 import puppeteer from "puppeteer";
@@ -43,8 +44,10 @@ export class WebScraper {
       const scrapJson = JSON.parse(fs.readFileSync(this.#scraperConfig.srcFile));
       this.#scrapConfig = new ScrapConfig(scrapJson);
     } catch (error) {
-      this.stop(`Cannot create scrap config: ${error.message}`);
-      return;
+      if (error instanceof ScrapError) {
+        this.stop(`Cannot create scrap config: ${error.message}`);
+        return;
+      }
     }
     // open new Puppeteer virtual browser and an initial web page
     this.#browser = await puppeteer.launch({ headless: "new" });

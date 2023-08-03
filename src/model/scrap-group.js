@@ -1,4 +1,5 @@
 import { ModelUtils } from "../utils/model-utils.js";
+import { ScrapError } from "./scrap-exception.js";
 import { ScrapObserver } from "./scrap-observer.js";
 
 export class ScrapGroup {
@@ -16,7 +17,7 @@ export class ScrapGroup {
     if (object) {
       // domain is needed so the scraper will know the page URL to scan
       if (!this.domain) {
-        throw Error(`Missing group domain`);
+        throw new ScrapError(`Missing group domain`);
       }
     }
   }
