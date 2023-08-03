@@ -7,9 +7,10 @@ import path from "path";
 import fs from "fs";
 
 export class WebScraper {
+  static #LOGGER_NAME = "web-scraper";
   static #RUNNING_STATUS = "Running";
 
-  #status = new StatusLogger("web-scraper");
+  #status = new StatusLogger(WebScraper.#LOGGER_NAME);
   #scraperConfig = undefined;
   #scrapConfig = undefined;
   #intervalId = undefined;
@@ -84,8 +85,8 @@ export class WebScraper {
   }
 
   /**
-   * Method used to receive current working status of web scraper
-   * @returns String with web scraper working status (OK or ERROR)
+   * Method used to receive running history status of web scraper
+   * @returns array of objects containing web scraper running history status
    */
   getStatusHistory() {
     const invalidStateMessage = "Invalid internal state";
@@ -106,6 +107,10 @@ export class WebScraper {
     return this.#status.getHistory();
   }
 
+  /**
+   * Method used to determine if the web scraper component is running (alive) or not
+   * @returns true when web scraper is running, false otherwise
+   */
   isAlive() {
     const currentStatus = this.#status.getStatus().message;
     return this.#intervalId != null && currentStatus === WebScraper.#RUNNING_STATUS;
@@ -180,7 +185,7 @@ export class WebScraper {
   }
 
   /**
-   * Method used to save specified object to be saved in destination file (stored in configuration object)
+   * Method used to save specified object in a destination file (its path stored in configuration object)
    * @param {Object} dataToSave The data object to save in destination file
    */
   #saveData(dataToSave) {
@@ -194,7 +199,7 @@ export class WebScraper {
   }
 
   /**
-   * Method used to format data in the passed data object
+   * Method used to format data in the specified data object
    * @param {Object} dataObj The object which we want to format
    * @returns formatted object
    */
@@ -205,7 +210,7 @@ export class WebScraper {
   }
 
   /**
-   * Method used to validate data in the passed data object
+   * Method used to validate data in the specified data object
    * @param {Object} dataObj The object which we want to validate
    * @returns empty string if passed object is valid, non-empty string otherwise
    */
