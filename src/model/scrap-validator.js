@@ -1,4 +1,4 @@
-import { ScrapError } from "./scrap-exception";
+import { ScrapError, ScrapWarning } from "./scrap-exception.js";
 
 export class ScrapValidator {
   #validationResult = undefined;
@@ -20,6 +20,12 @@ export class ScrapValidator {
         const observer = group.observers[observerNo];
         this.#validateObserver(observer);
       }
+    }
+    if (this.#validationResult.errors.length > 0) {
+      throw new ScrapError(this.#validationResult.errors[0]);
+    }
+    if (this.#validationResult.warnings.length > 0) {
+      throw new ScrapWarning(this.#validationResult.warnings[0]);
     }
     return this.#scrapConfig;
   }

@@ -13,19 +13,5 @@ export class ScrapGroup {
     this.category = ModelUtils.getValueOrDefault(input.category, "");
     this.domain = ModelUtils.getValueOrDefault(input.domain, "");
     this.observers = ModelUtils.getArrayOfModels(ScrapObserver, input.observers);
-    // check values only when object was passed (we use empty constructor call to get keys)
-    if (object) {
-      // domain is needed so the scraper will know the page URL to scan
-      if (!this.domain) {
-        throw new ScrapError(`Missing required group domain`);
-      }
-      // check the name and category values against the best experience (non-essential but nice-to-have)
-      if (!this.name) {
-        throw new ScrapWarning(`Empty group name`);
-      }
-      if (!this.category) {
-        throw new ScrapWarning(`Empty group category`);
-      }
-    }
   }
 }
