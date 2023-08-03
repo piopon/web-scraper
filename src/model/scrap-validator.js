@@ -21,11 +21,15 @@ export class ScrapValidator {
         this.#validateObserver(observer);
       }
     }
-    if (this.#validationResult.errors.length > 0) {
-      throw new ScrapError(this.#validationResult.errors[0]);
+    const errorsNo = this.#validationResult.errors.length;
+    if (errorsNo > 0) {
+      const additionalCount = errorsNo > 1 ? ` [+${errorsNo - 1} more]` : ``;
+      throw new ScrapError(this.#validationResult.errors[0] + additionalCount);
     }
-    if (this.#validationResult.warnings.length > 0) {
-      throw new ScrapWarning(this.#validationResult.warnings[0]);
+    const warningsNo = this.#validationResult.warnings.length;
+    if (warningsNo > 0) {
+      const additionalCount = warningsNo > 1 ? ` [+${warningsNo - 1} more]` : ``;
+      throw new ScrapWarning(this.#validationResult.warnings[0] + additionalCount);
     }
     return this.#scrapConfig;
   }
