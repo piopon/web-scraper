@@ -57,7 +57,7 @@ export class WebScraper {
     this.#browser = await puppeteer.launch({ headless: "new" });
     this.#page = await this.#browser.newPage();
     // invoke scrap data action initially and setup interval calls
-     if (true === this.#scrapData()) {
+    if (true === await this.#scrapData()) {
       this.#intervalId = setInterval(() => this.#scrapData(), this.#scraperConfig.interval);
       this.#status.log(WebScraper.#RUNNING_STATUS);
     }
@@ -203,9 +203,7 @@ export class WebScraper {
     if (!fs.existsSync(dataDirectory)) {
       fs.mkdirSync(dataDirectory, { recursive: true });
     }
-    fs.writeFile(this.#scraperConfig.dstFile, JSON.stringify(dataToSave, null, 2), (err) => {
-      if (err) throw err;
-    });
+    fs.writeFileSync(this.#scraperConfig.dstFile, JSON.stringify(dataToSave, null, 2));
   }
 
   /**

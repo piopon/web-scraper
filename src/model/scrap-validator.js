@@ -17,7 +17,7 @@ export class ScrapValidator {
       const group = this.#scrapConfig.groups[groupNo];
       this.#validateGroup(group);
       for (let observerNo = 0; observerNo < group.observers.length; observerNo++) {
-        const observer = group.observers[obseobserverNorverIndex];
+        const observer = group.observers[observerNo];
         this.#validateObserver(observer);
       }
     }
