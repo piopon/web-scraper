@@ -1,6 +1,7 @@
 import { RegexUtils } from "../utils/regex-utils.js";
 import { ScrapConfig } from "../model/scrap-config.js";
 import { ScrapError, ScrapWarning } from "../model/scrap-exception.js";
+import { ScrapValidator } from "../model/scrap-validator.js";
 import { StatusLogger } from "./status-logger.js";
 
 import puppeteer from "puppeteer";
@@ -42,12 +43,13 @@ export class WebScraper {
     // parse source scraper configuration file to a config class
     try {
       const scrapJson = JSON.parse(fs.readFileSync(this.#scraperConfig.srcFile));
-      this.#scrapConfig = new ScrapConfig(scrapJson);
+      const configObj = new ScrapConfig(scrapJson);
+      this.#scrapConfig = new ScrapValidator(configObj).validate();
     } catch (error) {
       if (error instanceof ScrapWarning) {
         this.#status.warning(error.message);
       } else {
-        this.stop(`Cannot create scrap config: ${error.message}`);
+        this.stop(`Invalid scrap config: ${error.message}`);
         return;
       }
     }
