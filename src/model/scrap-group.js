@@ -1,5 +1,5 @@
 import { ModelUtils } from "../utils/model-utils.js";
-import { ScrapError } from "./scrap-exception.js";
+import { ScrapError, ScrapWarning } from "./scrap-exception.js";
 import { ScrapObserver } from "./scrap-observer.js";
 
 export class ScrapGroup {
@@ -17,7 +17,14 @@ export class ScrapGroup {
     if (object) {
       // domain is needed so the scraper will know the page URL to scan
       if (!this.domain) {
-        throw new ScrapError(`Missing group domain`);
+        throw new ScrapError(`Missing required group domain`);
+      }
+      // check the name and category values against the best experience (non-essential but nice-to-have)
+      if (!this.name) {
+        throw new ScrapWarning(`Empty group name`);
+      }
+      if (!this.category) {
+        throw new ScrapWarning(`Empty group category`);
       }
     }
   }
