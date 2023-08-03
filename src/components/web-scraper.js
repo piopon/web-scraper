@@ -1,6 +1,6 @@
 import { RegexUtils } from "../utils/regex-utils.js";
 import { ScrapConfig } from "../model/scrap-config.js";
-import { ScrapError, ScrapWarning } from "../model/scrap-exception.js";
+import { ScrapWarning } from "../model/scrap-exception.js";
 import { ScrapValidator } from "../model/scrap-validator.js";
 import { StatusLogger } from "./status-logger.js";
 
