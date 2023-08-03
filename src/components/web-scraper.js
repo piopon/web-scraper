@@ -42,14 +42,15 @@ export class WebScraper {
     }
     // parse source scraper configuration file to a config class
     try {
-      const scrapJson = JSON.parse(fs.readFileSync(this.#scraperConfig.srcFile));
-      const configObj = new ScrapConfig(scrapJson);
-      this.#scrapConfig = new ScrapValidator(configObj).validate();
-    } catch (error) {
-      if (error instanceof ScrapWarning) {
-        this.#status.warning(error.message);
+      var scrapJson = JSON.parse(fs.readFileSync(this.#scraperConfig.srcFile));
+      var scrapConfigCandidate = new ScrapConfig(scrapJson);
+      this.#scrapConfig = new ScrapValidator(scrapConfigCandidate).validate();
+    } catch (e) {
+      if (e instanceof ScrapWarning) {
+        this.#scrapConfig = scrapConfigCandidate;
+        this.#status.warning(e.message);
       } else {
-        this.stop(`Invalid scrap config: ${error.message}`);
+        this.stop(`Invalid scrap config: ${e.message}`);
         return;
       }
     }
