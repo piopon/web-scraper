@@ -10,7 +10,6 @@ export class StatusLogger {
    */
   constructor(name) {
     this.#name = name;
-    this.log("Started");
   }
 
   /**
