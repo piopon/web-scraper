@@ -1,3 +1,7 @@
-import * as scraper from "./scraper.js";
+import { AppConfig } from "../config/app-config.js";
+import { WebScraper } from "./components/web-scraper.js";
 
-scraper.start();
+const config = new AppConfig().getConfig();
+const webScraper = new WebScraper(config.scraperConfig);
+
+webScraper.start();
