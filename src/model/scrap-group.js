@@ -1,5 +1,4 @@
 import { ModelUtils } from "../utils/model-utils.js";
-import { ScrapError, ScrapWarning } from "./scrap-exception.js";
 import { ScrapObserver } from "./scrap-observer.js";
 
 export class ScrapGroup {

@@ -1,6 +1,5 @@
 import { ModelUtils } from "../utils/model-utils.js";
 import { ScrapComponent } from "./scrap-component.js";
-import { ScrapError, ScrapWarning } from "./scrap-exception.js";
 
 export class ScrapObserver {
   /**
