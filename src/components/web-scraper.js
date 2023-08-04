@@ -25,12 +25,14 @@ export class WebScraper {
    */
   constructor(config) {
     this.#scraperConfig = config;
+    this.#status.log("Created");
   }
 
   /**
    * Method used to start web scraping action
    */
   async start() {
+    this.#status.log("Starting");
     // create a new empty configuration file and directory if none exists
     const configDirectory = path.dirname(this.#scraperConfig.srcFile);
     if (!fs.existsSync(configDirectory)) {
