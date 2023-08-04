@@ -4,6 +4,10 @@ export class ScrapValidator {
   #validationResult = undefined;
   #scrapConfig = undefined;
 
+  /**
+   * Creates a new scrap model validator class used to check an input model object
+   * @param {Object} scrapConfig The ScrapConfig class which should be validated
+   */
   constructor(scrapConfig) {
     if (scrapConfig == null) {
       throw new ScrapError("Cannot validate not existing configuration");
@@ -11,6 +15,10 @@ export class ScrapValidator {
     this.#scrapConfig = scrapConfig;
   }
 
+  /**
+   * Performs the validation process of the scrap configuration object (passed in constructor)
+   * @returns the validated object, or an error/warning when object has errors/warnings
+   */
   validate() {
     this.#validationResult = { errors: [], warnings: [] };
     for (let groupNo = 0; groupNo < this.#scrapConfig.groups.length; groupNo++) {
@@ -34,6 +42,10 @@ export class ScrapValidator {
     return this.#scrapConfig;
   }
 
+  /**
+   * Method used to validate scrap group object
+   * @param {Object} group The scrap group to validate
+   */
   #validateGroup(group) {
     // domain is needed so the scraper will know the page URL to scan
     if (!group.domain) {
@@ -48,6 +60,10 @@ export class ScrapValidator {
     }
   }
 
+  /**
+   * Method used to validate scrap observer object
+   * @param {Object} observer The scrap observer to validate
+   */
   #validateObserver(observer) {
     // path is needed so the scraper will know the exact page to scan
     if (!observer.path) {
@@ -72,10 +88,18 @@ export class ScrapValidator {
     }
   }
 
+  /**
+   * Method used to add new error to internal array field
+   * @param {String} errorMessage The message of error to be added
+   */
   #addError(errorMessage) {
     this.#validationResult.errors.push(errorMessage);
   }
 
+  /**
+   * Method used to add new warning to internal array field
+   * @param {String} warningMessage The message of warning to be added
+   */
   #addWarning(warningMessage) {
     this.#validationResult.warnings.push(warningMessage);
   }
