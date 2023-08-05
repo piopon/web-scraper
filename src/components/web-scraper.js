@@ -13,7 +13,7 @@ export class WebScraper {
   static #RUNNING_STATUS = "Running";
 
   #status = new StatusLogger(WebScraper.#LOGGER_NAME);
-  #scraperConfig = undefined;
+  #setupConfig = undefined;
   #scrapConfig = undefined;
   #intervalId = undefined;
   #browser = undefined;
@@ -24,7 +24,7 @@ export class WebScraper {
    * @param {Object} config The object containing scraper configuration
    */
   constructor(config) {
-    this.#scraperConfig = config;
+    this.#setupConfig = config;
     this.#status.log("Created");
   }
 
@@ -34,19 +34,19 @@ export class WebScraper {
   async start() {
     this.#status.log("Starting");
     // create a new empty configuration file and directory if none exists
-    const configDirectory = path.dirname(this.#scraperConfig.srcFile);
+    const configDirectory = path.dirname(this.#setupConfig.dataConfigPath);
     if (!fs.existsSync(configDirectory)) {
       fs.mkdirSync(configDirectory, { recursive: true });
     }
-    if (!fs.existsSync(this.#scraperConfig.srcFile)) {
+    if (!fs.existsSync(this.#setupConfig.dataConfigPath)) {
       const newConfig = { user: 0, groups: [] };
-      fs.writeFileSync(this.#scraperConfig.srcFile, JSON.stringify(newConfig, null, 2));
-      this.#status.log(`Created new ${path.basename(this.#scraperConfig.srcFile)}`);
+      fs.writeFileSync(this.#setupConfig.dataConfigPath, JSON.stringify(newConfig, null, 2));
+      this.#status.log(`Created new ${path.basename(this.#setupConfig.dataConfigPath)}`);
     }
     this.#status.log("Reading configuration");
     // parse source scraper configuration file to a config class
     try {
-      var scrapJson = JSON.parse(fs.readFileSync(this.#scraperConfig.srcFile));
+      var scrapJson = JSON.parse(fs.readFileSync(this.#setupConfig.dataConfigPath));
       var scrapConfigCandidate = new ScrapConfig(scrapJson);
       this.#scrapConfig = new ScrapValidator(scrapConfigCandidate).validate();
     } catch (e) {
@@ -64,7 +64,7 @@ export class WebScraper {
     this.#page = await this.#browser.newPage();
     // invoke scrap data action initially and setup interval calls
     if (true === (await this.#scrapData())) {
-      this.#intervalId = setInterval(() => this.#scrapData(), this.#scraperConfig.interval);
+      this.#intervalId = setInterval(() => this.#scrapData(), this.#setupConfig.scraperConfig.interval);
       this.#status.log(WebScraper.#RUNNING_STATUS);
     }
   }
@@ -205,11 +205,11 @@ export class WebScraper {
    * @param {Object} dataToSave The data object to save in destination file
    */
   #saveData(dataToSave) {
-    const dataDirectory = path.dirname(this.#scraperConfig.dstFile);
+    const dataDirectory = path.dirname(this.#setupConfig.dataOutputPath);
     if (!fs.existsSync(dataDirectory)) {
       fs.mkdirSync(dataDirectory, { recursive: true });
     }
-    fs.writeFileSync(this.#scraperConfig.dstFile, JSON.stringify(dataToSave, null, 2));
+    fs.writeFileSync(this.#setupConfig.dataOutputPath, JSON.stringify(dataToSave, null, 2));
   }
 
   /**

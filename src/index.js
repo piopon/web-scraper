@@ -5,8 +5,8 @@ import { WebServer } from "./components/web-server.js";
 // initialize application config
 const config = new AppConfig().getConfig();
 // create dependent components
-const webScraper = new WebScraper(config.scraperConfig);
+const webScraper = new WebScraper(config);
 // create and start webserver
-const webServer = new WebServer(config.serverConfig);
+const webServer = new WebServer(config);
 webServer.addComponent(webScraper);
 webServer.start();

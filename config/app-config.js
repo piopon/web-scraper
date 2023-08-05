@@ -12,13 +12,13 @@ export class AppConfig {
 
   getConfig() {
     return {
+      dataConfigPath: path.join(this.#rootDir, "user", "input", "scrap-config.json"),
+      dataOutputPath: path.join(this.#rootDir, "user", "output", "data.json"),
       serverConfig: {
         port: process.env.PORT || 5000,
       },
       scraperConfig: {
         interval: 30_000,
-        srcFile: path.join(this.#rootDir, "user", "input", "scrap-config.json"),
-        dstFile: path.join(this.#rootDir, "user", "output", "data.json"),
       },
     };
   }
