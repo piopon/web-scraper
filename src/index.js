@@ -9,4 +9,4 @@ const webScraper = new WebScraper(config);
 // create and start webserver
 const webServer = new WebServer(config);
 webServer.addComponent(webScraper);
-webServer.start();
+webServer.run();

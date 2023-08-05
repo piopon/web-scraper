@@ -1,11 +1,17 @@
 import express from "express";
 
 export class DataRouter {
+  #dataFilePath = undefined;
+
+  constructor(dataFile) {
+    this.#dataFilePath = dataFile;
+  }
+
   /**
    * Method used to create routes for scraped data values
    * @returns router object for handling data requests
    */
-  static createRoutes() {
+  createRoutes() {
     const router = express.Router();
     // create endpoint for receiving all data
     router.get("/", (request, response) => {
