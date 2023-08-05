@@ -22,9 +22,13 @@ export class WebServer {
   run() {
     this.#server = this.#initializeServer();
     this.#server.listen(this.#setupConfig.serverConfig.port, () => {
-      this.#components.forEach(component => component.start());
+      this.#components.forEach((component) => component.start());
       this.#status.log(`Started on port: ${this.#setupConfig.serverConfig.port}`);
     });
+  }
+
+  shutdown() {
+    this.#server.close(() => this.#status.log("Stopped"));
   }
 
   #initializeServer() {

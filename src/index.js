@@ -10,3 +10,8 @@ const webScraper = new WebScraper(config);
 const webServer = new WebServer(config);
 webServer.addComponent(webScraper);
 webServer.run();
+
+process.on("SIGTERM", () => {
+  webServer.shutdown();
+  webScraper.stop();
+});
