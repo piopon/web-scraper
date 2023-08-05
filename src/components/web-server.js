@@ -8,6 +8,7 @@ export class WebServer {
 
   #status = new StatusLogger(WebServer.#LOGGER_NAME);
   #serverConfig = undefined;
+  #components = [];
   #server = undefined;
 
   constructor(config) {
@@ -16,8 +17,13 @@ export class WebServer {
     this.#server.use("/api/v1/data", DataRouter.createRoutes())
   }
 
+  addComponent(component) {
+    this.#components.push(component);
+  }
+
   start() {
     this.#server.listen(this.#serverConfig.port, () => {
+      this.#components.forEach(component => component.start());
       this.#status.log(`Started on port: ${this.#serverConfig.port}`);
     });
   }
