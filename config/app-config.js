@@ -13,7 +13,7 @@ export class AppConfig {
   getConfig() {
     return {
       serverConfig: {
-        port: 5000,
+        port: process.env.PORT || 5000,
       },
       scraperConfig: {
         interval: 30_000,
