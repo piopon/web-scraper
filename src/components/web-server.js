@@ -1,3 +1,4 @@
+import { DataRouter } from "../routes/api/data.js";
 import { StatusLogger } from "./status-logger.js";
 
 import express from "express";
@@ -12,6 +13,7 @@ export class WebServer {
   constructor(config) {
     this.#serverConfig = config;
     this.#server = express();
+    this.#server.use("/api/v1/data", DataRouter.createRoutes())
   }
 
   start() {
