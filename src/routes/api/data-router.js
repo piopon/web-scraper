@@ -19,7 +19,7 @@ export class DataRouter {
    */
   createRoutes() {
     const router = express.Router();
-    // create endpoint for receiving all data
+    // create endpoint for receiving data according specified query param filters
     router.get("/", (request, response) => {
       const validationResult = this.#validateQueryParams(request.query);
       if (!validationResult.valid) {
@@ -27,7 +27,12 @@ export class DataRouter {
         return;
       }
       var dataContent = JSON.parse(fs.readFileSync(this.#dataFilePath));
-      response.status(200).json(dataContent);
+      var filteredData = dataContent.filter((data) => {
+        const nameOk = request.query.name ? data.name === request.query.name : true;
+        const categoryOk = request.query.category ? data.category === request.query.category : true;
+        return nameOk && categoryOk;
+      });
+      response.status(200).json(filteredData);
     });
     return router;
   }
