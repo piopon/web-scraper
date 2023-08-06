@@ -67,8 +67,9 @@ export class WebScraper {
     this.#page.setDefaultTimeout(this.#setupConfig.scraperConfig.defaultTimeout);
     // invoke scrap data action initially and setup interval calls
     if (true === (await this.#scrapData())) {
-      this.#intervalId = setInterval(() => this.#scrapData(), this.#setupConfig.scraperConfig.scrapInterval);
-      this.#status.log(WebScraper.#RUNNING_STATUS);
+      const intervalTime = this.#setupConfig.scraperConfig.scrapInterval;
+      this.#intervalId = setInterval(() => this.#scrapData(), intervalTime);
+      this.#status.log(`${WebScraper.#RUNNING_STATUS} (every: ${intervalTime / 1000} seconds)`);
     }
   }
 
