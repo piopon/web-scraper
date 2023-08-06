@@ -14,6 +14,7 @@ export class WebScraper {
   static #RUNNING_STATUS = "Running";
 
   #status = new StatusLogger(WebScraper.#LOGGER_NAME);
+  #scrapingInProgress = false;
   #setupConfig = undefined;
   #scrapConfig = undefined;
   #intervalId = undefined;
@@ -93,6 +94,8 @@ export class WebScraper {
         }
       }
     }
+    // update internal object state
+    this.#scrapingInProgress = false;
     // close currently opened page and browser
     try {
       if (this.#page != null) {
@@ -146,7 +149,12 @@ export class WebScraper {
       this.stop("Missing scrap configuration");
       return false;
     }
+    if (this.#scrapingInProgress) {
+      this.#status.warning("Skipping current scrap iteration - previous one in progress");
+      return false;
+    }
     const data = [];
+    this.#scrapingInProgress = true;
     for (let groupIndex = 0; groupIndex < this.#scrapConfig.groups.length; groupIndex++) {
       const group = this.#scrapConfig.groups[groupIndex];
       const groupObject = { name: group.name, category: group.category, items: [] };
@@ -203,6 +211,7 @@ export class WebScraper {
       data.push(groupObject);
     }
     this.#saveData(data);
+    this.#scrapingInProgress = false;
     return true;
   }
 
