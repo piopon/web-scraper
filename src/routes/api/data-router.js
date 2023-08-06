@@ -37,6 +37,11 @@ export class DataRouter {
     return router;
   }
 
+  /**
+   * Method used to validate the data router endpoint query parameters
+   * @param {Object} params The query parameters which should be validated
+   * @returns an object with validation result (true/false) and an optional cause (if validation NOK)
+   */
   #validateQueryParams(params) {
     const validator = new Ajv();
     const validate = validator.compile({
