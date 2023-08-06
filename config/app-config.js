@@ -21,7 +21,7 @@ export class AppConfig {
     return {
       dataConfigPath: path.join(this.#rootDir, "user", "input", "scrap-config.json"),
       dataOutputPath: path.join(this.#rootDir, "user", "output", "data.json"),
-      screenshotPath: path.join(this.#rootDir, "user", "screenshots"),
+      screenshotPath: path.join(this.#rootDir, "user", "captures"),
       serverConfig: {
         port: process.env.PORT || 5000,
       },
