@@ -3,6 +3,7 @@ import { ScrapConfig } from "../model/scrap-config.js";
 import { ScrapWarning } from "../model/scrap-exception.js";
 import { ScrapValidator } from "../model/scrap-validator.js";
 import { StatusLogger } from "./status-logger.js";
+import { TimeoutError } from "puppeteer";
 
 import puppeteer from "puppeteer";
 import path from "path";
@@ -154,10 +155,9 @@ export class WebScraper {
         const observer = group.observers[observerIndex];
         const page = new URL(observer.path, group.domain);
         try {
-          await this.#page.goto(page, { waitUntil: observer.target });
-          await this.#page.waitForSelector(observer.price.selector, { visible: true });
+          await this.#navigateToPage(page, observer);
         } catch (error) {
-          this.stop("Incorrect scrap configuration: Cannot find price element", true);
+          this.stop(`Incorrect scrap configuration: Cannot find price element in page ${page}`, true);
           return false;
         }
         const dataObj = await this.#page.evaluate((observer) => {
@@ -205,6 +205,31 @@ export class WebScraper {
     }
     this.#saveData(data);
     return true;
+  }
+
+  /**
+   * Method used to go to a specified URL and wait until an observer selector is available
+   * @param {String} pageUrl The address of a page to navigate to
+   * @param {Object} observer The observer which has the selector definition to find on a page
+   */
+  async #navigateToPage(pageUrl, observer) {
+    let attempt = 1;
+    let foundSelector = false;
+    const maxAttempts = 10;
+    while (!foundSelector) {
+      try {
+        await this.#page.goto(pageUrl, { waitUntil: observer.target });
+        await this.#page.waitForSelector(observer.price.selector, { visible: true });
+        foundSelector = true;
+      } catch (error) {
+        if (attempt <= maxAttempts && error instanceof TimeoutError) {
+          this.#status.warning(`Timeout when waiting for ${observer.price.selector} [${attempt}/${maxAttempts}]`);
+          attempt++;
+          continue;
+        }
+        throw error;
+      }
+    }
   }
 
   /**
