@@ -215,7 +215,7 @@ export class WebScraper {
   async #navigateToPage(pageUrl, observer) {
     let attempt = 1;
     let foundSelector = false;
-    const maxAttempts = 10;
+    const maxAttempts = this.#setupConfig.scraperConfig.timeoutAttempts;
     while (!foundSelector) {
       try {
         await this.#page.goto(pageUrl, { waitUntil: observer.target });
@@ -223,7 +223,7 @@ export class WebScraper {
         foundSelector = true;
       } catch (error) {
         if (attempt <= maxAttempts && error instanceof TimeoutError) {
-          this.#status.warning(`Timeout when waiting for ${observer.price.selector} [${attempt}/${maxAttempts}]`);
+          this.#status.warning(`Timeout when waiting for: ${observer.price.selector} [${attempt}/${maxAttempts}]`);
           attempt++;
           continue;
         }

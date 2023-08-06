@@ -27,7 +27,8 @@ export class AppConfig {
       },
       scraperConfig: {
         scrapInterval: 30_000,
-        defaultTimeout: 25_000,
+        defaultTimeout: 15_000,
+        timeoutAttempts: 10,
       },
     };
   }
