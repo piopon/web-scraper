@@ -62,9 +62,10 @@ export class WebScraper {
     // open new Puppeteer virtual browser and an initial web page
     this.#browser = await puppeteer.launch({ headless: "new" });
     this.#page = await this.#browser.newPage();
+    this.#page.setDefaultTimeout(this.#setupConfig.scraperConfig.defaultTimeout);
     // invoke scrap data action initially and setup interval calls
     if (true === (await this.#scrapData())) {
-      this.#intervalId = setInterval(() => this.#scrapData(), this.#setupConfig.scraperConfig.interval);
+      this.#intervalId = setInterval(() => this.#scrapData(), this.#setupConfig.scraperConfig.scrapInterval);
       this.#status.log(WebScraper.#RUNNING_STATUS);
     }
   }

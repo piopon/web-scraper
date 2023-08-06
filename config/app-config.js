@@ -18,7 +18,8 @@ export class AppConfig {
         port: process.env.PORT || 5000,
       },
       scraperConfig: {
-        interval: 30_000,
+        scrapInterval: 30_000,
+        defaultTimeout: 25_000,
       },
     };
   }
