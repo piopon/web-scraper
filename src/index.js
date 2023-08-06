@@ -11,7 +11,4 @@ const webServer = new WebServer(config);
 webServer.addComponent(webScraper);
 webServer.run();
 
-process.on("SIGTERM", () => {
-  webServer.shutdown();
-  webScraper.stop();
-});
+process.on("SIGTERM", () => webServer.shutdown());

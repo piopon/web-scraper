@@ -42,7 +42,10 @@ export class WebServer {
    * Method used to gracefully shutdown the web server
    */
   shutdown() {
-    this.#server.close(() => this.#status.log("Stopped"));
+    this.#server.close(() => {
+      this.#components.forEach((component) => component.stop());
+      this.#status.log("Stopped");
+    });
   }
 
   /**
