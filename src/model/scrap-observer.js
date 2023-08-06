@@ -9,7 +9,8 @@ export class ScrapObserver {
   constructor(object) {
     const input = ModelUtils.getValueOrDefault(object, {});
     this.path = ModelUtils.getValueOrDefault(input.path, "");
-    this.history = ModelUtils.getValueOrDefault(input.history, "");
+    this.target = ModelUtils.getValueOrDefault(input.target, "load");
+    this.history = ModelUtils.getValueOrDefault(input.history, "off");
     this.container = ModelUtils.getValueOrDefault(input.container, "");
     this.title = new ScrapComponent(input.title);
     this.image = new ScrapComponent(input.image);
