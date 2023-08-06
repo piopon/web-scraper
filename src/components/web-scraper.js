@@ -134,8 +134,7 @@ export class WebScraper {
    * @returns true when web scraper is running, false otherwise
    */
   isAlive() {
-    const currentStatus = this.#status.getStatus().message;
-    return this.#intervalId != null && currentStatus === WebScraper.#RUNNING_STATUS;
+    return this.#intervalId != null;
   }
 
   /**
