@@ -72,15 +72,28 @@ export class WebScraper {
 
   /**
    * Method used to stop web scraping action
-   * @param {String} reason Optional message with the reason for stopping the web scraping.
-   *                        Non-empty value will be interpreted as error.
+   * @param {String} reason The message with a web scraper stop reason. Non-empty value is treated as error.
+   * @param {Boolean} takeScreenshot Flag responsible for creating an additional screenshot.
    */
-  async stop(reason = "") {
-    try {
-      if (this.#intervalId != null) {
-        clearInterval(this.#intervalId);
-        this.#intervalId = undefined;
+  async stop(reason = "", takeScreenshot = false) {
+    // stop running method in constant time intervals
+    if (this.#intervalId != null) {
+      clearInterval(this.#intervalId);
+      this.#intervalId = undefined;
+    }
+    // update status and make error screenshot
+    if (reason.length === 0) {
+      this.#status.log("Stopped");
+    } else {
+      if (this.#status.getStatus().message !== reason) {
+        this.#status.error(reason);
+        if (takeScreenshot) {
+          await this.#createErrorScreenshot(this.#status.getStatus());
+        }
       }
+    }
+    // close currently opened page and browser
+    try {
       if (this.#page != null) {
         await this.#page.close();
       }
@@ -89,14 +102,6 @@ export class WebScraper {
       }
     } catch (warning) {
       this.#status.warning(`Stop issue: ${warning.message}`);
-    }
-    if (reason.length === 0) {
-      this.#status.log("Stopped");
-    } else {
-      if (this.#status.getStatus().message !== reason) {
-        this.#status.error(reason);
-        await this.#createErrorScreenshot(this.#status.getStatus());
-      }
     }
   }
 
@@ -152,7 +157,7 @@ export class WebScraper {
           await this.#page.goto(page);
           await this.#page.waitForSelector(observer.price.selector, { visible: true });
         } catch (error) {
-          this.stop("Incorrect scrap configuration: Cannot find price element");
+          this.stop("Incorrect scrap configuration: Cannot find price element", true);
           return false;
         }
         const dataObj = await this.#page.evaluate((observer) => {
@@ -191,7 +196,7 @@ export class WebScraper {
         }, observer);
         const validationResult = this.#validateData(dataObj);
         if (validationResult.length > 0) {
-          this.stop(validationResult);
+          this.stop(validationResult, true);
           return false;
         }
         groupObject.items.push(this.#formatData(dataObj));
@@ -250,10 +255,13 @@ export class WebScraper {
    * @param {Object} error The occured error object
    */
   async #createErrorScreenshot(error) {
-    if (this.#page) {
-      const screenshotName = `error_${error.timestamp.replace(" ", "_")}.png`
-      const dataDirectory = path.dirname(this.#setupConfig.screenshotPath);
-      await this.#page.screenshot({ path: path.join(dataDirectory, screenshotName)});
+    if (this.#page && error.type.length > 0) {
+      if (!fs.existsSync(this.#setupConfig.screenshotPath)) {
+        fs.mkdirSync(this.#setupConfig.screenshotPath, { recursive: true });
+      }
+      const screenshotName = `error_${error.timestamp.replaceAll(":", "-").replaceAll(" ", "_")}.png`;
+      const screenshotPath = path.join(this.#setupConfig.screenshotPath, screenshotName);
+      await this.#page.screenshot({ path: screenshotPath });
     }
   }
 }
