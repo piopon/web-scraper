@@ -95,6 +95,7 @@ export class WebScraper {
     } else {
       if (this.#status.getStatus().message !== reason) {
         this.#status.error(reason);
+        await this.#createErrorScreenshot(this.#status.getStatus());
       }
     }
   }
@@ -242,5 +243,17 @@ export class WebScraper {
       return `Invalid scraped data: Incorrect price value for ${objectName}`;
     }
     return "";
+  }
+
+  /**
+   * Method used to create an error screenshot of current web page (if present)
+   * @param {Object} error The occured error object
+   */
+  async #createErrorScreenshot(error) {
+    if (this.#page) {
+      const screenshotName = `error_${error.timestamp.replace(" ", "_")}.png`
+      const dataDirectory = path.dirname(this.#setupConfig.screenshotPath);
+      await this.#page.screenshot({ path: path.join(dataDirectory, screenshotName)});
+    }
   }
 }
