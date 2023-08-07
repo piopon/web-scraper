@@ -45,8 +45,20 @@ export class ConfigRouter {
     const validate = validator.compile({
       type: "object",
       additionalProperties: false,
-      properties: { user: { type: "string" } },
+      properties: this.#getAcceptedQueryParams(url),
     });
     return { valid: validate(params), cause: validate.errors };
+  }
+
+  /**
+   * Method used to get accepter query params object for specified URL address
+   * @param {String} url The endpoint URL address for which we want to get accepted query params definition
+   * @returns an object definition with accepted query params
+   */
+  #getAcceptedQueryParams(url) {
+    const pathParams = new Map([
+        ["/", { user: { type: "string" } }],
+    ]);
+    return pathParams.get(url.substring(0, url.indexOf("?")));
   }
 }
