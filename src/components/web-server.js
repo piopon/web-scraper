@@ -1,3 +1,4 @@
+import { ConfigRouter } from "../routes/api/config-router.js";
 import { DataRouter } from "../routes/api/data-router.js";
 import { StatusLogger } from "./status-logger.js";
 
@@ -58,6 +59,7 @@ export class WebServer {
     // setup web server routes
     const routes = new Map([
       ["/api/v1/data", new DataRouter(this.#setupConfig.dataOutputPath)],
+      ["/api/v1/config", new ConfigRouter(this.#setupConfig.dataConfigPath)],
     ]);
     routes.forEach((router, url) => server.use(url, router.createRoutes()));
 
