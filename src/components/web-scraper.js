@@ -15,6 +15,7 @@ export class WebScraper {
 
   #status = new StatusLogger(WebScraper.#LOGGER_NAME);
   #scrapingInProgress = false;
+  #currentUserId = undefined;
   #setupConfig = undefined;
   #scrapConfig = undefined;
   #intervalId = undefined;
@@ -25,8 +26,9 @@ export class WebScraper {
    * Creates a new web scraper with specified configuration
    * @param {Object} config The object containing scraper configuration
    */
-  constructor(config) {
+  constructor(config, userId) {
     this.#setupConfig = config;
+    this.#currentUserId = userId;
     this.#status.log("Created");
   }
 
@@ -41,14 +43,16 @@ export class WebScraper {
       fs.mkdirSync(configDirectory, { recursive: true });
     }
     if (!fs.existsSync(this.#setupConfig.dataConfigPath)) {
-      const newConfig = { user: 0, groups: [] };
+      const newConfig = { user: this.#currentUserId, groups: [] };
       fs.writeFileSync(this.#setupConfig.dataConfigPath, JSON.stringify(newConfig, null, 2));
       this.#status.log(`Created new ${path.basename(this.#setupConfig.dataConfigPath)}`);
     }
     this.#status.log("Reading configuration");
     // parse source scraper configuration file to a config class
     try {
-      var scrapJson = JSON.parse(fs.readFileSync(this.#setupConfig.dataConfigPath));
+      var scrapJson = JSON.parse(fs.readFileSync(this.#setupConfig.dataConfigPath))
+        .filter((element) => element.user === this.#currentUserId)
+        .at(0);
       var scrapConfigCandidate = new ScrapConfig(scrapJson);
       this.#scrapConfig = new ScrapValidator(scrapConfigCandidate).validate();
     } catch (e) {
