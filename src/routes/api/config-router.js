@@ -1,12 +1,14 @@
+import express from "express";
+
 export class ConfigRouter {
   #configFilePath = undefined;
 
   /**
    * Creates a new config router for configuring appropriate endpoints
-   * @param {String} configFilePath The path to the configuration file
+   * @param {String} configFile The path to the configuration file
    */
-  constructor(dataFile) {
-    this.#configFilePath = dataFile;
+  constructor(configFile) {
+    this.#configFilePath = configFile;
   }
 
   /**
