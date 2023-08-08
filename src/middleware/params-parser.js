@@ -1,4 +1,5 @@
 import { ModelUtils } from "../utils/model-utils.js";
+import { RegexUtils } from "../utils/regex-utils.js";
 
 export class ParamsParser {
   /**
@@ -23,7 +24,6 @@ export class ParamsParser {
       Object.keys(params).forEach((key) => {
         params[key] = ParamsParser.#parse(params[key]);
       });
-      console.log(params);
     }
   }
 
@@ -33,9 +33,8 @@ export class ParamsParser {
    * @returns the value parsed to best matching type
    */
   static #parse(value) {
-    const isInteger = new RegExp('^[0-9]+$');
-    if (isInteger.test(value)) {
-        return Number.parseInt(value);
+    if (RegexUtils.isSignedInteger(value)) {
+      return Number.parseInt(value);
     }
     return value;
   }
