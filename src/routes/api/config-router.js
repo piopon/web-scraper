@@ -51,6 +51,23 @@ export class ConfigRouter {
   }
 
   /**
+   * Method containing common logic used to handle GET requests
+   * @param {Object} request The incoming request object
+   * @param {Object} response The outputted response object
+   * @param {Function} filter The function using query and path params to return appropriate data
+   */
+  #handleGetRequest(request, response, filter) {
+    const validationResult = this.#validateQueryParams(request.url, request.query);
+    if (!validationResult.valid) {
+      response.status(400).json(validationResult.cause);
+      return;
+    }
+    const configContent = JSON.parse(fs.readFileSync(this.#configFilePath));
+    const filteredData = filter(configContent);
+    response.status(200).json(filteredData);
+  }
+
+  /**
    * Method used to validate the config router endpoint query parameters
    * @param {String} url The endpoint URL address
    * @param {Object} params The query parameters which should be validated
