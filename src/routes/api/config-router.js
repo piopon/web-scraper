@@ -57,7 +57,7 @@ export class ConfigRouter {
    */
   #getAcceptedQueryParams(url) {
     const pathParams = new Map([
-        ["/", { user: { type: "integer" } }],
+        ["/", { user: { type: "integer", minimum: 0 } }],
     ]);
     return pathParams.get(url.substring(0, url.indexOf("?")));
   }
