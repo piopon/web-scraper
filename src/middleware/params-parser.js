@@ -1,16 +1,16 @@
+import { ModelUtils } from "../utils/model-utils.js";
+
 export class ParamsParser {
   static middleware(request, response, next) {
-    if (request.params) {
-      ParamsParser.#parse(request.params);
-    }
-    if (request.query) {
-      ParamsParser.#parse(request.query);
-    }
+    ParamsParser.#tryParse(request.params);
+    ParamsParser.#tryParse(request.query);
     next();
   }
 
-  static #parse(params) {
-    console.log("Parsing params:");
-    console.log(params);
+  static #tryParse(params) {
+    if (params && !ModelUtils.isEmpty(params)) {
+      console.log("Parsing params:");
+      console.log(params);
+    }
   }
 }
