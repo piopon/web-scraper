@@ -1,4 +1,9 @@
 export class ModelUtils {
+  /**
+   * Method used to check if a specified object is empty (has no properties)
+   * @param {Object} object The object to check for emptiness
+   * @returns true if input object is empty, false otherwise
+   */
   static isEmpty(object) {
     return Object.keys(object).length === 0;
   }
