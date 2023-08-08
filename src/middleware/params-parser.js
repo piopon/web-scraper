@@ -33,7 +33,8 @@ export class ParamsParser {
    * @returns the value parsed to best matching type
    */
   static #parse(value) {
-    if (Number.isInteger(value)) {
+    const isInteger = new RegExp('^[0-9]+$');
+    if (isInteger.test(value)) {
         return Number.parseInt(value);
     }
     return value;
