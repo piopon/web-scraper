@@ -27,7 +27,7 @@ export class ConfigRouter {
       }
       var configContent = JSON.parse(fs.readFileSync(this.#configFilePath));
       var filteredData = configContent.filter((data) => {
-        return request.query.user ? data.user === parseInt(request.query.user) : true;
+        return request.query.user ? data.user === request.query.user : true;
       });
       response.status(200).json(filteredData);
     });
@@ -57,7 +57,7 @@ export class ConfigRouter {
    */
   #getAcceptedQueryParams(url) {
     const pathParams = new Map([
-        ["/", { user: { type: "string" } }],
+        ["/", { user: { type: "integer" } }],
     ]);
     return pathParams.get(url.substring(0, url.indexOf("?")));
   }
