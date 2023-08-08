@@ -1,4 +1,8 @@
 export class ModelUtils {
+  static isEmpty(object) {
+    return Object.keys(object).length === 0;
+  }
+
   /**
    * Method used to check and return value if present, or a default if not
    * @param {any} value The value to check and return if present
