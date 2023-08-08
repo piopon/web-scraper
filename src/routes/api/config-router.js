@@ -73,8 +73,8 @@ export class ConfigRouter {
    */
   #getAcceptedQueryParams(url) {
     const pathParams = new Map([
-        ["/", { user: { type: "integer", minimum: 0 } }],
-        ["/groups", { name: { type: "string" }, category: { type: "string" }, domain: { type: "string" } }],
+      ["/", { user: { type: "integer", minimum: 0 } }],
+      ["/groups", { name: { type: "string" }, category: { type: "string" }, domain: { type: "string" } }],
     ]);
     return pathParams.get(url.substring(0, url.indexOf("?")));
   }
