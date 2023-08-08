@@ -20,8 +20,22 @@ export class ParamsParser {
    */
   static #tryParse(params) {
     if (params && !ModelUtils.isEmpty(params)) {
-      console.log("Parsing params:");
+      Object.keys(params).forEach((key) => {
+        params[key] = ParamsParser.#parse(params[key]);
+      });
       console.log(params);
     }
+  }
+
+  /**
+   * Core method to parse string value to a matching type
+   * @param {String} value The input value to be parsed
+   * @returns the value parsed to best matching type
+   */
+  static #parse(value) {
+    if (Number.isInteger(value)) {
+        return Number.parseInt(value);
+    }
+    return value;
   }
 }
