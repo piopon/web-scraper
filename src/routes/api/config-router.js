@@ -31,6 +31,22 @@ export class ConfigRouter {
       });
       response.status(200).json(filteredData);
     });
+    router.get("/groups", (request, response) => {
+      const validationResult = this.#validateQueryParams(request.url, request.query);
+      if (!validationResult.valid) {
+        response.status(400).json(validationResult.cause);
+        return;
+      }
+      var configContent = JSON.parse(fs.readFileSync(this.#configFilePath));
+      var groupsContent = configContent.flatMap((item) => item.groups);
+      var filteredData = groupsContent.filter((data) => {
+        const nameOk = request.query.name ? data.name === request.query.name : true;
+        const categoryOk = request.query.category ? data.category === request.query.category : true;
+        const domainOk = request.query.domain ? data.domain === request.query.domain : true;
+        return nameOk && categoryOk && domainOk;
+      });
+      response.status(200).json(filteredData);
+    });
     return router;
   }
 
@@ -58,6 +74,7 @@ export class ConfigRouter {
   #getAcceptedQueryParams(url) {
     const pathParams = new Map([
         ["/", { user: { type: "integer", minimum: 0 } }],
+        ["/groups", { name: { type: "string" }, category: { type: "string" }, domain: { type: "string" } }],
     ]);
     return pathParams.get(url.substring(0, url.indexOf("?")));
   }
