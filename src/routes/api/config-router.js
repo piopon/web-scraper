@@ -46,6 +46,13 @@ export class ConfigRouter {
           })
       );
     });
+    router.get("/groups/observers", (request, response) => {
+      this.#handleGetRequest(request, response, (configContent) =>
+        configContent
+          .flatMap((item) => item.groups)
+          .flatMap((item) => item.observers)
+      );
+    });
   }
 
   /**
@@ -90,6 +97,14 @@ export class ConfigRouter {
     const pathParams = new Map([
       ["/", { user: { type: "integer", minimum: 0 } }],
       ["/groups", { name: { type: "string" }, category: { type: "string" }, domain: { type: "string" } }],
+      [
+        "/groups/observers",
+        {
+          path: { type: "string" },
+          target: { enum: ["load", "domcontentloaded", "networkidle0", "networkidle2"] },
+          history: { enum: ["off", "live", "change"] },
+        },
+      ],
     ]);
     return pathParams.get(url.substring(0, url.indexOf("?")));
   }
