@@ -1,3 +1,6 @@
+import { ScrapConfig } from "../../model/scrap-config.js";
+import { ScrapValidator } from "../../model/scrap-validator.js";
+
 import Ajv from "ajv";
 import express from "express";
 import fs from "fs";
@@ -68,6 +71,33 @@ export class ConfigRouter {
    */
   #createPostRoutes(router) {
     router.post("/", (request, response) => {
+      const requestBodyObject = request.body;
+      // validate request body content by schema structure
+      const validator = new Ajv();
+      const validate = validator.compile({
+        type: "object",
+        get required() {
+          return Object.keys(this.properties)
+        },
+        additionalProperties: false,
+        properties: { user: { type: "integer", minimum: 0 }, groups: { type: "array" } },
+      });
+      if (!validate(requestBodyObject)) {
+        response.status(400).json(validate.errors);
+        return;
+      }
+      // validate request body content by values
+      const scrapConfigCandidate = new ScrapConfig(requestBodyObject);
+      try {
+        var scrapConfig = new ScrapValidator(scrapConfigCandidate).validate();
+      } catch (e) {
+        if (e instanceof ScrapWarning) {
+          scrapConfig = scrapConfigCandidate;
+        } else {
+          response.status(400).json(e.message);
+          return;
+        }
+      }
       response.send(request.body);
     });
   }
