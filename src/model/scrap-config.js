@@ -11,4 +11,11 @@ export class ScrapConfig {
     this.user = ModelUtils.getValueOrDefault(input.user, "");
     this.groups = ModelUtils.getArrayOfModels(ScrapGroup, input.groups);
   }
+
+  getPropertiesSchema() {
+    return {
+      user: { type: "integer", minimum: 0 },
+      groups: { type: "array" },
+    };
+  }
 }

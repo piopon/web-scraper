@@ -13,4 +13,13 @@ export class ScrapGroup {
     this.domain = ModelUtils.getValueOrDefault(input.domain, "");
     this.observers = ModelUtils.getArrayOfModels(ScrapObserver, input.observers);
   }
+
+  getPropertiesSchema() {
+    return {
+      name: { type: "string" },
+      category: { type: "string" },
+      domain: { type: "string" },
+      observers: { type: "array" },
+    };
+  }
 }

@@ -16,4 +16,16 @@ export class ScrapObserver {
     this.image = new ScrapComponent(input.image);
     this.price = new ScrapComponent(input.price);
   }
+
+  getPropertiesSchema() {
+    return {
+      path: { type: "string" },
+      target: { type: "string" },
+      history: { type: "string" },
+      container: { type: "string" },
+      title: { type: "object" },
+      image: { type: "object" },
+      price: { type: "object" },
+    };
+  }
 }

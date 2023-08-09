@@ -12,4 +12,13 @@ export class ScrapComponent {
     this.attribute = ModelUtils.getValueOrDefault(input.attribute, "");
     this.auxiliary = ModelUtils.getValueOrDefault(input.auxiliary, "");
   }
+
+  getPropertiesSchema() {
+    return {
+      interval: { type: "string" },
+      selector: { type: "string" },
+      attribute: { type: "string" },
+      auxiliary: { type: "string" },
+    };
+  }
 }
