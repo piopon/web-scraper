@@ -102,11 +102,18 @@ export class ConfigRouter {
   #getAcceptedQueryParams(url) {
     const pathParams = new Map([
       ["/", { user: { type: "integer", minimum: 0 } }],
-      ["/groups", { name: { type: "string" }, category: { type: "string" }, domain: { type: "string" } }],
+      [
+        "/groups",
+        {
+          name: { type: "string", minLength: 1 },
+          category: { type: "string", minLength: 1 },
+          domain: { type: "string", minLength: 1 },
+        },
+      ],
       [
         "/groups/observers",
         {
-          path: { type: "string" },
+          path: { type: "string", minLength: 1 },
           target: { enum: ["load", "domcontentloaded", "networkidle0", "networkidle2"] },
           history: { enum: ["off", "live", "change"] },
         },
