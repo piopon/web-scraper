@@ -51,6 +51,12 @@ export class ConfigRouter {
         configContent
           .flatMap((item) => item.groups)
           .flatMap((item) => item.observers)
+          .filter((item) => {
+            const pathOk = request.query.path ? item.path === request.query.path : true;
+            const targetOk = request.query.target ? item.target === request.query.target : true;
+            const historyOk = request.query.history ? item.history === request.query.history : true;
+            return pathOk && targetOk && historyOk;
+          })
       );
     });
   }
