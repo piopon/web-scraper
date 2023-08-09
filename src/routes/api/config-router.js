@@ -3,6 +3,7 @@ import { ScrapValidator } from "../../model/scrap-validator.js";
 
 import Ajv from "ajv";
 import express from "express";
+import path from "path";
 import fs from "fs";
 
 export class ConfigRouter {
@@ -98,7 +99,15 @@ export class ConfigRouter {
           return;
         }
       }
-      response.send(request.body);
+      // add new schema to file
+      const configContent = JSON.parse(fs.readFileSync(this.#configFilePath));
+      configContent.push(scrapConfig);
+      const configDirectory = path.dirname(this.#configFilePath);
+      if (!fs.existsSync(configDirectory)) {
+        fs.mkdirSync(configDirectory, { recursive: true });
+      }
+      fs.writeFileSync(this.#configFilePath, JSON.stringify(configContent, null, 2));
+      response.status(200).send("Added new scrap configuration");
     });
   }
 
