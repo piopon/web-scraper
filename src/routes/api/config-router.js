@@ -20,6 +20,7 @@ export class ConfigRouter {
   createRoutes() {
     const router = express.Router();
     this.#createGetRoutes(router);
+    this.#createPostRoutes(router);
 
     return router;
   }
@@ -58,6 +59,16 @@ export class ConfigRouter {
             return pathOk && targetOk && historyOk;
           })
       );
+    });
+  }
+
+  /**
+   * Method used to create POST method routes and add them to the router object
+   * @param {Object} router The router object with POST method routes defined
+   */
+  #createPostRoutes(router) {
+    router.post("/", (request, response) => {
+      response.send(request.body);
     });
   }
 
