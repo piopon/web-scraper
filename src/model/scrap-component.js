@@ -13,12 +13,16 @@ export class ScrapComponent {
     this.auxiliary = ModelUtils.getValueOrDefault(input.auxiliary, "");
   }
 
-  getPropertiesSchema() {
+  static getPropertiesSchema() {
     return {
-      interval: { type: "string" },
-      selector: { type: "string" },
-      attribute: { type: "string" },
-      auxiliary: { type: "string" },
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        interval: { type: "string" },
+        selector: { type: "string" },
+        attribute: { type: "string" },
+        auxiliary: { type: "string" },
+      },
     };
   }
 }

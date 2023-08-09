@@ -14,12 +14,16 @@ export class ScrapGroup {
     this.observers = ModelUtils.getArrayOfModels(ScrapObserver, input.observers);
   }
 
-  getPropertiesSchema() {
+  static getPropertiesSchema() {
     return {
-      name: { type: "string" },
-      category: { type: "string" },
-      domain: { type: "string" },
-      observers: { type: "array" },
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        name: { type: "string" },
+        category: { type: "string" },
+        domain: { type: "string" },
+        observers: { type: "array", items: ScrapObserver.getPropertiesSchema() },
+      },
     };
   }
 }
