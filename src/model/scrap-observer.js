@@ -17,7 +17,7 @@ export class ScrapObserver {
     this.price = new ScrapComponent(input.price);
   }
 
-  static getPropertiesSchema() {
+  static getSchema() {
     return {
       type: "object",
       additionalProperties: false,
@@ -26,10 +26,11 @@ export class ScrapObserver {
         target: { type: "string" },
         history: { type: "string" },
         container: { type: "string" },
-        title: ScrapComponent.getPropertiesSchema(),
-        image: ScrapComponent.getPropertiesSchema(),
-        price: ScrapComponent.getPropertiesSchema(),
+        title: ScrapComponent.getSchema(),
+        image: ScrapComponent.getSchema(),
+        price: ScrapComponent.getSchema(),
       },
+      required: ["path", "price"],
     };
   }
 }

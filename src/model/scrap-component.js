@@ -13,7 +13,7 @@ export class ScrapComponent {
     this.auxiliary = ModelUtils.getValueOrDefault(input.auxiliary, "");
   }
 
-  static getPropertiesSchema() {
+  static getSchema() {
     return {
       type: "object",
       additionalProperties: false,
@@ -23,6 +23,7 @@ export class ScrapComponent {
         attribute: { type: "string" },
         auxiliary: { type: "string" },
       },
+      required: ["selector", "attribute", "auxiliary"],
     };
   }
 }

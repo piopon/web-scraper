@@ -75,7 +75,7 @@ export class ConfigRouter {
     router.post("/", (request, response) => {
       const requestBodyObject = request.body;
       // validate request body content by schema structure
-      const validate = new Ajv().compile(ScrapConfig.getPropertiesSchema());
+      const validate = new Ajv().compile(ScrapConfig.getSchema());
       if (!validate(requestBodyObject)) {
         response.status(400).json(validate.errors);
         return;

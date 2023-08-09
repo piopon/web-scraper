@@ -12,14 +12,15 @@ export class ScrapConfig {
     this.groups = ModelUtils.getArrayOfModels(ScrapGroup, input.groups);
   }
 
-  static getPropertiesSchema() {
+  static getSchema() {
     return {
       type: "object",
       additionalProperties: false,
       properties: {
         user: { type: "integer", minimum: 0 },
-        groups: { type: "array", items: ScrapGroup.getPropertiesSchema() },
+        groups: { type: "array", items: ScrapGroup.getSchema() },
       },
+      required: ["user"],
     };
   }
 }
