@@ -14,6 +14,10 @@ export class ScrapGroup {
     this.observers = ModelUtils.getArrayOfModels(ScrapObserver, input.observers);
   }
 
+  /**
+   * Method used to retrieve JSON schema
+   * @returns JSON schema object
+   */
   static getSchema() {
     return {
       type: "object",

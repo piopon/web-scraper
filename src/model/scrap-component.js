@@ -13,6 +13,10 @@ export class ScrapComponent {
     this.auxiliary = ModelUtils.getValueOrDefault(input.auxiliary, "");
   }
 
+  /**
+   * Method used to retrieve JSON schema
+   * @returns JSON schema object
+   */
   static getSchema() {
     return {
       type: "object",

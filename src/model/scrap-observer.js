@@ -17,6 +17,10 @@ export class ScrapObserver {
     this.price = new ScrapComponent(input.price);
   }
 
+  /**
+   * Method used to retrieve JSON schema
+   * @returns JSON schema object
+   */
   static getSchema() {
     return {
       type: "object",
