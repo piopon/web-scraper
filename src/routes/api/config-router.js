@@ -73,7 +73,7 @@ export class ConfigRouter {
         configContent
           .flatMap((item) => item.groups)
           .flatMap((item) => item.observers)
-          .map((item) => item.title)
+          .map((item) => item[request.query.source])
           .filter((item) => {
             const intervalOk = request.query.interval ? item.interval === request.query.interval : true;
             const attributeOk = request.query.attribute ? item.attribute === request.query.attribute : true;
