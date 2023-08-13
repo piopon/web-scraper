@@ -145,21 +145,6 @@ export class ConfigRouter {
   }
 
   /**
-   * Method used to get accepter query params object for specified URL address
-   * @param {String} url The endpoint URL address for which we want to get accepted query params definition
-   * @returns an object definition with accepted query params
-   */
-  #getAcceptedQueryParams(url) {
-    const pathParams = new Map([
-      ["/", ScrapConfig.getQueryParams()],
-      ["/groups", ScrapGroup.getQueryParams()],
-      ["/groups/observers", ScrapObserver.getQueryParams()],
-      ["/groups/observers/components", ScrapComponent.getQueryParams()],
-    ]);
-    return pathParams.get(url.substring(0, url.indexOf("?")));
-  }
-
-  /**
    * Method used to validate request body for correct config object
    * @param {Object} requestBodyObject The object which shoulde be validated
    * @returns the parsed and validated config if ok, error cause otherwise
@@ -197,5 +182,20 @@ export class ConfigRouter {
     const configContent = JSON.parse(fs.readFileSync(this.#configFilePath));
     update(configContent);
     fs.writeFileSync(this.#configFilePath, JSON.stringify(configContent, null, 2));
+  }
+
+  /**
+   * Method used to get accepter query params object for specified URL address
+   * @param {String} url The endpoint URL address for which we want to get accepted query params definition
+   * @returns an object definition with accepted query params
+   */
+  #getAcceptedQueryParams(url) {
+    const pathParams = new Map([
+      ["/", ScrapConfig.getQueryParams()],
+      ["/groups", ScrapGroup.getQueryParams()],
+      ["/groups/observers", ScrapObserver.getQueryParams()],
+      ["/groups/observers/components", ScrapComponent.getQueryParams()],
+    ]);
+    return pathParams.get(url.substring(0, url.indexOf("?")));
   }
 }
