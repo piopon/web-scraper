@@ -1,3 +1,4 @@
+import { ScrapComponent } from "../../model/scrap-component.js";
 import { ScrapConfig } from "../../model/scrap-config.js";
 import { ScrapValidator } from "../../model/scrap-validator.js";
 import { ScrapWarning } from "../../model/scrap-exception.js";
@@ -64,6 +65,20 @@ export class ConfigRouter {
             const targetOk = request.query.target ? item.target === request.query.target : true;
             const historyOk = request.query.history ? item.history === request.query.history : true;
             return pathOk && targetOk && historyOk;
+          })
+      );
+    });
+    router.get("/groups/observers/components", (request, response) => {
+      this.#handleGetRequest(request, response, (configContent) =>
+        configContent
+          .flatMap((item) => item.groups)
+          .flatMap((item) => item.observers)
+          .map((item) => item.title)
+          .filter((item) => {
+            const intervalOk = request.query.interval ? item.interval === request.query.interval : true;
+            const attributeOk = request.query.attribute ? item.attribute === request.query.attribute : true;
+            const auxiliaryOk = request.query.auxiliary ? item.auxiliary === request.query.auxiliary : true;
+            return intervalOk && attributeOk && auxiliaryOk;
           })
       );
     });
@@ -149,6 +164,7 @@ export class ConfigRouter {
       ["/", ScrapConfig.getQueryParams()],
       ["/groups", ScrapGroup.getQueryParams()],
       ["/groups/observers", ScrapObserver.getQueryParams()],
+      ["/groups/observers/components", ScrapComponent.getQueryParams()],
     ]);
     return pathParams.get(url.substring(0, url.indexOf("?")));
   }
