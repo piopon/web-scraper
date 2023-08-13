@@ -30,4 +30,16 @@ export class ScrapComponent {
       required: ["selector", "attribute", "auxiliary"],
     };
   }
+
+  /**
+   * Method used to retrieve accepted query params object
+   * @returns accepted query parameters object
+   */
+  static getQueryParams() {
+    return {
+      interval: { type: "string", minLength: 1 },
+      attribute: { type: "string", minLength: 1 },
+      auxiliary: { type: "string", minLength: 1 },
+    };
+  }
 }

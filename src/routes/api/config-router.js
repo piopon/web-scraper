@@ -6,6 +6,8 @@ import Ajv from "ajv";
 import express from "express";
 import path from "path";
 import fs from "fs";
+import { ScrapGroup } from "../../model/scrap-group.js";
+import { ScrapObserver } from "../../model/scrap-observer.js";
 
 export class ConfigRouter {
   #configFilePath = undefined;
@@ -144,23 +146,9 @@ export class ConfigRouter {
    */
   #getAcceptedQueryParams(url) {
     const pathParams = new Map([
-      ["/", { user: { type: "integer", minimum: 0 } }],
-      [
-        "/groups",
-        {
-          name: { type: "string", minLength: 1 },
-          category: { type: "string", minLength: 1 },
-          domain: { type: "string", minLength: 1 },
-        },
-      ],
-      [
-        "/groups/observers",
-        {
-          path: { type: "string", minLength: 1 },
-          target: { enum: ["load", "domcontentloaded", "networkidle0", "networkidle2"] },
-          history: { enum: ["off", "live", "change"] },
-        },
-      ],
+      ["/", ScrapConfig.getQueryParams()],
+      ["/groups", ScrapGroup.getQueryParams()],
+      ["/groups/observers", ScrapObserver.getQueryParams()],
     ]);
     return pathParams.get(url.substring(0, url.indexOf("?")));
   }

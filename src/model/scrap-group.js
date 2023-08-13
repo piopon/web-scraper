@@ -31,4 +31,16 @@ export class ScrapGroup {
       required: ["domain", "observers"],
     };
   }
+
+  /**
+   * Method used to retrieve accepted query params object
+   * @returns accepted query parameters object
+   */
+  static getQueryParams() {
+    return {
+      name: { type: "string", minLength: 1 },
+      category: { type: "string", minLength: 1 },
+      domain: { type: "string", minLength: 1 },
+    };
+  }
 }
