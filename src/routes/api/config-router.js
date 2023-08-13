@@ -90,12 +90,9 @@ export class ConfigRouter {
    */
   #createPostRoutes(router) {
     router.post("/", (request, response) => {
-      const validationResult = this.#validateBody(request.body);
-      if (!validationResult.config) {
-        response.status(400).json(validationResult.cause);
-      }
-      this.#updateConfig((currConfig) => currConfig.push(validationResult.config));
-      response.status(200).send("Added new scrap configuration");
+      this.#handlePostRequest(request, response, (allConfigs, newConfig) => {
+        return allConfigs.push(newConfig);
+      });
     });
   }
 
@@ -114,6 +111,15 @@ export class ConfigRouter {
     const configContent = JSON.parse(fs.readFileSync(this.#configFilePath));
     const filteredData = filter(configContent);
     response.status(200).json(filteredData);
+  }
+
+  #handlePostRequest(request, response, add) {
+    const validationResult = this.#validateBody(request.body);
+    if (!validationResult.config) {
+      response.status(400).json(validationResult.cause);
+    }
+    this.#updateConfig((currConfig) => add(currConfig, validationResult.config));
+    response.status(200).send("Added new scrap configuration");
   }
 
   /**
