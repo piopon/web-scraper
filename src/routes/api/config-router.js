@@ -94,14 +94,7 @@ export class ConfigRouter {
       if (!validationResult.config) {
         response.status(400).json(validationResult.cause);
       }
-      // add new schema to file
-      const configContent = JSON.parse(fs.readFileSync(this.#configFilePath));
-      configContent.push(validationResult.config);
-      const configDirectory = path.dirname(this.#configFilePath);
-      if (!fs.existsSync(configDirectory)) {
-        fs.mkdirSync(configDirectory, { recursive: true });
-      }
-      fs.writeFileSync(this.#configFilePath, JSON.stringify(configContent, null, 2));
+      this.#updateConfig((currConfig) => currConfig.push(validationResult.config));
       response.status(200).send("Added new scrap configuration");
     });
   }
@@ -173,5 +166,15 @@ export class ConfigRouter {
       }
     }
     return { config: scrapConfig, cause: undefined };
+  }
+
+  #updateConfig(update) {
+    const configDirectory = path.dirname(this.#configFilePath);
+    if (!fs.existsSync(configDirectory)) {
+      fs.mkdirSync(configDirectory, { recursive: true });
+    }
+    const configContent = JSON.parse(fs.readFileSync(this.#configFilePath));
+    update(configContent);
+    fs.writeFileSync(this.#configFilePath, JSON.stringify(configContent, null, 2));
   }
 }
