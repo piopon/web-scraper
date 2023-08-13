@@ -113,6 +113,12 @@ export class ConfigRouter {
     response.status(200).json(filteredData);
   }
 
+  /**
+   * Method containing common logic used to handle POST requests
+   * @param {Object} request The incoming request object
+   * @param {Object} response The outputted response object
+   * @param {Function} add The function using current configs and new config params to update configs
+   */
   #handlePostRequest(request, response, add) {
     const validationResult = this.#validateBody(request.body);
     if (!validationResult.config) {
@@ -153,6 +159,11 @@ export class ConfigRouter {
     return pathParams.get(url.substring(0, url.indexOf("?")));
   }
 
+  /**
+   * Method used to validate request body for correct config object
+   * @param {Object} requestBodyObject The object which shoulde be validated
+   * @returns the parsed and validated config if ok, error cause otherwise
+   */
   #validateBody(requestBodyObject) {
     let scrapConfig = undefined;
     // validate request body content by schema structure
@@ -174,6 +185,10 @@ export class ConfigRouter {
     return { config: scrapConfig, cause: undefined };
   }
 
+  /**
+   * Method used to update the configuration file with the provided logic
+   * @param {Function} update The update logic to apply when updating config file
+   */
   #updateConfig(update) {
     const configDirectory = path.dirname(this.#configFilePath);
     if (!fs.existsSync(configDirectory)) {
