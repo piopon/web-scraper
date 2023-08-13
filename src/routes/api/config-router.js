@@ -1,5 +1,7 @@
 import { ScrapComponent } from "../../model/scrap-component.js";
 import { ScrapConfig } from "../../model/scrap-config.js";
+import { ScrapGroup } from "../../model/scrap-group.js";
+import { ScrapObserver } from "../../model/scrap-observer.js";
 import { ScrapValidator } from "../../model/scrap-validator.js";
 import { ScrapWarning } from "../../model/scrap-exception.js";
 
@@ -7,8 +9,6 @@ import Ajv from "ajv";
 import express from "express";
 import path from "path";
 import fs from "fs";
-import { ScrapGroup } from "../../model/scrap-group.js";
-import { ScrapObserver } from "../../model/scrap-observer.js";
 
 export class ConfigRouter {
   #configFilePath = undefined;
