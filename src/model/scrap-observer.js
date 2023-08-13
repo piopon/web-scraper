@@ -22,9 +22,9 @@ export class ScrapObserver {
       type: "object",
       additionalProperties: false,
       properties: {
-        path: { type: "string" },
-        target: { type: "string" },
-        history: { type: "string" },
+        path: { type: "string", minLength: 1 },
+        target: { enum: ["load", "domcontentloaded", "networkidle0", "networkidle2"] },
+        history: { enum: ["off", "live", "change"] },
         container: { type: "string" },
         title: ScrapComponent.getSchema(),
         image: ScrapComponent.getSchema(),

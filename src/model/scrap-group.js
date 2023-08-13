@@ -19,10 +19,10 @@ export class ScrapGroup {
       type: "object",
       additionalProperties: false,
       properties: {
-        name: { type: "string" },
-        category: { type: "string" },
-        domain: { type: "string" },
-        observers: { type: "array", items: ScrapObserver.getSchema() },
+        name: { type: "string", minLength: 1 },
+        category: { type: "string", minLength: 1 },
+        domain: { type: "string", minLength: 1 },
+        observers: { type: "array", items: ScrapObserver.getSchema(), minItems: 1 },
       },
       required: ["domain", "observers"],
     };
