@@ -90,28 +90,13 @@ export class ConfigRouter {
    */
   #createPostRoutes(router) {
     router.post("/", (request, response) => {
-      const requestBodyObject = request.body;
-      // validate request body content by schema structure
-      const validate = new Ajv().compile(ScrapConfig.getSchema());
-      if (!validate(requestBodyObject)) {
-        response.status(400).json(validate.errors);
-        return;
-      }
-      // validate request body content by values
-      const scrapConfigCandidate = new ScrapConfig(requestBodyObject);
-      try {
-        var scrapConfig = new ScrapValidator(scrapConfigCandidate).validate();
-      } catch (e) {
-        if (e instanceof ScrapWarning) {
-          scrapConfig = scrapConfigCandidate;
-        } else {
-          response.status(400).json(e.message);
-          return;
-        }
+      const validationResult = this.#validateBody(request.body);
+      if (!validationResult.config) {
+        response.status(400).json(validationResult.cause);
       }
       // add new schema to file
       const configContent = JSON.parse(fs.readFileSync(this.#configFilePath));
-      configContent.push(scrapConfig);
+      configContent.push(validationResult.config);
       const configDirectory = path.dirname(this.#configFilePath);
       if (!fs.existsSync(configDirectory)) {
         fs.mkdirSync(configDirectory, { recursive: true });
@@ -167,5 +152,26 @@ export class ConfigRouter {
       ["/groups/observers/components", ScrapComponent.getQueryParams()],
     ]);
     return pathParams.get(url.substring(0, url.indexOf("?")));
+  }
+
+  #validateBody(requestBodyObject) {
+    let scrapConfig = undefined;
+    // validate request body content by schema structure
+    const validate = new Ajv().compile(ScrapConfig.getSchema());
+    if (!validate(requestBodyObject)) {
+      return { config: scrapConfig, cause: validate.errors };
+    }
+    // validate request body content by values
+    const scrapConfigCandidate = new ScrapConfig(requestBodyObject);
+    try {
+      scrapConfig = new ScrapValidator(scrapConfigCandidate).validate();
+    } catch (error) {
+      if (error instanceof ScrapWarning) {
+        scrapConfig = scrapConfigCandidate;
+      } else {
+        return { config: scrapConfig, cause: error.message };
+      }
+    }
+    return { config: scrapConfig, cause: undefined };
   }
 }
