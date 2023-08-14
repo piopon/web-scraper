@@ -32,7 +32,7 @@ export class ScrapConfig {
    * Method used to retrieve accepted query params object
    * @returns accepted query parameters object
    */
-  static getQueryParams() {
+  static getQueryParams(method) {
     return {
       user: { type: "integer", minimum: 0 },
     };

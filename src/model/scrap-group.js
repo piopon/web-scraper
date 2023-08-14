@@ -36,7 +36,7 @@ export class ScrapGroup {
    * Method used to retrieve accepted query params object
    * @returns accepted query parameters object
    */
-  static getQueryParams() {
+  static getQueryParams(method) {
     return {
       name: { type: "string", minLength: 1 },
       category: { type: "string", minLength: 1 },

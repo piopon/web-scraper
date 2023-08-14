@@ -42,7 +42,7 @@ export class ScrapObserver {
    * Method used to retrieve accepted query params object
    * @returns accepted query parameters object
    */
-  static getQueryParams() {
+  static getQueryParams(method) {
     return {
       path: { type: "string", minLength: 1 },
       target: { enum: ["load", "domcontentloaded", "networkidle0", "networkidle2"] },

@@ -35,7 +35,7 @@ export class ScrapComponent {
    * Method used to retrieve accepted query params object
    * @returns accepted query parameters object
    */
-  static getQueryParams() {
+  static getQueryParams(method) {
     return {
       source: { enum: ["title", "image", "price"] },
       interval: { type: "string", minLength: 1 },

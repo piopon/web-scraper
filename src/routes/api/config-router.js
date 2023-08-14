@@ -103,7 +103,7 @@ export class ConfigRouter {
    * @param {Function} filter The function using query and path params to return appropriate data
    */
   #handleGetRequest(request, response, filter) {
-    const validationResult = this.#validateQueryParams(request.url, request.query);
+    const validationResult = this.#validateQueryParams(request.method, request.url, request.query);
     if (!validationResult.valid) {
       response.status(400).json(validationResult.cause);
       return;
@@ -120,11 +120,16 @@ export class ConfigRouter {
    * @param {Function} add The function using current configs and new config params to update configs
    */
   #handlePostRequest(request, response, add) {
-    const validationResult = this.#validateBody(request.body);
-    if (!validationResult.config) {
-      response.status(400).json(validationResult.cause);
+    const paramsValidation = this.#validateQueryParams(request.method, request.url, request.query);
+    if (!paramsValidation.valid) {
+      response.status(400).json(paramsValidation.cause);
+      return;
     }
-    this.#updateConfig((currConfig) => add(currConfig, validationResult.config));
+    const bodyValidation = this.#validateBody(request.body);
+    if (!bodyValidation.config) {
+      response.status(400).json(bodyValidation.cause);
+    }
+    this.#updateConfig((currConfigs) => add(currConfigs, bodyValidation.config));
     response.status(200).send("Added new scrap configuration");
   }
 
@@ -134,12 +139,12 @@ export class ConfigRouter {
    * @param {Object} params The query parameters which should be validated
    * @returns an object with validation result (true/false) and an optional cause (if validation NOK)
    */
-  #validateQueryParams(url, params) {
+  #validateQueryParams(method, url, params) {
     const validator = new Ajv();
     const validate = validator.compile({
       type: "object",
       additionalProperties: false,
-      properties: this.#getAcceptedQueryParams(url),
+      properties: this.#getAcceptedQueryParams(method, url),
     });
     return { valid: validate(params), cause: validate.errors };
   }
@@ -189,12 +194,12 @@ export class ConfigRouter {
    * @param {String} url The endpoint URL address for which we want to get accepted query params definition
    * @returns an object definition with accepted query params
    */
-  #getAcceptedQueryParams(url) {
+  #getAcceptedQueryParams(method, url) {
     const pathParams = new Map([
-      ["/", ScrapConfig.getQueryParams()],
-      ["/groups", ScrapGroup.getQueryParams()],
-      ["/groups/observers", ScrapObserver.getQueryParams()],
-      ["/groups/observers/components", ScrapComponent.getQueryParams()],
+      ["/", ScrapConfig.getQueryParams(method)],
+      ["/groups", ScrapGroup.getQueryParams(method)],
+      ["/groups/observers", ScrapObserver.getQueryParams(method)],
+      ["/groups/observers/components", ScrapComponent.getQueryParams(method)],
     ]);
     return pathParams.get(url.substring(0, url.indexOf("?")));
   }
