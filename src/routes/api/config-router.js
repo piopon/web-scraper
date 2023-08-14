@@ -140,13 +140,17 @@ export class ConfigRouter {
    * @returns an object with validation result (true/false) and an optional cause (if validation NOK)
    */
   #validateQueryParams(method, url, params) {
+    const paramsStartIndex = url.indexOf("?");
+    if (paramsStartIndex < 0) {
+      return { valid: true, cause: undefined}
+    }
     const pathParams = new Map([
       ["/", ScrapConfig.getQueryParams(method)],
       ["/groups", ScrapGroup.getQueryParams(method)],
       ["/groups/observers", ScrapObserver.getQueryParams(method)],
       ["/groups/observers/components", ScrapComponent.getQueryParams(method)],
     ]);
-    const paramsSchema = pathParams.get(url.substring(0, url.indexOf("?"));
+    const paramsSchema = pathParams.get(url.substring(0, paramsStartIndex));
     const validate = new Ajv().compile(paramsSchema);
     return { valid: validate(params), cause: validate.errors };
   }
