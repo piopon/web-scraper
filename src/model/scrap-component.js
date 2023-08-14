@@ -37,10 +37,14 @@ export class ScrapComponent {
    */
   static getQueryParams(method) {
     return {
-      source: { enum: ["title", "image", "price"] },
-      interval: { type: "string", minLength: 1 },
-      attribute: { type: "string", minLength: 1 },
-      auxiliary: { type: "string", minLength: 1 },
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        source: { enum: ["title", "image", "price"] },
+        interval: { type: "string", minLength: 1 },
+        attribute: { type: "string", minLength: 1 },
+        auxiliary: { type: "string", minLength: 1 },
+      },
     };
   }
 }

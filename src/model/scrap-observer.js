@@ -44,9 +44,13 @@ export class ScrapObserver {
    */
   static getQueryParams(method) {
     return {
-      path: { type: "string", minLength: 1 },
-      target: { enum: ["load", "domcontentloaded", "networkidle0", "networkidle2"] },
-      history: { enum: ["off", "live", "change"] },
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        path: { type: "string", minLength: 1 },
+        target: { enum: ["load", "domcontentloaded", "networkidle0", "networkidle2"] },
+        history: { enum: ["off", "live", "change"] },
+      },
     };
   }
 }

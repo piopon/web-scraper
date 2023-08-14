@@ -34,7 +34,11 @@ export class ScrapConfig {
    */
   static getQueryParams(method) {
     return {
-      user: { type: "integer", minimum: 0 },
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        user: { type: "integer", minimum: 0 },
+      },
     };
   }
 }

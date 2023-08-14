@@ -38,9 +38,13 @@ export class ScrapGroup {
    */
   static getQueryParams(method) {
     return {
-      name: { type: "string", minLength: 1 },
-      category: { type: "string", minLength: 1 },
-      domain: { type: "string", minLength: 1 },
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        name: { type: "string", minLength: 1 },
+        category: { type: "string", minLength: 1 },
+        domain: { type: "string", minLength: 1 },
+      }
     };
   }
 }
