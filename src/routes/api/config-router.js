@@ -126,10 +126,10 @@ export class ConfigRouter {
       return;
     }
     const bodyValidation = this.#validateBody(request.body);
-    if (!bodyValidation.config) {
+    if (!bodyValidation.content) {
       response.status(400).json(bodyValidation.cause);
     }
-    this.#updateConfig((currConfigs) => add(currConfigs, bodyValidation.config));
+    this.#updateConfig((currConfigs) => add(currConfigs, bodyValidation.content));
     response.status(200).send("Added new scrap configuration");
   }
 
@@ -160,25 +160,25 @@ export class ConfigRouter {
    * @param {Object} requestBodyObject The object which shoulde be validated
    * @returns the parsed and validated config if ok, error cause otherwise
    */
-  #validateBody(requestBodyObject) {
-    let scrapConfig = undefined;
-    // validate request body content by schema structure
+  #validateBody(requestBody) {
+    let parsedBody = undefined;
+    // validate JSON structure of the request body content
     const validate = new Ajv().compile(ScrapConfig.getSchema());
-    if (!validate(requestBodyObject)) {
-      return { config: scrapConfig, cause: validate.errors };
+    if (!validate(requestBody)) {
+      return { content: parsedBody, cause: validate.errors };
     }
-    // validate request body content by values
-    const scrapConfigCandidate = new ScrapConfig(requestBodyObject);
+    // validate JSON values of the request body content
+    const bodyCandidate = new ScrapConfig(requestBody);
     try {
-      scrapConfig = new ScrapValidator(scrapConfigCandidate).validate();
+      parsedBody = new ScrapValidator(bodyCandidate).validate();
     } catch (error) {
       if (error instanceof ScrapWarning) {
-        scrapConfig = scrapConfigCandidate;
+        parsedBody = bodyCandidate;
       } else {
-        return { config: scrapConfig, cause: error.message };
+        return { content: parsedBody, cause: error.message };
       }
     }
-    return { config: scrapConfig, cause: undefined };
+    return { content: parsedBody, cause: undefined };
   }
 
   /**
