@@ -129,7 +129,11 @@ export class ConfigRouter {
     }
     const addResult = this.#updateConfig((initalConfig) => {
       const contentParent = parent(initalConfig);
+      if (!contentParent) {
+        return false;
+      }
       contentParent.push(bodyValidation.content);
+      return true;
     });
     response.status(200).send("Added new scrap configuration");
   }
@@ -193,7 +197,10 @@ export class ConfigRouter {
       fs.mkdirSync(configDirectory, { recursive: true });
     }
     const configContent = JSON.parse(fs.readFileSync(this.#configFilePath));
-    update(configContent);
-    fs.writeFileSync(this.#configFilePath, JSON.stringify(configContent, null, 2));
+    const updateStatus = update(configContent);
+    if (updateStatus) {
+      fs.writeFileSync(this.#configFilePath, JSON.stringify(configContent, null, 2));
+    }
+    return updateStatus;
   }
 }
