@@ -129,7 +129,7 @@ export class ConfigRouter {
       response.status(400).json(paramsValidation.cause);
       return;
     }
-    const bodyValidation = this.#validateBody(request.body);
+    const bodyValidation = this.#validateBody(request.url, request.body);
     if (!bodyValidation.content) {
       response.status(400).json(bodyValidation.cause);
       return;
@@ -170,17 +170,23 @@ export class ConfigRouter {
 
   /**
    * Method used to validate request body for correct config object
+   * @param {String} url The endpoint URL address (containing only the path)
    * @param {Object} requestBody The object which shoulde be validated
    * @returns the parsed and validated config if ok, error cause otherwise
    */
-  #validateBody(requestBody) {
+  #validateBody(url, requestBody) {
+    // select appropriate body validator from specified URL path
+    const bodyValidator = new Map([
+      ["/", { schema: ScrapConfig.getSchema(), value: new ScrapConfig(requestBody) }],
+      ["/groups", { schema: ScrapGroup.getSchema(), value: new ScrapGroup(requestBody) }],
+    ]).get(url.indexOf("?") > 0 ? url.substring(0, url.indexOf("?")) : url);
     // validate JSON structure of the request body content
-    const validate = new Ajv().compile(ScrapConfig.getSchema());
+    const validate = new Ajv().compile(bodyValidator.schema);
     if (!validate(requestBody)) {
       return { content: undefined, cause: validate.errors };
     }
     // validate JSON values of the request body content
-    const parsedBody = new ScrapConfig(requestBody);
+    const parsedBody = bodyValidator.value;
     const checkErrors = parsedBody.checkValues().errors;
     if (checkErrors.length > 0) {
       return { content: undefined, cause: checkErrors[0] };
