@@ -126,6 +126,7 @@ export class ConfigRouter {
     const bodyValidation = this.#validateBody(request.body);
     if (!bodyValidation.content) {
       response.status(400).json(bodyValidation.cause);
+      return;
     }
     const addResult = this.#updateConfig((initalConfig) => {
       const contentParent = parent(initalConfig);
