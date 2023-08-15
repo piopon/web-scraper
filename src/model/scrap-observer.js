@@ -18,6 +18,33 @@ export class ScrapObserver {
   }
 
   /**
+   * Method used to check correctness of the scrap observer values
+   * @returns check result containing all errors and warnings
+   */
+  checkValues() {
+    const checkResult = { errors: [], warnings: [] };
+    if (!this.path) {
+      checkResult.errors.push(`Missing required observer path`);
+    }
+    if (!this.price.selector) {
+      checkResult.errors.push(`Missing required 'price.selector' in observer ${this.path}`);
+    }
+    if (!this.price.attribute) {
+      checkResult.errors.push(`Missing required 'price.attribute' in observer ${this.path}`);
+    }
+    if (!this.price.auxiliary) {
+      checkResult.errors.push(`Missing required 'price.auxiliary' in observer ${this.path}`);
+    }
+    if ((!this.title.selector || !this.title.attribute) && !this.title.auxiliary) {
+      checkResult.warnings.push(`Empty title 'selector'/'attribute' and 'auxiliary' in observer ${this.path}`);
+    }
+    if ((!this.image.selector || !this.image.attribute) && !this.image.auxiliary) {
+      checkResult.warnings.push(`Empty image 'selector'/'attribute' and 'auxiliary' in observer ${this.path}`);
+    }
+    return checkResult;
+  }
+
+  /**
    * Method used to retrieve JSON schema
    * @returns JSON schema object
    */

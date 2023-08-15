@@ -13,6 +13,20 @@ export class ScrapConfig {
   }
 
   /**
+   * Method used to check correctness of the scrap config values
+   * @returns check result containing all errors and warnings
+   */
+  checkValues() {
+    const checkResult = { errors: [], warnings: [] };
+    for (let groupNo = 0; groupNo < this.groups.length; groupNo++) {
+      const groupCheckResult = this.groups[groupNo].checkValues();
+      checkResult.errors.push(...groupCheckResult.errors);
+      checkResult.warnings.push(...groupCheckResult.warnings);
+    }
+    return checkResult;
+  }
+
+  /**
    * Method used to retrieve JSON schema
    * @returns JSON schema object
    */

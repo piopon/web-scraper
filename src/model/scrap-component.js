@@ -14,6 +14,18 @@ export class ScrapComponent {
   }
 
   /**
+   * Method used to check correctness of the scrap group values
+   * @returns check result containing all errors and warnings
+   */
+  checkValues() {
+    const checkResult = { errors: [], warnings: [] };
+    if ((!this.selector || !this.attribute) && !this.auxiliary) {
+      checkResult.warnings.push(`Empty title 'selector'/'attribute' and 'auxiliary'`);
+    }
+    return checkResult;
+  }
+
+  /**
    * Method used to retrieve JSON schema
    * @returns JSON schema object
    */

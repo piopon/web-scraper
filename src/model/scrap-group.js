@@ -15,6 +15,32 @@ export class ScrapGroup {
   }
 
   /**
+   * Method used to check correctness of the scrap group values
+   * @returns check result containing all errors and warnings
+   */
+  checkValues() {
+    const checkResult = { errors: [], warnings: [] };
+    if (!this.domain) {
+      checkResult.errors.push("Missing required group domain");
+    }
+    if (this.observers.length < 1) {
+      checkResult.errors.push("At least one observer is needed");
+    }
+    for (let observerNo = 0; observerNo < this.observers.length; observerNo++) {
+      const observerCheckResult = this.observers[observerNo].checkValues();
+      checkResult.errors.push(...observerCheckResult.errors);
+      checkResult.warnings.push(...observerCheckResult.warnings);
+    }
+    if (!this.name) {
+      checkResult.warnings.push("Empty group name");
+    }
+    if (!this.category) {
+      checkResult.warnings.push("Empty group category");
+    }
+    return checkResult;
+  }
+
+  /**
    * Method used to retrieve JSON schema
    * @returns JSON schema object
    */
