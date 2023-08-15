@@ -135,14 +135,15 @@ export class ConfigRouter {
 
   /**
    * Method used to validate the config router endpoint query parameters
-   * @param {String} url The endpoint URL address
+   * @param {String} method The endpoint method for which we want to check parameters
+   * @param {String} url The endpoint URL address (containing only the path)
    * @param {Object} params The query parameters which should be validated
    * @returns an object with validation result (true/false) and an optional cause (if validation NOK)
    */
   #validateQueryParams(method, url, params) {
     const paramsStartIndex = url.indexOf("?");
     if (paramsStartIndex < 0) {
-      return { valid: true, cause: undefined}
+      return { valid: true, cause: undefined };
     }
     const pathParams = new Map([
       ["/", ScrapConfig.getQueryParams(method)],
@@ -157,7 +158,7 @@ export class ConfigRouter {
 
   /**
    * Method used to validate request body for correct config object
-   * @param {Object} requestBodyObject The object which shoulde be validated
+   * @param {Object} requestBody The object which shoulde be validated
    * @returns the parsed and validated config if ok, error cause otherwise
    */
   #validateBody(requestBody) {
@@ -183,7 +184,7 @@ export class ConfigRouter {
 
   /**
    * Method used to update the configuration file with the provided logic
-   * @param {Function} update The update logic to apply when updating config file
+   * @param {Function} update The update logic to apply when altering config file (add, edit, or delete)
    */
   #updateConfig(update) {
     const configDirectory = path.dirname(this.#configFilePath);

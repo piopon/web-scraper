@@ -30,6 +30,7 @@ export class ScrapConfig {
 
   /**
    * Method used to retrieve accepted query params object
+   * @param {String} method The request method type to get accepted query params
    * @returns accepted query parameters object
    */
   static getQueryParams(method) {
