@@ -193,15 +193,19 @@ export class ConfigRouter {
    * @param {Function} update The update logic to apply when altering config file (add, edit, or delete)
    */
   #updateConfig(update) {
-    const configDirectory = path.dirname(this.#configFilePath);
-    if (!fs.existsSync(configDirectory)) {
-      fs.mkdirSync(configDirectory, { recursive: true });
+    try {
+      const configDirectory = path.dirname(this.#configFilePath);
+      if (!fs.existsSync(configDirectory)) {
+        fs.mkdirSync(configDirectory, { recursive: true });
+      }
+      const configContent = JSON.parse(fs.readFileSync(this.#configFilePath));
+      const updateStatus = update(configContent);
+      if (updateStatus.success) {
+        fs.writeFileSync(this.#configFilePath, JSON.stringify(configContent, null, 2));
+      }
+      return { status: updateStatus.success ? 200 : 400, message: updateStatus.message };
+    } catch (error) {
+      return { status: 500, message: error.message };
     }
-    const configContent = JSON.parse(fs.readFileSync(this.#configFilePath));
-    const updateStatus = update(configContent);
-    if (updateStatus.success) {
-      fs.writeFileSync(this.#configFilePath, JSON.stringify(configContent, null, 2));
-    }
-    return { status: updateStatus.success ? 200 : 400, message: updateStatus.message };
   }
 }
