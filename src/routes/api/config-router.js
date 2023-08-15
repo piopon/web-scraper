@@ -92,6 +92,12 @@ export class ConfigRouter {
     router.post("/", (request, response) => {
       this.#handlePostRequest(request, response, (configContent) => configContent);
     });
+    router.post("/groups", (request, response) => {
+      this.#handlePostRequest(request, response, (configContent) => {
+        const parentConfig = configContent.filter((config) => config.user === request.query.parent);
+        return parentConfig.length > 0 ? parentConfig.at(0).groups : undefined;
+      });
+    });
   }
 
   /**
