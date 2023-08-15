@@ -90,9 +90,7 @@ export class ConfigRouter {
    */
   #createPostRoutes(router) {
     router.post("/", (request, response) => {
-      this.#handlePostRequest(request, response, (allConfigs, newConfig) => {
-        return allConfigs.push(newConfig);
-      });
+      this.#handlePostRequest(request, response, (configContent) => configContent);
     });
   }
 
@@ -117,9 +115,9 @@ export class ConfigRouter {
    * Method containing common logic used to handle POST requests
    * @param {Object} request The incoming request object
    * @param {Object} response The outputted response object
-   * @param {Function} add The function using current configs and new config params to update configs
+   * @param {Function} parent The function used to get the parent of the body content
    */
-  #handlePostRequest(request, response, add) {
+  #handlePostRequest(request, response, parent) {
     const paramsValidation = this.#validateQueryParams(request.method, request.url, request.query);
     if (!paramsValidation.valid) {
       response.status(400).json(paramsValidation.cause);
@@ -129,7 +127,10 @@ export class ConfigRouter {
     if (!bodyValidation.content) {
       response.status(400).json(bodyValidation.cause);
     }
-    this.#updateConfig((currConfigs) => add(currConfigs, bodyValidation.content));
+    const addResult = this.#updateConfig((initalConfig) => {
+      const contentParent = parent(initalConfig);
+      contentParent.push(bodyValidation.content);
+    });
     response.status(200).send("Added new scrap configuration");
   }
 
