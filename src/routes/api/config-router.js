@@ -153,15 +153,14 @@ export class ConfigRouter {
    * @returns an object with validation result (true/false) and an optional cause (if validation NOK)
    */
   #validateQueryParams(method, url, params) {
-    const pathParams = new Map([
+    const paramsValidator = new Map([
       ["/", ScrapConfig.getQueryParams(method)],
       ["/groups", ScrapGroup.getQueryParams(method)],
       ["/groups/observers", ScrapObserver.getQueryParams(method)],
       ["/groups/observers/components", ScrapComponent.getQueryParams(method)],
-    ]);
-    const paramsSchema = pathParams.get(url.indexOf("?") > 0 ? url.substring(0, url.indexOf("?")) : url);
-    const validate = new Ajv().compile(paramsSchema);
-    return { valid: validate(params), cause: validate.errors };
+    ]).get(url.indexOf("?") > 0 ? url.substring(0, url.indexOf("?")) : url);
+    const paramsValidate = new Ajv().compile(paramsValidator);
+    return { valid: paramsValidate(params), cause: paramsValidate.errors };
   }
 
   /**
@@ -177,15 +176,15 @@ export class ConfigRouter {
       ["/groups", { schema: ScrapGroup.getSchema(), value: new ScrapGroup(requestBody) }],
     ]).get(url.indexOf("?") > 0 ? url.substring(0, url.indexOf("?")) : url);
     // validate JSON structure of the request body content
-    const validate = new Ajv().compile(bodyValidator.schema);
-    if (!validate(requestBody)) {
-      return { content: undefined, cause: validate.errors };
+    const schemaValidate = new Ajv().compile(bodyValidator.schema);
+    if (!schemaValidate(requestBody)) {
+      return { content: undefined, cause: schemaValidate.errors };
     }
     // validate JSON values of the request body content
     const parsedBody = bodyValidator.value;
-    const checkErrors = parsedBody.checkValues().errors;
-    if (checkErrors.length > 0) {
-      return { content: undefined, cause: checkErrors[0] };
+    const valueValidate = parsedBody.checkValues().errors;
+    if (valueValidate.length > 0) {
+      return { content: undefined, cause: valueValidate[0] };
     }
     return { content: parsedBody, cause: undefined };
   }
