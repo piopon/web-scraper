@@ -64,14 +64,25 @@ export class ScrapGroup {
    * @returns accepted query parameters object
    */
   static getQueryParams(method) {
-    return {
-      type: "object",
-      additionalProperties: false,
-      properties: {
-        name: { type: "string", minLength: 1 },
-        category: { type: "string", minLength: 1 },
-        domain: { type: "string", minLength: 1 },
-      },
-    };
+    if ("GET" === method) {
+      return {
+        type: "object",
+        additionalProperties: false,
+        properties: {
+          name: { type: "string", minLength: 1 },
+          category: { type: "string", minLength: 1 },
+          domain: { type: "string", minLength: 1 },
+        },
+      };
+    } else {
+      return {
+        type: "object",
+        additionalProperties: false,
+        properties: {
+          parent: { type: "integer", minimum: 0 },
+        },
+        required: ["parent"],
+      };
+    }
   }
 }
