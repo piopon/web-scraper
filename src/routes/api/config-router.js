@@ -168,22 +168,16 @@ export class ConfigRouter {
    * @returns the parsed and validated config if ok, error cause otherwise
    */
   #validateBody(requestBody) {
-    let parsedBody = undefined;
     // validate JSON structure of the request body content
     const validate = new Ajv().compile(ScrapConfig.getSchema());
     if (!validate(requestBody)) {
-      return { content: parsedBody, cause: validate.errors };
+      return { content: undefined, cause: validate.errors };
     }
     // validate JSON values of the request body content
-    const bodyCandidate = new ScrapConfig(requestBody);
-    try {
-      parsedBody = new ScrapValidator(bodyCandidate).validate();
-    } catch (error) {
-      if (error instanceof ScrapWarning) {
-        parsedBody = bodyCandidate;
-      } else {
-        return { content: parsedBody, cause: error.message };
-      }
+    const parsedBody = new ScrapConfig(requestBody);
+    const checkErrors = parsedBody.checkValues().errors;
+    if (checkErrors.length > 0) {
+      return { content: undefined, cause: checkErrors[0] };
     }
     return { content: parsedBody, cause: undefined };
   }
