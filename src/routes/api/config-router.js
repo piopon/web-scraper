@@ -26,6 +26,7 @@ export class ConfigRouter {
   createRoutes() {
     const router = express.Router();
     this.#createGetRoutes(router);
+    this.#createPutRoutes(router);
     this.#createPostRoutes(router);
 
     return router;
@@ -79,6 +80,37 @@ export class ConfigRouter {
             return intervalOk && attributeOk && auxiliaryOk;
           })
       );
+    });
+  }
+
+  #createPutRoutes(router) {
+    router.put("/", (request, response) => {
+      const validationResult = this.#validateQueryParams(request.method, request.url, request.query);
+      if (!validationResult.valid) {
+        response.status(400).json(validationResult.cause);
+        return;
+      }
+      const bodyValidation = this.#validateBody(request.url, request.body);
+      if (!bodyValidation.content) {
+        response.status(400).json(bodyValidation.cause);
+        return;
+      }
+      const configContent = JSON.parse(fs.readFileSync(this.#configFilePath));
+
+      // BEGIN: UPDATE
+      // BEGIN: should be passed from caller
+      const parent = configContent;
+      const editIndex = parent.findIndex((item) => (request.query.user ? item.user === request.query.user : false))
+      // END: should be passed from caller
+      if (editIndex <= 0) {
+        response.status(400).json("not found");
+        return;
+      }
+      parent[editIndex] = bodyValidation.content;
+      // END: UPDATE
+
+      fs.writeFileSync(this.#configFilePath, JSON.stringify(configContent, null, 2));
+      response.status(200).json(`edited: ${configContent[editIndex].user}`);
     });
   }
 
