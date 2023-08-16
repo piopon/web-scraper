@@ -242,7 +242,7 @@ export class ConfigRouter {
       if (!fs.existsSync(configDirectory)) {
         fs.mkdirSync(configDirectory, { recursive: true });
       }
-      const configContent = new ScrapConfig(JSON.parse(fs.readFileSync(this.#configFilePath)));
+      const configContent = JSON.parse(fs.readFileSync(this.#configFilePath)).map((item) => new ScrapConfig(item));
       const updateStatus = update(configContent);
       if (updateStatus.success) {
         fs.writeFileSync(this.#configFilePath, JSON.stringify(configContent, null, 2));
