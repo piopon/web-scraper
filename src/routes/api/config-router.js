@@ -100,7 +100,7 @@ export class ConfigRouter {
       // BEGIN: UPDATE
       // BEGIN: should be passed from caller
       const parent = configContent;
-      const editIndex = parent.findIndex((item) => (request.query.user ? item.user === request.query.user : false))
+      const editIndex = parent.findIndex((item) => (request.query.user ? item.user === request.query.user : false));
       // END: should be passed from caller
       if (editIndex <= 0) {
         response.status(400).json("not found");
@@ -175,14 +175,14 @@ export class ConfigRouter {
     const addResult = this.#updateConfig((initalConfig) => {
       const contentParent = parent(initalConfig);
       if (!contentParent) {
-        return { success: false, message: "Undefined parent" };
+        return { success: false, message: "Undefined parent of new element" };
       }
       const newIdentifier = bodyValidation.content.getIdentifier();
       if (contentParent.findIndex((item) => item.getIdentifier() === newIdentifier) >= 0) {
         return { success: false, message: `Element with identifier ${newIdentifier} already exists` };
       }
       contentParent.push(bodyValidation.content);
-      return { success: true, message: "Added new configuration" };
+      return { success: true, message: "Added new configuration element" };
     });
     response.status(addResult.status).send(addResult.message);
   }

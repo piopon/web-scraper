@@ -59,7 +59,7 @@ export class WebServer {
     const server = express();
     //setup web server middleware
     server.use(ParamsParser.middleware);
-    server.use(express.json())
+    server.use(express.json());
     // setup web server routes
     const routes = new Map([
       ["/api/v1/data", new DataRouter(this.#setupConfig.dataOutputPath)],
