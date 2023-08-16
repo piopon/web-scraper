@@ -71,14 +71,25 @@ export class ScrapObserver {
    * @returns accepted query parameters object
    */
   static getQueryParams(method) {
-    return {
-      type: "object",
-      additionalProperties: false,
-      properties: {
-        path: { type: "string", minLength: 1 },
-        target: { enum: ["load", "domcontentloaded", "networkidle0", "networkidle2"] },
-        history: { enum: ["off", "live", "change"] },
-      },
-    };
+    if ("GET" === method) {
+      return {
+        type: "object",
+        additionalProperties: false,
+        properties: {
+          path: { type: "string", minLength: 1 },
+          target: { enum: ["load", "domcontentloaded", "networkidle0", "networkidle2"] },
+          history: { enum: ["off", "live", "change"] },
+        },
+      };
+    } else {
+      return {
+        type: "object",
+        additionalProperties: false,
+        properties: {
+          parent: { type: "string", minLength: 1 },
+        },
+        required: ["parent"],
+      };
+    }
   }
 }
