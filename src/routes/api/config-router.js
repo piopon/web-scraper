@@ -96,6 +96,14 @@ export class ConfigRouter {
         return parentConfig.length > 0 ? parentConfig.at(0).groups : undefined;
       });
     });
+    router.post("/groups/observers", (request, response) => {
+      this.#handlePostRequest(request, response, (configContent) => {
+        const parentGroup = configContent
+          .flatMap((config) => config.groups)
+          .filter((group) => group.domain === request.query.parent);
+        return parentGroup.length > 0 ? parentGroup.at(0).observers : undefined;
+      });
+    });
   }
 
   /**
@@ -172,6 +180,7 @@ export class ConfigRouter {
     const bodyValidator = new Map([
       ["/", { schema: ScrapConfig.getSchema(), value: new ScrapConfig(requestBody) }],
       ["/groups", { schema: ScrapGroup.getSchema(), value: new ScrapGroup(requestBody) }],
+      ["/groups/observers", { schema: ScrapObserver.getSchema(), value: new ScrapObserver(requestBody) }],
     ]).get(url.indexOf("?") > 0 ? url.substring(0, url.indexOf("?")) : url);
     // validate JSON structure of the request body content
     const schemaValidate = new Ajv().compile(bodyValidator.schema);
