@@ -177,6 +177,10 @@ export class ConfigRouter {
       if (!contentParent) {
         return { success: false, message: "Undefined parent" };
       }
+      const newIdentifier = bodyValidation.content.getIdentifier();
+      if (contentParent.findIndex((item) => item.getIdentifier() === newIdentifier) >= 0) {
+        return { success: false, message: `Element with identifier ${newIdentifier} already exists` };
+      }
       contentParent.push(bodyValidation.content);
       return { success: true, message: "Added new configuration" };
     });
@@ -238,7 +242,7 @@ export class ConfigRouter {
       if (!fs.existsSync(configDirectory)) {
         fs.mkdirSync(configDirectory, { recursive: true });
       }
-      const configContent = JSON.parse(fs.readFileSync(this.#configFilePath));
+      const configContent = new ScrapConfig(JSON.parse(fs.readFileSync(this.#configFilePath)));
       const updateStatus = update(configContent);
       if (updateStatus.success) {
         fs.writeFileSync(this.#configFilePath, JSON.stringify(configContent, null, 2));
