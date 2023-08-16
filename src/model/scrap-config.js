@@ -12,6 +12,10 @@ export class ScrapConfig {
     this.groups = ModelUtils.getArrayOfModels(ScrapGroup, input.groups);
   }
 
+  getIdentifier() {
+    return this.user;
+  }
+
   /**
    * Method used to check correctness of the scrap config values
    * @returns check result containing all errors and warnings

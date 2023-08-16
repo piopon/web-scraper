@@ -13,6 +13,10 @@ export class ScrapComponent {
     this.auxiliary = ModelUtils.getValueOrDefault(input.auxiliary, "");
   }
 
+  getIdentifier() {
+    return `${this.selector} | ${this.attribute} | ${this.auxiliary}`;
+  }
+
   /**
    * Method used to check correctness of the scrap group values
    * @returns check result containing all errors and warnings

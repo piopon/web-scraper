@@ -17,6 +17,10 @@ export class ScrapObserver {
     this.price = new ScrapComponent(input.price);
   }
 
+  getIdentifier() {
+    return this.path;
+  }
+
   /**
    * Method used to check correctness of the scrap observer values
    * @returns check result containing all errors and warnings

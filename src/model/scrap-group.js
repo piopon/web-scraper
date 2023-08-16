@@ -14,6 +14,10 @@ export class ScrapGroup {
     this.observers = ModelUtils.getArrayOfModels(ScrapObserver, input.observers);
   }
 
+  getIdentifier() {
+    return this.domain;
+  }
+
   /**
    * Method used to check correctness of the scrap group values
    * @returns check result containing all errors and warnings
