@@ -12,6 +12,10 @@ export class ScrapConfig {
     this.groups = ModelUtils.getArrayOfModels(ScrapGroup, input.groups);
   }
 
+  /**
+   * Method used to receive the appropriate identifier of config
+   * @returns config identifier: user field value
+   */
   getIdentifier() {
     return this.user;
   }

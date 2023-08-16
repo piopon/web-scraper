@@ -83,6 +83,10 @@ export class ConfigRouter {
     });
   }
 
+  /**
+   * Method used to create PUT method routes and add them to the router object
+   * @param {Object} router The router object with PUT method routes defined
+   */
   #createPutRoutes(router) {
     router.put("/", (request, response) => {
       const validationResult = this.#validateQueryParams(request.method, request.url, request.query);

@@ -14,6 +14,10 @@ export class ScrapGroup {
     this.observers = ModelUtils.getArrayOfModels(ScrapObserver, input.observers);
   }
 
+  /**
+   * Method used to receive the appropriate identifier of group
+   * @returns group identifier: domain field value
+   */
   getIdentifier() {
     return this.domain;
   }

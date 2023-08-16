@@ -17,6 +17,10 @@ export class ScrapObserver {
     this.price = new ScrapComponent(input.price);
   }
 
+  /**
+   * Method used to receive the appropriate identifier of observer
+   * @returns observer identifier: path field value
+   */
   getIdentifier() {
     return this.path;
   }

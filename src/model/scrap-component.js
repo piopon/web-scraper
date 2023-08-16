@@ -13,6 +13,10 @@ export class ScrapComponent {
     this.auxiliary = ModelUtils.getValueOrDefault(input.auxiliary, "");
   }
 
+  /**
+   * Method used to receive the appropriate identifier of component
+   * @returns component identifier: string composed of selector, attribute, and auxiliary values
+   */
   getIdentifier() {
     return `${this.selector} | ${this.attribute} | ${this.auxiliary}`;
   }
