@@ -174,9 +174,20 @@ export class ConfigRouter {
       if (editIndex < 0) {
         return { success: false, message: "Could not find the specifed element" };
       }
+      const queryIdentifier = contentParent[editIndex].getIdentifier();
+      const bodyIdentifier = bodyValidation.content.getIdentifier();
+      if (queryIdentifier !== bodyIdentifier) {
+        return {
+          success: false,
+          message: `Incompatible query (${queryIdentifier}) and body (${bodyIdentifier}) identifiers`,
+        };
+      }
       // we must copy values because assigning new object will NOT update the main config reference
       contentParent[editIndex].copyValues(bodyValidation.content);
-      return { success: true, message: `Edited configuration element ${contentParent[editIndex].getIdentifier()}` };
+      return {
+        success: true,
+        message: `Edited configuration element with ${contentParent[editIndex].getIdentifier()}`,
+      };
     });
     response.status(updateResult.status).json(updateResult.message);
   }
