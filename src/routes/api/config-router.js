@@ -89,32 +89,10 @@ export class ConfigRouter {
    */
   #createPutRoutes(router) {
     router.put("/", (request, response) => {
-      const validationResult = this.#validateQueryParams(request.method, request.url, request.query);
-      if (!validationResult.valid) {
-        response.status(400).json(validationResult.cause);
-        return;
-      }
-      const bodyValidation = this.#validateBody(request.url, request.body);
-      if (!bodyValidation.content) {
-        response.status(400).json(bodyValidation.cause);
-        return;
-      }
-      const configContent = JSON.parse(fs.readFileSync(this.#configFilePath));
-
-      // BEGIN: UPDATE
-      // BEGIN: should be passed from caller
-      const parent = configContent;
-      const editIndex = parent.findIndex((item) => (request.query.user ? item.user === request.query.user : false));
-      // END: should be passed from caller
-      if (editIndex <= 0) {
-        response.status(400).json("not found");
-        return;
-      }
-      parent[editIndex] = bodyValidation.content;
-      // END: UPDATE
-
-      fs.writeFileSync(this.#configFilePath, JSON.stringify(configContent, null, 2));
-      response.status(200).json(`edited: ${configContent[editIndex].user}`);
+      this.#handlePutRequest(request, response, (configContent) => configContent, (parent) => {
+          return parent.findIndex((item) => (request.query.user ? item.user === request.query.user : false));
+        }
+      );
     });
   }
 
@@ -157,6 +135,32 @@ export class ConfigRouter {
     const configContent = JSON.parse(fs.readFileSync(this.#configFilePath));
     const filteredData = filter(configContent);
     response.status(200).json(filteredData);
+  }
+
+  #handlePutRequest(request, response, parent, index) {
+    const paramsValidation = this.#validateQueryParams(request.method, request.url, request.query);
+    if (!paramsValidation.valid) {
+      response.status(400).json(paramsValidation.cause);
+      return;
+    }
+    const bodyValidation = this.#validateBody(request.url, request.body);
+    if (!bodyValidation.content) {
+      response.status(400).json(bodyValidation.cause);
+      return;
+    }
+    const updateResult = this.#updateConfig((initalConfig) => {
+      const contentParent = parent(initalConfig);
+      if (!contentParent) {
+        return { success: false, message: "Undefined parent of new element" };
+      }
+      const editIndex = index(contentParent);
+      if (editIndex <= 0) {
+        return { success: false, message: "Could not find the specifed element" };
+      }
+      contentParent[editIndex] = bodyValidation.content;
+      return { success: true, message: `Edited configuration element ${contentParent[editIndex].user}` };
+    });
+    response.status(updateResult.status).json(updateResult.message);
   }
 
   /**
