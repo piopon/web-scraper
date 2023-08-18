@@ -169,7 +169,7 @@ export class ConfigRouter {
         return { success: false, message: "Undefined parent of new element" };
       }
       const editIndex = index(contentParent);
-      if (editIndex <= 0) {
+      if (editIndex < 0) {
         return { success: false, message: "Could not find the specifed element" };
       }
       contentParent[editIndex] = bodyValidation.content;
