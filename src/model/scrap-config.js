@@ -21,6 +21,15 @@ export class ScrapConfig {
   }
 
   /**
+   * Method used to perform a deep copy of all values in scrap config object
+   * @param {Object} otherConfig The scrap config object with source values
+   */
+  copyValues(otherConfig) {
+    this.user = otherConfig.user;
+    this.groups.forEach((group, index) => group.copyValues(otherConfig.groups[index]));
+  }
+
+  /**
    * Method used to check correctness of the scrap config values
    * @returns check result containing all errors and warnings
    */
