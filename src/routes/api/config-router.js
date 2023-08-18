@@ -166,7 +166,7 @@ export class ConfigRouter {
         return { success: false, message: "Could not find the specifed element" };
       }
       contentParent[editIndex] = bodyValidation.content;
-      return { success: true, message: `Edited configuration element ${contentParent[editIndex].user}` };
+      return { success: true, message: `Edited configuration element ${contentParent[editIndex].getIdentifier()}` };
     });
     response.status(updateResult.status).json(updateResult.message);
   }
