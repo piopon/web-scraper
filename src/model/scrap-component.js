@@ -1,4 +1,5 @@
 import { ModelUtils } from "../utils/model-utils.js";
+import { ScrapError } from "./scrap-exception.js";
 
 export class ScrapComponent {
   /**
@@ -26,6 +27,9 @@ export class ScrapComponent {
    * @param {Object} otherComponent The scrap component object with source values
    */
   copyValues(otherComponent) {
+    if (!ModelUtils.isInstanceOf(ScrapComponent, otherComponent)) {
+      throw new ScrapError("Cannot copy scrap component values: incompatible object")
+    }
     this.interval = otherComponent.interval;
     this.selector = otherComponent.selector;
     this.attribute = otherComponent.attribute;

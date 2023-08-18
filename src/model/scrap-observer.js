@@ -1,5 +1,6 @@
 import { ModelUtils } from "../utils/model-utils.js";
 import { ScrapComponent } from "./scrap-component.js";
+import { ScrapError } from "./scrap-exception.js";
 
 export class ScrapObserver {
   /**
@@ -30,6 +31,9 @@ export class ScrapObserver {
    * @param {Object} otherObserver The scrap observer object with source values
    */
   copyValues(otherObserver) {
+    if (!ModelUtils.isInstanceOf(ScrapObserver, otherObserver)) {
+      throw new ScrapError("Cannot copy scrap observer values: incompatible object")
+    }
     this.path = otherObserver.path;
     this.target = otherObserver.target;
     this.history = otherObserver.history;

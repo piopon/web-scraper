@@ -1,4 +1,5 @@
 import { ModelUtils } from "../utils/model-utils.js";
+import { ScrapError } from "./scrap-exception.js";
 import { ScrapGroup } from "./scrap-group.js";
 
 export class ScrapConfig {
@@ -25,6 +26,9 @@ export class ScrapConfig {
    * @param {Object} otherConfig The scrap config object with source values
    */
   copyValues(otherConfig) {
+    if (!ModelUtils.isInstanceOf(ScrapConfig, otherConfig)) {
+      throw new ScrapError("Cannot copy scrap config values: incompatible object")
+    }
     this.user = otherConfig.user;
     this.groups.forEach((group, index) => group.copyValues(otherConfig.groups[index]));
   }

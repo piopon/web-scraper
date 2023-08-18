@@ -1,4 +1,5 @@
 import { ModelUtils } from "../utils/model-utils.js";
+import { ScrapError } from "./scrap-exception.js";
 import { ScrapObserver } from "./scrap-observer.js";
 
 export class ScrapGroup {
@@ -27,6 +28,9 @@ export class ScrapGroup {
    * @param {Object} otherGroup The scrap group object with source values
    */
   copyValues(otherGroup) {
+    if (!ModelUtils.isInstanceOf(ScrapGroup, otherGroup)) {
+      throw new ScrapError("Cannot copy scrap group values: incompatible object")
+    }
     this.name = otherGroup.name;
     this.category = otherGroup.category;
     this.domain = otherGroup.domain;
