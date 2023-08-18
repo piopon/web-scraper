@@ -89,14 +89,16 @@ export class ConfigRouter {
    */
   #createPutRoutes(router) {
     router.put("/", (request, response) => {
-      this.#handlePutRequest(request, response, (configContent) => configContent,
+      this.#handlePutRequest(request, response,
+        (configContent) => configContent,
         (parent) => {
           return parent.findIndex((item) => (request.query.user ? item.user === request.query.user : false));
         }
       );
     });
     router.put("/groups", (request, response) => {
-      this.#handlePutRequest(request, response, (configContent) => configContent.flatMap((item) => item.groups),
+      this.#handlePutRequest(request, response,
+        (configContent) => configContent.flatMap((item) => item.groups),
         (parent) => {
           return parent.findIndex((item) => (request.query.domain ? item.domain === request.query.domain : false));
         }
