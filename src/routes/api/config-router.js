@@ -172,7 +172,8 @@ export class ConfigRouter {
       if (editIndex < 0) {
         return { success: false, message: "Could not find the specifed element" };
       }
-      contentParent[editIndex] = bodyValidation.content;
+      // we must copy values because assigning new object will NOT update the main config reference
+      contentParent[editIndex].copyValues(bodyValidation.content);
       return { success: true, message: `Edited configuration element ${contentParent[editIndex].getIdentifier()}` };
     });
     response.status(updateResult.status).json(updateResult.message);
