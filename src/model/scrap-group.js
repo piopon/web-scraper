@@ -82,7 +82,7 @@ export class ScrapGroup {
           domain: { type: "string", minLength: 1 },
         },
       };
-    } else {
+    } else if ("POST" === method) {
       return {
         type: "object",
         additionalProperties: false,
@@ -90,6 +90,15 @@ export class ScrapGroup {
           parent: { type: "integer", minimum: 0 },
         },
         required: ["parent"],
+      };
+    } else {
+      return {
+        type: "object",
+        additionalProperties: false,
+        properties: {
+          domain: { type: "string", minLength: 1 },
+        },
+        required: ["domain"],
       };
     }
   }
