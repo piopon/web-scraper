@@ -182,12 +182,16 @@ export class ConfigRouter {
           message: `Incompatible query (${queryIdentifier}) and body (${bodyIdentifier}) identifiers`,
         };
       }
-      // we must copy values because assigning new object will NOT update the main config reference
-      contentParent[editIndex].copyValues(bodyValidation.content);
-      return {
-        success: true,
-        message: `Edited configuration element with ${contentParent[editIndex].getIdentifier()}`,
-      };
+      try {
+        // we must try to copy values because assigning new object will NOT update the main config reference
+        contentParent[editIndex].copyValues(bodyValidation.content);
+        return {
+          success: true,
+          message: `Edited configuration element with ${contentParent[editIndex].getIdentifier()}`,
+        };
+      } catch (error) {
+        return { success: false, message: error.message };
+      }
     });
     response.status(updateResult.status).json(updateResult.message);
   }
