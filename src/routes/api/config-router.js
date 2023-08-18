@@ -145,6 +145,13 @@ export class ConfigRouter {
     response.status(200).json(filteredData);
   }
 
+  /**
+   * Method containing common logic used to handle PUT requests
+   * @param {Object} request The incoming request object
+   * @param {Object} response The outputted response object
+   * @param {Function} parent The function used to get the parent of the body content
+   * @param {Function} index The function used to get the index of the element to edit
+   */
   #handlePutRequest(request, response, parent, index) {
     const paramsValidation = this.#validateQueryParams(request.method, request.url, request.query);
     if (!paramsValidation.valid) {
