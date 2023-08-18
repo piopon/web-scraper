@@ -19,10 +19,10 @@ export class ScrapObserver {
 
   /**
    * Method used to receive the appropriate identifier of observer
-   * @returns observer identifier: path field value
+   * @returns observer identifier: string composed of title with path field value
    */
   getIdentifier() {
-    return this.path;
+    return `path = ${this.path}`;
   }
 
   /**

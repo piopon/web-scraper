@@ -16,10 +16,10 @@ export class ScrapGroup {
 
   /**
    * Method used to receive the appropriate identifier of group
-   * @returns group identifier: domain field value
+   * @returns group identifier: string composed of title with domain field value
    */
   getIdentifier() {
-    return this.domain;
+    return `domain = ${this.domain}`;
   }
 
   /**

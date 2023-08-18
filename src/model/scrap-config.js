@@ -14,10 +14,10 @@ export class ScrapConfig {
 
   /**
    * Method used to receive the appropriate identifier of config
-   * @returns config identifier: user field value
+   * @returns config identifier: string composed of title with user field value
    */
   getIdentifier() {
-    return this.user;
+    return `user = ${this.user}`;
   }
 
   /**
