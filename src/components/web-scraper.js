@@ -50,14 +50,14 @@ export class WebScraper {
     this.#status.log("Reading configuration");
     // parse source scraper configuration file to a config class
     try {
-      var scrapJson = JSON.parse(fs.readFileSync(this.#setupConfig.dataConfigPath))
-        .filter((element) => element.user === this.#currentUserId)
+      var configCandidate = JSON.parse(fs.readFileSync(this.#setupConfig.dataConfigPath))
+        .map((config) => new ScrapConfig(config))
+        .filter((config) => config.user === this.#currentUserId)
         .at(0);
-      var scrapConfigCandidate = new ScrapConfig(scrapJson);
-      this.#scrapConfig = new ScrapValidator(scrapConfigCandidate).validate();
+      this.#scrapConfig = new ScrapValidator(configCandidate).validate();
     } catch (e) {
       if (e instanceof ScrapWarning) {
-        this.#scrapConfig = scrapConfigCandidate;
+        this.#scrapConfig = configCandidate;
         this.#status.warning(e.message);
       } else {
         this.stop(`Invalid scrap config: ${e.message}`);
