@@ -36,6 +36,27 @@ export class ModelUtils {
   }
 
   /**
+   * Method used to check if the specified object is an instace of a class
+   * @param {any} Clazz The reference class which type we want to check
+   * @param {any} obj The object to be checked
+   * @returns true if object is an instance of a class, false otherwise
+   */
+  static isInstanceOf(Clazz, obj) {
+    if (Clazz == null || obj == null) {
+      return false;
+    }
+    const model = new Clazz();
+    const modelKeys = Object.keys(model);
+    for (let i = 0, keys = modelKeys; i < keys.length; i++) {
+      const key = keys[i];
+      if (!Object.prototype.hasOwnProperty.call(obj, key)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
    * Method used to receive a array from specified source
    * @param {any} items The array of items
    * @returns an array of items, or a single item array if input was a single item
@@ -64,26 +85,5 @@ export class ModelUtils {
       }
     }
     return false;
-  }
-
-  /**
-   * Method used to check if the specified object is an instace of a class
-   * @param {any} Clazz The reference class which type we want to check
-   * @param {any} obj The object to be checked
-   * @returns true if object is an instance of a class, false otherwise
-   */
-  static #isInstanceOf(Clazz, obj) {
-    if (Clazz == null || obj == null) {
-      return false;
-    }
-    const model = new Clazz();
-    const modelKeys = Object.keys(model);
-    for (let i = 0, keys = modelKeys; i < keys.length; i++) {
-      const key = keys[i];
-      if (!Object.prototype.hasOwnProperty.call(obj, key)) {
-        return false;
-      }
-    }
-    return true;
   }
 }
