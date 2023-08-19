@@ -245,7 +245,7 @@ export class ConfigRouter {
         return { success: false, message: error.message };
       }
     });
-    response.status(updateResult.status).json(updateResult.message);
+    response.status(updateResult.status).send(updateResult.message);
   }
 
   /**
