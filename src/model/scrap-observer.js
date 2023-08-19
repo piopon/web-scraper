@@ -107,7 +107,7 @@ export class ScrapObserver {
           history: { enum: ["off", "live", "change"] },
         },
       };
-    } else {
+    } else if ("POST" === method) {
       return {
         type: "object",
         additionalProperties: false,
@@ -115,6 +115,15 @@ export class ScrapObserver {
           parent: { type: "string", minLength: 1 },
         },
         required: ["parent"],
+      };
+    } else {
+      return {
+        type: "object",
+        additionalProperties: false,
+        properties: {
+          path: { type: "string", minLength: 1 },
+        },
+        required: ["path"],
       };
     }
   }

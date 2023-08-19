@@ -104,6 +104,14 @@ export class ConfigRouter {
         }
       );
     });
+    router.put("/groups/observers", (request, response) => {
+      this.#handlePutRequest(request, response,
+        (configContent) => configContent.flatMap((item) => item.groups).flatMap((item) => item.observers),
+        (parent) => {
+          return parent.findIndex((item) => (request.query.path ? item.path === request.query.path : false));
+        }
+      );
+    });
   }
 
   /**
