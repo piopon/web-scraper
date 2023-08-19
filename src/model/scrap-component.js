@@ -28,7 +28,7 @@ export class ScrapComponent {
    */
   copyValues(otherComponent) {
     if (!ModelUtils.isInstanceOf(ScrapComponent, otherComponent)) {
-      throw new ScrapError("Cannot copy scrap component values: incompatible object")
+      throw new ScrapError("Cannot copy scrap component values: incompatible object");
     }
     this.interval = otherComponent.interval;
     this.selector = otherComponent.selector;

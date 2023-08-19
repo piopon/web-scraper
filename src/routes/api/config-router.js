@@ -89,7 +89,9 @@ export class ConfigRouter {
    */
   #createPutRoutes(router) {
     router.put("/", (request, response) => {
-      this.#handlePutRequest(request, response,
+      this.#handlePutRequest(
+        request,
+        response,
         (configContent) => configContent,
         (parent) => {
           return parent.findIndex((item) => (request.query.user ? item.user === request.query.user : false));
@@ -97,7 +99,9 @@ export class ConfigRouter {
       );
     });
     router.put("/groups", (request, response) => {
-      this.#handlePutRequest(request, response,
+      this.#handlePutRequest(
+        request,
+        response,
         (configContent) => configContent.flatMap((item) => item.groups),
         (parent) => {
           return parent.findIndex((item) => (request.query.domain ? item.domain === request.query.domain : false));
@@ -105,7 +109,9 @@ export class ConfigRouter {
       );
     });
     router.put("/groups/observers", (request, response) => {
-      this.#handlePutRequest(request, response,
+      this.#handlePutRequest(
+        request,
+        response,
         (configContent) => configContent.flatMap((item) => item.groups).flatMap((item) => item.observers),
         (parent) => {
           return parent.findIndex((item) => (request.query.path ? item.path === request.query.path : false));

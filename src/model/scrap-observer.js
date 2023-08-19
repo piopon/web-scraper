@@ -32,7 +32,7 @@ export class ScrapObserver {
    */
   copyValues(otherObserver) {
     if (!ModelUtils.isInstanceOf(ScrapObserver, otherObserver)) {
-      throw new ScrapError("Cannot copy scrap observer values: incompatible object")
+      throw new ScrapError("Cannot copy scrap observer values: incompatible object");
     }
     this.path = otherObserver.path;
     this.target = otherObserver.target;

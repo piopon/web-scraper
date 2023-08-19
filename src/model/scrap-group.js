@@ -29,7 +29,7 @@ export class ScrapGroup {
    */
   copyValues(otherGroup) {
     if (!ModelUtils.isInstanceOf(ScrapGroup, otherGroup)) {
-      throw new ScrapError("Cannot copy scrap group values: incompatible object")
+      throw new ScrapError("Cannot copy scrap group values: incompatible object");
     }
     this.name = otherGroup.name;
     this.category = otherGroup.category;

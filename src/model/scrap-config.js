@@ -27,7 +27,7 @@ export class ScrapConfig {
    */
   copyValues(otherConfig) {
     if (!ModelUtils.isInstanceOf(ScrapConfig, otherConfig)) {
-      throw new ScrapError("Cannot copy scrap config values: incompatible object")
+      throw new ScrapError("Cannot copy scrap config values: incompatible object");
     }
     this.user = otherConfig.user;
     this.groups.forEach((group, index) => group.copyValues(otherConfig.groups[index]));
