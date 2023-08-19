@@ -28,6 +28,7 @@ export class ConfigRouter {
     this.#createGetRoutes(router);
     this.#createPutRoutes(router);
     this.#createPostRoutes(router);
+    this.#createDeleteRoutes(router);
 
     return router;
   }
@@ -141,6 +142,43 @@ export class ConfigRouter {
           .filter((group) => group.domain === request.query.parent);
         return parentGroup.length > 0 ? parentGroup.at(0).observers : undefined;
       });
+    });
+  }
+
+  /**
+   * Method used to create DELETE method routes and add them to the router object
+   * @param {Object} router The router object with DELETE method routes defined
+   */
+  #createDeleteRoutes(router) {
+    router.delete("/groups", (request, response) => {
+      const paramsValidation = this.#validateQueryParams(request.method, request.url, request.query);
+      if (!paramsValidation.valid) {
+        response.status(400).json(paramsValidation.cause);
+        return;
+      }
+
+      const configContent = JSON.parse(fs.readFileSync(this.#configFilePath)).map((item) => new ScrapConfig(item));
+
+      // START: index logic (gets configContent)
+      let indexResult = { found: undefined, reason: "could not find item to delete" };
+      for (let configIndex = 0; configIndex < configContent.length; configIndex++) {
+        const currentConfig = configContent[configIndex];
+        for (let groupIndex = 0; groupIndex < currentConfig.groups.length; groupIndex++) {
+          if (currentConfig.groups[groupIndex].domain === request.query.domain) {
+            indexResult = { found: { parent: currentConfig.groups, index: groupIndex }, reason: undefined };
+          }
+        }
+      }
+      // END: index logic (gets configContent)
+      if (!indexResult.found) {
+        response.status(400).send(indexResult.reason);
+        return;
+      }
+      const removedItem = indexResult.found.parent.splice(indexResult.found.index, 1);
+
+      fs.writeFileSync(this.#configFilePath, JSON.stringify(configContent, null, 2));
+
+      response.status(200).send(`Removed item with ${removedItem.at(0).getIdentifier()}`);
     });
   }
 
