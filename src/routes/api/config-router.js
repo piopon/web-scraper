@@ -163,6 +163,22 @@ export class ConfigRouter {
         return { found: undefined, reason: "could not find item to delete" };
       });
     });
+    router.delete("/groups/observers", (request, response) => {
+      this.#handleDeleteRequest(request, response, (configContent) => {
+        for (let configIndex = 0; configIndex < configContent.length; configIndex++) {
+          const currentConfig = configContent[configIndex];
+          for (let groupIndex = 0; groupIndex < currentConfig.groups.length; groupIndex++) {
+            const currentGroup = currentConfig.groups[groupIndex];
+            for (let observerIndex = 0; observerIndex < currentGroup.observers.length; observerIndex++) {
+              if (currentGroup.observers[observerIndex].path === request.query.path) {
+                return { found: { parent: currentGroup.observers, index: observerIndex }, reason: undefined };
+              }
+            }
+          }
+        }
+        return { found: undefined, reason: "Could not find the item to delete" };
+      });
+    });
   }
 
   /**
