@@ -181,6 +181,9 @@ export class ConfigRouter {
             const currentGroup = currentConfig.groups[groupIndex];
             for (let observerIndex = 0; observerIndex < currentGroup.observers.length; observerIndex++) {
               if (currentGroup.observers[observerIndex].path === request.query.path) {
+                if (currentGroup.observers.length === 1) {
+                  return { found: undefined, reason: "Cannot delete last group observer" };
+                }
                 return { found: { parent: currentGroup.observers, index: observerIndex }, reason: undefined };
               }
             }
