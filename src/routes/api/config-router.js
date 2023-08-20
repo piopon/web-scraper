@@ -152,42 +152,27 @@ export class ConfigRouter {
   #createDeleteRoutes(router) {
     router.delete("/", (request, response) => {
       this.#handleDeleteRequest(request, response, (configContent) => {
-        for (let configIndex = 0; configIndex < configContent.length; configIndex++) {
-          if (configContent[configIndex].user === request.query.user) {
-            return { found: { parent: configContent, index: configIndex }, reason: undefined };
-          }
-        }
-        return { found: undefined, reason: "Could not find item to delete" };
+        const details = this.#getParentDetails(configContent, { configUser: request.query.user });
+        return details
+          ? { found: { parent: details.parent, index: details.index }, reason: undefined }
+          : { found: undefined, reason: "Could not find item to delete" };
       });
     });
     router.delete("/groups", (request, response) => {
       this.#handleDeleteRequest(request, response, (configContent) => {
-        for (let configIndex = 0; configIndex < configContent.length; configIndex++) {
-          const currentConfig = configContent[configIndex];
-          for (let groupIndex = 0; groupIndex < currentConfig.groups.length; groupIndex++) {
-            if (currentConfig.groups[groupIndex].domain === request.query.domain) {
-              return { found: { parent: currentConfig.groups, index: groupIndex }, reason: undefined };
-            }
-          }
-        }
-        return { found: undefined, reason: "could not find item to delete" };
+        const details = this.#getParentDetails(configContent, { groupDomain: request.query.domain });
+        return details
+          ? { found: { parent: details.parent, index: details.index }, reason: undefined }
+          : { found: undefined, reason: "could not find item to delete" };
       });
     });
     router.delete("/groups/observers", (request, response) => {
       this.#handleDeleteRequest(request, response, (configContent) => {
-        for (let configIndex = 0; configIndex < configContent.length; configIndex++) {
-          const currentConfig = configContent[configIndex];
-          for (let groupIndex = 0; groupIndex < currentConfig.groups.length; groupIndex++) {
-            const currentGroup = currentConfig.groups[groupIndex];
-            for (let observerIndex = 0; observerIndex < currentGroup.observers.length; observerIndex++) {
-              if (currentGroup.observers[observerIndex].path === request.query.path) {
-                if (currentGroup.observers.length === 1) {
-                  return { found: undefined, reason: "Cannot delete last group observer" };
-                }
-                return { found: { parent: currentGroup.observers, index: observerIndex }, reason: undefined };
-              }
-            }
-          }
+        const details = this.#getParentDetails(configContent, { observerPath: request.query.path });
+        if (details) {
+          return details.parent.length > 1
+            ? { found: { parent: details.parent, index: details.index }, reason: undefined }
+            : { found: undefined, reason: "Cannot delete last group observer" };
         }
         return { found: undefined, reason: "Could not find the item to delete" };
       });
