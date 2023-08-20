@@ -150,6 +150,16 @@ export class ConfigRouter {
    * @param {Object} router The router object with DELETE method routes defined
    */
   #createDeleteRoutes(router) {
+    router.delete("/", (request, response) => {
+      this.#handleDeleteRequest(request, response, (configContent) => {
+        for (let configIndex = 0; configIndex < configContent.length; configIndex++) {
+          if (configContent[configIndex].user === request.query.user) {
+            return { found: { parent: configContent, index: configIndex }, reason: undefined };
+          }
+        }
+        return { found: undefined, reason: "Could not find item to delete" };
+      });
+    });
     router.delete("/groups", (request, response) => {
       this.#handleDeleteRequest(request, response, (configContent) => {
         for (let configIndex = 0; configIndex < configContent.length; configIndex++) {
