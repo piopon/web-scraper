@@ -180,34 +180,6 @@ export class ConfigRouter {
   }
 
   /**
-   * Method used to receive the specified config, group, or observer parent and index
-   * @param {Object} fullConfig The full config object which we want to search through
-   * @param {Object} object The searched object identifier for which we want to get parent details
-   * @returns parent of the searched object and the index of the object in parent
-   */
-  #getParentDetails(fullConfig, { configUser = undefined, groupDomain = undefined, observerPath = undefined }) {
-    for (let configIndex = 0; configIndex < fullConfig.length; configIndex++) {
-      const currentConfig = fullConfig[configIndex];
-      if (configUser && configUser === currentConfig.user) {
-        return { parent: fullConfig, index: configIndex };
-      }
-      for (let groupIndex = 0; groupIndex < currentConfig.groups.length; groupIndex++) {
-        const currentGroup = currentConfig.groups[groupIndex];
-        if (groupDomain && groupDomain === currentGroup.domain) {
-          return { parent: currentConfig.groups, index: groupIndex };
-        }
-        for (let observerIndex = 0; observerIndex < currentGroup.observers.length; observerIndex++) {
-          const currentObserver = currentGroup.observers[observerIndex];
-          if (observerPath && observerPath === currentObserver.path) {
-            return { parent: currentGroup.observers, index: observerIndex };
-          }
-        }
-      }
-    }
-    return undefined;
-  }
-
-  /**
    * Method containing common logic used to handle GET requests
    * @param {Object} request The incoming request object
    * @param {Object} response The outputted response object
@@ -320,6 +292,34 @@ export class ConfigRouter {
       return { success: true, message: `Removed item with ${removedItem.at(0).getIdentifier()}` };
     });
     response.status(deleteResult.status).send(deleteResult.message);
+  }
+
+  /**
+   * Method used to receive the specified config, group, or observer parent and index
+   * @param {Object} fullConfig The full config object which we want to search through
+   * @param {Object} object The searched object identifier for which we want to get parent details
+   * @returns parent of the searched object and the index of the object in parent
+   */
+  #getParentDetails(fullConfig, { configUser = undefined, groupDomain = undefined, observerPath = undefined }) {
+    for (let configIndex = 0; configIndex < fullConfig.length; configIndex++) {
+      const currentConfig = fullConfig[configIndex];
+      if (configUser && configUser === currentConfig.user) {
+        return { parent: fullConfig, index: configIndex };
+      }
+      for (let groupIndex = 0; groupIndex < currentConfig.groups.length; groupIndex++) {
+        const currentGroup = currentConfig.groups[groupIndex];
+        if (groupDomain && groupDomain === currentGroup.domain) {
+          return { parent: currentConfig.groups, index: groupIndex };
+        }
+        for (let observerIndex = 0; observerIndex < currentGroup.observers.length; observerIndex++) {
+          const currentObserver = currentGroup.observers[observerIndex];
+          if (observerPath && observerPath === currentObserver.path) {
+            return { parent: currentGroup.observers, index: observerIndex };
+          }
+        }
+      }
+    }
+    return undefined;
   }
 
   /**
