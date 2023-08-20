@@ -151,34 +151,17 @@ export class ConfigRouter {
    */
   #createDeleteRoutes(router) {
     router.delete("/groups", (request, response) => {
-      const paramsValidation = this.#validateQueryParams(request.method, request.url, request.query);
-      if (!paramsValidation.valid) {
-        response.status(400).json(paramsValidation.cause);
-        return;
-      }
-
-      const configContent = JSON.parse(fs.readFileSync(this.#configFilePath)).map((item) => new ScrapConfig(item));
-
-      // START: index logic (gets configContent)
-      let indexResult = { found: undefined, reason: "could not find item to delete" };
-      for (let configIndex = 0; configIndex < configContent.length; configIndex++) {
-        const currentConfig = configContent[configIndex];
-        for (let groupIndex = 0; groupIndex < currentConfig.groups.length; groupIndex++) {
-          if (currentConfig.groups[groupIndex].domain === request.query.domain) {
-            indexResult = { found: { parent: currentConfig.groups, index: groupIndex }, reason: undefined };
+      this.#handleDeleteRequest(request, response, (configContent) => {
+        for (let configIndex = 0; configIndex < configContent.length; configIndex++) {
+          const currentConfig = configContent[configIndex];
+          for (let groupIndex = 0; groupIndex < currentConfig.groups.length; groupIndex++) {
+            if (currentConfig.groups[groupIndex].domain === request.query.domain) {
+              return { found: { parent: currentConfig.groups, index: groupIndex }, reason: undefined };
+            }
           }
         }
-      }
-      // END: index logic (gets configContent)
-      if (!indexResult.found) {
-        response.status(400).send(indexResult.reason);
-        return;
-      }
-      const removedItem = indexResult.found.parent.splice(indexResult.found.index, 1);
-
-      fs.writeFileSync(this.#configFilePath, JSON.stringify(configContent, null, 2));
-
-      response.status(200).send(`Removed item with ${removedItem.at(0).getIdentifier()}`);
+        return { found: undefined, reason: "could not find item to delete" };
+      });
     });
   }
 
@@ -278,6 +261,23 @@ export class ConfigRouter {
       return { success: true, message: "Added new configuration element" };
     });
     response.status(addResult.status).send(addResult.message);
+  }
+
+  #handleDeleteRequest(request, response, index) {
+    const paramsValidation = this.#validateQueryParams(request.method, request.url, request.query);
+    if (!paramsValidation.valid) {
+      response.status(400).json(paramsValidation.cause);
+      return;
+    }
+    const deleteResult = this.#updateConfig((initalConfig) => {
+      const indexResult = index(initalConfig);
+      if (!indexResult.found) {
+        return { success: false, message: indexResult.reason };
+      }
+      const removedItem = indexResult.found.parent.splice(indexResult.found.index, 1);
+      return { success: true, message: `Removed item with ${removedItem.at(0).getIdentifier()}` };
+    });
+    response.status(deleteResult.status).send(deleteResult.message);
   }
 
   /**
