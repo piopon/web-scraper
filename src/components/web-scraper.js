@@ -115,6 +115,22 @@ export class WebScraper {
   }
 
   /**
+   * Method used to return the name of the component
+   * @returns web scraper component name
+   */
+  getName() {
+    return WebScraper.#LOGGER_NAME;
+  }
+
+  /**
+   * Method used to determine if the web scraper component is running (alive) or not
+   * @returns true when web scraper is running, false otherwise
+   */
+  isAlive() {
+    return this.#intervalId != null;
+  }
+
+  /**
    * Method used to receive running history status of web scraper
    * @returns array of objects containing web scraper running history status
    */
@@ -135,14 +151,6 @@ export class WebScraper {
       }
     }
     return this.#status.getHistory();
-  }
-
-  /**
-   * Method used to determine if the web scraper component is running (alive) or not
-   * @returns true when web scraper is running, false otherwise
-   */
-  isAlive() {
-    return this.#intervalId != null;
   }
 
   /**
