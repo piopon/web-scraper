@@ -10,10 +10,10 @@ import path from "path";
 import fs from "fs";
 
 export class WebScraper {
-  static #LOGGER_NAME = "web-scraper";
+  static #COMPONENT_NAME = "web-scraper";
   static #RUNNING_STATUS = "Running";
 
-  #status = new StatusLogger(WebScraper.#LOGGER_NAME);
+  #status = new StatusLogger(WebScraper.#COMPONENT_NAME);
   #scrapingInProgress = false;
   #currentUserId = undefined;
   #setupConfig = undefined;
@@ -119,7 +119,7 @@ export class WebScraper {
    * @returns web scraper component name
    */
   getName() {
-    return WebScraper.#LOGGER_NAME;
+    return WebScraper.#COMPONENT_NAME;
   }
 
   /**
