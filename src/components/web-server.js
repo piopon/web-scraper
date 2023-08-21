@@ -1,6 +1,7 @@
 import { ParamsParser } from "../middleware/params-parser.js";
 import { ConfigRouter } from "../routes/api/config-router.js";
 import { DataRouter } from "../routes/api/data-router.js";
+import { StatusRouter } from "../routes/api/status-router.js";
 import { StatusLogger } from "./status-logger.js";
 
 import express from "express";
@@ -64,6 +65,7 @@ export class WebServer {
     const routes = new Map([
       ["/api/v1/data", new DataRouter(this.#setupConfig.dataOutputPath)],
       ["/api/v1/configs", new ConfigRouter(this.#setupConfig.dataConfigPath)],
+      ["/api/v1/status", new StatusRouter(this.#components)],
     ]);
     routes.forEach((router, url) => server.use(url, router.createRoutes()));
 
