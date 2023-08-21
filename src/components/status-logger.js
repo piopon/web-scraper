@@ -60,6 +60,6 @@ export class StatusLogger {
    * @returns a string with JSON content containing full logs history
    */
   getHistory() {
-    return JSON.stringify(this.#status, null, 2);
+    return this.#status;
   }
 }
