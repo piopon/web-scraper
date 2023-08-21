@@ -139,13 +139,13 @@ export class WebScraper {
     const currentStatus = this.#status.getStatus().message;
     if (this.#intervalId == null) {
       // scraper is NOT running in selected intervals
-      if (currentStatus === WebScraper.#RUNNING_STATUS) {
+      if (currentStatus.startsWith(WebScraper.#RUNNING_STATUS)) {
         // incorrect state - update field
         this.#status.error(invalidStateMessage);
       }
     } else {
       // scraper is running in selected intervals
-      if (currentStatus !== WebScraper.#RUNNING_STATUS) {
+      if (!currentStatus.startsWith(WebScraper.#RUNNING_STATUS)) {
         // incorrect state - since it's running then we must stop it
         this.stop(invalidStateMessage);
       }
