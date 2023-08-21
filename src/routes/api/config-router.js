@@ -277,6 +277,12 @@ export class ConfigRouter {
     response.status(addResult.status).send(addResult.message);
   }
 
+  /**
+   * Method containing common logic used to handle DELETE requests
+   * @param {Object} request The incoming request object
+   * @param {Object} response The outputted response object
+   * @param {Function} index The function used to get the parent and index of the element to delete
+   */
   #handleDeleteRequest(request, response, index) {
     const paramsValidation = this.#validateQueryParams(request.method, request.url, request.query);
     if (!paramsValidation.valid) {
