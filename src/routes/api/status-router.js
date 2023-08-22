@@ -31,6 +31,24 @@ export class StatusRouter {
       }
       response.status(200).json(outputData);
     });
+    router.get("/history", (request, response) => {
+      const outputData = [
+        {
+          name: this.#serverStatus.getName(),
+          alive: true,
+          history: this.#serverStatus.getHistory(),
+        },
+      ];
+      for (let componentIndex = 0; componentIndex < this.#components.length; componentIndex++) {
+        const component = this.#components[componentIndex];
+        outputData.push({
+          name: component.getName(),
+          alive: component.isAlive(),
+          history: component.getStatusHistory(),
+        });
+      }
+      response.status(200).json(outputData);
+    });
     return router;
   }
 }
