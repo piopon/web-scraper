@@ -67,7 +67,7 @@ export class WebServer {
     const routes = new Map([
       ["/api/v1/data", new DataRouter(this.#setupConfig.dataOutputPath)],
       ["/api/v1/configs", new ConfigRouter(this.#setupConfig.dataConfigPath)],
-      ["/api/v1/status", new StatusRouter(this.#components)],
+      ["/api/v1/status", new StatusRouter(this.#status, this.#components)],
     ]);
     routes.forEach((router, url) => server.use(url, router.createRoutes()));
 

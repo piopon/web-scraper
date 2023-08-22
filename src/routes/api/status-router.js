@@ -1,13 +1,16 @@
 import express from "express";
 
 export class StatusRouter {
+  #serverStatus = undefined;
   #components = undefined;
 
   /**
    * Creates a new status router for configuring appropriate endpoints
+   * @param {Object} serverStatus The web server status logger object
    * @param {Array} components The array of components which status we want to receive
    */
-  constructor(components) {
+  constructor(serverStatus, components) {
+    this.#serverStatus = serverStatus;
     this.#components = components;
   }
 
@@ -18,7 +21,7 @@ export class StatusRouter {
   createRoutes() {
     const router = express.Router();
     router.get("/", (request, response) => {
-      const outputData = [{ name: "web-server", alive: true }];
+      const outputData = [{ name: this.#serverStatus.getName(), alive: true }];
       for (let componentIndex = 0; componentIndex < this.#components.length; componentIndex++) {
         const component = this.#components[componentIndex];
         outputData.push({
