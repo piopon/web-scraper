@@ -13,6 +13,14 @@ export class StatusLogger {
   }
 
   /**
+   * Method used to return current status logger name
+   * @returns name of the logger
+   */
+  getName() {
+    return this.#name;
+  }
+
+  /**
    * Adds and prints an info log message
    * @param {String} message The message to add and print
    */
