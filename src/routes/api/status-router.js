@@ -21,6 +21,11 @@ export class StatusRouter {
   createRoutes() {
     const router = express.Router();
     router.get("/", (request, response) => {
+      const validationResult = this.#validateQueryParams(request.query);
+      if (!validationResult.valid) {
+        response.status(400).json(validationResult.cause);
+        return;
+      }
       const outputData = [{ name: this.#serverStatus.getName(), alive: true }];
       for (let componentIndex = 0; componentIndex < this.#components.length; componentIndex++) {
         const component = this.#components[componentIndex];
@@ -50,5 +55,17 @@ export class StatusRouter {
       response.status(200).json(outputData);
     });
     return router;
+  }
+
+  #validateQueryParams(params) {
+    const queryValidation = new Ajv().compile({
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        name: { type: "string" },
+        history: { type: "boolean" },
+      },
+    });
+    return { valid: queryValidation(params), cause: queryValidation.errors };
   }
 }
