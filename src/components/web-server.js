@@ -1,4 +1,5 @@
 import { ParamsParser } from "../middleware/params-parser.js";
+import { RequestLogger } from "../middleware/request-logger.js";
 import { ConfigRouter } from "../routes/api/config-router.js";
 import { DataRouter } from "../routes/api/data-router.js";
 import { StatusRouter } from "../routes/api/status-router.js";
@@ -60,6 +61,7 @@ export class WebServer {
     const server = express();
     //setup web server middleware
     server.use(ParamsParser.middleware);
+    server.use(RequestLogger.middleware(this.#status));
     server.use(express.json());
     // setup web server routes
     const routes = new Map([
