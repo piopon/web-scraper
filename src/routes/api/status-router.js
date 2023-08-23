@@ -26,31 +26,22 @@ export class StatusRouter {
         response.status(400).json(validationResult.cause);
         return;
       }
-      const outputData = [{ name: this.#serverStatus.getName(), alive: true }];
-      for (let componentIndex = 0; componentIndex < this.#components.length; componentIndex++) {
-        const component = this.#components[componentIndex];
-        outputData.push({
-          name: component.getName(),
-          alive: component.isAlive(),
+      const showHistory = request.query.history ? request.query.history : false;
+      const outputData = this.#components
+        .filter((component) => (request.query.name ? component.getName() === request.query.name : true))
+        .map((component) => {
+          return {
+            name: component.getName(),
+            alive: component.isAlive(),
+            history: showHistory ? component.getStatusHistory() : undefined,
+          };
         });
-      }
-      response.status(200).json(outputData);
-    });
-    router.get("/history", (request, response) => {
-      const outputData = [
-        {
+      if (!request.query.name || this.#serverStatus.getName() === request.query.name) {
+        outputData.push({
           name: this.#serverStatus.getName(),
           alive: true,
-          history: this.#serverStatus.getHistory(),
-        },
-      ];
-      for (let componentIndex = 0; componentIndex < this.#components.length; componentIndex++) {
-        const component = this.#components[componentIndex];
-        outputData.push({
-          name: component.getName(),
-          alive: component.isAlive(),
-          history: component.getStatusHistory(),
-        });
+          history: showHistory ? this.#serverStatus.getHistory() : undefined,
+        })
       }
       response.status(200).json(outputData);
     });
