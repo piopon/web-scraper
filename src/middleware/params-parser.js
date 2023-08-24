@@ -36,6 +36,9 @@ export class ParamsParser {
     if (RegexUtils.isSignedInteger(value)) {
       return Number.parseInt(value);
     }
+    if (RegexUtils.isBoolean(value)) {
+      return value === "true";
+    }
     return value;
   }
 }
