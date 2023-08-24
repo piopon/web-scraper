@@ -29,7 +29,7 @@ export class StatusRouter {
       }
       const showHistory = request.query.history ? request.query.history : false;
       const outputData = this.#components
-        .filter((component) => (request.query.name ? component.getName() === request.query.name : true))
+        .filter((component) => (request.query.name ? component.getName().trim() === request.query.name : true))
         .map((component) => {
           return {
             name: component.getName(),
@@ -37,7 +37,7 @@ export class StatusRouter {
             history: showHistory ? component.getStatusHistory() : undefined,
           };
         });
-      if (!request.query.name || this.#serverStatus.getName() === request.query.name) {
+      if (!request.query.name || this.#serverStatus.getName().trim() === request.query.name) {
         outputData.push({
           name: this.#serverStatus.getName(),
           alive: true,
