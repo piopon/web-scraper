@@ -1,5 +1,14 @@
 export class ModelUtils {
   /**
+   * Method used to check if a specified object is empty (has no properties)
+   * @param {Object} object The object to check for emptiness
+   * @returns true if input object is empty, false otherwise
+   */
+  static isEmpty(object) {
+    return Object.keys(object).length === 0;
+  }
+
+  /**
    * Method used to check and return value if present, or a default if not
    * @param {any} value The value to check and return if present
    * @param {any} defaultValue The default value to return if value not present
@@ -24,6 +33,27 @@ export class ModelUtils {
       }
     });
     return array;
+  }
+
+  /**
+   * Method used to check if the specified object is an instace of a class
+   * @param {any} Clazz The reference class which type we want to check
+   * @param {any} obj The object to be checked
+   * @returns true if object is an instance of a class, false otherwise
+   */
+  static isInstanceOf(Clazz, obj) {
+    if (Clazz == null || obj == null) {
+      return false;
+    }
+    const model = new Clazz();
+    const modelKeys = Object.keys(model);
+    for (let i = 0, keys = modelKeys; i < keys.length; i++) {
+      const key = keys[i];
+      if (!Object.prototype.hasOwnProperty.call(obj, key)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /**
@@ -55,26 +85,5 @@ export class ModelUtils {
       }
     }
     return false;
-  }
-
-  /**
-   * Method used to check if the specified object is an instace of a class
-   * @param {any} Clazz The reference class which type we want to check
-   * @param {any} obj The object to be checked
-   * @returns true if object is an instance of a class, false otherwise
-   */
-  static #isInstanceOf(Clazz, obj) {
-    if (Clazz == null || obj == null) {
-      return false;
-    }
-    const model = new Clazz();
-    const modelKeys = Object.keys(model);
-    for (let i = 0, keys = modelKeys; i < keys.length; i++) {
-      const key = keys[i];
-      if (!Object.prototype.hasOwnProperty.call(obj, key)) {
-        return false;
-      }
-    }
-    return true;
   }
 }

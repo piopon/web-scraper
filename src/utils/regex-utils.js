@@ -7,4 +7,31 @@ export class RegexUtils {
   static getPrices(string) {
     return string.replace(",", ".").match(/\d+(?:\.\d+)?/g);
   }
+
+  /**
+   * Method used to check if the provided string value is an unsigned integer
+   * @param {String} string The input string value to be checked
+   * @returns true if the string value is an unsigned integer, false otherwise
+   */
+  static isUnsignedInteger(string) {
+    return new RegExp("^[0-9]+$").test(string);
+  }
+
+  /**
+   * Method used to check if the provided string value is a signed integer
+   * @param {String} string The input string value to be checked
+   * @returns true if the string value is a signed integer, false otherwise
+   */
+  static isSignedInteger(string) {
+    return new RegExp("^-?[0-9]+$").test(string);
+  }
+
+  /**
+   * Method used to check if the provided string value is a boolean
+   * @param {String} string The input string value to be checked
+   * @returns true if the string value is a boolean, false otherwise
+   */
+  static isBoolean(string) {
+    return string === "true" || string === "false";
+  }
 }

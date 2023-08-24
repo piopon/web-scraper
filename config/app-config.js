@@ -5,17 +5,30 @@ export class AppConfig {
   #currDir = undefined;
   #rootDir = undefined;
 
+  /**
+   * Creates a new application configuration object
+   */
   constructor() {
     this.#currDir = path.dirname(url.fileURLToPath(import.meta.url));
     this.#rootDir = path.join(this.#currDir, "..");
   }
 
+  /**
+   * Method used to receive the current application configuration
+   * @returns object with application configuration
+   */
   getConfig() {
     return {
+      dataConfigPath: path.join(this.#rootDir, "user", "input", "scrap-config.json"),
+      dataOutputPath: path.join(this.#rootDir, "user", "output", "data.json"),
+      screenshotPath: path.join(this.#rootDir, "user", "captures"),
+      serverConfig: {
+        port: process.env.PORT || 5000,
+      },
       scraperConfig: {
-        interval: 30_000,
-        srcFile: path.join(this.#rootDir, "user", "input", "scrap-config.json"),
-        dstFile: path.join(this.#rootDir, "user", "output", "data.json"),
+        scrapInterval: 30_000,
+        defaultTimeout: 15_000,
+        timeoutAttempts: 10,
       },
     };
   }

@@ -3,17 +3,20 @@ import { ScrapConfig } from "../model/scrap-config.js";
 import { ScrapWarning } from "../model/scrap-exception.js";
 import { ScrapValidator } from "../model/scrap-validator.js";
 import { StatusLogger } from "./status-logger.js";
+import { TimeoutError } from "puppeteer";
 
 import puppeteer from "puppeteer";
 import path from "path";
 import fs from "fs";
 
 export class WebScraper {
-  static #LOGGER_NAME = "web-scraper";
+  static #COMPONENT_NAME = "web-scraper";
   static #RUNNING_STATUS = "Running";
 
-  #status = new StatusLogger(WebScraper.#LOGGER_NAME);
-  #scraperConfig = undefined;
+  #status = new StatusLogger(WebScraper.#COMPONENT_NAME);
+  #scrapingInProgress = false;
+  #currentUserId = undefined;
+  #setupConfig = undefined;
   #scrapConfig = undefined;
   #intervalId = undefined;
   #browser = undefined;
@@ -23,33 +26,38 @@ export class WebScraper {
    * Creates a new web scraper with specified configuration
    * @param {Object} config The object containing scraper configuration
    */
-  constructor(config) {
-    this.#scraperConfig = config;
+  constructor(config, userId) {
+    this.#setupConfig = config;
+    this.#currentUserId = userId;
+    this.#status.log("Created");
   }
 
   /**
    * Method used to start web scraping action
    */
   async start() {
+    this.#status.log("Starting");
     // create a new empty configuration file and directory if none exists
-    const configDirectory = path.dirname(this.#scraperConfig.srcFile);
+    const configDirectory = path.dirname(this.#setupConfig.dataConfigPath);
     if (!fs.existsSync(configDirectory)) {
       fs.mkdirSync(configDirectory, { recursive: true });
     }
-    if (!fs.existsSync(this.#scraperConfig.srcFile)) {
-      const newConfig = { user: 0, groups: [] };
-      fs.writeFileSync(this.#scraperConfig.srcFile, JSON.stringify(newConfig, null, 2));
-      this.#status.log(`Created new ${path.basename(this.#scraperConfig.srcFile)}`);
+    if (!fs.existsSync(this.#setupConfig.dataConfigPath)) {
+      const newConfig = { user: this.#currentUserId, groups: [] };
+      fs.writeFileSync(this.#setupConfig.dataConfigPath, JSON.stringify(newConfig, null, 2));
+      this.#status.log(`Created new ${path.basename(this.#setupConfig.dataConfigPath)}`);
     }
     this.#status.log("Reading configuration");
     // parse source scraper configuration file to a config class
     try {
-      var scrapJson = JSON.parse(fs.readFileSync(this.#scraperConfig.srcFile));
-      var scrapConfigCandidate = new ScrapConfig(scrapJson);
-      this.#scrapConfig = new ScrapValidator(scrapConfigCandidate).validate();
+      var configCandidate = JSON.parse(fs.readFileSync(this.#setupConfig.dataConfigPath))
+        .map((config) => new ScrapConfig(config))
+        .filter((config) => config.user === this.#currentUserId)
+        .at(0);
+      this.#scrapConfig = new ScrapValidator(configCandidate).validate();
     } catch (e) {
       if (e instanceof ScrapWarning) {
-        this.#scrapConfig = scrapConfigCandidate;
+        this.#scrapConfig = configCandidate;
         this.#status.warning(e.message);
       } else {
         this.stop(`Invalid scrap config: ${e.message}`);
@@ -60,24 +68,41 @@ export class WebScraper {
     // open new Puppeteer virtual browser and an initial web page
     this.#browser = await puppeteer.launch({ headless: "new" });
     this.#page = await this.#browser.newPage();
+    this.#page.setDefaultTimeout(this.#setupConfig.scraperConfig.defaultTimeout);
     // invoke scrap data action initially and setup interval calls
     if (true === (await this.#scrapData())) {
-      this.#intervalId = setInterval(() => this.#scrapData(), this.#scraperConfig.interval);
-      this.#status.log(WebScraper.#RUNNING_STATUS);
+      const intervalTime = this.#setupConfig.scraperConfig.scrapInterval;
+      this.#intervalId = setInterval(() => this.#scrapData(), intervalTime);
+      this.#status.log(`${WebScraper.#RUNNING_STATUS} (every: ${intervalTime / 1000} seconds)`);
     }
   }
 
   /**
    * Method used to stop web scraping action
-   * @param {String} reason Optional message with the reason for stopping the web scraping.
-   *                        Non-empty value will be interpreted as error.
+   * @param {String} reason The message with a web scraper stop reason. Non-empty value is treated as error.
+   * @param {Boolean} takeScreenshot Flag responsible for creating an additional screenshot.
    */
-  async stop(reason = "") {
-    try {
-      if (this.#intervalId != null) {
-        clearInterval(this.#intervalId);
-        this.#intervalId = undefined;
+  async stop(reason = "", takeScreenshot = false) {
+    // stop running method in constant time intervals
+    if (this.#intervalId != null) {
+      clearInterval(this.#intervalId);
+      this.#intervalId = undefined;
+    }
+    // update status and make error screenshot
+    if (reason.length === 0) {
+      this.#status.log("Stopped");
+    } else {
+      if (this.#status.getStatus().message !== reason) {
+        this.#status.error(reason);
+        if (takeScreenshot) {
+          await this.#createErrorScreenshot(this.#status.getStatus());
+        }
       }
+    }
+    // update internal object state
+    this.#scrapingInProgress = false;
+    // close currently opened page and browser
+    try {
       if (this.#page != null) {
         await this.#page.close();
       }
@@ -87,13 +112,22 @@ export class WebScraper {
     } catch (warning) {
       this.#status.warning(`Stop issue: ${warning.message}`);
     }
-    if (reason.length === 0) {
-      this.#status.log("Stopped");
-    } else {
-      if (this.#status.getStatus().message !== reason) {
-        this.#status.error(reason);
-      }
-    }
+  }
+
+  /**
+   * Method used to return the name of the component
+   * @returns web scraper component name
+   */
+  getName() {
+    return WebScraper.#COMPONENT_NAME;
+  }
+
+  /**
+   * Method used to determine if the web scraper component is running (alive) or not
+   * @returns true when web scraper is running, false otherwise
+   */
+  isAlive() {
+    return this.#intervalId != null;
   }
 
   /**
@@ -105,27 +139,18 @@ export class WebScraper {
     const currentStatus = this.#status.getStatus().message;
     if (this.#intervalId == null) {
       // scraper is NOT running in selected intervals
-      if (currentStatus === WebScraper.#RUNNING_STATUS) {
+      if (currentStatus.startsWith(WebScraper.#RUNNING_STATUS)) {
         // incorrect state - update field
         this.#status.error(invalidStateMessage);
       }
     } else {
       // scraper is running in selected intervals
-      if (currentStatus !== WebScraper.#RUNNING_STATUS) {
+      if (!currentStatus.startsWith(WebScraper.#RUNNING_STATUS)) {
         // incorrect state - since it's running then we must stop it
         this.stop(invalidStateMessage);
       }
     }
     return this.#status.getHistory();
-  }
-
-  /**
-   * Method used to determine if the web scraper component is running (alive) or not
-   * @returns true when web scraper is running, false otherwise
-   */
-  isAlive() {
-    const currentStatus = this.#status.getStatus().message;
-    return this.#intervalId != null && currentStatus === WebScraper.#RUNNING_STATUS;
   }
 
   /**
@@ -137,7 +162,12 @@ export class WebScraper {
       this.stop("Missing scrap configuration");
       return false;
     }
+    if (this.#scrapingInProgress) {
+      this.#status.warning("Skipping current scrap iteration - previous one in progress");
+      return false;
+    }
     const data = [];
+    this.#scrapingInProgress = true;
     for (let groupIndex = 0; groupIndex < this.#scrapConfig.groups.length; groupIndex++) {
       const group = this.#scrapConfig.groups[groupIndex];
       const groupObject = { name: group.name, category: group.category, items: [] };
@@ -145,10 +175,9 @@ export class WebScraper {
         const observer = group.observers[observerIndex];
         const page = new URL(observer.path, group.domain);
         try {
-          await this.#page.goto(page);
-          await this.#page.waitForSelector(observer.price.selector, { visible: true });
+          await this.#navigateToPage(page, observer);
         } catch (error) {
-          this.stop("Incorrect scrap configuration: Cannot find price element");
+          this.stop(`Incorrect scrap configuration: Cannot find price element in page ${page}`, true);
           return false;
         }
         const dataObj = await this.#page.evaluate((observer) => {
@@ -187,7 +216,7 @@ export class WebScraper {
         }, observer);
         const validationResult = this.#validateData(dataObj);
         if (validationResult.length > 0) {
-          this.stop(validationResult);
+          this.stop(validationResult, true);
           return false;
         }
         groupObject.items.push(this.#formatData(dataObj));
@@ -195,7 +224,33 @@ export class WebScraper {
       data.push(groupObject);
     }
     this.#saveData(data);
+    this.#scrapingInProgress = false;
     return true;
+  }
+
+  /**
+   * Method used to go to a specified URL and wait until an observer selector is available
+   * @param {String} pageUrl The address of a page to navigate to
+   * @param {Object} observer The observer which has the selector definition to find on a page
+   */
+  async #navigateToPage(pageUrl, observer) {
+    let attempt = 1;
+    let foundSelector = false;
+    const maxAttempts = this.#setupConfig.scraperConfig.timeoutAttempts;
+    while (!foundSelector) {
+      try {
+        await this.#page.goto(pageUrl, { waitUntil: observer.target });
+        await this.#page.waitForSelector(observer.price.selector, { visible: true });
+        foundSelector = true;
+      } catch (error) {
+        if (attempt <= maxAttempts && error instanceof TimeoutError) {
+          this.#status.warning(`Timeout when waiting for: ${observer.price.selector} [${attempt}/${maxAttempts}]`);
+          attempt++;
+          continue;
+        }
+        throw error;
+      }
+    }
   }
 
   /**
@@ -203,11 +258,11 @@ export class WebScraper {
    * @param {Object} dataToSave The data object to save in destination file
    */
   #saveData(dataToSave) {
-    const dataDirectory = path.dirname(this.#scraperConfig.dstFile);
+    const dataDirectory = path.dirname(this.#setupConfig.dataOutputPath);
     if (!fs.existsSync(dataDirectory)) {
       fs.mkdirSync(dataDirectory, { recursive: true });
     }
-    fs.writeFileSync(this.#scraperConfig.dstFile, JSON.stringify(dataToSave, null, 2));
+    fs.writeFileSync(this.#setupConfig.dataOutputPath, JSON.stringify(dataToSave, null, 2));
   }
 
   /**
@@ -239,5 +294,20 @@ export class WebScraper {
       return `Invalid scraped data: Incorrect price value for ${objectName}`;
     }
     return "";
+  }
+
+  /**
+   * Method used to create an error screenshot of current web page (if present)
+   * @param {Object} error The occured error object
+   */
+  async #createErrorScreenshot(error) {
+    if (this.#page && error.type.length > 0) {
+      if (!fs.existsSync(this.#setupConfig.screenshotPath)) {
+        fs.mkdirSync(this.#setupConfig.screenshotPath, { recursive: true });
+      }
+      const screenshotName = `error_${error.timestamp.replaceAll(":", "-").replaceAll(" ", "_")}.png`;
+      const screenshotPath = path.join(this.#setupConfig.screenshotPath, screenshotName);
+      await this.#page.screenshot({ path: screenshotPath });
+    }
   }
 }
