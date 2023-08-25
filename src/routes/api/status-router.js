@@ -42,7 +42,7 @@ export class StatusRouter {
           name: this.#serverStatus.getName(),
           alive: true,
           history: showHistory ? this.#serverStatus.getHistory() : undefined,
-        })
+        });
       }
       response.status(200).json(outputData);
     });
