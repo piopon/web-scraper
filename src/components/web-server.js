@@ -4,6 +4,7 @@ import { ConfigRouter } from "../routes/api/config-router.js";
 import { DataRouter } from "../routes/api/data-router.js";
 import { StatusRouter } from "../routes/api/status-router.js";
 import { StatusLogger } from "./status-logger.js";
+import { ViewRouter } from "../routes/view/view-router.js";
 
 import express from "express";
 import { engine } from 'express-handlebars';
@@ -70,6 +71,7 @@ export class WebServer {
     server.use(express.json());
     // setup web server routes
     const routes = new Map([
+      ["/", new ViewRouter()],
       ["/api/v1/data", new DataRouter(this.#setupConfig.dataOutputPath)],
       ["/api/v1/configs", new ConfigRouter(this.#setupConfig.dataConfigPath)],
       ["/api/v1/status", new StatusRouter(this.#status, this.#components)],
