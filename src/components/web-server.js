@@ -64,8 +64,8 @@ export class WebServer {
     // setup web server template engine
     server.engine('handlebars', engine());
     server.set('view engine', 'handlebars');
-    server.set('views', '../../public');
-    //setup web server middleware
+    server.set('views', './public');
+    // setup web server middleware
     server.use(ParamsParser.middleware);
     server.use(RequestLogger.middleware(this.#status));
     server.use(express.json());
