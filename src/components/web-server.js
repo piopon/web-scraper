@@ -6,6 +6,7 @@ import { StatusRouter } from "../routes/api/status-router.js";
 import { StatusLogger } from "./status-logger.js";
 
 import express from "express";
+import { engine } from 'express-handlebars';
 
 export class WebServer {
   static #LOGGER_NAME = "web-server ";
@@ -59,6 +60,10 @@ export class WebServer {
   #initializeServer() {
     // create web server object
     const server = express();
+    // setup web server template engine
+    server.engine('handlebars', engine());
+    server.set('view engine', 'handlebars');
+    server.set('views', '../../public');
     //setup web server middleware
     server.use(ParamsParser.middleware);
     server.use(RequestLogger.middleware(this.#status));
