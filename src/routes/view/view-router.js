@@ -8,7 +8,9 @@ export class ViewRouter {
   createRoutes() {
     const router = express.Router();
     router.get("/", (request, response) => response.render("index"));
-    router.get("/status", (request, response) => response.render("status"));
+    router.get("/status", (request, response) => response.render("status", {
+      title: "title from outside",
+    }));
     return router;
   }
 }
