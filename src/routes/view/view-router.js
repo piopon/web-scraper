@@ -7,10 +7,8 @@ export class ViewRouter {
    */
   createRoutes() {
     const router = express.Router();
-    router.get("/", (request, response) => response.render("index"));
-    router.get("/status", (request, response) => response.render("status", {
-      title: "title from outside",
-    }));
+    router.get("/", (request, response) => response.render("index", { title: "web-scraper: home" }));
+    router.get("/status", (request, response) => response.render("status", { title: "web-scraper: status" }));
     return router;
   }
 }
