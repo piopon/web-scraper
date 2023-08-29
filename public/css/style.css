@@ -1,5 +1,14 @@
+html {
+  font-size: 20px;
+}
+
 body {
   background-color: gray;
   color: white;
   font-family: 'Sedgwick Ave', cursive;
 }
+
+header {
+  display: block;
+}
+
