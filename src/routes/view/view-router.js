@@ -1,4 +1,7 @@
+import { ScrapConfig } from "../../model/scrap-config.js";
+
 import express from "express";
+import fs from "fs";
 
 export class ViewRouter {
   #configFilePath = undefined;
@@ -17,7 +20,10 @@ export class ViewRouter {
    */
   createRoutes() {
     const router = express.Router();
-    router.get("/", (request, response) => response.render("index", { title: "web-scraper: home" }));
+    router.get("/", (request, response) => {
+      const scrapConfig = JSON.parse(fs.readFileSync(this.#configFilePath)).map((item) => new ScrapConfig(item));
+      response.render("index", { title: "web-scraper: home", content: scrapConfig })
+    });
     router.get("/status", (request, response) => response.render("status", { title: "web-scraper: status" }));
     return router;
   }
