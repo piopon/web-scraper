@@ -23,8 +23,24 @@ div#page {
   box-shadow: 0px 0px 50px black;
 }
 
+header#main-header {
+  height: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
 div#main-content {
   max-height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
+}
+
+footer#main-footer {
+  height: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0.75rem;
 }
