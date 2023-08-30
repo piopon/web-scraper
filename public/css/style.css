@@ -33,10 +33,24 @@ header#main-header {
   background-color: mediumslateblue;
 }
 
+header#content-header {
+  position: sticky;
+  top: 0;
+  height: 2.5rem;
+  background-color: white;
+}
+
 div#main-content {
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
+}
+
+footer#content-footer {
+  position: sticky;
+  bottom: 0;
+  height: 0.5rem;
+  background-color: white;
 }
 
 footer#main-footer {
