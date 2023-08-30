@@ -16,6 +16,8 @@ header {
 }
 
 div#page {
+  display: flex;
+  flex-direction: column;
   width: 60rem;
   margin: 3rem 3rem;
   background-color: white;
