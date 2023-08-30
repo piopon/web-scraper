@@ -26,7 +26,7 @@ div#page {
 }
 
 header#main-header {
-  height: 4rem;
+  height: 5rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -60,7 +60,7 @@ div#main-content {
 footer#content-footer {
   position: sticky;
   bottom: 0;
-  height: 0.5rem;
+  height: 1rem;
   background-color: white;
 }
 
