@@ -2,6 +2,34 @@
   {{#each groups}}
     <ul>
       <li>GROUP: {{this.name}} - CATEGORY: {{this.name}}</li>
+      <li>DOMAIN: {{this.domain}}</li>
+      <li>OBSERVERS:</li>
+      {{#each observers}}
+        <ul>
+          <li>PATH: {{this.path}}</li>
+          <li>TARGET: {{this.target}}</li>
+          <li>HISTORY: {{this.history}}</li>
+          <li>CONTAINER: {{this.container}}</li>
+          <li>TITLE:</li>
+          <ul>
+            <li>SELECTOR: {{this.title.selector}}</li>
+            <li>ATTRIBUTE: {{this.title.attribute}}</li>
+            <li>AUXILIARY: {{this.title.auxiliary}}</li>
+          </ul>
+          <li>IMAGE:</li>
+          <ul>
+            <li>SELECTOR: {{this.image.selector}}</li>
+            <li>ATTRIBUTE: {{this.image.attribute}}</li>
+            <li>AUXILIARY: {{this.image.auxiliary}}</li>
+          </ul>
+          <li>PRICE:</li>
+          <ul>
+            <li>SELECTOR: {{this.price.selector}}</li>
+            <li>ATTRIBUTE: {{this.price.attribute}}</li>
+            <li>AUXILIARY: {{this.price.auxiliary}}</li>
+          </ul>
+        </ul>
+      {{/each}}
     </ul>
   {{/each}}
 {{/each}}
