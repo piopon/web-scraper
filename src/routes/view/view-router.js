@@ -22,9 +22,9 @@ export class ViewRouter {
     const router = express.Router();
     router.get("/", (request, response) => {
       const scrapConfig = JSON.parse(fs.readFileSync(this.#configFilePath)).map((item) => new ScrapConfig(item));
-      response.render("index", { title: "web-scraper: home", content: scrapConfig })
+      response.render("index", { title: "scraper configuration", content: scrapConfig })
     });
-    router.get("/status", (request, response) => response.render("status", { title: "web-scraper: status" }));
+    router.get("/status", (request, response) => response.render("status", { title: "scraper running status" }));
     return router;
   }
 }
