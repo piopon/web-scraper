@@ -72,7 +72,7 @@ export class WebServer {
     server.use(express.json());
     // setup web server routes
     const routes = new Map([
-      ["/", new ViewRouter()],
+      ["/", new ViewRouter(this.#setupConfig.dataConfigPath)],
       ["/api/v1/data", new DataRouter(this.#setupConfig.dataOutputPath)],
       ["/api/v1/configs", new ConfigRouter(this.#setupConfig.dataConfigPath)],
       ["/api/v1/status", new StatusRouter(this.#status, this.#components)],

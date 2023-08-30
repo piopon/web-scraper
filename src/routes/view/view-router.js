@@ -1,6 +1,16 @@
 import express from "express";
 
 export class ViewRouter {
+  #configFilePath = undefined;
+
+  /**
+   * Creates a new view router for displaying configuraion file for the user
+   * @param {String} configFile The path to the configuration file
+   */
+  constructor(configFile) {
+    this.#configFilePath = configFile;
+  }
+
   /**
    * Method used to create routes for view endpoints
    * @returns router object for handling view requests
