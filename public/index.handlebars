@@ -1,1 +1,7 @@
-{{content}}
+{{#each content}}
+  {{#each groups}}
+    <ul>
+      <li>GROUP: {{this.name}} - CATEGORY: {{this.name}}</li>
+    </ul>
+  {{/each}}
+{{/each}}
