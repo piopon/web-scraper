@@ -71,3 +71,7 @@ footer#main-footer {
   align-items: center;
   background-color: mediumslateblue;
 }
+
+footer#main-footer h3 {
+  margin: 0;
+}
