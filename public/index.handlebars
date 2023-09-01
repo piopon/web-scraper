@@ -1,6 +1,5 @@
 {{#each content}}
   {{#each groups}}
-    {{> test }}
     <p>GROUP:</p>
     <ul>
       <li>
@@ -22,24 +21,9 @@
           <li>TARGET: {{this.target}}</li>
           <li>HISTORY: {{this.history}}</li>
           <li>CONTAINER: {{this.container}}</li>
-          <li>TITLE:</li>
-          <ul>
-            <li>SELECTOR: {{this.title.selector}}</li>
-            <li>ATTRIBUTE: {{this.title.attribute}}</li>
-            <li>AUXILIARY: {{this.title.auxiliary}}</li>
-          </ul>
-          <li>IMAGE:</li>
-          <ul>
-            <li>SELECTOR: {{this.image.selector}}</li>
-            <li>ATTRIBUTE: {{this.image.attribute}}</li>
-            <li>AUXILIARY: {{this.image.auxiliary}}</li>
-          </ul>
-          <li>PRICE:</li>
-          <ul>
-            <li>SELECTOR: {{this.price.selector}}</li>
-            <li>ATTRIBUTE: {{this.price.attribute}}</li>
-            <li>AUXILIARY: {{this.price.auxiliary}}</li>
-          </ul>
+          {{> component name="title" component=this.title }}
+          {{> component name="image" component=this.image }}
+          {{> component name="price" component=this.price }}
         </ul>
       {{/each}}
     </ul>
