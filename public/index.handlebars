@@ -16,15 +16,7 @@
       </li>
       <li>OBSERVERS:</li>
       {{#each observers}}
-        <ul>
-          <li>PATH: {{this.path}}</li>
-          <li>TARGET: {{this.target}}</li>
-          <li>HISTORY: {{this.history}}</li>
-          <li>CONTAINER: {{this.container}}</li>
-          {{> component name="title" component=this.title }}
-          {{> component name="image" component=this.image }}
-          {{> component name="price" component=this.price }}
-        </ul>
+        {{> observer observer=this }}
       {{/each}}
     </ul>
   {{/each}}
