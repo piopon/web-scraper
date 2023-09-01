@@ -1,0 +1,18 @@
+<ul>
+  <li>
+    <label id="group-label" for="group-name">name:</label>
+    <input type="text" id="group-name" name="name" value="{{group.name}}" />
+  </li>
+  <li>
+    <label id="group-label" for="group-category">category:</label>
+    <input type="button" id="group-category" name="category" value="{{group.category}}" />
+  </li>
+  <li>
+    <label id="group-label" for="group-domain">domain:</label>
+    <input type="text" id="group-domain" name="domain" value="{{group.domain}}" />
+  </li>
+  <li>observers:</li>
+  {{#each observers}}
+    {{> observer observer=this }}
+  {{/each}}
+</ul>
