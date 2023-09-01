@@ -1,8 +1,19 @@
 {{#each content}}
   {{#each groups}}
+    <p>GROUP:</p>
     <ul>
-      <li>GROUP: {{this.name}} - CATEGORY: {{this.category}}</li>
-      <li>DOMAIN: {{this.domain}}</li>
+      <li>
+        <label id="group-label" for="group-name">name:</label>
+        <input type="text" id="group-name" name="name" value="{{this.name}}" />
+      </li>
+      <li>
+        <label id="group-label" for="group-category">category:</label>
+        <input type="button" id="group-category" name="category" value="{{this.category}}" />
+      </li>
+      <li>
+        <label id="group-label" for="group-domain">domain:</label>
+        <input type="text" id="group-domain" name="domain" value="{{this.domain}}" />
+      </li>
       <li>OBSERVERS:</li>
       {{#each observers}}
         <ul>
