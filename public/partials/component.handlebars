@@ -1,6 +1,15 @@
 <li>{{name}}:</li>
 <ul>
-  <li>selector: {{component.selector}}</li>
-  <li>attribute: {{component.attribute}}</li>
-  <li>auxiliary: {{component.auxiliary}}</li>
+  <li>
+    <label id="component-label" for="component-selector">selector:</label>
+    <input type="text" id="component-selector" name="selector" value="{{component.selector}}" />
+  </li>
+  <li>
+    <label id="component-label" for="component-attribute">attribute:</label>
+    <input type="text" id="component-attribute" name="attribute" value="{{component.attribute}}" />
+  </li>
+  <li>
+    <label id="component-label" for="component-auxiliary">auxiliary:</label>
+    <input type="text" id="component-auxiliary" name="auxiliary" value="{{component.auxiliary}}" />
+  </li>
 </ul>

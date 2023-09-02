@@ -1,8 +1,20 @@
 <ul>
-  <li>path: {{observer.path}}</li>
-  <li>target: {{observer.target}}</li>
-  <li>history: {{observer.history}}</li>
-  <li>container: {{observer.container}}</li>
+  <li>
+    <label id="observer-label" for="observer-path">path:</label>
+    <input type="text" id="observer-path" name="path" value="{{observer.path}}" />
+  </li>
+  <li>
+    <label id="observer-label" for="observer-target">target:</label>
+    <input type="text" id="observer-target" name="target" value="{{observer.target}}" />
+  </li>
+  <li>
+    <label id="observer-label" for="observer-history">history:</label>
+    <input type="text" id="observer-history" name="history" value="{{observer.history}}" />
+  </li>
+  <li>
+    <label id="observer-label" for="observer-container">container:</label>
+    <input type="text" id="observer-container" name="container" value="{{observer.container}}" />
+  </li>
   {{> component name="title" component=observer.title }}
   {{> component name="image" component=observer.image }}
   {{> component name="price" component=observer.price }}
