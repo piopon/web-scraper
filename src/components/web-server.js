@@ -7,6 +7,7 @@ import { StatusLogger } from "./status-logger.js";
 import { ViewRouter } from "../routes/view/view-router.js";
 
 import express from "express";
+import helpers from "handlebars-helpers";
 import { engine } from "express-handlebars";
 
 export class WebServer {
@@ -61,8 +62,8 @@ export class WebServer {
   #initializeServer() {
     // create web server object
     const server = express();
-    // setup web server template engine
-    server.engine("handlebars", engine());
+    // setup web server template engine and all options for UI
+    server.engine("handlebars", engine({ helpers: helpers() }));
     server.set("view engine", "handlebars");
     server.set("views", "./public");
     server.use(express.static("./public"));
