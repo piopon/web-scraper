@@ -5,11 +5,22 @@
   </li>
   <li>
     <label id="observer-label" for="observer-target">target:</label>
-    <input type="text" id="observer-target" name="target" value="{{observer.target}}" />
+    <select id="observer-target" name="target" required>
+      <option value="" disabled selected hidden>Choose a ready target state</option>
+      <option value="load" {{#if (eq observer.target "load")}}selected{{/if}}>load</option>
+      <option value="domcontentloaded" {{#if (eq observer.target "domcontentloaded")}}selected{{/if}}>domcontentloaded</option>
+      <option value="networkidle0" {{#if (eq observer.target "networkidle0")}}selected{{/if}}>networkidle0</option>
+      <option value="networkidle2" {{#if (eq observer.target "networkidle2")}}selected{{/if}}>networkidle2</option>
+    </select>
   </li>
   <li>
     <label id="observer-label" for="observer-history">history:</label>
-    <input type="text" id="observer-history" name="history" value="{{observer.history}}" />
+    <select id="observer-history" name="history" required>
+      <option value="" disabled selected hidden>Choose a history setting</option>
+      <option value="off" {{#if (eq observer.history "off")}}selected{{/if}}>off</option>
+      <option value="onChange" {{#if (eq observer.history "onChange")}}selected{{/if}}>on change</option>
+      <option value="on" {{#if (eq observer.history "on")}}selected{{/if}}>on</option>
+    </select>
   </li>
   <li>
     <label id="observer-label" for="observer-container">container:</label>
