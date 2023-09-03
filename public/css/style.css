@@ -60,13 +60,6 @@ div#main-content {
   overflow-y: auto;
 }
 
-footer#content-footer {
-  position: sticky;
-  bottom: 0;
-  height: 1rem;
-  background-color: white;
-}
-
 footer#main-footer {
   height: 2rem;
   display: flex;
