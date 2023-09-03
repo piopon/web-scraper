@@ -1,6 +1,8 @@
-{{#each content}}
-  {{#each groups}}
-    <p>GROUP:</p>
-    {{> group group=this }}
+<section class="strips">
+  {{#each content}}
+    {{#each groups}}
+      {{> group group=this }}
+    {{/each}}
   {{/each}}
-{{/each}}
+  <i class="fa fa-close strip__close"></i>
+</section>
