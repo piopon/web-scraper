@@ -1,5 +1,4 @@
 var Expand = (function () {
-  var tile = document.querySelectorAll(".strips__strip");
   var tileLink = document.querySelectorAll(".strips__strip > .strip__content");
   var stripClose = document.querySelector(".strip__close");
   var expanded = false;
