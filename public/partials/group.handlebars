@@ -3,12 +3,9 @@
     <h2 class="strip__title" data-name="Lorem">{{group.name}}</h2>
     <div class="strip__inner-text">
       <div class="group-data">
-        <label id="group-label" for="group-name">name:</label>
-        <input type="text" id="group-name" name="name" value="{{group.name}}" />
-        <label id="group-label" for="group-category">category:</label>
-        <input type="button" id="group-category" name="category" value="{{group.category}}" />
-        <label id="group-label" for="group-domain">domain:</label>
-        <input type="text" id="group-domain" name="domain" value="{{group.domain}}" />
+        {{> widget type="text" parent="group" label="name" value=group.name }}
+        {{> widget type="button" parent="group" label="category" value=group.category }}
+        {{> widget type="text" parent="group" label="domain" value=group.domain }}
       </div>
       {{#each observers}}
         {{> observer observer=this }}
