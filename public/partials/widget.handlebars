@@ -1,6 +1,15 @@
 <div class="widget">
   <label class="{{parent}}-label">
     {{label}}:
-    <input type="{{type}}" class="{{parent}}-{{label}}" name="{{label}}" value="{{value}}" />
+    {{#if (eq type "combo")}}
+      <select class="{{parent}}-{{label}}" name="{{label}}" required>
+        <option value="" disabled selected hidden>Select value</option>
+        {{#each (split options "|")}}
+          <option value={{this}} {{#if (eq ../value this)}}selected{{/if}}>{{this}}</option>
+        {{/each}}
+      </select>
+    {{else}}
+      <input type="{{type}}" class="{{parent}}-{{label}}" name="{{label}}" value="{{value}}" />
+    {{/if}}
   </label>
 </div>
