@@ -33,7 +33,7 @@ header#main-header {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: mediumslateblue;
+  background-color: slateblue;
 }
 
 header#main-header h1 {
@@ -41,13 +41,11 @@ header#main-header h1 {
 }
 
 header#content-header {
-  position: sticky;
-  top: 0;
   height: 2.5rem;
   display: flex;
   align-items: center;
   padding-left: 1rem;
-  background-color: white;
+  background-image: linear-gradient(slateblue 5%, mediumslateblue);
 }
 
 header#content-header h3 {
