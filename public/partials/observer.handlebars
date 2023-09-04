@@ -1,23 +1,8 @@
 <div class="observer-data">
-  <label id="observer-label" for="observer-path">path:</label>
-  <input type="text" id="observer-path" name="path" value="{{observer.path}}" />
-  <label id="observer-label" for="observer-target">target:</label>
-  <select id="observer-target" name="target" required>
-    <option value="" disabled selected hidden>Choose a ready target state</option>
-    <option value="load" {{#if (eq observer.target "load")}}selected{{/if}}>load</option>
-    <option value="domcontentloaded" {{#if (eq observer.target "domcontentloaded")}}selected{{/if}}>domcontentloaded</option>
-    <option value="networkidle0" {{#if (eq observer.target "networkidle0")}}selected{{/if}}>networkidle0</option>
-    <option value="networkidle2" {{#if (eq observer.target "networkidle2")}}selected{{/if}}>networkidle2</option>
-  </select>
-  <label id="observer-label" for="observer-history">history:</label>
-  <select id="observer-history" name="history" required>
-    <option value="" disabled selected hidden>Choose a history setting</option>
-    <option value="off" {{#if (eq observer.history "off")}}selected{{/if}}>off</option>
-    <option value="onChange" {{#if (eq observer.history "onChange")}}selected{{/if}}>on change</option>
-    <option value="on" {{#if (eq observer.history "on")}}selected{{/if}}>on</option>
-  </select>
-  <label id="observer-label" for="observer-container">container:</label>
-  <input type="text" id="observer-container" name="container" value="{{observer.container}}" />
+  {{> widget type="text" parent="observer" label="path" value=observer.path }}
+  {{> widget type="combo" parent="observer" label="target" options="load|domcontentloaded|networkidle0|networkidle2" value=observer.target }}
+  {{> widget type="combo" parent="observer" label="history" options="off|onChange|on" value=observer.history }}
+  {{> widget type="text" parent="observer" label="container" value=observer.container }}
   {{> component name="title" component=observer.title }}
   {{> component name="image" component=observer.image }}
   {{> component name="price" component=observer.price }}
