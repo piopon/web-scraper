@@ -1,20 +1,10 @@
 <div class="component-data">
   {{name}}<br>
-  <label id="component-label" for="component-selector">selector:</label>
-  <input type="text" id="component-selector" name="selector" value="{{component.selector}}" />
-  <label id="component-label" for="component-attribute">attribute:</label>
-  <input type="text" id="component-attribute" name="attribute" value="{{component.attribute}}" />
+  {{> widget type="text" parent="component" label="selector" value=component.selector }}
+  {{> widget type="text" parent="component" label="attribute" value=component.attribute }}
   {{#if (eq name "price")}}
-    <label id="component-label" for="component-auxiliary">auxiliary:</label>
-    <select id="component-auxiliary" name="auxiliary" required>
-      <option value="" disabled selected hidden>Choose a currency</option>
-      <option value="PLN" {{#if (eq component.auxiliary "PLN")}}selected{{/if}}>PLN</option>
-      <option value="GBP" {{#if (eq component.auxiliary "GBP")}}selected{{/if}}>GBP</option>
-      <option value="USD" {{#if (eq component.auxiliary "USD")}}selected{{/if}}>USD</option>
-      <option value="EUR" {{#if (eq component.auxiliary "EUR")}}selected{{/if}}>EUR</option>
-    </select>
+    {{> widget type="combo" parent="component" label="auxiliary" options="PLN|GBP|USD|EUR" value=component.auxiliary }}
   {{else}}
-    <label id="component-label" for="component-auxiliary">auxiliary:</label>
-    <input type="text" id="component-auxiliary" name="auxiliary" value="{{component.auxiliary}}" />
+    {{> widget type="text" parent="component" label="auxiliary" value=component.auxiliary }}
   {{/if}}
 </div>
