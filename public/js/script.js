@@ -1,6 +1,6 @@
 var Expand = (function () {
   var tileLink = document.querySelectorAll(".group-column > .group-container");
-  var stripClose = document.querySelector(".group-column-close");
+  var stripClose = document.querySelectorAll(".group-container > .group-column-close");
   var expanded = false;
 
   var open = function (elContent) {
@@ -32,8 +32,10 @@ var Expand = (function () {
         open(this);
       });
     });
-    stripClose.addEventListener("click", function () {
-      close(this);
+    [].forEach.call(stripClose, function (colClose) {
+      colClose.addEventListener("click", function () {
+        close(this);
+      });
     });
   };
 
