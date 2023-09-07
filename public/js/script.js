@@ -27,13 +27,15 @@ var Expand = (function () {
 
   var bindActions = function () {
     [].forEach.call(tileLink, function (tlnk) {
-      tlnk.addEventListener("click", function () {
+      tlnk.addEventListener("click", function (event) {
         open(this);
+        event.stopPropagation();
       });
     });
     [].forEach.call(stripClose, function (colClose) {
-      colClose.addEventListener("click", function () {
+      colClose.addEventListener("click", function (event) {
         close(this);
+        event.stopPropagation();
       });
     });
   };
