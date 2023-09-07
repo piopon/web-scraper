@@ -1,4 +1,4 @@
-var Expand = (function () {
+var ColumnsController = function () {
   var tileLink = document.querySelectorAll(".group-column > .group-container");
   var stripClose = document.querySelectorAll(".group-container > .group-column-close");
   var expanded = false;
@@ -7,7 +7,7 @@ var Expand = (function () {
     if (!expanded) {
       elContent.parentNode.classList.add("group-column-expanded");
       elContent.querySelector(".group-content").style.transition = "all .5s .3s cubic-bezier(0.23, 1, 0.32, 1)";
-      const closeBtn = elContent.querySelector(".group-column-close")
+      const closeBtn = elContent.querySelector(".group-column-close");
       closeBtn.classList.add("group-column-close-show");
       closeBtn.style.transition = "all .6s 1s cubic-bezier(0.23, 1, 0.32, 1)";
       expanded = true;
@@ -40,11 +40,7 @@ var Expand = (function () {
     });
   };
 
-  var init = function () {
-    bindActions();
-  };
+  return { init: bindActions };
+};
 
-  return {
-    init: init,
-  };
-})().init();
+ColumnsController().init();
