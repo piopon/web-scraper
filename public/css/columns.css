@@ -146,14 +146,6 @@
   opacity: 1;
 }
 
-@-webkit-keyframes strip1 {
-  0% {
-    transform: translate3d(-100%, 0, 0);
-  }
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-}
 @keyframes strip1 {
   0% {
     transform: translate3d(-100%, 0, 0);
@@ -162,15 +154,15 @@
     transform: translate3d(0, 0, 0);
   }
 }
-
-@-webkit-keyframes strip2 {
+@-webkit-keyframes strip1 {
   0% {
-    transform: translate3d(0, 100%, 0);
+    transform: translate3d(-100%, 0, 0);
   }
   100% {
     transform: translate3d(0, 0, 0);
   }
 }
+
 @keyframes strip2 {
   0% {
     transform: translate3d(0, 100%, 0);
@@ -179,52 +171,9 @@
     transform: translate3d(0, 0, 0);
   }
 }
-
-@-webkit-keyframes strip3 {
-  0% {
-    transform: translate3d(0, -100%, 0);
-  }
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-}
-@keyframes strip3 {
-  0% {
-    transform: translate3d(0, -100%, 0);
-  }
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-@-webkit-keyframes strip4 {
+@-webkit-keyframes strip2 {
   0% {
     transform: translate3d(0, 100%, 0);
-  }
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-}
-@keyframes strip4 {
-  0% {
-    transform: translate3d(0, 100%, 0);
-  }
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-@-webkit-keyframes strip5 {
-  0% {
-    transform: translate3d(100%, 0, 0);
-  }
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-}
-@keyframes strip5 {
-  0% {
-    transform: translate3d(100%, 0, 0);
   }
   100% {
     transform: translate3d(0, 0, 0);
