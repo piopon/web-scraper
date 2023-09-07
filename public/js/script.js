@@ -1,13 +1,13 @@
 var Expand = (function () {
   var tileLink = document.querySelectorAll(".group-column > .group-container");
-  var stripClose = document.querySelector(".strip__close");
+  var stripClose = document.querySelector(".group-column-close");
   var expanded = false;
 
   var open = function (elContent) {
     if (!expanded) {
-      elContent.parentNode.classList.add("strips__strip--expanded");
+      elContent.parentNode.classList.add("group-column-expanded");
       elContent.querySelector(".group-content").style.transition = "all .5s .3s cubic-bezier(0.23, 1, 0.32, 1)";
-      stripClose.classList.add("strip__close--show");
+      stripClose.classList.add("group-column-close-show");
       stripClose.style.transition = "all .6s 1s cubic-bezier(0.23, 1, 0.32, 1)";
       expanded = true;
     }
@@ -15,12 +15,12 @@ var Expand = (function () {
 
   var close = function (elContent) {
     if (expanded) {
-      var elExpanded = elContent.parentNode.querySelector(".strips__strip--expanded");
+      var elExpanded = elContent.parentNode.querySelector(".group-column-expanded");
       elContent.parentNode
-        .querySelector(".strips__strip--expanded")
+        .querySelector(".group-column-expanded")
         .querySelector(".group-content").style.transition = "all 0.15s 0 cubic-bezier(0.23, 1, 0.32, 1)";
-      elExpanded.classList.remove("strips__strip--expanded");
-      stripClose.classList.remove("strip__close--show");
+      elExpanded.classList.remove("group-column-expanded");
+      stripClose.classList.remove("group-column-close-show");
       stripClose.style.transition = "all 0.2s 0s cubic-bezier(0.23, 1, 0.32, 1)";
       expanded = false;
     }
