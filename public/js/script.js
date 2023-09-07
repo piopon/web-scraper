@@ -1,5 +1,5 @@
 var Expand = (function () {
-  var tileLink = document.querySelectorAll(".strips__strip > .strip__content");
+  var tileLink = document.querySelectorAll(".group-column > .strip__content");
   var stripClose = document.querySelector(".strip__close");
   var expanded = false;
 
