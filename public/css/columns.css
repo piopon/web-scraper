@@ -23,7 +23,7 @@
   left: 50vw;
 }
 
-.group-column:nth-child(1) .strip__content {
+.group-column:nth-child(1) .group-container {
   background: #244f75;
   transform: translate3d(-100%, 0, 0);
   -webkit-animation-name: strip1;
@@ -32,7 +32,7 @@
   animation-delay: 0.1s;
 }
 
-.group-column:nth-child(2) .strip__content {
+.group-column:nth-child(2) .group-container {
   background: #60bfbf;
   transform: translate3d(0, 100%, 0);
   -webkit-animation-name: strip2;
@@ -41,7 +41,7 @@
   animation-delay: 0.2s;
 }
 
-.group-columns .strip__content {
+.group-columns .group-container {
   -webkit-animation-duration: 1s;
   animation-duration: 1s;
   -webkit-animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
@@ -56,12 +56,12 @@
   text-decoration: none;
 }
 
-.group-columns .strip__content:hover:before {
+.group-columns .group-container:hover:before {
   transform: skew(-30deg) scale(3) translate(0, 0);
   opacity: 0.1;
 }
 
-.group-columns .strip__content:before {
+.group-columns .group-container:before {
   content: "";
   position: absolute;
   z-index: 1;
@@ -76,7 +76,7 @@
   transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.group-columns .strip__inner-text {
+.group-columns .group-content {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -106,21 +106,21 @@
   }
 }
 
-.strips__strip--expanded .strip__content:hover:before {
+.strips__strip--expanded .group-container:hover:before {
   transform: skew(-30deg) scale(1) translate(0, 0);
   opacity: 0.05;
 }
 
-.strips__strip--expanded .strip__title {
+.strips__strip--expanded .group-title {
   opacity: 0;
 }
 
-.strips__strip--expanded .strip__inner-text {
+.strips__strip--expanded .group-content {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
 }
 
-.strip__title {
+.group-title {
   display: block;
   margin: 0;
   position: relative;

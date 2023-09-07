@@ -1,12 +1,12 @@
 var Expand = (function () {
-  var tileLink = document.querySelectorAll(".group-column > .strip__content");
+  var tileLink = document.querySelectorAll(".group-column > .group-container");
   var stripClose = document.querySelector(".strip__close");
   var expanded = false;
 
   var open = function (elContent) {
     if (!expanded) {
       elContent.parentNode.classList.add("strips__strip--expanded");
-      elContent.querySelector(".strip__inner-text").style.transition = "all .5s .3s cubic-bezier(0.23, 1, 0.32, 1)";
+      elContent.querySelector(".group-content").style.transition = "all .5s .3s cubic-bezier(0.23, 1, 0.32, 1)";
       stripClose.classList.add("strip__close--show");
       stripClose.style.transition = "all .6s 1s cubic-bezier(0.23, 1, 0.32, 1)";
       expanded = true;
@@ -18,7 +18,7 @@ var Expand = (function () {
       var elExpanded = elContent.parentNode.querySelector(".strips__strip--expanded");
       elContent.parentNode
         .querySelector(".strips__strip--expanded")
-        .querySelector(".strip__inner-text").style.transition = "all 0.15s 0 cubic-bezier(0.23, 1, 0.32, 1)";
+        .querySelector(".group-content").style.transition = "all 0.15s 0 cubic-bezier(0.23, 1, 0.32, 1)";
       elExpanded.classList.remove("strips__strip--expanded");
       stripClose.classList.remove("strip__close--show");
       stripClose.style.transition = "all 0.2s 0s cubic-bezier(0.23, 1, 0.32, 1)";
