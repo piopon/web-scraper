@@ -8,7 +8,7 @@
 
 .strips__strip {
   will-change: width, left, z-index, height;
-  width: 20%;
+  width: 50%;
   height: 100%;
   overflow: hidden;
   cursor: pointer;
@@ -20,7 +20,7 @@
 }
 
 .strips__strip:nth-child(2) {
-  left: 20vw;
+  left: 50vw;
 }
 
 .strips__strip:nth-child(1) .strip__content {
