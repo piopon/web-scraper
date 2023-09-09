@@ -41,21 +41,6 @@
   animation-delay: 0.2s;
 }
 
-.group-columns .group-container {
-  -webkit-animation-duration: 1s;
-  animation-duration: 1s;
-  -webkit-animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
-  animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  text-decoration: none;
-}
-
 .group-columns .group-container:hover:before {
   transform: skew(-30deg) scale(3) translate(0, 0);
   opacity: 0.1;
