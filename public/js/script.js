@@ -1,9 +1,9 @@
-var ColumnsController = function () {
-  var groupColumns = document.querySelectorAll(".group-column > .group-container");
-  var groupCloseButtons = document.querySelectorAll(".group-container > .group-column-close");
+const ColumnsController = function () {
+  const groupColumns = document.querySelectorAll(".group-column > .group-container");
+  const groupCloseButtons = document.querySelectorAll(".group-container > .group-column-close");
   var groupExpanded = false;
 
-  var expand = function (groupColumn) {
+  const expand = function (groupColumn) {
     if (!groupExpanded) {
       groupColumn.parentNode.classList.add("group-column-expanded");
       groupColumn.querySelector(".group-content").style.transition = "all .5s .3s cubic-bezier(0.23, 1, 0.32, 1)";
@@ -14,7 +14,7 @@ var ColumnsController = function () {
     }
   };
 
-  var collapse = function (groupCloseButton) {
+  const collapse = function (groupCloseButton) {
     if (groupExpanded) {
       const groupColumn = groupCloseButton.parentNode.parentNode.parentNode.querySelector(".group-column-expanded");
       groupColumn.querySelector(".group-content").style.transition = "all 0.15s 0 cubic-bezier(0.23, 1, 0.32, 1)";
@@ -25,7 +25,7 @@ var ColumnsController = function () {
     }
   };
 
-  var bindListeners = function () {
+  const bindListeners = function () {
     [].forEach.call(groupColumns, function (column) {
       column.addEventListener("click", function (event) {
         expand(this);
