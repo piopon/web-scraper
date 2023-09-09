@@ -1,0 +1,25 @@
+div.group-data {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  margin: 0.5rem;
+  overflow: auto;
+}
+
+label.group-label {
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+
+.group-name {
+  width: 100%;
+}
+
+.group-category {
+  width: 100%;
+}
+
+.group-domain {
+  width: 100%;
+}
