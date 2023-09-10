@@ -13,7 +13,7 @@
   -webkit-animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-div.group-data {
+div.group-root-data {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;

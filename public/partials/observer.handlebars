@@ -1,8 +1,10 @@
 <div class="observer-data">
-  {{> widget type="text" parent="observer" label="path" value=observer.path }}
-  {{> widget type="combo" parent="observer" label="target" options="load|domcontentloaded|networkidle0|networkidle2" value=observer.target }}
-  {{> widget type="combo" parent="observer" label="history" options="off|onChange|on" value=observer.history }}
-  {{> widget type="text" parent="observer" label="container" value=observer.container }}
+  <div class="observer-root-data">
+    {{> widget type="text" parent="observer" label="path" value=observer.path }}
+    {{> widget type="text" parent="observer" label="container" value=observer.container }}
+    {{> widget type="combo" parent="observer" label="target" options="load|domcontentloaded|networkidle0|networkidle2" value=observer.target }}
+    {{> widget type="combo" parent="observer" label="history" options="off|onChange|on" value=observer.history }}
+  </div>
   {{> component name="title" component=observer.title }}
   {{> component name="image" component=observer.image }}
   {{> component name="price" component=observer.price }}
