@@ -1,10 +1,14 @@
-<div class="component-data">
-  {{name}}<br>
-  {{> widget type="text" parent="component" label="selector" value=component.selector }}
-  {{> widget type="text" parent="component" label="attribute" value=component.attribute }}
-  {{#if (eq name "price")}}
-    {{> widget type="combo" parent="component" label="auxiliary" options="PLN|GBP|USD|EUR" value=component.auxiliary }}
-  {{else}}
-    {{> widget type="text" parent="component" label="auxiliary" value=component.auxiliary }}
-  {{/if}}
+<div class="component-content">
+  <div class="component-name">
+    {{name}}
+  </div>
+  <div class="component-root-data">
+    {{> widget type="text" parent="component" label="selector" value=component.selector }}
+    {{> widget type="text" parent="component" label="attribute" value=component.attribute }}
+    {{#if (eq name "price")}}
+      {{> widget type="combo" parent="component" label="auxiliary" options="PLN|GBP|USD|EUR" value=component.auxiliary }}
+    {{else}}
+      {{> widget type="text" parent="component" label="auxiliary" value=component.auxiliary }}
+    {{/if}}
+  </div>
 </div>

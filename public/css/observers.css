@@ -1,11 +1,11 @@
-div.observer-data {
+div.observer-content {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
   width: 100%;
   height: 100%;
-  margin: 0.5rem;
+  margin: 0rem;
 }
 
 div.observer-root-data {
