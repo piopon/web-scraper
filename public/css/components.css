@@ -1,0 +1,9 @@
+div.component-data {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  margin: 0.25rem;
+}
