@@ -1,11 +1,19 @@
 div.component-content {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: nowrap;
   justify-content: center;
+  align-items: flex-start;
   width: 100%;
   height: 100%;
   margin: 0rem;
+}
+
+div.component-name {
+  display: flex;
+  margin: 0rem 0.5rem;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 div.component-root-data {
@@ -15,5 +23,23 @@ div.component-root-data {
   justify-content: center;
   width: 100%;
   height: 100%;
-  margin: 0.25rem;
+  margin: 0rem;
+}
+
+label.component-label {
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+
+.component-selector {
+  width: 100%;
+}
+
+.component-attribute {
+  width: 100%;
+}
+
+.component-auxiliary {
+  width: 100%;
 }
