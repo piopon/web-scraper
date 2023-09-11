@@ -44,3 +44,17 @@ const ColumnsController = function () {
 };
 
 ColumnsController().initialize();
+
+const button = document.querySelector("div.button");
+button.addEventListener("click", function (event) {
+  const buttonId = event.target.id;
+  const container = document.getElementById("modal-container");
+  container.classList = buttonId;
+  document.querySelector("body").classList.add("modal-active");
+});
+
+const modalContainer = document.getElementById("modal-container");
+modalContainer.addEventListener("click", function (event) {
+  this.classList.add("out");
+  document.querySelector("body").classList.remove("modal-active");
+});
