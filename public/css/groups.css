@@ -1,10 +1,12 @@
 div.modal-dialog {
   position: fixed;
-  display: table;
+  top: 0;
+  left: 0;
+  display: flex;
   height: 100%;
   width: 100%;
-  transform: scale(0);
   z-index: 1;
+  transform: scale(0);
 }
 
 div.modal-dialog.in {
@@ -16,10 +18,8 @@ div.modal-dialog.out {
 }
 
 div.modal-dialog div.modal-background {
-  display: table-cell;
-  background: rgba(0, 0, 0, 0.8);
-  text-align: center;
-  vertical-align: middle;
+  display: flex;
+  padding: 2.5rem;
 }
 
 div.modal-dialog.in div.modal-background {
@@ -32,9 +32,10 @@ div.modal-dialog.out div.modal-background {
 }
 
 div.modal-dialog div.modal-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   background: gray;
-  height: 65%;
-  margin: 50px;
   padding: 15px;
 }
 
