@@ -1,7 +1,7 @@
 <div class="observer-content">
-  <div id="modal-container">
+  <div class="modal-dialog">
     <div class="modal-background">
-      <div class="modal">
+      <div class="modal-content">
         <div class="observer-root-data">
           {{> widget type="text" parent="observer" label="path" value=observer.path }}
           {{> widget type="text" parent="observer" label="container" value=observer.container }}
@@ -14,7 +14,5 @@
       </div>
     </div>
   </div>
-  <div class="buttons">
-    <div class="button">{{observer.path}}</div>
-  </div>
+  <div class="modal-button">{{observer.path}}</div>
 </div>

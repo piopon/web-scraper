@@ -45,14 +45,15 @@ const ColumnsController = function () {
 
 ColumnsController().initialize();
 
-const button = document.querySelector("div.button");
+const button = document.querySelector("div.modal-button");
 button.addEventListener("click", function (event) {
-  const container = document.getElementById("modal-container");
-  container.classList = "in";
+  const container = document.querySelector("div.modal-dialog");
+  container.classList.remove("out");
+  container.classList.add("in");
   document.querySelector("body").classList.add("modal-active");
 });
 
-const modalContainer = document.getElementById("modal-container");
+const modalContainer = document.querySelector("div.modal-dialog");
 modalContainer.addEventListener("click", function (event) {
   this.classList.add("out");
   document.querySelector("body").classList.remove("modal-active");
