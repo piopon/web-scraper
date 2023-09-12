@@ -50,11 +50,9 @@ button.addEventListener("click", function (event) {
   const container = document.querySelector("div.modal-dialog");
   container.classList.remove("out");
   container.classList.add("in");
-  document.querySelector("body").classList.add("modal-active");
 });
 
 const modalContainer = document.querySelector("div.modal-dialog");
 modalContainer.addEventListener("click", function (event) {
   this.classList.add("out");
-  document.querySelector("body").classList.remove("modal-active");
 });
