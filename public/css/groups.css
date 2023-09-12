@@ -17,7 +17,7 @@
   opacity: 0;
   animation: scaleUp 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
-#modal-container.two + .content {
+#modal-container.two + .buttons {
   animation: scaleBack 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
 #modal-container.two.out {
@@ -29,7 +29,7 @@
 #modal-container.two.out .modal-background .modal {
   animation: scaleDown 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
-#modal-container.two.out + .content {
+#modal-container.two.out + .buttons {
   animation: scaleForward 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
 #modal-container .modal-background {
@@ -47,11 +47,7 @@
   font-size: 25px;
 }
 
-.content .buttons {
-  margin: 0 auto;
-}
-
-.content .buttons .button {
+.buttons .button {
   display: inline-block;
   text-align: center;
   padding: 10px 15px;
@@ -64,7 +60,7 @@
   cursor: pointer;
 }
 
-.content .buttons .button:hover {
+.buttons .button:hover {
   color: white;
   background: slateblue;
 }
