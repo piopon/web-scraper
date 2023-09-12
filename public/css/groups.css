@@ -6,32 +6,34 @@
   transform: scale(0);
   z-index: 1;
 }
-#modal-container.two {
+
+#modal-container.in {
   transform: scale(1);
 }
-#modal-container.two .modal-background {
+#modal-container.in .modal-background {
   background: rgba(0, 0, 0, 0);
   animation: fadeIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
-#modal-container.two .modal-background .modal {
+#modal-container.in .modal-background .modal {
   opacity: 0;
   animation: scaleUp 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
-#modal-container.two + .buttons {
+#modal-container.in + .buttons {
   animation: scaleBack 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
-#modal-container.two.out {
+#modal-container.out {
   animation: quickScaleDown 0s 0.5s linear forwards;
 }
-#modal-container.two.out .modal-background {
+#modal-container.out .modal-background {
   animation: fadeOut 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
-#modal-container.two.out .modal-background .modal {
+#modal-container.out .modal-background .modal {
   animation: scaleDown 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
-#modal-container.two.out + .buttons {
+#modal-container.out + .buttons {
   animation: scaleForward 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
+
 #modal-container .modal-background {
   display: table-cell;
   background: rgba(0, 0, 0, 0.8);

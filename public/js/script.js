@@ -47,9 +47,8 @@ ColumnsController().initialize();
 
 const button = document.querySelector("div.button");
 button.addEventListener("click", function (event) {
-  const buttonId = event.target.id;
   const container = document.getElementById("modal-container");
-  container.classList = buttonId;
+  container.classList = "in";
   document.querySelector("body").classList.add("modal-active");
 });
 
