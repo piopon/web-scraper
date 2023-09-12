@@ -7,9 +7,11 @@
         {{> widget type="text" parent="group" label="domain" value=group.domain }}
         {{> widget type="button" parent="group" label="category" value=group.category }}
       </div>
-      {{#each observers}}
-        {{> observer observer=this }}
-      {{/each}}
+      <div class="group-observers">
+        {{#each observers}}
+          {{> observer observer=this }}
+        {{/each}}
+      </div>
     </div>
     <i class="fa fa-close group-column-close"></i>
   </div>
