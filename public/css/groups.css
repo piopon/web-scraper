@@ -48,16 +48,16 @@ div.modal-dialog .modal-background .modal-content {
 }
 
 div.modal-button {
-  display: inline-block;
-  text-align: center;
+  cursor: pointer;
+  width: 100%;
   padding: 10px 15px;
-  margin: 0px;
-  color: black;
+  margin: 0rem 0.5rem 0rem 0rem;
+  text-align: center;
   font-size: 1rem;
+  color: black;
   background-color: #efefef;
   border-radius: 5px;
   box-shadow: 2px 2px 5px black;
-  cursor: pointer;
 }
 
 div.modal-button:hover {
@@ -157,7 +157,7 @@ div.group-observers {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  width: 100%;
+  margin: 0rem 0.5rem;
 }
 
 label.group-label {
