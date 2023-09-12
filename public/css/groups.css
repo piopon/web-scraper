@@ -5,7 +5,7 @@ div.modal-dialog {
   display: flex;
   height: 100%;
   width: 100%;
-  z-index: 1;
+  z-index: 4;
   transform: scale(0);
 }
 
@@ -20,6 +20,7 @@ div.modal-dialog.out {
 div.modal-dialog div.modal-background {
   display: flex;
   padding: 2.5rem;
+  z-index: 5;
 }
 
 div.modal-dialog.in div.modal-background {
