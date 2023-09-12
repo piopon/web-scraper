@@ -2,22 +2,21 @@
   <div id="modal-container">
     <div class="modal-background">
       <div class="modal">
-        <h2>I'm a Modal</h2>
+        <div class="observer-root-data">
+          {{> widget type="text" parent="observer" label="path" value=observer.path }}
+          {{> widget type="text" parent="observer" label="container" value=observer.container }}
+          {{> widget type="combo" parent="observer" label="target" options="load|domcontentloaded|networkidle0|networkidle2" value=observer.target }}
+          {{> widget type="combo" parent="observer" label="history" options="off|onChange|on" value=observer.history }}
+        </div>
+        {{> component name="title" component=observer.title }}
+        {{> component name="image" component=observer.image }}
+        {{> component name="price" component=observer.price }}
       </div>
     </div>
   </div>
   <div class="content">
     <div class="buttons">
-      <div id="two" class="button">Test observer</div>
+      <div id="two" class="button">{{observer.path}}</div>
     </div>
   </div>
-  <div class="observer-root-data">
-    {{> widget type="text" parent="observer" label="path" value=observer.path }}
-    {{> widget type="text" parent="observer" label="container" value=observer.container }}
-    {{> widget type="combo" parent="observer" label="target" options="load|domcontentloaded|networkidle0|networkidle2" value=observer.target }}
-    {{> widget type="combo" parent="observer" label="history" options="off|onChange|on" value=observer.history }}
-  </div>
-  {{> component name="title" component=observer.title }}
-  {{> component name="image" component=observer.image }}
-  {{> component name="price" component=observer.price }}
 </div>
