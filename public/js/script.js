@@ -45,14 +45,19 @@ const ColumnsController = function () {
 
 ColumnsController().initialize();
 
-const button = document.querySelector("div.modal-button");
-button.addEventListener("click", function (event) {
-  const container = document.querySelector("div.modal-dialog");
-  container.classList.remove("out");
-  container.classList.add("in");
+const observerButton = document.querySelector("div.modal-button");
+observerButton.addEventListener("click", function () {
+  const observerDialog = document.querySelector("div.modal-dialog");
+  observerDialog.classList.remove("out");
+  observerDialog.classList.add("in");
 });
 
-const modalContainer = document.querySelector("div.modal-dialog");
-modalContainer.addEventListener("click", function (event) {
-  this.classList.add("out");
+const modalAccept = document.querySelector("div.modal-accept");
+modalAccept.addEventListener("click", function () {
+  this.parentNode.parentNode.parentNode.classList.add("out");
+});
+
+const modalCancel = document.querySelector("div.modal-cancel");
+modalCancel.addEventListener("click", function () {
+  this.parentNode.parentNode.parentNode.classList.add("out");
 });
