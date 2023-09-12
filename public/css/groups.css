@@ -10,41 +10,41 @@ div.modal-dialog {
 div.modal-dialog.in {
   transform: scale(1);
 }
-div.modal-dialog.in .modal-background {
-  background: rgba(0, 0, 0, 0);
-  animation: fadeIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
-}
-div.modal-dialog.in .modal-background .modal-content {
-  opacity: 0;
-  animation: scaleUp 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
-}
-div.modal-dialog.in + div.modal-button {
-  animation: scaleBack 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
-}
+
 div.modal-dialog.out {
   animation: quickScaleDown 0s 0.5s linear forwards;
 }
-div.modal-dialog.out .modal-background {
-  animation: fadeOut 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
-}
-div.modal-dialog.out .modal-background .modal-content {
-  animation: scaleDown 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
-}
-div.modal-dialog.out + div.modal-button {
-  animation: scaleForward 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
-}
 
-div.modal-dialog .modal-background {
+div.modal-dialog div.modal-background {
   display: table-cell;
   background: rgba(0, 0, 0, 0.8);
   text-align: center;
   vertical-align: middle;
 }
 
-div.modal-dialog .modal-background .modal-content {
-  background: white;
-  padding: 50px;
-  display: inline-block;
+div.modal-dialog.in div.modal-background {
+  background: rgba(0, 0, 0, 0);
+  animation: fadeIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+div.modal-dialog.out div.modal-background {
+  animation: fadeOut 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+div.modal-dialog div.modal-content {
+  background: gray;
+  height: 65%;
+  margin: 50px;
+  padding: 15px;
+}
+
+div.modal-dialog.in div.modal-content {
+  opacity: 0;
+  animation: scaleUp 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+div.modal-dialog.out div.modal-content {
+  animation: scaleDown 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
 
 div.modal-button {
@@ -63,6 +63,14 @@ div.modal-button {
 div.modal-button:hover {
   color: white;
   background: slateblue;
+}
+
+div.modal-dialog.in + div.modal-button {
+  animation: scaleBack 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+div.modal-dialog.out + div.modal-button {
+  animation: scaleForward 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
 
 @keyframes fadeIn {
