@@ -57,12 +57,14 @@ const modalCancelButtons = document.querySelectorAll("div.modal-cancel");
   });
 });
 
-const modalAccept = document.querySelector("div.modal-accept");
-modalAccept.addEventListener("click", function () {
-  this.parentNode.parentNode.parentNode.classList.add("out");
+[].forEach.call(modalAcceptButtons, function (modalAccept) {
+  modalAccept.addEventListener("click", function () {
+    this.parentNode.parentNode.parentNode.classList.add("out");
+  });
 });
 
-const modalCancel = document.querySelector("div.modal-cancel");
-modalCancel.addEventListener("click", function () {
-  this.parentNode.parentNode.parentNode.classList.add("out");
+[].forEach.call(modalCancelButtons, function (modalCancel) {
+  modalCancel.addEventListener("click", function () {
+    this.parentNode.parentNode.parentNode.classList.add("out");
+  });
 });
