@@ -45,11 +45,16 @@ const ColumnsController = function () {
 
 ColumnsController().initialize();
 
-const observerButton = document.querySelector("div.modal-button");
-observerButton.addEventListener("click", function () {
-  const observerDialog = document.querySelector("div.modal-dialog");
-  observerDialog.classList.remove("out");
-  observerDialog.classList.add("in");
+const observerButtons = document.querySelectorAll("div.modal-button");
+const modalAcceptButtons = document.querySelectorAll("div.modal-accept");
+const modalCancelButtons = document.querySelectorAll("div.modal-cancel");
+
+[].forEach.call(observerButtons, function (observerButton) {
+  observerButton.addEventListener("click", function () {
+    const observerDialog = this.parentNode.querySelector("div.modal-dialog");
+    observerDialog.classList.remove("out");
+    observerDialog.classList.add("in");
+  });
 });
 
 const modalAccept = document.querySelector("div.modal-accept");
