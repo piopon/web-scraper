@@ -16,7 +16,8 @@ const ColumnsController = function () {
 
   const collapse = function (groupCloseButton) {
     if (groupExpanded) {
-      const groupColumn = groupCloseButton.parentNode.parentNode.parentNode.parentNode.querySelector(".group-column-expanded");
+      const groupColumn =
+        groupCloseButton.parentNode.parentNode.parentNode.parentNode.querySelector(".group-column-expanded");
       groupColumn.querySelector(".group-content").style.transition = "all 0.15s 0 cubic-bezier(0.23, 1, 0.32, 1)";
       groupColumn.classList.remove("group-column-expanded");
       groupCloseButton.classList.remove("group-column-close-show");
