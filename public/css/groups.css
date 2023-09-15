@@ -185,14 +185,15 @@ div.group-root-data {
   flex-wrap: nowrap;
   justify-content: center;
   width: 100%;
-  margin: 2.5rem 0rem;
+  margin: 2.5rem 0rem 0rem 0rem;
 }
 
 div.group-observers {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  margin: 0rem 0.5rem;
+  width: 100%;
+  padding: 0.5rem;
 }
 
 label.group-label {
