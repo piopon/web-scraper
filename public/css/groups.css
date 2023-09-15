@@ -201,7 +201,8 @@ label.group-label {
 }
 
 .group-name {
-  width: 100%;
+  width: 10rem;
+  height: 2rem;
   font-size: 1rem;
   color: black;
   background-color: #efefef;
@@ -211,7 +212,8 @@ label.group-label {
 }
 
 .group-category {
-  width: 100%;
+  width: 4rem;
+  height: 2rem;
   font-size: 1rem;
   color: black;
   background-color: #efefef;
@@ -220,8 +222,13 @@ label.group-label {
   box-shadow: 2px 2px 5px black;
 }
 
+.group-category:hover {
+  background-color: slateblue;
+}
+
 .group-domain {
-  width: 100%;
+  width: 20rem;
+  height: 2rem;
   font-size: 1rem;
   color: black;
   background-color: #efefef;
