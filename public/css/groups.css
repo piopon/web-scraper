@@ -212,8 +212,20 @@ label.group-label {
 
 .group-category {
   width: 100%;
+  font-size: 1rem;
+  color: black;
+  background-color: #efefef;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: 2px 2px 5px black;
 }
 
 .group-domain {
   width: 100%;
+  font-size: 1rem;
+  color: black;
+  background-color: #efefef;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: 2px 2px 5px black;
 }
