@@ -202,6 +202,12 @@ label.group-label {
 
 .group-name {
   width: 100%;
+  font-size: 1rem;
+  color: black;
+  background-color: #efefef;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: 2px 2px 5px black;
 }
 
 .group-category {
