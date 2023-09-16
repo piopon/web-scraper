@@ -27,10 +27,10 @@ const ColumnsController = function () {
   };
 
   const setStyle = function() {
-    const colors = ["background-navy", "background-aqua"];
-    const animations = ["column-from-left", "column-from-bottom"];
+    const colors = ["navy", "aqua", "green", "orange", "red", "blue", "yellow", "plum"];
+    const animations = ["column-from-top", "column-from-right", "column-from-bottom", "column-from-left"];
     [].forEach.call(groupColumns, function (column) {
-      column.classList.add(colors[Math.floor(Math.random()*colors.length)]);
+      column.classList.add("background-" + colors[Math.floor(Math.random()*colors.length)]);
       column.classList.add(animations[Math.floor(Math.random()*animations.length)]);
     });
   };
