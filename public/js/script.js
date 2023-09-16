@@ -26,6 +26,13 @@ const ColumnsController = function () {
     }
   };
 
+  const setStyle = function() {
+    const colors = ["background-navy", "background-aqua"];
+    [].forEach.call(groupColumns, function (column) {
+      column.classList.add(colors[Math.floor(Math.random()*colors.length)]);
+    });
+  };
+
   const bindListeners = function () {
     [].forEach.call(groupColumns, function (column) {
       column.addEventListener("click", function (event) {
@@ -41,7 +48,12 @@ const ColumnsController = function () {
     });
   };
 
-  return { initialize: bindListeners };
+  const init = function() {
+    setStyle();
+    bindListeners();
+  }
+
+  return { initialize: init };
 };
 
 ColumnsController().initialize();

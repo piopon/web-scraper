@@ -24,7 +24,6 @@
 }
 
 .group-column:nth-child(1) .group-container {
-  background: #244f75;
   transform: translate3d(-100%, 0, 0);
   -webkit-animation-name: strip1;
   animation-name: strip1;
@@ -33,7 +32,6 @@
 }
 
 .group-column:nth-child(2) .group-container {
-  background: #60bfbf;
   transform: translate3d(0, 100%, 0);
   -webkit-animation-name: strip2;
   animation-name: strip2;
