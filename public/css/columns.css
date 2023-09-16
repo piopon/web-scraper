@@ -86,6 +86,10 @@
   transform: translate(-50%, -50%) scale(1);
 }
 
+.group-column-collapsed {
+  width: 0;
+}
+
 .group-title {
   display: block;
   margin: 0;
