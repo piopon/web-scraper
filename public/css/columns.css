@@ -66,12 +66,6 @@
   cursor: default;
 }
 
-@media screen and (max-width: 760px) {
-  .group-column-expanded {
-    min-height: 100vh;
-  }
-}
-
 .group-column-expanded .group-container:hover:before {
   transform: skew(-30deg) scale(1) translate(0, 0);
   opacity: 0.05;
