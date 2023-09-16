@@ -28,8 +28,10 @@ const ColumnsController = function () {
 
   const setStyle = function() {
     const colors = ["background-navy", "background-aqua"];
+    const animations = ["column-from-left", "column-from-bottom"];
     [].forEach.call(groupColumns, function (column) {
       column.classList.add(colors[Math.floor(Math.random()*colors.length)]);
+      column.classList.add(animations[Math.floor(Math.random()*animations.length)]);
     });
   };
 
