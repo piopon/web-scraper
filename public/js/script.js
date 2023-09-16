@@ -5,7 +5,9 @@ const ColumnsController = function () {
 
   const expand = function (groupColumn) {
     if (!groupExpanded) {
-      groupColumns.forEach(column => column.parentNode.classList.add(column === groupColumn ? "group-column-expanded" : "group-column-collapsed"));
+      groupColumns.forEach((column) =>
+        column.parentNode.classList.add(column === groupColumn ? "group-column-expanded" : "group-column-collapsed")
+      );
       groupColumn.querySelector(".group-content").style.transition = "all .5s .3s cubic-bezier(0.23, 1, 0.32, 1)";
       const groupCloseButton = groupColumn.querySelector(".group-column-close");
       groupCloseButton.classList.add("group-column-close-show");
@@ -20,19 +22,19 @@ const ColumnsController = function () {
         groupCloseButton.parentNode.parentNode.parentNode.parentNode.querySelector(".group-column-expanded");
       groupColumn.querySelector(".group-content").style.transition = "all 0.15s 0 cubic-bezier(0.23, 1, 0.32, 1)";
       groupColumn.classList.remove("group-column-expanded");
-      groupColumns.forEach(column => column.parentNode.classList.remove("group-column-collapsed"));
+      groupColumns.forEach((column) => column.parentNode.classList.remove("group-column-collapsed"));
       groupCloseButton.classList.remove("group-column-close-show");
       groupCloseButton.style.transition = "all 0.2s 0s cubic-bezier(0.23, 1, 0.32, 1)";
       groupExpanded = false;
     }
   };
 
-  const setStyle = function() {
+  const setStyle = function () {
     const colors = ["navy", "aqua", "green", "orange", "red", "blue", "yellow", "plum"];
     const animations = ["column-from-top", "column-from-right", "column-from-bottom", "column-from-left"];
     [].forEach.call(groupColumns, function (column) {
-      column.classList.add("background-" + colors[Math.floor(Math.random()*colors.length)]);
-      column.classList.add(animations[Math.floor(Math.random()*animations.length)]);
+      column.classList.add("background-" + colors[Math.floor(Math.random() * colors.length)]);
+      column.classList.add(animations[Math.floor(Math.random() * animations.length)]);
     });
   };
 
@@ -51,10 +53,10 @@ const ColumnsController = function () {
     });
   };
 
-  const init = function() {
+  const init = function () {
     setStyle();
     bindListeners();
-  }
+  };
 
   return { initialize: init };
 };
