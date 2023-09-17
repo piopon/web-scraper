@@ -91,7 +91,7 @@
   z-index: 2;
   width: 100%;
   font-size: 3.5vw;
-  color: white;
+  background: transparent;
   transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
@@ -100,7 +100,6 @@
   right: 1vw;
   top: 1vw;
   opacity: 0;
-  color: white;
   z-index: 3;
   transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
   cursor: pointer;
