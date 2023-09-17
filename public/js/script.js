@@ -18,10 +18,8 @@ const ColumnsController = function () {
 
   const collapse = function (groupCloseButton) {
     if (groupExpanded) {
-      const groupColumn =
-        groupCloseButton.parentNode.parentNode.parentNode.parentNode.querySelector(".group-column-expanded");
-      groupColumn.classList.remove("group-column-expanded");
       groupColumns.forEach((column) => {
+        column.parentNode.classList.remove("group-column-expanded");
         column.parentNode.classList.remove("group-column-collapsed");
         setPosition(column);
       });
