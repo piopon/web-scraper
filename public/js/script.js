@@ -11,7 +11,6 @@ const ColumnsController = function () {
       });
       const groupCloseButton = groupColumn.querySelector(".group-column-close");
       groupCloseButton.classList.add("group-column-close-show");
-      groupCloseButton.style.transition = "all .6s 1s cubic-bezier(0.23, 1, 0.32, 1)";
       groupExpanded = true;
     }
   };
@@ -24,7 +23,6 @@ const ColumnsController = function () {
         setPosition(column);
       });
       groupCloseButton.classList.remove("group-column-close-show");
-      groupCloseButton.style.transition = "all 0.2s 0s cubic-bezier(0.23, 1, 0.32, 1)";
       groupExpanded = false;
     }
   };
