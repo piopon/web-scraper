@@ -49,7 +49,7 @@
   transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.group-column-expanded {
+.group-column.expanded {
   width: 100%;
   top: 0 !important;
   left: 0 !important;
@@ -57,21 +57,21 @@
   cursor: default;
 }
 
-.group-column-expanded .group-container:hover:before {
+.group-column.expanded .group-container:hover:before {
   transform: skew(-30deg) scale(1) translate(0, 0);
   opacity: 0.05;
 }
 
-.group-column-expanded .group-title {
+.group-column.expanded .group-title {
   opacity: 0;
 }
 
-.group-column-expanded .group-content {
+.group-column.expanded .group-content {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
 }
 
-.group-column-collapsed {
+.group-column.collapsed {
   width: 0;
 }
 
