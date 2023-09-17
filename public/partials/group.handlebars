@@ -8,10 +8,14 @@
         {{> widget type="button" parent="group" label="category" value=group.category }}
       </div>
       <div class="group-observers">
-        <label class="group-label">observers:</label>
-        {{#each observers}}
-          {{> observer observer=this }}
-        {{/each}}
+        <div class="observers-title">
+          <label class="group-label">observers:</label>
+        </div>
+        <div class="observers-container">
+          {{#each observers}}
+            {{> observer observer=this }}
+          {{/each}}
+        </div>
       </div>
       <i class="fa fa-close group-column-close"></i>
     </div>
