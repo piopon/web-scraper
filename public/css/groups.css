@@ -201,11 +201,13 @@ div.group-observers {
 div.observers-title {
   display: flex;
   flex-direction: column;
+  width: 41rem;
 }
 
 div.observers-container {
   display: flex;
   flex-direction: row;
+  width: 41rem;
   height: 100%;
 }
 
@@ -243,7 +245,7 @@ label.group-label {
 }
 
 .group-domain {
-  width: 20rem;
+  width: 25rem;
   height: 2rem;
   font-size: 1rem;
   color: black;
