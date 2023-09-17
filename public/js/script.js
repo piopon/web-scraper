@@ -9,7 +9,6 @@ const ColumnsController = function () {
         column.parentNode.classList.add(column === groupColumn ? "group-column-expanded" : "group-column-collapsed");
         clearPosition(column);
       });
-      groupColumn.querySelector(".group-content").style.transition = "all .5s .3s cubic-bezier(0.23, 1, 0.32, 1)";
       const groupCloseButton = groupColumn.querySelector(".group-column-close");
       groupCloseButton.classList.add("group-column-close-show");
       groupCloseButton.style.transition = "all .6s 1s cubic-bezier(0.23, 1, 0.32, 1)";
@@ -21,7 +20,6 @@ const ColumnsController = function () {
     if (groupExpanded) {
       const groupColumn =
         groupCloseButton.parentNode.parentNode.parentNode.parentNode.querySelector(".group-column-expanded");
-      groupColumn.querySelector(".group-content").style.transition = "all 0.15s 0 cubic-bezier(0.23, 1, 0.32, 1)";
       groupColumn.classList.remove("group-column-expanded");
       groupColumns.forEach((column) => {
         column.parentNode.classList.remove("group-column-collapsed");
