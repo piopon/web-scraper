@@ -19,6 +19,8 @@ div.modal-dialog.out {
 
 div.modal-dialog div.modal-background {
   display: flex;
+  justify-content: center;
+  width: 100%;
   padding: 2.5rem;
   z-index: 5;
 }
@@ -38,6 +40,7 @@ div.modal-dialog div.modal-content {
   padding: 15px;
   background: whitesmoke;
   border: 2px solid black;
+  width: 90%;
 }
 
 div.modal-dialog.in div.modal-content {
