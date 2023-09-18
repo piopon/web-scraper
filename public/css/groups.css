@@ -83,28 +83,23 @@ div.observer-buttons {
   display: flex;
 }
 
-div.modal-accept {
+div.modal-close-btn {
   cursor: pointer;
   padding: 10px 15px;
-  margin: 1.5rem 0rem 0rem 0rem;
+  margin: 0rem 0rem 0rem 0rem;
   text-align: center;
   font-size: 1rem;
   color: black;
-  background-color: limegreen;
   border-radius: 5px;
   box-shadow: 2px 2px 5px black;
 }
 
-div.modal-cancel {
-  cursor: pointer;
-  padding: 10px 15px;
-  margin: 0.5rem 0rem 0rem 0rem;
-  text-align: center;
-  font-size: 1rem;
-  color: black;
+.accept {
+  background-color: limegreen;
+}
+
+.cancel {
   background-color: tomato;
-  border-radius: 5px;
-  box-shadow: 2px 2px 5px black;
 }
 
 @keyframes fadeIn {

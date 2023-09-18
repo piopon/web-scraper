@@ -83,8 +83,8 @@ const ColumnsController = function () {
 ColumnsController().initialize();
 
 const observerButtons = document.querySelectorAll("div.modal-button");
-const modalAcceptButtons = document.querySelectorAll("div.modal-accept");
-const modalCancelButtons = document.querySelectorAll("div.modal-cancel");
+const modalAcceptButtons = document.querySelectorAll("div.modal-close-btn.accept");
+const modalCancelButtons = document.querySelectorAll("div.modal-close-btn.cancel");
 
 observerButtons.forEach((button) => {
   button.addEventListener("click", function (event) {
