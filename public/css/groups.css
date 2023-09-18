@@ -79,6 +79,10 @@ div.modal-dialog.out + div.modal-button {
   animation: scaleForward 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
 
+div.observer-buttons {
+  display: flex;
+}
+
 div.modal-accept {
   cursor: pointer;
   padding: 10px 15px;

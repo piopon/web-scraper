@@ -97,14 +97,14 @@ observerButtons.forEach((button) => {
 
 modalAcceptButtons.forEach((button) => {
   button.addEventListener("click", function (event) {
-    this.parentNode.parentNode.parentNode.classList.add("out");
+    this.parentNode.parentNode.parentNode.parentNode.classList.add("out");
     event.stopPropagation();
   });
 });
 
 modalCancelButtons.forEach((button) => {
   button.addEventListener("click", function (event) {
-    this.parentNode.parentNode.parentNode.classList.add("out");
+    this.parentNode.parentNode.parentNode.parentNode.classList.add("out");
     event.stopPropagation();
   });
 });
