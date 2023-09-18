@@ -5,6 +5,9 @@ html {
   -webkit-font-smoothing: antialiased;
   text-rendering: geometricPrecision;
   line-height: 1.5;
+  user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
 }
 
 body {
