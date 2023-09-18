@@ -92,16 +92,27 @@ div.modal-close-btn {
   text-align: center;
   font-size: 1rem;
   color: black;
+  border: 1px solid black;
   border-radius: 5px;
   box-shadow: 2px 2px 5px black;
 }
 
 .accept {
   background-color: limegreen;
+  margin-right: 0.25rem;
+}
+
+.accept:hover {
+  background-color: lightgreen;
 }
 
 .cancel {
   background-color: tomato;
+  margin-left: 0.25rem;
+}
+
+.cancel:hover {
+  background-color: coral;
 }
 
 @keyframes fadeIn {
