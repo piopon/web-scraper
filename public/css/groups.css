@@ -66,6 +66,10 @@ div.modal-button {
   box-shadow: 2px 2px 5px black;
 }
 
+div.modal-button.new-observer {
+  width: 1.5rem
+}
+
 div.modal-button:hover {
   color: white;
   background: slateblue;
@@ -219,6 +223,7 @@ div.observers-title {
 div.observers-container {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   width: 41rem;
   height: 100%;
 }
