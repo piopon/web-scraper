@@ -101,6 +101,6 @@ div.group-content i {
   transition-delay: 0.5s;
 }
 
-.group-column-close-show {
+.group-column-close.show {
   opacity: 1;
 }

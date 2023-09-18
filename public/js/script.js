@@ -9,8 +9,7 @@ const ColumnsController = function () {
         column.parentNode.classList.add(column === groupColumn ? "expanded" : "collapsed");
         clearPosition(column);
       });
-      const groupCloseButton = groupColumn.querySelector(".group-column-close");
-      groupCloseButton.classList.add("group-column-close-show");
+      groupColumn.querySelector(".group-column-close").classList.add("show");
       groupExpanded = true;
     }
   };
@@ -22,7 +21,7 @@ const ColumnsController = function () {
         column.parentNode.classList.remove("collapsed");
         setPosition(column);
       });
-      groupCloseButton.classList.remove("group-column-close-show");
+      groupCloseButton.classList.remove("show");
       groupExpanded = false;
     }
   };
