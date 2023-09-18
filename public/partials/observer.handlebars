@@ -18,5 +18,9 @@
       </div>
     </div>
   </div>
-  <div class="modal-button">{{observer.path}}</div>
+  {{#if (eq observer undefined)}}
+    <div class="modal-button new-observer">+</div>
+  {{else}}
+    <div class="modal-button">{{observer.path}}</div>
+  {{/if}}
 </div>

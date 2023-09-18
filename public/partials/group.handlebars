@@ -12,9 +12,12 @@
           <label class="group-label">observers:</label>
         </div>
         <div class="observers-container">
+          {{!-- show currently existing observers --}}
           {{#each observers}}
             {{> observer observer=this }}
           {{/each}}
+          {{!-- display add new observer button --}}
+          {{> observer }}
         </div>
       </div>
       <i class="fa fa-close group-column-close"></i>
