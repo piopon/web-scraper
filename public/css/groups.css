@@ -37,9 +37,9 @@ div.modal-dialog div.modal-content {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 15px;
+  padding: 35px;
   background: whitesmoke;
-  border: 2px solid black;
+  border: 3px solid black;
   width: 90%;
 }
 
