@@ -108,3 +108,11 @@ modalCancelButtons.forEach((button) => {
     event.stopPropagation();
   });
 });
+
+function addObserver() {
+  console.log("ADD OBSERVER");
+}
+
+function updateObserver(path) {
+  console.log(`UPDATE OBSERVER ${path}`);
+}
