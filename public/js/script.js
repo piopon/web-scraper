@@ -29,10 +29,13 @@ modalCancelButtons.forEach((button) => {
   });
 });
 
-function addObserver() {
+export function addObserver() {
   console.log("ADD OBSERVER");
 }
 
-function updateObserver(path) {
+export function updateObserver(path) {
   console.log(`UPDATE OBSERVER ${path}`);
 }
+
+window.addObserver = addObserver;
+window.updateObserver = updateObserver;
