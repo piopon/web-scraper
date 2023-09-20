@@ -40,7 +40,7 @@ export const ColumnsController = function () {
   const setStyle = function () {
     const colors = ["navy", "aqua", "green", "orange", "red", "blue", "yellow", "plum"];
     const animations = ["column-from-top", "column-from-right", "column-from-bottom", "column-from-left"];
-    [].forEach.call(groupColumns, function (column) {
+    groupColumns.forEach((column) => {
       // adjust position of each column
       setPosition(column);
       // get color from array and then remove it so no duplicates are selected (in next iterations)
@@ -80,13 +80,13 @@ export const ColumnsController = function () {
    * Method used to bind listeners to all group columns and column close buttons
    */
   const bindListeners = function () {
-    [].forEach.call(groupColumns, function (column) {
+    groupColumns.forEach((column) => {
       column.addEventListener("click", function (event) {
         expand(this);
         event.stopPropagation();
       });
     });
-    [].forEach.call(groupCloseButtons, function (closeButton) {
+    groupCloseButtons.forEach((closeButton) => {
       closeButton.addEventListener("click", function (event) {
         collapse(this);
         event.stopPropagation();
