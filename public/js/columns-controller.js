@@ -35,29 +35,6 @@ export const ColumnsController = function () {
   };
 
   /**
-   * Method used to set style for all group columns (position, colors and animation)
-   */
-  const setStyle = function () {
-    const colors = ["navy", "aqua", "green", "orange", "red", "blue", "yellow", "plum"];
-    const animations = ["column-from-top", "column-from-right", "column-from-bottom", "column-from-left"];
-    groupColumns.forEach((column) => {
-      // adjust position of each column
-      setPosition(column);
-      // get color from array and then remove it so no duplicates are selected (in next iterations)
-      const selectedColor = colors[Math.floor(Math.random() * colors.length)];
-      var index = colors.indexOf(selectedColor);
-      if (index !== -1) {
-        colors.splice(index, 1);
-      }
-      column.classList.add("background-" + selectedColor);
-      column.querySelector(".group-title").classList.add("background-" + selectedColor);
-      // get animation from array (duplicates are allowed in this case)
-      const selectedAnimation = animations[Math.floor(Math.random() * animations.length)];
-      column.classList.add(selectedAnimation);
-    });
-  };
-
-  /**
    * Method used to set the position (and width) of the specified column
    * @param {Object} column The column which position (and width) shoulde be setup
    */
