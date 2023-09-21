@@ -11,7 +11,7 @@ export const ColumnsController = function () {
     if (!groupExpanded) {
       groupColumns.forEach((column) => {
         column.parentNode.classList.add(column === groupColumn ? "expanded" : "collapsed");
-        clearPosition(column);
+        clearDimension(column);
       });
       groupColumn.querySelector(".group-column-close").classList.add("show");
       groupExpanded = true;
@@ -27,7 +27,7 @@ export const ColumnsController = function () {
       groupColumns.forEach((column) => {
         column.parentNode.classList.remove("expanded");
         column.parentNode.classList.remove("collapsed");
-        setPosition(column);
+        setDimension(column);
       });
       groupCloseButton.classList.remove("show");
       groupExpanded = false;
@@ -35,10 +35,10 @@ export const ColumnsController = function () {
   };
 
   /**
-   * Method used to set the position (and width) of the specified column
-   * @param {Object} column The column which position (and width) shoulde be setup
+   * Method used to set the dimensions (position and width) of the specified column
+   * @param {Object} column The column which dimensions should be configured
    */
-  const setPosition = function (column) {
+  const setDimension = function (column) {
     const columnWidth = 100 / groupColumns.length;
     const columnIndex = Array.from(groupColumns).indexOf(column);
     column.parentNode.style.width = `${columnWidth}%`;
@@ -46,10 +46,10 @@ export const ColumnsController = function () {
   };
 
   /**
-   * Method used to clear the position setting of the selected column
-   * @param {Object} column The column which position setting should be cleared
+   * Method used to clear the dimensions of the selected column
+   * @param {Object} column The column which dimensions should be cleared
    */
-  const clearPosition = function (column) {
+  const clearDimension = function (column) {
     column.parentNode.removeAttribute("style");
   };
 
@@ -71,15 +71,18 @@ export const ColumnsController = function () {
     });
   };
 
-  const initPositions = function () {
-    groupColumns.forEach((column) => setPosition(column));
+  /**
+   * Method used to initialize column dimensions (positions and size)
+   */
+  const initDimensions = function () {
+    groupColumns.forEach((column) => setDimension(column));
   }
 
   /**
-   * Method used to setup the column controller (initialize position, create and bind all listeners)
+   * Method used to setup the column controller
    */
   const setup = function () {
-    initPositions();
+    initDimensions();
     bindListeners();
   };
 
