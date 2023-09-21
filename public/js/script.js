@@ -1,14 +1,14 @@
 import { ObserversController } from "./observers-controller.js";
-import { ColumnsController } from "./columns-controller.js";
-import { ColumnsStyler } from "./columns-styler.js";
+import { GroupsController } from "./groups-controller.js";
+import { GroupsStyler } from "./groups-styler.js";
 
 const observersController = ObserversController();
-const columnsController = ColumnsController();
-const columnsStyler = ColumnsStyler();
+const groupsController = GroupsController();
+const groupsStyler = GroupsStyler();
 
 observersController.initialize();
-columnsController.initialize();
-columnsStyler.initialize();
+groupsController.initialize();
+groupsStyler.initialize();
 
 window.addObserver = observersController.add;
 window.updateObserver = observersController.update;

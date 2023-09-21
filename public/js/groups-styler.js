@@ -1,4 +1,4 @@
-export const ColumnsStyler = function () {
+export const GroupsStyler = function () {
   const colors = ["navy", "aqua", "green", "orange", "red", "blue", "yellow", "plum"];
   const animations = ["column-from-top", "column-from-right", "column-from-bottom", "column-from-left"];
   const groupColumns = document.querySelectorAll(".group-column > .group-container");

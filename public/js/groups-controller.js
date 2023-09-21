@@ -1,4 +1,4 @@
-export const ColumnsController = function () {
+export const GroupsController = function () {
   const groupColumns = document.querySelectorAll(".group-column > .group-container");
   const groupCloseButtons = document.querySelectorAll(".group-content > .group-column-close");
   var groupExpanded = false;
