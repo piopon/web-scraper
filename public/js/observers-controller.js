@@ -3,10 +3,17 @@ export const ObserversController = function () {
   const modalAcceptButtons = document.querySelectorAll("div.modal-close-btn.accept");
   const modalCancelButtons = document.querySelectorAll("div.modal-close-btn.cancel");
 
+  /**
+   * Method used to handle new observer addition
+   */
   const addObserver = function () {
     console.log("ADD OBSERVER");
   };
 
+  /**
+   * Method used to handle specified observer update
+   * @param {String} path The path identifier of the observer to update
+   */
   const updateObserver = function (path) {
     console.log(`UPDATE OBSERVER ${path}`);
   };

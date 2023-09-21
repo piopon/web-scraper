@@ -54,7 +54,8 @@ export const ColumnsController = function () {
   };
 
   /**
-   * Method used to bind listeners to all group columns and column close buttons
+   * Method used to bind UI listeners to controller methods.
+   * This method handles: group column and close column buttons clicksss
    */
   const bindListeners = function () {
     groupColumns.forEach((column) => {
@@ -76,7 +77,7 @@ export const ColumnsController = function () {
    */
   const initDimensions = function () {
     groupColumns.forEach((column) => setDimension(column));
-  }
+  };
 
   /**
    * Method used to setup the column controller
