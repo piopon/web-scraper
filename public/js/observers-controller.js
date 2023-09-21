@@ -3,6 +3,14 @@ export const ObserversController = function () {
   const modalAcceptButtons = document.querySelectorAll("div.modal-close-btn.accept");
   const modalCancelButtons = document.querySelectorAll("div.modal-close-btn.cancel");
 
+  const addObserver = function () {
+    console.log("ADD OBSERVER");
+  };
+
+  const updateObserver = function (path) {
+    console.log(`UPDATE OBSERVER ${path}`);
+  };
+
   /**
    * Method used to bind UI listeners to controller methods.
    * This method handles: observer buttons and modal dialog accept and cancel buttons clicks
@@ -30,5 +38,5 @@ export const ObserversController = function () {
     });
   };
 
-  return { initialize: bindListeners };
+  return { initialize: bindListeners, add: addObserver, update: updateObserver };
 };

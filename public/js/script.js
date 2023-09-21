@@ -10,13 +10,5 @@ observersController.initialize();
 columnsController.initialize();
 columnsStyler.initialize();
 
-export function addObserver() {
-  console.log("ADD OBSERVER");
-}
-
-export function updateObserver(path) {
-  console.log(`UPDATE OBSERVER ${path}`);
-}
-
-window.addObserver = addObserver;
-window.updateObserver = updateObserver;
+window.addObserver = observersController.add;
+window.updateObserver = observersController.update;
