@@ -14,10 +14,10 @@
         <div class="observers-container">
           {{!-- show currently existing observers --}}
           {{#each observers}}
-            {{> observer observer=this }}
+            {{> observer parent=../group observer=this }}
           {{/each}}
           {{!-- display add new observer button --}}
-          {{> observer }}
+          {{> observer parent=group }}
         </div>
       </div>
       <i class="fa fa-close group-column-close"></i>
