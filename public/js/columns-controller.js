@@ -94,11 +94,15 @@ export const ColumnsController = function () {
     });
   };
 
+  const initPositions = function () {
+    groupColumns.forEach((column) => setPosition(column));
+  }
+
   /**
-   * Method used to setup the column controller (set style, position, create and bind all listeners)
+   * Method used to setup the column controller (initialize position, create and bind all listeners)
    */
   const setup = function () {
-    setStyle();
+    initPositions();
     bindListeners();
   };
 

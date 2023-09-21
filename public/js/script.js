@@ -1,6 +1,8 @@
 import { ColumnsController } from "./columns-controller.js";
+import { ColumnsStyler } from "./columns-styler.js";
 
 ColumnsController().initialize();
+ColumnsStyler().initialize();
 
 const observerButtons = document.querySelectorAll("div.modal-button");
 const modalAcceptButtons = document.querySelectorAll("div.modal-close-btn.accept");
