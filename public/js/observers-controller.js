@@ -5,17 +5,19 @@ export const ObserversController = function () {
 
   /**
    * Method used to handle new observer addition
+   * @param {String} group The observer parent group name
    */
-  const addObserver = function () {
-    console.log("ADD OBSERVER");
+  const addObserver = function (group) {
+    console.log(`ADD OBSERVER TO GROUP: ${group}`);
   };
 
   /**
    * Method used to handle specified observer update
+   * @param {String} group The observer parent group name
    * @param {String} path The path identifier of the observer to update
    */
-  const updateObserver = function (path) {
-    console.log(`UPDATE OBSERVER ${path}`);
+  const updateObserver = function (group, path) {
+    console.log(`UPDATE OBSERVER: ${path} IN GROUP: ${group}`);
   };
 
   /**
