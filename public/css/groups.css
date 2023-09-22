@@ -86,7 +86,7 @@ div.modal-dialog.out + div.modal-button {
 div.observer-buttons {
   display: flex;
   width: 100%;
-  margin: 0.5rem 0 0 0;
+  margin: 1rem 0 0 0;
 }
 
 div.modal-close-btn {
@@ -103,6 +103,7 @@ div.modal-close-btn {
 
 .accept {
   background-color: limegreen;
+  margin-left: 0.5rem;
   margin-right: 0.25rem;
 }
 
@@ -113,6 +114,7 @@ div.modal-close-btn {
 .cancel {
   background-color: tomato;
   margin-left: 0.25rem;
+  margin-right: 0.5rem;
 }
 
 .cancel:hover {
