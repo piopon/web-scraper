@@ -22,24 +22,59 @@ div.component-root-data {
   flex-wrap: nowrap;
   justify-content: center;
   width: 100%;
-  height: 100%;
   margin: 0rem;
 }
 
-label.component-label {
+label.component-title-label {
   display: block;
   width: 100%;
   text-align: left;
 }
 
-.component-selector {
+.component-title-selector {
   width: 100%;
 }
 
-.component-attribute {
+.component-title-attribute {
   width: 100%;
 }
 
-.component-auxiliary {
+.component-title-auxiliary {
+  width: 100%;
+}
+
+label.component-image-label {
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+
+.component-image-selector {
+  width: 100%;
+}
+
+.component-image-attribute {
+  width: 100%;
+}
+
+.component-image-auxiliary {
+  width: 100%;
+}
+
+label.component-price-label {
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+
+.component-price-selector {
+  width: 100%;
+}
+
+.component-price-attribute {
+  width: 100%;
+}
+
+.component-price-auxiliary {
   width: 100%;
 }
