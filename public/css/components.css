@@ -4,7 +4,6 @@ div.component-content {
   flex-wrap: nowrap;
   justify-content: center;
   align-items: flex-start;
-  padding: 0rem 0.5rem;
   color: black;
 }
 
@@ -13,6 +12,7 @@ div.component-name {
   margin: 0rem;
   width: 100%;
   justify-content: flex-start;
+  padding: 0rem 0.5rem;
   align-items: center;
 }
 
@@ -20,7 +20,7 @@ div.component-root-data {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100%;
   margin: 0rem;
 }
