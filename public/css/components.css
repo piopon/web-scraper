@@ -32,7 +32,14 @@ label.component-title-label {
 }
 
 .component-title-selector {
-  width: 100%;
+  width: 15rem;
+  height: 2rem;
+  font-size: 1rem;
+  color: black;
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: 2px 2px 5px black;
 }
 
 .component-title-attribute {
@@ -50,7 +57,14 @@ label.component-image-label {
 }
 
 .component-image-selector {
-  width: 100%;
+  width: 15rem;
+  height: 2rem;
+  font-size: 1rem;
+  color: black;
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: 2px 2px 5px black;
 }
 
 .component-image-attribute {
@@ -68,7 +82,14 @@ label.component-price-label {
 }
 
 .component-price-selector {
-  width: 100%;
+  width: 15rem;
+  height: 2rem;
+  font-size: 1rem;
+  color: black;
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: 2px 2px 5px black;
 }
 
 .component-price-attribute {
