@@ -32,7 +32,7 @@ label.component-title-label {
 }
 
 .component-title-selector {
-  width: 15rem;
+  width: 20rem;
   height: 2rem;
   font-size: 1rem;
   color: black;
@@ -43,7 +43,7 @@ label.component-title-label {
 }
 
 .component-title-attribute {
-  width: 15rem;
+  width: 10rem;
   height: 2rem;
   font-size: 1rem;
   color: black;
@@ -54,7 +54,7 @@ label.component-title-label {
 }
 
 .component-title-auxiliary {
-  width: 15rem;
+  width: 10rem;
   height: 2rem;
   font-size: 1rem;
   color: black;
@@ -71,7 +71,7 @@ label.component-image-label {
 }
 
 .component-image-selector {
-  width: 15rem;
+  width: 20rem;
   height: 2rem;
   font-size: 1rem;
   color: black;
@@ -82,7 +82,7 @@ label.component-image-label {
 }
 
 .component-image-attribute {
-  width: 15rem;
+  width: 10rem;
   height: 2rem;
   font-size: 1rem;
   color: black;
@@ -93,7 +93,7 @@ label.component-image-label {
 }
 
 .component-image-auxiliary {
-  width: 15rem;
+  width: 10rem;
   height: 2rem;
   font-size: 1rem;
   color: black;
@@ -110,7 +110,7 @@ label.component-price-label {
 }
 
 .component-price-selector {
-  width: 15rem;
+  width: 20rem;
   height: 2rem;
   font-size: 1rem;
   color: black;
@@ -121,7 +121,7 @@ label.component-price-label {
 }
 
 .component-price-attribute {
-  width: 15rem;
+  width: 10rem;
   height: 2rem;
   font-size: 1rem;
   color: black;
@@ -132,7 +132,7 @@ label.component-price-label {
 }
 
 .component-price-auxiliary {
-  width: 15rem;
+  width: 10rem;
   height: 2rem;
   font-size: 1rem;
   color: black;
