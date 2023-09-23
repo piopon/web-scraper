@@ -136,6 +136,7 @@ label.component-price-label {
   height: 2rem;
   font-size: 1rem;
   color: black;
+  text-align: center;
   background-color: white;
   border-radius: 5px;
   border: 1px solid black;
