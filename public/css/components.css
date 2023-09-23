@@ -93,6 +93,7 @@ label.component-image-label {
 }
 
 .component-image-auxiliary {
+  cursor: pointer;
   width: 10rem;
   height: 2rem;
   font-size: 1rem;
@@ -101,6 +102,11 @@ label.component-image-label {
   border-radius: 5px;
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
+}
+
+.component-image-auxiliary:hover {
+  color: white;
+  background-color: slateblue;
 }
 
 label.component-price-label {
@@ -132,6 +138,7 @@ label.component-price-label {
 }
 
 .component-price-auxiliary {
+  cursor: pointer;
   width: 10rem;
   height: 2rem;
   font-size: 1rem;
