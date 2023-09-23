@@ -7,6 +7,8 @@
     {{> widget type="text" parent=(append "component-" name) label="attribute" value=component.attribute }}
     {{#if (eq name "price")}}
       {{> widget type="combo" parent=(append "component-" name) label="auxiliary" options="PLN|GBP|USD|EUR" value=component.auxiliary }}
+    {{else if (eq name "image")}}
+      {{> widget type="button" parent=(append "component-" name) label="auxiliary" value=component.auxiliary }}
     {{else}}
       {{> widget type="text" parent=(append "component-" name) label="auxiliary" value=component.auxiliary }}
     {{/if}}
