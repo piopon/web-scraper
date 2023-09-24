@@ -3,6 +3,26 @@
     {{name}}
   </div>
   <div class="component-root-data fill">
+    <div class="cards">
+      <div class="card" active>
+        <div class="card__infos">
+          <h3 class="card__name">title</h3>
+          <p class="card__author">specify selector title</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card__infos">
+          <h3 class="card__name">image</h3>
+          <p class="card__author">specify selector image</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card__infos">
+          <h3 class="card__name">price</h3>
+          <p class="card__author">specify selector price</p>
+        </div>
+      </div>
+    </div>
     {{> widget type="text" parent=(append "component-" name) label="selector" value=component.selector class="fill" }}
     {{> widget type="text" parent=(append "component-" name) label="attribute" value=component.attribute }}
     {{#if (eq name "price")}}

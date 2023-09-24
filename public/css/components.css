@@ -1,3 +1,104 @@
+.cards {
+  --cards-text-color: red;
+  --cards-closed-size: 3rem;
+  --animation-speed-normal: .5s;
+  --animation-speed-fast: .25s;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  font-family: sans-serif;
+}
+
+.card {
+  width: 10rem;
+  overflow: hidden;
+  background-color: pink;
+  border-radius: 1rem;
+  position: relative;
+  z-index: 1;
+  transition: all var(--animation-speed-normal) ease-in-out;
+  cursor: pointer;
+}
+
+.card:hover {
+  filter: brightness(.875) saturate(100%);
+}
+
+.card__infos {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  height: var(--cards-closed-size);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: .125rem;
+  width: 100%;
+  padding: .25rem 1rem;
+}
+
+.card__name {
+  margin: 0;
+  color: var(--cards-text-color);
+  transform: translateY(.65rem);
+  transition: all var(--animation-speed-normal) ease-in-out;
+  font-size: 1.5rem;
+}
+
+.card[active] .card__name {
+  transform: translateY(0);
+}
+
+.card__author {
+  margin: 0;
+  color: var(--cards-text-color);
+  text-decoration: none;
+  transform: translateY(.65rem);
+  opacity: 0;
+  transition:
+    opacity var(--animation-speed-fast) ease-in-out,
+    transform var(--animation-speed-normal) ease-in-out;
+}
+
+.card[active] .card__author {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.card[active] .card__author:hover {
+  opacity: .75;
+}
+
+@media screen and (min-width: 640px) {
+  .cards {
+    max-width: 640px;
+    margin: 0 auto;
+    flex-direction: row;
+  }
+
+  .card {
+    width: var(--cards-closed-size);
+    height: 20rem;
+    flex: 0 0 var(--cards-closed-size);
+  }
+
+  .card[active] {
+    width: 100%;
+    height: 20rem;
+    flex: 0 0 calc(640px - 19rem);
+  }
+
+  .card__name {
+    transform: rotate(-90deg) translate(1rem, -2.25rem);
+  }
+}
+
+/* ------------------------------------------------------ */
+
 div.component-content {
   display: flex;
   flex-direction: column;
