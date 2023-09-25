@@ -9,24 +9,9 @@
           {{> widget type="combo" parent="observer" label="history" options="off|onChange|on" value=observer.history }}
         </div>
         <div class="cards">
-          <div class="card" active>
-            <h3 class="card__name">title</h3>
-            <p class="card__author">
-              {{> component name="title" component=observer.title }}
-            </p>
-          </div>
-          <div class="card">
-            <h3 class="card__name">image</h3>
-            <p class="card__author">
-              {{> component name="image" component=observer.image }}
-            </p>
-          </div>
-          <div class="card">
-            <h3 class="card__name">price</h3>
-            <p class="card__author">
-              {{> component name="price" component=observer.price }}
-            </p>
-          </div>
+          {{> component name="title" component=observer.title activate=true }}
+          {{> component name="image" component=observer.image }}
+          {{> component name="price" component=observer.price }}
         </div>
         <div class="observer-buttons">
           {{#if (eq observer undefined)}}
