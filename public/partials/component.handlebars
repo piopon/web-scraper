@@ -1,6 +1,6 @@
 <div class="component-content">
-  <div class="component-root-data fill">
-    {{> widget type="text" parent=(append "component-" name) label="selector" value=component.selector class="fill" }}
+  <div class="component-root-data">
+    {{> widget type="text" parent=(append "component-" name) label="selector" value=component.selector }}
     {{> widget type="text" parent=(append "component-" name) label="attribute" value=component.attribute }}
     {{#if (eq name "price")}}
       {{> widget type="combo" parent=(append "component-" name) label="auxiliary" options="PLN|GBP|USD|EUR" value=component.auxiliary }}
