@@ -1,14 +1,9 @@
 .cards {
-  --cards-text-color: red;
   --cards-closed-size: 3rem;
   --animation-speed-normal: .5s;
   --animation-speed-fast: .25s;
-
   display: flex;
-  flex-direction: column;
   gap: 0.5rem;
-  width: 100%;
-  font-family: sans-serif;
 }
 
 .card {
