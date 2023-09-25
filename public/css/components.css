@@ -7,11 +7,8 @@
 }
 
 .card {
-  width: 10rem;
-  overflow: hidden;
-  background-color: pink;
-  border-radius: 1rem;
-  position: relative;
+  background-color: lightgrey;
+  border-radius: 0.5rem;
   z-index: 1;
   transition: all var(--animation-speed-normal) ease-in-out;
   cursor: pointer;
@@ -66,12 +63,9 @@
 /* ------------------------------------------------------ */
 
 div.component-content {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  justify-content: center;
-  align-items: flex-start;
   color: black;
+  width: 100%;
+  height: 100%;
 }
 
 div.component-name {
@@ -84,10 +78,6 @@ div.component-name {
 }
 
 div.component-root-data {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
   width: 100%;
   margin: 0rem;
 }
