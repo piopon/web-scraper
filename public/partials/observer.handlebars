@@ -8,9 +8,32 @@
           {{> widget type="combo" parent="observer" label="target" options="load|domcontentloaded|networkidle0|networkidle2" value=observer.target }}
           {{> widget type="combo" parent="observer" label="history" options="off|onChange|on" value=observer.history }}
         </div>
-        {{> component name="title" component=observer.title }}
-        {{> component name="image" component=observer.image }}
-        {{> component name="price" component=observer.price }}
+        <div class="cards">
+          <div class="card" active>
+            <div class="card__infos">
+              <h3 class="card__name">title</h3>
+              <p class="card__author">
+                {{> component name="title" component=observer.title }}
+              </p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card__infos">
+              <h3 class="card__name">image</h3>
+              <p class="card__author">
+                {{> component name="image" component=observer.image }}
+              </p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card__infos">
+              <h3 class="card__name">price</h3>
+              <p class="card__author">
+                {{> component name="price" component=observer.price }}
+              </p>
+            </div>
+          </div>
+        </div>
         <div class="observer-buttons">
           {{#if (eq observer undefined)}}
             <div class="modal-close-btn accept" onclick="addObserver('{{parent.name}}')">ok</div>
