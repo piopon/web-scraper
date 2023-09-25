@@ -1,7 +1,5 @@
 .cards {
-  --cards-closed-size: 3rem;
-  --animation-speed-normal: 0.5s;
-  --animation-speed-fast: 0.25s;
+  --animation-speed: 0.5s;
   display: flex;
   gap: 0.5rem;
 }
@@ -10,11 +8,15 @@
   background-color: lightgrey;
   border-radius: 0.5rem;
   z-index: 1;
-  transition: all var(--animation-speed-normal) ease-in-out;
+  transition: all var(--animation-speed) ease-in-out;
   cursor: pointer;
-  width: var(--cards-closed-size);
+  width: 3rem;
   height: 20rem;
-  flex: 0 0 var(--cards-closed-size);
+  flex: 0 0 3rem;
+}
+
+.card[active] {
+  flex: 0 0 25rem;
 }
 
 .card:hover {
@@ -23,7 +25,7 @@
 
 .card-title {
   margin: 0;
-  transition: all var(--animation-speed-normal) ease-in-out;
+  transition: all var(--animation-speed) ease-in-out;
   transform: rotate(-90deg) translate(-1rem, 0rem);
   font-size: 1.5rem;
 }
@@ -38,11 +40,7 @@
   text-decoration: none;
   transform: translateY(0.65rem);
   opacity: 0;
-  transition: opacity var(--animation-speed-fast) ease-in-out, transform var(--animation-speed-normal) ease-in-out;
-}
-
-.card[active] {
-  flex: 0 0 25rem;
+  transition: opacity var(--animation-speed) ease-in-out, transform var(--animation-speed) ease-in-out;
 }
 
 .card[active] .card__author {
