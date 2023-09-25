@@ -1,7 +1,7 @@
 .cards {
   --cards-closed-size: 3rem;
-  --animation-speed-normal: .5s;
-  --animation-speed-fast: .25s;
+  --animation-speed-normal: 0.5s;
+  --animation-speed-fast: 0.25s;
   display: flex;
   gap: 0.5rem;
 }
@@ -15,14 +15,13 @@
   z-index: 1;
   transition: all var(--animation-speed-normal) ease-in-out;
   cursor: pointer;
-
   width: var(--cards-closed-size);
   height: 20rem;
   flex: 0 0 var(--cards-closed-size);
 }
 
 .card:hover {
-  filter: brightness(.875) saturate(100%);
+  filter: brightness(0.875) saturate(100%);
 }
 
 .card__infos {
@@ -46,11 +45,9 @@
   margin: 0;
   color: var(--cards-text-color);
   text-decoration: none;
-  transform: translateY(.65rem);
+  transform: translateY(0.65rem);
   opacity: 0;
-  transition:
-    opacity var(--animation-speed-fast) ease-in-out,
-    transform var(--animation-speed-normal) ease-in-out;
+  transition: opacity var(--animation-speed-fast) ease-in-out, transform var(--animation-speed-normal) ease-in-out;
 }
 
 .card[active] {
@@ -63,7 +60,7 @@
 }
 
 .card[active] .card__author:hover {
-  opacity: .75;
+  opacity: 0.75;
 }
 
 /* ------------------------------------------------------ */

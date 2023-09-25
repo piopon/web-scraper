@@ -67,7 +67,7 @@ div.modal-button {
 }
 
 div.modal-button.new-observer {
-  width: 1.5rem
+  width: 1.5rem;
 }
 
 div.modal-button:hover {
