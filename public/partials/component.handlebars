@@ -1,22 +1,20 @@
 <div class="card" {{#if activate}}active{{/if}}>
-<h3 class="card-title">{{name}}</h3>
-<p class="card__author">
-<div class="component-content">
-  <div class="component-root-data">
-    {{> widget type="text" parent=(append "component-" name) label="selector" value=component.selector }}
-    {{> widget type="text" parent=(append "component-" name) label="attribute" value=component.attribute }}
-    {{#if (eq name "price")}}
-      {{> widget type="combo" parent=(append "component-" name) label="auxiliary" options="PLN|GBP|USD|EUR" value=component.auxiliary }}
-    {{else if (eq name "image")}}
-      {{#if (equalsLength component.auxiliary 0)}}
-        {{> widget type="button" parent=(append "component-" name) label="auxiliary" value="Select image" }}
+  <h3 class="card-title">{{name}}</h3>
+  <div class="component-content">
+    <div class="component-root-data">
+      {{> widget type="text" parent=(append "component-" name) label="selector" value=component.selector }}
+      {{> widget type="text" parent=(append "component-" name) label="attribute" value=component.attribute }}
+      {{#if (eq name "price")}}
+        {{> widget type="combo" parent=(append "component-" name) label="auxiliary" options="PLN|GBP|USD|EUR" value=component.auxiliary }}
+      {{else if (eq name "image")}}
+        {{#if (equalsLength component.auxiliary 0)}}
+          {{> widget type="button" parent=(append "component-" name) label="auxiliary" value="Select image" }}
+        {{else}}
+          {{> widget type="button" parent=(append "component-" name) label="auxiliary" value=component.auxiliary }}
+        {{/if}}
       {{else}}
-        {{> widget type="button" parent=(append "component-" name) label="auxiliary" value=component.auxiliary }}
+        {{> widget type="text" parent=(append "component-" name) label="auxiliary" value=component.auxiliary }}
       {{/if}}
-    {{else}}
-      {{> widget type="text" parent=(append "component-" name) label="auxiliary" value=component.auxiliary }}
-    {{/if}}
+    </div>
   </div>
-</div>
-</p>
 </div>
