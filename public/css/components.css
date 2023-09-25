@@ -21,14 +21,14 @@
   filter: brightness(0.875) saturate(100%);
 }
 
-.card__name {
+.card-title {
   margin: 0;
   transition: all var(--animation-speed-normal) ease-in-out;
   transform: rotate(-90deg) translate(-1rem, 0rem);
   font-size: 1.5rem;
 }
 
-.card[active] .card__name {
+.card[active] .card-title {
   transform: translateY(0);
 }
 
