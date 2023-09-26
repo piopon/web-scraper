@@ -20,7 +20,7 @@ div.component-cards {
 }
 
 .card[active] {
-  flex: 0 0 calc(100% - 2*3rem - 5*0.5rem);
+  flex: 0 0 calc(100% - 2*3rem - 2.8rem);
   background-color: darkgray;
 }
 
@@ -31,15 +31,14 @@ div.component-cards {
 .card-title {
   margin: 0;
   transition: all var(--animation-speed) ease-in-out;
-  transform: rotate(-90deg) translate(-1rem, 0rem);
-  font-size: 1.5rem;
+  transform: rotate(-90deg) translate(-2rem, 0rem);
+  font-size: 1.8rem;
 }
 
 .card[active] .card-title {
+  font-size: 1.5rem;
   transform: translateY(0);
 }
-
-/* ------------------------------------------------------ */
 
 div.component-content {
   transform: translateY(2rem);
@@ -50,6 +49,7 @@ div.component-content {
 .card[active] div.component-content {
   transform: translateY(0);
   opacity: 1;
+  border-top: 1px solid black;
 }
 
 div.component-name {
