@@ -6,7 +6,7 @@ div.component-cards {
   color: black;
 }
 
-.card {
+div.component-card {
   background-color: silver;
   border-radius: 0.25rem;
   border: 1px solid black;
@@ -19,12 +19,12 @@ div.component-cards {
   flex: 0 0 3rem;
 }
 
-.card[active] {
+div.component-card[active] {
   flex: 0 0 calc(100% - 2*3rem - 2.8rem);
   background-color: darkgray;
 }
 
-.card:hover {
+div.component-card:hover {
   background-color: darkgray;
 }
 
@@ -35,7 +35,7 @@ div.component-cards {
   font-size: 1.8rem;
 }
 
-.card[active] .card-title {
+div.component-card[active] .card-title {
   font-size: 1.5rem;
   transform: translateY(0);
 }
@@ -46,7 +46,7 @@ div.component-content {
   transition: opacity var(--animation-speed) ease-in-out, transform var(--animation-speed) ease-in-out;
 }
 
-.card[active] div.component-content {
+div.component-card[active] div.component-content {
   transform: translateY(0);
   opacity: 1;
   border-top: 1px solid black;

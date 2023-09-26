@@ -1,5 +1,5 @@
 export const ComponentsController = function () {
-  const cards = document.querySelectorAll(".card");
+  const cards = document.querySelectorAll(".component-card");
 
   const bindListeners = function () {
     cards.forEach((card) => {
