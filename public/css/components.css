@@ -3,11 +3,13 @@ div.component-cards {
   display: flex;
   padding: 0rem 0.5rem;
   gap: 0.5rem;
+  color: black;
 }
 
 .card {
-  background-color: lightgrey;
-  border-radius: 0.5rem;
+  background-color: silver;
+  border-radius: 0.25rem;
+  border: 1px solid black;
   z-index: 1;
   transition: all var(--animation-speed) ease-in-out;
   cursor: pointer;
@@ -19,10 +21,11 @@ div.component-cards {
 
 .card[active] {
   flex: 0 0 calc(100% - 2*3rem - 5*0.5rem);
+  background-color: darkgray;
 }
 
 .card:hover {
-  filter: brightness(0.875) saturate(100%);
+  background-color: darkgray;
 }
 
 .card-title {
