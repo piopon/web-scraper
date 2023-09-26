@@ -1,24 +1,25 @@
 export const ComponentsController = function () {
-  const cards = document.querySelectorAll(".component-card");
+  const componentCards = document.querySelectorAll(".component-card");
 
   const bindListeners = function () {
-    cards.forEach((card) => {
+    componentCards.forEach((card) => {
       card.addEventListener("click", () => {
         if (!card.hasAttribute("active")) {
-          updateActiveCard(card);
+          updateObserverCards(card);
         }
       });
     });
 
-    function updateActiveCard(activeCard) {
-      cards.forEach((card) => {
+    const updateObserverCards = function (activeCard) {
+      const observerCards = activeCard.parentNode.querySelectorAll(".component-card");
+      observerCards.forEach((card) => {
         if (card === activeCard) {
           card.setAttribute("active", "");
         } else {
           card.removeAttribute("active");
         }
       });
-    }
+    };
   };
 
   return { initialize: bindListeners };
