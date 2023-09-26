@@ -1,4 +1,4 @@
-.cards {
+div.component-cards {
   --animation-speed: 0.5s;
   display: flex;
   gap: 0.5rem;
