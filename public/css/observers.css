@@ -7,7 +7,6 @@ div.observer-content {
 
 div.observer-root-data {
   display: flex;
-  width: 100%;
   color: black;
   background: silver;
   border: 1px solid black;
