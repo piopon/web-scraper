@@ -1,5 +1,5 @@
 <div class="component-card" {{#if activate}}active{{/if}}>
-  <h3 class="card-title">{{name}}</h3>
+  <h3 class="card-title">{{name}} config</h3>
   <div class="component-content">
     {{> widget type="text" parent=(append "component-" name) label="selector" value=component.selector }}
     {{> widget type="text" parent=(append "component-" name) label="attribute" value=component.attribute }}

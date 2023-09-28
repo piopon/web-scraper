@@ -33,6 +33,9 @@ div.component-card:hover {
   transition: all var(--animation-speed) ease-in-out;
   transform: rotate(-90deg) translate(-2rem, 0rem);
   font-size: 1.8rem;
+  white-space: nowrap;
+  display: flex;
+  justify-content: flex-end;
 }
 
 div.component-card[active] .card-title {
