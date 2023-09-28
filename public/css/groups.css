@@ -21,7 +21,7 @@ div.modal-dialog div.modal-background {
   display: flex;
   justify-content: center;
   width: 100%;
-  padding: 2.5rem;
+  padding: 1.5rem;
   z-index: 5;
 }
 
