@@ -3,6 +3,7 @@
     <div class="modal-background">
       <div class="modal-content">
         <div class="observer-root-data">
+          {{> widget type="text" parent="observer" label="name" value=observer.name }}
           {{> widget type="text" parent="observer" label="path" value=observer.path }}
           {{> widget type="text" parent="observer" label="container" value=observer.container }}
           {{> widget type="combo" parent="observer" label="target" options="load|domcontentloaded|networkidle0|networkidle2" value=observer.target }}
