@@ -9,6 +9,10 @@ div.observer-root-data {
   display: flex;
   width: 100%;
   color: black;
+  background: silver;
+  border: 1px solid black;
+  border-radius: 0.25rem;
+  margin: 0rem 0rem 0.5rem 0rem;
 }
 
 label.observer-label {
