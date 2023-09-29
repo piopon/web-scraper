@@ -12,8 +12,8 @@ div.observer-root-data {
   background: darkgray;
   border: 1px solid black;
   border-radius: 0.25rem;
-  margin: 0rem 0rem 0.5rem 0rem;
-  padding: 0.1rem 0.25rem;
+  margin: 0rem 0rem 0.75rem 0rem;
+  padding: 0.5rem 0.25rem;
 }
 
 h3.observer-data-title {
