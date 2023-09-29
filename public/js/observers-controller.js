@@ -1,3 +1,5 @@
+import { ObserversService } from "./observers-service.js";
+
 export const ObserversController = function () {
   const observerButtons = document.querySelectorAll("div.modal-button");
   const modalAcceptButtons = document.querySelectorAll("div.modal-close-btn.accept");
@@ -16,6 +18,7 @@ export const ObserversController = function () {
    * @param {String} path The path identifier of the observer to update
    */
   const updateObserver = function (path) {
+    ObserversService.updateObserver(path);
     console.log(`UPDATE OBSERVER: ${path}`);
   };
 

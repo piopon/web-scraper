@@ -1,7 +1,8 @@
 export class ObserversService {
-  updateObserver(observerId, newObserver) {
-    fetch(`localhost:5000/api/v1/configs/groups/observers?path=${observerId}`)
-      .then((response) => console.log(response))
+  static updateObserver(observerId) {
+    fetch(`api/v1/configs/groups`)
+      .then((response) => response.json())
+      .then((data) => console.log(data))
       .catch((error) => console.log(error));
   }
 }
