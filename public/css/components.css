@@ -15,6 +15,7 @@ div.component-card {
   width: 3rem;
   padding: 0.25rem;
   flex: 0 0 3rem;
+  overflow: hidden;
 }
 
 div.component-card[active] {
