@@ -32,7 +32,7 @@ div.component-card:hover {
   transition: all 0.5s ease-in-out;
   transform: rotate(-90deg) translate(-0.5rem, -2.75rem);
   transform-origin: top right;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   white-space: nowrap;
   display: flex;
   justify-content: flex-end;
