@@ -13,11 +13,10 @@ export const ObserversController = function () {
 
   /**
    * Method used to handle specified observer update
-   * @param {String} group The observer parent group name
    * @param {String} path The path identifier of the observer to update
    */
-  const updateObserver = function (group, path) {
-    console.log(`UPDATE OBSERVER: ${path} IN GROUP: ${group}`);
+  const updateObserver = function (path) {
+    console.log(`UPDATE OBSERVER: ${path}`);
   };
 
   /**
