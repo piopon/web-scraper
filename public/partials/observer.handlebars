@@ -3,11 +3,16 @@
     <div class="modal-background">
       <div class="modal-content">
         <div class="observer-root-data">
-          {{> widget type="text" parent="observer" label="name" value=observer.name }}
-          {{> widget type="text" parent="observer" label="path" value=observer.path }}
-          {{> widget type="text" parent="observer" label="container" value=observer.container }}
-          {{> widget type="combo" parent="observer" label="target" options="load|domcontentloaded|networkidle0|networkidle2" value=observer.target }}
-          {{> widget type="combo" parent="observer" label="history" options="off|onChange|on" value=observer.history }}
+          <h3 class="observer-data-title">base config</h3>
+          <div class="observer-data-row1">
+            {{> widget type="text" parent="observer" label="name" value=observer.name }}
+            {{> widget type="text" parent="observer" label="path" value=observer.path }}
+            {{> widget type="text" parent="observer" label="container" value=observer.container }}
+          </div>
+          <div class="observer-data-row2">
+            {{> widget type="combo" parent="observer" label="target" options="load|domcontentloaded|networkidle0|networkidle2" value=observer.target }}
+            {{> widget type="combo" parent="observer" label="history" options="off|onChange|on" value=observer.history }}
+          </div>
         </div>
         <div class="component-cards">
           {{> component name="title" component=observer.title activate=true }}
