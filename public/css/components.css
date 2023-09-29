@@ -21,6 +21,7 @@ div.component-card {
 div.component-card[active] {
   flex: 0 0 calc(100% - 2*3rem - 3.3rem);
   background-color: darkgray;
+  cursor: default;
 }
 
 div.component-card:hover {
