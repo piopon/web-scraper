@@ -1,9 +1,11 @@
 export class ObserversService {
-  static updateObserver(observerId) {
-    fetch(`api/v1/configs/groups/observers?path=${observerId}`, this.#createSetRequestOptions("PUT"))
-      .then((response) => response.text())
-      .then((data) => console.log(data))
-      .catch((error) => console.log(error));
+  static async updateObserver(observerId) {
+    const url = `api/v1/configs/groups/observers?path=${observerId}`;
+    const response = await fetch(url, this.#createSetRequestOptions("PUT"));
+    if (response.status === 200) {
+      return response.text();
+    }
+    throw new Error(`Cannot update observer ${observerId}`);
   }
 
   static #createObserver() {

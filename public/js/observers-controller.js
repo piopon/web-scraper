@@ -18,8 +18,9 @@ export const ObserversController = function () {
    * @param {String} path The path identifier of the observer to update
    */
   const updateObserver = function (path) {
-    ObserversService.updateObserver(path);
-    console.log(`UPDATE OBSERVER: ${path}`);
+    ObserversService.updateObserver(path)
+      .then((data) => console.log(data))
+      .catch((error) => console.error(error));
   };
 
   /**
