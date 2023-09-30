@@ -13,7 +13,7 @@ div.modal-dialog.in {
   transform: scale(1);
 }
 
-div.modal-dialog.out {
+div.modal-dialog.hidden {
   animation: quickScaleDown 0s 0.5s linear forwards;
 }
 
@@ -29,7 +29,7 @@ div.modal-dialog.in div.modal-background {
   animation: fadeIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
 
-div.modal-dialog.out div.modal-background {
+div.modal-dialog.hidden div.modal-background {
   animation: fadeOut 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
 
@@ -48,7 +48,7 @@ div.modal-dialog.in div.modal-content {
   animation: scaleUp 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
 
-div.modal-dialog.out div.modal-content {
+div.modal-dialog.hidden div.modal-content {
   animation: scaleDown 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
 
@@ -79,7 +79,7 @@ div.modal-dialog.in + div.modal-button {
   animation: scaleBack 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
 
-div.modal-dialog.out + div.modal-button {
+div.modal-dialog.hidden + div.modal-button {
   animation: scaleForward 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
 

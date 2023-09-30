@@ -31,20 +31,20 @@ export const ObserversController = function () {
     observerButtons.forEach((button) => {
       button.addEventListener("click", function (event) {
         const observerDialog = this.parentNode.querySelector("div.modal-dialog");
-        observerDialog.classList.remove("out");
+        observerDialog.classList.remove("hidden");
         observerDialog.classList.add("in");
         event.stopPropagation();
       });
     });
     modalAcceptButtons.forEach((button) => {
       button.addEventListener("click", function (event) {
-        this.parentNode.parentNode.parentNode.parentNode.classList.add("out");
+        this.parentNode.parentNode.parentNode.parentNode.classList.add("hidden");
         event.stopPropagation();
       });
     });
     modalCancelButtons.forEach((button) => {
       button.addEventListener("click", function (event) {
-        this.parentNode.parentNode.parentNode.parentNode.classList.add("out");
+        this.parentNode.parentNode.parentNode.parentNode.classList.add("hidden");
         event.stopPropagation();
       });
     });
