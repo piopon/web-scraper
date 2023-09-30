@@ -40,7 +40,7 @@ export class ObserversService {
     return {
       method: method,
       headers: { "Content-Type": "application/json" },
-      body: this.#createObserver(),
+      body: JSON.stringify(this.#createObserver()),
     };
   }
 }
