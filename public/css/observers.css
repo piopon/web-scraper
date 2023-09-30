@@ -52,6 +52,12 @@ label.observer-label {
   box-shadow: 2px 2px 5px black;
 }
 
+.observer-name:disabled {
+  background-color: #e5e5e5;
+  border-color: #787878;
+  color: #646464;
+}
+
 .observer-path {
   width: 100%;
   height: 2rem;

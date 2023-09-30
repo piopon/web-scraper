@@ -5,7 +5,11 @@
         <div class="observer-root-data">
           <h3 class="observer-data-title">base config</h3>
           <div class="observer-data-row1">
-            {{> widget type="text" parent="observer" label="name" value=observer.name classes=" fill" }}
+            {{#if (eq observer undefined)}}
+              {{> widget type="text" parent="observer" label="name" value=observer.name classes=" fill" }}
+            {{else}}
+              {{> widget type="text" parent="observer" label="name" value=observer.name classes=" fill" disable=true }}
+            {{/if}}
             {{> widget type="combo" parent="observer" label="target" options="load|domcontentloaded|networkidle0|networkidle2" value=observer.target }}
             {{> widget type="combo" parent="observer" label="history" options="off|onChange|on" value=observer.history }}
           </div>
