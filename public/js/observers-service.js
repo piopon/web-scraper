@@ -9,7 +9,31 @@ export class ObserversService {
   }
 
   static #createObserver() {
-    return {};
+    const editedObserver = document.querySelector("div.modal-dialog.in:not(.hidden)");
+    return {
+      path: editedObserver.querySelector("input.observer-path").value,
+      target: editedObserver.querySelector("select.observer-target").value,
+      history: editedObserver.querySelector("select.observer-history").value,
+      container: editedObserver.querySelector("input.observer-container").value,
+      title: {
+        interval: "",
+        selector: editedObserver.querySelector("input.component-title-selector").value,
+        attribute: editedObserver.querySelector("input.component-title-attribute").value,
+        auxiliary: editedObserver.querySelector("input.component-title-auxiliary").value,
+      },
+      image: {
+        interval: "",
+        selector: editedObserver.querySelector("input.component-image-selector").value,
+        attribute: editedObserver.querySelector("input.component-image-attribute").value,
+        auxiliary: editedObserver.querySelector("input.component-image-auxiliary").value,
+      },
+      price: {
+        interval: "",
+        selector: editedObserver.querySelector("input.component-price-selector").value,
+        attribute: editedObserver.querySelector("input.component-price-attribute").value,
+        auxiliary: editedObserver.querySelector("select.component-price-auxiliary").value,
+      },
+    };
   }
 
   static #createSetRequestOptions(method) {
