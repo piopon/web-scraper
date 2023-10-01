@@ -47,7 +47,7 @@ export class ScrapGroup {
       checkResult.errors.push("Missing required group domain");
     }
     if (this.observers.length < 1) {
-      checkResult.errors.push("At least one observer is needed");
+      checkResult.warnings.push("Add at least one observer to make things work properly");
     }
     for (let observerNo = 0; observerNo < this.observers.length; observerNo++) {
       const observerCheckResult = this.observers[observerNo].checkValues();
@@ -75,7 +75,7 @@ export class ScrapGroup {
         name: { type: "string", minLength: 1 },
         category: { type: "string", minLength: 1 },
         domain: { type: "string", minLength: 1 },
-        observers: { type: "array", items: ScrapObserver.getSchema(), minItems: 1 },
+        observers: { type: "array", items: ScrapObserver.getSchema() },
       },
       required: ["domain", "observers"],
     };
