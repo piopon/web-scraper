@@ -115,7 +115,7 @@ export class ConfigRouter {
         response,
         (configContent) => configContent.flatMap((item) => item.groups).flatMap((item) => item.observers),
         (parent) => {
-          return parent.findIndex((item) => (request.query.path ? item.path === request.query.path : false));
+          return parent.findIndex((item) => (request.query.name ? item.name === request.query.name : false));
         }
       );
     });
@@ -168,7 +168,7 @@ export class ConfigRouter {
     });
     router.delete("/groups/observers", (request, response) => {
       this.#handleDeleteRequest(request, response, (configContent) => {
-        const details = this.#getParentDetails(configContent, { observerPath: request.query.path });
+        const details = this.#getParentDetails(configContent, { observerName: request.query.name });
         if (details) {
           return details.parent.length > 1
             ? { found: { parent: details.parent, index: details.index }, reason: undefined }
@@ -306,7 +306,7 @@ export class ConfigRouter {
    * @param {Object} object The searched object identifier for which we want to get parent details
    * @returns parent of the searched object and the index of the object in parent
    */
-  #getParentDetails(fullConfig, { configUser = undefined, groupDomain = undefined, observerPath = undefined }) {
+  #getParentDetails(fullConfig, { configUser = undefined, groupDomain = undefined, observerName = undefined }) {
     for (let configIndex = 0; configIndex < fullConfig.length; configIndex++) {
       const currentConfig = fullConfig[configIndex];
       if (configUser && configUser === currentConfig.user) {
@@ -319,7 +319,7 @@ export class ConfigRouter {
         }
         for (let observerIndex = 0; observerIndex < currentGroup.observers.length; observerIndex++) {
           const currentObserver = currentGroup.observers[observerIndex];
-          if (observerPath && observerPath === currentObserver.path) {
+          if (observerName && observerName === currentObserver.name) {
             return { parent: currentGroup.observers, index: observerIndex };
           }
         }
