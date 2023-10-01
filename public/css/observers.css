@@ -102,7 +102,7 @@ label.observer-label {
   box-shadow: 2px 2px 5px black;
 }
 
-div.id::before {
+div.id::after {
   position: absolute;
   bottom: 0.1rem;
   right: 0.6rem;
@@ -110,4 +110,21 @@ div.id::before {
   color: orange;
   font-family: FontAwesome;
   font-size: 1.5rem;
+}
+
+div.id::before {
+  content: "This is an identifier! It cannot be changed after adding observer.";
+  position: absolute;
+  bottom: 0.55rem;
+  right: 2.5rem;
+  left: 0.5rem;
+  display: none;
+  text-align: center;
+  background-color: orange;
+  color: white;
+  border-radius: 0.25rem;
+}
+
+div.id:hover:before {
+  display: block;
 }
