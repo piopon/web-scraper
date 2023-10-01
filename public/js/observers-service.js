@@ -1,4 +1,9 @@
 export class ObserversService {
+  /**
+   * Method used to update observer with the specified identifier
+   * @param {String} observerId The identifier of the observer to be updated
+   * @returns promise containing the response text or error
+   */
   static async updateObserver(observerId) {
     const url = `api/v1/configs/groups/observers?path=${observerId}`;
     const response = await fetch(url, this.#createSetRequestOptions("PUT"));
@@ -8,6 +13,10 @@ export class ObserversService {
     throw new Error(`Cannot update observer ${observerId}`);
   }
 
+  /**
+   * Method used to create an observer objest from values of the HTML elements
+   * @returns observer object with values from current HTML elements
+   */
   static #createObserver() {
     const editedObserver = document.querySelector("div.modal-dialog.in:not(.hidden)");
     return {
@@ -36,6 +45,11 @@ export class ObserversService {
     };
   }
 
+  /**
+   * Method used to create request options
+   * @param {String} method The HTTP method of the request (one of set methods: POST, PUT)
+   * @returns request options object
+   */
   static #createSetRequestOptions(method) {
     return {
       method: method,
