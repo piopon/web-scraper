@@ -101,3 +101,13 @@ label.observer-label {
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
 }
+
+div.id::before {
+  position: absolute;
+  bottom: 0.1rem;
+  right: 0.6rem;
+  content: '\f071';
+  color: orange;
+  font-family: FontAwesome;
+  font-size: 1.5rem;
+}

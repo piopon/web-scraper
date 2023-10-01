@@ -6,7 +6,7 @@
           <h3 class="observer-data-title">base config</h3>
           <div class="observer-data-row1">
             {{#if (eq observer undefined)}}
-              {{> widget type="text" parent="observer" label="name" value=observer.name classes=" fill" }}
+              {{> widget type="text" parent="observer" label="name" value=observer.name classes=" fill id" }}
             {{else}}
               {{> widget type="text" parent="observer" label="name" value=observer.name classes=" fill" disable=true }}
             {{/if}}
