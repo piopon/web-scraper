@@ -199,23 +199,23 @@ div.modal-close-btn {
 div.group-root-data {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
   justify-content: center;
-  width: 100%;
-  margin: 2.5rem 0rem 0rem 0rem;
+  width: 40rem;
+  margin: 2.5rem auto 0rem auto;
 }
 
 div.group-observers {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 0.5rem 0rem 0rem 0rem;
+  width: 40rem;
+  margin: 0.5rem auto 0rem auto;
 }
 
 div.observers-title {
   display: flex;
   flex-direction: column;
-  width: 41rem;
+  width: 100%;
 }
 
 div.observers-container {
@@ -223,7 +223,7 @@ div.observers-container {
   flex-direction: row;
   flex-wrap: wrap;
   gap: 0.5rem;
-  width: 41rem;
+  width: 100%;
   height: 100%;
 }
 
