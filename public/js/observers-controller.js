@@ -32,7 +32,7 @@ export const ObserversController = function () {
       button.addEventListener("click", function (event) {
         const observerDialog = this.parentNode.querySelector("div.modal-dialog");
         observerDialog.classList.remove("hidden");
-        observerDialog.classList.add("in");
+        observerDialog.classList.add("init-reveal");
         event.stopPropagation();
       });
     });

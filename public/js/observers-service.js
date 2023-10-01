@@ -18,7 +18,7 @@ export class ObserversService {
    * @returns observer object with values from current HTML elements
    */
   static #createObserver() {
-    const editedObserver = document.querySelector("div.modal-dialog.in:not(.hidden)");
+    const editedObserver = document.querySelector("div.modal-dialog.init-reveal:not(.hidden)");
     return {
       path: editedObserver.querySelector("input.observer-path").value,
       target: editedObserver.querySelector("select.observer-target").value,
