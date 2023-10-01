@@ -1,8 +1,5 @@
 div.observer-content {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 12rem;
+  min-width: 12rem;
 }
 
 div.observer-root-data {

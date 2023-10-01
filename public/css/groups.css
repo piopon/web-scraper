@@ -54,9 +54,7 @@ div.modal-dialog.hidden div.modal-content {
 
 div.modal-button {
   cursor: pointer;
-  width: 100%;
   padding: 5px 10px;
-  margin: 0rem 0.5rem 0rem 0rem;
   text-align: center;
   font-size: 1rem;
   color: black;
@@ -224,6 +222,7 @@ div.observers-container {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  gap: 0.5rem;
   width: 41rem;
   height: 100%;
 }
