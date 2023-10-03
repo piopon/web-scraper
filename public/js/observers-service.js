@@ -20,6 +20,7 @@ export class ObserversService {
   static #createObserver() {
     const editedObserver = document.querySelector("div.modal-dialog.init-reveal:not(.hidden)");
     return {
+      name: editedObserver.querySelector("input.observer-name").value,
       path: editedObserver.querySelector("input.observer-path").value,
       target: editedObserver.querySelector("select.observer-target").value,
       history: editedObserver.querySelector("select.observer-history").value,
