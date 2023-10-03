@@ -27,7 +27,7 @@
           {{#if (eq observer undefined)}}
             <div class="modal-close-btn accept" onclick="addObserver('{{parent.name}}')">ok</div>
           {{else}}
-            <div class="modal-close-btn accept" onclick="updateObserver('{{observer.path}}')">ok</div>
+            <div class="modal-close-btn accept" onclick="updateObserver('{{observer.name}}')">ok</div>
           {{/if}}
           <div class="modal-close-btn cancel">cancel</div>
         </div>

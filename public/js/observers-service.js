@@ -1,16 +1,16 @@
 export class ObserversService {
   /**
-   * Method used to update observer with the specified identifier
-   * @param {String} observerId The identifier of the observer to be updated
+   * Method used to update observer with the specified name
+   * @param {String} observerName The name of the observer to be updated
    * @returns promise containing the response text or error
    */
-  static async updateObserver(observerId) {
-    const url = `api/v1/configs/groups/observers?path=${observerId}`;
+  static async updateObserver(observerName) {
+    const url = `api/v1/configs/groups/observers?name=${observerName}`;
     const response = await fetch(url, this.#createSetRequestOptions("PUT"));
     if (response.status === 200) {
       return response.text();
     }
-    throw new Error(`Cannot update observer ${observerId}`);
+    throw new Error(`Cannot update observer ${observerName}`);
   }
 
   /**
