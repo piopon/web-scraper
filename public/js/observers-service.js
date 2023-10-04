@@ -1,5 +1,19 @@
 export class ObserversService {
   /**
+   * Method used to add new observer to the specified parent
+   * @param {String} parentId The identifier of the observer parent
+   * @returns promise containing the response text or error
+   */
+  static async addObserver(parentId) {
+    const url = `api/v1/configs/groups/observers?parent=${parentId}`;
+    const response = await fetch(url, this.#createSetRequestOptions("POST"));
+    if (response.status === 200) {
+      return response.text();
+    }
+    throw new Error(`Cannot add observer to ${parentId}`);
+  }
+
+  /**
    * Method used to update observer with the specified name
    * @param {String} observerName The name of the observer to be updated
    * @returns promise containing the response text or error
