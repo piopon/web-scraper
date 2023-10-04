@@ -10,7 +10,9 @@ export const ObserversController = function () {
    * @param {String} group The observer parent group name
    */
   const addObserver = function (group) {
-    console.log(`ADD OBSERVER TO GROUP: ${group}`);
+    ObserversService.addObserver(group)
+      .then((data) => console.log(data))
+      .catch((error) => console.error(error));
   };
 
   /**
