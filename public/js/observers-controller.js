@@ -11,7 +11,7 @@ export const ObserversController = function () {
    */
   const reloadObservers = function (parentGroupId) {
     console.log("Reload observers");
-  }
+  };
 
   /**
    * Method used to handle new observer addition
@@ -37,7 +37,7 @@ export const ObserversController = function () {
     ObserversService.updateObserver(editedObserverId)
       .then((data) => {
         observerDialog.classList.add("hidden");
-        console.log(data)
+        console.log(data);
       })
       .catch((error) => console.error(error));
   };
@@ -60,11 +60,11 @@ export const ObserversController = function () {
         const observerDialog = this.parentNode.parentNode.parentNode.parentNode;
         const selectedAction = this.dataset.action;
         if (selectedAction === "add") {
-          addObserver(observerDialog, this.dataset.id)
+          addObserver(observerDialog, this.dataset.id);
         } else if (selectedAction === "update") {
-          updateObserver(observerDialog, this.dataset.id)
+          updateObserver(observerDialog, this.dataset.id);
         } else {
-          console.error(`Unsupported accept button action: ${selectedAction}`)
+          console.error(`Unsupported accept button action: ${selectedAction}`);
         }
         event.stopPropagation();
       });
