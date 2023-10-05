@@ -6,12 +6,21 @@ export const ObserversController = function () {
   const modalCancelButtons = document.querySelectorAll("div.modal-close-btn.cancel");
 
   /**
+   * Method used to reload observers for the specified parent group
+   * @param {String} group The observers parent group name
+   */
+  const reloadObservers = function (group) {
+    console.log("Reload observers");
+  }
+
+  /**
    * Method used to handle new observer addition
    * @param {String} group The observer parent group name
    */
   const addObserver = function (observer, group) {
     ObserversService.addObserver(group)
       .then((data) => {
+        reloadObservers(group);
         observer.parentNode.parentNode.parentNode.parentNode.classList.add("hidden");
         console.log(data);
       })
