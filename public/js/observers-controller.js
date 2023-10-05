@@ -60,6 +60,8 @@ export const ObserversController = function () {
           addObserver(this, this.dataset.id)
         } else if (selectedAction === "update") {
           updateObserver(this, this.dataset.id)
+        } else {
+          console.error(`Unsupported accept button action: ${selectedAction}`)
         }
         event.stopPropagation();
       });
