@@ -5,7 +5,8 @@ export class ObserversService {
    * @returns promise containing the response text or error
    */
   static async addObserver(parentId) {
-    const url = `api/v1/configs/groups/observers?parent=${parentId}`;
+    const encodedParentId = encodeURIComponent(parentId);
+    const url = `api/v1/configs/groups/observers?parent=${encodedParentId}`;
     const response = await fetch(url, this.#createSetRequestOptions("POST"));
     if (response.status === 200) {
       return response.text();
@@ -19,7 +20,8 @@ export class ObserversService {
    * @returns promise containing the response text or error
    */
   static async updateObserver(observerName) {
-    const url = `api/v1/configs/groups/observers?name=${observerName}`;
+    const encodedObserverId = encodeURIComponent(observerName);
+    const url = `api/v1/configs/groups/observers?name=${encodedObserverId}`;
     const response = await fetch(url, this.#createSetRequestOptions("PUT"));
     if (response.status === 200) {
       return response.text();
