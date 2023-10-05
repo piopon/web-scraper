@@ -1,12 +1,12 @@
 export class ObserversService {
   /**
    * Method used to add new observer to the specified parent
-   * @param {String} parentId The identifier of the observer parent
-   * @returns promise containing the response text or error
+   * @param {String} parentId The identifier of the parent to which we want to add new observer
+   * @returns promise containing the operation response text or error
    */
   static async addObserver(parentId) {
-    const encodedParentId = encodeURIComponent(parentId);
-    const url = `api/v1/configs/groups/observers?parent=${encodedParentId}`;
+    const encodedId = encodeURIComponent(parentId);
+    const url = `api/v1/configs/groups/observers?parent=${encodedId}`;
     const response = await fetch(url, this.#createSetRequestOptions("POST"));
     if (response.status === 200) {
       return response.text();
@@ -16,17 +16,17 @@ export class ObserversService {
 
   /**
    * Method used to update observer with the specified name
-   * @param {String} observerName The name of the observer to be updated
-   * @returns promise containing the response text or error
+   * @param {String} observerId The identifier of the observer to be updated
+   * @returns promise containing the operation response text or error
    */
-  static async updateObserver(observerName) {
-    const encodedObserverId = encodeURIComponent(observerName);
-    const url = `api/v1/configs/groups/observers?name=${encodedObserverId}`;
+  static async updateObserver(observerId) {
+    const encodedId = encodeURIComponent(observerId);
+    const url = `api/v1/configs/groups/observers?name=${encodedId}`;
     const response = await fetch(url, this.#createSetRequestOptions("PUT"));
     if (response.status === 200) {
       return response.text();
     }
-    throw new Error(`Cannot update observer ${observerName}`);
+    throw new Error(`Cannot update observer ${observerId}`);
   }
 
   /**
