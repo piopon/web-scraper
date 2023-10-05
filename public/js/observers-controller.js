@@ -9,7 +9,7 @@ export const ObserversController = function () {
    * Method used to reload observers for the specified parent group
    * @param {String} group The observers parent group name
    */
-  const reloadObservers = function (group) {
+  const reloadObservers = function (parentGroupId) {
     console.log("Reload observers");
   }
 
@@ -17,11 +17,11 @@ export const ObserversController = function () {
    * Method used to handle new observer addition
    * @param {String} group The observer parent group name
    */
-  const addObserver = function (observer, group) {
-    ObserversService.addObserver(group)
+  const addObserver = function (observerDialog, parentGroupId) {
+    ObserversService.addObserver(parentGroupId)
       .then((data) => {
-        reloadObservers(group);
-        observer.parentNode.parentNode.parentNode.parentNode.classList.add("hidden");
+        reloadObservers(parentGroupId);
+        observerDialog.classList.add("hidden");
         console.log(data);
       })
       .catch((error) => console.error(error));
@@ -31,10 +31,10 @@ export const ObserversController = function () {
    * Method used to handle specified observer update
    * @param {String} path The path identifier of the observer to update
    */
-  const updateObserver = function (observer, path) {
-    ObserversService.updateObserver(path)
+  const updateObserver = function (observerDialog, editedObserverId) {
+    ObserversService.updateObserver(editedObserverId)
       .then((data) => {
-        observer.parentNode.parentNode.parentNode.parentNode.classList.add("hidden");
+        observerDialog.classList.add("hidden");
         console.log(data)
       })
       .catch((error) => console.error(error));
@@ -55,11 +55,12 @@ export const ObserversController = function () {
     });
     modalAcceptButtons.forEach((button) => {
       button.addEventListener("click", function (event) {
+        const observerDialog = this.parentNode.parentNode.parentNode.parentNode;
         const selectedAction = this.dataset.action;
         if (selectedAction === "add") {
-          addObserver(this, this.dataset.id)
+          addObserver(observerDialog, this.dataset.id)
         } else if (selectedAction === "update") {
-          updateObserver(this, this.dataset.id)
+          updateObserver(observerDialog, this.dataset.id)
         } else {
           console.error(`Unsupported accept button action: ${selectedAction}`)
         }
