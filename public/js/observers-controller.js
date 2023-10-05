@@ -58,5 +58,5 @@ export const ObserversController = function () {
     });
   };
 
-  return { initialize: bindListeners, add: addObserver, update: updateObserver };
+  return { initialize: bindListeners };
 };

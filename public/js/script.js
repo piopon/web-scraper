@@ -9,6 +9,3 @@ const groupsController = GroupsController();
 componentsController.initialize();
 observersController.initialize();
 groupsController.initialize();
-
-window.addObserver = observersController.add;
-window.updateObserver = observersController.update;
