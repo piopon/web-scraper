@@ -9,9 +9,12 @@ export const ObserversController = function () {
    * Method used to handle new observer addition
    * @param {String} group The observer parent group name
    */
-  const addObserver = function (group) {
+  const addObserver = function (observer, group) {
     ObserversService.addObserver(group)
-      .then((data) => console.log(data))
+      .then((data) => {
+        observer.parentNode.parentNode.parentNode.parentNode.classList.add("hidden");
+        console.log(data);
+      })
       .catch((error) => console.error(error));
   };
 
@@ -19,9 +22,12 @@ export const ObserversController = function () {
    * Method used to handle specified observer update
    * @param {String} path The path identifier of the observer to update
    */
-  const updateObserver = function (path) {
+  const updateObserver = function (observer, path) {
     ObserversService.updateObserver(path)
-      .then((data) => console.log(data))
+      .then((data) => {
+        observer.parentNode.parentNode.parentNode.parentNode.classList.add("hidden");
+        console.log(data)
+      })
       .catch((error) => console.error(error));
   };
 
@@ -42,11 +48,10 @@ export const ObserversController = function () {
       button.addEventListener("click", function (event) {
         const selectedAction = this.dataset.action;
         if (selectedAction === "add") {
-          addObserver(this.dataset.id)
+          addObserver(this, this.dataset.id)
         } else if (selectedAction === "update") {
-          updateObserver(this.dataset.id)
+          updateObserver(this, this.dataset.id)
         }
-        this.parentNode.parentNode.parentNode.parentNode.classList.add("hidden");
         event.stopPropagation();
       });
     });
