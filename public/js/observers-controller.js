@@ -40,6 +40,12 @@ export const ObserversController = function () {
     });
     modalAcceptButtons.forEach((button) => {
       button.addEventListener("click", function (event) {
+        const selectedAction = this.dataset.action;
+        if (selectedAction === "add") {
+          addObserver(this.dataset.id)
+        } else if (selectedAction === "update") {
+          updateObserver(this.dataset.id)
+        }
         this.parentNode.parentNode.parentNode.parentNode.classList.add("hidden");
         event.stopPropagation();
       });
