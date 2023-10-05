@@ -7,7 +7,7 @@ export const ObserversController = function () {
 
   /**
    * Method used to reload observers for the specified parent group
-   * @param {String} group The observers parent group name
+   * @param {String} parentGroupId The observers parent group identifier
    */
   const reloadObservers = function (parentGroupId) {
     console.log("Reload observers");
@@ -15,7 +15,8 @@ export const ObserversController = function () {
 
   /**
    * Method used to handle new observer addition
-   * @param {String} group The observer parent group name
+   * @param {Element} observerDialog The observer modal dialog element
+   * @param {String} parentGroup The observer parent group name
    */
   const addObserver = function (observerDialog, parentGroupId) {
     ObserversService.addObserver(parentGroupId)
@@ -29,7 +30,8 @@ export const ObserversController = function () {
 
   /**
    * Method used to handle specified observer update
-   * @param {String} path The path identifier of the observer to update
+   * @param {Element} observerDialog The observer modal dialog element
+   * @param {String} editedObserverId The identifier of the observer to be edited
    */
   const updateObserver = function (observerDialog, editedObserverId) {
     ObserversService.updateObserver(editedObserverId)
