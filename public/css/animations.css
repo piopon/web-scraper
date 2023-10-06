@@ -30,6 +30,10 @@
   animation-delay: 0.1s;
 }
 
+.shake {
+  animation: shake 500ms ease-out;
+}
+
 @keyframes slide-from-top {
   0% {
     transform: translate3d(0, -100%, 0);
@@ -99,5 +103,41 @@
   }
   100% {
     transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  5% {
+    transform: translateX(-4px);
+  }
+  15% {
+    transform: translateX(4px);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  35% {
+    transform: translateX(4px);
+  }
+  45% {
+    transform: translateX(-4px);
+  }
+  55% {
+    transform: translateX(4px);
+  }
+  65% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(3px);
+  }
+  85% {
+    transform: translateX(-3px);
+  }
+  100% {
+    transform: translateX(0);
   }
 }
