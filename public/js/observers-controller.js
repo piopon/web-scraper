@@ -25,7 +25,11 @@ export const ObserversController = function () {
         observerDialog.classList.add("hidden");
         console.log(data);
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        observerDialog.classList.add("shake");
+        setTimeout(() => observerDialog.classList.remove("shake"), 500);
+        console.error(error);
+      });
   };
 
   /**
@@ -39,7 +43,11 @@ export const ObserversController = function () {
         observerDialog.classList.add("hidden");
         console.log(data);
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        observerDialog.classList.add("shake");
+        setTimeout(() => observerDialog.classList.remove("shake"), 500);
+        console.error(error)
+      });
   };
 
   /**
