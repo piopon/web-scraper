@@ -140,7 +140,7 @@ export class ConfigRouter {
       this.#handlePostRequest(request, response, (configContent) => {
         const parentGroup = configContent
           .flatMap((config) => config.groups)
-          .filter((group) => group.domain === request.query.parent);
+          .filter((group) => group.name === request.query.parent);
         return parentGroup.length > 0 ? parentGroup.at(0).observers : undefined;
       });
     });
