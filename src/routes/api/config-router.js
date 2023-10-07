@@ -106,7 +106,7 @@ export class ConfigRouter {
         response,
         (configContent) => configContent.flatMap((item) => item.groups),
         (parent) => {
-          return parent.findIndex((item) => (request.query.domain ? item.domain === request.query.domain : false));
+          return parent.findIndex((item) => (request.query.name ? item.name === request.query.name : false));
         }
       );
     });
@@ -161,7 +161,7 @@ export class ConfigRouter {
     });
     router.delete("/groups", (request, response) => {
       this.#handleDeleteRequest(request, response, (configContent) => {
-        const details = this.#getParentDetails(configContent, { groupDomain: request.query.domain });
+        const details = this.#getParentDetails(configContent, { groupName: request.query.name });
         return details
           ? { found: { parent: details.parent, index: details.index }, reason: undefined }
           : { found: undefined, reason: "could not find item to delete" };
@@ -307,7 +307,7 @@ export class ConfigRouter {
    * @param {Object} object The searched object identifier for which we want to get parent details
    * @returns parent of the searched object and the index of the object in parent
    */
-  #getParentDetails(fullConfig, { configUser = undefined, groupDomain = undefined, observerName = undefined }) {
+  #getParentDetails(fullConfig, { configUser = undefined, groupName = undefined, observerName = undefined }) {
     for (let configIndex = 0; configIndex < fullConfig.length; configIndex++) {
       const currentConfig = fullConfig[configIndex];
       if (configUser && configUser === currentConfig.user) {
@@ -315,7 +315,7 @@ export class ConfigRouter {
       }
       for (let groupIndex = 0; groupIndex < currentConfig.groups.length; groupIndex++) {
         const currentGroup = currentConfig.groups[groupIndex];
-        if (groupDomain && groupDomain === currentGroup.domain) {
+        if (groupName && groupName === currentGroup.name) {
           return { parent: currentConfig.groups, index: groupIndex };
         }
         for (let observerIndex = 0; observerIndex < currentGroup.observers.length; observerIndex++) {
