@@ -1,26 +1,46 @@
 <article class="group-column">
   <div class="group-container">
-    <h2 class="group-title">{{group.name}}</h2>
-    <div class="group-content">
-      <div class="group-root-data">
-        {{> widget type="text" parent="group" label="name" value=group.name }}
-        {{> widget type="text" parent="group" label="domain" value=group.domain }}
-        {{> widget type="button" parent="group" label="category" value=group.category }}
-      </div>
-      <div class="group-observers">
-        <div class="observers-title">
-          <label class="group-label">observers:</label>
+    {{#if (eq group undefined)}}
+      <h2 class="group-title">NEW</h2>
+      <div class="group-content">
+        <div class="group-root-data">
+          {{> widget type="text" parent="group" label="name" }}
+          {{> widget type="text" parent="group" label="domain" }}
+          {{> widget type="button" parent="group" label="category" }}
         </div>
-        <div class="observers-container">
-          {{!-- show currently existing observers --}}
-          {{#each observers}}
-            {{> observer parent=../group observer=this }}
-          {{/each}}
-          {{!-- display add new observer button --}}
-          {{> observer parent=group }}
+        <div class="group-observers">
+          <div class="observers-title">
+            <label class="group-label">observers:</label>
+          </div>
+          <div class="observers-container">
+            {{> observer parent=group }}
+          </div>
         </div>
+        <i class="fa fa-close group-column-close"></i>
       </div>
-      <i class="fa fa-close group-column-close"></i>
-    </div>
+    {{else}}
+      <h2 class="group-title">{{group.name}}</h2>
+      <div class="group-content">
+        <div class="group-root-data">
+          {{> widget type="text" parent="group" label="name" value=group.name }}
+          {{> widget type="text" parent="group" label="domain" value=group.domain }}
+          {{> widget type="button" parent="group" label="category" value=group.category }}
+        </div>
+        <div class="group-observers">
+          <div class="observers-title">
+            <label class="group-label">observers:</label>
+          </div>
+          <div class="observers-container">
+            {{!-- show currently existing observers --}}
+            {{#each observers}}
+              {{> observer parent=../group observer=this }}
+            {{/each}}
+            {{!-- display add new observer button --}}
+            {{> observer parent=group }}
+          </div>
+        </div>
+        <i class="fa fa-close group-column-close"></i>
+      </div>
+    {{/if}}
   </div>
 </article>
