@@ -61,7 +61,7 @@ header#content-header {
   display: flex;
   align-items: center;
   padding-left: 1rem;
-  background-image: linear-gradient(slateblue 5%, mediumslateblue);
+  background-image: linear-gradient(slateblue 15%, mediumslateblue);
 }
 
 header#content-header h3 {
