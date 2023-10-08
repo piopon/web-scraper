@@ -1,6 +1,6 @@
 <article class="group-column">
   {{#if (eq group undefined)}}
-    <div class="group-container-new">
+    <div class="group-container" data-action="add">
       <h2 class="group-title">+</h2>
       <div class="group-content">
         <div class="group-root-data">
@@ -20,7 +20,7 @@
       </div>
     </div>
   {{else}}
-    <div class="group-container">
+    <div class="group-container" data-action="update">
       <h2 class="group-title">{{group.name}}</h2>
       <div class="group-content">
         <div class="group-root-data">
