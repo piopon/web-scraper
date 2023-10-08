@@ -59,12 +59,19 @@ export const GroupsController = function () {
    */
   const initStyle = function () {
     groupColumns.forEach((column) => {
-      // get color from array and then remove it so no duplicates are selected (in next iterations)
-      const selectedColor = getRandom(colors, true);
-      column.classList.add("background-" + selectedColor);
-      column.querySelector(".group-title").classList.add("background-" + selectedColor);
-      // get animation from array (duplicates are allowed in this case)
-      column.classList.add(getRandom(animations, false));
+      if ("update" === column.dataset.action) {
+        // get color from array and then remove it so no duplicates are selected (in next iterations)
+        const selectedColor = getRandom(colors, true);
+        column.classList.add("background-" + selectedColor);
+        column.querySelector(".group-title").classList.add("background-" + selectedColor);
+        // get animation from array (duplicates are allowed in this case)
+        column.classList.add(getRandom(animations, false));
+      } else {
+        // new group column should always appear from right and have gray background
+        column.classList.add("background-violet");
+        column.querySelector(".group-title").classList.add("background-violet");
+        column.classList.add("column-from-right");
+      }
     });
   };
 
