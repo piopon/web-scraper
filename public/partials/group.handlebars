@@ -1,7 +1,7 @@
 <article class="group-column">
-  <div class="group-container">
-    {{#if (eq group undefined)}}
-      <h2 class="group-title">NEW</h2>
+  {{#if (eq group undefined)}}
+    <div class="group-container-new">
+      <h2 class="group-title">+</h2>
       <div class="group-content">
         <div class="group-root-data">
           {{> widget type="text" parent="group" label="name" }}
@@ -18,7 +18,9 @@
         </div>
         <i class="fa fa-close group-column-close"></i>
       </div>
-    {{else}}
+    </div>
+  {{else}}
+    <div class="group-container">
       <h2 class="group-title">{{group.name}}</h2>
       <div class="group-content">
         <div class="group-root-data">
@@ -41,6 +43,6 @@
         </div>
         <i class="fa fa-close group-column-close"></i>
       </div>
-    {{/if}}
-  </div>
+    </div>
+  {{/if}}
 </article>
