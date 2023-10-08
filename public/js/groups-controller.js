@@ -73,8 +73,7 @@ export const GroupsController = function () {
    * @param {Object} column The column which dimensions should be configured
    */
   const setDimension = function (column) {
-    const columnAction = column.dataset.action;
-    if ("update" === columnAction) {
+    if ("update" === column.dataset.action) {
       const columnWidth = (100 - NEW_GROUP_COLUMN_WIDTH) / (groupColumns.length - 1);
       const columnIndex = Array.from(groupColumns).indexOf(column);
       column.parentNode.style.width = `${columnWidth}%`;
