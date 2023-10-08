@@ -1,0 +1,26 @@
+<article class="group-column">
+  <div class="group-container" data-action="update">
+    <h2 class="group-title">{{group.name}}</h2>
+    <div class="group-content">
+      <div class="group-root-data">
+        {{> widget type="text" parent="group" label="name" value=group.name }}
+        {{> widget type="text" parent="group" label="domain" value=group.domain }}
+        {{> widget type="button" parent="group" label="category" value=group.category }}
+      </div>
+      <div class="group-observers">
+        <div class="observers-title">
+          <label class="group-label">observers:</label>
+        </div>
+        <div class="observers-container">
+          {{!-- show currently existing observers --}}
+          {{#each observers}}
+            {{> observer parent=../group observer=this }}
+          {{/each}}
+          {{!-- display add new observer button --}}
+          {{> observer parent=group }}
+        </div>
+      </div>
+      <i class="fa fa-close group-column-close"></i>
+    </div>
+  </div>
+</article>

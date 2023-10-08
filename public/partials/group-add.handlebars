@@ -1,0 +1,22 @@
+<article class="group-column">
+  <div class="group-container" data-action="add">
+    <h2 class="group-title">+</h2>
+    <div class="group-content">
+      <div class="group-root-data">
+        {{> widget type="text" parent="group" label="name" }}
+        {{> widget type="text" parent="group" label="domain" }}
+        {{> widget type="button" parent="group" label="category" }}
+      </div>
+      <div class="group-observers">
+        <div class="observers-title">
+          <label class="group-label">observers:</label>
+        </div>
+        {{!-- new group will not have any observers --}}
+        <div class="observers-container">
+          {{> observer parent=group }}
+        </div>
+      </div>
+      <i class="fa fa-close group-column-close"></i>
+    </div>
+  </div>
+</article>
