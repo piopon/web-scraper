@@ -1,5 +1,6 @@
 export const GroupsController = function () {
   var groupExpanded = false;
+  const NEW_GROUP_COLUMN_WIDTH = 4;
   const colors = ["navy", "aqua", "green", "orange", "red", "blue", "yellow", "plum"];
   const animations = ["column-from-top", "column-from-right", "column-from-bottom", "column-from-left"];
   const groupColumns = document.querySelectorAll(".group-column > .group-container");
@@ -72,10 +73,16 @@ export const GroupsController = function () {
    * @param {Object} column The column which dimensions should be configured
    */
   const setDimension = function (column) {
-    const columnWidth = 100 / groupColumns.length;
-    const columnIndex = Array.from(groupColumns).indexOf(column);
-    column.parentNode.style.width = `${columnWidth}%`;
-    column.parentNode.style.left = `${columnWidth * columnIndex}vh`;
+    const columnAction = column.dataset.action;
+    if ("update" === columnAction) {
+      const columnWidth = (100 - NEW_GROUP_COLUMN_WIDTH) / (groupColumns.length - 1);
+      const columnIndex = Array.from(groupColumns).indexOf(column);
+      column.parentNode.style.width = `${columnWidth}%`;
+      column.parentNode.style.left = `${columnWidth * columnIndex}vh`;
+    } else {
+      column.parentNode.style.width = `${NEW_GROUP_COLUMN_WIDTH}%`;
+      column.parentNode.style.left = `${100 - NEW_GROUP_COLUMN_WIDTH}vh`;
+    }
   };
 
   /**
