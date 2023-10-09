@@ -11,6 +11,9 @@ export const GroupsController = function () {
    * @param {Object} groupColumn The column which should be expanded
    */
   const expand = function (groupColumn) {
+    if ("add" === groupColumn.dataset.action) {
+      hideHint(groupColumn);
+    }
     if (!groupExpanded) {
       groupColumns.forEach((column) => {
         column.parentNode.classList.add(column === groupColumn ? "expanded" : "collapsed");
