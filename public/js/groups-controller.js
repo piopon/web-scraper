@@ -135,7 +135,7 @@ export const GroupsController = function () {
   const bindListeners = function () {
     groupColumns.forEach((column) => {
       column.addEventListener("click", (event) => {
-        expand(this);
+        expand(column);
         event.stopPropagation();
       });
       column.addEventListener("mouseover", (event) => {
@@ -149,7 +149,7 @@ export const GroupsController = function () {
     });
     groupCloseButtons.forEach((closeButton) => {
       closeButton.addEventListener("click", (event) => {
-        collapse(this);
+        collapse(closeButton);
         event.stopPropagation();
       });
     });
