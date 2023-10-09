@@ -110,6 +110,22 @@ export const GroupsController = function () {
         event.stopPropagation();
       });
     });
+    groupColumns.forEach((column) => {
+      if ("add" === column.dataset.action) {
+        column.addEventListener("mouseover", function (event) {
+          column.parentNode.classList.add("show-hint");
+          column.querySelector("h2").innerHTML = "add group";
+          clearDimension(column);
+          event.stopPropagation();
+        });
+        column.addEventListener("mouseout", function (event) {
+          column.parentNode.classList.remove("show-hint");
+          column.querySelector("h2").innerHTML = "+";
+          setDimension(column);
+          event.stopPropagation();
+        });
+      }
+    });
     groupCloseButtons.forEach((closeButton) => {
       closeButton.addEventListener("click", function (event) {
         collapse(this);
