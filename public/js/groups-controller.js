@@ -37,6 +37,10 @@ export const GroupsController = function () {
     }
   };
 
+  /**
+   * Method used to show column hint (available only for "add" gruop column)
+   * @param {Object} column The column for which we want to show a hint
+   */
   const showHint = function (column) {
     if ("add" !== column.dataset.action) {
       return;
@@ -46,6 +50,10 @@ export const GroupsController = function () {
     clearDimension(column);
   }
 
+  /**
+   * Method used to hide column hint (available only for "add" gruop column)
+   * @param {Object} column The column for which we want to hide a hint
+   */
   const hideHint = function (column) {
     if ("add" !== column.dataset.action) {
       return;
