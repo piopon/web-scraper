@@ -123,23 +123,21 @@ export const GroupsController = function () {
    */
   const bindListeners = function () {
     groupColumns.forEach((column) => {
-      column.addEventListener("click", function (event) {
+      column.addEventListener("click", (event) => {
         expand(this);
         event.stopPropagation();
       });
-    });
-    groupColumns.forEach((column) => {
-      column.addEventListener("mouseover", function (event) {
+      column.addEventListener("mouseover", (event) => {
         showHint(column);
         event.stopPropagation();
       });
-      column.addEventListener("mouseout", function (event) {
+      column.addEventListener("mouseout", (event) => {
         hideHint(column);
         event.stopPropagation();
       });
     });
     groupCloseButtons.forEach((closeButton) => {
-      closeButton.addEventListener("click", function (event) {
+      closeButton.addEventListener("click", (event) => {
         collapse(this);
         event.stopPropagation();
       });
