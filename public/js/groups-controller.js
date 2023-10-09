@@ -37,6 +37,24 @@ export const GroupsController = function () {
     }
   };
 
+  const showHint = function (column) {
+    if ("add" !== column.dataset.action) {
+      return;
+    }
+    column.parentNode.classList.add("show-hint");
+    column.querySelector("h2").innerHTML = "add group";
+    clearDimension(column);
+  }
+
+  const hideHint = function (column) {
+    if ("add" !== column.dataset.action) {
+      return;
+    }
+    column.parentNode.classList.remove("show-hint");
+    column.querySelector("h2").innerHTML = "+";
+    setDimension(column);
+  }
+
   /**
    * Method used to receive random element from provided array
    * @param {Object} array The array from which we want to receive element
@@ -111,20 +129,14 @@ export const GroupsController = function () {
       });
     });
     groupColumns.forEach((column) => {
-      if ("add" === column.dataset.action) {
-        column.addEventListener("mouseover", function (event) {
-          column.parentNode.classList.add("show-hint");
-          column.querySelector("h2").innerHTML = "add group";
-          clearDimension(column);
-          event.stopPropagation();
-        });
-        column.addEventListener("mouseout", function (event) {
-          column.parentNode.classList.remove("show-hint");
-          column.querySelector("h2").innerHTML = "+";
-          setDimension(column);
-          event.stopPropagation();
-        });
-      }
+      column.addEventListener("mouseover", function (event) {
+        showHint(column);
+        event.stopPropagation();
+      });
+      column.addEventListener("mouseout", function (event) {
+        hideHint(column);
+        event.stopPropagation();
+      });
     });
     groupCloseButtons.forEach((closeButton) => {
       closeButton.addEventListener("click", function (event) {
