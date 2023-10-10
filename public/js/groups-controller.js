@@ -49,7 +49,6 @@ export const GroupsController = function () {
       return;
     }
     column.parentNode.classList.add("show-hint");
-    column.querySelector("h2").innerHTML = "add group";
     clearDimension(column);
   };
 
@@ -62,7 +61,6 @@ export const GroupsController = function () {
       return;
     }
     column.parentNode.classList.remove("show-hint");
-    column.querySelector("h2").innerHTML = "+";
     setDimension(column);
   };
 
