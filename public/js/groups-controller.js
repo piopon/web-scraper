@@ -11,10 +11,12 @@ export const GroupsController = function () {
    * @param {Object} groupColumn The column which should be expanded
    */
   const expand = function (groupColumn) {
-    if ("add" === groupColumn.dataset.action) {
-      hideHint(groupColumn);
-    }
     if (!groupExpanded) {
+      // add group column will always display hint when expading - we must remove it
+      if ("add" === groupColumn.dataset.action) {
+        groupColumn.parentNode.classList.remove("show-hint");
+      }
+      // go with regular flow for all columns
       groupColumns.forEach((column) => {
         column.parentNode.classList.add(column === groupColumn ? "expanded" : "collapsed");
         clearDimension(column);
