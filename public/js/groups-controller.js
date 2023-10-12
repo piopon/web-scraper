@@ -57,11 +57,15 @@ export const GroupsController = function () {
    * @param {Object} column The column for which we want to hide a hint
    */
   const hideHint = function (column) {
+    // hint is only available for add group column
     if ("add" !== column.dataset.action) {
       return;
     }
     column.parentNode.classList.remove("show-hint");
-    setDimension(column);
+    // restore dimensions only when new group is NOT expanded
+    if (!column.parentNode.classList.contains("expanded")) {
+      setDimension(column);
+    }
   };
 
   /**
