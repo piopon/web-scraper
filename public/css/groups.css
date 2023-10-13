@@ -214,6 +214,13 @@ div.group-observers {
   margin: 0.5rem auto 0rem auto;
 }
 
+div.group-buttons {
+  display: flex;
+  align-items: center;
+  width: 40rem;
+  margin: 0.5rem auto 2.5rem auto;
+}
+
 div.observers-title {
   display: flex;
   flex-direction: column;
