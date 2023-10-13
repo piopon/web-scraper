@@ -3,7 +3,6 @@
   flex-direction: row;
   height: calc(100% - 2.5rem);
   text-align: center;
-  color: white;
 }
 
 .group-column {

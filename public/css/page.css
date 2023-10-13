@@ -1,5 +1,4 @@
 html {
-  color: black;
   font-size: 20px;
   font-family: "Sedgwick Ave", cursive;
   -webkit-font-smoothing: antialiased;
@@ -61,6 +60,7 @@ header#content-header {
   display: flex;
   align-items: center;
   padding-left: 1rem;
+  color: black;
   background-image: linear-gradient(slateblue 15%, mediumslateblue);
 }
 
@@ -72,6 +72,7 @@ div#main-content {
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
+  color: mediumslateblue;
   background-color: mediumslateblue;
 }
 
@@ -80,6 +81,7 @@ footer#main-footer {
   display: flex;
   justify-content: center;
   align-items: center;
+  color: black;
   background-color: mediumslateblue;
 }
 
