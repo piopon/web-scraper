@@ -47,11 +47,15 @@ export const GroupsController = function () {
    * @param {Object} column The column for which we want to show a hint
    */
   const showHint = function (column) {
+    // hint is only available for add group column
     if ("add" !== column.dataset.action) {
       return;
     }
-    column.parentNode.classList.add("show-hint");
-    clearDimension(column);
+    // show hind and clear dimension only when new group is NOT expanded
+    if (!column.parentNode.classList.contains("expanded")) {
+      column.parentNode.classList.add("show-hint");
+      clearDimension(column);
+    }
   };
 
   /**
