@@ -43,6 +43,14 @@ div.fill {
   width: 100%;
 }
 
+.hide {
+  opacity: 0;
+}
+
+.show {
+  opacity: 1;
+}
+
 header#main-header {
   height: 5rem;
   display: flex;
