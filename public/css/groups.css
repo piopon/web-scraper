@@ -280,3 +280,15 @@ label.group-label {
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
 }
+
+div.group-close-btn {
+  cursor: pointer;
+  width: 50%;
+  padding: 7px 0px;
+  text-align: center;
+  font-size: 1rem;
+  color: black;
+  border: 1px solid black;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px black;
+}
