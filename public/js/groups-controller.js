@@ -5,7 +5,7 @@ export const GroupsController = function () {
   const animations = ["column-from-top", "column-from-right", "column-from-bottom", "column-from-left"];
   const columnsContainer = document.querySelector("section.group-columns");
   const groupColumns = document.querySelectorAll(".group-column > .group-container");
-  const groupCloseButtons = document.querySelectorAll(".group-content > .group-column-close");
+  const groupCloseButtons = document.querySelectorAll(".group-buttons > .group-close-btn");
 
   /**
    * Method used to expand the selected group column to full available width
