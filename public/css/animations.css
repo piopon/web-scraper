@@ -30,6 +30,10 @@
   animation-delay: 0.1s;
 }
 
+.loading {
+  animation: spinning 1s infinite linear;
+}
+
 .shake {
   animation: shake 500ms ease-out;
 }
@@ -139,5 +143,17 @@
   }
   100% {
     transform: translateX(0);
+  }
+}
+
+@keyframes spinning {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes spinning {
+  100% {
+    transform: rotate(360deg);
   }
 }
