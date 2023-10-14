@@ -254,6 +254,12 @@ label.group-label {
   box-shadow: 2px 2px 5px black;
 }
 
+.group-name:disabled {
+  background-color: #e5e5e5;
+  border-color: #787878;
+  color: #646464;
+}
+
 .group-category {
   cursor: pointer;
   width: 4rem;
