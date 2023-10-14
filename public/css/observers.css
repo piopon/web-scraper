@@ -110,7 +110,7 @@ div.id::after {
 }
 
 div.id::before {
-  content: "This is an identifier! It cannot be changed after adding observer.";
+  content: "Immutable identifier!";
   position: absolute;
   bottom: 0.55rem;
   right: 2.5rem;
