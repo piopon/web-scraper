@@ -22,7 +22,6 @@ export const GroupsController = function () {
         column.parentNode.classList.add(column === groupColumn ? "expanded" : "collapsed");
         clearDimension(column);
       });
-      groupColumn.querySelector(".group-column-close").classList.add("show");
       groupExpanded = true;
     }
   };
