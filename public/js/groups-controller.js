@@ -3,6 +3,7 @@ export const GroupsController = function () {
   const NEW_GROUP_COLUMN_WIDTH = 4;
   const colors = ["navy", "aqua", "green", "orange", "red", "blue", "yellow", "plum"];
   const animations = ["column-from-top", "column-from-right", "column-from-bottom", "column-from-left"];
+  const columnsStatus = document.querySelector("section.group-status");
   const columnsContainer = document.querySelector("section.group-columns");
   const groupColumns = document.querySelectorAll(".group-column > .group-container");
   const groupCloseButtons = document.querySelectorAll(".group-buttons > .group-close-btn");
@@ -111,6 +112,8 @@ export const GroupsController = function () {
       }
     });
     // when all styles are ready we can now show columns
+    columnsStatus.classList.remove("show");
+    columnsStatus.classList.add("hide");
     columnsContainer.classList.remove("hide");
     columnsContainer.classList.add("show");
   };
