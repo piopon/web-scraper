@@ -14,7 +14,7 @@ export const ObserversController = function () {
     ObserversService.getObservers(parentGroupId)
       .then((data) => {
         const groupObservers = data[0].observers;
-        ObserversView.getHTML(groupObservers);
+        ObserversView.getHtml(groupObservers);
       })
       .catch((error) => console.error(error));
   };
