@@ -12,7 +12,10 @@ export const ObserversController = function () {
    */
   const reloadObservers = function (parentGroupId) {
     ObserversService.getObservers(parentGroupId)
-      .then((data) => ObserversView.getHTML(data[0].observers))
+      .then((data) => {
+        const groupObservers = data[0].observers;
+        ObserversView.getHTML(groupObservers);
+      })
       .catch((error) => console.error(error));
   };
 
@@ -49,7 +52,7 @@ export const ObserversController = function () {
       .catch((error) => {
         observerDialog.classList.add("shake");
         setTimeout(() => observerDialog.classList.remove("shake"), 500);
-        console.error(error)
+        console.error(error);
       });
   };
 
