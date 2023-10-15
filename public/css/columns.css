@@ -21,6 +21,11 @@
   border-radius: 100%;
 }
 
+.group-status h3 {
+  color: darkslateblue;
+  margin: 0.75rem 0 0 0;
+}
+
 .group-columns {
   display: flex;
   flex-direction: row;
