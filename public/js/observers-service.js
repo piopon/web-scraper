@@ -15,6 +15,21 @@ export class ObserversService {
   }
 
   /**
+   * Method used to get observers from the specified parent
+   * @param {String} parentId The identifier of the parent for which we want get observers
+   * @returns promise containing the operation response JSON or error
+   */
+  static async getObservers(parentId) {
+    const encodedId = encodeURIComponent(parentId);
+    const url = `api/v1/configs/groups?name=${encodedId}`;
+    const response = await fetch(url);
+    if (response.status === 200) {
+      return response.json();
+    }
+    throw new Error(`Cannot get ${parentId} observers`);
+  }
+
+  /**
    * Method used to update observer with the specified name
    * @param {String} observerId The identifier of the observer to be updated
    * @returns promise containing the operation response text or error
