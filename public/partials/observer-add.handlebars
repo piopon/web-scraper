@@ -5,11 +5,7 @@
         <div class="observer-root-data">
           <h3 class="observer-data-title">base config</h3>
           <div class="observer-data-row1">
-            {{#if (eq observer undefined)}}
-              {{> widget type="text" parent="observer" label="name" value=observer.name classes=" fill" id=true }}
-            {{else}}
-              {{> widget type="text" parent="observer" label="name" value=observer.name classes=" fill" disable=true }}
-            {{/if}}
+            {{> widget type="text" parent="observer" label="name" value=observer.name classes=" fill" id=true }}
             {{> widget type="combo" parent="observer" label="target" options="load|domcontentloaded|networkidle0|networkidle2" value=observer.target }}
             {{> widget type="combo" parent="observer" label="history" options="off|onChange|on" value=observer.history }}
           </div>
@@ -24,19 +20,11 @@
           {{> component name="price" component=observer.price }}
         </div>
         <div class="observer-buttons">
-          {{#if (eq observer undefined)}}
-            <div class="modal-close-btn accept" data-action="add" data-id="{{parent.name}}">ok</div>
-          {{else}}
-            <div class="modal-close-btn accept" data-action="update" data-id="{{observer.name}}">ok</div>
-          {{/if}}
+          <div class="modal-close-btn accept" data-action="add" data-id="{{parent.name}}">ok</div>
           <div class="modal-close-btn cancel">cancel</div>
         </div>
       </div>
     </div>
   </div>
-  {{#if (eq observer undefined)}}
-    <div class="modal-button new-observer">+</div>
-  {{else}}
-    <div class="modal-button">{{observer.name}}</div>
-  {{/if}}
+  <div class="modal-button new-observer">+</div>
 </div>
