@@ -78,8 +78,7 @@ header#content-header h3 {
 
 div#main-content {
   height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden;
   color: mediumslateblue;
   background-color: mediumslateblue;
 }
