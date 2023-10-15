@@ -1,4 +1,5 @@
 import { ObserversService } from "./observers-service.js";
+import { ObserversView } from "./observers-view.js";
 
 export const ObserversController = function () {
   const observerButtons = document.querySelectorAll("div.modal-button");
@@ -10,7 +11,9 @@ export const ObserversController = function () {
    * @param {String} parentGroupId The observers parent group identifier
    */
   const reloadObservers = function (parentGroupId) {
-    console.log("Reload observers");
+    ObserversService.getObservers(parentGroupId)
+      .then((data) => ObserversView.getHTML(data[0].observers))
+      .catch((error) => console.error(error));
   };
 
   /**
