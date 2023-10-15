@@ -7,10 +7,12 @@
 
 .group-status.hide {
   height: 0px;
+  transition: height 1.0s;
 }
 
 .group-status.show {
   height: calc(100% - 2.5rem);
+  transition: height 1.0s;
 }
 
 .group-status .group-loader {
@@ -34,10 +36,12 @@
 
 .group-columns.hide {
   height: 0px;
+  transition: height 1.0s;
 }
 
 .group-columns.show {
   height: calc(100% - 2.5rem);
+  transition: height 1.0s;
 }
 
 .group-column {

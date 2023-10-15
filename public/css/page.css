@@ -45,10 +45,12 @@ div.widget {
 
 .hide {
   opacity: 0;
+  transition: opacity 1.0s;
 }
 
 .show {
   opacity: 1;
+  transition: opacity 1.0s;
 }
 
 header#main-header {
