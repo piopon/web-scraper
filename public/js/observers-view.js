@@ -37,6 +37,16 @@ export class ObserversView {
     return `<div class="modal-dialog hidden">
               <div class="modal-background">
                 <div class="modal-content">
+                  <div class="observer-root-data">
+                    <h3 class="observer-data-title">base config</h3>
+                    ${ObserversView.#getObserverRootDataRow1Html(observer)}
+                    ${ObserversView.#getObserverRootDataRow2Html(observer)}
+                  </div>
+                  <div class="component-cards">
+                    ${ObserversView.#getObserverTitleComponentHtml(observer.title)}
+                    ${ObserversView.#getObserverImageComponentHtml(observer.image)}
+                    ${ObserversView.#getObserverPriceComponentHtml(observer.price)}
+                  </div>
                 </div>
               </div>
             </div>`;
