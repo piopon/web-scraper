@@ -4,10 +4,12 @@ export class ObserversView {
    * @param {Array} observers The array of observers which HTML code we want to get
    */
   static getHtml = function (observers) {
+    let result = "";
     observers.forEach((observer) => {
-      ObserversView.#getExistingObserverHtml(observer);
+      result += ObserversView.#getExistingObserverHtml(observer);
     });
-    ObserversView.#getNewObserverHtml();
+    result += ObserversView.#getNewObserverHtml();
+    return result;
   };
 
   /**
