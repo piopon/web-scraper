@@ -42,6 +42,48 @@ export class ObserversView {
             </div>`;
   }
 
+  static #getObserverRootDataRow1Html(observer) {
+    return `<div class="observer-data-row1">
+              <div class="widget fill">
+                <label class="observer-label">name:</label>
+                <div class="id"></div>
+                <input type="text" class="observer-name" name="name" value="${observer.name}" />
+              </div>
+              <div class="widget">
+                <label class="observer-label">target:</label>
+                <select class="observer-target" name="target" required>
+                  <option value="" disabled hidden>Select value</option>
+                  <option value=load ${component.target === "load" ? "selected" : ""}>load</option>
+                  <option value=domcontentloaded ${component.target === "domcontentloaded" ? "selected" : ""}>domcontentloaded</option>
+                  <option value=networkidle0 ${component.target === "networkidle0" ? "selected" : ""}>networkidle0</option>
+                  <option value=networkidle2 ${component.target === "networkidle2" ? "selected" : ""}>networkidle2</option>
+                </select>
+              </div>
+              <div class="widget">
+                <label class="observer-label">history:</label>
+                <select class="observer-history" name="history" required>
+                  <option value="" disabled hidden>Select value</option>
+                  <option value=off ${component.history === "off" ? "selected" : ""}>off</option>
+                  <option value=onChange ${component.history === "onChange" ? "selected" : ""}>onChange</option>
+                  <option value=on ${component.history === "on" ? "selected" : ""}>on</option>
+                </select>
+              </div>
+            </div>`;
+  }
+
+  static #getObserverRootDataRow2Html(observer) {
+    return `<div class="observer-data-row2">
+              <div class="widget fill">
+                <label class="observer-label">path:</label>
+                <input type="text" class="observer-path" name="path" value="${observer.path}" />
+              </div>
+              <div class="widget fill">
+                <label class="observer-label">container:</label>
+                <input type="text" class="observer-container" name="container" value="${observer.container}" />
+              </div>
+            </div>`;
+  }
+
   static #getObserverTitleComponentHtml(component) {
     return `<div class="component-card" active>
               <h3 class="card-title">title config</h3>
