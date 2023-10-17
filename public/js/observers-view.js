@@ -33,6 +33,11 @@ export class ObserversView {
             </div>`;
   }
 
+  /**
+   * Method used to receive HTML code for observer modal dialog
+   * @param {Object} observer The observer which contents will be displayed in modal dialog
+   * @returns HTML code with observer modal dialog
+   */
   static #getObserverModalHtml(observer) {
     return `<div class="modal-dialog hidden">
               <div class="modal-background">
@@ -52,6 +57,11 @@ export class ObserversView {
             </div>`;
   }
 
+  /**
+   * Method used to receive observer root data, first row contents
+   * @param {Object} observer The observer which root data should be received
+   * @returns HTML code with observer root data, first row contents
+   */
   static #getObserverRootDataRow1Html(observer) {
     const name = observer !== undefined ? observer.name : "";
     const target = observer !== undefined ? observer.target : "";
@@ -84,6 +94,11 @@ export class ObserversView {
             </div>`;
   }
 
+  /**
+   * Method used to receive observer root data, second row contents
+   * @param {Object} observer The observer which root data should be received
+   * @returns HTML code with observer root data, second row contents
+   */
   static #getObserverRootDataRow2Html(observer) {
     const path = observer !== undefined ? observer.path : "";
     const container = observer !== undefined ? observer.container : "";
@@ -99,6 +114,11 @@ export class ObserversView {
             </div>`;
   }
 
+  /**
+   * Method used to return observer title component contents
+   * @param {Object} component The title component which data to receive
+   * @returns HTML with observer title component contetns
+   */
   static #getObserverTitleComponentHtml(component) {
     const selector = component !== undefined ? component.selector : "";
     const attribute = component !== undefined ? component.attribute : "";
@@ -122,6 +142,11 @@ export class ObserversView {
             </div>`;
   }
 
+  /**
+   * Method used to return observer image component contents
+   * @param {Object} component The image component which data to receive
+   * @returns HTML with observer image component contetns
+   */
   static #getObserverImageComponentHtml(component) {
     const selector = component !== undefined ? component.selector : "";
     const attribute = component !== undefined ? component.attribute : "";
@@ -145,6 +170,11 @@ export class ObserversView {
             </div>`;
   }
 
+  /**
+   * Method used to return observer price component contents
+   * @param {Object} component The price component which data to receive
+   * @returns HTML with observer price component contetns
+   */
   static #getObserverPriceComponentHtml(component) {
     const selector = component !== undefined ? component.selector : "";
     const attribute = component !== undefined ? component.attribute : "";
