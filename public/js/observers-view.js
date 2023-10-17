@@ -2,6 +2,7 @@ export class ObserversView {
   /**
    * Method used to receive HTML code representing input observers array
    * @param {Array} observers The array of observers which HTML code we want to get
+   * @return HTML code with all observers contents
    */
   static getHtml = function (observers) {
     let result = "";
@@ -15,6 +16,7 @@ export class ObserversView {
   /**
    * Method used to receive HTML code representing observer object
    * @param {Object} observer The observer object which HTML code we want to get
+   * @returns HTML code with existing observer contents
    */
   static #getExistingObserverHtml(observer) {
     return `<div class="observer-content">
@@ -25,6 +27,7 @@ export class ObserversView {
 
   /**
    * Method used to receive HTML code representing new observer UI
+   * @returns HTML code with new observer UI contents
    */
   static #getNewObserverHtml() {
     return `<div class="observer-content">
