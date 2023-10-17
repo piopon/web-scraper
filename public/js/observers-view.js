@@ -4,12 +4,12 @@ export class ObserversView {
    * @param {Array} observers The array of observers which HTML code we want to get
    * @return HTML code with all observers contents
    */
-  static getHtml = function (observers) {
+  static getHtml = function (groupId, observers) {
     let result = "";
     observers.forEach((observer) => {
       result += ObserversView.#getExistingObserverHtml(observer);
     });
-    result += ObserversView.#getNewObserverHtml();
+    result += ObserversView.#getNewObserverHtml(groupId);
     return result;
   };
 
@@ -20,7 +20,7 @@ export class ObserversView {
    */
   static #getExistingObserverHtml(observer) {
     return `<div class="observer-content">
-              ${ObserversView.#getObserverModalHtml(observer)}
+              ${ObserversView.#getObserverModalHtml(observer, undefined)}
               <div class="modal-button">${observer.name}</div>
             </div>`;
   }
@@ -29,9 +29,9 @@ export class ObserversView {
    * Method used to receive HTML code representing new observer UI
    * @returns HTML code with new observer UI contents
    */
-  static #getNewObserverHtml() {
+  static #getNewObserverHtml(groupId) {
     return `<div class="observer-content">
-              ${ObserversView.#getObserverModalHtml(undefined)}
+              ${ObserversView.#getObserverModalHtml(undefined, groupId)}
               <div class="modal-button new-observer">+</div>
             </div>`;
   }
@@ -41,7 +41,8 @@ export class ObserversView {
    * @param {Object} observer The observer which contents will be displayed in modal dialog
    * @returns HTML code with observer modal dialog
    */
-  static #getObserverModalHtml(observer) {
+  static #getObserverModalHtml(observer, groupId) {
+    const dataId = observer !== undefined ? observer.name : groupId;
     const dataAction = observer !== undefined ? "update" : "add";
     const titleComponent = observer !== undefined ? observer.title : undefined;
     const imageComponent = observer !== undefined ? observer.image : undefined;
@@ -60,7 +61,7 @@ export class ObserversView {
                     ${ObserversView.#getObserverPriceComponentHtml(priceComponent)}
                   </div>
                   <div class="observer-buttons">
-                    <div class="modal-close-btn accept" data-action="${dataAction}" data-id="${observer.name}">ok</div>
+                    <div class="modal-close-btn accept" data-action="${dataAction}" data-id="${dataId}">ok</div>
                     <div class="modal-close-btn cancel">cancel</div>
                   </div>
                 </div>

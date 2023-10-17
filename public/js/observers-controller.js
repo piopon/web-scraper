@@ -16,10 +16,11 @@ export class ObserversController {
   #reloadObservers(parentGroupId) {
     ObserversService.getObservers(parentGroupId)
       .then((data) => {
+        const groupId = data[0].name;
         const groupObservers = data[0].observers;
         const expandedGroup = document.querySelector(".group-column.expanded");
         const expandedObservers = expandedGroup.querySelector(".observers-container");
-        expandedObservers.innerHTML = ObserversView.getHtml(groupObservers);
+        expandedObservers.innerHTML = ObserversView.getHtml(groupId, groupObservers);
         this.#bindListeners();
       })
       .catch((error) => console.error(error));
