@@ -1,16 +1,16 @@
 import { ObserversService } from "./observers-service.js";
 import { ObserversView } from "./observers-view.js";
 
-export const ObserversController = function () {
-  const observerButtons = document.querySelectorAll("div.modal-button");
-  const modalAcceptButtons = document.querySelectorAll("div.modal-close-btn.accept");
-  const modalCancelButtons = document.querySelectorAll("div.modal-close-btn.cancel");
+export class ObserversController {
+  #observerButtons = document.querySelectorAll("div.modal-button");
+  #modalAcceptButtons = document.querySelectorAll("div.modal-close-btn.accept");
+  #modalCancelButtons = document.querySelectorAll("div.modal-close-btn.cancel");
 
   /**
    * Method used to reload observers for the specified parent group
    * @param {String} parentGroupId The observers parent group identifier
    */
-  const reloadObservers = function (parentGroupId) {
+  reloadObservers(parentGroupId) {
     ObserversService.getObservers(parentGroupId)
       .then((data) => {
         const groupObservers = data[0].observers;
@@ -26,7 +26,7 @@ export const ObserversController = function () {
    * @param {Element} observerDialog The observer modal dialog element
    * @param {String} parentGroup The observer parent group name
    */
-  const addObserver = function (observerDialog, parentGroupId) {
+  addObserver(observerDialog, parentGroupId) {
     ObserversService.addObserver(parentGroupId)
       .then((data) => {
         reloadObservers(parentGroupId);
@@ -45,7 +45,7 @@ export const ObserversController = function () {
    * @param {Element} observerDialog The observer modal dialog element
    * @param {String} editedObserverId The identifier of the observer to be edited
    */
-  const updateObserver = function (observerDialog, editedObserverId) {
+  updateObserver(observerDialog, editedObserverId) {
     ObserversService.updateObserver(editedObserverId)
       .then((data) => {
         observerDialog.classList.add("hidden");
@@ -62,39 +62,37 @@ export const ObserversController = function () {
    * Method used to bind UI listeners to controller methods.
    * This method handles: observer buttons and modal dialog accept and cancel buttons clicks
    */
-  const bindListeners = function () {
-    observerButtons.forEach((button) => {
-      button.addEventListener("click", function (event) {
-        const button = event.currentTarget;
-        const observerDialog = button.parentNode.querySelector("div.modal-dialog");
+  bindListeners() {
+    this.#observerButtons.forEach((button) => {
+      button.addEventListener("click", (event) => {
+        const target = event.currentTarget;
+        const observerDialog = target.parentNode.querySelector("div.modal-dialog");
         observerDialog.classList.remove("hidden");
         observerDialog.classList.add("init-reveal");
         event.stopPropagation();
       });
     });
-    modalAcceptButtons.forEach((button) => {
-      button.addEventListener("click", function (event) {
-        const button = event.currentTarget;
-        const observerDialog = button.parentNode.parentNode.parentNode.parentNode;
-        const selectedAction = button.dataset.action;
+    this.#modalAcceptButtons.forEach((button) => {
+      button.addEventListener("click", (event) => {
+        const target = event.currentTarget;
+        const observerDialog = target.parentNode.parentNode.parentNode.parentNode;
+        const selectedAction = target.dataset.action;
         if (selectedAction === "add") {
-          addObserver(observerDialog, button.dataset.id);
+          this.addObserver(observerDialog, target.dataset.id);
         } else if (selectedAction === "update") {
-          updateObserver(observerDialog, button.dataset.id);
+          this.updateObserver(observerDialog, target.dataset.id);
         } else {
           console.error(`Unsupported accept button action: ${selectedAction}`);
         }
         event.stopPropagation();
       });
     });
-    modalCancelButtons.forEach((button) => {
-      button.addEventListener("click", function (event) {
-        const button = event.currentTarget;
-        button.parentNode.parentNode.parentNode.parentNode.classList.add("hidden");
+    this.#modalCancelButtons.forEach((button) => {
+      button.addEventListener("click", (event) => {
+        const target = event.currentTarget;
+        target.parentNode.parentNode.parentNode.parentNode.classList.add("hidden");
         event.stopPropagation();
       });
     });
   };
-
-  return { initialize: bindListeners };
 };
