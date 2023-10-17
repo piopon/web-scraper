@@ -59,7 +59,7 @@ export class ObserversView {
     return `<div class="observer-data-row1">
               <div class="widget fill">
                 <label class="observer-label">name:</label>
-                <div class="id"></div>
+                ${observer === undefined ? `<div class="id"></div>` : ""}
                 <input type="text" class="observer-name" name="name" value="${name}" />
               </div>
               <div class="widget">
