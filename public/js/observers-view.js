@@ -1,6 +1,7 @@
 export class ObserversView {
   /**
    * Method used to receive HTML code representing input observers array
+   * @param {String} groupId The observers parent group identifier
    * @param {Array} observers The array of observers which HTML code we want to get
    * @return HTML code with all observers contents
    */
@@ -20,30 +21,30 @@ export class ObserversView {
    */
   static #getExistingObserverHtml(observer) {
     return `<div class="observer-content">
-              ${ObserversView.#getObserverModalHtml(observer, undefined)}
+              ${ObserversView.#getObserverModalHtml(undefined, observer)}
               <div class="modal-button">${observer.name}</div>
             </div>`;
   }
 
   /**
    * Method used to receive HTML code representing new observer UI
+   * @param {String} groupId The observer parent (group) identifier
    * @returns HTML code with new observer UI contents
    */
   static #getNewObserverHtml(groupId) {
     return `<div class="observer-content">
-              ${ObserversView.#getObserverModalHtml(undefined, groupId)}
+              ${ObserversView.#getObserverModalHtml(groupId, undefined)}
               <div class="modal-button new-observer">+</div>
             </div>`;
   }
 
   /**
    * Method used to receive HTML code for observer modal dialog
+   * @param {String} groupId The group identifier as observer parent (used when adding new observer)
    * @param {Object} observer The observer which contents will be displayed in modal dialog
    * @returns HTML code with observer modal dialog
    */
-  static #getObserverModalHtml(observer, groupId) {
-    const dataId = observer !== undefined ? observer.name : groupId;
-    const dataAction = observer !== undefined ? "update" : "add";
+  static #getObserverModalHtml(groupId, observer) {
     const titleComponent = observer !== undefined ? observer.title : undefined;
     const imageComponent = observer !== undefined ? observer.image : undefined;
     const priceComponent = observer !== undefined ? observer.price : undefined;
@@ -61,8 +62,7 @@ export class ObserversView {
                     ${ObserversView.#getObserverPriceComponentHtml(priceComponent)}
                   </div>
                   <div class="observer-buttons">
-                    <div class="modal-close-btn accept" data-action="${dataAction}" data-id="${dataId}">ok</div>
-                    <div class="modal-close-btn cancel">cancel</div>
+                    ${ObserversView.#getObserverModalButtonsHtml(groupId, observer)};
                   </div>
                 </div>
               </div>
@@ -214,5 +214,18 @@ export class ObserversView {
                 </div>
               </div>
             </div>`;
+  }
+
+  /**
+   * Method used to receive observer modal dialog buttons HTML code
+   * @param {String} groupId The observer parent group identifier
+   * @param {Object} observer The observer for which we want to generate buttons code
+   * @returns HTML clode containing modal dialog buttons for specified observer
+   */
+  static #getObserverModalButtonsHtml(groupId, observer) {
+    const dataId = observer !== undefined ? observer.name : groupId;
+    const dataAction = observer !== undefined ? "update" : "add";
+    return `<div class="modal-close-btn accept" data-action="${dataAction}" data-id="${dataId}">ok</div>
+            <div class="modal-close-btn cancel">cancel</div>`;
   }
 }
