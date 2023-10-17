@@ -65,7 +65,8 @@ export const ObserversController = function () {
   const bindListeners = function () {
     observerButtons.forEach((button) => {
       button.addEventListener("click", function (event) {
-        const observerDialog = this.parentNode.querySelector("div.modal-dialog");
+        const button = event.currentTarget;
+        const observerDialog = button.parentNode.querySelector("div.modal-dialog");
         observerDialog.classList.remove("hidden");
         observerDialog.classList.add("init-reveal");
         event.stopPropagation();
@@ -73,12 +74,13 @@ export const ObserversController = function () {
     });
     modalAcceptButtons.forEach((button) => {
       button.addEventListener("click", function (event) {
-        const observerDialog = this.parentNode.parentNode.parentNode.parentNode;
-        const selectedAction = this.dataset.action;
+        const button = event.currentTarget;
+        const observerDialog = button.parentNode.parentNode.parentNode.parentNode;
+        const selectedAction = button.dataset.action;
         if (selectedAction === "add") {
-          addObserver(observerDialog, this.dataset.id);
+          addObserver(observerDialog, button.dataset.id);
         } else if (selectedAction === "update") {
-          updateObserver(observerDialog, this.dataset.id);
+          updateObserver(observerDialog, button.dataset.id);
         } else {
           console.error(`Unsupported accept button action: ${selectedAction}`);
         }
@@ -87,7 +89,8 @@ export const ObserversController = function () {
     });
     modalCancelButtons.forEach((button) => {
       button.addEventListener("click", function (event) {
-        this.parentNode.parentNode.parentNode.parentNode.classList.add("hidden");
+        const button = event.currentTarget;
+        button.parentNode.parentNode.parentNode.parentNode.classList.add("hidden");
         event.stopPropagation();
       });
     });
