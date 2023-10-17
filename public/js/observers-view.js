@@ -42,6 +42,10 @@ export class ObserversView {
    * @returns HTML code with observer modal dialog
    */
   static #getObserverModalHtml(observer) {
+    const dataAction = observer !== undefined ? "update" : "add";
+    const titleComponent = observer !== undefined ? observer.title : undefined;
+    const imageComponent = observer !== undefined ? observer.image : undefined;
+    const priceComponent = observer !== undefined ? observer.price : undefined;
     return `<div class="modal-dialog hidden">
               <div class="modal-background">
                 <div class="modal-content">
@@ -51,9 +55,13 @@ export class ObserversView {
                     ${ObserversView.#getObserverRootDataRow2Html(observer)}
                   </div>
                   <div class="component-cards">
-                    ${ObserversView.#getObserverTitleComponentHtml(observer !== undefined ? observer.title : undefined)}
-                    ${ObserversView.#getObserverImageComponentHtml(observer !== undefined ? observer.image : undefined)}
-                    ${ObserversView.#getObserverPriceComponentHtml(observer !== undefined ? observer.price : undefined)}
+                    ${ObserversView.#getObserverTitleComponentHtml(titleComponent)}
+                    ${ObserversView.#getObserverImageComponentHtml(imageComponent)}
+                    ${ObserversView.#getObserverPriceComponentHtml(priceComponent)}
+                  </div>
+                  <div class="observer-buttons">
+                    <div class="modal-close-btn accept" data-action="${dataAction}" data-id="${observer.name}">ok</div>
+                    <div class="modal-close-btn cancel">cancel</div>
                   </div>
                 </div>
               </div>
