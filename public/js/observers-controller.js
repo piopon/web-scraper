@@ -7,10 +7,17 @@ export class ObserversController {
   #modalCancelButtons = document.querySelectorAll("div.modal-close-btn.cancel");
 
   /**
+   * Creates new observers controller
+   */
+  constructor() {
+    this.#bindListeners();
+  }
+
+  /**
    * Method used to reload observers for the specified parent group
    * @param {String} parentGroupId The observers parent group identifier
    */
-  reloadObservers(parentGroupId) {
+  #reloadObservers(parentGroupId) {
     ObserversService.getObservers(parentGroupId)
       .then((data) => {
         const groupObservers = data[0].observers;
@@ -26,10 +33,10 @@ export class ObserversController {
    * @param {Element} observerDialog The observer modal dialog element
    * @param {String} parentGroup The observer parent group name
    */
-  addObserver(observerDialog, parentGroupId) {
+  #addObserver(observerDialog, parentGroupId) {
     ObserversService.addObserver(parentGroupId)
       .then((data) => {
-        reloadObservers(parentGroupId);
+        this.#reloadObservers(parentGroupId);
         observerDialog.classList.add("hidden");
         console.log(data);
       })
@@ -45,7 +52,7 @@ export class ObserversController {
    * @param {Element} observerDialog The observer modal dialog element
    * @param {String} editedObserverId The identifier of the observer to be edited
    */
-  updateObserver(observerDialog, editedObserverId) {
+  #updateObserver(observerDialog, editedObserverId) {
     ObserversService.updateObserver(editedObserverId)
       .then((data) => {
         observerDialog.classList.add("hidden");
@@ -62,7 +69,7 @@ export class ObserversController {
    * Method used to bind UI listeners to controller methods.
    * This method handles: observer buttons and modal dialog accept and cancel buttons clicks
    */
-  bindListeners() {
+  #bindListeners() {
     this.#observerButtons.forEach((button) => {
       button.addEventListener("click", (event) => {
         const target = event.currentTarget;
@@ -78,9 +85,9 @@ export class ObserversController {
         const observerDialog = target.parentNode.parentNode.parentNode.parentNode;
         const selectedAction = target.dataset.action;
         if (selectedAction === "add") {
-          this.addObserver(observerDialog, target.dataset.id);
+          this.#addObserver(observerDialog, target.dataset.id);
         } else if (selectedAction === "update") {
-          this.updateObserver(observerDialog, target.dataset.id);
+          this.#updateObserver(observerDialog, target.dataset.id);
         } else {
           console.error(`Unsupported accept button action: ${selectedAction}`);
         }
