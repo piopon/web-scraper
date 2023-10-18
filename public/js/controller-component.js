@@ -10,9 +10,9 @@ export class ComponentsController {
    * Method used to update component cards expand/collapse effect
    * @param {Element} activeCard The card which should be expanded (other should be collapsed)
    */
-  #updateObserverCards(activeCard) {
-    const observerCards = activeCard.parentNode.querySelectorAll(".component-card");
-    observerCards.forEach((card) => {
+  #updateComponentCards(activeCard) {
+    const componentCards = activeCard.parentNode.querySelectorAll(".component-card");
+    componentCards.forEach((card) => {
       if (card === activeCard) {
         card.setAttribute("active", "");
       } else {
@@ -30,7 +30,7 @@ export class ComponentsController {
     componentCards.forEach((card) => {
       card.addEventListener("click", () => {
         if (!card.hasAttribute("active")) {
-          this.#updateObserverCards(card);
+          this.#updateComponentCards(card);
         }
       });
     });
