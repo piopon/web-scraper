@@ -1,11 +1,15 @@
 export class ComponentsController {
   /**
-   * Creates new observers controller
+   * Creates new components controller
    */
   constructor() {
     this.#bindListeners();
   }
 
+  /**
+   * Method used to update component cards expand/collapse effect
+   * @param {Element} activeCard The card which should be expanded (other should be collapsed)
+   */
   #updateObserverCards(activeCard) {
     const observerCards = activeCard.parentNode.querySelectorAll(".component-card");
     observerCards.forEach((card) => {
@@ -17,6 +21,10 @@ export class ComponentsController {
     });
   };
 
+  /**
+   * Method used to bind UI listeners to controller methods.
+   * This method handles: component cards expand/collapse effects
+   */
   #bindListeners() {
     const componentCards = document.querySelectorAll(".component-card");
     componentCards.forEach((card) => {

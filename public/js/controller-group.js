@@ -3,6 +3,9 @@ export class GroupsController {
   #groupColumns = document.querySelectorAll(".group-column > .group-container");
   #groupCloseButtons = document.querySelectorAll(".group-buttons > .group-close-btn");
 
+  /**
+   * Creates new groups controller
+   */
   constructor() {
     this.#initStyle();
     this.#initDimensions();
@@ -43,7 +46,7 @@ export class GroupsController {
 
   /**
    * Method used to bind UI listeners to controller methods.
-   * This method handles: group column and close column buttons clicksss
+   * This method handles: group column and close column buttons clicks & new column hint
    */
   #bindListeners() {
     this.#groupColumns.forEach((column) => {
@@ -68,6 +71,9 @@ export class GroupsController {
     });
   };
 
+  /**
+   * Method used to show whole group columns container
+   */
   #showColumnsContainer() {
     const columnsStatus = document.querySelector("section.group-status");
     columnsStatus.classList.remove("show");
