@@ -1,29 +1,32 @@
-export const GroupsController = function () {
-  var groupExpanded = false;
-  const NEW_GROUP_COLUMN_WIDTH = 4;
-  const colors = ["navy", "aqua", "green", "orange", "red", "blue", "yellow", "plum"];
-  const animations = ["column-from-top", "column-from-right", "column-from-bottom", "column-from-left"];
-  const columnsStatus = document.querySelector("section.group-status");
-  const columnsContainer = document.querySelector("section.group-columns");
-  const groupColumns = document.querySelectorAll(".group-column > .group-container");
-  const groupCloseButtons = document.querySelectorAll(".group-buttons > .group-close-btn");
+export class GroupsController {
+  #groupExpanded = false;
+  #columnsStatus = document.querySelector("section.group-status");
+  #columnsContainer = document.querySelector("section.group-columns");
+  #groupColumns = document.querySelectorAll(".group-column > .group-container");
+  #groupCloseButtons = document.querySelectorAll(".group-buttons > .group-close-btn");
+
+  constructor() {
+    this.initStyle();
+    this.initDimensions();
+    this.bindListeners();
+  }
 
   /**
    * Method used to expand the selected group column to full available width
    * @param {Object} groupColumn The column which should be expanded
    */
-  const expand = function (groupColumn) {
-    if (!groupExpanded) {
+  expand(groupColumn) {
+    if (!this.#groupExpanded) {
       // add group column will always display hint when expading - we must remove it
       if ("add" === groupColumn.dataset.action) {
         groupColumn.parentNode.classList.remove("show-hint");
       }
       // go with regular flow for all columns
-      groupColumns.forEach((column) => {
+      this.#groupColumns.forEach((column) => {
         column.parentNode.classList.add(column === groupColumn ? "expanded" : "collapsed");
-        clearDimension(column);
+        this.clearDimension(column);
       });
-      groupExpanded = true;
+      this.#groupExpanded = true;
     }
   };
 
@@ -31,15 +34,15 @@ export const GroupsController = function () {
    * Method used to collapse the selected group column to display all available choices/columns
    * @param {Object} groupCloseButton The close button of column which should be collapsed
    */
-  const collapse = function (groupCloseButton) {
-    if (groupExpanded) {
-      groupColumns.forEach((column) => {
+  collapse(groupCloseButton) {
+    if (this.#groupExpanded) {
+      this.#groupColumns.forEach((column) => {
         column.parentNode.classList.remove("expanded");
         column.parentNode.classList.remove("collapsed");
-        setDimension(column);
+        this.setDimension(column);
       });
       groupCloseButton.classList.remove("show");
-      groupExpanded = false;
+      this.#groupExpanded = false;
     }
   };
 
@@ -47,7 +50,7 @@ export const GroupsController = function () {
    * Method used to show column hint (available only for "add" gruop column)
    * @param {Object} column The column for which we want to show a hint
    */
-  const showHint = function (column) {
+  showHint(column) {
     // hint is only available for add group column
     if ("add" !== column.dataset.action) {
       return;
@@ -55,7 +58,7 @@ export const GroupsController = function () {
     // show hind and clear dimension only when new group is NOT expanded
     if (!column.parentNode.classList.contains("expanded")) {
       column.parentNode.classList.add("show-hint");
-      clearDimension(column);
+      this.clearDimension(column);
     }
   };
 
@@ -63,7 +66,7 @@ export const GroupsController = function () {
    * Method used to hide column hint (available only for "add" gruop column)
    * @param {Object} column The column for which we want to hide a hint
    */
-  const hideHint = function (column) {
+  hideHint(column) {
     // hint is only available for add group column
     if ("add" !== column.dataset.action) {
       return;
@@ -71,7 +74,7 @@ export const GroupsController = function () {
     column.parentNode.classList.remove("show-hint");
     // restore dimensions only when new group is NOT expanded
     if (!column.parentNode.classList.contains("expanded")) {
-      setDimension(column);
+      this.setDimension(column);
     }
   };
 
@@ -81,7 +84,7 @@ export const GroupsController = function () {
    * @param {Boolean} remove If we want to remove the received random element from array (to prevent duplicates)
    * @returns random element from input array
    */
-  const getRandom = function (array, remove) {
+  getRandom(array, remove) {
     const randomItem = array[Math.floor(Math.random() * array.length)];
     if (remove) {
       var index = array.indexOf(randomItem);
@@ -95,15 +98,17 @@ export const GroupsController = function () {
   /**
    * Method used to set style for all group columns (position, colors and animation)
    */
-  const initStyle = function () {
-    groupColumns.forEach((column) => {
+  initStyle() {
+    const colors = ["navy", "aqua", "green", "orange", "red", "blue", "yellow", "plum"];
+    const animations = ["column-from-top", "column-from-right", "column-from-bottom", "column-from-left"];
+    this.#groupColumns.forEach((column) => {
       if ("update" === column.dataset.action) {
         // get color from array and then remove it so no duplicates are selected (in next iterations)
-        const selectedColor = getRandom(colors, true);
+        const selectedColor = this.getRandom(colors, true);
         column.classList.add("background-" + selectedColor);
         column.querySelector(".group-title").classList.add("background-" + selectedColor);
         // get animation from array (duplicates are allowed in this case)
-        column.classList.add(getRandom(animations, false));
+        column.classList.add(this.getRandom(animations, false));
       } else {
         // new group column should always appear from right and have gray background
         column.classList.add("background-violet");
@@ -112,20 +117,21 @@ export const GroupsController = function () {
       }
     });
     // when all styles are ready we can now show columns
-    columnsStatus.classList.remove("show");
-    columnsStatus.classList.add("hide");
-    columnsContainer.classList.remove("hide");
-    columnsContainer.classList.add("show");
+    this.#columnsStatus.classList.remove("show");
+    this.#columnsStatus.classList.add("hide");
+    this.#columnsContainer.classList.remove("hide");
+    this.#columnsContainer.classList.add("show");
   };
 
   /**
    * Method used to set the dimensions (position and width) of the specified column
    * @param {Object} column The column which dimensions should be configured
    */
-  const setDimension = function (column) {
+  setDimension(column) {
+    const NEW_GROUP_COLUMN_WIDTH = 4;
     if ("update" === column.dataset.action) {
-      const columnWidth = (100 - NEW_GROUP_COLUMN_WIDTH) / (groupColumns.length - 1);
-      const columnIndex = Array.from(groupColumns).indexOf(column);
+      const columnWidth = (100 - NEW_GROUP_COLUMN_WIDTH) / (this.#groupColumns.length - 1);
+      const columnIndex = Array.from(this.#groupColumns).indexOf(column);
       column.parentNode.style.width = `${columnWidth}%`;
       column.parentNode.style.left = `${columnWidth * columnIndex}vh`;
     } else {
@@ -138,7 +144,7 @@ export const GroupsController = function () {
    * Method used to clear the dimensions of the selected column
    * @param {Object} column The column which dimensions should be cleared
    */
-  const clearDimension = function (column) {
+  clearDimension(column) {
     column.parentNode.removeAttribute("style");
   };
 
@@ -146,24 +152,24 @@ export const GroupsController = function () {
    * Method used to bind UI listeners to controller methods.
    * This method handles: group column and close column buttons clicksss
    */
-  const bindListeners = function () {
-    groupColumns.forEach((column) => {
+  bindListeners() {
+    this.#groupColumns.forEach((column) => {
       column.addEventListener("click", (event) => {
-        expand(column);
+        this.expand(column);
         event.stopPropagation();
       });
       column.addEventListener("mouseover", (event) => {
-        showHint(column);
+        this.showHint(column);
         event.stopPropagation();
       });
       column.addEventListener("mouseout", (event) => {
-        hideHint(column);
+        this.hideHint(column);
         event.stopPropagation();
       });
     });
-    groupCloseButtons.forEach((closeButton) => {
+    this.#groupCloseButtons.forEach((closeButton) => {
       closeButton.addEventListener("click", (event) => {
-        collapse(closeButton);
+        this.collapse(closeButton);
         event.stopPropagation();
       });
     });
@@ -172,18 +178,7 @@ export const GroupsController = function () {
   /**
    * Method used to initialize column dimensions (positions and size)
    */
-  const initDimensions = function () {
-    groupColumns.forEach((column) => setDimension(column));
+  initDimensions() {
+    this.#groupColumns.forEach((column) => this.setDimension(column));
   };
-
-  /**
-   * Method used to setup the column controller
-   */
-  const setup = function () {
-    initStyle();
-    initDimensions();
-    bindListeners();
-  };
-
-  return { initialize: setup };
 };
