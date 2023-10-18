@@ -1,12 +1,14 @@
 export class GroupsController {
   #groupExpanded = false;
-  #groupColumns = document.querySelectorAll(".group-column > .group-container");
-  #groupCloseButtons = document.querySelectorAll(".group-buttons > .group-close-btn");
+  #groupColumns = undefined;
 
   /**
    * Creates new groups controller
    */
   constructor() {
+    // get all elements representing group columns
+    this.#groupColumns = document.querySelectorAll(".group-column > .group-container");
+    // initialize style, size, and logic of all group columns
     this.#initStyle();
     this.#initDimensions();
     this.#bindListeners();
@@ -63,7 +65,8 @@ export class GroupsController {
         event.stopPropagation();
       });
     });
-    this.#groupCloseButtons.forEach((closeButton) => {
+    const groupCloseButtons = document.querySelectorAll(".group-buttons > .group-close-btn");
+    groupCloseButtons.forEach((closeButton) => {
       closeButton.addEventListener("click", (event) => {
         this.#collapse(closeButton);
         event.stopPropagation();
