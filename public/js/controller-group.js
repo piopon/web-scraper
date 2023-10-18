@@ -1,7 +1,5 @@
 export class GroupsController {
   #groupExpanded = false;
-  #columnsStatus = document.querySelector("section.group-status");
-  #columnsContainer = document.querySelector("section.group-columns");
   #groupColumns = document.querySelectorAll(".group-column > .group-container");
   #groupCloseButtons = document.querySelectorAll(".group-buttons > .group-close-btn");
 
@@ -33,10 +31,7 @@ export class GroupsController {
       }
     });
     // when all styles are ready we can now show columns
-    this.#columnsStatus.classList.remove("show");
-    this.#columnsStatus.classList.add("hide");
-    this.#columnsContainer.classList.remove("hide");
-    this.#columnsContainer.classList.add("show");
+    this.#showColumnsContainer();
   };
 
   /**
@@ -72,6 +67,15 @@ export class GroupsController {
       });
     });
   };
+
+  #showColumnsContainer() {
+    const columnsStatus = document.querySelector("section.group-status");
+    columnsStatus.classList.remove("show");
+    columnsStatus.classList.add("hide");
+    const columnsContainer = document.querySelector("section.group-columns");
+    columnsContainer.classList.remove("hide");
+    columnsContainer.classList.add("show");
+  }
 
   /**
    * Method used to expand the selected group column to full available width
