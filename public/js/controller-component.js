@@ -1,9 +1,25 @@
 export class ComponentsController {
+  #mediator = undefined;
+
   /**
    * Creates new components controller
    */
   constructor() {
     this.#bindListeners();
+  }
+
+  emitEvent(eventType, eventObject) {
+    if (undefined === this.#mediator) {
+      console.error(`Cannot emit event - mediator is undefined`);
+    }
+    this.#mediator.notify(this, eventType, eventObject);
+  }
+
+  handleEvent(eventType, eventObject) {
+    if ("subscribed" === eventType) {
+      this.#mediator = eventObject;
+    }
+    return;
   }
 
   /**

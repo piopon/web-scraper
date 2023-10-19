@@ -2,11 +2,27 @@ import { ObserversService } from "./observers-service.js";
 import { ObserversView } from "./observers-view.js";
 
 export class ObserversController {
+  #mediator = undefined;
+
   /**
    * Creates new observers controller
    */
   constructor() {
     this.#bindListeners();
+  }
+
+  emitEvent(eventType, eventObject) {
+    if (undefined === this.#mediator) {
+      console.error(`Cannot emit event - mediator is undefined`);
+    }
+    this.#mediator.notify(this, eventType, eventObject);
+  }
+
+  handleEvent(eventType, eventObject) {
+    if ("subscribed" === eventType) {
+      this.#mediator = eventObject;
+    }
+    return;
   }
 
   /**
@@ -22,6 +38,8 @@ export class ObserversController {
         const expandedObservers = expandedGroup.querySelector(".observers-container");
         expandedObservers.innerHTML = ObserversView.getHtml(groupId, groupObservers);
         this.#bindListeners();
+        // notify other controllers that observers were reloaded
+        this.emitEvent('observers-reloaded', groupId);
       })
       .catch((error) => console.error(error));
   };
