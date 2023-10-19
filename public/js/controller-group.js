@@ -1,4 +1,5 @@
 export class GroupsController {
+  #mediator = undefined;
   #groupExpanded = false;
   #groupColumns = undefined;
 
@@ -12,6 +13,20 @@ export class GroupsController {
     this.#initStyle();
     this.#initDimensions();
     this.#bindListeners();
+  }
+
+  emitEvent(eventType, eventObject) {
+    if (undefined === this.#mediator) {
+      console.error(`Cannot emit event - mediator is undefined`);
+    }
+    this.#mediator.notify(this, eventType, eventObject);
+  }
+
+  handleEvent(eventType, eventObject) {
+    if ("subscribed" === eventType) {
+      this.#mediator = eventObject;
+    }
+    return;
   }
 
   /**
