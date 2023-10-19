@@ -1,11 +1,9 @@
 export class ControllersMediator {
-  constructor() {
-    this.classes = [];
-  }
+  #registeredClasses = [];
 
   register(classInstance) {
     if (this.#checkInterface(classInstance)) {
-      this.classes.push(classInstance);
+      this.#registeredClasses.push(classInstance);
       classInstance.handleEvent("subscribed", this);
     } else {
       console.error(`Cannot register ${classInstance.constructor.name}`);
@@ -13,9 +11,9 @@ export class ControllersMediator {
   }
 
   notify(sender, eventType, eventObject) {
-    for (let i = 0; i < this.classes.length; i++) {
-      if (this.classes[i] !== sender) {
-        this.classes[i].handleEvent(eventType, eventObject);
+    for (let i = 0; i < this.#registeredClasses.length; i++) {
+      if (this.#registeredClasses[i] !== sender) {
+        this.#registeredClasses[i].handleEvent(eventType, eventObject);
       }
     }
   }
