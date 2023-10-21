@@ -28,6 +28,9 @@ export class ComponentsController {
   handleEvent(eventType, eventObject) {
     if ("subscribed" === eventType) {
       this.#mediator = eventObject;
+    } else if ("observers-reloaded" === eventType) {
+      // bind listeners to currently existing component cards
+      this.#bindListeners();
     }
     return;
   }
