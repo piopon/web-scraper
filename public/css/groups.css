@@ -108,13 +108,22 @@ div.modal-close-btn {
   background-color: lightgreen;
 }
 
-.cancel {
+.delete {
+  background-color: red;
+  margin-left: 0.25rem;
+}
+
+.delete:hover {
   background-color: tomato;
+}
+
+.cancel {
+  background-color: orange;
   margin-left: 0.25rem;
 }
 
 .cancel:hover {
-  background-color: coral;
+  background-color: moccasin;
 }
 
 @keyframes fadeIn {
