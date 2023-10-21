@@ -7,7 +7,7 @@ export class ObserversService {
   static async addObserver(parentId) {
     const encodedId = encodeURIComponent(parentId);
     const url = `api/v1/configs/groups/observers?parent=${encodedId}`;
-    const response = await fetch(url, this.#createSetRequestOptions("POST"));
+    const response = await fetch(url, this.#createRequestOptions("POST"));
     if (response.status === 200) {
       return response.text();
     }
@@ -22,7 +22,7 @@ export class ObserversService {
   static async getObservers(parentId) {
     const encodedId = encodeURIComponent(parentId);
     const url = `api/v1/configs/groups?name=${encodedId}`;
-    const response = await fetch(url);
+    const response = await fetch(url, this.#createRequestOptions("GET"));
     if (response.status === 200) {
       return response.json();
     }
@@ -37,7 +37,7 @@ export class ObserversService {
   static async updateObserver(observerId) {
     const encodedId = encodeURIComponent(observerId);
     const url = `api/v1/configs/groups/observers?name=${encodedId}`;
-    const response = await fetch(url, this.#createSetRequestOptions("PUT"));
+    const response = await fetch(url, this.#createRequestOptions("PUT"));
     if (response.status === 200) {
       return response.text();
     }
@@ -79,14 +79,16 @@ export class ObserversService {
 
   /**
    * Method used to create request options
-   * @param {String} method The HTTP method of the request (one of set methods: POST, PUT)
+   * @param {String} method The HTTP method of the request
    * @returns request options object
    */
-  static #createSetRequestOptions(method) {
+  static #createRequestOptions(method) {
+    const shouldHaveBody = "POST" === method || "PUT" === method;
+    const requestBody = shouldHaveBody ? JSON.stringify(this.#createObserver()) : undefined;
     return {
       method: method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(this.#createObserver()),
+      body: requestBody,
     };
   }
 }
