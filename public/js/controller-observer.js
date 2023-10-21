@@ -106,8 +106,8 @@ export class ObserversController {
         event.stopPropagation();
       });
     });
-    const modalAcceptButtons = document.querySelectorAll("div.modal-close-btn.accept");
-    modalAcceptButtons.forEach((button) => {
+    const modalCloseButtons = document.querySelectorAll("div.modal-close-btn");
+    modalCloseButtons.forEach((button) => {
       button.addEventListener("click", (event) => {
         const target = event.currentTarget;
         const observerDialog = target.parentNode.parentNode.parentNode.parentNode;
@@ -116,17 +116,11 @@ export class ObserversController {
           this.#addObserver(observerDialog, target.dataset.id);
         } else if (selectedAction === "update") {
           this.#updateObserver(observerDialog, target.dataset.id);
+        } else if (selectedAction === "cancel") {
+          observerDialog.classList.add("hidden");
         } else {
           console.error(`Unsupported accept button action: ${selectedAction}`);
         }
-        event.stopPropagation();
-      });
-    });
-    const modalCancelButtons = document.querySelectorAll("div.modal-close-btn.cancel");
-    modalCancelButtons.forEach((button) => {
-      button.addEventListener("click", (event) => {
-        const target = event.currentTarget;
-        target.parentNode.parentNode.parentNode.parentNode.classList.add("hidden");
         event.stopPropagation();
       });
     });
