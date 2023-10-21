@@ -97,11 +97,20 @@ export class ObserversController {
   /**
    * Method used to handle specified observer delete action
    * @param {Element} observerDialog The observer modal dialog element
-   * @param {String} editedObserverId The identifier of the observer to be removed
+   * @param {String} deletedObserverId The identifier of the observer to be removed
    */
-  #deleteObserver(observerDialog, editedObserverId) {
-    observerDialog.classList.add("hidden");
-    console.log("delete observer: " + editedObserverId)
+  #deleteObserver(observerDialog, deletedObserverId) {
+    ObserversService.deleteObserver(deletedObserverId)
+    .then((data) => {
+      this.#reloadObservers(this.#expandedGroup);
+      observerDialog.classList.add("hidden");
+      console.log(data);
+    })
+    .catch((error) => {
+      observerDialog.classList.add("shake");
+      setTimeout(() => observerDialog.classList.remove("shake"), 500);
+      console.error(error);
+    });
   }
 
   /**
