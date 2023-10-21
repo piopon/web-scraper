@@ -55,7 +55,7 @@ export class ObserversController {
   };
 
   /**
-   * Method used to handle new observer addition
+   * Method used to handle new observer add action
    * @param {Element} observerDialog The observer modal dialog element
    * @param {String} parentGroup The observer parent group name
    */
@@ -74,7 +74,7 @@ export class ObserversController {
   };
 
   /**
-   * Method used to handle specified observer update
+   * Method used to handle specified observer update action
    * @param {Element} observerDialog The observer modal dialog element
    * @param {String} editedObserverId The identifier of the observer to be edited
    */
@@ -90,6 +90,16 @@ export class ObserversController {
         console.error(error);
       });
   };
+
+  /**
+   * Method used to handle specified observer delete action
+   * @param {Element} observerDialog The observer modal dialog element
+   * @param {String} editedObserverId The identifier of the observer to be removed
+   */
+  #deleteObserver(observerDialog, editedObserverId) {
+    observerDialog.classList.add("hidden");
+    console.log("delete observer: " + editedObserverId)
+  }
 
   /**
    * Method used to bind UI listeners to controller methods.
@@ -116,6 +126,8 @@ export class ObserversController {
           this.#addObserver(observerDialog, target.dataset.id);
         } else if (selectedAction === "update") {
           this.#updateObserver(observerDialog, target.dataset.id);
+        } else if (selectedAction === "delete") {
+          this.#deleteObserver(observerDialog, target.dataset.id);
         } else if (selectedAction === "cancel") {
           observerDialog.classList.add("hidden");
         } else {
