@@ -127,6 +127,8 @@ export class GroupsController {
         this.#clearDimension(column);
       });
       this.#groupExpanded = true;
+      // notify other controllers that group with specified name was expanded
+      this.emitEvent('group-expanded', groupColumn.querySelector("h2.group-title").innerText);
     }
   };
 
@@ -143,6 +145,8 @@ export class GroupsController {
       });
       groupCloseButton.classList.remove("show");
       this.#groupExpanded = false;
+      // notify other controllers that none group is expanded
+      this.emitEvent('group-expanded', undefined);
     }
   };
 

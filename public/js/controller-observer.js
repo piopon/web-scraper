@@ -3,6 +3,7 @@ import { ObserversView } from "./observers-view.js";
 
 export class ObserversController {
   #mediator = undefined;
+  #expandedGroup = undefined;
 
   /**
    * Creates new observers controller
@@ -31,6 +32,8 @@ export class ObserversController {
   handleEvent(eventType, eventObject) {
     if ("subscribed" === eventType) {
       this.#mediator = eventObject;
+    } else if ("group-expanded" === eventType) {
+      this.#expandedGroup = eventObject;
     }
     return;
   }
