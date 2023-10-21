@@ -45,6 +45,21 @@ export class ObserversService {
   }
 
   /**
+   * Method used to delete observer with the specified name
+   * @param {String} observerId The identifier of the observer to be deleted
+   * @returns promise containing the operation response text or error
+   */
+  static async deleteObserver(observerId) {
+    const encodedId = encodeURIComponent(observerId);
+    const url = `api/v1/configs/groups/observers?name=${encodedId}`;
+    const response = await fetch(url, this.#createRequestOptions("DELETE"));
+    if (response.status === 200) {
+      return response.text();
+    }
+    throw new Error(`Cannot delete observer ${observerId}`);
+  }
+
+  /**
    * Method used to create an observer objest from values of the HTML elements
    * @returns observer object with values from current HTML elements
    */
