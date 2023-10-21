@@ -11,6 +11,11 @@ export class ObserversController {
     this.#bindListeners();
   }
 
+  /**
+   * Method used to emit event from controller to mediator
+   * @param {String} eventType The type of event which we want to transmit
+   * @param {Object} eventObject The object which we want to transmit
+   */
   emitEvent(eventType, eventObject) {
     if (undefined === this.#mediator) {
       console.error(`Cannot emit event - mediator is undefined`);
@@ -18,6 +23,11 @@ export class ObserversController {
     this.#mediator.notify(this, eventType, eventObject);
   }
 
+  /**
+   * Method used to handle event received from mediator
+   * @param {String} eventType The type of received event
+   * @param {Object} eventObject The received object
+   */
   handleEvent(eventType, eventObject) {
     if ("subscribed" === eventType) {
       this.#mediator = eventObject;
