@@ -43,6 +43,10 @@ export class ObserversController {
    * @param {String} parentGroupId The observers parent group identifier
    */
   #reloadObservers(parentGroupId) {
+    if (parentGroupId === undefined || parentGroupId === "+") {
+      console.error(`Cannot reload observers for ${parentGroupId} parent.`);
+      return;
+    }
     ObserversService.getObservers(parentGroupId)
       .then((data) => {
         const groupId = data[0].name;
