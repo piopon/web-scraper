@@ -225,7 +225,7 @@ export class ObserversView {
   static #getObserverModalButtonsHtml(groupId, observer) {
     const dataId = observer !== undefined ? observer.name : groupId;
     const dataAction = observer !== undefined ? "update" : "add";
-    return `<div class="modal-close-btn accept" data-action="${dataAction}" data-id="${dataId}">ok</div>
+    return `<div class="modal-close-btn accept" data-action="${dataAction}" data-id="${dataId}">${dataAction}</div>
             <div class="modal-close-btn delete" data-action="delete" data-id="${dataId}">delete</div>
             <div class="modal-close-btn cancel" data-action="cancel">cancel</div>`;
   }
