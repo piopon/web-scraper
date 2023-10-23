@@ -226,6 +226,7 @@ export class ObserversView {
     const dataId = observer !== undefined ? observer.name : groupId;
     const dataAction = observer !== undefined ? "update" : "add";
     return `<div class="modal-close-btn accept" data-action="${dataAction}" data-id="${dataId}">ok</div>
-            <div class="modal-close-btn cancel">cancel</div>`;
+            <div class="modal-close-btn delete" data-action="delete" data-id="${dataId}">delete</div>
+            <div class="modal-close-btn cancel" data-action="cancel">cancel</div>`;
   }
 }
