@@ -3,8 +3,8 @@
     {{#each groups}}
       {{> group-edit group=this }}
     {{/each}}
+    {{> group-add userId=user }}
   {{/each}}
-  {{> group-add }}
 </section>
 <section class="group-status show">
   <div class="group-loader loading"></div>
