@@ -48,7 +48,7 @@ export class ComponentsController {
         card.removeAttribute("active");
       }
     });
-  };
+  }
 
   /**
    * Method used to bind UI listeners to controller methods.
@@ -63,5 +63,5 @@ export class ComponentsController {
         }
       });
     });
-  };
-};
+  }
+}

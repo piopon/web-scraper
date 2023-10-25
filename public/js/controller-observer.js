@@ -56,10 +56,10 @@ export class ObserversController {
         expandedObservers.innerHTML = ObserversView.getHtml(groupId, groupObservers);
         this.#bindListeners();
         // notify other controllers that observers were reloaded
-        this.emitEvent('observers-reloaded', groupId);
+        this.emitEvent("observers-reloaded", groupId);
       })
       .catch((error) => console.error(error));
-  };
+  }
 
   /**
    * Method used to handle new observer add action
@@ -78,7 +78,7 @@ export class ObserversController {
         setTimeout(() => observerDialog.classList.remove("shake"), 500);
         console.error(error);
       });
-  };
+  }
 
   /**
    * Method used to handle specified observer update action
@@ -96,7 +96,7 @@ export class ObserversController {
         setTimeout(() => observerDialog.classList.remove("shake"), 500);
         console.error(error);
       });
-  };
+  }
 
   /**
    * Method used to handle specified observer delete action
@@ -105,16 +105,16 @@ export class ObserversController {
    */
   #deleteObserver(observerDialog, deletedObserverId) {
     ObserversService.deleteObserver(deletedObserverId)
-    .then((data) => {
-      this.#reloadObservers(this.#expandedGroup);
-      observerDialog.classList.add("hidden");
-      console.log(data);
-    })
-    .catch((error) => {
-      observerDialog.classList.add("shake");
-      setTimeout(() => observerDialog.classList.remove("shake"), 500);
-      console.error(error);
-    });
+      .then((data) => {
+        this.#reloadObservers(this.#expandedGroup);
+        observerDialog.classList.add("hidden");
+        console.log(data);
+      })
+      .catch((error) => {
+        observerDialog.classList.add("shake");
+        setTimeout(() => observerDialog.classList.remove("shake"), 500);
+        console.error(error);
+      });
   }
 
   /**
@@ -152,5 +152,5 @@ export class ObserversController {
         event.stopPropagation();
       });
     });
-  };
-};
+  }
+}

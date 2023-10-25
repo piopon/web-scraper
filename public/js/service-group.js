@@ -21,7 +21,7 @@ export class GroupsService {
   static #createGroup() {
     const editedGroup = document.querySelector("article.group-column.expanded");
     return {
-      name: editedGroup.querySelector("h2.group-title").innerText
+      name: editedGroup.querySelector("h2.group-title").innerText,
     };
   }
 

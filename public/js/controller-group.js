@@ -62,14 +62,14 @@ export class GroupsController {
     });
     // when all styles are ready we can now show columns
     this.#showColumnsContainer();
-  };
+  }
 
   /**
    * Method used to initialize column dimensions (positions and size)
    */
   #initDimensions() {
     this.#groupColumns.forEach((column) => this.#setDimension(column));
-  };
+  }
 
   /**
    * Method used to bind UI listeners to controller methods.
@@ -97,7 +97,7 @@ export class GroupsController {
         event.stopPropagation();
       });
     });
-  };
+  }
 
   /**
    * Method used to show whole group columns container
@@ -128,9 +128,9 @@ export class GroupsController {
       });
       this.#groupExpanded = true;
       // notify other controllers that group with specified name was expanded
-      this.emitEvent('group-expanded', groupColumn.querySelector("h2.group-title").innerText);
+      this.emitEvent("group-expanded", groupColumn.querySelector("h2.group-title").innerText);
     }
-  };
+  }
 
   /**
    * Method used to collapse the selected group column to display all available choices/columns
@@ -146,9 +146,9 @@ export class GroupsController {
       groupCloseButton.classList.remove("show");
       this.#groupExpanded = false;
       // notify other controllers that none group is expanded
-      this.emitEvent('group-expanded', undefined);
+      this.emitEvent("group-expanded", undefined);
     }
-  };
+  }
 
   /**
    * Method used to show column hint (available only for "add" gruop column)
@@ -164,7 +164,7 @@ export class GroupsController {
       column.parentNode.classList.add("show-hint");
       this.#clearDimension(column);
     }
-  };
+  }
 
   /**
    * Method used to hide column hint (available only for "add" gruop column)
@@ -180,7 +180,7 @@ export class GroupsController {
     if (!column.parentNode.classList.contains("expanded")) {
       this.#setDimension(column);
     }
-  };
+  }
 
   /**
    * Method used to set the dimensions (position and width) of the specified column
@@ -197,7 +197,7 @@ export class GroupsController {
       column.parentNode.style.width = `${NEW_GROUP_COLUMN_WIDTH}%`;
       column.parentNode.style.left = `${100 - NEW_GROUP_COLUMN_WIDTH}vh`;
     }
-  };
+  }
 
   /**
    * Method used to clear the dimensions of the selected column
@@ -205,7 +205,7 @@ export class GroupsController {
    */
   #clearDimension(column) {
     column.parentNode.removeAttribute("style");
-  };
+  }
 
   /**
    * Method used to receive random element from provided array
@@ -222,5 +222,5 @@ export class GroupsController {
       }
     }
     return randomItem;
-  };
-};
+  }
+}
