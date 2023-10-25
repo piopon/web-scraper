@@ -1,5 +1,20 @@
 export class GroupsService {
   /**
+   * Method used to add new gropu to the specified parent user
+   * @param {String} userId The identifier of the user to which we want to add new group
+   * @returns promise containing the operation response text or error
+   */
+  static async addGroup(userId) {
+    const encodedId = encodeURIComponent(userId);
+    const url = `api/v1/configs/groups?parent=${encodedId}`;
+    const response = await fetch(url, this.#createRequestOptions("POST"));
+    if (response.status === 200) {
+      return response.text();
+    }
+    throw new Error(`Cannot add group to user ${userId}`);
+  }
+
+  /**
    * Method used to create a group objest from values of the HTML elements
    * @returns group object with values from current HTML elements
    */
