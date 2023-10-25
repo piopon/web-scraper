@@ -1,4 +1,4 @@
-import { ObserversService } from "./observers-service.js";
+import { ObserversService } from "./service-observer.js";
 import { ObserversView } from "./observers-view.js";
 
 export class ObserversController {
