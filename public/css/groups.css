@@ -64,6 +64,13 @@ div.modal-button {
   box-shadow: 2px 2px 5px black;
 }
 
+div.modal-button[disabled] {
+  pointer-events: none;
+  background-color: #e5e5e5;
+  border-color: #787878;
+  color: #646464;
+}
+
 div.modal-button.new-observer {
   width: 1.5rem;
 }
