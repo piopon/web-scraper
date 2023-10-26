@@ -21,7 +21,10 @@ export class GroupsService {
   static #createGroup() {
     const editedGroup = document.querySelector("article.group-column.expanded");
     return {
-      name: editedGroup.querySelector("h2.group-title").innerText,
+      name: editedGroup.querySelector("input.group-name").value,
+      category: editedGroup.querySelector("input.group-category").value,
+      domain: editedGroup.querySelector("input.group-domain").value,
+      observers: [],
     };
   }
 
