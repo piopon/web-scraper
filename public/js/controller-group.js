@@ -1,3 +1,5 @@
+import { GroupsService } from "./service-group.js";
+
 export class GroupsController {
   #mediator = undefined;
   #groupExpanded = false;
@@ -96,7 +98,7 @@ export class GroupsController {
         const target = event.currentTarget;
         const selectedAction = target.dataset.action;
         if (selectedAction === "add") {
-          console.log("add new group -> ID = " + target.dataset.id);
+          this.#addGroup(closeButton, target.dataset.id);
         } else if (selectedAction === "update") {
           console.log("update group -> ID = " + target.dataset.id);
         } else if (selectedAction === "delete") {
@@ -106,6 +108,17 @@ export class GroupsController {
         event.stopPropagation();
       });
     });
+  }
+
+  #addGroup(closeButton, parentUserId) {
+    GroupsService.addGroup(parentUserId)
+      .then((data) => {
+        this.#collapse(closeButton);
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   /**
