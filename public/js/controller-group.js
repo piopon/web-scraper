@@ -92,6 +92,13 @@ export class GroupsController {
         event.stopPropagation();
       });
     });
+    const groupCategoryButtons = document.querySelectorAll("input.group-category");
+    groupCategoryButtons.forEach((button) => {
+      button.addEventListener("click", (event) => {
+        categoryDialog.showModal();
+        event.stopPropagation();
+      });
+    });
     const groupCloseButtons = document.querySelectorAll(".group-buttons > .group-close-btn");
     groupCloseButtons.forEach((closeButton) => {
       closeButton.addEventListener("click", (event) => {
