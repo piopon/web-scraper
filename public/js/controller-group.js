@@ -93,6 +93,15 @@ export class GroupsController {
     const groupCloseButtons = document.querySelectorAll(".group-buttons > .group-close-btn");
     groupCloseButtons.forEach((closeButton) => {
       closeButton.addEventListener("click", (event) => {
+        const target = event.currentTarget;
+        const selectedAction = target.dataset.action;
+        if (selectedAction === "add") {
+          console.log("add new group -> ID = " + target.dataset.id);
+        } else if (selectedAction === "update") {
+          console.log("update group -> ID = " + target.dataset.id);
+        } else if (selectedAction === "delete") {
+          console.log("delete group -> ID = " + target.dataset.id);
+        }
         this.#collapse(closeButton);
         event.stopPropagation();
       });
