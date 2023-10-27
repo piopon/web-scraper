@@ -298,6 +298,10 @@ dialog.group-category-matrix form {
   grid-gap: 0.5rem;
 }
 
+dialog.group-category-matrix button {
+  font-size: 2rem;
+}
+
 .group-domain {
   width: 22rem;
   height: 2rem;
