@@ -1,5 +1,7 @@
 <div class="widget{{classes}}">
-  <label class="{{parent}}-label">{{label}}:</label>
+  {{#if (unlessEq label undefined)}}
+    <label class="{{parent}}-label">{{label}}:</label>
+  {{/if}}
   {{#if id}}<div class="id"></div>{{/if}}
   {{#if (eq type "combo")}}
     <select class="{{parent}}-{{label}}" name="{{label}}" required {{#if disable}}disabled{{/if}}>
