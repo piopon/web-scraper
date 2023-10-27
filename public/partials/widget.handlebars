@@ -1,8 +1,11 @@
 <div class="widget{{classes}}">
-  {{#if (unlessEq label undefined)}}
+  {{!-- show label only if it was provided and NOT for matrix widget --}}
+  {{#if (and (unlessEq label undefined) (unlessEq type "matrix"))}}
     <label class="{{parent}}-label">{{label}}:</label>
   {{/if}}
+  {{!-- show identifier container with warning icon and information --}}
   {{#if id}}<div class="id"></div>{{/if}}
+  {{!-- add main widget component --}}
   {{#if (eq type "combo")}}
     <select class="{{parent}}-{{label}}" name="{{label}}" required {{#if disable}}disabled{{/if}}>
       <option value="" disabled selected hidden>Select value</option>
