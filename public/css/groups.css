@@ -292,6 +292,12 @@ label.group-label {
   background-color: slateblue;
 }
 
+label.group-category-label {
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+
 dialog.group-category-matrix {
   box-shadow: 0px 0px 2rem black;
   border-radius: 0.35rem;

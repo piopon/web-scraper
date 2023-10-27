@@ -12,6 +12,9 @@
     </select>
   {{else if (eq type "matrix")}}
     <dialog class="{{parent}}-matrix">
+      {{#if (unlessEq label undefined)}}
+        <label class="{{parent}}-label">{{label}}:</label>
+      {{/if}}
       <form method="dialog">
         {{#each (split options "|")}}
           <button type="submit" value="{{this}}">{{this}}</button>
