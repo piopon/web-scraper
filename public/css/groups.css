@@ -306,8 +306,8 @@ dialog.group-category-matrix {
 
 dialog.group-category-matrix form {
   display: grid;
-  grid-template-columns: repeat(5, 5rem);
-  grid-template-rows: repeat(4, 5rem);
+  grid-template-columns: repeat(6, 4rem);
+  grid-template-rows: repeat(5, 4rem);
   grid-gap: 0.5rem;
 }
 
