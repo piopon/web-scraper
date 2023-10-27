@@ -291,6 +291,13 @@ label.group-label {
   background-color: slateblue;
 }
 
+dialog.group-category-matrix form {
+  display: grid;
+  grid-template-columns: repeat(5, 5rem);
+  grid-template-rows: repeat(4, 5rem);
+  grid-gap: 0.5rem;
+}
+
 .group-domain {
   width: 22rem;
   height: 2rem;
