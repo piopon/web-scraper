@@ -10,8 +10,8 @@
         <option value={{this}} {{#if (eq ../value this)}}selected{{/if}}>{{this}}</option>
       {{/each}}
     </select>
-  {{else if (eq type "category")}}
-    <dialog class="{{parent}}-dialog-category">
+  {{else if (eq type "matrix")}}
+    <dialog class="{{parent}}-matrix">
       <form method="dialog">
         {{#each (split options "|")}}
           <button value="{{this}}">{{this}}</button>

@@ -78,7 +78,7 @@ export class GroupsController {
    * This method handles: group column and close column buttons clicks & new column hint
    */
   #bindListeners() {
-    const categoryDialog = document.querySelector('dialog.my-dialog');
+    const categoryDialog = document.querySelector('dialog.group-category-matrix');
     categoryDialog.addEventListener("close", (event) => {
       console.log("got: " + categoryDialog.returnValue);
       event.stopPropagation();
