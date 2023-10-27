@@ -6,13 +6,8 @@
     {{> group-add userId=user }}
   {{/each}}
 </section>
-<dialog class="my-dialog">
-  <form method="dialog">
-    <button value="📈">📈</button>
-    <button value="👕">👕</button>
-  </form>
-</dialog>
 <section class="group-status show">
   <div class="group-loader loading"></div>
   <h3>initializing groups...</h3>
 </section>
+{{> widget type="category" parent="group" options="📈|👕" }}
