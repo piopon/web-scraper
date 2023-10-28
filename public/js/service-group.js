@@ -20,12 +20,27 @@ export class GroupsService {
    */
   static #createGroup() {
     const editedGroup = document.querySelector("article.group-column.expanded");
+    const editedGroupObservers = editedGroup.querySelectorAll('div.modal-button:not(.new-observer)');
     return {
       name: editedGroup.querySelector("input.group-name").value,
       category: editedGroup.querySelector("input.group-category").value,
       domain: editedGroup.querySelector("input.group-domain").value,
-      observers: [],
+      observers: this.#createGroupObservers(editedGroupObservers),
     };
+  }
+
+  /**
+   * Method used to create an array of observer objects from provided list of HTML elements
+   * @param {NodeList} observers The list of HTML observer elemenets
+   * @returns array of observer objects created from provided input
+   */
+  static #createGroupObservers(observers) {
+    const result = [];
+    observers.forEach(observer => {
+      const observerContent = observer.parentNode;
+      console.log(observerContent);
+    });
+    return result;
   }
 
   /**
