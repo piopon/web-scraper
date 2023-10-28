@@ -78,7 +78,7 @@ export class GroupsController {
    * This method handles: group column and close column buttons clicks & new column hint
    */
   #bindListeners() {
-    const categoryDialog = document.querySelector('dialog.group-category-matrix');
+    const categoryDialog = document.querySelector("dialog.group-category-matrix");
     categoryDialog.addEventListener("close", (event) => {
       const parentCategoryButton = this.#groupExpanded.querySelector("input.group-category");
       parentCategoryButton.value = categoryDialog.returnValue;
@@ -123,6 +123,11 @@ export class GroupsController {
     });
   }
 
+  /**
+   * Method used to handle new group addition logic
+   * @param {Object} closeButton The close button of added group used for collapsing UI
+   * @param {String} parentUserId The parent identifier for which we want to add new group
+   */
   #addGroup(closeButton, parentUserId) {
     GroupsService.addGroup(parentUserId)
       .then((data) => {
@@ -134,6 +139,11 @@ export class GroupsController {
       });
   }
 
+  /**
+   * Method used to handle group edition logic
+   * @param {Object} closeButton The close button of edited group used for collapsing UI
+   * @param {String} editedGroupId The edited group identifier
+   */
   #updateGroup(closeButton, editedGroupId) {
     GroupsService.updateGroup(editedGroupId)
       .then((data) => {

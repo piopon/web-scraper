@@ -1,6 +1,6 @@
 export class GroupsService {
   /**
-   * Method used to add new gropu to the specified parent user
+   * Method used to add new group to the specified parent user
    * @param {String} userId The identifier of the user to which we want to add new group
    * @returns promise containing the operation response text or error
    */
@@ -35,7 +35,7 @@ export class GroupsService {
    */
   static #createGroup() {
     const editedGroup = document.querySelector("article.group-column.expanded");
-    const editedGroupObservers = editedGroup.querySelectorAll('div.modal-button:not(.new-observer)');
+    const editedGroupObservers = editedGroup.querySelectorAll("div.modal-button:not(.new-observer)");
     return {
       name: editedGroup.querySelector("input.group-name").value,
       category: editedGroup.querySelector("input.group-category").value,
@@ -51,7 +51,7 @@ export class GroupsService {
    */
   static #createGroupObservers(observers) {
     const result = [];
-    observers.forEach(observer => {
+    observers.forEach((observer) => {
       const observerContent = observer.parentNode;
       console.log(observerContent);
     });
