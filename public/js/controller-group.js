@@ -80,7 +80,8 @@ export class GroupsController {
   #bindListeners() {
     const categoryDialog = document.querySelector('dialog.group-category-matrix');
     categoryDialog.addEventListener("close", (event) => {
-      console.log("got: " + categoryDialog.returnValue);
+      const parentCategoryButton = this.#groupExpanded.querySelector("input.group-category");
+      parentCategoryButton.value = categoryDialog.returnValue;
       event.stopPropagation();
     });
     this.#groupColumns.forEach((column) => {
