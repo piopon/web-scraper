@@ -2,8 +2,8 @@ import { GroupsService } from "./service-group.js";
 
 export class GroupsController {
   #mediator = undefined;
-  #groupExpanded = false;
   #groupColumns = undefined;
+  #groupExpanded = undefined;
 
   /**
    * Creates new groups controller
@@ -150,7 +150,7 @@ export class GroupsController {
    * @param {Object} groupColumn The column which should be expanded
    */
   #expand(groupColumn) {
-    if (!this.#groupExpanded) {
+    if (undefined === this.#groupExpanded) {
       // add group column will always display hint when expading - we must remove it
       if ("add" === groupColumn.dataset.action) {
         groupColumn.parentNode.classList.remove("show-hint");
@@ -160,7 +160,7 @@ export class GroupsController {
         column.parentNode.classList.add(column === groupColumn ? "expanded" : "collapsed");
         this.#clearDimension(column);
       });
-      this.#groupExpanded = true;
+      this.#groupExpanded = groupColumn.parentNode;
       // notify other controllers that group with specified name was expanded
       this.emitEvent("group-expanded", groupColumn.querySelector("h2.group-title").innerText);
     }
@@ -171,14 +171,14 @@ export class GroupsController {
    * @param {Object} groupCloseButton The close button of column which should be collapsed
    */
   #collapse(groupCloseButton) {
-    if (this.#groupExpanded) {
+    if (undefined !== this.#groupExpanded) {
       this.#groupColumns.forEach((column) => {
         column.parentNode.classList.remove("expanded");
         column.parentNode.classList.remove("collapsed");
         this.#setDimension(column);
       });
       groupCloseButton.classList.remove("show");
-      this.#groupExpanded = false;
+      this.#groupExpanded = undefined;
       // notify other controllers that none group is expanded
       this.emitEvent("group-expanded", undefined);
     }
