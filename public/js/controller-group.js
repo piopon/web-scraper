@@ -113,7 +113,7 @@ export class GroupsController {
         if (selectedAction === "add") {
           this.#addGroup(closeButton, target.dataset.id);
         } else if (selectedAction === "update") {
-          console.log("update group -> ID = " + target.dataset.id);
+          this.#updateGroup(closeButton, target.dataset.id);
         } else if (selectedAction === "delete") {
           console.log("delete group -> ID = " + target.dataset.id);
         }
@@ -125,6 +125,17 @@ export class GroupsController {
 
   #addGroup(closeButton, parentUserId) {
     GroupsService.addGroup(parentUserId)
+      .then((data) => {
+        this.#collapse(closeButton);
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  #updateGroup(closeButton, editedGroupId) {
+    GroupsService.updateGroup(editedGroupId)
       .then((data) => {
         this.#collapse(closeButton);
         console.log(data);
