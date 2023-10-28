@@ -15,6 +15,21 @@ export class GroupsService {
   }
 
   /**
+   * Method used to update group with the specified identifier
+   * @param {String} groupId The identifier of the group which should be updated
+   * @returns promise containing the operation response text or error
+   */
+  static async updateGroup(groupId) {
+    const encodedId = encodeURIComponent(groupId);
+    const url = `api/v1/configs/groups?parent=${encodedId}`;
+    const response = await fetch(url, this.#createRequestOptions("PUT"));
+    if (response.status === 200) {
+      return response.text();
+    }
+    throw new Error(`Cannot update group ${groupId}`);
+  }
+
+  /**
    * Method used to create a group objest from values of the HTML elements
    * @returns group object with values from current HTML elements
    */
