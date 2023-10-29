@@ -30,6 +30,21 @@ export class GroupsService {
   }
 
   /**
+   * Method used to delete group with the specified identifier
+   * @param {String} groupId The identifier of the group which should be deleted
+   * @returns promise containing the operation response text or error
+   */
+  static async deleteGroup(groupId) {
+    const encodedId = encodeURIComponent(groupId);
+    const url = `api/v1/configs/groups?name=${encodedId}`;
+    const response = await fetch(url, this.#createRequestOptions("DELETE"));
+    if (response.status === 200) {
+      return response.text();
+    }
+    throw new Error(`Cannot delete group ${groupId}`);
+  }
+
+  /**
    * Method used to create a group objest from values of the HTML elements
    * @returns group object with values from current HTML elements
    */
