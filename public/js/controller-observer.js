@@ -153,4 +153,13 @@ export class ObserversController {
       })
       .catch((error) => console.error(error));
   }
+
+  /**
+   * Method used to hide the close button parent observer modal dialog
+   * @param {Element} observerCloseButton The close button for which parent dialog should be closed
+   */
+  #hideDialog(observerCloseButton) {
+    const observerDialog = observerCloseButton.parentNode.parentNode.parentNode.parentNode;
+    observerDialog.classList.add("hidden");
+  }
 }
