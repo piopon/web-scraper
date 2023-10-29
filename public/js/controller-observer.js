@@ -39,26 +39,40 @@ export class ObserversController {
   }
 
   /**
-   * Method used to reload observers for the specified parent group
-   * @param {String} parentGroupId The observers parent group identifier
+   * Method used to bind UI listeners to controller methods.
+   * This method handles: observer buttons and modal dialog accept and cancel buttons clicks
    */
-  #reloadObservers(parentGroupId) {
-    if (parentGroupId === undefined || parentGroupId === "+") {
-      console.error(`Cannot reload observers for ${parentGroupId} parent.`);
-      return;
-    }
-    ObserversService.getObservers(parentGroupId)
-      .then((data) => {
-        const groupId = data[0].name;
-        const groupObservers = data[0].observers;
-        const expandedGroup = document.querySelector(".group-column.expanded");
-        const expandedObservers = expandedGroup.querySelector(".observers-container");
-        expandedObservers.innerHTML = ObserversView.getHtml(groupId, groupObservers);
-        this.#bindListeners();
-        // notify other controllers that observers were reloaded
-        this.emitEvent("observers-reloaded", groupId);
-      })
-      .catch((error) => console.error(error));
+  #bindListeners() {
+    const observerButtons = document.querySelectorAll("div.modal-button");
+    observerButtons.forEach((button) => {
+      button.addEventListener("click", (event) => {
+        const target = event.currentTarget;
+        const observerDialog = target.parentNode.querySelector("div.modal-dialog");
+        observerDialog.classList.remove("hidden");
+        observerDialog.classList.add("init-reveal");
+        event.stopPropagation();
+      });
+    });
+    const modalCloseButtons = document.querySelectorAll("div.modal-close-btn");
+    modalCloseButtons.forEach((button) => {
+      button.addEventListener("click", (event) => {
+        const target = event.currentTarget;
+        const observerDialog = target.parentNode.parentNode.parentNode.parentNode;
+        const selectedAction = target.dataset.action;
+        if (selectedAction === "add") {
+          this.#addObserver(observerDialog, target.dataset.id);
+        } else if (selectedAction === "update") {
+          this.#updateObserver(observerDialog, target.dataset.id);
+        } else if (selectedAction === "delete") {
+          this.#deleteObserver(observerDialog, target.dataset.id);
+        } else if (selectedAction === "cancel") {
+          observerDialog.classList.add("hidden");
+        } else {
+          console.error(`Unsupported accept button action: ${selectedAction}`);
+        }
+        event.stopPropagation();
+      });
+    });
   }
 
   /**
@@ -118,39 +132,25 @@ export class ObserversController {
   }
 
   /**
-   * Method used to bind UI listeners to controller methods.
-   * This method handles: observer buttons and modal dialog accept and cancel buttons clicks
+   * Method used to reload observers for the specified parent group
+   * @param {String} parentGroupId The observers parent group identifier
    */
-  #bindListeners() {
-    const observerButtons = document.querySelectorAll("div.modal-button");
-    observerButtons.forEach((button) => {
-      button.addEventListener("click", (event) => {
-        const target = event.currentTarget;
-        const observerDialog = target.parentNode.querySelector("div.modal-dialog");
-        observerDialog.classList.remove("hidden");
-        observerDialog.classList.add("init-reveal");
-        event.stopPropagation();
-      });
-    });
-    const modalCloseButtons = document.querySelectorAll("div.modal-close-btn");
-    modalCloseButtons.forEach((button) => {
-      button.addEventListener("click", (event) => {
-        const target = event.currentTarget;
-        const observerDialog = target.parentNode.parentNode.parentNode.parentNode;
-        const selectedAction = target.dataset.action;
-        if (selectedAction === "add") {
-          this.#addObserver(observerDialog, target.dataset.id);
-        } else if (selectedAction === "update") {
-          this.#updateObserver(observerDialog, target.dataset.id);
-        } else if (selectedAction === "delete") {
-          this.#deleteObserver(observerDialog, target.dataset.id);
-        } else if (selectedAction === "cancel") {
-          observerDialog.classList.add("hidden");
-        } else {
-          console.error(`Unsupported accept button action: ${selectedAction}`);
-        }
-        event.stopPropagation();
-      });
-    });
+  #reloadObservers(parentGroupId) {
+    if (parentGroupId === undefined || parentGroupId === "+") {
+      console.error(`Cannot reload observers for ${parentGroupId} parent.`);
+      return;
+    }
+    ObserversService.getObservers(parentGroupId)
+      .then((data) => {
+        const groupId = data[0].name;
+        const groupObservers = data[0].observers;
+        const expandedGroup = document.querySelector(".group-column.expanded");
+        const expandedObservers = expandedGroup.querySelector(".observers-container");
+        expandedObservers.innerHTML = ObserversView.getHtml(groupId, groupObservers);
+        this.#bindListeners();
+        // notify other controllers that observers were reloaded
+        this.emitEvent("observers-reloaded", groupId);
+      })
+      .catch((error) => console.error(error));
   }
 }
