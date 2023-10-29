@@ -21,7 +21,7 @@ export class GroupsService {
    */
   static async updateGroup(groupId) {
     const encodedId = encodeURIComponent(groupId);
-    const url = `api/v1/configs/groups?parent=${encodedId}`;
+    const url = `api/v1/configs/groups?name=${encodedId}`;
     const response = await fetch(url, this.#createRequestOptions("PUT"));
     if (response.status === 200) {
       return response.text();
