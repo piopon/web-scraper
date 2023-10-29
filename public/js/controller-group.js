@@ -115,7 +115,7 @@ export class GroupsController {
         } else if (selectedAction === "update") {
           this.#updateGroup(closeButton, target.dataset.id);
         } else if (selectedAction === "delete") {
-          console.log("delete group -> ID = " + target.dataset.id);
+          this.#deleteGroup(closeButton, target.dataset.id);
         }
         this.#collapse(closeButton);
         event.stopPropagation();
@@ -146,6 +146,22 @@ export class GroupsController {
    */
   #updateGroup(closeButton, editedGroupId) {
     GroupsService.updateGroup(editedGroupId)
+      .then((data) => {
+        this.#collapse(closeButton);
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  /**
+   * Method used to handle group deletion logic
+   * @param {Object} closeButton The close button of deleted group used for collapsing UI
+   * @param {String} deletedGroupId The deleted group identifier
+   */
+  #deleteGroup(closeButton, deletedGroupId) {
+    GroupsService.deleteGroup(deletedGroupId)
       .then((data) => {
         this.#collapse(closeButton);
         console.log(data);
