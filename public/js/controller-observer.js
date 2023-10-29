@@ -66,7 +66,7 @@ export class ObserversController {
         } else if (selectedAction === "delete") {
           this.#deleteObserver(observerDialog, target.dataset.id);
         } else if (selectedAction === "cancel") {
-          observerDialog.classList.add("hidden");
+          this.#hideDialog(closeButton);
         } else {
           console.error(`Unsupported accept button action: ${selectedAction}`);
         }
@@ -77,14 +77,14 @@ export class ObserversController {
 
   /**
    * Method used to handle new observer add action
-   * @param {Element} observerDialog The observer modal dialog element
+   * @param {Element} closeButton The close button used to call this method
    * @param {String} parentGroup The observer parent group name
    */
-  #addObserver(observerDialog, parentGroupId) {
+  #addObserver(closeButton, parentGroupId) {
     ObserversService.addObserver(parentGroupId)
       .then((data) => {
         this.#reloadObservers(parentGroupId);
-        observerDialog.classList.add("hidden");
+        this.#hideDialog(closeButton);
         console.log(data);
       })
       .catch((error) => {
@@ -96,13 +96,13 @@ export class ObserversController {
 
   /**
    * Method used to handle specified observer update action
-   * @param {Element} observerDialog The observer modal dialog element
+   * @param {Element} closeButton The close button used to call this method
    * @param {String} editedObserverId The identifier of the observer to be edited
    */
-  #updateObserver(observerDialog, editedObserverId) {
+  #updateObserver(closeButton, editedObserverId) {
     ObserversService.updateObserver(editedObserverId)
       .then((data) => {
-        observerDialog.classList.add("hidden");
+        this.#hideDialog(closeButton);
         console.log(data);
       })
       .catch((error) => {
@@ -114,14 +114,14 @@ export class ObserversController {
 
   /**
    * Method used to handle specified observer delete action
-   * @param {Element} observerDialog The observer modal dialog element
+   * @param {Element} closeButton The close button used to call this method
    * @param {String} deletedObserverId The identifier of the observer to be removed
    */
-  #deleteObserver(observerDialog, deletedObserverId) {
+  #deleteObserver(closeButton, deletedObserverId) {
     ObserversService.deleteObserver(deletedObserverId)
       .then((data) => {
         this.#reloadObservers(this.#expandedGroup);
-        observerDialog.classList.add("hidden");
+        this.#hideDialog(closeButton);
         console.log(data);
       })
       .catch((error) => {
