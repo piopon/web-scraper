@@ -116,8 +116,11 @@ export class GroupsController {
           this.#updateGroup(closeButton, target.dataset.id);
         } else if (selectedAction === "delete") {
           this.#deleteGroup(closeButton, target.dataset.id);
+        } else if (selectedAction === "cancel") {
+          this.#collapse(closeButton);
+        } else {
+          console.error(`Unsupported accept button action: ${selectedAction}`);
         }
-        this.#collapse(closeButton);
         event.stopPropagation();
       });
     });
