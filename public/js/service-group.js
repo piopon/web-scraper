@@ -59,6 +59,39 @@ export class GroupsService {
   }
 
   /**
+   * Method used to create a observer from the provided HTML content element
+   * @param {Element} observerContent The HTML content from which we want to create an observer object
+   * @returns Object with observer data
+   */
+  static #createGroupObserver(observerContent) {
+    return {
+      name: observerContent.querySelector("input.observer-name").value,
+      path: observerContent.querySelector("input.observer-path").value,
+      target: observerContent.querySelector("select.observer-target").value,
+      history: observerContent.querySelector("select.observer-history").value,
+      container: observerContent.querySelector("input.observer-container").value,
+      title: {
+        interval: "",
+        selector: observerContent.querySelector("input.component-title-selector").value,
+        attribute: observerContent.querySelector("input.component-title-attribute").value,
+        auxiliary: observerContent.querySelector("input.component-title-auxiliary").value,
+      },
+      image: {
+        interval: "",
+        selector: observerContent.querySelector("input.component-image-selector").value,
+        attribute: observerContent.querySelector("input.component-image-attribute").value,
+        auxiliary: observerContent.querySelector("input.component-image-auxiliary").value,
+      },
+      price: {
+        interval: "",
+        selector: observerContent.querySelector("input.component-price-selector").value,
+        attribute: observerContent.querySelector("input.component-price-attribute").value,
+        auxiliary: observerContent.querySelector("select.component-price-auxiliary").value,
+      },
+    };
+  }
+
+  /**
    * Method used to create request options
    * @param {String} method The HTTP method of the request
    * @returns request options object
