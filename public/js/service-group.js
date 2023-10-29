@@ -11,7 +11,9 @@ export class GroupsService {
     if (response.status === 200) {
       return response.text();
     }
-    throw new Error(`Cannot add group to user ${userId}`);
+    const errorResponse = await response.json();
+    const errorDetails = `${errorResponse[0].instancePath} ${errorResponse[0].message}`;
+    throw new Error(`Cannot add group: ${errorDetails}`);
   }
 
   /**
@@ -26,7 +28,9 @@ export class GroupsService {
     if (response.status === 200) {
       return response.text();
     }
-    throw new Error(`Cannot update group ${groupId}`);
+    const errorResponse = await response.json();
+    const errorDetails = `${errorResponse[0].instancePath} ${errorResponse[0].message}`;
+    throw new Error(`Cannot update group: ${errorDetails}`);
   }
 
   /**
@@ -41,7 +45,9 @@ export class GroupsService {
     if (response.status === 200) {
       return response.text();
     }
-    throw new Error(`Cannot delete group ${groupId}`);
+    const errorResponse = await response.json();
+    const errorDetails = `${errorResponse[0].instancePath} ${errorResponse[0].message}`;
+    throw new Error(`Cannot delete group: ${errorDetails}`);
   }
 
   /**

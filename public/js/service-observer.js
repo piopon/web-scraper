@@ -11,7 +11,9 @@ export class ObserversService {
     if (response.status === 200) {
       return response.text();
     }
-    throw new Error(`Cannot add observer to ${parentId}`);
+    const errorResponse = await response.json();
+    const errorDetails = `${errorResponse[0].instancePath} ${errorResponse[0].message}`;
+    throw new Error(`Cannot add observer: ${errorDetails}`);
   }
 
   /**
@@ -26,7 +28,9 @@ export class ObserversService {
     if (response.status === 200) {
       return response.json();
     }
-    throw new Error(`Cannot get ${parentId} observers`);
+    const errorResponse = await response.json();
+    const errorDetails = `${errorResponse[0].instancePath} ${errorResponse[0].message}`;
+    throw new Error(`Cannot get ${parentId} observers: ${errorDetails}`);
   }
 
   /**
@@ -41,7 +45,9 @@ export class ObserversService {
     if (response.status === 200) {
       return response.text();
     }
-    throw new Error(`Cannot update observer ${observerId}`);
+    const errorResponse = await response.json();
+    const errorDetails = `${errorResponse[0].instancePath} ${errorResponse[0].message}`;
+    throw new Error(`Cannot update observer: ${errorDetails}`);
   }
 
   /**
@@ -56,7 +62,9 @@ export class ObserversService {
     if (response.status === 200) {
       return response.text();
     }
-    throw new Error(`Cannot delete observer ${observerId}`);
+    const errorResponse = await response.json();
+    const errorDetails = `${errorResponse[0].instancePath} ${errorResponse[0].message}`;
+    throw new Error(`Cannot delete observer: ${errorDetails}`);
   }
 
   /**
