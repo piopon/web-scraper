@@ -138,6 +138,8 @@ export class GroupsController {
         console.log(data);
       })
       .catch((error) => {
+        closeButton.classList.add("shake");
+        setTimeout(() => closeButton.classList.remove("shake"), 500);
         console.error(error);
       });
   }
@@ -154,6 +156,8 @@ export class GroupsController {
         console.log(data);
       })
       .catch((error) => {
+        closeButton.classList.add("shake");
+        setTimeout(() => closeButton.classList.remove("shake"), 500);
         console.error(error);
       });
   }
@@ -170,6 +174,8 @@ export class GroupsController {
         console.log(data);
       })
       .catch((error) => {
+        closeButton.classList.add("shake");
+        setTimeout(() => closeButton.classList.remove("shake"), 500);
         console.error(error);
       });
   }
