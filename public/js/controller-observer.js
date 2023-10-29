@@ -54,17 +54,16 @@ export class ObserversController {
       });
     });
     const modalCloseButtons = document.querySelectorAll("div.modal-close-btn");
-    modalCloseButtons.forEach((button) => {
-      button.addEventListener("click", (event) => {
+    modalCloseButtons.forEach((closeButton) => {
+      closeButton.addEventListener("click", (event) => {
         const target = event.currentTarget;
-        const observerDialog = target.parentNode.parentNode.parentNode.parentNode;
         const selectedAction = target.dataset.action;
         if (selectedAction === "add") {
-          this.#addObserver(observerDialog, target.dataset.id);
+          this.#addObserver(closeButton, target.dataset.id);
         } else if (selectedAction === "update") {
-          this.#updateObserver(observerDialog, target.dataset.id);
+          this.#updateObserver(closeButton, target.dataset.id);
         } else if (selectedAction === "delete") {
-          this.#deleteObserver(observerDialog, target.dataset.id);
+          this.#deleteObserver(closeButton, target.dataset.id);
         } else if (selectedAction === "cancel") {
           this.#hideDialog(closeButton);
         } else {
