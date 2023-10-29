@@ -87,8 +87,8 @@ export class ObserversController {
         console.log(data);
       })
       .catch((error) => {
-        observerDialog.classList.add("shake");
-        setTimeout(() => observerDialog.classList.remove("shake"), 500);
+        closeButton.classList.add("shake");
+        setTimeout(() => closeButton.classList.remove("shake"), 500);
         console.error(error);
       });
   }
@@ -105,8 +105,8 @@ export class ObserversController {
         console.log(data);
       })
       .catch((error) => {
-        observerDialog.classList.add("shake");
-        setTimeout(() => observerDialog.classList.remove("shake"), 500);
+        closeButton.classList.add("shake");
+        setTimeout(() => closeButton.classList.remove("shake"), 500);
         console.error(error);
       });
   }
@@ -124,8 +124,8 @@ export class ObserversController {
         console.log(data);
       })
       .catch((error) => {
-        observerDialog.classList.add("shake");
-        setTimeout(() => observerDialog.classList.remove("shake"), 500);
+        closeButton.classList.add("shake");
+        setTimeout(() => closeButton.classList.remove("shake"), 500);
         console.error(error);
       });
   }
