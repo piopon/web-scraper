@@ -52,8 +52,8 @@ export class GroupsService {
   static #createGroupObservers(observers) {
     const result = [];
     observers.forEach((observer) => {
-      const observerContent = observer.parentNode;
-      console.log(observerContent);
+      const observerContent = observer.parentNode.querySelector("div.modal-content");
+      result.push(this.#createGroupObserver(observerContent));
     });
     return result;
   }
