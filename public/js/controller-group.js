@@ -99,7 +99,6 @@ export class GroupsController {
         categoryDialog.addEventListener("close", (closeEvent) => {
           const parentCategoryButton = this.#groupExpanded.querySelector("input.group-category");
           parentCategoryButton.value = categoryDialog.returnValue;
-          console.log("cat: " + categoryDialog.returnValue)
           closeEvent.stopPropagation();
         }, { once: true });
         categoryDialog.showModal();
