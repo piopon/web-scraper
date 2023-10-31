@@ -170,12 +170,9 @@ export class ConfigRouter {
     router.delete("/groups/observers", (request, response) => {
       this.#handleDeleteRequest(request, response, (configContent) => {
         const details = this.#getParentDetails(configContent, { observerName: request.query.name });
-        if (details) {
-          return details.parent.length > 1
-            ? { found: { parent: details.parent, index: details.index }, reason: undefined }
-            : { found: undefined, reason: "Cannot delete last group observer" };
-        }
-        return { found: undefined, reason: "Could not find the item to delete" };
+        return details
+          ? { found: { parent: details.parent, index: details.index }, reason: undefined }
+          : { found: undefined, reason: "Could not find item to delete" };
       });
     });
   }
