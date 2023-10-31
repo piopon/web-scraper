@@ -1,6 +1,6 @@
 <div class="widget{{classes}}">
-  {{!-- show label only if it was provided and NOT for matrix widget --}}
-  {{#if (and (unlessEq label undefined) (unlessEq type "matrix"))}}
+  {{!-- show label only if it was provided and NOT for dialog widget --}}
+  {{#if (and (unlessEq label undefined) (unlessEq type "dialog"))}}
     <label class="{{parent}}-label">{{label}}:</label>
   {{/if}}
   {{!-- show identifier container with warning icon and information --}}
@@ -13,8 +13,8 @@
         <option value={{this}} {{#if (eq ../value this)}}selected{{/if}}>{{this}}</option>
       {{/each}}
     </select>
-  {{else if (eq type "matrix")}}
-    <dialog class="{{parent}}-matrix">
+  {{else if (eq type "dialog")}}
+    <dialog class="{{parent}}-dialog">
       {{#if (unlessEq label undefined)}}
         <label class="{{parent}}-label">{{label}}:</label>
       {{/if}}

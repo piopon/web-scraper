@@ -298,20 +298,20 @@ label.group-category-label {
   text-align: left;
 }
 
-dialog.group-category-matrix {
+dialog.group-category-dialog {
   box-shadow: 0px 0px 2rem black;
   border-radius: 0.35rem;
   border: 3px solid black;
 }
 
-dialog.group-category-matrix form {
+dialog.group-category-dialog form {
   display: grid;
   grid-template-columns: repeat(6, 4rem);
   grid-template-rows: repeat(5, 4rem);
   grid-gap: 0.5rem;
 }
 
-dialog.group-category-matrix button {
+dialog.group-category-dialog button {
   font-size: 2rem;
 }
 

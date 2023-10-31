@@ -63,7 +63,7 @@ export class ObserversController {
         } else if ("update" === selectedAction) {
           this.#updateObserver(closeButton, target.dataset.id);
         } else if ("delete" === selectedAction) {
-          const confirmDialog = document.querySelector("dialog.delete-observer-matrix");
+          const confirmDialog = document.querySelector("dialog.delete-observer-dialog");
           confirmDialog.addEventListener("close", (closeEvent) => {
             if ("yes" === confirmDialog.returnValue) {
               this.#deleteObserver(closeButton, target.dataset.id);

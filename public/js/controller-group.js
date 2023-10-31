@@ -95,7 +95,7 @@ export class GroupsController {
     const groupCategoryButtons = document.querySelectorAll("input.group-category");
     groupCategoryButtons.forEach((button) => {
       button.addEventListener("click", (clickEvent) => {
-        const categoryDialog = document.querySelector("dialog.group-category-matrix");
+        const categoryDialog = document.querySelector("dialog.group-category-dialog");
         categoryDialog.addEventListener("close", (closeEvent) => {
           const parentCategoryButton = this.#groupExpanded.querySelector("input.group-category");
           parentCategoryButton.value = categoryDialog.returnValue;
@@ -116,7 +116,7 @@ export class GroupsController {
         } else if ("update" === selectedAction) {
           this.#updateGroup(closeButton, target.dataset.id);
         } else if ("delete" === selectedAction) {
-          const confirmDialog = document.querySelector("dialog.delete-group-matrix");
+          const confirmDialog = document.querySelector("dialog.delete-group-dialog");
           confirmDialog.addEventListener("close", (closeEvent) => {
             if ("yes" === confirmDialog.returnValue) {
               this.#deleteGroup(closeButton, target.dataset.id);
