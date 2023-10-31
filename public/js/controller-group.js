@@ -115,7 +115,15 @@ export class GroupsController {
         } else if (selectedAction === "update") {
           this.#updateGroup(closeButton, target.dataset.id);
         } else if (selectedAction === "delete") {
-          this.#deleteGroup(closeButton, target.dataset.id);
+          const confirmDialog = document.querySelector("dialog.delete-group-matrix");
+          confirmDialog.addEventListener("close", (event) => {
+            if ("yes" === confirmDialog.returnValue) {
+              this.#deleteGroup(closeButton, target.dataset.id);
+            }
+            event.stopPropagation();
+          }, { once: true });
+          confirmDialog.querySelector("label").innerText = `delete group: ${target.dataset.id}?`
+          confirmDialog.showModal();
         } else if (selectedAction === "cancel") {
           this.#collapse(closeButton);
         } else {
