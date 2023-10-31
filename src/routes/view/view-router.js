@@ -22,9 +22,21 @@ export class ViewRouter {
     const router = express.Router();
     router.get("/", (request, response) => {
       const scrapConfig = JSON.parse(fs.readFileSync(this.#configFilePath)).map((item) => new ScrapConfig(item));
-      response.render("index", { title: "scraper configuration", content: scrapConfig })
+      response.render("index", {
+        title: "scraper configuration",
+        content: scrapConfig,
+        categories: this.#getSupportedCategories(),
+      });
     });
     router.get("/status", (request, response) => response.render("status", { title: "scraper running status" }));
     return router;
+  }
+
+  /**
+   * Method used to receive all categories supported by web scraper
+   * @returns a String with supported categories separated by '|' character
+   */
+  #getSupportedCategories() {
+    return "📈|💰|👕|👗|👢|🍔|🛒|👪|🐶|🐱|🏠|🚘|⛽|💊|📚|⛺|🧸|⚽|🔨|💻|📀|📱|🎮|🎵|🎥|🧩|🎴|💎|💄|🔥";
   }
 }
