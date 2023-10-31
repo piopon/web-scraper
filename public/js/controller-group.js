@@ -78,12 +78,6 @@ export class GroupsController {
    * This method handles: group column and close column buttons clicks & new column hint
    */
   #bindListeners() {
-    const categoryDialog = document.querySelector("dialog.group-category-matrix");
-    categoryDialog.addEventListener("close", (event) => {
-      const parentCategoryButton = this.#groupExpanded.querySelector("input.group-category");
-      parentCategoryButton.value = categoryDialog.returnValue;
-      event.stopPropagation();
-    });
     this.#groupColumns.forEach((column) => {
       column.addEventListener("click", (event) => {
         this.#expand(column);
@@ -101,6 +95,13 @@ export class GroupsController {
     const groupCategoryButtons = document.querySelectorAll("input.group-category");
     groupCategoryButtons.forEach((button) => {
       button.addEventListener("click", (event) => {
+        const categoryDialog = document.querySelector("dialog.group-category-matrix");
+        categoryDialog.addEventListener("close", (event) => {
+          const parentCategoryButton = this.#groupExpanded.querySelector("input.group-category");
+          parentCategoryButton.value = categoryDialog.returnValue;
+          console.log("cat: " + categoryDialog.returnValue)
+          event.stopPropagation();
+        }, { once: true });
         categoryDialog.showModal();
         event.stopPropagation();
       });
