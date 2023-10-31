@@ -94,43 +94,43 @@ export class GroupsController {
     });
     const groupCategoryButtons = document.querySelectorAll("input.group-category");
     groupCategoryButtons.forEach((button) => {
-      button.addEventListener("click", (event) => {
+      button.addEventListener("click", (clickEvent) => {
         const categoryDialog = document.querySelector("dialog.group-category-matrix");
-        categoryDialog.addEventListener("close", (event) => {
+        categoryDialog.addEventListener("close", (closeEvent) => {
           const parentCategoryButton = this.#groupExpanded.querySelector("input.group-category");
           parentCategoryButton.value = categoryDialog.returnValue;
           console.log("cat: " + categoryDialog.returnValue)
-          event.stopPropagation();
+          closeEvent.stopPropagation();
         }, { once: true });
         categoryDialog.showModal();
-        event.stopPropagation();
+        clickEvent.stopPropagation();
       });
     });
     const groupCloseButtons = document.querySelectorAll(".group-buttons > .group-close-btn");
     groupCloseButtons.forEach((closeButton) => {
-      closeButton.addEventListener("click", (event) => {
-        const target = event.currentTarget;
+      closeButton.addEventListener("click", (clickEvent) => {
+        const target = clickEvent.currentTarget;
         const selectedAction = target.dataset.action;
-        if (selectedAction === "add") {
+        if ("add" === selectedAction) {
           this.#addGroup(closeButton, target.dataset.id);
-        } else if (selectedAction === "update") {
+        } else if ("update" === selectedAction) {
           this.#updateGroup(closeButton, target.dataset.id);
-        } else if (selectedAction === "delete") {
+        } else if ("delete" === selectedAction) {
           const confirmDialog = document.querySelector("dialog.delete-group-matrix");
-          confirmDialog.addEventListener("close", (event) => {
+          confirmDialog.addEventListener("close", (closeEvent) => {
             if ("yes" === confirmDialog.returnValue) {
               this.#deleteGroup(closeButton, target.dataset.id);
             }
-            event.stopPropagation();
+            closeEvent.stopPropagation();
           }, { once: true });
           confirmDialog.querySelector("label").innerText = `delete group: ${target.dataset.id}?`
           confirmDialog.showModal();
-        } else if (selectedAction === "cancel") {
+        } else if ("cancel" === selectedAction) {
           this.#collapse(closeButton);
         } else {
           console.error(`Unsupported accept button action: ${selectedAction}`);
         }
-        event.stopPropagation();
+        clickEvent.stopPropagation();
       });
     });
   }
@@ -307,7 +307,7 @@ export class GroupsController {
     const randomItem = array[Math.floor(Math.random() * array.length)];
     if (remove) {
       var index = array.indexOf(randomItem);
-      if (index !== -1) {
+      if (-1 !== index) {
         array.splice(index, 1);
       }
     }

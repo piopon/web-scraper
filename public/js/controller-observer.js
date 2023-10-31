@@ -55,29 +55,29 @@ export class ObserversController {
     });
     const modalCloseButtons = document.querySelectorAll("div.modal-close-btn");
     modalCloseButtons.forEach((closeButton) => {
-      closeButton.addEventListener("click", (event) => {
-        const target = event.currentTarget;
+      closeButton.addEventListener("click", (clickEvent) => {
+        const target = clickEvent.currentTarget;
         const selectedAction = target.dataset.action;
-        if (selectedAction === "add") {
+        if ("add" === selectedAction) {
           this.#addObserver(closeButton, target.dataset.id);
-        } else if (selectedAction === "update") {
+        } else if ("update" === selectedAction) {
           this.#updateObserver(closeButton, target.dataset.id);
-        } else if (selectedAction === "delete") {
+        } else if ("delete" === selectedAction) {
           const confirmDialog = document.querySelector("dialog.delete-observer-matrix");
-          confirmDialog.addEventListener("close", (event) => {
+          confirmDialog.addEventListener("close", (closeEvent) => {
             if ("yes" === confirmDialog.returnValue) {
               this.#deleteObserver(closeButton, target.dataset.id);
             }
-            event.stopPropagation();
+            closeEvent.stopPropagation();
           }, { once: true });
           confirmDialog.querySelector("label").innerText = `delete observer: ${target.dataset.id}?`
           confirmDialog.showModal();
-        } else if (selectedAction === "cancel") {
+        } else if ("cancel" === selectedAction) {
           this.#hideDialog(closeButton);
         } else {
           console.error(`Unsupported accept button action: ${selectedAction}`);
         }
-        event.stopPropagation();
+        clickEvent.stopPropagation();
       });
     });
   }
@@ -143,7 +143,7 @@ export class ObserversController {
    * @param {String} parentGroupId The observers parent group identifier
    */
   #reloadObservers(parentGroupId) {
-    if (parentGroupId === undefined || parentGroupId === "+") {
+    if (undefined === parentGroupId || "+" === parentGroupId) {
       console.error(`Cannot reload observers for ${parentGroupId} parent.`);
       return;
     }
