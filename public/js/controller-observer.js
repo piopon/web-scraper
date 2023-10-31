@@ -63,7 +63,15 @@ export class ObserversController {
         } else if (selectedAction === "update") {
           this.#updateObserver(closeButton, target.dataset.id);
         } else if (selectedAction === "delete") {
-          this.#deleteObserver(closeButton, target.dataset.id);
+          const confirmDialog = document.querySelector("dialog.delete-observer-matrix");
+          confirmDialog.addEventListener("close", (event) => {
+            if ("yes" === confirmDialog.returnValue) {
+              this.#deleteObserver(closeButton, target.dataset.id);
+            }
+            event.stopPropagation();
+          }, { once: true });
+          confirmDialog.querySelector("label").innerText = `delete observer: ${target.dataset.id}?`
+          confirmDialog.showModal();
         } else if (selectedAction === "cancel") {
           this.#hideDialog(closeButton);
         } else {
