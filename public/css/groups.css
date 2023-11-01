@@ -151,6 +151,12 @@ dialog.delete-group-dialog button {
   background-color: #efefef;
   border: 1px solid black;
   border-radius: 5px;
+  font-family: "Sedgwick Ave", cursive;
+}
+
+dialog.delete-group-dialog button:hover {
+  color: white;
+  background-color: slateblue;
 }
 
 .cancel {
