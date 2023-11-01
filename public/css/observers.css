@@ -126,3 +126,38 @@ div.id::before {
 div.id:hover:before {
   display: block;
 }
+
+label.delete-observer-label {
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+
+dialog.delete-observer-dialog {
+  box-shadow: 0px 0px 2rem black;
+  border-radius: 0.35rem;
+  border: 3px solid black;
+}
+
+dialog.delete-observer-dialog form {
+  display: grid;
+  grid-template-columns: repeat(2, 10rem);
+  grid-template-rows: repeat(1, 2.5rem);
+  grid-gap: 0.5rem;
+  margin: 0rem;
+}
+
+dialog.delete-observer-dialog button {
+  text-align: center;
+  font-size: 1rem;
+  color: black;
+  background-color: #efefef;
+  border: 1px solid black;
+  border-radius: 5px;
+  font-family: "Sedgwick Ave", cursive;
+}
+
+dialog.delete-observer-dialog button:hover {
+  color: white;
+  background-color: slateblue;
+}
