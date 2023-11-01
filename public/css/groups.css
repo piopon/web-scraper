@@ -125,6 +125,34 @@ div.modal-close-btn {
   background-color: tomato;
 }
 
+label.delete-group-label {
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+
+dialog.delete-group-dialog {
+  box-shadow: 0px 0px 2rem black;
+  border-radius: 0.35rem;
+  border: 3px solid black;
+}
+
+dialog.delete-group-dialog form {
+  display: grid;
+  grid-template-columns: repeat(2, 10rem);
+  grid-template-rows: repeat(1, 2.5rem);
+  grid-gap: 0.5rem;
+}
+
+dialog.delete-group-dialog button {
+  text-align: center;
+  font-size: 1rem;
+  color: black;
+  background-color: #efefef;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
 .cancel {
   background-color: orange;
   margin-left: 0.25rem;
