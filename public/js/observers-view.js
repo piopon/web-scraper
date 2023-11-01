@@ -5,7 +5,7 @@ export class ObserversView {
    * @param {Array} observers The array of observers which HTML code we want to get
    * @return HTML code with all observers contents
    */
-  static getHtml = function (groupId, observers) {
+  static getHtml(groupId, observers) {
     let result = "";
     observers.forEach((observer) => {
       result += ObserversView.#getExistingObserverHtml(observer);
