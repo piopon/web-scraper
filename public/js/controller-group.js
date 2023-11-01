@@ -142,6 +142,7 @@ export class GroupsController {
   #addGroup(closeButton, parentUserId) {
     GroupsService.addGroup(parentUserId)
       .then((data) => {
+        this.#reloadGroups(parentUserId);
         this.#collapse(closeButton);
         console.log(data);
       })
@@ -178,6 +179,7 @@ export class GroupsController {
   #deleteGroup(closeButton, deletedGroupId) {
     GroupsService.deleteGroup(deletedGroupId)
       .then((data) => {
+        this.#reloadGroups(0);
         this.#collapse(closeButton);
         console.log(data);
       })
@@ -186,6 +188,20 @@ export class GroupsController {
         setTimeout(() => closeButton.classList.remove("shake"), 500);
         console.error(error);
       });
+  }
+
+  /**
+   * Method used to reload observers for the specified parent group
+   * @param {String} parentGroupId The observers parent group identifier
+   */
+  #reloadGroups(parentUserId) {
+    if (undefined === parentUserId) {
+      console.error(`Cannot reload groups for ${parentGroupId} user.`);
+      return;
+    }
+    GroupsService.getGroups(parentUserId)
+      .then((data) => console.log(data[0]))
+      .catch((error) => console.error(error));
   }
 
   /**
