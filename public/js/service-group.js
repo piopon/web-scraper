@@ -17,6 +17,23 @@ export class GroupsService {
   }
 
   /**
+   * Method used to get groups from the specified parent
+   * @param {String} userId The identifier of the parent for which we want get groups
+   * @returns promise containing the operation response JSON or error
+   */
+  static async getGroups(userId) {
+    const encodedId = encodeURIComponent(userId);
+    const url = `api/v1/configs?user=${encodedId}`;
+    const response = await fetch(url, this.#createRequestOptions("GET"));
+    if (response.status === 200) {
+      return response.json();
+    }
+    const errorResponse = await response.json();
+    const errorDetails = `${errorResponse[0].instancePath} ${errorResponse[0].message}`;
+    throw new Error(`Cannot get ${parentId} observers: ${errorDetails}`);
+  }
+
+  /**
    * Method used to update group with the specified identifier
    * @param {String} groupId The identifier of the group which should be updated
    * @returns promise containing the operation response text or error
