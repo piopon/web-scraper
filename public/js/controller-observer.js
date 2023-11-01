@@ -1,5 +1,5 @@
 import { ObserversService } from "./service-observer.js";
-import { ObserversView } from "./observers-view.js";
+import { ObserversView } from "./view-observer.js";
 
 export class ObserversController {
   #mediator = undefined;
