@@ -204,7 +204,8 @@ export class GroupsController {
       .then((data) => {
         const userId = data[0].user;
         const userGroups = data[0].groups;
-        console.log(GroupsView.getHtml(userId, userGroups));
+        const groupsContainer = document.querySelector("section.group-columns");
+        groupsContainer.innerHTML = GroupsView.getHtml(userId, userGroups);
       })
       .catch((error) => console.error(error));
   }
