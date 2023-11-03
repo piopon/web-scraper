@@ -34,6 +34,8 @@ export class ObserversController {
       this.#mediator = eventObject;
     } else if ("group-expanded" === eventType) {
       this.#expandedGroup = eventObject;
+    } else if ("groups-reloaded" === eventType) {
+      this.#bindListeners();
     }
     return;
   }

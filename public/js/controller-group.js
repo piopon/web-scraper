@@ -214,6 +214,8 @@ export class GroupsController {
         const groupsContainer = document.querySelector("section.group-columns");
         groupsContainer.innerHTML = GroupsView.getHtml(userId, userGroups);
         this.#initController();
+        // notify other controllers that groups were reloaded
+        this.emitEvent("groups-reloaded", userId);
       })
       .catch((error) => console.error(error));
   }
