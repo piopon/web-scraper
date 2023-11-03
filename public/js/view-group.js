@@ -32,6 +32,26 @@ export class GroupsView {
     return "";
   }
 
+  static #getGroupRootDataHtml(group) {
+    const name = group !== undefined ? group.name : "";
+    const domain = group !== undefined ? group.domain : "";
+    const category = group !== undefined ? group.category : "";
+    const disabled = group !== undefined ? "disabled" : "";
+    return `<div class="widget">
+              <label class="group-label">name:</label>
+              ${group === undefined ? `<div class="id"></div>` : ""}
+              <input type="text" class="group-name" name="name" value="${name}" ${disabled}/>
+            </div>
+            <div class="widget">
+              <label class="group-label">domain:</label>
+              <input type="text" class="group-domain" name="domain" value="${domain}"/>
+            </div>
+            <div class="widget">
+              <label class="group-label">category:</label>
+              <input type="button" class="group-category" name="category" value="${category}"/>
+            </div>`;
+  }
+
   static #getGroupButtonsHtml(userId, group) {
     if (group === undefined) {
       // no group provided = we are adding a new one
