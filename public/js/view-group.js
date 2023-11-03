@@ -1,4 +1,4 @@
-export class ObserversView {
+export class GroupsView {
   /**
    * Method used to receive HTML code representing input group array
    * @param {String} userId The groups parent user identifier
@@ -8,9 +8,9 @@ export class ObserversView {
   static getHtml(userId, groups) {
     let result = "";
     groups.forEach((group) => {
-      result += ObserversView.#getExistingGroupHtml(group);
+      result += GroupsView.#getExistingGroupHtml(group);
     });
-    result += ObserversView.#getNewGroupHtml(userId);
+    result += GroupsView.#getNewGroupHtml(userId);
     return result;
   }
 
