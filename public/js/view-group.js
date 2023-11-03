@@ -31,4 +31,16 @@ export class GroupsView {
   static #getNewGroupHtml(userId) {
     return "";
   }
+
+  static #getGroupButtonsHtml(userId, group) {
+    if (group === undefined) {
+      // no group provided = we are adding a new one
+      return `<div class="group-close-btn accept" data-action="add" data-id="${userId}">add</div>
+              <div class="group-close-btn cancel" data-action="cancel">cancel</div>`;
+    }
+    // provided is an edited one
+    return `<div class="group-close-btn accept" data-action="update" data-id="${group.name}">update</div>
+            <div class="group-close-btn delete" data-action="delete" data-id="${group.name}">delete</div>
+            <div class="group-close-btn cancel" data-action="cancel">cancel</div>`;
+  }
 }
