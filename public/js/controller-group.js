@@ -1,4 +1,5 @@
 import { GroupsService } from "./service-group.js";
+import { GroupsView } from "./view-group.js";
 
 export class GroupsController {
   #mediator = undefined;
@@ -200,7 +201,11 @@ export class GroupsController {
       return;
     }
     GroupsService.getGroups(parentUserId)
-      .then((data) => console.log(data[0]))
+      .then((data) => {
+        const userId = data[0].user;
+        const userGroups = data[0].groups;
+        console.log(GroupsView.getHtml(userId, userGroups));
+      })
       .catch((error) => console.error(error));
   }
 
