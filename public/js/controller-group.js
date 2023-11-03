@@ -10,12 +10,7 @@ export class GroupsController {
    * Creates new groups controller
    */
   constructor() {
-    // get all elements representing group columns
-    this.#groupColumns = document.querySelectorAll(".group-column > .group-container");
-    // initialize style, size, and logic of all group columns
-    this.#initStyle();
-    this.#initDimensions();
-    this.#bindListeners();
+    this.#initController();
   }
 
   /**
@@ -40,6 +35,18 @@ export class GroupsController {
       this.#mediator = eventObject;
     }
     return;
+  }
+
+  /**
+   * Method used to (re)initialize controller
+   */
+  #initController() {
+    // get all elements representing group columns
+    this.#groupColumns = document.querySelectorAll(".group-column > .group-container");
+    // initialize style, size, and logic of all group columns
+    this.#initStyle();
+    this.#initDimensions();
+    this.#bindListeners();
   }
 
   /**
@@ -206,6 +213,7 @@ export class GroupsController {
         const userGroups = data[0].groups;
         const groupsContainer = document.querySelector("section.group-columns");
         groupsContainer.innerHTML = GroupsView.getHtml(userId, userGroups);
+        this.#initController();
       })
       .catch((error) => console.error(error));
   }
