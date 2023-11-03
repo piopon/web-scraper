@@ -1,3 +1,5 @@
+import { ObserversView } from "./view-observer.js";
+
 export class GroupsView {
   /**
    * Method used to receive HTML code representing input group array
@@ -30,6 +32,27 @@ export class GroupsView {
    */
   static #getNewGroupHtml(userId) {
     return "";
+  }
+
+  static #getGroupContentHtml(userId, group) {
+    const groupId = group !== undefined ? group.name : undefined;
+    const groupObservers = group !== undefined ? group.observers : [];
+    return `<div class="group-content">
+              <div class="group-root-data">
+              ${GroupsView.#getGroupRootDataHtml(group)}
+              </div>
+              <div class="group-observers">
+                <div class="observers-title">
+                  <label class="group-label">observers:</label>
+                </div>
+                <div class="observers-container">
+                  ${ObserversView.getHtml(groupId, groupObservers)}
+                </div>
+              </div>
+              <div class="group-buttons">
+                ${GroupsView.#getGroupButtonsHtml(userId, group)}
+              </div>
+            </div>`;
   }
 
   static #getGroupRootDataHtml(group) {
