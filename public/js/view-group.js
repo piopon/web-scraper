@@ -22,7 +22,12 @@ export class GroupsView {
    * @returns HTML code with existing group contents
    */
   static #getExistingGroupHtml(group) {
-    return "";
+    return `<article class="group-column">
+              <div class="group-container" data-action="update">
+                <h2 class="group-title">${group.name}</h2>
+                ${GroupsView.#getGroupContentHtml(undefined, group)}
+              </div>
+            </article>`;
   }
 
   /**
@@ -31,7 +36,13 @@ export class GroupsView {
    * @returns HTML code with new group UI contents
    */
   static #getNewGroupHtml(userId) {
-    return "";
+    return `<article class="group-column">
+              <div class="group-container" data-action="add">
+                <h2 class="group-title">+</h2>
+                <h3 class="group-hint">add group</h3>
+                ${GroupsView.#getGroupContentHtml(userId, undefined)}
+              </div>
+            </article>`;
   }
 
   static #getGroupContentHtml(userId, group) {
