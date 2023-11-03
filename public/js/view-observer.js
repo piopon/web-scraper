@@ -78,11 +78,12 @@ export class ObserversView {
     const name = observer !== undefined ? observer.name : "";
     const target = observer !== undefined ? observer.target : "";
     const history = observer !== undefined ? observer.history : "";
+    const disabled = observer !== undefined ? "disabled" : "";
     return `<div class="observer-data-row1">
               <div class="widget fill">
                 <label class="observer-label">name:</label>
                 ${observer === undefined ? `<div class="id"></div>` : ""}
-                <input type="text" class="observer-name" name="name" value="${name}" />
+                <input type="text" class="observer-name" name="name" value="${name}" ${disabled}/>
               </div>
               <div class="widget">
                 <label class="observer-label">target:</label>
