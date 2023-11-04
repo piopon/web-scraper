@@ -45,6 +45,12 @@ export class GroupsView {
             </article>`;
   }
 
+  /**
+   * Method used to receive group content HTML code
+   * @param {String} userId The group parent user identifier
+   * @param {Object} group The group for which we want to generate content code
+   * @returns HTML code containing content for specified group
+   */
   static #getGroupContentHtml(userId, group) {
     const groupId = group !== undefined ? group.name : undefined;
     const groupObservers = group !== undefined ? group.observers : [];
@@ -66,6 +72,11 @@ export class GroupsView {
             </div>`;
   }
 
+  /**
+   * Method used to receive HTML code with specified group root data
+   * @param {Object} group The group for which we want to get root data code
+   * @returns HTML code containing root data for specified group
+   */
   static #getGroupRootDataHtml(group) {
     const name = group !== undefined ? group.name : "";
     const domain = group !== undefined ? group.domain : "";
@@ -86,6 +97,12 @@ export class GroupsView {
             </div>`;
   }
 
+  /**
+   * Method used to receive group action buttons HTML code
+   * @param {String} userId The group parent user identifier
+   * @param {Object} group The group for which we want to generate buttons code
+   * @returns HTML code containing action buttons for specified group
+   */
   static #getGroupButtonsHtml(userId, group) {
     if (group === undefined) {
       // no group provided = we are adding a new one
