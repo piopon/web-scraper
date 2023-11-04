@@ -32,9 +32,10 @@ export class ObserversView {
    * @returns HTML code with new observer UI contents
    */
   static #getNewObserverHtml(groupId) {
+    const disabled = groupId === undefined ? "disabled" : "";
     return `<div class="observer-content">
               ${ObserversView.#getObserverModalHtml(groupId, undefined)}
-              <div class="modal-button new-observer">+</div>
+              <div class="modal-button new-observer" ${disabled}>+</div>
             </div>`;
   }
 
