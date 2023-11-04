@@ -36,6 +36,8 @@ export class ObserversController {
       this.#expandedGroup = eventObject;
     } else if ("groups-reloaded" === eventType) {
       this.#bindListeners();
+      // since groups were reloaded then by definition observers were also reloaded
+      this.emitEvent("observers-reloaded", undefined);
     }
     return;
   }
