@@ -222,7 +222,7 @@ export class ObserversView {
    * Method used to receive observer modal dialog buttons HTML code
    * @param {String} groupId The observer parent group identifier
    * @param {Object} observer The observer for which we want to generate buttons code
-   * @returns HTML clode containing modal dialog buttons for specified observer
+   * @returns HTML code containing modal dialog buttons for specified observer
    */
   static #getObserverModalButtonsHtml(groupId, observer) {
     if (observer === undefined) {
