@@ -66,6 +66,11 @@ div.component-toggle {
   width: 3rem;
 }
 
+div.component-toggle p {
+  margin: 0.25rem;
+  font-size: 0.8rem;
+}
+
 div.component-name {
   display: flex;
   margin: 0rem;

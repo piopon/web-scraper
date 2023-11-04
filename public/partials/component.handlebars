@@ -16,9 +16,12 @@
         {{> widget type="text" parent=(append "component-" name) label="auxiliary" value=component.auxiliary }}
       {{/if}}
     </div>
-    <div class="component-toggle">
-      <input type="checkbox" id="check-auto-manual">
-      <label for="check-auto-manual"></label>
-    </div>
+    {{#if (unlessEq name "price")}}
+      <div class="component-toggle">
+        <p>auto</p>
+        <input type="checkbox" class="check-auto-manual">
+        <p>manual</p>
+      </div>
+    {{/if}}
   </div>
 </div>
