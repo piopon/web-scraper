@@ -45,6 +45,8 @@ div.component-card[active] .card-title {
 }
 
 div.component-content {
+  display: flex;
+  flex-direction: row;
   transform: translateY(2rem);
   opacity: 0;
   transition: opacity var(--animation-speed) ease-in-out, transform var(--animation-speed) ease-in-out;
@@ -54,6 +56,14 @@ div.component-card[active] div.component-content {
   transform: translateY(0);
   opacity: 1;
   border-top: 1px solid black;
+}
+
+div.component-fields {
+  width: 100%;
+}
+
+div.component-toggle {
+  width: 3rem;
 }
 
 div.component-name {
