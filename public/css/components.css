@@ -69,6 +69,7 @@ div.component-toggle {
   justify-content: space-evenly;
   position: relative;
   box-sizing: border-box;
+  margin-top: 1.5rem;
 }
 
 div.component-toggle input[type=checkbox] {
@@ -86,6 +87,7 @@ div.component-toggle label {
   position: relative;
   display: flex;
   box-sizing: border-box;
+  width: 100%;
 }
 
 div.component-toggle label:before {
@@ -126,7 +128,7 @@ div.component-toggle input[type=checkbox]:checked + label:after {
 }
 
 div.component-toggle p {
-  margin: 0.25rem;
+  margin: 0rem auto;
   font-size: 0.8rem;
 }
 
