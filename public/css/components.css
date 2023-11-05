@@ -82,6 +82,49 @@ div.component-toggle input[type=checkbox] {
   opacity: 0;
 }
 
+div.component-toggle label {
+  position: relative;
+  display: flex;
+  box-sizing: border-box;
+}
+
+div.component-toggle label:before {
+  content: "";
+  left: 0.5rem;
+  width: 2rem;
+  height: 6rem;
+  background: red;
+  position: relative;
+  display: inline-block;
+  border-radius: 20px;
+  border: 1px solid black;
+  box-sizing: border-box;
+  transition: 0.2s ease-in;
+}
+
+div.component-toggle label:after {
+  content: "";
+  position: absolute;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  left: 0.75rem;
+  top: 0.25rem;
+  z-index: 2;
+  background: #fff;
+  border: 1px solid black;
+  box-sizing: border-box;
+  transition: 0.2s ease-in;
+}
+
+div.component-toggle input[type=checkbox]:checked + label:before {
+  background: green;
+}
+
+div.component-toggle input[type=checkbox]:checked + label:after {
+  top: 4.25rem;
+}
+
 div.component-toggle p {
   margin: 0.25rem;
   font-size: 0.8rem;
