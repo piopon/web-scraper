@@ -64,6 +64,9 @@ div.component-fields {
 
 div.component-toggle {
   width: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 
 div.component-toggle p {
