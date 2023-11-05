@@ -95,7 +95,7 @@ div.component-toggle label:before {
   left: 0.5rem;
   width: 2rem;
   height: 6rem;
-  background: red;
+  background: slateblue;
   position: relative;
   display: inline-block;
   border-radius: 20px;
@@ -120,7 +120,7 @@ div.component-toggle label:after {
 }
 
 div.component-toggle input[type=checkbox]:checked + label:before {
-  background: green;
+  background: cornflowerblue;
 }
 
 div.component-toggle input[type=checkbox]:checked + label:after {
