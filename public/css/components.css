@@ -101,6 +101,7 @@ div.component-toggle label:before {
   border-radius: 20px;
   border: 1px solid black;
   box-sizing: border-box;
+  box-shadow: 2px 2px 5px black;
   transition: 0.2s ease-in;
 }
 
