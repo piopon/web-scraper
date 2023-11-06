@@ -110,6 +110,12 @@
   transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
+.group-column .group-content input:disabled {
+  background-color: #e5e5e5;
+  border-color: #787878;
+  color: #646464;
+}
+
 .group-column.expanded {
   width: 100%;
   top: 0 !important;
