@@ -5,7 +5,7 @@ export class ComponentsController {
    * Creates new components controller
    */
   constructor() {
-    this.#bindListeners();
+    this.#initController();
   }
 
   /**
@@ -29,10 +29,17 @@ export class ComponentsController {
     if ("subscribed" === eventType) {
       this.#mediator = eventObject;
     } else if ("observers-reloaded" === eventType) {
-      // bind listeners to currently existing component cards
-      this.#bindListeners();
+      // re-initialize controller with current component cards
+      this.#initController();
     }
     return;
+  }
+
+  /**
+   * Method used to (re)initialize controller
+   */
+  #initController() {
+    this.#bindListeners();
   }
 
   /**
