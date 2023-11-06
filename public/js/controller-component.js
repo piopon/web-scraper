@@ -63,5 +63,11 @@ export class ComponentsController {
         }
       });
     });
+    const componentToggles = document.querySelectorAll("input.check-auto-manual");
+    componentToggles.forEach((toggle) => {
+      toggle.addEventListener("change", () => {
+        console.log("Changed component toggle");
+      });
+    });
   }
 }
