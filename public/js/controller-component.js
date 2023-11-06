@@ -51,7 +51,7 @@ export class ComponentsController {
     const componentToggles = document.querySelectorAll("input.check-auto-manual");
     componentToggles.forEach((toggle) => {
       toggle.addEventListener("change", () => {
-        console.log("Changed component toggle");
+        this.#updateCardEnableState(toggle);
       });
     });
   }
@@ -69,5 +69,13 @@ export class ComponentsController {
         card.removeAttribute("active");
       }
     });
+  }
+
+  /**
+   * Method used to update the enable state of toggle's parent card components
+   * @param {Element} cardToggle The toggle element for which we want to get and update state
+   */
+  #updateCardEnableState(cardToggle) {
+    console.log(`Curr: ${cardToggle.checked} -> par: ${cardToggle.parentNode}`);
   }
 }
