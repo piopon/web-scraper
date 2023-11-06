@@ -36,21 +36,6 @@ export class ComponentsController {
   }
 
   /**
-   * Method used to update component cards expand/collapse effect
-   * @param {Element} activeCard The card which should be expanded (other should be collapsed)
-   */
-  #updateComponentCards(activeCard) {
-    const componentCards = activeCard.parentNode.querySelectorAll(".component-card");
-    componentCards.forEach((card) => {
-      if (card === activeCard) {
-        card.setAttribute("active", "");
-      } else {
-        card.removeAttribute("active");
-      }
-    });
-  }
-
-  /**
    * Method used to bind UI listeners to controller methods.
    * This method handles: component cards expand/collapse effects
    */
@@ -68,6 +53,21 @@ export class ComponentsController {
       toggle.addEventListener("change", () => {
         console.log("Changed component toggle");
       });
+    });
+  }
+
+  /**
+   * Method used to update component cards expand/collapse effect
+   * @param {Element} activeCard The card which should be expanded (other should be collapsed)
+   */
+  #updateComponentCards(activeCard) {
+    const componentCards = activeCard.parentNode.querySelectorAll(".component-card");
+    componentCards.forEach((card) => {
+      if (card === activeCard) {
+        card.setAttribute("active", "");
+      } else {
+        card.removeAttribute("active");
+      }
     });
   }
 }
