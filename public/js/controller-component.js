@@ -103,19 +103,22 @@ export class ComponentsController {
     const currSelector = cardFields.querySelector("input[name='selector']");
     const currAttribute = cardFields.querySelector("input[name='attribute']");
     const currAuxiliary = cardFields.querySelector("input[name='auxiliary']");
-    if ("manual" === toggleMode) {
-      currSelector.disabled = true;
-      currSelector.value = "";
-      currAttribute.disabled = true;
-      currAttribute.value = "";
-      currAuxiliary.disabled = false;
-    } else if ("auto" === toggleMode) {
-      currSelector.disabled = false;
-      currAttribute.disabled = false;
-      currAuxiliary.disabled = true;
-      currAuxiliary.value = "";
+    this.#updateFieldEnableState(currSelector, "auto" === toggleMode);
+    this.#updateFieldEnableState(currAttribute, "auto" === toggleMode);
+    this.#updateFieldEnableState(currAuxiliary, "manual" === toggleMode);
+  }
+
+  /**
+   * The method used to update the enable state (and by definition the value) of a specific field
+   * @param {Element} field The field which enable state should be updated
+   * @param {Boolean} enabled The new enable state of specified field
+   */
+  #updateFieldEnableState(field, enabled) {
+    if (enabled) {
+      field.disabled = false;
     } else {
-      console.error(`Invalid internal state! Unknown toggle mode: ${toggleMode}`);
+      field.disabled = true;
+      field.value = "";
     }
   }
 }
