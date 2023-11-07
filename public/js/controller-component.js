@@ -39,7 +39,21 @@ export class ComponentsController {
    * Method used to (re)initialize controller
    */
   #initController() {
+    this.#initStyle();
     this.#bindListeners();
+  }
+
+  /**
+   * Method used to set style for all component cards
+   */
+  #initStyle() {
+    const componentToggles = document.querySelectorAll("input.check-auto-manual");
+    componentToggles.forEach((toggle) => {
+      const cardFields = toggle.parentNode.parentNode.querySelector("div.component-fields");
+      const cardMode = "" === cardFields.querySelector("input[name='selector']").value ? "manual" : "auto";
+      toggle.checked = "manual" === cardMode;
+      this.#updateCardEnableState(cardMode, cardFields);
+    });
   }
 
   /**
