@@ -103,8 +103,19 @@ export class ComponentsController {
     const currSelector = cardFields.querySelector("input[name='selector']");
     const currAttribute = cardFields.querySelector("input[name='attribute']");
     const currAuxiliary = cardFields.querySelector("input[name='auxiliary']");
-    currSelector.disabled = "auto" !== toggleMode;
-    currAttribute.disabled = "auto" !== toggleMode;
-    currAuxiliary.disabled = "manual" !== toggleMode;
+    if ("manual" === toggleMode) {
+      currSelector.disabled = true;
+      currSelector.value = "";
+      currAttribute.disabled = true;
+      currAttribute.value = "";
+      currAuxiliary.disabled = false;
+    } else if ("auto" === toggleMode) {
+      currSelector.disabled = false;
+      currAttribute.disabled = false;
+      currAuxiliary.disabled = true;
+      currAuxiliary.value = "";
+    } else {
+      console.error(`Invalid internal state! Unknown toggle mode: ${toggleMode}`);
+    }
   }
 }
