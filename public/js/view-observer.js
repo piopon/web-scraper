@@ -1,3 +1,5 @@
+import { ComponentsView } from "./view-component.js";
+
 export class ObserversView {
   /**
    * Method used to receive HTML code representing input observers array
@@ -57,11 +59,7 @@ export class ObserversView {
                     ${ObserversView.#getObserverRootDataRow1Html(observer)}
                     ${ObserversView.#getObserverRootDataRow2Html(observer)}
                   </div>
-                  <div class="component-cards">
-                    ${ObserversView.#getObserverTitleComponentHtml(titleComponent)}
-                    ${ObserversView.#getObserverImageComponentHtml(imageComponent)}
-                    ${ObserversView.#getObserverPriceComponentHtml(priceComponent)}
-                  </div>
+                  ${ComponentsView.getHtml(titleComponent, imageComponent, priceComponent)}
                   <div class="observer-buttons">
                     ${ObserversView.#getObserverModalButtonsHtml(groupId, observer)};
                   </div>
@@ -124,114 +122,6 @@ export class ObserversView {
               <div class="widget fill">
                 <label class="observer-label">container:</label>
                 <input type="text" class="observer-container" name="container" value="${container}" />
-              </div>
-            </div>`;
-  }
-
-  /**
-   * Method used to return observer title component contents
-   * @param {Object} component The title component which data to receive
-   * @returns HTML with observer title component contetns
-   */
-  static #getObserverTitleComponentHtml(component) {
-    const selector = component !== undefined ? component.selector : "";
-    const attribute = component !== undefined ? component.attribute : "";
-    const auxiliary = component !== undefined ? component.auxiliary : "";
-    return `<div class="component-card" active>
-              <h3 class="card-title">title config</h3>
-              <div class="component-content">
-                <div class="component-fields">
-                  <div class="widget">
-                    <label class="component-title-label">selector:</label>
-                    <input type="text" class="component-title-selector" name="selector" value="${selector}" />
-                  </div>
-                  <div class="widget">
-                    <label class="component-title-label">attribute:</label>
-                    <input type="text" class="component-title-attribute" name="attribute" value="${attribute}" />
-                  </div>
-                  <div class="widget">
-                    <label class="component-title-label">auxiliary:</label>
-                    <input type="text" class="component-title-auxiliary" name="auxiliary" value="${auxiliary}" />
-                  </div>
-                </div>
-                <div class="component-toggle">
-                  <p>auto</p>
-                  <input type="checkbox" class="check-auto-manual">
-                  <label for="check-auto-manual"></label>
-                  <p>manual</p>
-                </div>
-              </div>
-            </div>`;
-  }
-
-  /**
-   * Method used to return observer image component contents
-   * @param {Object} component The image component which data to receive
-   * @returns HTML with observer image component contetns
-   */
-  static #getObserverImageComponentHtml(component) {
-    const selector = component !== undefined ? component.selector : "";
-    const attribute = component !== undefined ? component.attribute : "";
-    const auxiliary = component !== undefined ? component.auxiliary : "";
-    return `<div class="component-card">
-              <h3 class="card-title">image config</h3>
-              <div class="component-content">
-                <div class="component-fields">
-                  <div class="widget">
-                    <label class="component-image-label">selector:</label>
-                    <input type="text" class="component-image-selector" name="selector" value="${selector}" />
-                  </div>
-                  <div class="widget">
-                    <label class="component-image-label">attribute:</label>
-                    <input type="text" class="component-image-attribute" name="attribute" value="${attribute}" />
-                  </div>
-                  <div class="widget">
-                    <label class="component-image-label">auxiliary:</label>
-                    <input type="button" class="component-image-auxiliary" name="auxiliary" value="Select image" />
-                  </div>
-                </div>
-                <div class="component-toggle">
-                  <p>auto</p>
-                  <input type="checkbox" class="check-auto-manual">
-                  <label for="check-auto-manual"></label>
-                  <p>manual</p>
-                </div>
-              </div>
-            </div>`;
-  }
-
-  /**
-   * Method used to return observer price component contents
-   * @param {Object} component The price component which data to receive
-   * @returns HTML with observer price component contetns
-   */
-  static #getObserverPriceComponentHtml(component) {
-    const selector = component !== undefined ? component.selector : "";
-    const attribute = component !== undefined ? component.attribute : "";
-    const auxiliary = component !== undefined ? component.auxiliary : "";
-    return `<div class="component-card">
-              <h3 class="card-title">price config</h3>
-              <div class="component-content">
-                <div class="component-fields">
-                  <div class="widget">
-                    <label class="component-price-label">selector:</label>
-                    <input type="text" class="component-price-selector" name="selector" value="${selector}" />
-                  </div>
-                  <div class="widget">
-                    <label class="component-price-label">attribute:</label>
-                    <input type="text" class="component-price-attribute" name="attribute" value="${attribute}" />
-                  </div>
-                  <div class="widget">
-                    <label class="component-price-label">auxiliary:</label>
-                    <select class="component-price-auxiliary" name="auxiliary" required>
-                      <option value="" disabled hidden ${auxiliary === "" ? "selected" : ""}>Select value</option>
-                      <option value=PLN ${auxiliary === "PLN" ? "selected" : ""}>PLN</option>
-                      <option value=GBP ${auxiliary === "GBP" ? "selected" : ""}>GBP</option>
-                      <option value=USD ${auxiliary === "USD" ? "selected" : ""}>USD</option>
-                      <option value=EUR ${auxiliary === "EUR" ? "selected" : ""}>EUR</option>
-                    </select>
-                  </div>
-                </div>
               </div>
             </div>`;
   }
