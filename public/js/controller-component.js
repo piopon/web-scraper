@@ -58,7 +58,9 @@ export class ComponentsController {
     const componentToggles = document.querySelectorAll("input.check-auto-manual");
     componentToggles.forEach((toggle) => {
       toggle.addEventListener("change", () => {
-        this.#updateCardEnableState(toggle);
+        const cardMode = toggle.checked ? "manual" : "auto";
+        const cardFields = toggle.parentNode.parentNode.querySelector("div.component-fields");
+        this.#updateCardEnableState(cardMode, cardFields);
       });
     });
   }
@@ -80,11 +82,10 @@ export class ComponentsController {
 
   /**
    * Method used to update the enable state of toggle's parent card components
-   * @param {Element} cardToggle The toggle element for which we want to get and update state
+   * @param {String} toggleMode The current toggle mode (auto/manual) for which we want to update UI state
+   * @param {Element} cardFields The card fields parent HTML element container
    */
-  #updateCardEnableState(cardToggle) {
-    const toggleMode = cardToggle.checked ? "manual" : "auto";
-    const cardFields = cardToggle.parentNode.parentNode.querySelector("div.component-fields");
+  #updateCardEnableState(toggleMode, cardFields) {
     const currSelector = cardFields.querySelector("input[name='selector']");
     const currAttribute = cardFields.querySelector("input[name='attribute']");
     const currAuxiliary = cardFields.querySelector("input[name='auxiliary']");
