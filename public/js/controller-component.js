@@ -83,6 +83,13 @@ export class ComponentsController {
    * @param {Element} cardToggle The toggle element for which we want to get and update state
    */
   #updateCardEnableState(cardToggle) {
-    console.log(`Curr: ${cardToggle.checked} -> par: ${cardToggle.parentNode}`);
+    const toggleMode = cardToggle.checked ? "manual" : "auto";
+    const cardFields = cardToggle.parentNode.parentNode.querySelector("div.component-fields");
+    const currSelector = cardFields.querySelector("input[name='selector']");
+    const currAttribute = cardFields.querySelector("input[name='attribute']");
+    const currAuxiliary = cardFields.querySelector("input[name='auxiliary']");
+    currSelector.disabled = "auto" !== toggleMode;
+    currAttribute.disabled = "auto" !== toggleMode;
+    currAuxiliary.disabled = "manual" !== toggleMode;
   }
 }
