@@ -103,6 +103,10 @@ export class ComponentsController {
     const currSelector = cardFields.querySelector("input[name='selector']");
     const currAttribute = cardFields.querySelector("input[name='attribute']");
     const currAuxiliary = cardFields.querySelector("input[name='auxiliary']");
+    if (currSelector == undefined || currAttribute == undefined || currAuxiliary == undefined) {
+      console.error(`Cannot update card enable state`);
+      return;
+    }
     this.#updateFieldEnableState(currSelector, "auto" === toggleMode);
     this.#updateFieldEnableState(currAttribute, "auto" === toggleMode);
     this.#updateFieldEnableState(currAuxiliary, "manual" === toggleMode);
