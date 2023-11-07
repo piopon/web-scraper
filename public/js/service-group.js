@@ -1,3 +1,5 @@
+import { CommonService } from "./service-common.js";
+
 export class GroupsService {
   /**
    * Method used to add new group to the specified parent user
@@ -136,7 +138,8 @@ export class GroupsService {
    */
   static #createRequestOptions(method) {
     const shouldHaveBody = "POST" === method || "PUT" === method;
-    const requestBody = shouldHaveBody ? JSON.stringify(this.#createGroup()) : undefined;
+    const expandedGroup = document.querySelector("article.group-column.expanded");
+    const requestBody = shouldHaveBody ? JSON.stringify(CommonService.createGroup(expandedGroup)) : undefined;
     return {
       method: method,
       headers: { "Content-Type": "application/json" },

@@ -1,3 +1,5 @@
+import { CommonService } from "./service-common.js";
+
 export class ObserversService {
   /**
    * Method used to add new observer to the specified parent
@@ -107,7 +109,8 @@ export class ObserversService {
    */
   static #createRequestOptions(method) {
     const shouldHaveBody = "POST" === method || "PUT" === method;
-    const requestBody = shouldHaveBody ? JSON.stringify(this.#createObserver()) : undefined;
+    const openedObserver = document.querySelector("div.modal-dialog.init-reveal:not(.hidden)");
+    const requestBody = shouldHaveBody ? JSON.stringify(CommonService.createObserver(openedObserver)) : undefined;
     return {
       method: method,
       headers: { "Content-Type": "application/json" },
