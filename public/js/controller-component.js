@@ -50,7 +50,7 @@ export class ComponentsController {
     const componentToggles = document.querySelectorAll("input.check-auto-manual");
     componentToggles.forEach((toggle) => {
       const cardFields = toggle.parentNode.parentNode.querySelector("div.component-fields");
-      const cardMode = "" === cardFields.querySelector("input[name='selector']").value ? "manual" : "auto";
+      const cardMode = "" === cardFields.querySelector("input[name='auxiliary']").value ? "auto" : "manual";
       toggle.checked = "manual" === cardMode;
       this.#updateCardEnableState(cardMode, cardFields);
     });
