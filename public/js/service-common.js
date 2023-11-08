@@ -20,6 +20,8 @@ export class CommonService {
    * @returns Object with observer data retrieved from input HTML element
    */
   static createObserver(observerHtmlElement) {
+    // we need to check image auxiliary value to correctly determine if empty or not
+    const imageAux = observerHtmlElement.querySelector("input.component-image-auxiliary").value;
     return {
       name: observerHtmlElement.querySelector("input.observer-name").value,
       path: observerHtmlElement.querySelector("input.observer-path").value,
@@ -36,7 +38,7 @@ export class CommonService {
         interval: "",
         selector: observerHtmlElement.querySelector("input.component-image-selector").value,
         attribute: observerHtmlElement.querySelector("input.component-image-attribute").value,
-        auxiliary: observerHtmlElement.querySelector("input.component-image-auxiliary").value,
+        auxiliary: imageAux === "Select image" ? "" : imageAux,
       },
       price: {
         interval: "",
