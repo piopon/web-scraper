@@ -70,39 +70,6 @@ export class ObserversService {
   }
 
   /**
-   * Method used to create an observer objest from values of the HTML elements
-   * @returns observer object with values from current HTML elements
-   */
-  static #createObserver() {
-    const editedObserver = document.querySelector("div.modal-dialog.init-reveal:not(.hidden)");
-    return {
-      name: editedObserver.querySelector("input.observer-name").value,
-      path: editedObserver.querySelector("input.observer-path").value,
-      target: editedObserver.querySelector("select.observer-target").value,
-      history: editedObserver.querySelector("select.observer-history").value,
-      container: editedObserver.querySelector("input.observer-container").value,
-      title: {
-        interval: "",
-        selector: editedObserver.querySelector("input.component-title-selector").value,
-        attribute: editedObserver.querySelector("input.component-title-attribute").value,
-        auxiliary: editedObserver.querySelector("input.component-title-auxiliary").value,
-      },
-      image: {
-        interval: "",
-        selector: editedObserver.querySelector("input.component-image-selector").value,
-        attribute: editedObserver.querySelector("input.component-image-attribute").value,
-        auxiliary: editedObserver.querySelector("input.component-image-auxiliary").value,
-      },
-      price: {
-        interval: "",
-        selector: editedObserver.querySelector("input.component-price-selector").value,
-        attribute: editedObserver.querySelector("input.component-price-attribute").value,
-        auxiliary: editedObserver.querySelector("select.component-price-auxiliary").value,
-      },
-    };
-  }
-
-  /**
    * Method used to create request options
    * @param {String} method The HTTP method of the request
    * @returns request options object
