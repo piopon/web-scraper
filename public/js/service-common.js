@@ -15,20 +15,6 @@ export class CommonService {
   }
 
   /**
-   * Method used to create an array of observer objects from provided list of HTML elements
-   * @param {NodeList} observers The list of HTML observer elemenets
-   * @returns array of observer objects created from provided input
-   */
-  static #createGroupObservers(observers) {
-    const result = [];
-    observers.forEach((observer) => {
-      const observerContent = observer.parentNode.querySelector("div.modal-content");
-      result.push(this.createObserver(observerContent));
-    });
-    return result;
-  }
-
-  /**
    * Method used to create a observer from the provided HTML element
    * @param {Element} observerHtmlElement The HTML content from which we want to create an observer object
    * @returns Object with observer data retrieved from input HTML element
@@ -59,5 +45,19 @@ export class CommonService {
         auxiliary: observerHtmlElement.querySelector("select.component-price-auxiliary").value,
       },
     };
+  }
+
+  /**
+   * Method used to create an array of observer objects from provided list of HTML elements
+   * @param {NodeList} observers The list of HTML observer elemenets
+   * @returns array of observer objects created from provided input
+   */
+  static #createGroupObservers(observers) {
+    const result = [];
+    observers.forEach((observer) => {
+      const observerContent = observer.parentNode.querySelector("div.modal-content");
+      result.push(this.createObserver(observerContent));
+    });
+    return result;
   }
 }
