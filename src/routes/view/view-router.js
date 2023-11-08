@@ -41,7 +41,11 @@ export class ViewRouter {
     return "📈|💰|👕|👗|👢|🍔|🛒|👪|🐶|🐱|🏠|🚘|⛽|💊|📚|⛺|🧸|⚽|🔨|💻|📀|📱|🎮|🎵|🎥|🧩|🎴|💎|💄|🔥";
   }
 
+  /**
+   * Method used to receive all currencies supported by web scraper
+   * @returns a String with supported currencies separated by '|' character
+   */
   #getSupportedCurrencies() {
-    return "PLN|GBP|USD|EUR";
+    return "PLN|GBP|USD|EUR|CHF|CZK|DKK|JPY|INR|AUD";
   }
 }
