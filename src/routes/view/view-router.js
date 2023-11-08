@@ -26,6 +26,7 @@ export class ViewRouter {
         title: "scraper configuration",
         content: scrapConfig,
         categories: this.#getSupportedCategories(),
+        currencies: this.#getSupportedCurrencies(),
       });
     });
     router.get("/status", (request, response) => response.render("status", { title: "scraper running status" }));
@@ -38,5 +39,9 @@ export class ViewRouter {
    */
   #getSupportedCategories() {
     return "📈|💰|👕|👗|👢|🍔|🛒|👪|🐶|🐱|🏠|🚘|⛽|💊|📚|⛺|🧸|⚽|🔨|💻|📀|📱|🎮|🎵|🎥|🧩|🎴|💎|💄|🔥";
+  }
+
+  #getSupportedCurrencies() {
+    return "PLN|GBP|USD|EUR";
   }
 }
