@@ -1,7 +1,7 @@
 <section class="group-columns hide">
   {{#each content}}
     {{#each groups}}
-      {{> group-edit group=this }}
+      {{> group-edit group=this currencies=../../currencies }}
     {{/each}}
     {{> group-add userId=user }}
   {{/each}}

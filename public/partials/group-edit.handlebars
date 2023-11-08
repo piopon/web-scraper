@@ -14,7 +14,7 @@
         <div class="observers-container">
           {{!-- show currently existing observers --}}
           {{#each observers}}
-            {{> observer-edit parent=../group observer=this }}
+            {{> observer-edit parent=../group observer=this currencies=../currencies }}
           {{/each}}
           {{!-- display add new observer button --}}
           {{> observer-add parent=group }}
