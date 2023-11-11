@@ -10,17 +10,20 @@ export class CommonController {
     toast.classList.add("toast");
     toast.innerHTML = `<i class="fa-solid ${this.#getToastIcon(type)}"></i> ${message}`;
     toastBox.appendChild(toast);
-
-    if (this.#TYPE_ERROR === type) {
-      toast.classList.add("error");
-    }
-    if (this.#TYPE_SUCCESS === type) {
-      toast.classList.add("success");
-    }
-    if (this.#TYPE_WARNING === type) {
-      toast.classList.add("warning");
-    }
+    toast.classList.add(this.#getToastClass(type));
     setTimeout(() => toast.remove(), this.#TOAST_TIMEOUT_MS);
+  }
+
+  static #getToastClass(toastType) {
+    if (this.#TYPE_ERROR === toastType) {
+      return "error";
+    } else if (this.#TYPE_WARNING === toastType) {
+      return "warning";
+    } else if (this.#TYPE_SUCCESS === toastType) {
+      return "success";
+    } else {
+      console.error(`Unknown toast type: ${toastType}`);
+    }
   }
 
   static #getToastIcon(toastType) {
