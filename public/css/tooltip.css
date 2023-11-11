@@ -1,0 +1,10 @@
+#toastBox {
+    position: absolute;
+    bottom: 25px;
+    right: 30px;
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 20px;
+}
