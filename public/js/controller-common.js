@@ -8,7 +8,7 @@ export class CommonController {
     const toastBox = document.getElementById("toastBox");
     const toast = document.createElement("div");
     toast.classList.add("toast");
-    toast.innerHTML = `<i class="fa-solid ${this.#getToastIcon(type)}"></i> ${message}`;
+    toast.innerHTML = `${this.#getToastIcon(type)} ${message}`;
     toastBox.appendChild(toast);
     toast.classList.add(this.#getToastClass(type));
     setTimeout(() => toast.remove(), this.#TOAST_TIMEOUT_MS);
@@ -27,14 +27,16 @@ export class CommonController {
   }
 
   static #getToastIcon(toastType) {
+    let toastImage = "";
     if (this.#TYPE_ERROR === toastType) {
-      return "fa-circle-xmark";
+      toastImage = "fa-circle-xmark";
     } else if (this.#TYPE_WARNING === toastType) {
-      return "fa-circle-exclamation";
+      toastImage = "fa-circle-exclamation";
     } else if (this.#TYPE_SUCCESS === toastType) {
-      return "fa-circle-check";
+      toastImage = "fa-circle-check";
     } else {
       console.error(`Unknown toast type: ${toastType}`);
     }
+    return `<i class="fa-solid ${toastImage}"></i>`;
   }
 }
