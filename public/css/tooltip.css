@@ -52,3 +52,27 @@
     width: 0;
   }
 }
+
+.toast.success i {
+  color: limegreen;
+}
+
+.toast.warning i {
+  color: goldenrod;
+}
+
+.toast.error i {
+  color: crimson;
+}
+
+.toast.success::after {
+  background: limegreen;
+}
+
+.toast.warning::after {
+  background: goldenrod;
+}
+
+.toast.error::after {
+  background: crimson;
+}
