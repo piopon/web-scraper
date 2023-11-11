@@ -5,12 +5,14 @@ export class CommonController {
   static #TYPE_WARNING = 1;
 
   static showToast(type, message) {
-    const toastBox = document.getElementById("toastBox");
-    const toast = document.createElement("div");
-    toast.classList.add("toast");
-    toast.innerHTML = `${this.#getToastIcon(type)} ${message}`;
-    toastBox.appendChild(toast);
-    toast.classList.add(this.#getToastClass(type));
+    // create toast content
+    const toastContent = document.createElement("div");
+    toastContent.classList.add("toast");
+    toastContent.classList.add(this.#getToastClass(type));
+    toastContent.innerHTML = `${this.#getToastIcon(type)} ${message}`;
+    // add toast content to appropriate container
+    document.getElementById("toastBox").appendChild(toastContent);
+    // remove toast content after predefined time
     setTimeout(() => toast.remove(), this.#TOAST_TIMEOUT_MS);
   }
 
