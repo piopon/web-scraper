@@ -3,12 +3,22 @@ export class CommonController {
   static #TYPE_SUCCESS = 0;
   static #TYPE_WARNING = 1;
 
-  static showToast(message) {
+  static showToast(type, message) {
     const toastBox = document.getElementById("toastBox");
     const toast = document.createElement("div");
     toast.classList.add("toast");
-    toast.innerHTML = `<i class="fa-solid fa-circle-xmark}"></i> ${message}`;
+    toast.innerHTML = `<i class="fa-solid ${this.#getToastIcon(type)}"></i> ${message}`;
     toastBox.appendChild(toast);
+
+    if (this.#TYPE_ERROR === type) {
+      toast.classList.add("error");
+    }
+    if (this.#TYPE_SUCCESS === type) {
+      toast.classList.add("success");
+    }
+    if (this.#TYPE_WARNING === type) {
+      toast.classList.add("warning");
+    }
 
     setTimeout(() => {
       toast.remove();
