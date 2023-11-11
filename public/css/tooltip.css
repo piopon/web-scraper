@@ -8,3 +8,24 @@
     overflow: hidden;
     padding: 20px;
 }
+
+.toast {
+    display: flex;
+    position: relative;
+    width: 400px;
+    height: 80px;
+    margin: 15px 0;
+    background: #282A3A;
+    border: 1px solid #C6974955;
+    border-radius: 1rem;
+    box-shadow: 0 0 1rem 0.5rem darkgrey, inset 0 0 1rem .1rem darkgrey;
+    align-items: center;
+    transform: translateX(100%);
+    animation: moveleft 0.2s linear forwards;
+}
+
+@keyframes moveleft {
+    100% {
+        transform: translateX(0);
+    }
+}
