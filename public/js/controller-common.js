@@ -1,4 +1,5 @@
 export class CommonController {
+  static #TOAST_TIMEOUT_MS = 6000;
   static #TYPE_ERROR = -1;
   static #TYPE_SUCCESS = 0;
   static #TYPE_WARNING = 1;
@@ -19,10 +20,7 @@ export class CommonController {
     if (this.#TYPE_WARNING === type) {
       toast.classList.add("warning");
     }
-
-    setTimeout(() => {
-      toast.remove();
-    }, 6000);
+    setTimeout(() => toast.remove(), this.#TOAST_TIMEOUT_MS);
   }
 
   static #getToastIcon(toastType) {
