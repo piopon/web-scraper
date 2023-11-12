@@ -4,18 +4,35 @@ export class CommonController {
   static #TYPE_SUCCESS = 0;
   static #TYPE_WARNING = 1;
 
+  /**
+   * Method used to show error toast popup
+   * @param {String} message The message to be displayed in the toast
+   */
   static showToastError(message) {
     this.#showToast(this.#TYPE_ERROR, message);
   }
 
+  /**
+   * Method used to show warning toast popup
+   * @param {String} message The message to be displayed in the toast
+   */
   static showToastWarning(message) {
     this.#showToast(this.#TYPE_WARNING, message);
   }
 
+  /**
+   * Method used to show success toast popup
+   * @param {String} message The message to be displayed in the toast
+   */
   static showToastSuccess(message) {
     this.#showToast(this.#TYPE_SUCCESS, message);
   }
 
+  /**
+   * Method used to show error popup of specified type with appropriate message
+   * @param {Number} type The type of popup to be displayed
+   * @param {String} message The message to be displayed in the toast
+   */
   static #showToast(type, message) {
     // create toast content
     const toastContent = document.createElement("div");
@@ -28,6 +45,11 @@ export class CommonController {
     setTimeout(() => toast.remove(), this.#TOAST_TIMEOUT_MS);
   }
 
+  /**
+   * Method used to receive the appropriate toast class name(s) based on its type
+   * @param {Number} toastType The type of popup for which we want to get class name(s)
+   * @returns string with class name(s) for the specified toast type
+   */
   static #getToastClass(toastType) {
     if (this.#TYPE_ERROR === toastType) {
       return "error";
@@ -40,6 +62,11 @@ export class CommonController {
     }
   }
 
+  /**
+   * Method used to receive the appropriate toast icon based on its type
+   * @param {Number} toastType The type of popup for which we want to get icon
+   * @returns string with icon HTML code for the specified toast type
+   */
   static #getToastIcon(toastType) {
     let toastImage = "";
     if (this.#TYPE_ERROR === toastType) {
