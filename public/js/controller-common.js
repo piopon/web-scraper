@@ -4,7 +4,19 @@ export class CommonController {
   static #TYPE_SUCCESS = 0;
   static #TYPE_WARNING = 1;
 
-  static showToast(type, message) {
+  static showToastError(message) {
+    this.#showToast(this.#TYPE_ERROR, message);
+  }
+
+  static showToastWarning(message) {
+    this.#showToast(this.#TYPE_WARNING, message);
+  }
+
+  static showToastSuccess(message) {
+    this.#showToast(this.#TYPE_SUCCESS, message);
+  }
+
+  static #showToast(type, message) {
     // create toast content
     const toastContent = document.createElement("div");
     toastContent.classList.add("toast");
