@@ -40,6 +40,13 @@
   border-radius: 0 0 1rem 1rem;
 }
 
+.toast.success {
+  background: yellowgreen;
+  border: 3px solid green;
+  box-shadow: 0 0 0.35rem 0.1rem green;
+  color: darkgreen;
+}
+
 .toast.success i {
   color: limegreen;
 }
@@ -53,7 +60,7 @@
 }
 
 .toast.success::after {
-  background: limegreen;
+  background: green;
 }
 
 .toast.warning::after {
