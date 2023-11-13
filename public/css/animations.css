@@ -157,3 +157,27 @@
     transform: rotate(360deg);
   }
 }
+
+@keyframes toast-move-left {
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@-webkit-keyframes toast-move-left {
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes toast-fill {
+  100% {
+    width: 0;
+  }
+}
+
+@-webkit-keyframes toast-fill {
+  100% {
+    width: 0;
+  }
+}

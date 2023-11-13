@@ -22,13 +22,7 @@
   box-shadow: 0 0 1rem 0.5rem darkgrey, inset 0 0 1rem 0.1rem darkgrey;
   align-items: center;
   transform: translateX(100%);
-  animation: moveleft 0.2s linear forwards;
-}
-
-@keyframes moveleft {
-  100% {
-    transform: translateX(0);
-  }
+  animation: toast-move-left 0.2s linear forwards;
 }
 
 .toast i {
@@ -43,14 +37,8 @@
   bottom: 0;
   width: 100%;
   height: 10px;
-  animation: anim 6200ms linear forwards;
+  animation: toast-fill 6200ms linear forwards;
   border-radius: 0 0 1rem 1rem;
-}
-
-@keyframes anim {
-  100% {
-    width: 0;
-  }
 }
 
 .toast.success i {
