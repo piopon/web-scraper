@@ -42,7 +42,7 @@ export class CommonController {
     // add toast content to appropriate container
     document.getElementById("toastBox").appendChild(toastContent);
     // remove toast content after predefined time
-    setTimeout(() => toast.remove(), this.#TOAST_TIMEOUT_MS);
+    setTimeout(() => toastContent.remove(), this.#TOAST_TIMEOUT_MS);
   }
 
   /**
