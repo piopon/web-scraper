@@ -55,6 +55,13 @@
   color: goldenrod;
 }
 
+.toast.error {
+  background: tomato;
+  border: 3px solid darkred;
+  box-shadow: 0 0 0.35rem 0.1rem darkred;
+  color: darkred;
+}
+
 .toast.error i {
   color: crimson;
 }
@@ -68,5 +75,5 @@
 }
 
 .toast.error::after {
-  background: crimson;
+  background: darkred;
 }
