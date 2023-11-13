@@ -13,30 +13,29 @@
 .toast {
   display: flex;
   position: relative;
-  width: 400px;
-  height: 80px;
-  margin: 15px 0;
-  background: #282a3a;
-  border: 1px solid #c6974955;
-  border-radius: 1rem;
-  box-shadow: 0 0 1rem 0.5rem darkgrey, inset 0 0 1rem 0.1rem darkgrey;
+  width: 20rem;
+  height: 4rem;
+  margin-top: 1rem;
+  padding-right: 1rem;
+  border-radius: 0.5rem;
   align-items: center;
   transform: translateX(100%);
+  font-size: 0.8rem;
   animation: toast-move-left 0.2s linear forwards;
 }
 
 .toast i {
-  margin: 0 20px;
+  margin: 0 1.5rem;
   font-size: 35px;
 }
 
 .toast::after {
   content: "";
   position: absolute;
-  left: 0;
-  bottom: 0;
+  bottom: 0px;
+  left: -1px;
   width: 100%;
-  height: 10px;
+  height: 0.35rem;
   animation: toast-fill 6200ms linear forwards;
   border-radius: 0 0 1rem 1rem;
 }
