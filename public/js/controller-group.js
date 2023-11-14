@@ -1,3 +1,4 @@
+import { CommonController } from "./controller-common.js"
 import { GroupsService } from "./service-group.js";
 import { GroupsView } from "./view-group.js";
 
@@ -157,7 +158,7 @@ export class GroupsController {
       .catch((error) => {
         closeButton.classList.add("shake");
         setTimeout(() => closeButton.classList.remove("shake"), 500);
-        console.error(error);
+        CommonController.showToastError(error);
       });
   }
 
