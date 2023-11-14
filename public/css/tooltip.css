@@ -48,7 +48,7 @@
 }
 
 .toast.success i {
-  color: limegreen;
+  color: darkgreen;
 }
 
 .toast.warning {
@@ -59,7 +59,7 @@
 }
 
 .toast.warning i {
-  color: goldenrod;
+  color: darkgoldenrod;
 }
 
 .toast.error {
@@ -70,7 +70,7 @@
 }
 
 .toast.error i {
-  color: crimson;
+  color: darkred;
 }
 
 .toast.success::after {
