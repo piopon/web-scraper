@@ -70,14 +70,14 @@ export class CommonController {
   static #getToastIcon(toastType) {
     let toastImage = "";
     if (this.#TYPE_ERROR === toastType) {
-      toastImage = "fa-circle-xmark";
+      toastImage = "fa-times-circle";
     } else if (this.#TYPE_WARNING === toastType) {
-      toastImage = "fa-circle-exclamation";
+      toastImage = "fa-exclamation-circle";
     } else if (this.#TYPE_SUCCESS === toastType) {
-      toastImage = "fa-circle-check";
+      toastImage = "fa-check-circle";
     } else {
       console.error(`Unknown toast type: ${toastType}`);
     }
-    return `<i class="fa-solid ${toastImage}"></i>`;
+    return `<i class="fa ${toastImage}"></i>`;
   }
 }
