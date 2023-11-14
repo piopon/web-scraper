@@ -21,7 +21,7 @@ export class GroupsController {
    */
   emitEvent(eventType, eventObject) {
     if (undefined === this.#mediator) {
-      console.error(`Cannot emit event - mediator is undefined`);
+      CommonController.showToastWarning(`Cannot emit event - mediator is undefined`);
     }
     this.#mediator.notify(this, eventType, eventObject);
   }
@@ -136,7 +136,7 @@ export class GroupsController {
         } else if ("cancel" === selectedAction) {
           this.#collapse(closeButton);
         } else {
-          console.error(`Unsupported accept button action: ${selectedAction}`);
+          CommonController.showToastError(`Unsupported accept button action: ${selectedAction}`);
         }
         clickEvent.stopPropagation();
       });
@@ -153,7 +153,7 @@ export class GroupsController {
       .then((data) => {
         this.#reloadGroups(parentUserId);
         this.#collapse(closeButton);
-        console.log(data);
+        CommonController.showToastSuccess(data);
       })
       .catch((error) => {
         closeButton.classList.add("shake");
@@ -171,12 +171,12 @@ export class GroupsController {
     GroupsService.updateGroup(editedGroupId)
       .then((data) => {
         this.#collapse(closeButton);
-        console.log(data);
+        CommonController.showToastSuccess(data);
       })
       .catch((error) => {
         closeButton.classList.add("shake");
         setTimeout(() => closeButton.classList.remove("shake"), 500);
-        console.error(error);
+        CommonController.showToastError(error);
       });
   }
 
@@ -190,12 +190,12 @@ export class GroupsController {
       .then((data) => {
         this.#reloadGroups(0);
         this.#collapse(closeButton);
-        console.log(data);
+        CommonController.showToastSuccess(data);
       })
       .catch((error) => {
         closeButton.classList.add("shake");
         setTimeout(() => closeButton.classList.remove("shake"), 500);
-        console.error(error);
+        CommonController.showToastError(error);
       });
   }
 
@@ -205,7 +205,7 @@ export class GroupsController {
    */
   #reloadGroups(parentUserId) {
     if (undefined === parentUserId) {
-      console.error(`Cannot reload groups for ${parentGroupId} user.`);
+      CommonController.showToastWarning(`Cannot reload groups for ${parentGroupId} user.`);
       return;
     }
     GroupsService.getGroups(parentUserId)
@@ -218,7 +218,7 @@ export class GroupsController {
         // notify other controllers that groups were reloaded
         this.emitEvent("groups-reloaded", userId);
       })
-      .catch((error) => console.error(error));
+      .catch((error) => CommonController.showToastError(error));
   }
 
   /**
