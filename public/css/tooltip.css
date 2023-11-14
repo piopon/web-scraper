@@ -51,6 +51,13 @@
   color: limegreen;
 }
 
+.toast.warning {
+  background: gold;
+  border: 3px solid darkgoldenrod;
+  box-shadow: 0 0 0.35rem 0.1rem darkgoldenrod;
+  color: darkgoldenrod;
+}
+
 .toast.warning i {
   color: goldenrod;
 }
@@ -71,7 +78,7 @@
 }
 
 .toast.warning::after {
-  background: goldenrod;
+  background: darkgoldenrod;
 }
 
 .toast.error::after {
