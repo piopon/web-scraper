@@ -5,27 +5,30 @@ export class CommonController {
   static #TYPE_WARNING = 1;
 
   /**
-   * Method used to show error toast popup
+   * Method used to show error toast popup (and underlying error message in console)
    * @param {String} message The message to be displayed in the toast
    */
   static showToastError(message) {
     this.#showToast(this.#TYPE_ERROR, message);
+    console.error(message);
   }
 
   /**
-   * Method used to show warning toast popup
+   * Method used to show warning toast popup (and underlying warn message in console)
    * @param {String} message The message to be displayed in the toast
    */
   static showToastWarning(message) {
     this.#showToast(this.#TYPE_WARNING, message);
+    console.warn(message);
   }
 
   /**
-   * Method used to show success toast popup
+   * Method used to show success toast popup (and underlying info message in console)
    * @param {String} message The message to be displayed in the toast
    */
   static showToastSuccess(message) {
     this.#showToast(this.#TYPE_SUCCESS, message);
+    console.info(message);
   }
 
   /**
