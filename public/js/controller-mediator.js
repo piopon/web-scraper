@@ -10,7 +10,7 @@ export class ControllersMediator {
       this.#registeredClasses.push(classInstance);
       classInstance.handleEvent("subscribed", this);
     } else {
-      console.error(`Cannot register ${classInstance.constructor.name}`);
+      CommonController.showToastError(`Cannot register ${classInstance.constructor.name}`);
     }
   }
 
