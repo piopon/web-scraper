@@ -1,3 +1,5 @@
+import { CommonController } from "./controller-common.js";
+
 export class ComponentsController {
   #mediator = undefined;
 
@@ -15,7 +17,7 @@ export class ComponentsController {
    */
   emitEvent(eventType, eventObject) {
     if (undefined === this.#mediator) {
-      console.error(`Cannot emit event - mediator is undefined`);
+      CommonController.showToastWarning(`Cannot emit event - mediator is undefined`);
     }
     this.#mediator.notify(this, eventType, eventObject);
   }
@@ -106,7 +108,7 @@ export class ComponentsController {
     const currAttribute = cardFields.querySelector("input[name='attribute']");
     const currAuxiliary = cardFields.querySelector("input[name='auxiliary']");
     if (currSelector == undefined || currAttribute == undefined || currAuxiliary == undefined) {
-      console.error(`Cannot update card enable state`);
+      CommonController.showToastError(`Cannot update card enable state`);
       return;
     }
     this.#updateFieldEnableState(currSelector, "auto" === toggleMode);
