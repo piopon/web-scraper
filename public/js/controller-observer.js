@@ -1,3 +1,4 @@
+import { CommonController } from "./controller-common.js";
 import { ObserversService } from "./service-observer.js";
 import { ObserversView } from "./view-observer.js";
 
@@ -19,7 +20,7 @@ export class ObserversController {
    */
   emitEvent(eventType, eventObject) {
     if (undefined === this.#mediator) {
-      console.error(`Cannot emit event - mediator is undefined`);
+      CommonController.showToastWarning(`Cannot emit event - mediator is undefined`);
     }
     this.#mediator.notify(this, eventType, eventObject);
   }
@@ -79,7 +80,7 @@ export class ObserversController {
         } else if ("cancel" === selectedAction) {
           this.#hideDialog(closeButton);
         } else {
-          console.error(`Unsupported accept button action: ${selectedAction}`);
+          CommonController.showToastError(`Unsupported accept button action: ${selectedAction}`);
         }
         clickEvent.stopPropagation();
       });
@@ -96,12 +97,12 @@ export class ObserversController {
       .then((data) => {
         this.#reloadObservers(parentGroupId);
         this.#hideDialog(closeButton);
-        console.log(data);
+        CommonController.showToastSuccess(data);
       })
       .catch((error) => {
         closeButton.classList.add("shake");
         setTimeout(() => closeButton.classList.remove("shake"), 500);
-        console.error(error);
+        CommonController.showToastError(error);
       });
   }
 
@@ -114,12 +115,12 @@ export class ObserversController {
     ObserversService.updateObserver(editedObserverId)
       .then((data) => {
         this.#hideDialog(closeButton);
-        console.log(data);
+        CommonController.showToastSuccess(data);
       })
       .catch((error) => {
         closeButton.classList.add("shake");
         setTimeout(() => closeButton.classList.remove("shake"), 500);
-        console.error(error);
+        CommonController.showToastError(error);
       });
   }
 
@@ -133,12 +134,12 @@ export class ObserversController {
       .then((data) => {
         this.#reloadObservers(this.#expandedGroup);
         this.#hideDialog(closeButton);
-        console.log(data);
+        CommonController.showToastSuccess(data);
       })
       .catch((error) => {
         closeButton.classList.add("shake");
         setTimeout(() => closeButton.classList.remove("shake"), 500);
-        console.error(error);
+        CommonController.showToastError(error);
       });
   }
 
@@ -148,7 +149,7 @@ export class ObserversController {
    */
   #reloadObservers(parentGroupId) {
     if (undefined === parentGroupId || "+" === parentGroupId) {
-      console.error(`Cannot reload observers for ${parentGroupId} parent.`);
+      CommonController.showToastWarning(`Cannot reload observers for ${parentGroupId} parent.`);
       return;
     }
     ObserversService.getObservers(parentGroupId)
@@ -162,7 +163,7 @@ export class ObserversController {
         // notify other controllers that observers were reloaded
         this.emitEvent("observers-reloaded", groupId);
       })
-      .catch((error) => console.error(error));
+      .catch((error) => CommonController.showToastError(error));
   }
 
   /**
