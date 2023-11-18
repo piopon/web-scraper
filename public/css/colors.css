@@ -1,0 +1,44 @@
+.background-green {
+  background: seagreen;
+  color: white;
+}
+
+.background-orange {
+  background: rgb(212, 111, 17);
+  color: black;
+}
+
+.background-red {
+  background: indianred;
+  color: black;
+}
+
+.background-blue {
+  background: steelblue;
+  color: black;
+}
+
+.background-yellow {
+  background: goldenrod;
+  color: black;
+}
+
+.background-plum {
+  background: plum;
+  color: black;
+}
+
+.background-navy {
+  background: #244f75;
+  color: white;
+}
+
+.background-aqua {
+  background: #60bfbf;
+  color: black;
+}
+
+.background-violet {
+  background: mediumslateblue;
+  color: black;
+}

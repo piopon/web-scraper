@@ -61,10 +61,11 @@ export class ConfigRouter {
           .flatMap((item) => item.groups)
           .flatMap((item) => item.observers)
           .filter((item) => {
+            const nameOk = request.query.name ? item.name === request.query.name : true;
             const pathOk = request.query.path ? item.path === request.query.path : true;
             const targetOk = request.query.target ? item.target === request.query.target : true;
             const historyOk = request.query.history ? item.history === request.query.history : true;
-            return pathOk && targetOk && historyOk;
+            return nameOk && pathOk && targetOk && historyOk;
           })
       );
     });
@@ -105,7 +106,7 @@ export class ConfigRouter {
         response,
         (configContent) => configContent.flatMap((item) => item.groups),
         (parent) => {
-          return parent.findIndex((item) => (request.query.domain ? item.domain === request.query.domain : false));
+          return parent.findIndex((item) => (request.query.name ? item.name === request.query.name : false));
         }
       );
     });
@@ -115,7 +116,7 @@ export class ConfigRouter {
         response,
         (configContent) => configContent.flatMap((item) => item.groups).flatMap((item) => item.observers),
         (parent) => {
-          return parent.findIndex((item) => (request.query.path ? item.path === request.query.path : false));
+          return parent.findIndex((item) => (request.query.name ? item.name === request.query.name : false));
         }
       );
     });
@@ -139,7 +140,7 @@ export class ConfigRouter {
       this.#handlePostRequest(request, response, (configContent) => {
         const parentGroup = configContent
           .flatMap((config) => config.groups)
-          .filter((group) => group.domain === request.query.parent);
+          .filter((group) => group.name === request.query.parent);
         return parentGroup.length > 0 ? parentGroup.at(0).observers : undefined;
       });
     });
@@ -160,7 +161,7 @@ export class ConfigRouter {
     });
     router.delete("/groups", (request, response) => {
       this.#handleDeleteRequest(request, response, (configContent) => {
-        const details = this.#getParentDetails(configContent, { groupDomain: request.query.domain });
+        const details = this.#getParentDetails(configContent, { groupName: request.query.name });
         return details
           ? { found: { parent: details.parent, index: details.index }, reason: undefined }
           : { found: undefined, reason: "could not find item to delete" };
@@ -168,13 +169,10 @@ export class ConfigRouter {
     });
     router.delete("/groups/observers", (request, response) => {
       this.#handleDeleteRequest(request, response, (configContent) => {
-        const details = this.#getParentDetails(configContent, { observerPath: request.query.path });
-        if (details) {
-          return details.parent.length > 1
-            ? { found: { parent: details.parent, index: details.index }, reason: undefined }
-            : { found: undefined, reason: "Cannot delete last group observer" };
-        }
-        return { found: undefined, reason: "Could not find the item to delete" };
+        const details = this.#getParentDetails(configContent, { observerName: request.query.name });
+        return details
+          ? { found: { parent: details.parent, index: details.index }, reason: undefined }
+          : { found: undefined, reason: "Could not find item to delete" };
       });
     });
   }
@@ -306,7 +304,7 @@ export class ConfigRouter {
    * @param {Object} object The searched object identifier for which we want to get parent details
    * @returns parent of the searched object and the index of the object in parent
    */
-  #getParentDetails(fullConfig, { configUser = undefined, groupDomain = undefined, observerPath = undefined }) {
+  #getParentDetails(fullConfig, { configUser = undefined, groupName = undefined, observerName = undefined }) {
     for (let configIndex = 0; configIndex < fullConfig.length; configIndex++) {
       const currentConfig = fullConfig[configIndex];
       if (configUser && configUser === currentConfig.user) {
@@ -314,12 +312,12 @@ export class ConfigRouter {
       }
       for (let groupIndex = 0; groupIndex < currentConfig.groups.length; groupIndex++) {
         const currentGroup = currentConfig.groups[groupIndex];
-        if (groupDomain && groupDomain === currentGroup.domain) {
+        if (groupName && groupName === currentGroup.name) {
           return { parent: currentConfig.groups, index: groupIndex };
         }
         for (let observerIndex = 0; observerIndex < currentGroup.observers.length; observerIndex++) {
           const currentObserver = currentGroup.observers[observerIndex];
-          if (observerPath && observerPath === currentObserver.path) {
+          if (observerName && observerName === currentObserver.name) {
             return { parent: currentGroup.observers, index: observerIndex };
           }
         }

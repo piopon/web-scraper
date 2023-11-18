@@ -1,0 +1,268 @@
+div.component-cards {
+  --animation-speed: 0.35s;
+  display: flex;
+  gap: 0.75rem;
+  color: black;
+}
+
+div.component-card {
+  background-color: silver;
+  border-radius: 0.25rem;
+  border: 1px solid black;
+  z-index: 1;
+  transition: all 0.5s ease-in-out;
+  cursor: pointer;
+  width: 3rem;
+  padding: 0.25rem;
+  flex: 0 0 3rem;
+  overflow: hidden;
+}
+
+div.component-card[active] {
+  flex: 0 0 calc(100% - 2*3rem - 3.3rem);
+  background-color: darkgray;
+  cursor: default;
+}
+
+div.component-card:hover {
+  background-color: darkgray;
+}
+
+.card-title {
+  margin: 0;
+  transition: all 0.5s ease-in-out;
+  transform: rotate(-90deg) translate(-0.5rem, -2.75rem);
+  transform-origin: top right;
+  font-size: 1.6rem;
+  white-space: nowrap;
+  display: flex;
+  justify-content: flex-end;
+}
+
+div.component-card[active] .card-title {
+  font-size: 1.5rem;
+  transform: rotate(0deg) translate(-0.5rem, 0rem);
+}
+
+div.component-content {
+  display: flex;
+  flex-direction: row;
+  transform: translateY(2rem);
+  opacity: 0;
+  transition: opacity var(--animation-speed) ease-in-out, transform var(--animation-speed) ease-in-out;
+}
+
+div.component-card[active] div.component-content {
+  transform: translateY(0);
+  opacity: 1;
+  border-top: 1px solid black;
+}
+
+div.component-fields {
+  width: 100%;
+}
+
+div.component-toggle {
+  width: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  position: relative;
+  box-sizing: border-box;
+  margin-top: 1.5rem;
+}
+
+div.component-toggle input[type=checkbox] {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  opacity: 0;
+}
+
+div.component-toggle label {
+  position: relative;
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+div.component-toggle label:before {
+  content: "";
+  left: 0.5rem;
+  width: 2rem;
+  height: 6rem;
+  background: slateblue;
+  position: relative;
+  display: inline-block;
+  border-radius: 20px;
+  border: 1px solid black;
+  box-sizing: border-box;
+  box-shadow: 2px 2px 5px black;
+  transition: 0.2s ease-in;
+}
+
+div.component-toggle label:after {
+  content: "";
+  position: absolute;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  left: 0.75rem;
+  top: 0.25rem;
+  z-index: 2;
+  background: #fff;
+  border: 1px solid black;
+  box-sizing: border-box;
+  transition: 0.2s ease-in;
+}
+
+div.component-toggle input[type=checkbox]:checked + label:before {
+  background: cornflowerblue;
+}
+
+div.component-toggle input[type=checkbox]:checked + label:after {
+  top: 4.25rem;
+}
+
+div.component-toggle p {
+  margin: 0rem auto;
+  font-size: 0.8rem;
+}
+
+div.component-name {
+  display: flex;
+  margin: 0rem;
+  width: 100%;
+  justify-content: flex-start;
+  padding: 0rem 0.5rem;
+  align-items: center;
+}
+
+label.component-title-label {
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+
+.component-title-selector {
+  width: 100%;
+  height: 2rem;
+  font-size: 1rem;
+  color: black;
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: 2px 2px 5px black;
+}
+
+.component-title-attribute {
+  width: 100%;
+  height: 2rem;
+  font-size: 1rem;
+  color: black;
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: 2px 2px 5px black;
+}
+
+.component-title-auxiliary {
+  width: 100%;
+  height: 2rem;
+  font-size: 1rem;
+  color: black;
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: 2px 2px 5px black;
+}
+
+label.component-image-label {
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+
+.component-image-selector {
+  width: 100%;
+  height: 2rem;
+  font-size: 1rem;
+  color: black;
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: 2px 2px 5px black;
+}
+
+.component-image-attribute {
+  width: 100%;
+  height: 2rem;
+  font-size: 1rem;
+  color: black;
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: 2px 2px 5px black;
+}
+
+.component-image-auxiliary {
+  cursor: pointer;
+  width: 100%;
+  height: 2rem;
+  font-size: 1rem;
+  color: black;
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: 2px 2px 5px black;
+}
+
+.component-image-auxiliary:hover {
+  color: white;
+  background-color: slateblue;
+}
+
+label.component-price-label {
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+
+.component-price-selector {
+  width: 100%;
+  height: 2rem;
+  font-size: 1rem;
+  color: black;
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: 2px 2px 5px black;
+}
+
+.component-price-attribute {
+  width: 100%;
+  height: 2rem;
+  font-size: 1rem;
+  color: black;
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: 2px 2px 5px black;
+}
+
+.component-price-auxiliary {
+  cursor: pointer;
+  width: 100%;
+  height: 2rem;
+  font-size: 1rem;
+  color: black;
+  text-align: center;
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: 2px 2px 5px black;
+}

@@ -1,0 +1,38 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="./css/animations.css" />
+    <link rel="stylesheet" href="./css/colors.css" />
+    <link rel="stylesheet" href="./css/page.css" />
+    <link rel="stylesheet" href="./css/tooltip.css" />
+    <link rel="stylesheet" href="./css/columns.css" />
+    <link rel="stylesheet" href="./css/groups.css" />
+    <link rel="stylesheet" href="./css/observers.css" />
+    <link rel="stylesheet" href="./css/components.css" />
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="icon" type="image/x-icon" href="./img/icon/favicon-32.ico" />
+    <link href="https://fonts.googleapis.com/css2?family=Sedgwick+Ave&display=swap" rel="stylesheet" />
+    <script type="module" src="./js/script.js" defer></script>
+    <title>web-scraper</title>
+  </head>
+  <body>
+    {{!-- page body --}}
+    <div id="page">
+      {{!-- page header --}}
+      <header id="main-header">
+        <h1>web-scraper</h1>
+      </header>
+      {{!-- page content --}}
+      <div id="main-content">
+        <header id="content-header">
+          <h3>{{title}}</h3>
+        </header>
+        {{{body}}}
+      </div>
+      {{!-- page footer --}}
+      <footer id="main-footer">
+        <h3>developed with 💚 pnk @ 2023</h3>
+      </footer>
+    </div>
+  </body>
+</html>

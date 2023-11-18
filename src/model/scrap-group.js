@@ -20,7 +20,7 @@ export class ScrapGroup {
    * @returns group identifier: string composed of title with domain field value
    */
   getIdentifier() {
-    return `domain = ${this.domain}`;
+    return `name = ${this.name}`;
   }
 
   /**
@@ -43,19 +43,19 @@ export class ScrapGroup {
    */
   checkValues() {
     const checkResult = { errors: [], warnings: [] };
+    if (!this.name) {
+      checkResult.errors.push("Missing required group name");
+    }
     if (!this.domain) {
       checkResult.errors.push("Missing required group domain");
     }
     if (this.observers.length < 1) {
-      checkResult.errors.push("At least one observer is needed");
+      checkResult.warnings.push("Add at least one observer to make things work properly");
     }
     for (let observerNo = 0; observerNo < this.observers.length; observerNo++) {
       const observerCheckResult = this.observers[observerNo].checkValues();
       checkResult.errors.push(...observerCheckResult.errors);
       checkResult.warnings.push(...observerCheckResult.warnings);
-    }
-    if (!this.name) {
-      checkResult.warnings.push("Empty group name");
     }
     if (!this.category) {
       checkResult.warnings.push("Empty group category");
@@ -75,9 +75,9 @@ export class ScrapGroup {
         name: { type: "string", minLength: 1 },
         category: { type: "string", minLength: 1 },
         domain: { type: "string", minLength: 1 },
-        observers: { type: "array", items: ScrapObserver.getSchema(), minItems: 1 },
+        observers: { type: "array", items: ScrapObserver.getSchema() },
       },
-      required: ["domain", "observers"],
+      required: ["name", "domain", "observers"],
     };
   }
 
@@ -111,9 +111,9 @@ export class ScrapGroup {
         type: "object",
         additionalProperties: false,
         properties: {
-          domain: { type: "string", minLength: 1 },
+          name: { type: "string", minLength: 1 },
         },
-        required: ["domain"],
+        required: ["name"],
       };
     }
   }

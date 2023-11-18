@@ -1,0 +1,30 @@
+<div class="widget{{classes}}">
+  {{!-- show label only if it was provided and NOT for dialog widget --}}
+  {{#if (and (unlessEq label undefined) (unlessEq type "dialog"))}}
+    <label class="{{parent}}-label">{{label}}:</label>
+  {{/if}}
+  {{!-- show identifier container with warning icon and information --}}
+  {{#if id}}<div class="id"></div>{{/if}}
+  {{!-- add main widget component --}}
+  {{#if (eq type "combo")}}
+    <select class="{{parent}}-{{label}}" name="{{label}}" required {{#if disable}}disabled{{/if}}>
+      <option value="" disabled selected hidden>Select value</option>
+      {{#each (split options "|")}}
+        <option value={{this}} {{#if (eq ../value this)}}selected{{/if}}>{{this}}</option>
+      {{/each}}
+    </select>
+  {{else if (eq type "dialog")}}
+    <dialog class="{{parent}}-dialog">
+      {{#if (unlessEq label undefined)}}
+        <label class="{{parent}}-label">{{label}}:</label>
+      {{/if}}
+      <form method="dialog">
+        {{#each (split options "|")}}
+          <button type="submit" value="{{this}}">{{this}}</button>
+        {{/each}}
+      </form>
+    </dialog>
+  {{else}}
+    <input type="{{type}}" class="{{parent}}-{{label}}" name="{{label}}" value="{{value}}" {{#if disable}}disabled{{/if}}/>
+  {{/if}}
+</div>

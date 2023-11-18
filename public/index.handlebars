@@ -1,0 +1,16 @@
+<section class="group-columns hide">
+  {{#each content}}
+    {{#each groups}}
+      {{> group-edit group=this }}
+    {{/each}}
+    {{> group-add userId=user }}
+  {{/each}}
+</section>
+<section class="group-status show">
+  <div class="group-loader loading"></div>
+  <h3>initializing groups...</h3>
+</section>
+<div id="toastBox"></div>
+{{> widget type="dialog" parent="group-category" label="select category" options=categories }}
+{{> widget type="dialog" parent="delete-observer" label="delete?" options="yes|no" }}
+{{> widget type="dialog" parent="delete-group" label="delete?" options="yes|no" }}

@@ -9,6 +9,7 @@ export class ScrapObserver {
    */
   constructor(object) {
     const input = ModelUtils.getValueOrDefault(object, {});
+    this.name = ModelUtils.getValueOrDefault(input.name, "");
     this.path = ModelUtils.getValueOrDefault(input.path, "");
     this.target = ModelUtils.getValueOrDefault(input.target, "load");
     this.history = ModelUtils.getValueOrDefault(input.history, "off");
@@ -23,7 +24,7 @@ export class ScrapObserver {
    * @returns observer identifier: string composed of title with path field value
    */
   getIdentifier() {
-    return `path = ${this.path}`;
+    return `name = ${this.name}`;
   }
 
   /**
@@ -34,6 +35,7 @@ export class ScrapObserver {
     if (!ModelUtils.isInstanceOf(ScrapObserver, otherObserver)) {
       throw new ScrapError("Cannot copy scrap observer values: incompatible object");
     }
+    this.name = otherObserver.name;
     this.path = otherObserver.path;
     this.target = otherObserver.target;
     this.history = otherObserver.history;
@@ -49,6 +51,9 @@ export class ScrapObserver {
    */
   checkValues() {
     const checkResult = { errors: [], warnings: [] };
+    if (!this.name) {
+      checkResult.errors.push(`Missing required observer name`);
+    }
     if (!this.path) {
       checkResult.errors.push(`Missing required observer path`);
     }
@@ -79,6 +84,7 @@ export class ScrapObserver {
       type: "object",
       additionalProperties: false,
       properties: {
+        name: { type: "string", minLength: 1 },
         path: { type: "string", minLength: 1 },
         target: { enum: ["load", "domcontentloaded", "networkidle0", "networkidle2"] },
         history: { enum: ["off", "live", "change"] },
@@ -87,7 +93,7 @@ export class ScrapObserver {
         image: ScrapComponent.getSchema(),
         price: ScrapComponent.getSchema(),
       },
-      required: ["path", "price"],
+      required: ["name", "path", "price"],
     };
   }
 
@@ -102,6 +108,7 @@ export class ScrapObserver {
         type: "object",
         additionalProperties: false,
         properties: {
+          name: { type: "string", minLength: 1 },
           path: { type: "string", minLength: 1 },
           target: { enum: ["load", "domcontentloaded", "networkidle0", "networkidle2"] },
           history: { enum: ["off", "live", "change"] },
@@ -121,9 +128,9 @@ export class ScrapObserver {
         type: "object",
         additionalProperties: false,
         properties: {
-          path: { type: "string", minLength: 1 },
+          name: { type: "string", minLength: 1 },
         },
-        required: ["path"],
+        required: ["name"],
       };
     }
   }

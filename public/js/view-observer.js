@@ -1,0 +1,146 @@
+import { ComponentsView } from "./view-component.js";
+
+export class ObserversView {
+  /**
+   * Method used to receive HTML code representing input observers array
+   * @param {String} groupId The observers parent group identifier
+   * @param {Array} observers The array of observers which HTML code we want to get
+   * @return HTML code with all observers contents
+   */
+  static getHtml(groupId, observers) {
+    let result = "";
+    observers.forEach((observer) => {
+      result += ObserversView.#getExistingObserverHtml(observer);
+    });
+    result += ObserversView.#getNewObserverHtml(groupId);
+    return result;
+  };
+
+  /**
+   * Method used to receive HTML code representing observer object
+   * @param {Object} observer The observer object which HTML code we want to get
+   * @returns HTML code with existing observer contents
+   */
+  static #getExistingObserverHtml(observer) {
+    return `<div class="observer-content">
+              ${ObserversView.#getObserverModalHtml(undefined, observer)}
+              <div class="modal-button">${observer.name}</div>
+            </div>`;
+  }
+
+  /**
+   * Method used to receive HTML code representing new observer UI
+   * @param {String} groupId The observer parent (group) identifier
+   * @returns HTML code with new observer UI contents
+   */
+  static #getNewObserverHtml(groupId) {
+    const disabled = groupId === undefined ? "disabled" : "";
+    return `<div class="observer-content">
+              ${ObserversView.#getObserverModalHtml(groupId, undefined)}
+              <div class="modal-button new-observer" ${disabled}>+</div>
+            </div>`;
+  }
+
+  /**
+   * Method used to receive HTML code for observer modal dialog
+   * @param {String} groupId The group identifier as observer parent (used when adding new observer)
+   * @param {Object} observer The observer which contents will be displayed in modal dialog
+   * @returns HTML code with observer modal dialog
+   */
+  static #getObserverModalHtml(groupId, observer) {
+    const titleComponent = observer !== undefined ? observer.title : undefined;
+    const imageComponent = observer !== undefined ? observer.image : undefined;
+    const priceComponent = observer !== undefined ? observer.price : undefined;
+    return `<div class="modal-dialog hidden">
+              <div class="modal-background">
+                <div class="modal-content">
+                  <div class="observer-root-data">
+                    <h3 class="observer-data-title">base config</h3>
+                    ${ObserversView.#getObserverRootDataRow1Html(observer)}
+                    ${ObserversView.#getObserverRootDataRow2Html(observer)}
+                  </div>
+                  ${ComponentsView.getHtml(titleComponent, imageComponent, priceComponent)}
+                  <div class="observer-buttons">
+                    ${ObserversView.#getObserverModalButtonsHtml(groupId, observer)};
+                  </div>
+                </div>
+              </div>
+            </div>`;
+  }
+
+  /**
+   * Method used to receive observer root data, first row contents
+   * @param {Object} observer The observer which root data should be received
+   * @returns HTML code with observer root data, first row contents
+   */
+  static #getObserverRootDataRow1Html(observer) {
+    const name = observer !== undefined ? observer.name : "";
+    const target = observer !== undefined ? observer.target : "";
+    const history = observer !== undefined ? observer.history : "";
+    const disabled = observer !== undefined ? "disabled" : "";
+    return `<div class="observer-data-row1">
+              <div class="widget fill">
+                <label class="observer-label">name:</label>
+                ${observer === undefined ? `<div class="id"></div>` : ""}
+                <input type="text" class="observer-name" name="name" value="${name}" ${disabled}/>
+              </div>
+              <div class="widget">
+                <label class="observer-label">target:</label>
+                <select class="observer-target" name="target" required>
+                  <option value="" disabled hidden ${target === "" ? "selected" : ""}>Select value</option>
+                  <option value=load ${target === "load" ? "selected" : ""}>load</option>
+                  <option value=domcontentloaded ${target === "domcontentloaded" ? "selected" : ""}>domcontentloaded</option>
+                  <option value=networkidle0 ${target === "networkidle0" ? "selected" : ""}>networkidle0</option>
+                  <option value=networkidle2 ${target === "networkidle2" ? "selected" : ""}>networkidle2</option>
+                </select>
+              </div>
+              <div class="widget">
+                <label class="observer-label">history:</label>
+                <select class="observer-history" name="history" required>
+                  <option value="" disabled hidden ${history === "" ? "selected" : ""}>Select value</option>
+                  <option value=off ${history === "off" ? "selected" : ""}>off</option>
+                  <option value=onChange ${history === "onChange" ? "selected" : ""}>onChange</option>
+                  <option value=on ${history === "on" ? "selected" : ""}>on</option>
+                </select>
+              </div>
+            </div>`;
+  }
+
+  /**
+   * Method used to receive observer root data, second row contents
+   * @param {Object} observer The observer which root data should be received
+   * @returns HTML code with observer root data, second row contents
+   */
+  static #getObserverRootDataRow2Html(observer) {
+    const path = observer !== undefined ? observer.path : "";
+    const container = observer !== undefined ? observer.container : "";
+    return `<div class="observer-data-row2">
+              <div class="widget fill">
+                <label class="observer-label">path:</label>
+                <input type="text" class="observer-path" name="path" value="${path}" />
+              </div>
+              <div class="widget fill">
+                <label class="observer-label">container:</label>
+                <input type="text" class="observer-container" name="container" value="${container}" />
+              </div>
+            </div>`;
+  }
+
+  /**
+   * Method used to receive observer modal dialog buttons HTML code
+   * @param {String} groupId The observer parent group identifier
+   * @param {Object} observer The observer for which we want to generate buttons code
+   * @returns HTML code containing modal dialog buttons for specified observer
+   */
+  static #getObserverModalButtonsHtml(groupId, observer) {
+    if (observer === undefined) {
+      // no observer provided = we are adding a new one
+      return `<div class="modal-close-btn accept" data-action="add" data-id="${groupId}">add</div>
+              <div class="modal-close-btn cancel" data-action="cancel">cancel</div>`;
+    }
+    // provided is an edited one
+    return `<div class="modal-close-btn accept" data-action="update" data-id="${observer.name}">update</div>
+            <div class="modal-close-btn delete" data-action="delete" data-id="${observer.name}">delete</div>
+            <div class="modal-close-btn cancel" data-action="cancel">cancel</div>`;
+  }
+}

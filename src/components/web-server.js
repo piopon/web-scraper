@@ -4,8 +4,11 @@ import { ConfigRouter } from "../routes/api/config-router.js";
 import { DataRouter } from "../routes/api/data-router.js";
 import { StatusRouter } from "../routes/api/status-router.js";
 import { StatusLogger } from "./status-logger.js";
+import { ViewRouter } from "../routes/view/view-router.js";
 
 import express from "express";
+import helpers from "handlebars-helpers";
+import { engine } from "express-handlebars";
 
 export class WebServer {
   static #LOGGER_NAME = "web-server ";
@@ -59,12 +62,18 @@ export class WebServer {
   #initializeServer() {
     // create web server object
     const server = express();
-    //setup web server middleware
+    // setup web server template engine and all options for UI
+    server.engine("handlebars", engine({ helpers: helpers() }));
+    server.set("view engine", "handlebars");
+    server.set("views", "./public");
+    server.use(express.static("./public"));
+    // setup web server middleware
     server.use(ParamsParser.middleware);
     server.use(RequestLogger.middleware(this.#status));
     server.use(express.json());
     // setup web server routes
     const routes = new Map([
+      ["/", new ViewRouter(this.#setupConfig.dataConfigPath)],
       ["/api/v1/data", new DataRouter(this.#setupConfig.dataOutputPath)],
       ["/api/v1/configs", new ConfigRouter(this.#setupConfig.dataConfigPath)],
       ["/api/v1/status", new StatusRouter(this.#status, this.#components)],

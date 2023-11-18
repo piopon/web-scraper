@@ -1,0 +1,368 @@
+div.modal-dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  z-index: 4;
+  transform: scale(0);
+}
+
+div.modal-dialog.init-reveal {
+  transform: scale(1);
+}
+
+div.modal-dialog.hidden {
+  animation: quickScaleDown 0s 0.5s linear forwards;
+}
+
+div.modal-dialog div.modal-background {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 1.5rem;
+  z-index: 5;
+}
+
+div.modal-dialog.init-reveal div.modal-background {
+  animation: fadeIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+div.modal-dialog.hidden div.modal-background {
+  animation: fadeOut 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+div.modal-dialog div.modal-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 35px;
+  background: whitesmoke;
+  border: 3px solid black;
+  border-radius: 0.35rem;
+  width: 90%;
+}
+
+div.modal-dialog.init-reveal div.modal-content {
+  opacity: 0;
+  animation: scaleUp 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+div.modal-dialog.hidden div.modal-content {
+  animation: scaleDown 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+div.modal-button {
+  cursor: pointer;
+  padding: 5px 10px;
+  text-align: center;
+  font-size: 1rem;
+  color: black;
+  background-color: #efefef;
+  border: 1px solid black;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px black;
+}
+
+div.modal-button[disabled] {
+  pointer-events: none;
+  background-color: #e5e5e5;
+  border-color: #787878;
+  color: #646464;
+}
+
+div.modal-button.new-observer {
+  width: 1.5rem;
+}
+
+div.modal-button:hover {
+  color: white;
+  background: slateblue;
+}
+
+div.modal-dialog.init-reveal + div.modal-button {
+  animation: scaleBack 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+div.modal-dialog.hidden + div.modal-button {
+  animation: scaleForward 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+div.observer-buttons {
+  display: flex;
+  width: 100%;
+  margin: 0.75rem 0rem 0rem 0rem;
+}
+
+div.modal-close-btn {
+  cursor: pointer;
+  width: 50%;
+  padding: 7px 0px;
+  text-align: center;
+  font-size: 1rem;
+  color: black;
+  border: 1px solid black;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px black;
+}
+
+.accept {
+  background-color: limegreen;
+  margin-right: 0.25rem;
+}
+
+.accept:hover {
+  background-color: lightgreen;
+}
+
+.delete {
+  background-color: red;
+  margin-left: 0.25rem;
+}
+
+.delete:hover {
+  background-color: tomato;
+}
+
+label.delete-group-label {
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+
+dialog.delete-group-dialog {
+  box-shadow: 0px 0px 2rem black;
+  border-radius: 0.35rem;
+  border: 3px solid black;
+}
+
+dialog.delete-group-dialog form {
+  display: grid;
+  grid-template-columns: repeat(2, 10rem);
+  grid-template-rows: repeat(1, 2.5rem);
+  grid-gap: 0.5rem;
+  margin: 0rem;
+}
+
+dialog.delete-group-dialog button {
+  text-align: center;
+  font-size: 1rem;
+  color: black;
+  background-color: #efefef;
+  border: 1px solid black;
+  border-radius: 5px;
+  font-family: "Sedgwick Ave", cursive;
+}
+
+dialog.delete-group-dialog button:hover {
+  color: white;
+  background-color: slateblue;
+}
+
+.cancel {
+  background-color: orange;
+  margin-left: 0.25rem;
+}
+
+.cancel:hover {
+  background-color: moccasin;
+}
+
+@keyframes fadeIn {
+  0% {
+    background: rgba(0, 0, 0, 0);
+  }
+  100% {
+    background: rgba(0, 0, 0, 0.4);
+  }
+}
+@keyframes fadeOut {
+  0% {
+    background: rgba(0, 0, 0, 0.4);
+  }
+  100% {
+    background: rgba(0, 0, 0, 0);
+  }
+}
+@keyframes scaleUp {
+  0% {
+    transform: scale(0.8) translateY(1000px);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) translateY(0px);
+    opacity: 1;
+  }
+}
+@keyframes scaleDown {
+  0% {
+    transform: scale(1) translateY(0px);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8) translateY(1000px);
+    opacity: 0;
+  }
+}
+@keyframes scaleBack {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.85);
+  }
+}
+@keyframes scaleForward {
+  0% {
+    transform: scale(0.85);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes quickScaleDown {
+  0% {
+    transform: scale(1);
+  }
+  99.9% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+
+.group-columns .group-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  text-decoration: none;
+  animation-duration: 1s;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+  -webkit-animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  -webkit-animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+div.group-root-data {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 40rem;
+  margin: 2.5rem auto 0rem auto;
+}
+
+div.group-observers {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40rem;
+  height: 100%;
+  margin: 0.5rem auto 0rem auto;
+}
+
+div.group-buttons {
+  display: flex;
+  align-items: center;
+  width: 40rem;
+  margin: 0.5rem auto 2.5rem auto;
+}
+
+div.observers-title {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+div.observers-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+label.group-label {
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+
+.group-name {
+  width: 13rem;
+  height: 2rem;
+  font-size: 1rem;
+  color: black;
+  background-color: #efefef;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: 2px 2px 5px black;
+}
+
+.group-category {
+  cursor: pointer;
+  width: 4rem;
+  height: 2rem;
+  font-size: 1rem;
+  color: black;
+  background-color: #efefef;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: 2px 2px 5px black;
+}
+
+.group-category:hover {
+  background-color: slateblue;
+}
+
+label.group-category-label {
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+
+dialog.group-category-dialog {
+  box-shadow: 0px 0px 2rem black;
+  border-radius: 0.35rem;
+  border: 3px solid black;
+}
+
+dialog.group-category-dialog form {
+  display: grid;
+  grid-template-columns: repeat(6, 4rem);
+  grid-template-rows: repeat(5, 4rem);
+  grid-gap: 0.5rem;
+}
+
+dialog.group-category-dialog button {
+  font-size: 2rem;
+}
+
+.group-domain {
+  width: 22rem;
+  height: 2rem;
+  font-size: 1rem;
+  color: black;
+  background-color: #efefef;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: 2px 2px 5px black;
+}
+
+div.group-close-btn {
+  cursor: pointer;
+  width: 50%;
+  padding: 7px 0px;
+  text-align: center;
+  font-size: 1rem;
+  color: black;
+  border: 1px solid black;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px black;
+}
