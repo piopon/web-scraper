@@ -25,6 +25,7 @@ export class WebServer {
   constructor(config) {
     this.#setupConfig = config;
     this.#status = new StatusLogger(WebServer.#LOGGER_NAME, config.minLogLevel);
+    this.#status.log("Created");
   }
 
   /**
