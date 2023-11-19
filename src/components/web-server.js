@@ -13,10 +13,10 @@ import { engine } from "express-handlebars";
 export class WebServer {
   static #LOGGER_NAME = "web-server ";
 
-  #status = new StatusLogger(WebServer.#LOGGER_NAME);
   #setupConfig = undefined;
   #components = [];
   #server = undefined;
+  #status = undefined;
 
   /**
    * Creates a new web server with specified configuration
@@ -24,6 +24,8 @@ export class WebServer {
    */
   constructor(config) {
     this.#setupConfig = config;
+    this.#status = new StatusLogger(WebServer.#LOGGER_NAME, config.minLogLevel);
+    this.#status.info("Created");
   }
 
   /**
@@ -41,7 +43,7 @@ export class WebServer {
     this.#server = this.#initializeServer();
     this.#server.listen(this.#setupConfig.serverConfig.port, () => {
       this.#components.forEach((component) => component.start());
-      this.#status.log(`Started on port: ${this.#setupConfig.serverConfig.port}`);
+      this.#status.info(`Started on port: ${this.#setupConfig.serverConfig.port}`);
     });
   }
 
@@ -51,7 +53,7 @@ export class WebServer {
   shutdown() {
     this.#server.close(() => {
       this.#components.forEach((component) => component.stop());
-      this.#status.log("Stopped");
+      this.#status.info("Stopped");
     });
   }
 
