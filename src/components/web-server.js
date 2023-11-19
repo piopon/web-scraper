@@ -13,10 +13,10 @@ import { engine } from "express-handlebars";
 export class WebServer {
   static #LOGGER_NAME = "web-server ";
 
-  #status = new StatusLogger(WebServer.#LOGGER_NAME);
   #setupConfig = undefined;
   #components = [];
   #server = undefined;
+  #status = undefined;
 
   /**
    * Creates a new web server with specified configuration
@@ -24,6 +24,7 @@ export class WebServer {
    */
   constructor(config) {
     this.#setupConfig = config;
+    this.#status = new StatusLogger(WebServer.#LOGGER_NAME, config.minLogLevel);
   }
 
   /**

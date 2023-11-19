@@ -1,15 +1,19 @@
+import { AppVariables } from "../../config/app-variables.js";
 import moment from "moment";
 
 export class StatusLogger {
   #status = [];
   #name = undefined;
+  #minLogLevel = undefined;
 
   /**
    * Creates a new status logger with specified name
    * @param {String} name The name of the logger
+   * @param {Number} minLogLevel The minimal messages level to be logged
    */
-  constructor(name) {
+  constructor(name, minLogLevel) {
     this.#name = name;
+    this.#minLogLevel = minLogLevel;
   }
 
   /**

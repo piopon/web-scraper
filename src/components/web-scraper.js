@@ -13,7 +13,6 @@ export class WebScraper {
   static #COMPONENT_NAME = "web-scraper";
   static #RUNNING_STATUS = "Running";
 
-  #status = new StatusLogger(WebScraper.#COMPONENT_NAME);
   #scrapingInProgress = false;
   #currentUserId = undefined;
   #setupConfig = undefined;
@@ -21,6 +20,7 @@ export class WebScraper {
   #intervalId = undefined;
   #browser = undefined;
   #page = undefined;
+  #status = undefined;
 
   /**
    * Creates a new web scraper with specified configuration
@@ -29,6 +29,7 @@ export class WebScraper {
   constructor(config, userId) {
     this.#setupConfig = config;
     this.#currentUserId = userId;
+    this.#status = new StatusLogger(WebScraper.#COMPONENT_NAME, config.minLogLevel);
     this.#status.log("Created");
   }
 
