@@ -25,6 +25,19 @@ export class StatusLogger {
   }
 
   /**
+   * Adds and prints a debug log message
+   * @param {String} message The message to add and print
+   */
+  debug(message) {
+    if (this.#minLogLevel < AppVariables.LOG_LEVEL_DEBUG) {
+      return;
+    }
+    const dateTimeNow = moment().format("YYYY-MM-DD HH:mm:ss");
+    this.#status.push({ timestamp: dateTimeNow, type: "debug", message: message });
+    console.debug(`${dateTimeNow} [${this.#name}] DEBUG: ${message}`);
+  }
+
+  /**
    * Adds and prints an info log message
    * @param {String} message The message to add and print
    */
