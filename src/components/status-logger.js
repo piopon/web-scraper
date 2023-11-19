@@ -28,13 +28,13 @@ export class StatusLogger {
    * Adds and prints an info log message
    * @param {String} message The message to add and print
    */
-  log(message) {
+  info(message) {
     if (this.#minLogLevel < AppVariables.LOG_LEVEL_INFO) {
       return;
     }
     const dateTimeNow = moment().format("YYYY-MM-DD HH:mm:ss");
     this.#status.push({ timestamp: dateTimeNow, type: "info", message: message });
-    console.log(`${dateTimeNow} [${this.#name}] INFO: ${message}`);
+    console.info(`${dateTimeNow} [${this.#name}] INFO: ${message}`);
   }
 
   /**

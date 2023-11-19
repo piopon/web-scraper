@@ -30,14 +30,14 @@ export class WebScraper {
     this.#setupConfig = config;
     this.#currentUserId = userId;
     this.#status = new StatusLogger(WebScraper.#COMPONENT_NAME, config.minLogLevel);
-    this.#status.log("Created");
+    this.#status.info("Created");
   }
 
   /**
    * Method used to start web scraping action
    */
   async start() {
-    this.#status.log("Starting");
+    this.#status.info("Starting");
     // create a new empty configuration file and directory if none exists
     const configDirectory = path.dirname(this.#setupConfig.dataConfigPath);
     if (!fs.existsSync(configDirectory)) {
@@ -46,9 +46,9 @@ export class WebScraper {
     if (!fs.existsSync(this.#setupConfig.dataConfigPath)) {
       const newConfig = { user: this.#currentUserId, groups: [] };
       fs.writeFileSync(this.#setupConfig.dataConfigPath, JSON.stringify(newConfig, null, 2));
-      this.#status.log(`Created new ${path.basename(this.#setupConfig.dataConfigPath)}`);
+      this.#status.info(`Created new ${path.basename(this.#setupConfig.dataConfigPath)}`);
     }
-    this.#status.log("Reading configuration");
+    this.#status.info("Reading configuration");
     // parse source scraper configuration file to a config class
     try {
       var configCandidate = JSON.parse(fs.readFileSync(this.#setupConfig.dataConfigPath))
@@ -65,7 +65,7 @@ export class WebScraper {
         return;
       }
     }
-    this.#status.log("Initializing");
+    this.#status.info("Initializing");
     // open new Puppeteer virtual browser and an initial web page
     this.#browser = await puppeteer.launch({ headless: "new" });
     this.#page = await this.#browser.newPage();
@@ -74,7 +74,7 @@ export class WebScraper {
     if (true === (await this.#scrapData())) {
       const intervalTime = this.#setupConfig.scraperConfig.scrapInterval;
       this.#intervalId = setInterval(() => this.#scrapData(), intervalTime);
-      this.#status.log(`${WebScraper.#RUNNING_STATUS} (every: ${intervalTime / 1000} seconds)`);
+      this.#status.info(`${WebScraper.#RUNNING_STATUS} (every: ${intervalTime / 1000} seconds)`);
     }
   }
 
@@ -91,7 +91,7 @@ export class WebScraper {
     }
     // update status and make error screenshot
     if (reason.length === 0) {
-      this.#status.log("Stopped");
+      this.#status.info("Stopped");
     } else {
       if (this.#status.getStatus().message !== reason) {
         this.#status.error(reason);
