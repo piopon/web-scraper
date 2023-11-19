@@ -29,6 +29,9 @@ export class StatusLogger {
    * @param {String} message The message to add and print
    */
   log(message) {
+    if (this.#minLogLevel < AppVariables.LOG_LEVEL_INFO) {
+      return;
+    }
     const dateTimeNow = moment().format("YYYY-MM-DD HH:mm:ss");
     this.#status.push({ timestamp: dateTimeNow, type: "info", message: message });
     console.log(`${dateTimeNow} [${this.#name}] INFO: ${message}`);
@@ -39,6 +42,9 @@ export class StatusLogger {
    * @param {String} message The message to add and print
    */
   warning(message) {
+    if (this.#minLogLevel < AppVariables.LOG_LEVEL_WARNING) {
+      return;
+    }
     const dateTimeNow = moment().format("YYYY-MM-DD HH:mm:ss");
     this.#status.push({ timestamp: dateTimeNow, type: "warning", message: message });
     console.warn(`${dateTimeNow} [${this.#name}] WARNING: ${message}`);
@@ -49,6 +55,9 @@ export class StatusLogger {
    * @param {String} message The message to add and print
    */
   error(message) {
+    if (this.#minLogLevel < AppVariables.LOG_LEVEL_ERROR) {
+      return;
+    }
     const dateTimeNow = moment().format("YYYY-MM-DD HH:mm:ss");
     this.#status.push({ timestamp: dateTimeNow, type: "error", message: message });
     console.error(`${dateTimeNow} [${this.#name}] ERROR: ${message}`);
