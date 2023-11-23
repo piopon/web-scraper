@@ -350,7 +350,7 @@ export class GroupsController {
   #createColorClass(color) {
     const className = `background-${color}`;
     const classElement = document.createElement('style');
-    classElement.innerHTML = `.${className} { background: #${color}; color: black; }`;
+    classElement.innerHTML = `.${className} { background: #${color}; color: ${this.#invertColor(color)}; }`;
     document.getElementsByTagName('head')[0].appendChild(classElement);
     return className;
   }
@@ -378,5 +378,21 @@ export class GroupsController {
    */
   #getRandomColor() {
     return Math.floor(Math.random() * 0xffffff).toString(16);
+  }
+
+  #invertColor(color) {
+    if (0 === color.indexOf("#")) {
+      color = color.slice(1);
+    }
+    if (3 === color.length) {
+      color = color[0] + color[0] + color[1] + color[1] + color[2] + color[2];
+    }
+    if (6 !== color.length) {
+      throw new Error(`Invalid color: ${color}`);
+    }
+    const r = parseInt(color.slice(0, 2), 16);
+    const g = parseInt(color.slice(2, 4), 16);
+    const b = parseInt(color.slice(4, 6), 16);
+    return r * 0.299 + g * 0.587 + b * 0.114 > 186 ? "black" : "white";
   }
 }
