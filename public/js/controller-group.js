@@ -62,7 +62,6 @@ export class GroupsController {
         if (colors.length > 0) {
           const selectedColor = this.#getRandom(colors, true);
           column.classList.add("background-" + selectedColor);
-          column.querySelector(".group-title").classList.add("background-" + selectedColor);
         } else {
           const randomColorHex = Math.floor(Math.random()*0xFFFFFF).toString(16);
           const randomColorClass = document.createElement('style');
