@@ -1,4 +1,4 @@
-import { CommonController } from "./controller-common.js"
+import { CommonController } from "./controller-common.js";
 import { GroupsService } from "./service-group.js";
 import { GroupsView } from "./view-group.js";
 
@@ -335,8 +335,8 @@ export class GroupsController {
    */
   #getAvailableColors() {
     const definedColors = ["navy", "aqua", "green", "orange", "red", "blue", "yellow", "plum"];
-    const pageHeadElement = document.getElementsByTagName('head')[0];
-    const generatedColors = Array.from(pageHeadElement.getElementsByTagName("style")).map(element => {
+    const pageHeadElement = document.getElementsByTagName("head")[0];
+    const generatedColors = Array.from(pageHeadElement.getElementsByTagName("style")).map((element) => {
       return element.innerHTML.match(".background-([0-9a-fA-F]+)")[1];
     });
     return definedColors.concat(generatedColors);
@@ -349,9 +349,9 @@ export class GroupsController {
    */
   #createColorClass(color) {
     const className = `background-${color}`;
-    const classElement = document.createElement('style');
+    const classElement = document.createElement("style");
     classElement.innerHTML = `.${className} { background: #${color}; color: ${this.#invertColor(color)}; }`;
-    document.getElementsByTagName('head')[0].appendChild(classElement);
+    document.getElementsByTagName("head")[0].appendChild(classElement);
     return className;
   }
 
