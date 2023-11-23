@@ -333,6 +333,10 @@ export class GroupsController {
     column.parentNode.removeAttribute("style");
   }
 
+  /**
+   * Method used to receive an array of currently available colors
+   * @returns an array with available colors (defined and currently generated)
+   */
   #getAvailableColors() {
     const definedColors = ["navy", "aqua", "green", "orange", "red", "blue", "yellow", "plum"];
     const pageHeadElement = document.getElementsByTagName('head')[0];
@@ -342,6 +346,11 @@ export class GroupsController {
     return definedColors.concat(generatedColors);
   }
 
+  /**
+   * Method used to create CSS color responsible for color style
+   * @param {String} color The color name/code/hex for which we want to generate class
+   * @returns the name of currently generated (and added to header) style class
+   */
   #createColorClass(color) {
     const className = `background-${color}`;
     const classElement = document.createElement('style');
