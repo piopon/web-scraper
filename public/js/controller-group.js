@@ -59,15 +59,11 @@ export class GroupsController {
     this.#groupColumns.forEach((column) => {
       if ("update" === column.dataset.action) {
         // get color from array and then remove it so no duplicates are selected (in next iterations)
-        if (colors.length > 0) {
-          const selectedColor = this.#getRandom(colors, true);
-          column.classList.add("background-" + selectedColor);
-        } else {
-          const randomColor = Math.floor(Math.random()*0xFFFFFF).toString(16);
-          column.classList.add(this.#createColorClass(randomColor));
-        }
+        column.classList.add(colors.length > 0
+            ? "background-" + this.#getRandomElement(colors, true)
+            : this.#createColorClass(this.#getRandomColor()));
         // get animation from array (duplicates are allowed in this case)
-        column.classList.add(this.#getRandom(animations, false));
+        column.classList.add(this.#getRandomElement(animations, false));
       } else {
         // new group column should always appear from right and have gray background
         column.classList.add("background-violet");
@@ -365,7 +361,7 @@ export class GroupsController {
    * @param {Boolean} remove If we want to remove the received random element from array (to prevent duplicates)
    * @returns random element from input array
    */
-  #getRandom(array, remove) {
+  #getRandomElement(array, remove) {
     const randomItem = array[Math.floor(Math.random() * array.length)];
     if (remove) {
       var index = array.indexOf(randomItem);
@@ -374,5 +370,13 @@ export class GroupsController {
       }
     }
     return randomItem;
+  }
+
+  /**
+   * Method used to generate and receive random color
+   * @returns String with random color in form of a HEX number
+   */
+  #getRandomColor() {
+    return Math.floor(Math.random() * 0xffffff).toString(16);
   }
 }
