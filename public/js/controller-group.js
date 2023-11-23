@@ -63,11 +63,8 @@ export class GroupsController {
           const selectedColor = this.#getRandom(colors, true);
           column.classList.add("background-" + selectedColor);
         } else {
-          const randomColorHex = Math.floor(Math.random()*0xFFFFFF).toString(16);
-          const randomColorClass = document.createElement('style');
-          randomColorClass.innerHTML = `.background-${randomColorHex} { background: #${randomColorHex}; color: black; }`;
-          document.getElementsByTagName('head')[0].appendChild(randomColorClass);
-          column.classList.add("background-" + randomColorHex);
+          const randomColor = Math.floor(Math.random()*0xFFFFFF).toString(16);
+          column.classList.add(this.#createColorClass(randomColor));
         }
         // get animation from array (duplicates are allowed in this case)
         column.classList.add(this.#getRandom(animations, false));
