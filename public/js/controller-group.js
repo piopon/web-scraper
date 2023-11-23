@@ -64,7 +64,7 @@ export class GroupsController {
           column.classList.add("background-" + selectedColor);
           column.querySelector(".group-title").classList.add("background-" + selectedColor);
         } else {
-          const randomColorHex = Math.floor(Math.random()*16777215).toString(16);
+          const randomColorHex = Math.floor(Math.random()*0xFFFFFF).toString(16);
           const randomColorClass = document.createElement('style');
           randomColorClass.innerHTML = `.background-${randomColorHex} { background: #${randomColorHex}; color: black; }`;
           document.getElementsByTagName('head')[0].appendChild(randomColorClass);
