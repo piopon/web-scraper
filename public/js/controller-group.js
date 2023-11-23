@@ -346,6 +346,14 @@ export class GroupsController {
     return definedColors.concat(generatedColors);
   }
 
+  #createColorClass(color) {
+    const className = `background-${color}`;
+    const classElement = document.createElement('style');
+    classElement.innerHTML = `.${className} { background: #${color}; color: black; }`;
+    document.getElementsByTagName('head')[0].appendChild(classElement);
+    return className;
+  }
+
   /**
    * Method used to receive random element from provided array
    * @param {Object} array The array from which we want to receive element
