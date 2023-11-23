@@ -54,7 +54,7 @@ export class GroupsController {
    * Method used to set style for all group columns (position, colors and animation)
    */
   #initStyle() {
-    const colors = ["navy", "aqua", "green", "orange", "red", "blue", "yellow", "plum"];
+    const colors = this.#getAvailableColors();
     const animations = ["column-from-top", "column-from-right", "column-from-bottom", "column-from-left"];
     this.#groupColumns.forEach((column) => {
       if ("update" === column.dataset.action) {
@@ -335,6 +335,15 @@ export class GroupsController {
    */
   #clearDimension(column) {
     column.parentNode.removeAttribute("style");
+  }
+
+  #getAvailableColors() {
+    const definedColors = ["navy", "aqua", "green", "orange", "red", "blue", "yellow", "plum"];
+    const pageHeadElement = document.getElementsByTagName('head')[0];
+    const generatedColors = Array.from(pageHeadElement.getElementsByTagName("style")).map(element => {
+      return element.innerHTML.match(".background-([0-9a-fA-F]+)")[1];
+    });
+    return definedColors.concat(generatedColors);
   }
 
   /**
