@@ -59,9 +59,17 @@ export class GroupsController {
     this.#groupColumns.forEach((column) => {
       if ("update" === column.dataset.action) {
         // get color from array and then remove it so no duplicates are selected (in next iterations)
-        const selectedColor = this.#getRandom(colors, true);
-        column.classList.add("background-" + selectedColor);
-        column.querySelector(".group-title").classList.add("background-" + selectedColor);
+        if (colors.length > 0) {
+          const selectedColor = this.#getRandom(colors, true);
+          column.classList.add("background-" + selectedColor);
+          column.querySelector(".group-title").classList.add("background-" + selectedColor);
+        } else {
+          const randomColorHex = Math.floor(Math.random()*16777215).toString(16);
+          const randomColorClass = document.createElement('style');
+          randomColorClass.innerHTML = `.background-${randomColorHex} { background: #${randomColorHex}; color: black; }`;
+          document.getElementsByTagName('head')[0].appendChild(randomColorClass);
+          column.classList.add("background-" + randomColorHex);
+        }
         // get animation from array (duplicates are allowed in this case)
         column.classList.add(this.#getRandom(animations, false));
       } else {
