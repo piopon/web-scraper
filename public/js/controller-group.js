@@ -377,7 +377,7 @@ export class GroupsController {
    * @returns String with random color in form of a HEX number
    */
   #getRandomColor() {
-    return Math.floor(Math.random() * 0xffffff).toString(16);
+    return Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, "0");
   }
 
   #invertColor(color) {
