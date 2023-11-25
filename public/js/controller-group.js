@@ -350,7 +350,7 @@ export class GroupsController {
   #createColorClass(color) {
     const className = `background-${color}`;
     const classElement = document.createElement("style");
-    classElement.innerHTML = `.${className} { background: #${color}; color: ${this.#invertColor(color)}; }`;
+    classElement.innerHTML = `.${className} { background: #${color}; color: ${this.#contrastColor(color)}; }`;
     document.getElementsByTagName("head")[0].appendChild(classElement);
     return className;
   }
@@ -380,7 +380,12 @@ export class GroupsController {
     return Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, "0");
   }
 
-  #invertColor(color) {
+  /**
+   * Method used to generate color with good contrast to the input (black or white)
+   * @param {String} color The color in HEX for which we want to generate good contrast color
+   * @returns black or white color in HEX which has the better contrast to the input color
+   */
+  #contrastColor(color) {
     if (0 === color.indexOf("#")) {
       color = color.slice(1);
     }
