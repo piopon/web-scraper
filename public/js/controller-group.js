@@ -388,7 +388,8 @@ export class GroupsController {
       color = color[0] + color[0] + color[1] + color[1] + color[2] + color[2];
     }
     if (6 !== color.length) {
-      throw new Error(`Invalid color: ${color}`);
+      CommonController.showToastError(`Cannot generate color. Invalid value: ${color}`)
+      return "black";
     }
     const r = parseInt(color.slice(0, 2), 16);
     const g = parseInt(color.slice(2, 4), 16);
