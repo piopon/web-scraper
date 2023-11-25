@@ -87,7 +87,7 @@ export class ScrapObserver {
         name: { type: "string", minLength: 1 },
         path: { type: "string", minLength: 1 },
         target: { enum: ["load", "domcontentloaded", "networkidle0", "networkidle2"] },
-        history: { enum: ["off", "live", "change"] },
+        history: { enum: ["off", "on", "onChange"] },
         container: { type: "string" },
         title: ScrapComponent.getSchema(),
         image: ScrapComponent.getSchema(),
@@ -111,7 +111,7 @@ export class ScrapObserver {
           name: { type: "string", minLength: 1 },
           path: { type: "string", minLength: 1 },
           target: { enum: ["load", "domcontentloaded", "networkidle0", "networkidle2"] },
-          history: { enum: ["off", "live", "change"] },
+          history: { enum: ["off", "on", "onChange"] },
         },
       };
     } else if ("POST" === method) {
