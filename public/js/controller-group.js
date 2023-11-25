@@ -1,4 +1,4 @@
-import { CommonController } from "./controller-common.js"
+import { CommonController } from "./controller-common.js";
 import { GroupsService } from "./service-group.js";
 import { GroupsView } from "./view-group.js";
 
@@ -54,16 +54,16 @@ export class GroupsController {
    * Method used to set style for all group columns (position, colors and animation)
    */
   #initStyle() {
-    const colors = ["navy", "aqua", "green", "orange", "red", "blue", "yellow", "plum"];
+    const colors = this.#getAvailableColors();
     const animations = ["column-from-top", "column-from-right", "column-from-bottom", "column-from-left"];
     this.#groupColumns.forEach((column) => {
       if ("update" === column.dataset.action) {
         // get color from array and then remove it so no duplicates are selected (in next iterations)
-        const selectedColor = this.#getRandom(colors, true);
-        column.classList.add("background-" + selectedColor);
-        column.querySelector(".group-title").classList.add("background-" + selectedColor);
+        column.classList.add(colors.length > 0
+            ? "background-" + this.#getRandomElement(colors, true)
+            : this.#createColorClass(this.#getRandomColor()));
         // get animation from array (duplicates are allowed in this case)
-        column.classList.add(this.#getRandom(animations, false));
+        column.classList.add(this.#getRandomElement(animations, false));
       } else {
         // new group column should always appear from right and have gray background
         column.classList.add("background-violet");
@@ -330,12 +330,38 @@ export class GroupsController {
   }
 
   /**
+   * Method used to receive an array of currently available colors
+   * @returns an array with available colors (defined and currently generated)
+   */
+  #getAvailableColors() {
+    const definedColors = ["navy", "aqua", "green", "orange", "red", "blue", "yellow", "plum"];
+    const pageHeadElement = document.getElementsByTagName("head")[0];
+    const generatedColors = Array.from(pageHeadElement.getElementsByTagName("style")).map((element) => {
+      return element.innerHTML.match(".background-([0-9a-fA-F]+)")[1];
+    });
+    return definedColors.concat(generatedColors);
+  }
+
+  /**
+   * Method used to create CSS color responsible for color style
+   * @param {String} color The color name/code/hex for which we want to generate class
+   * @returns the name of currently generated (and added to header) style class
+   */
+  #createColorClass(color) {
+    const className = `background-${color}`;
+    const classElement = document.createElement("style");
+    classElement.innerHTML = `.${className} { background: #${color}; color: ${this.#contrastColor(color)}; }`;
+    document.getElementsByTagName("head")[0].appendChild(classElement);
+    return className;
+  }
+
+  /**
    * Method used to receive random element from provided array
    * @param {Object} array The array from which we want to receive element
    * @param {Boolean} remove If we want to remove the received random element from array (to prevent duplicates)
    * @returns random element from input array
    */
-  #getRandom(array, remove) {
+  #getRandomElement(array, remove) {
     const randomItem = array[Math.floor(Math.random() * array.length)];
     if (remove) {
       var index = array.indexOf(randomItem);
@@ -344,5 +370,35 @@ export class GroupsController {
       }
     }
     return randomItem;
+  }
+
+  /**
+   * Method used to generate and receive random color
+   * @returns String with random color in form of a HEX number
+   */
+  #getRandomColor() {
+    return Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, "0");
+  }
+
+  /**
+   * Method used to generate color with good contrast to the input (black or white)
+   * @param {String} color The color in HEX for which we want to generate good contrast color
+   * @returns black or white color in HEX which has the better contrast to the input color
+   */
+  #contrastColor(color) {
+    if (0 === color.indexOf("#")) {
+      color = color.slice(1);
+    }
+    if (3 === color.length) {
+      color = color[0] + color[0] + color[1] + color[1] + color[2] + color[2];
+    }
+    if (6 !== color.length) {
+      CommonController.showToastError(`Cannot generate color. Invalid value: ${color}`)
+      return "black";
+    }
+    const r = parseInt(color.slice(0, 2), 16);
+    const g = parseInt(color.slice(2, 4), 16);
+    const b = parseInt(color.slice(4, 6), 16);
+    return r * 0.299 + g * 0.587 + b * 0.114 > 186 ? "black" : "white";
   }
 }
