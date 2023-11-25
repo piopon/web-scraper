@@ -3,6 +3,9 @@ import { ScrapComponent } from "./scrap-component.js";
 import { ScrapError } from "./scrap-exception.js";
 
 export class ScrapObserver {
+  static #TARGET_OPTIONS = ["load", "domcontentloaded", "networkidle0", "networkidle2"];
+  static #HISTORY_OPTIONS = ["off", "on", "onChange"];
+
   /**
    * Creates a new scrap observer from a specified object
    * @param {Object} object The source object
@@ -86,8 +89,8 @@ export class ScrapObserver {
       properties: {
         name: { type: "string", minLength: 1 },
         path: { type: "string", minLength: 1 },
-        target: { enum: ["load", "domcontentloaded", "networkidle0", "networkidle2"] },
-        history: { enum: ["off", "on", "onChange"] },
+        target: { enum: ScrapObserver.#TARGET_OPTIONS },
+        history: { enum: ScrapObserver.#HISTORY_OPTIONS },
         container: { type: "string" },
         title: ScrapComponent.getSchema(),
         image: ScrapComponent.getSchema(),
@@ -110,8 +113,8 @@ export class ScrapObserver {
         properties: {
           name: { type: "string", minLength: 1 },
           path: { type: "string", minLength: 1 },
-          target: { enum: ["load", "domcontentloaded", "networkidle0", "networkidle2"] },
-          history: { enum: ["off", "on", "onChange"] },
+          target: { enum: ScrapObserver.#TARGET_OPTIONS },
+          history: { enum: ScrapObserver.#HISTORY_OPTIONS },
         },
       };
     } else if ("POST" === method) {
