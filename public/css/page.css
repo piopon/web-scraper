@@ -20,6 +20,13 @@ header {
   display: block;
 }
 
+.logo {
+  background: url('../img/logo/logo-64.png');
+  height: 64px;
+  width: 64px;
+  display: block;
+}
+
 div#page {
   display: flex;
   flex-direction: column;
