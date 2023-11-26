@@ -25,6 +25,8 @@ header {
   height: 64px;
   width: 64px;
   display: block;
+  transform: rotate(45deg);
+  margin-right: 0.65rem;
 }
 
 div#page {
