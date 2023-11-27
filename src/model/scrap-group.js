@@ -3,6 +3,8 @@ import { ScrapError } from "./scrap-exception.js";
 import { ScrapObserver } from "./scrap-observer.js";
 
 export class ScrapGroup {
+  static #NAME_REGEX = /[a-zA-Z]/;
+
   /**
    * Creates a new scrap group from a specified object
    * @param {Object} object The source object
@@ -45,6 +47,8 @@ export class ScrapGroup {
     const checkResult = { errors: [], warnings: [] };
     if (!this.name) {
       checkResult.errors.push("Missing required group name");
+    } else if (false === ScrapGroup.#NAME_REGEX.test(this.name)) {
+      checkResult.errors.push("Group name must have at least one letter");
     }
     if (!this.domain) {
       checkResult.errors.push("Missing required group domain");

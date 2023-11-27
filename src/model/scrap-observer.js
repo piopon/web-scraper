@@ -3,6 +3,7 @@ import { ScrapComponent } from "./scrap-component.js";
 import { ScrapError } from "./scrap-exception.js";
 
 export class ScrapObserver {
+  static #NAME_REGEX = /[a-zA-Z]/;
   static #TARGET_OPTIONS = ["load", "domcontentloaded", "networkidle0", "networkidle2"];
   static #HISTORY_OPTIONS = ["off", "on", "onChange"];
 
@@ -56,6 +57,8 @@ export class ScrapObserver {
     const checkResult = { errors: [], warnings: [] };
     if (!this.name) {
       checkResult.errors.push(`Missing required observer name`);
+    } else if (false === ScrapObserver.#NAME_REGEX.test(this.name)) {
+      checkResult.errors.push("Observer name must have at least one letter");
     }
     if (!this.path) {
       checkResult.errors.push(`Missing required observer path`);
