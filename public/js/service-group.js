@@ -14,7 +14,7 @@ export class GroupsService {
       return response.text();
     }
     const errorResponse = await response.json();
-    const errorDetails = `${errorResponse[0].instancePath} ${errorResponse[0].message}`;
+    const errorDetails = CommonService.getErrorDetails(errorResponse);
     throw new Error(`Cannot add group: ${errorDetails}`);
   }
 
@@ -31,7 +31,7 @@ export class GroupsService {
       return response.json();
     }
     const errorResponse = await response.json();
-    const errorDetails = `${errorResponse[0].instancePath} ${errorResponse[0].message}`;
+    const errorDetails = CommonService.getErrorDetails(errorResponse);
     throw new Error(`Cannot get ${parentId} observers: ${errorDetails}`);
   }
 
@@ -48,7 +48,7 @@ export class GroupsService {
       return response.text();
     }
     const errorResponse = await response.json();
-    const errorDetails = `${errorResponse[0].instancePath} ${errorResponse[0].message}`;
+    const errorDetails = CommonService.getErrorDetails(errorResponse);
     throw new Error(`Cannot update group: ${errorDetails}`);
   }
 
@@ -65,7 +65,7 @@ export class GroupsService {
       return response.text();
     }
     const errorResponse = await response.json();
-    const errorDetails = `${errorResponse[0].instancePath} ${errorResponse[0].message}`;
+    const errorDetails = CommonService.getErrorDetails(errorResponse);
     throw new Error(`Cannot delete group: ${errorDetails}`);
   }
 

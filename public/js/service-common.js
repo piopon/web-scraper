@@ -1,4 +1,8 @@
 export class CommonService {
+  static getErrorDetails(errorResponse) {
+    return `${errorResponse[0].instancePath} ${errorResponse[0].message}`;
+  }
+
   /**
    * Method used to create a group objest from values of the HTML elements
    * @param {Element} groupHtmlElement The HTML content from which we want to create a group object
