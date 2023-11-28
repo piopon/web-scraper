@@ -110,7 +110,7 @@ export class ComponentsView {
                   <div class="widget">
                     <label class="component-price-label">auxiliary:</label>
                     <select class="component-price-auxiliary" name="auxiliary" required>
-                    ${ComponentsView.#getCurrenciesOptionsHtml(auxiliary, localStorage.getItem("currencies"))}
+                    ${ComponentsView.#getCurrenciesOptionsHtml(auxiliary)}
                     </select>
                   </div>
                 </div>
@@ -118,9 +118,9 @@ export class ComponentsView {
             </div>`;
   }
 
-  static #getCurrenciesOptionsHtml(selectedCurrency, allCurrencies) {
+  static #getCurrenciesOptionsHtml(selectedCurrency) {
     let result = `<option value="" disabled hidden ${selectedCurrency === "" ? "selected" : ""}>Select value</option>`;
-    allCurrencies.split(",").forEach(currency => {
+    localStorage.getItem("currencies").split(",").forEach(currency => {
       result += `<option value=${currency} ${selectedCurrency === currency ? "selected" : ""}>${currency}</option>`;
     })
     return result;
