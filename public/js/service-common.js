@@ -1,4 +1,9 @@
 export class CommonService {
+  /**
+   * Method used to return error string from the input error response object
+   * @param {Object} errorResponse The object containing error details
+   * @returns string with error message received from error response object
+   */
   static getErrorDetails(errorResponse) {
     if (errorResponse instanceof Array) {
       if (0 === errorResponse.length) {
