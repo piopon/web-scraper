@@ -1,6 +1,18 @@
 export class CommonService {
   static getErrorDetails(errorResponse) {
-    return `${errorResponse[0].instancePath} ${errorResponse[0].message}`;
+    if (errorResponse instanceof Array) {
+      if (0 === errorResponse.length) {
+        return "Unexpected empty array response";
+      }
+      if (!errorResponse[0].instancePath || !errorResponse[0].message) {
+        return "Unexpected array response";
+      }
+      return `${errorResponse[0].instancePath} ${errorResponse[0].message}`;
+    } else if (errorResponse instanceof String || 'string' === typeof(errorResponse)) {
+      return errorResponse;
+    } else {
+      return "Unexpected response type";
+    }
   }
 
   /**
