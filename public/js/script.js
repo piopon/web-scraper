@@ -16,6 +16,9 @@ mediator.register(componentsController);
 mediator.register(observersController);
 mediator.register(groupsController);
 
+/**
+ * Method used to store initial backend values to session storage
+ */
 function storeInitialBackendValues() {
   const priceAuxComponent = document.querySelector("select.component-price-auxiliary");
   const currenciesOptions = priceAuxComponent.querySelectorAll("option:not([disabled])");

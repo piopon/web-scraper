@@ -118,6 +118,11 @@ export class ComponentsView {
             </div>`;
   }
 
+  /**
+   * Method used to retrieve select options with all supported currencies
+   * @param {String} selectedCurrency The currently selected currency
+   * @returns HTML code with all possible options for select tag
+   */
   static #getCurrenciesOptionsHtml(selectedCurrency) {
     let result = `<option value="" disabled hidden ${selectedCurrency === "" ? "selected" : ""}>Select value</option>`;
     sessionStorage.getItem("currencies").split(",").forEach(currency => {
