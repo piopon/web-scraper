@@ -20,5 +20,5 @@ function storeInitialBackendValues() {
   const priceAuxComponent = document.querySelector("select.component-price-auxiliary");
   const currenciesOptions = priceAuxComponent.querySelectorAll("option:not([disabled])");
   const currenciesValues = Array.from(currenciesOptions).map((element) => element.value);
-  localStorage.setItem("currencies", currenciesValues);
+  sessionStorage.setItem("currencies", currenciesValues);
 }

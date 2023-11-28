@@ -120,7 +120,7 @@ export class ComponentsView {
 
   static #getCurrenciesOptionsHtml(selectedCurrency) {
     let result = `<option value="" disabled hidden ${selectedCurrency === "" ? "selected" : ""}>Select value</option>`;
-    localStorage.getItem("currencies").split(",").forEach(currency => {
+    sessionStorage.getItem("currencies").split(",").forEach(currency => {
       result += `<option value=${currency} ${selectedCurrency === currency ? "selected" : ""}>${currency}</option>`;
     })
     return result;
