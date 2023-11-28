@@ -110,15 +110,24 @@ export class ComponentsView {
                   <div class="widget">
                     <label class="component-price-label">auxiliary:</label>
                     <select class="component-price-auxiliary" name="auxiliary" required>
-                      <option value="" disabled hidden ${auxiliary === "" ? "selected" : ""}>Select value</option>
-                      <option value=PLN ${auxiliary === "PLN" ? "selected" : ""}>PLN</option>
-                      <option value=GBP ${auxiliary === "GBP" ? "selected" : ""}>GBP</option>
-                      <option value=USD ${auxiliary === "USD" ? "selected" : ""}>USD</option>
-                      <option value=EUR ${auxiliary === "EUR" ? "selected" : ""}>EUR</option>
+                    ${ComponentsView.#getCurrenciesOptionsHtml(auxiliary)}
                     </select>
                   </div>
                 </div>
               </div>
             </div>`;
+  }
+
+  /**
+   * Method used to retrieve select options with all supported currencies
+   * @param {String} selectedCurrency The currently selected currency
+   * @returns HTML code with all possible options for select tag
+   */
+  static #getCurrenciesOptionsHtml(selectedCurrency) {
+    let result = `<option value="" disabled hidden ${selectedCurrency === "" ? "selected" : ""}>Select value</option>`;
+    sessionStorage.getItem("currencies").split(",").forEach(currency => {
+      result += `<option value=${currency} ${selectedCurrency === currency ? "selected" : ""}>${currency}</option>`;
+    })
+    return result;
   }
 }

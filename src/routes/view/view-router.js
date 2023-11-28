@@ -46,6 +46,6 @@ export class ViewRouter {
    * @returns a String with supported currencies separated by '|' character
    */
   #getSupportedCurrencies() {
-    return "PLN|GBP|USD|EUR|CHF|CZK|DKK|JPY|INR|AUD";
+    return "PLN|GBP|USD|EUR|CHF|CZK|DKK|CNY|JPY|INR|AUD|CAD";
   }
 }
