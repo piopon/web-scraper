@@ -272,7 +272,7 @@ export class ConfigRouter {
       contentParent.push(bodyValidation.content);
       return { success: true, message: "Added new configuration element" };
     });
-    response.status(addResult.status).send(addResult.message);
+    response.status(addResult.status).json(addResult.message);
   }
 
   /**
