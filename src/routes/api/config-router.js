@@ -295,7 +295,7 @@ export class ConfigRouter {
       const removedItem = indexResult.found.parent.splice(indexResult.found.index, 1);
       return { success: true, message: `Removed item with ${removedItem.at(0).getIdentifier()}` };
     });
-    response.status(deleteResult.status).send(deleteResult.message);
+    response.status(deleteResult.status).json(deleteResult.message);
   }
 
   /**
