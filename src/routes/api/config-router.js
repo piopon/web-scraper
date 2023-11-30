@@ -293,7 +293,7 @@ export class ConfigRouter {
         return { success: false, message: indexResult.reason };
       }
       const removedItem = indexResult.found.parent.splice(indexResult.found.index, 1);
-      return { success: true, message: `Removed item with ${removedItem.at(0).getIdentifier()}` };
+      return { success: true, message: `Removed configuration element with ${removedItem.at(0).getIdentifier()}` };
     });
     response.status(deleteResult.status).json(deleteResult.message);
   }
