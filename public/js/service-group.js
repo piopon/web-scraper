@@ -45,7 +45,7 @@ export class GroupsService {
     const url = `api/v1/configs/groups?name=${encodedId}`;
     const response = await fetch(url, this.#createRequestOptions("PUT"));
     if (response.status === 200) {
-      return response.text();
+      return response.json();
     }
     const errorResponse = await response.json();
     const errorDetails = CommonService.getErrorDetails(errorResponse);
