@@ -11,7 +11,7 @@ export class ObserversService {
     const url = `api/v1/configs/groups/observers?parent=${encodedId}`;
     const response = await fetch(url, this.#createRequestOptions("POST"));
     if (response.status === 200) {
-      return response.text();
+      return response.json();
     }
     const errorResponse = await response.json();
     const errorDetails = CommonService.getErrorDetails(errorResponse);
@@ -45,7 +45,7 @@ export class ObserversService {
     const url = `api/v1/configs/groups/observers?name=${encodedId}`;
     const response = await fetch(url, this.#createRequestOptions("PUT"));
     if (response.status === 200) {
-      return response.text();
+      return response.json();
     }
     const errorResponse = await response.json();
     const errorDetails = CommonService.getErrorDetails(errorResponse);
@@ -62,7 +62,7 @@ export class ObserversService {
     const url = `api/v1/configs/groups/observers?name=${encodedId}`;
     const response = await fetch(url, this.#createRequestOptions("DELETE"));
     if (response.status === 200) {
-      return response.text();
+      return response.json();
     }
     const errorResponse = await response.json();
     const errorDetails = CommonService.getErrorDetails(errorResponse);

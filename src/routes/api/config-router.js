@@ -240,7 +240,7 @@ export class ConfigRouter {
         return { success: false, message: error.message };
       }
     });
-    response.status(updateResult.status).send(updateResult.message);
+    response.status(updateResult.status).json(updateResult.message);
   }
 
   /**
@@ -270,9 +270,9 @@ export class ConfigRouter {
         return { success: false, message: `Element with identifier ${newIdentifier} already exists` };
       }
       contentParent.push(bodyValidation.content);
-      return { success: true, message: "Added new configuration element" };
+      return { success: true, message: `Added new configuration element with ${newIdentifier}` };
     });
-    response.status(addResult.status).send(addResult.message);
+    response.status(addResult.status).json(addResult.message);
   }
 
   /**
@@ -293,9 +293,9 @@ export class ConfigRouter {
         return { success: false, message: indexResult.reason };
       }
       const removedItem = indexResult.found.parent.splice(indexResult.found.index, 1);
-      return { success: true, message: `Removed item with ${removedItem.at(0).getIdentifier()}` };
+      return { success: true, message: `Removed configuration element with ${removedItem.at(0).getIdentifier()}` };
     });
-    response.status(deleteResult.status).send(deleteResult.message);
+    response.status(deleteResult.status).json(deleteResult.message);
   }
 
   /**
