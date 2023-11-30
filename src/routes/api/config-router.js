@@ -270,7 +270,7 @@ export class ConfigRouter {
         return { success: false, message: `Element with identifier ${newIdentifier} already exists` };
       }
       contentParent.push(bodyValidation.content);
-      return { success: true, message: "Added new configuration element" };
+      return { success: true, message: `Added new configuration element with ${newIdentifier}` };
     });
     response.status(addResult.status).json(addResult.message);
   }
