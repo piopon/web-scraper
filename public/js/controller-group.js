@@ -69,6 +69,12 @@ export class GroupsController {
         column.classList.add("background-violet");
         column.querySelector(".group-title").classList.add("background-violet");
         column.classList.add("column-from-right");
+        // if new group is the only group then show its label, else hide the label
+        if (this.#groupColumns.length < 2) {
+          column.parentNode.classList.add("show-hint");
+        } else {
+          column.parentNode.classList.remove("show-hint");
+        }
       }
     });
     // when all styles are ready we can now show columns
