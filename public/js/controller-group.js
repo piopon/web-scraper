@@ -281,6 +281,10 @@ export class GroupsController {
     if ("add" !== column.dataset.action) {
       return;
     }
+    // hint should be availabe when there is at least one other group than add
+    if (this.#groupColumns.length < 2) {
+      return;
+    }
     // show hind and clear dimension only when new group is NOT expanded
     if (!column.parentNode.classList.contains("expanded")) {
       column.parentNode.classList.add("show-hint");
@@ -295,6 +299,10 @@ export class GroupsController {
   #hideHint(column) {
     // hint is only available for add group column
     if ("add" !== column.dataset.action) {
+      return;
+    }
+    // hint should be available when there is at least one other group than add
+    if (this.#groupColumns.length < 2) {
       return;
     }
     column.parentNode.classList.remove("show-hint");
