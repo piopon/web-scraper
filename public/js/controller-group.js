@@ -309,7 +309,7 @@ export class GroupsController {
    * @param {Object} column The column which dimensions should be configured
    */
   #setDimension(column) {
-    const NEW_GROUP_COLUMN_WIDTH = 4;
+    const NEW_GROUP_COLUMN_WIDTH = this.#groupColumns.length >= 2 ? 4 : 100;
     if ("update" === column.dataset.action) {
       const columnWidth = (100 - NEW_GROUP_COLUMN_WIDTH) / (this.#groupColumns.length - 1);
       const columnIndex = Array.from(this.#groupColumns).indexOf(column);
