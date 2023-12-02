@@ -69,6 +69,12 @@ export class GroupsController {
         column.classList.add("background-violet");
         column.querySelector(".group-title").classList.add("background-violet");
         column.classList.add("column-from-right");
+        // if new group is the only group then show its label, else hide the label
+        if (this.#groupColumns.length < 2) {
+          column.parentNode.classList.add("show-hint");
+        } else {
+          column.parentNode.classList.remove("show-hint");
+        }
       }
     });
     // when all styles are ready we can now show columns
@@ -264,6 +270,10 @@ export class GroupsController {
         column.parentNode.classList.remove("expanded");
         column.parentNode.classList.remove("collapsed");
         this.#setDimension(column);
+        // restore add column hint if it's the only one column defined
+        if (this.#groupColumns.length < 2 && "add" === column.dataset.action) {
+          column.parentNode.classList.add("show-hint");
+        }
       });
       groupCloseButton.classList.remove("show");
       this.#groupExpanded = undefined;
@@ -279,6 +289,10 @@ export class GroupsController {
   #showHint(column) {
     // hint is only available for add group column
     if ("add" !== column.dataset.action) {
+      return;
+    }
+    // hint should be availabe when there is at least one other group than add
+    if (this.#groupColumns.length < 2) {
       return;
     }
     // show hind and clear dimension only when new group is NOT expanded
@@ -297,6 +311,10 @@ export class GroupsController {
     if ("add" !== column.dataset.action) {
       return;
     }
+    // hint should be available when there is at least one other group than add
+    if (this.#groupColumns.length < 2) {
+      return;
+    }
     column.parentNode.classList.remove("show-hint");
     // restore dimensions only when new group is NOT expanded
     if (!column.parentNode.classList.contains("expanded")) {
@@ -309,7 +327,7 @@ export class GroupsController {
    * @param {Object} column The column which dimensions should be configured
    */
   #setDimension(column) {
-    const NEW_GROUP_COLUMN_WIDTH = 4;
+    const NEW_GROUP_COLUMN_WIDTH = this.#groupColumns.length >= 2 ? 4 : 100;
     if ("update" === column.dataset.action) {
       const columnWidth = (100 - NEW_GROUP_COLUMN_WIDTH) / (this.#groupColumns.length - 1);
       const columnIndex = Array.from(this.#groupColumns).indexOf(column);
