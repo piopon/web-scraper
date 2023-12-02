@@ -110,7 +110,12 @@ export class GroupsController {
     const groupCategoryButtons = document.querySelectorAll("input.group-category");
     groupCategoryButtons.forEach((button) => {
       button.addEventListener("click", (clickEvent) => {
+        const initialValue = button.value;
         const categoryDialog = document.querySelector("dialog.group-category-dialog");
+        categoryDialog.addEventListener("cancel", (cancelEvent) => {
+          categoryDialog.returnValue = initialValue;
+          cancelEvent.stopPropagation();
+        }, { once: true });
         categoryDialog.addEventListener("close", (closeEvent) => {
           const parentCategoryButton = this.#groupExpanded.querySelector("input.group-category");
           parentCategoryButton.value = categoryDialog.returnValue;
