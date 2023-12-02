@@ -112,10 +112,12 @@ export class GroupsController {
       button.addEventListener("click", (clickEvent) => {
         const initialValue = button.value;
         const categoryDialog = document.querySelector("dialog.group-category-dialog");
+        // listen to cancel event (when ESC pressed) to restore value for current catrgory dialog
         categoryDialog.addEventListener("cancel", (cancelEvent) => {
           categoryDialog.returnValue = initialValue;
           cancelEvent.stopPropagation();
         }, { once: true });
+        // listen to close event to setup category value (it can be either new one or restored one)
         categoryDialog.addEventListener("close", (closeEvent) => {
           const parentCategoryButton = this.#groupExpanded.querySelector("input.group-category");
           parentCategoryButton.value = categoryDialog.returnValue;
