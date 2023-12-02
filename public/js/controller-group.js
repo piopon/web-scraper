@@ -270,6 +270,10 @@ export class GroupsController {
         column.parentNode.classList.remove("expanded");
         column.parentNode.classList.remove("collapsed");
         this.#setDimension(column);
+        // restore add column hint if it's the only one column defined
+        if (this.#groupColumns.length < 2 && "add" === column.dataset.action) {
+          column.parentNode.classList.add("show-hint");
+        }
       });
       groupCloseButton.classList.remove("show");
       this.#groupExpanded = undefined;
