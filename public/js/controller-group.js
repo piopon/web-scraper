@@ -119,8 +119,7 @@ export class GroupsController {
         }, { once: true });
         // listen to close event to setup category value (it can be either new one or restored one)
         categoryDialog.addEventListener("close", (closeEvent) => {
-          const parentCategoryButton = this.#groupExpanded.querySelector("input.group-category");
-          parentCategoryButton.value = categoryDialog.returnValue;
+          button.value = categoryDialog.returnValue;
           closeEvent.stopPropagation();
         }, { once: true });
         categoryDialog.showModal();
