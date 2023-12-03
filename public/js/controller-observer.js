@@ -47,8 +47,9 @@ export class ObserversController {
    * Method used to bind UI listeners to controller methods.
    * This method handles: observer buttons and modal dialog accept and cancel buttons clicks
    */
-  #bindListeners() {
-    const observerButtons = document.querySelectorAll("div.modal-button");
+  #bindListeners(parentGroupId = undefined) {
+    const parentGroupSelector = parentGroupId ? ".group-column.expanded " : "";
+    const observerButtons = document.querySelectorAll(`${parentGroupSelector}div.modal-button`);
     observerButtons.forEach((button) => {
       button.addEventListener("click", (event) => {
         const target = event.currentTarget;
@@ -58,7 +59,7 @@ export class ObserversController {
         event.stopPropagation();
       });
     });
-    const modalCloseButtons = document.querySelectorAll("div.modal-close-btn");
+    const modalCloseButtons = document.querySelectorAll(`${parentGroupSelector}div.modal-close-btn`);
     modalCloseButtons.forEach((closeButton) => {
       closeButton.addEventListener("click", (clickEvent) => {
         const target = clickEvent.currentTarget;
@@ -159,7 +160,7 @@ export class ObserversController {
         document.querySelector(".group-column.expanded")
                 .querySelector(".observers-container")
                 .innerHTML = html + ObserversView.toHtml(data[0].name);
-        this.#bindListeners();
+        this.#bindListeners(parentGroupId);
         // notify other controllers that observers were reloaded
         this.emitEvent("observers-reloaded", parentGroupId);
       })
