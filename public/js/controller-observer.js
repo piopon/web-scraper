@@ -158,7 +158,7 @@ export class ObserversController {
         const groupObservers = data[0].observers;
         const expandedGroup = document.querySelector(".group-column.expanded");
         const expandedObservers = expandedGroup.querySelector(".observers-container");
-        expandedObservers.innerHTML = ObserversView.getHtml(groupId, groupObservers);
+        expandedObservers.innerHTML = ObserversView.toHtml(groupId, groupObservers);
         this.#bindListeners();
         // notify other controllers that observers were reloaded
         this.emitEvent("observers-reloaded", groupId);

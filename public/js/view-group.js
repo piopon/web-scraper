@@ -63,7 +63,7 @@ export class GroupsView {
                   <label class="group-label">observers:</label>
                 </div>
                 <div class="observers-container">
-                  ${ObserversView.getHtml(groupId, groupObservers)}
+                  ${ObserversView.toHtml(groupId, groupObservers)}
                 </div>
               </div>
               <div class="group-buttons">
