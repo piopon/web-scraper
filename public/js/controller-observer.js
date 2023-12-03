@@ -154,14 +154,14 @@ export class ObserversController {
     }
     ObserversService.getObservers(parentGroupId)
       .then((data) => {
-        const groupId = data[0].name;
-        const groupObservers = data[0].observers;
-        const expandedGroup = document.querySelector(".group-column.expanded");
-        const expandedObservers = expandedGroup.querySelector(".observers-container");
-        expandedObservers.innerHTML = ObserversView.toHtml(groupId, groupObservers);
+        let html = "";
+        data[0].observers.forEach((observer) => (html += ObserversView.toHtml(observer)));
+        document.querySelector(".group-column.expanded")
+                .querySelector(".observers-container")
+                .innerHTML = html + ObserversView.toHtml(data[0].name);
         this.#bindListeners();
         // notify other controllers that observers were reloaded
-        this.emitEvent("observers-reloaded", groupId);
+        this.emitEvent("observers-reloaded", parentGroupId);
       })
       .catch((error) => CommonController.showToastError(error));
   }
