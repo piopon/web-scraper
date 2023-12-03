@@ -20,7 +20,7 @@ export class ComponentsView {
         return ComponentsView.#getPriceComponentHtml(component);
       default:
         console.error(`Internal error! Unknown component type: ${type}`);
-        return "error";
+        return ComponentsView.#getUnknownTypeErrorHtml(type);
     }
   }
 
@@ -123,6 +123,17 @@ export class ComponentsView {
                     ${ComponentsView.#getCurrenciesOptionsHtml(auxiliary)}
                     </select>
                   </div>
+                </div>
+              </div>
+            </div>`;
+  }
+
+  static #getUnknownTypeErrorHtml(type) {
+    return `<div class="component-card" style="background: red">
+              <h3 class="card-title">unknown type: ${type}</h3>
+              <div class="component-content">
+                <div class="component-fields">
+                  <p>internal error - unknown component type: ${type}</p>
                 </div>
               </div>
             </div>`;
