@@ -104,7 +104,9 @@ export class GroupsView {
    * @return HTML code with all observers contents
    */
   static #getGroupObserversHtml(groupId, groupObservers) {
-    return ObserversView.toHtml(groupId, groupObservers);
+    let html = "";
+    groupObservers.forEach((observer) => (html += ObserversView.toHtml(observer)));
+    return html + ObserversView.toHtml(groupId);
   }
 
   /**

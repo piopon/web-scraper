@@ -7,13 +7,22 @@ export class ObserversView {
    * @param {Array} observers The array of observers which HTML code we want to get
    * @return HTML code with all observers contents
    */
-  static toHtml(groupId, observers) {
-    let result = "";
-    observers.forEach((observer) => {
-      result += ObserversView.#getExistingObserverHtml(observer);
-    });
-    result += ObserversView.#getNewObserverHtml(groupId);
-    return result;
+  static toHtml(observer) {
+    if (observer === null) {
+      return "Invalid observer! Cannot create HTML from a null parameter";
+    }
+    if ('object' === typeof(observer) && !Array.isArray(observer)) {
+      // adding HTML for am existing observer of an existing group (created earlier)
+      return ObserversView.#getExistingObserverHtml(observer);
+    } else if ('string' === typeof(observer) || observer instanceof String) {
+      // adding HTML for a new observer of an existing group (created earlier)
+      return ObserversView.#getNewObserverHtml(observer);
+    } else if (undefined === observer) {
+      // adding HTML for a new observer of a group during creation (add group column)
+      return ObserversView.#getNewObserverHtml(observer);
+    } else {
+      return "Invalid observer! Must be an observer object or ID string";
+    }
   };
 
   /**
