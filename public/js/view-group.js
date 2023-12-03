@@ -63,7 +63,7 @@ export class GroupsView {
                   <label class="group-label">observers:</label>
                 </div>
                 <div class="observers-container">
-                  ${ObserversView.toHtml(groupId, groupObservers)}
+                  ${GroupsView.#getGroupObserversHtml(groupId, groupObservers)}
                 </div>
               </div>
               <div class="group-buttons">
@@ -95,6 +95,16 @@ export class GroupsView {
               <label class="group-label">category:</label>
               <input type="button" class="group-category" name="category" value="${category}"/>
             </div>`;
+  }
+
+  /**
+   * Method used to receive group observers HTML code
+   * @param {String} groupId The observers parent group identifier
+   * @param {Array} groupObservers The array of observers which HTML code we want to get
+   * @return HTML code with all observers contents
+   */
+  static #getGroupObserversHtml(groupId, groupObservers) {
+    return ObserversView.toHtml(groupId, groupObservers);
   }
 
   /**
