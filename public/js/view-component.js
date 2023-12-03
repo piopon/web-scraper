@@ -1,4 +1,8 @@
 export class ComponentsView {
+  static COMPONENT_TITLE = 0;
+  static COMPONENT_IMAGE = 1;
+  static COMPONENT_PRICE = 2;
+
   /**
    * Method used to receive HTML code representing specified component contents
    * @param {Object} titleComponent The component containing title information
