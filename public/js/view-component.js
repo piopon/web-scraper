@@ -4,10 +4,9 @@ export class ComponentsView {
   static COMPONENT_PRICE = 2;
 
   /**
-   * Method used to receive HTML code representing specified component contents
-   * @param {Object} titleComponent The component containing title information
-   * @param {Object} imageComponent The component containing image information
-   * @param {Object} priceComponent The component containing price information
+   * Method used to convert JS component objects to HTML code representing those components
+   * @param {Number} type The type of the component which we want to convert to HTML
+   * @param {Object} component The component object which we want to convert to HTML
    * @return HTML code with all components cards contents
    */
   static toHtml(type, component) {
@@ -128,6 +127,11 @@ export class ComponentsView {
             </div>`;
   }
 
+  /**
+   * Method used tp receive HTML to display unknown type error
+   * @param {Number} type The invalid component type for which we want to display error
+   * @returns HTML component code with error message
+   */
   static #getUnknownTypeErrorHtml(type) {
     return `<div class="component-card" style="background: red">
               <h3 class="card-title">unknown type: ${type}</h3>
