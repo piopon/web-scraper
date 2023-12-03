@@ -2,10 +2,9 @@ import { ComponentsView } from "./view-component.js";
 
 export class ObserversView {
   /**
-   * Method used to receive HTML code representing input observers array
-   * @param {String} groupId The observers parent group identifier
-   * @param {Array} observers The array of observers which HTML code we want to get
-   * @return HTML code with all observers contents
+   * Receive HTML code representing an existing observer (object input) or a new observer (string input)
+   * @param {Object} observer The observer object or a parent ID if a new observer HTML should be created
+   * @return HTML code with observer content
    */
   static toHtml(observer) {
     if (observer === null) {
@@ -40,6 +39,7 @@ export class ObserversView {
   /**
    * Method used to receive HTML code representing new observer UI
    * @param {String} groupId The observer parent (group) identifier
+   * @param {Boolean} disabled If the observer UI should be disabled (true) or enabled (false)
    * @returns HTML code with new observer UI contents
    */
   static #getNewObserverHtml(groupId, disabled) {

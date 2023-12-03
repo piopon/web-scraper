@@ -46,6 +46,8 @@ export class ObserversController {
   /**
    * Method used to bind UI listeners to controller methods.
    * This method handles: observer buttons and modal dialog accept and cancel buttons clicks
+   * @param {String} parentGroupId The observer parent group name for which we want to bind listeners.
+   *                               If not used then this will affect ALL observer buttons/dialogs.
    */
   #bindListeners(parentGroupId = undefined) {
     const parentGroupSelector = parentGroupId ? ".group-column.expanded " : "";
