@@ -59,7 +59,11 @@ export class ObserversView {
                     ${ObserversView.#getObserverRootDataRow1Html(observer)}
                     ${ObserversView.#getObserverRootDataRow2Html(observer)}
                   </div>
-                  ${ComponentsView.getHtml(titleComponent, imageComponent, priceComponent)}
+                  <div class="component-cards">
+                    ${ComponentsView.toHtml(ComponentsView.COMPONENT_TITLE, titleComponent)}
+                    ${ComponentsView.toHtml(ComponentsView.COMPONENT_IMAGE, imageComponent)}
+                    ${ComponentsView.toHtml(ComponentsView.COMPONENT_PRICE, priceComponent)}
+                  </div>
                   <div class="observer-buttons">
                     ${ObserversView.#getObserverModalButtonsHtml(groupId, observer)};
                   </div>

@@ -10,12 +10,18 @@ export class ComponentsView {
    * @param {Object} priceComponent The component containing price information
    * @return HTML code with all components cards contents
    */
-  static getHtml(titleComponent, imageComponent, priceComponent) {
-    return `<div class="component-cards">
-              ${ComponentsView.#getTitleComponentHtml(titleComponent)}
-              ${ComponentsView.#getImageComponentHtml(imageComponent)}
-              ${ComponentsView.#getPriceComponentHtml(priceComponent)}
-            </div>`;
+  static toHtml(type, component) {
+    switch (type) {
+      case ComponentsView.COMPONENT_TITLE:
+        return ComponentsView.#getTitleComponentHtml(component);
+      case ComponentsView.COMPONENT_IMAGE:
+        return ComponentsView.#getImageComponentHtml(component);
+      case ComponentsView.COMPONENT_PRICE:
+        return ComponentsView.#getPriceComponentHtml(component);
+      default:
+        console.error(`Internal error! Unknown component type: ${type}`);
+        return "error";
+    }
   }
 
   /**
