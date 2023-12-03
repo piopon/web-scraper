@@ -16,10 +16,10 @@ export class ObserversView {
       return ObserversView.#getExistingObserverHtml(observer);
     } else if ('string' === typeof(observer) || observer instanceof String) {
       // adding HTML for a new observer of an existing group (created earlier)
-      return ObserversView.#getNewObserverHtml(observer);
+      return ObserversView.#getNewObserverHtml(observer, false);
     } else if (undefined === observer) {
       // adding HTML for a new observer of a group during creation (add group column)
-      return ObserversView.#getNewObserverHtml(observer);
+      return ObserversView.#getNewObserverHtml(observer, true);
     } else {
       return "Invalid observer! Must be an observer object or ID string";
     }
@@ -42,11 +42,10 @@ export class ObserversView {
    * @param {String} groupId The observer parent (group) identifier
    * @returns HTML code with new observer UI contents
    */
-  static #getNewObserverHtml(groupId) {
-    const disabled = groupId === undefined ? "disabled" : "";
+  static #getNewObserverHtml(groupId, disabled) {
     return `<div class="observer-content">
               ${ObserversView.#getObserverModalHtml(groupId, undefined)}
-              <div class="modal-button new-observer" ${disabled}>+</div>
+              <div class="modal-button new-observer" ${disabled ? "disabled" : ""}>+</div>
             </div>`;
   }
 
