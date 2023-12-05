@@ -7,7 +7,7 @@ export class GroupsView {
    * @param {Array} groups The array of groups which HTML code we want to get
    * @return HTML code with all groups contents
    */
-  static getHtml(userId, groups) {
+  static toHtml(userId, groups) {
     let result = "";
     groups.forEach((group) => {
       result += GroupsView.#getExistingGroupHtml(group);

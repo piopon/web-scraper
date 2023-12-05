@@ -225,7 +225,7 @@ export class GroupsController {
         const userId = data[0].user;
         const userGroups = data[0].groups;
         const groupsContainer = document.querySelector("section.group-columns");
-        groupsContainer.innerHTML = GroupsView.getHtml(userId, userGroups);
+        groupsContainer.innerHTML = GroupsView.toHtml(userId, userGroups);
         this.#initController();
         // notify other controllers that groups were reloaded
         this.emitEvent("groups-reloaded", userId);
