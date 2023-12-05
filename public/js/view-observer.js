@@ -3,57 +3,57 @@ import { ComponentsView } from "./view-component.js";
 export class ObserversView {
   /**
    * Creates an observer object from the provided HTML element
-   * @param {Element} observerHtmlElement The HTML content from which we want to create an observer object
+   * @param {Element} observerHtml The HTML content from which we want to create an observer object
    * @returns Object with observer data retrieved from input HTML element
    */
-  static fromHtml(observerHtmlElement) {
+  static fromHtml(observerHtml) {
     // we need to check image auxiliary value to correctly determine if empty or not
-    const imageAux = observerHtmlElement.querySelector("input.component-image-auxiliary").value;
+    const imageAux = observerHtml.querySelector("input.component-image-auxiliary").value;
     return {
-      name: observerHtmlElement.querySelector("input.observer-name").value,
-      path: observerHtmlElement.querySelector("input.observer-path").value,
-      target: observerHtmlElement.querySelector("select.observer-target").value,
-      history: observerHtmlElement.querySelector("select.observer-history").value,
-      container: observerHtmlElement.querySelector("input.observer-container").value,
+      name: observerHtml.querySelector("input.observer-name").value,
+      path: observerHtml.querySelector("input.observer-path").value,
+      target: observerHtml.querySelector("select.observer-target").value,
+      history: observerHtml.querySelector("select.observer-history").value,
+      container: observerHtml.querySelector("input.observer-container").value,
       title: {
         interval: "",
-        selector: observerHtmlElement.querySelector("input.component-title-selector").value,
-        attribute: observerHtmlElement.querySelector("input.component-title-attribute").value,
-        auxiliary: observerHtmlElement.querySelector("input.component-title-auxiliary").value,
+        selector: observerHtml.querySelector("input.component-title-selector").value,
+        attribute: observerHtml.querySelector("input.component-title-attribute").value,
+        auxiliary: observerHtml.querySelector("input.component-title-auxiliary").value,
       },
       image: {
         interval: "",
-        selector: observerHtmlElement.querySelector("input.component-image-selector").value,
-        attribute: observerHtmlElement.querySelector("input.component-image-attribute").value,
+        selector: observerHtml.querySelector("input.component-image-selector").value,
+        attribute: observerHtml.querySelector("input.component-image-attribute").value,
         auxiliary: imageAux === "Select image" ? "" : imageAux,
       },
       price: {
         interval: "",
-        selector: observerHtmlElement.querySelector("input.component-price-selector").value,
-        attribute: observerHtmlElement.querySelector("input.component-price-attribute").value,
-        auxiliary: observerHtmlElement.querySelector("select.component-price-auxiliary").value,
+        selector: observerHtml.querySelector("input.component-price-selector").value,
+        attribute: observerHtml.querySelector("input.component-price-attribute").value,
+        auxiliary: observerHtml.querySelector("select.component-price-auxiliary").value,
       },
     };
   }
 
   /**
    * Receive HTML code representing an existing observer (object input) or a new observer (string input)
-   * @param {Object} observer The observer object or a parent ID if a new observer HTML should be created
+   * @param {Object} observerData The observer object or a parent ID if a new observer HTML should be created
    * @return HTML code with observer content
    */
-  static toHtml(observer) {
-    if (observer === null) {
+  static toHtml(observerData) {
+    if (observerData === null) {
       return "Invalid observer! Cannot create HTML from a null parameter";
     }
-    if ('object' === typeof(observer) && !Array.isArray(observer)) {
+    if ('object' === typeof(observerData) && !Array.isArray(observerData)) {
       // adding HTML for am existing observer of an existing group (created earlier)
-      return ObserversView.#getExistingObserverHtml(observer);
-    } else if ('string' === typeof(observer) || observer instanceof String) {
+      return ObserversView.#getExistingObserverHtml(observerData);
+    } else if ('string' === typeof(observerData) || observerData instanceof String) {
       // adding HTML for a new observer of an existing group (created earlier)
-      return ObserversView.#getNewObserverHtml(observer, false);
-    } else if (undefined === observer) {
+      return ObserversView.#getNewObserverHtml(observerData, false);
+    } else if (undefined === observerData) {
       // adding HTML for a new observer of a group during creation (add group column)
-      return ObserversView.#getNewObserverHtml(observer, true);
+      return ObserversView.#getNewObserverHtml(observerData, true);
     } else {
       return "Invalid observer! Must be an observer object or ID string";
     }
