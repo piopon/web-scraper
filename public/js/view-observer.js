@@ -2,6 +2,41 @@ import { ComponentsView } from "./view-component.js";
 
 export class ObserversView {
   /**
+   * Method used to create a observer from the provided HTML element
+   * @param {Element} observerHtmlElement The HTML content from which we want to create an observer object
+   * @returns Object with observer data retrieved from input HTML element
+   */
+  static createObserver(observerHtmlElement) {
+    // we need to check image auxiliary value to correctly determine if empty or not
+    const imageAux = observerHtmlElement.querySelector("input.component-image-auxiliary").value;
+    return {
+      name: observerHtmlElement.querySelector("input.observer-name").value,
+      path: observerHtmlElement.querySelector("input.observer-path").value,
+      target: observerHtmlElement.querySelector("select.observer-target").value,
+      history: observerHtmlElement.querySelector("select.observer-history").value,
+      container: observerHtmlElement.querySelector("input.observer-container").value,
+      title: {
+        interval: "",
+        selector: observerHtmlElement.querySelector("input.component-title-selector").value,
+        attribute: observerHtmlElement.querySelector("input.component-title-attribute").value,
+        auxiliary: observerHtmlElement.querySelector("input.component-title-auxiliary").value,
+      },
+      image: {
+        interval: "",
+        selector: observerHtmlElement.querySelector("input.component-image-selector").value,
+        attribute: observerHtmlElement.querySelector("input.component-image-attribute").value,
+        auxiliary: imageAux === "Select image" ? "" : imageAux,
+      },
+      price: {
+        interval: "",
+        selector: observerHtmlElement.querySelector("input.component-price-selector").value,
+        attribute: observerHtmlElement.querySelector("input.component-price-attribute").value,
+        auxiliary: observerHtmlElement.querySelector("select.component-price-auxiliary").value,
+      },
+    };
+  }
+
+  /**
    * Receive HTML code representing an existing observer (object input) or a new observer (string input)
    * @param {Object} observer The observer object or a parent ID if a new observer HTML should be created
    * @return HTML code with observer content
