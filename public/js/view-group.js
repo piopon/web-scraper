@@ -2,10 +2,9 @@ import { ObserversView } from "./view-observer.js";
 
 export class GroupsView {
   /**
-   * Method used to receive HTML code representing input group array
-   * @param {String} userId The groups parent user identifier
-   * @param {Array} groups The array of groups which HTML code we want to get
-   * @return HTML code with all groups contents
+   * Receive HTML code representing an existing group (object input) or a new group (number input)
+   * @param {Object} group The group object or a parent ID if a new group HTML should be created
+   * @return HTML code with group content
    */
   static toHtml(group) {
     if (group === null) {
