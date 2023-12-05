@@ -2,6 +2,35 @@ import { ObserversView } from "./view-observer.js";
 
 export class GroupsView {
   /**
+   * Method used to create a group objest from values of the HTML elements
+   * @param {Element} groupHtmlElement The HTML content from which we want to create a group object
+   * @returns Object with group data retrieved from input HTML element
+   */
+  static createGroup(groupHtmlElement) {
+    const groupObservers = groupHtmlElement.querySelectorAll("div.modal-button:not(.new-observer)");
+    return {
+      name: groupHtmlElement.querySelector("input.group-name").value,
+      category: groupHtmlElement.querySelector("input.group-category").value,
+      domain: groupHtmlElement.querySelector("input.group-domain").value,
+      observers: this.#createGroupObservers(groupObservers),
+    };
+  }
+
+  /**
+   * Method used to create an array of observer objects from provided list of HTML elements
+   * @param {NodeList} observers The list of HTML observer elemenets
+   * @returns array of observer objects created from provided input
+   */
+  static #createGroupObservers(observers) {
+    const result = [];
+    observers.forEach((observer) => {
+      const observerContent = observer.parentNode.querySelector("div.modal-content");
+      result.push(ObserversView.fromHtml(observerContent));
+    });
+    return result;
+  }
+
+  /**
    * Receive HTML code representing an existing group (object input) or a new group (number input)
    * @param {Object} group The group object or a parent ID if a new group HTML should be created
    * @return HTML code with group content
