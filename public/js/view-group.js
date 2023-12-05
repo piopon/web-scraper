@@ -7,13 +7,19 @@ export class GroupsView {
    * @param {Array} groups The array of groups which HTML code we want to get
    * @return HTML code with all groups contents
    */
-  static toHtml(userId, groups) {
-    let result = "";
-    groups.forEach((group) => {
-      result += GroupsView.#getExistingGroupHtml(group);
-    });
-    result += GroupsView.#getNewGroupHtml(userId);
-    return result;
+  static toHtml(group) {
+    if (group === null) {
+      return "Invalid group! Cannot create HTML from a null parameter";
+    }
+    if ('object' === typeof(group) && !Array.isArray(group)) {
+      // adding HTML for an existing group
+      return GroupsView.#getExistingGroupHtml(group);
+    } else if (Number.isFinite(group)) {
+      // adding HTML for a new group
+      return GroupsView.#getNewGroupHtml(group);
+    } else {
+      return "Invalid group! Must be an group object or ID string";
+    }
   }
 
   /**
