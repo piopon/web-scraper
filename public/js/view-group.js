@@ -2,16 +2,16 @@ import { ObserversView } from "./view-observer.js";
 
 export class GroupsView {
   /**
-   * Method used to create a group objest from values of the HTML elements
-   * @param {Element} groupHtmlElement The HTML content from which we want to create a group object
+   * Method used to create a group object from values of the HTML elements
+   * @param {Element} groupHtml The HTML content from which we want to create a group object
    * @returns Object with group data retrieved from input HTML element
    */
-  static createGroup(groupHtmlElement) {
-    const groupObservers = groupHtmlElement.querySelectorAll("div.modal-button:not(.new-observer)");
+  static fromHtml(groupHtml) {
+    const groupObservers = groupHtml.querySelectorAll("div.modal-button:not(.new-observer)");
     return {
-      name: groupHtmlElement.querySelector("input.group-name").value,
-      category: groupHtmlElement.querySelector("input.group-category").value,
-      domain: groupHtmlElement.querySelector("input.group-domain").value,
+      name: groupHtml.querySelector("input.group-name").value,
+      category: groupHtml.querySelector("input.group-category").value,
+      domain: groupHtml.querySelector("input.group-domain").value,
       observers: this.#createGroupObservers(groupObservers),
     };
   }
@@ -32,19 +32,19 @@ export class GroupsView {
 
   /**
    * Receive HTML code representing an existing group (object input) or a new group (number input)
-   * @param {Object} group The group object or a parent ID if a new group HTML should be created
+   * @param {Object} groupData The group object or a parent ID if a new group HTML should be created
    * @return HTML code with group content
    */
-  static toHtml(group) {
-    if (group === null) {
+  static toHtml(groupData) {
+    if (groupData === null) {
       return "Invalid group! Cannot create HTML from a null parameter";
     }
-    if ('object' === typeof(group) && !Array.isArray(group)) {
+    if ('object' === typeof(groupData) && !Array.isArray(groupData)) {
       // adding HTML for an existing group
-      return GroupsView.#getExistingGroupHtml(group);
-    } else if (Number.isFinite(group)) {
+      return GroupsView.#getExistingGroupHtml(groupData);
+    } else if (Number.isFinite(groupData)) {
       // adding HTML for a new group
-      return GroupsView.#getNewGroupHtml(group);
+      return GroupsView.#getNewGroupHtml(groupData);
     } else {
       return "Invalid group! Must be an group object or ID string";
     }

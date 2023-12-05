@@ -78,7 +78,7 @@ export class GroupsService {
   static #createRequestOptions(method) {
     const shouldHaveBody = "POST" === method || "PUT" === method;
     const expandedGroup = document.querySelector("article.group-column.expanded");
-    const requestBody = shouldHaveBody ? JSON.stringify(GroupsView.createGroup(expandedGroup)) : undefined;
+    const requestBody = shouldHaveBody ? JSON.stringify(GroupsView.fromHtml(expandedGroup)) : undefined;
     return {
       method: method,
       headers: { "Content-Type": "application/json" },
