@@ -2,11 +2,11 @@ import { ComponentsView } from "./view-component.js";
 
 export class ObserversView {
   /**
-   * Method used to create a observer from the provided HTML element
+   * Creates an observer object from the provided HTML element
    * @param {Element} observerHtmlElement The HTML content from which we want to create an observer object
    * @returns Object with observer data retrieved from input HTML element
    */
-  static createObserver(observerHtmlElement) {
+  static fromHtml(observerHtmlElement) {
     // we need to check image auxiliary value to correctly determine if empty or not
     const imageAux = observerHtmlElement.querySelector("input.component-image-auxiliary").value;
     return {

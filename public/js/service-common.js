@@ -46,7 +46,7 @@ export class CommonService {
     const result = [];
     observers.forEach((observer) => {
       const observerContent = observer.parentNode.querySelector("div.modal-content");
-      result.push(ObserversView.createObserver(observerContent));
+      result.push(ObserversView.fromHtml(observerContent));
     });
     return result;
   }

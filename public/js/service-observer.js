@@ -78,7 +78,7 @@ export class ObserversService {
   static #createRequestOptions(method) {
     const shouldHaveBody = "POST" === method || "PUT" === method;
     const openedObserver = document.querySelector("div.modal-dialog.init-reveal:not(.hidden)");
-    const requestBody = shouldHaveBody ? JSON.stringify(ObserversView.createObserver(openedObserver)) : undefined;
+    const requestBody = shouldHaveBody ? JSON.stringify(ObserversView.fromHtml(openedObserver)) : undefined;
     return {
       method: method,
       headers: { "Content-Type": "application/json" },
