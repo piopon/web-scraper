@@ -222,13 +222,13 @@ export class GroupsController {
     }
     GroupsService.getGroups(parentUserId)
       .then((data) => {
-        const userId = data[0].user;
-        const userGroups = data[0].groups;
-        const groupsContainer = document.querySelector("section.group-columns");
-        groupsContainer.innerHTML = GroupsView.toHtml(userId, userGroups);
+        let html = "";
+        data[0].groups.forEach((group) => html += GroupsView.toHtml(group));
+        document.querySelector("section.group-columns")
+                .innerHTML = html + GroupsView.toHtml(data[0].user);
         this.#initController();
         // notify other controllers that groups were reloaded
-        this.emitEvent("groups-reloaded", userId);
+        this.emitEvent("groups-reloaded", parentUserId);
       })
       .catch((error) => CommonController.showToastError(error));
   }
