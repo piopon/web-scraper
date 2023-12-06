@@ -7,32 +7,15 @@ export class ObserversView {
    * @returns Object with observer data retrieved from input HTML element
    */
   static fromHtml(observerHtml) {
-    // we need to check image auxiliary value to correctly determine if empty or not
-    const imageAux = observerHtml.querySelector("input.component-image-auxiliary").value;
     return {
       name: observerHtml.querySelector("input.observer-name").value,
       path: observerHtml.querySelector("input.observer-path").value,
       target: observerHtml.querySelector("select.observer-target").value,
       history: observerHtml.querySelector("select.observer-history").value,
       container: observerHtml.querySelector("input.observer-container").value,
-      title: {
-        interval: "",
-        selector: observerHtml.querySelector("input.component-title-selector").value,
-        attribute: observerHtml.querySelector("input.component-title-attribute").value,
-        auxiliary: observerHtml.querySelector("input.component-title-auxiliary").value,
-      },
-      image: {
-        interval: "",
-        selector: observerHtml.querySelector("input.component-image-selector").value,
-        attribute: observerHtml.querySelector("input.component-image-attribute").value,
-        auxiliary: imageAux === "Select image" ? "" : imageAux,
-      },
-      price: {
-        interval: "",
-        selector: observerHtml.querySelector("input.component-price-selector").value,
-        attribute: observerHtml.querySelector("input.component-price-attribute").value,
-        auxiliary: observerHtml.querySelector("select.component-price-auxiliary").value,
-      },
+      title: ComponentsView.fromHtml(ComponentsView.COMPONENT_TITLE, observerHtml),
+      image: ComponentsView.fromHtml(ComponentsView.COMPONENT_IMAGE, observerHtml),
+      price: ComponentsView.fromHtml(ComponentsView.COMPONENT_PRICE, observerHtml),
     };
   }
 
