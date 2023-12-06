@@ -1,17 +1,63 @@
 export class ComponentsView {
+  static COMPONENT_TITLE = 0;
+  static COMPONENT_IMAGE = 1;
+  static COMPONENT_PRICE = 2;
+
   /**
-   * Method used to receive HTML code representing specified component contents
-   * @param {Object} titleComponent The component containing title information
-   * @param {Object} imageComponent The component containing image information
-   * @param {Object} priceComponent The component containing price information
+   * Creates a component object from the provided HTML element
+   * @param {Number} type The type of the component which we want to convert from HTML
+   * @param {Element} componentHtml The HTML content from which we want to create a component object
+   * @returns Object with component data retrieved from input HTML element
+   */
+  static fromHtml(type, componentHtml) {
+    switch (type) {
+      case ComponentsView.COMPONENT_TITLE:
+        return {
+          interval: "",
+          selector: componentHtml.querySelector("input.component-title-selector").value,
+          attribute: componentHtml.querySelector("input.component-title-attribute").value,
+          auxiliary: componentHtml.querySelector("input.component-title-auxiliary").value,
+        };
+      case ComponentsView.COMPONENT_IMAGE:
+        // we need to check image auxiliary value to correctly determine if empty or not
+        const imageAux = componentHtml.querySelector("input.component-image-auxiliary").value;
+        return {
+          interval: "",
+          selector: componentHtml.querySelector("input.component-image-selector").value,
+          attribute: componentHtml.querySelector("input.component-image-attribute").value,
+          auxiliary: imageAux === "Select image" ? "" : imageAux,
+        };
+      case ComponentsView.COMPONENT_PRICE:
+        return {
+          interval: "",
+          selector: componentHtml.querySelector("input.component-price-selector").value,
+          attribute: componentHtml.querySelector("input.component-price-attribute").value,
+          auxiliary: componentHtml.querySelector("select.component-price-auxiliary").value,
+        };
+      default:
+        console.error(`Internal error! Unknown component type: ${type}`);
+        return null;
+    }
+  }
+
+  /**
+   * Method used to convert JS component objects to HTML code representing those components
+   * @param {Number} type The type of the component which we want to convert to HTML
+   * @param {Object} componentData The component object which we want to convert to HTML
    * @return HTML code with all components cards contents
    */
-  static getHtml(titleComponent, imageComponent, priceComponent) {
-    return `<div class="component-cards">
-              ${ComponentsView.#getTitleComponentHtml(titleComponent)}
-              ${ComponentsView.#getImageComponentHtml(imageComponent)}
-              ${ComponentsView.#getPriceComponentHtml(priceComponent)}
-            </div>`;
+  static toHtml(type, componentData) {
+    switch (type) {
+      case ComponentsView.COMPONENT_TITLE:
+        return ComponentsView.#getTitleComponentHtml(componentData);
+      case ComponentsView.COMPONENT_IMAGE:
+        return ComponentsView.#getImageComponentHtml(componentData);
+      case ComponentsView.COMPONENT_PRICE:
+        return ComponentsView.#getPriceComponentHtml(componentData);
+      default:
+        console.error(`Internal error! Unknown component type: ${type}`);
+        return ComponentsView.#getUnknownTypeErrorHtml(type);
+    }
   }
 
   /**
@@ -119,15 +165,35 @@ export class ComponentsView {
   }
 
   /**
+   * Method used tp receive HTML to display unknown type error
+   * @param {Number} type The invalid component type for which we want to display error
+   * @returns HTML component code with error message
+   */
+  static #getUnknownTypeErrorHtml(type) {
+    return `<div class="component-card" style="background: red">
+              <h3 class="card-title">unknown type: ${type}</h3>
+              <div class="component-content">
+                <div class="component-fields">
+                  <p>internal error - unknown component type: ${type}</p>
+                </div>
+              </div>
+            </div>`;
+  }
+
+  /**
    * Method used to retrieve select options with all supported currencies
    * @param {String} selectedCurrency The currently selected currency
    * @returns HTML code with all possible options for select tag
    */
   static #getCurrenciesOptionsHtml(selectedCurrency) {
     let result = `<option value="" disabled hidden ${selectedCurrency === "" ? "selected" : ""}>Select value</option>`;
-    sessionStorage.getItem("currencies").split(",").forEach(currency => {
-      result += `<option value=${currency} ${selectedCurrency === currency ? "selected" : ""}>${currency}</option>`;
-    })
+    sessionStorage
+      .getItem("currencies")
+      .split(",")
+      .forEach((currency) => {
+        const selectedAttribute = selectedCurrency === currency ? "selected" : "";
+        result += `<option value=${currency} ${selectedAttribute}>${currency}</option>`;
+      });
     return result;
   }
 }

@@ -2,18 +2,41 @@ import { ObserversView } from "./view-observer.js";
 
 export class GroupsView {
   /**
-   * Method used to receive HTML code representing input group array
-   * @param {String} userId The groups parent user identifier
-   * @param {Array} groups The array of groups which HTML code we want to get
-   * @return HTML code with all groups contents
+   * Method used to create a group object from values of the HTML elements
+   * @param {Element} groupHtml The HTML content from which we want to create a group object
+   * @returns Object with group data retrieved from input HTML element
    */
-  static getHtml(userId, groups) {
-    let result = "";
-    groups.forEach((group) => {
-      result += GroupsView.#getExistingGroupHtml(group);
-    });
-    result += GroupsView.#getNewGroupHtml(userId);
-    return result;
+  static fromHtml(groupHtml) {
+    const groupObservers = groupHtml.querySelectorAll("div.modal-button:not(.new-observer)");
+    return {
+      name: groupHtml.querySelector("input.group-name").value,
+      category: groupHtml.querySelector("input.group-category").value,
+      domain: groupHtml.querySelector("input.group-domain").value,
+      observers: Array.from(groupObservers).map((observer) => {
+        const observerContent = observer.parentNode.querySelector("div.modal-content");
+        return ObserversView.fromHtml(observerContent);
+      }),
+    };
+  }
+
+  /**
+   * Receive HTML code representing an existing group (object input) or a new group (number input)
+   * @param {Object} groupData The group object or a parent ID if a new group HTML should be created
+   * @return HTML code with group content
+   */
+  static toHtml(groupData) {
+    if (groupData === null) {
+      return "Invalid group! Cannot create HTML from a null parameter";
+    }
+    if ("object" === typeof groupData && !Array.isArray(groupData)) {
+      // adding HTML for an existing group
+      return GroupsView.#getExistingGroupHtml(groupData);
+    } else if (Number.isFinite(groupData)) {
+      // adding HTML for a new group
+      return GroupsView.#getNewGroupHtml(groupData);
+    } else {
+      return "Invalid group! Must be an group object or ID string";
+    }
   }
 
   /**
@@ -63,7 +86,7 @@ export class GroupsView {
                   <label class="group-label">observers:</label>
                 </div>
                 <div class="observers-container">
-                  ${ObserversView.getHtml(groupId, groupObservers)}
+                  ${GroupsView.#getGroupObserversHtml(groupId, groupObservers)}
                 </div>
               </div>
               <div class="group-buttons">
@@ -95,6 +118,18 @@ export class GroupsView {
               <label class="group-label">category:</label>
               <input type="button" class="group-category" name="category" value="${category}"/>
             </div>`;
+  }
+
+  /**
+   * Method used to receive group observers HTML code
+   * @param {String} groupId The observers parent group identifier
+   * @param {Array} groupObservers The array of observers which HTML code we want to get
+   * @return HTML code with all observers contents
+   */
+  static #getGroupObserversHtml(groupId, groupObservers) {
+    let html = "";
+    groupObservers.forEach((observer) => (html += ObserversView.toHtml(observer)));
+    return html + ObserversView.toHtml(groupId);
   }
 
   /**

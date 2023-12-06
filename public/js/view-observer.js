@@ -2,19 +2,45 @@ import { ComponentsView } from "./view-component.js";
 
 export class ObserversView {
   /**
-   * Method used to receive HTML code representing input observers array
-   * @param {String} groupId The observers parent group identifier
-   * @param {Array} observers The array of observers which HTML code we want to get
-   * @return HTML code with all observers contents
+   * Creates an observer object from the provided HTML element
+   * @param {Element} observerHtml The HTML content from which we want to create an observer object
+   * @returns Object with observer data retrieved from input HTML element
    */
-  static getHtml(groupId, observers) {
-    let result = "";
-    observers.forEach((observer) => {
-      result += ObserversView.#getExistingObserverHtml(observer);
-    });
-    result += ObserversView.#getNewObserverHtml(groupId);
-    return result;
-  };
+  static fromHtml(observerHtml) {
+    return {
+      name: observerHtml.querySelector("input.observer-name").value,
+      path: observerHtml.querySelector("input.observer-path").value,
+      target: observerHtml.querySelector("select.observer-target").value,
+      history: observerHtml.querySelector("select.observer-history").value,
+      container: observerHtml.querySelector("input.observer-container").value,
+      title: ComponentsView.fromHtml(ComponentsView.COMPONENT_TITLE, observerHtml),
+      image: ComponentsView.fromHtml(ComponentsView.COMPONENT_IMAGE, observerHtml),
+      price: ComponentsView.fromHtml(ComponentsView.COMPONENT_PRICE, observerHtml),
+    };
+  }
+
+  /**
+   * Receive HTML code representing an existing observer (object input) or a new observer (string input)
+   * @param {Object} observerData The observer object or a parent ID if a new observer HTML should be created
+   * @return HTML code with observer content
+   */
+  static toHtml(observerData) {
+    if (observerData === null) {
+      return "Invalid observer! Cannot create HTML from a null parameter";
+    }
+    if ("object" === typeof observerData && !Array.isArray(observerData)) {
+      // adding HTML for am existing observer of an existing group (created earlier)
+      return ObserversView.#getExistingObserverHtml(observerData);
+    } else if ("string" === typeof observerData || observerData instanceof String) {
+      // adding HTML for a new observer of an existing group (created earlier)
+      return ObserversView.#getNewObserverHtml(observerData, false);
+    } else if (undefined === observerData) {
+      // adding HTML for a new observer of a group during creation (add group column)
+      return ObserversView.#getNewObserverHtml(observerData, true);
+    } else {
+      return "Invalid observer! Must be an observer object or ID string";
+    }
+  }
 
   /**
    * Method used to receive HTML code representing observer object
@@ -31,13 +57,13 @@ export class ObserversView {
   /**
    * Method used to receive HTML code representing new observer UI
    * @param {String} groupId The observer parent (group) identifier
+   * @param {Boolean} disabled If the observer UI should be disabled (true) or enabled (false)
    * @returns HTML code with new observer UI contents
    */
-  static #getNewObserverHtml(groupId) {
-    const disabled = groupId === undefined ? "disabled" : "";
+  static #getNewObserverHtml(groupId, disabled) {
     return `<div class="observer-content">
               ${ObserversView.#getObserverModalHtml(groupId, undefined)}
-              <div class="modal-button new-observer" ${disabled}>+</div>
+              <div class="modal-button new-observer" ${disabled ? "disabled" : ""}>+</div>
             </div>`;
   }
 
@@ -59,7 +85,11 @@ export class ObserversView {
                     ${ObserversView.#getObserverRootDataRow1Html(observer)}
                     ${ObserversView.#getObserverRootDataRow2Html(observer)}
                   </div>
-                  ${ComponentsView.getHtml(titleComponent, imageComponent, priceComponent)}
+                  <div class="component-cards">
+                    ${ComponentsView.toHtml(ComponentsView.COMPONENT_TITLE, titleComponent)}
+                    ${ComponentsView.toHtml(ComponentsView.COMPONENT_IMAGE, imageComponent)}
+                    ${ComponentsView.toHtml(ComponentsView.COMPONENT_PRICE, priceComponent)}
+                  </div>
                   <div class="observer-buttons">
                     ${ObserversView.#getObserverModalButtonsHtml(groupId, observer)};
                   </div>
