@@ -1,5 +1,3 @@
-import { ObserversView } from "./view-observer.js";
-
 export class CommonService {
   /**
    * Method used to return error string from the input error response object
