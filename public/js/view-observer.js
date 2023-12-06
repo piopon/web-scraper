@@ -28,10 +28,10 @@ export class ObserversView {
     if (observerData === null) {
       return "Invalid observer! Cannot create HTML from a null parameter";
     }
-    if ('object' === typeof(observerData) && !Array.isArray(observerData)) {
+    if ("object" === typeof observerData && !Array.isArray(observerData)) {
       // adding HTML for am existing observer of an existing group (created earlier)
       return ObserversView.#getExistingObserverHtml(observerData);
-    } else if ('string' === typeof(observerData) || observerData instanceof String) {
+    } else if ("string" === typeof observerData || observerData instanceof String) {
       // adding HTML for a new observer of an existing group (created earlier)
       return ObserversView.#getNewObserverHtml(observerData, false);
     } else if (undefined === observerData) {
@@ -40,7 +40,7 @@ export class ObserversView {
     } else {
       return "Invalid observer! Must be an observer object or ID string";
     }
-  };
+  }
 
   /**
    * Method used to receive HTML code representing observer object

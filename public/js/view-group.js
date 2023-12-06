@@ -28,7 +28,7 @@ export class GroupsView {
     if (groupData === null) {
       return "Invalid group! Cannot create HTML from a null parameter";
     }
-    if ('object' === typeof(groupData) && !Array.isArray(groupData)) {
+    if ("object" === typeof groupData && !Array.isArray(groupData)) {
       // adding HTML for an existing group
       return GroupsView.#getExistingGroupHtml(groupData);
     } else if (Number.isFinite(groupData)) {

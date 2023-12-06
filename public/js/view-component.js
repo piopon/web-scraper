@@ -181,9 +181,13 @@ export class ComponentsView {
    */
   static #getCurrenciesOptionsHtml(selectedCurrency) {
     let result = `<option value="" disabled hidden ${selectedCurrency === "" ? "selected" : ""}>Select value</option>`;
-    sessionStorage.getItem("currencies").split(",").forEach(currency => {
-      result += `<option value=${currency} ${selectedCurrency === currency ? "selected" : ""}>${currency}</option>`;
-    })
+    sessionStorage
+      .getItem("currencies")
+      .split(",")
+      .forEach((currency) => {
+        const selectedAttribute = selectedCurrency === currency ? "selected" : "";
+        result += `<option value=${currency} ${selectedAttribute}>${currency}</option>`;
+      });
     return result;
   }
 }
