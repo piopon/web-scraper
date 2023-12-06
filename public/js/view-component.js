@@ -37,17 +37,17 @@ export class ComponentsView {
   /**
    * Method used to convert JS component objects to HTML code representing those components
    * @param {Number} type The type of the component which we want to convert to HTML
-   * @param {Object} component The component object which we want to convert to HTML
+   * @param {Object} componentData The component object which we want to convert to HTML
    * @return HTML code with all components cards contents
    */
-  static toHtml(type, component) {
+  static toHtml(type, componentData) {
     switch (type) {
       case ComponentsView.COMPONENT_TITLE:
-        return ComponentsView.#getTitleComponentHtml(component);
+        return ComponentsView.#getTitleComponentHtml(componentData);
       case ComponentsView.COMPONENT_IMAGE:
-        return ComponentsView.#getImageComponentHtml(component);
+        return ComponentsView.#getImageComponentHtml(componentData);
       case ComponentsView.COMPONENT_PRICE:
-        return ComponentsView.#getPriceComponentHtml(component);
+        return ComponentsView.#getPriceComponentHtml(componentData);
       default:
         console.error(`Internal error! Unknown component type: ${type}`);
         return ComponentsView.#getUnknownTypeErrorHtml(type);
