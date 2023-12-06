@@ -3,6 +3,37 @@ export class ComponentsView {
   static COMPONENT_IMAGE = 1;
   static COMPONENT_PRICE = 2;
 
+  static fromHtml(type, componentHtml) {
+    switch (type) {
+      case ComponentsView.COMPONENT_TITLE:
+        return {
+          interval: "",
+          selector: componentHtml.querySelector("input.component-title-selector").value,
+          attribute: componentHtml.querySelector("input.component-title-attribute").value,
+          auxiliary: componentHtml.querySelector("input.component-title-auxiliary").value,
+        };
+      case ComponentsView.COMPONENT_IMAGE:
+        // we need to check image auxiliary value to correctly determine if empty or not
+        const imageAux = componentHtml.querySelector("input.component-image-auxiliary").value;
+        return {
+          interval: "",
+          selector: componentHtml.querySelector("input.component-image-selector").value,
+          attribute: componentHtml.querySelector("input.component-image-attribute").value,
+          auxiliary: imageAux === "Select image" ? "" : imageAux,
+        };
+      case ComponentsView.COMPONENT_PRICE:
+        return {
+          interval: "",
+          selector: componentHtml.querySelector("input.component-price-selector").value,
+          attribute: componentHtml.querySelector("input.component-price-attribute").value,
+          auxiliary: componentHtml.querySelector("select.component-price-auxiliary").value,
+        };
+      default:
+        console.error(`Internal error! Unknown component type: ${type}`);
+        return null;
+    }
+  }
+
   /**
    * Method used to convert JS component objects to HTML code representing those components
    * @param {Number} type The type of the component which we want to convert to HTML
