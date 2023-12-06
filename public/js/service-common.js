@@ -19,4 +19,18 @@ export class CommonService {
       return "Unexpected response type";
     }
   }
+
+  /**
+   * Method used to create request options
+   * @param {String} requestMethod The HTTP method of the request
+   * @param {Object} requestBody The HTTP body of the request
+   * @returns request options object
+   */
+  static createRequestOptions(requestMethod, requestBody = undefined) {
+    return {
+      method: requestMethod,
+      headers: { "Content-Type": "application/json" },
+      body: requestBody,
+    };
+  }
 }
