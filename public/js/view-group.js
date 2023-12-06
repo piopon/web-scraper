@@ -12,22 +12,11 @@ export class GroupsView {
       name: groupHtml.querySelector("input.group-name").value,
       category: groupHtml.querySelector("input.group-category").value,
       domain: groupHtml.querySelector("input.group-domain").value,
-      observers: this.#createGroupObservers(groupObservers),
+      observers: Array.from(groupObservers).map((observer) => {
+        const observerContent = observer.parentNode.querySelector("div.modal-content");
+        return ObserversView.fromHtml(observerContent);
+      }),
     };
-  }
-
-  /**
-   * Method used to create an array of observer objects from provided list of HTML elements
-   * @param {NodeList} observers The list of HTML observer elemenets
-   * @returns array of observer objects created from provided input
-   */
-  static #createGroupObservers(observers) {
-    const result = [];
-    observers.forEach((observer) => {
-      const observerContent = observer.parentNode.querySelector("div.modal-content");
-      result.push(ObserversView.fromHtml(observerContent));
-    });
-    return result;
   }
 
   /**
