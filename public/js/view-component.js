@@ -3,6 +3,12 @@ export class ComponentsView {
   static COMPONENT_IMAGE = 1;
   static COMPONENT_PRICE = 2;
 
+  /**
+   * Creates a component object from the provided HTML element
+   * @param {Number} type The type of the component which we want to convert from HTML
+   * @param {Element} componentHtml The HTML content from which we want to create a component object
+   * @returns Object with component data retrieved from input HTML element
+   */
   static fromHtml(type, componentHtml) {
     switch (type) {
       case ComponentsView.COMPONENT_TITLE:
