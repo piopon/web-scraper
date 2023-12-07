@@ -69,20 +69,4 @@ export class ObserversService {
     const errorDetails = CommonService.getErrorDetails(errorResponse);
     throw new Error(`Cannot delete observer: ${errorDetails}`);
   }
-
-  /**
-   * Method used to create request options
-   * @param {String} method The HTTP method of the request
-   * @returns request options object
-   */
-  static #createRequestOptions(method) {
-    const shouldHaveBody = "POST" === method || "PUT" === method;
-    const openedObserver = document.querySelector("div.modal-dialog.init-reveal:not(.hidden)");
-    const requestBody = shouldHaveBody ? JSON.stringify(ObserversView.fromHtml(openedObserver)) : undefined;
-    return {
-      method: method,
-      headers: { "Content-Type": "application/json" },
-      body: requestBody,
-    };
-  }
 }
