@@ -69,20 +69,4 @@ export class GroupsService {
     const errorDetails = CommonService.getErrorDetails(errorResponse);
     throw new Error(`Cannot delete group: ${errorDetails}`);
   }
-
-  /**
-   * Method used to create request options
-   * @param {String} method The HTTP method of the request
-   * @returns request options object
-   */
-  static #createRequestOptions(method) {
-    const shouldHaveBody = "POST" === method || "PUT" === method;
-    const expandedGroup = document.querySelector("article.group-column.expanded");
-    const requestBody = shouldHaveBody ? JSON.stringify(GroupsView.fromHtml(expandedGroup)) : undefined;
-    return {
-      method: method,
-      headers: { "Content-Type": "application/json" },
-      body: requestBody,
-    };
-  }
 }
