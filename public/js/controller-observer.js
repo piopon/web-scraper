@@ -85,6 +85,8 @@ export class ObserversController {
           confirmDialog.showModal();
         } else if ("cancel" === selectedAction) {
           this.#hideDialog(closeButton);
+          // clean previously opened observer data
+          this.#openedObserver = undefined;
         } else {
           CommonController.showToastError(`Unsupported accept button action: ${selectedAction}`);
         }
@@ -101,9 +103,12 @@ export class ObserversController {
   #addObserver(closeButton, parentGroupId) {
     ObserversService.addObserver(parentGroupId)
       .then((data) => {
+        // close observer dialog and show confirmation
         this.#reloadObservers(parentGroupId);
         this.#hideDialog(closeButton);
         CommonController.showToastSuccess(data);
+        // clean previously opened observer data
+        this.#openedObserver = undefined;
       })
       .catch((error) => {
         closeButton.classList.add("shake");
@@ -120,8 +125,11 @@ export class ObserversController {
   #updateObserver(closeButton, editedObserverId) {
     ObserversService.updateObserver(editedObserverId)
       .then((data) => {
+        // close observer dialog and show confirmation
         this.#hideDialog(closeButton);
         CommonController.showToastSuccess(data);
+        // clean previously opened observer data
+        this.#openedObserver = undefined;
       })
       .catch((error) => {
         closeButton.classList.add("shake");
@@ -138,9 +146,12 @@ export class ObserversController {
   #deleteObserver(closeButton, deletedObserverId) {
     ObserversService.deleteObserver(deletedObserverId)
       .then((data) => {
+        // close observer dialog and show confirmation
         this.#reloadObservers(this.#expandedGroup);
         this.#hideDialog(closeButton);
         CommonController.showToastSuccess(data);
+        // clean previously opened observer data
+        this.#openedObserver = undefined;
       })
       .catch((error) => {
         closeButton.classList.add("shake");
