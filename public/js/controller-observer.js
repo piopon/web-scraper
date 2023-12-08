@@ -5,6 +5,7 @@ import { ObserversView } from "./view-observer.js";
 export class ObserversController {
   #mediator = undefined;
   #expandedGroup = undefined;
+  #openedObserver = undefined;
 
   /**
    * Creates new observers controller
@@ -59,6 +60,8 @@ export class ObserversController {
         observerDialog.classList.remove("hidden");
         observerDialog.classList.add("init-reveal");
         event.stopPropagation();
+        // store initial HTML values of the selected observer
+        this.#openedObserver = ObserversView.fromHtml(target.parentNode);
       });
     });
     const modalCloseButtons = document.querySelectorAll(`${parentGroupSelector}div.modal-close-btn`);
