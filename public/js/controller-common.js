@@ -4,6 +4,12 @@ export class CommonController {
   static #TYPE_SUCCESS = 0;
   static #TYPE_WARNING = 1;
 
+  static htmlToElement(string) {
+    var tempContainer = document.createElement('div');
+    tempContainer.innerHTML = string;
+    return tempContainer.firstChild;
+  }
+
   /**
    * Method used to show error toast popup (and underlying error message in console)
    * @param {String} message The message to be displayed in the toast
