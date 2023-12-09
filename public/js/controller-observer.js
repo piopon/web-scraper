@@ -62,6 +62,9 @@ export class ObserversController {
         event.stopPropagation();
         // store initial HTML values of the selected observer
         this.#openedObserver = ObserversView.fromHtml(target.parentNode);
+        if (!this.#openedObserver.name) {
+          this.#openedObserver = this.#expandedGroup;
+        }
       });
     });
     const modalCloseButtons = document.querySelectorAll(`${parentGroupSelector}div.modal-close-btn`);
