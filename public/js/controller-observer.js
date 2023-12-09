@@ -109,8 +109,13 @@ export class ObserversController {
           .findIndex((name) => name === this.#openedObserver.name);
         const previousElement = index < 0 ? parentContainer.lastElementChild : parentContainer.children[index];
         parentContainer.replaceChild(restoredElement, previousElement);
-        // re-bind listeners of the changed group
-        this.#bindListeners(this.#expandedGroup);
+        // bind open and close listeners to the newly updated/restored element
+        const observerButton = restoredElement.querySelector(`div.modal-button`);
+        this.#addOpenDialogListener(observerButton);
+        const modalCloseButtons = restoredElement.querySelectorAll(`div.modal-close-btn`);
+        modalCloseButtons.forEach((button) => this.#addCloseDialogListener(button));
+        // notify components controller that observers were changed
+        this.emitEvent("observers-reloaded", undefined);
         // clean previously opened observer data
         this.#openedObserver = undefined;
       } else {
