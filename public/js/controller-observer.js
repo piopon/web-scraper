@@ -85,6 +85,10 @@ export class ObserversController {
           confirmDialog.showModal();
         } else if ("cancel" === selectedAction) {
           this.#hideDialog(closeButton);
+          // restore edited observed data after cancelling operation
+          const restoredElement = CommonController.htmlToElement(ObserversView.toHtml(this.#openedObserver));
+          const parentContainer = target.closest("div.observers-container");
+          parentContainer.replaceChild(restoredElement, parentContainer.lastElementChild);
           // clean previously opened observer data
           this.#openedObserver = undefined;
         } else {
