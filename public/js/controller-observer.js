@@ -55,43 +55,7 @@ export class ObserversController {
     const observerButtons = document.querySelectorAll(`${parentGroupSelector}div.modal-button`);
     observerButtons.forEach((button) => this.#addOpenDialogListener(button));
     const modalCloseButtons = document.querySelectorAll(`${parentGroupSelector}div.modal-close-btn`);
-    modalCloseButtons.forEach((closeButton) => {
-      closeButton.addEventListener("click", (clickEvent) => {
-        const target = clickEvent.currentTarget;
-        const selectedAction = target.dataset.action;
-        if ("add" === selectedAction) {
-          this.#addObserver(closeButton, target.dataset.id);
-        } else if ("update" === selectedAction) {
-          this.#updateObserver(closeButton, target.dataset.id);
-        } else if ("delete" === selectedAction) {
-          const confirmDialog = document.querySelector("dialog.delete-observer-dialog");
-          confirmDialog.addEventListener("close", (closeEvent) => {
-            if ("yes" === confirmDialog.returnValue) {
-              this.#deleteObserver(closeButton, target.dataset.id);
-            }
-            closeEvent.stopPropagation();
-          }, { once: true });
-          confirmDialog.querySelector("label").innerText = `delete observer: ${target.dataset.id}?`
-          confirmDialog.showModal();
-        } else if ("cancel" === selectedAction) {
-          this.#hideDialog(closeButton);
-          // restore edited observed data after cancelling operation
-          const parentContainer = target.closest("div.observers-container");
-          const restoredElement = CommonController.htmlToElement(ObserversView.toHtml(this.#openedObserver));
-          const index = Array.from(parentContainer.children)
-            .map((element) => element.querySelector("div.modal-button").innerText)
-            .findIndex((name) => name === this.#openedObserver.name);
-          const previousElement = index < 0 ? parentContainer.lastElementChild : parentContainer.children[index];
-          parentContainer.replaceChild(restoredElement, previousElement);
-          // re-bind listeners of the changed group
-          this.#bindListeners(this.#expandedGroup);
-          // clean previously opened observer data
-          this.#openedObserver = undefined;
-        } else {
-          CommonController.showToastError(`Unsupported accept button action: ${selectedAction}`);
-        }
-        clickEvent.stopPropagation();
-      });
+    modalCloseButtons.forEach((button) => this.#addCloseDialogListener(button));
   }
 
   #addOpenDialogListener(openButton) {
@@ -106,6 +70,45 @@ export class ObserversController {
       if (!this.#openedObserver.name) {
         this.#openedObserver = this.#expandedGroup;
       }
+    });
+  }
+
+  #addCloseDialogListener(closeButton) {
+    closeButton.addEventListener("click", (clickEvent) => {
+      const target = clickEvent.currentTarget;
+      const selectedAction = target.dataset.action;
+      if ("add" === selectedAction) {
+        this.#addObserver(closeButton, target.dataset.id);
+      } else if ("update" === selectedAction) {
+        this.#updateObserver(closeButton, target.dataset.id);
+      } else if ("delete" === selectedAction) {
+        const confirmDialog = document.querySelector("dialog.delete-observer-dialog");
+        confirmDialog.addEventListener("close", (closeEvent) => {
+          if ("yes" === confirmDialog.returnValue) {
+            this.#deleteObserver(closeButton, target.dataset.id);
+          }
+          closeEvent.stopPropagation();
+        }, { once: true });
+        confirmDialog.querySelector("label").innerText = `delete observer: ${target.dataset.id}?`
+        confirmDialog.showModal();
+      } else if ("cancel" === selectedAction) {
+        this.#hideDialog(closeButton);
+        // restore edited observed data after cancelling operation
+        const parentContainer = target.closest("div.observers-container");
+        const restoredElement = CommonController.htmlToElement(ObserversView.toHtml(this.#openedObserver));
+        const index = Array.from(parentContainer.children)
+          .map((element) => element.querySelector("div.modal-button").innerText)
+          .findIndex((name) => name === this.#openedObserver.name);
+        const previousElement = index < 0 ? parentContainer.lastElementChild : parentContainer.children[index];
+        parentContainer.replaceChild(restoredElement, previousElement);
+        // re-bind listeners of the changed group
+        this.#bindListeners(this.#expandedGroup);
+        // clean previously opened observer data
+        this.#openedObserver = undefined;
+      } else {
+        CommonController.showToastError(`Unsupported accept button action: ${selectedAction}`);
+      }
+      clickEvent.stopPropagation();
     });
   }
 
