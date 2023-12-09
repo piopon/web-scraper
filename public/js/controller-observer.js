@@ -53,20 +53,7 @@ export class ObserversController {
   #bindListeners(parentGroupId = undefined) {
     const parentGroupSelector = parentGroupId ? ".group-column.expanded " : "";
     const observerButtons = document.querySelectorAll(`${parentGroupSelector}div.modal-button`);
-    observerButtons.forEach((button) => {
-      button.addEventListener("click", (event) => {
-        const target = event.currentTarget;
-        const observerDialog = target.parentNode.querySelector("div.modal-dialog");
-        observerDialog.classList.remove("hidden");
-        observerDialog.classList.add("init-reveal");
-        event.stopPropagation();
-        // store initial HTML values of the selected observer
-        this.#openedObserver = ObserversView.fromHtml(target.parentNode);
-        if (!this.#openedObserver.name) {
-          this.#openedObserver = this.#expandedGroup;
-        }
-      });
-    });
+    observerButtons.forEach((button) => this.#addOpenDialogListener(button));
     const modalCloseButtons = document.querySelectorAll(`${parentGroupSelector}div.modal-close-btn`);
     modalCloseButtons.forEach((closeButton) => {
       closeButton.addEventListener("click", (clickEvent) => {
@@ -105,6 +92,20 @@ export class ObserversController {
         }
         clickEvent.stopPropagation();
       });
+  }
+
+  #addOpenDialogListener(openButton) {
+    openButton.addEventListener("click", (event) => {
+      const target = event.currentTarget;
+      const observerDialog = target.parentNode.querySelector("div.modal-dialog");
+      observerDialog.classList.remove("hidden");
+      observerDialog.classList.add("init-reveal");
+      event.stopPropagation();
+      // store initial HTML values of the selected observer
+      this.#openedObserver = ObserversView.fromHtml(target.parentNode);
+      if (!this.#openedObserver.name) {
+        this.#openedObserver = this.#expandedGroup;
+      }
     });
   }
 
