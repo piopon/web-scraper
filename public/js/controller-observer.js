@@ -58,6 +58,10 @@ export class ObserversController {
     modalCloseButtons.forEach((button) => this.#addCloseDialogListener(button));
   }
 
+  /**
+   * Method used to add open dialog action listeners to observers buttons
+   * @param {Element} openButton The observer button which should be able to open observer dialog
+   */
   #addOpenDialogListener(openButton) {
     openButton.addEventListener("click", (event) => {
       const target = event.currentTarget;
@@ -73,6 +77,10 @@ export class ObserversController {
     });
   }
 
+  /**
+   * Method used to add close dialog action listeners to observer dialog buttons
+   * @param {Element} closeButton The dialog button which should be able to close observer dialog
+   */
   #addCloseDialogListener(closeButton) {
     closeButton.addEventListener("click", (clickEvent) => {
       const target = clickEvent.currentTarget;
