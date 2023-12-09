@@ -89,9 +89,15 @@ export class ObserversController {
         } else if ("cancel" === selectedAction) {
           this.#hideDialog(closeButton);
           // restore edited observed data after cancelling operation
-          const restoredElement = CommonController.htmlToElement(ObserversView.toHtml(this.#openedObserver));
           const parentContainer = target.closest("div.observers-container");
-          parentContainer.replaceChild(restoredElement, parentContainer.lastElementChild);
+          const restoredElement = CommonController.htmlToElement(ObserversView.toHtml(this.#openedObserver));
+          const index = Array.from(parentContainer.children)
+            .map((element) => element.querySelector("div.modal-button").innerText)
+            .findIndex((name) => name === this.#openedObserver.name);
+          const previousElement = index < 0 ? parentContainer.lastElementChild : parentContainer.children[index];
+          parentContainer.replaceChild(restoredElement, previousElement);
+          // re-bind listeners of the changed group
+          this.#bindListeners(this.#expandedGroup);
           // clean previously opened observer data
           this.#openedObserver = undefined;
         } else {
