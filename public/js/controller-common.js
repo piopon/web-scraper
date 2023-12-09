@@ -4,6 +4,11 @@ export class CommonController {
   static #TYPE_SUCCESS = 0;
   static #TYPE_WARNING = 1;
 
+  /**
+   * Method used to convert HTML string/code to HTML element/object
+   * @param {String} string The input HTML code to be converted
+   * @returns HTML element node from code
+   */
   static htmlToElement(string) {
     var tempContainer = document.createElement('div');
     tempContainer.innerHTML = string;
