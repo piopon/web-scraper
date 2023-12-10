@@ -97,23 +97,7 @@ export class ObserversController {
         confirmDialog.showModal();
       } else if ("cancel" === selectedAction) {
         this.#hideDialog(closeButton);
-        // restore edited observed data after cancelling operation
-        const parentContainer = target.closest("div.observers-container");
-        const restoredElement = CommonController.htmlToElement(ObserversView.toHtml(this.#openedObserver));
-        const index = Array.from(parentContainer.children)
-          .map((element) => element.querySelector("div.modal-button").innerText)
-          .findIndex((name) => name === this.#openedObserver.name);
-        const previousElement = index < 0 ? parentContainer.lastElementChild : parentContainer.children[index];
-        parentContainer.replaceChild(restoredElement, previousElement);
-        // bind open and close listeners to the newly updated/restored element
-        const observerButton = restoredElement.querySelector(`div.modal-button`);
-        this.#bindOpenDialogListener(observerButton);
-        const modalCloseButtons = restoredElement.querySelectorAll(`div.modal-close-btn`);
-        modalCloseButtons.forEach((button) => this.#bindCloseDialogListener(button));
-        // notify components controller that observers were changed
-        this.emitEvent("observers-reloaded", undefined);
-        // clean previously opened observer data
-        this.#openedObserver = undefined;
+        this.#restoreOpenedObserver(target);
       } else {
         CommonController.showToastError(`Unsupported accept button action: ${selectedAction}`);
       }
@@ -222,5 +206,24 @@ export class ObserversController {
 
   #clearOpenedObserver() {
     this.#openedObserver = undefined;
+  }
+
+  #restoreOpenedObserver(observerTarget) {
+    // update current target values with the restored ones
+    const parentContainer = observerTarget.closest("div.observers-container");
+    const restoredElement = CommonController.htmlToElement(ObserversView.toHtml(this.#openedObserver));
+    const index = Array.from(parentContainer.children)
+      .map((element) => element.querySelector("div.modal-button").innerText)
+      .findIndex((name) => name === this.#openedObserver.name);
+    const previousElement = index < 0 ? parentContainer.lastElementChild : parentContainer.children[index];
+    parentContainer.replaceChild(restoredElement, previousElement);
+    this.#clearOpenedObserver();
+    // bind open and close listeners to the newly updated/restored element
+    const observerButton = restoredElement.querySelector(`div.modal-button`);
+    this.#bindOpenDialogListener(observerButton);
+    const modalCloseButtons = restoredElement.querySelectorAll(`div.modal-close-btn`);
+    modalCloseButtons.forEach((button) => this.#bindCloseDialogListener(button));
+    // notify other controller(s) that observer(s) were changed
+    this.emitEvent("observers-reloaded", undefined);
   }
 }
