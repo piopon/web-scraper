@@ -53,16 +53,16 @@ export class ObserversController {
   #bindListeners(parentGroupId = undefined) {
     const parentGroupSelector = parentGroupId ? ".group-column.expanded " : "";
     const observerButtons = document.querySelectorAll(`${parentGroupSelector}div.modal-button`);
-    observerButtons.forEach((button) => this.#addOpenDialogListener(button));
+    observerButtons.forEach((button) => this.#bindOpenDialogListener(button));
     const modalCloseButtons = document.querySelectorAll(`${parentGroupSelector}div.modal-close-btn`);
-    modalCloseButtons.forEach((button) => this.#addCloseDialogListener(button));
+    modalCloseButtons.forEach((button) => this.#bindCloseDialogListener(button));
   }
 
   /**
    * Method used to add open dialog action listeners to observers buttons
    * @param {Element} openButton The observer button which should be able to open observer dialog
    */
-  #addOpenDialogListener(openButton) {
+  #bindOpenDialogListener(openButton) {
     openButton.addEventListener("click", (event) => {
       const target = event.currentTarget;
       const observerDialog = target.parentNode.querySelector("div.modal-dialog");
@@ -81,7 +81,7 @@ export class ObserversController {
    * Method used to add close dialog action listeners to observer dialog buttons
    * @param {Element} closeButton The dialog button which should be able to close observer dialog
    */
-  #addCloseDialogListener(closeButton) {
+  #bindCloseDialogListener(closeButton) {
     closeButton.addEventListener("click", (clickEvent) => {
       const target = clickEvent.currentTarget;
       const selectedAction = target.dataset.action;
@@ -111,9 +111,9 @@ export class ObserversController {
         parentContainer.replaceChild(restoredElement, previousElement);
         // bind open and close listeners to the newly updated/restored element
         const observerButton = restoredElement.querySelector(`div.modal-button`);
-        this.#addOpenDialogListener(observerButton);
+        this.#bindOpenDialogListener(observerButton);
         const modalCloseButtons = restoredElement.querySelectorAll(`div.modal-close-btn`);
-        modalCloseButtons.forEach((button) => this.#addCloseDialogListener(button));
+        modalCloseButtons.forEach((button) => this.#bindCloseDialogListener(button));
         // notify components controller that observers were changed
         this.emitEvent("observers-reloaded", undefined);
         // clean previously opened observer data
