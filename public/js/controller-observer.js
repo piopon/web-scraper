@@ -132,9 +132,8 @@ export class ObserversController {
         // close observer dialog and show confirmation
         this.#reloadObservers(parentGroupId);
         this.#hideDialog(closeButton);
+        this.#clearOpenedObserver();
         CommonController.showToastSuccess(data);
-        // clean previously opened observer data
-        this.#openedObserver = undefined;
       })
       .catch((error) => {
         closeButton.classList.add("shake");
@@ -153,9 +152,8 @@ export class ObserversController {
       .then((data) => {
         // close observer dialog and show confirmation
         this.#hideDialog(closeButton);
+        this.#clearOpenedObserver();
         CommonController.showToastSuccess(data);
-        // clean previously opened observer data
-        this.#openedObserver = undefined;
       })
       .catch((error) => {
         closeButton.classList.add("shake");
@@ -175,9 +173,8 @@ export class ObserversController {
         // close observer dialog and show confirmation
         this.#reloadObservers(this.#expandedGroup);
         this.#hideDialog(closeButton);
+        this.#clearOpenedObserver();
         CommonController.showToastSuccess(data);
-        // clean previously opened observer data
-        this.#openedObserver = undefined;
       })
       .catch((error) => {
         closeButton.classList.add("shake");
@@ -223,5 +220,9 @@ export class ObserversController {
     if (!this.#openedObserver.name) {
       this.#openedObserver = this.#expandedGroup;
     }
+  }
+
+  #clearOpenedObserver() {
+    this.#openedObserver = undefined;
   }
 }
