@@ -129,7 +129,6 @@ export class ObserversController {
   #addObserver(closeButton, parentGroupId) {
     ObserversService.addObserver(parentGroupId)
       .then((data) => {
-        // close observer dialog and show confirmation
         this.#reloadObservers(parentGroupId);
         this.#hideDialog(closeButton);
         this.#clearOpenedObserver();
@@ -150,7 +149,6 @@ export class ObserversController {
   #updateObserver(closeButton, editedObserverId) {
     ObserversService.updateObserver(editedObserverId)
       .then((data) => {
-        // close observer dialog and show confirmation
         this.#hideDialog(closeButton);
         this.#clearOpenedObserver();
         CommonController.showToastSuccess(data);
@@ -170,7 +168,6 @@ export class ObserversController {
   #deleteObserver(closeButton, deletedObserverId) {
     ObserversService.deleteObserver(deletedObserverId)
       .then((data) => {
-        // close observer dialog and show confirmation
         this.#reloadObservers(this.#expandedGroup);
         this.#hideDialog(closeButton);
         this.#clearOpenedObserver();
@@ -217,6 +214,7 @@ export class ObserversController {
 
   #storeOpenedObserver(observerTarget) {
     this.#openedObserver = ObserversView.fromHtml(observerTarget.parentNode);
+    // if stored observer does not have a name then it's a new one = we have to remember the parent ID
     if (!this.#openedObserver.name) {
       this.#openedObserver = this.#expandedGroup;
     }
