@@ -69,11 +69,7 @@ export class ObserversController {
       observerDialog.classList.remove("hidden");
       observerDialog.classList.add("init-reveal");
       event.stopPropagation();
-      // store initial HTML values of the selected observer
-      this.#openedObserver = ObserversView.fromHtml(target.parentNode);
-      if (!this.#openedObserver.name) {
-        this.#openedObserver = this.#expandedGroup;
-      }
+      this.#storeOpenedObserver(target);
     });
   }
 
@@ -220,5 +216,12 @@ export class ObserversController {
   #hideDialog(observerCloseButton) {
     const observerDialog = observerCloseButton.parentNode.parentNode.parentNode.parentNode;
     observerDialog.classList.add("hidden");
+  }
+
+  #storeOpenedObserver(observerTarget) {
+    this.#openedObserver = ObserversView.fromHtml(observerTarget.parentNode);
+    if (!this.#openedObserver.name) {
+      this.#openedObserver = this.#expandedGroup;
+    }
   }
 }
