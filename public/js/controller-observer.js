@@ -69,7 +69,7 @@ export class ObserversController {
       observerDialog.classList.remove("hidden");
       observerDialog.classList.add("init-reveal");
       event.stopPropagation();
-      this.#storeOpenedObserver(target);
+      this.#storeObserverData(target);
     });
   }
 
@@ -97,7 +97,7 @@ export class ObserversController {
         confirmDialog.showModal();
       } else if ("cancel" === selectedAction) {
         this.#hideDialog(closeButton);
-        this.#restoreOpenedObserver(target);
+        this.#restoreObserverData(target);
       } else {
         CommonController.showToastError(`Unsupported accept button action: ${selectedAction}`);
       }
@@ -115,7 +115,7 @@ export class ObserversController {
       .then((data) => {
         this.#reloadObservers(parentGroupId);
         this.#hideDialog(closeButton);
-        this.#clearOpenedObserver();
+        this.#clearObserverData();
         CommonController.showToastSuccess(data);
       })
       .catch((error) => {
@@ -134,7 +134,7 @@ export class ObserversController {
     ObserversService.updateObserver(editedObserverId)
       .then((data) => {
         this.#hideDialog(closeButton);
-        this.#clearOpenedObserver();
+        this.#clearObserverData();
         CommonController.showToastSuccess(data);
       })
       .catch((error) => {
@@ -154,7 +154,7 @@ export class ObserversController {
       .then((data) => {
         this.#reloadObservers(this.#expandedGroup);
         this.#hideDialog(closeButton);
-        this.#clearOpenedObserver();
+        this.#clearObserverData();
         CommonController.showToastSuccess(data);
       })
       .catch((error) => {
@@ -200,7 +200,7 @@ export class ObserversController {
    * Method used to save specified observer's data
    * @param {Object} observerTarget The observer which data we want to store
    */
-  #storeOpenedObserver(observerTarget) {
+  #storeObserverData(observerTarget) {
     this.#openedObserver = ObserversView.fromHtml(observerTarget.parentNode);
     // if stored observer does not have a name then it's a new one = we have to remember the parent ID
     if (!this.#openedObserver.name) {
@@ -211,7 +211,7 @@ export class ObserversController {
   /**
    * Method used to clean saved observer data
    */
-  #clearOpenedObserver() {
+  #clearObserverData() {
     this.#openedObserver = undefined;
   }
 
@@ -219,7 +219,7 @@ export class ObserversController {
    * Method used to restore values saved earlier for specified observer target
    * @param {Object} observerTarget The observer which values we want to restore
    */
-  #restoreOpenedObserver(observerTarget) {
+  #restoreObserverData(observerTarget) {
     // update current target values with the restored ones
     const parentContainer = observerTarget.closest("div.observers-container");
     const childIndex = Array.from(parentContainer.children)
@@ -228,7 +228,7 @@ export class ObserversController {
     const restoredElement = CommonController.htmlToElement(ObserversView.toHtml(this.#openedObserver));
     const previousElement = childIndex < 0 ? parentContainer.lastElementChild : parentContainer.children[childIndex];
     parentContainer.replaceChild(restoredElement, previousElement);
-    this.#clearOpenedObserver();
+    this.#clearObserverData();
     // bind open and close listeners to the newly updated/restored element
     this.#bindOpenDialogListener(restoredElement.querySelector(`div.modal-button`));
     restoredElement.querySelectorAll(`div.modal-close-btn`).forEach((btn) => this.#bindCloseDialogListener(btn));
