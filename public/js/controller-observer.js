@@ -196,6 +196,10 @@ export class ObserversController {
     observerDialog.classList.add("hidden");
   }
 
+  /**
+   * Method used to save specified observer's data
+   * @param {Object} observerTarget The observer which data we want to store
+   */
   #storeOpenedObserver(observerTarget) {
     this.#openedObserver = ObserversView.fromHtml(observerTarget.parentNode);
     // if stored observer does not have a name then it's a new one = we have to remember the parent ID
@@ -204,10 +208,17 @@ export class ObserversController {
     }
   }
 
+  /**
+   * Method used to clean saved observer data
+   */
   #clearOpenedObserver() {
     this.#openedObserver = undefined;
   }
 
+  /**
+   * Method used to restore values saved earlier for specified observer target
+   * @param {Object} observerTarget The observer which values we want to restore
+   */
   #restoreOpenedObserver(observerTarget) {
     // update current target values with the restored ones
     const parentContainer = observerTarget.closest("div.observers-container");
