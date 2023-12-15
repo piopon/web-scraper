@@ -258,7 +258,7 @@ export class GroupsController {
         column.parentNode.classList.add(column === groupColumn ? "expanded" : "collapsed");
         this.#clearDimension(column);
       });
-      this.#groupExpanded = groupColumn.parentNode;
+      this.#groupExpanded = GroupsView.fromHtml(groupColumn.parentNode);
       // notify other controllers that group with specified name was expanded
       this.emitEvent("group-expanded", groupColumn.querySelector("h2.group-title").innerText);
     }
