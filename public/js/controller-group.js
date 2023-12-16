@@ -145,6 +145,7 @@ export class GroupsController {
           confirmDialog.showModal();
         } else if ("cancel" === selectedAction) {
           this.#collapse(closeButton);
+          this.#cleanGroupData();
         } else {
           CommonController.showToastError(`Unsupported accept button action: ${selectedAction}`);
         }
@@ -163,6 +164,7 @@ export class GroupsController {
       .then((data) => {
         this.#reloadGroups(parentUserId);
         this.#collapse(closeButton);
+        this.#cleanGroupData();
         CommonController.showToastSuccess(data);
       })
       .catch((error) => {
@@ -181,6 +183,7 @@ export class GroupsController {
     GroupsService.updateGroup(editedGroupId)
       .then((data) => {
         this.#collapse(closeButton);
+        this.#cleanGroupData();
         CommonController.showToastSuccess(data);
       })
       .catch((error) => {
@@ -200,6 +203,7 @@ export class GroupsController {
       .then((data) => {
         this.#reloadGroups(0);
         this.#collapse(closeButton);
+        this.#cleanGroupData();
         CommonController.showToastSuccess(data);
       })
       .catch((error) => {
@@ -280,7 +284,6 @@ export class GroupsController {
         }
       });
       groupCloseButton.classList.remove("show");
-      this.#groupExpanded = undefined;
       // notify other controllers that none group is expanded
       this.emitEvent("group-expanded", undefined);
     }
