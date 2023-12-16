@@ -262,7 +262,7 @@ export class GroupsController {
         column.parentNode.classList.add(column === groupColumn ? "expanded" : "collapsed");
         this.#clearDimension(column);
       });
-      this.#groupExpanded = GroupsView.fromHtml(groupColumn.parentNode);
+      this.#storeGroupData(groupColumn.parentNode);
       // notify other controllers that group with specified name was expanded
       this.emitEvent("group-expanded", groupColumn.querySelector("h2.group-title").innerText);
     }
@@ -425,6 +425,10 @@ export class GroupsController {
     const g = parseInt(color.slice(2, 4), 16);
     const b = parseInt(color.slice(4, 6), 16);
     return r * 0.299 + g * 0.587 + b * 0.114 > 186 ? "black" : "white";
+  }
+
+  #storeGroupData(groupTarget) {
+    this.#groupExpanded = GroupsView.fromHtml(groupTarget);
   }
 
   #cleanGroupData() {
