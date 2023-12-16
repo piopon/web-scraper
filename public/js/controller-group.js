@@ -429,6 +429,10 @@ export class GroupsController {
 
   #storeGroupData(groupTarget) {
     this.#groupExpanded = GroupsView.fromHtml(groupTarget);
+    // if stored group does not have a name then it's a new one = we have to remember the user ID
+    if (!this.#groupExpanded.name) {
+      this.#groupExpanded = 0;
+    }
   }
 
   #cleanGroupData() {
