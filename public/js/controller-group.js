@@ -423,4 +423,8 @@ export class GroupsController {
     const b = parseInt(color.slice(4, 6), 16);
     return r * 0.299 + g * 0.587 + b * 0.114 > 186 ? "black" : "white";
   }
+
+  #cleanGroupData() {
+    this.#groupExpanded = undefined;
+  }
 }
