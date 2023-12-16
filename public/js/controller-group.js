@@ -145,7 +145,7 @@ export class GroupsController {
           confirmDialog.showModal();
         } else if ("cancel" === selectedAction) {
           this.#collapse(closeButton);
-          this.#cleanGroupData();
+          this.#restoreGroupData(closeButton);
         } else {
           CommonController.showToastError(`Unsupported accept button action: ${selectedAction}`);
         }
@@ -432,6 +432,11 @@ export class GroupsController {
   }
 
   #cleanGroupData() {
+    this.#groupExpanded = undefined;
+  }
+
+  #restoreGroupData(groupTarget) {
+    const parentContainer = groupTarget.closest("article.group-column");
     this.#groupExpanded = undefined;
   }
 }
