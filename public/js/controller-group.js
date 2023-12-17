@@ -435,6 +435,10 @@ export class GroupsController {
     return r * 0.299 + g * 0.587 + b * 0.114 > 186 ? "black" : "white";
   }
 
+  /**
+   * Method used to save specified group's data
+   * @param {Object} groupTarget The group which data we want to store
+   */
   #storeGroupData(groupTarget) {
     this.#groupExpanded = GroupsView.fromHtml(groupTarget);
     // if stored group does not have a name then it's a new one = we have to remember the user ID
@@ -443,10 +447,17 @@ export class GroupsController {
     }
   }
 
+  /**
+   * Method used to clean saved group data
+   */
   #cleanGroupData() {
     this.#groupExpanded = undefined;
   }
 
+  /**
+   * Method used to restore values saved earlier for specified group target
+   * @param {Object} groupTarget The group which values we want to restore
+   */
   #restoreGroupData(groupTarget) {
     const parentContainer = groupTarget.closest("section.group-columns");
     const childIndex = Array.from(parentContainer.children)
