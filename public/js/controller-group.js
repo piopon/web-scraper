@@ -108,7 +108,9 @@ export class GroupsController {
         event.stopPropagation();
       });
     });
-    const groupCategoryButtons = document.querySelectorAll("input.group-category");
+    const groupCategoryButtons = groupContainer === undefined
+        ? document.querySelectorAll("input.group-category")
+        : groupContainer.querySelectorAll("input.group-category");
     groupCategoryButtons.forEach((button) => {
       button.addEventListener("click", (clickEvent) => {
         const initialValue = button.value;
