@@ -127,7 +127,9 @@ export class GroupsController {
         clickEvent.stopPropagation();
       });
     });
-    const groupCloseButtons = document.querySelectorAll(".group-buttons > .group-close-btn");
+    const groupCloseButtons = groupContainer === undefined
+        ? document.querySelectorAll(".group-buttons > .group-close-btn")
+        : groupContainer.querySelectorAll(".group-buttons > .group-close-btn");
     groupCloseButtons.forEach((closeButton) => {
       closeButton.addEventListener("click", (clickEvent) => {
         const target = clickEvent.currentTarget;
