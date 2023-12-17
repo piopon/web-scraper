@@ -440,7 +440,13 @@ export class GroupsController {
   }
 
   #restoreGroupData(groupTarget) {
-    const parentContainer = groupTarget.closest("article.group-column");
+    const parentContainer = groupTarget.closest("section.group-columns");
+    const childIndex = Array.from(parentContainer.children)
+      .map((element) => element.querySelector("h2.group-title").innerText)
+      .findIndex((name) => name === this.#groupExpanded.name);
+    const restoredElement = CommonController.htmlToElement(GroupsView.toHtml(this.#groupExpanded));
+    const previousElement = childIndex < 0 ? parentContainer.lastElementChild : parentContainer.children[childIndex];
+    parentContainer.replaceChild(restoredElement, previousElement);
     this.#groupExpanded = undefined;
   }
 }
