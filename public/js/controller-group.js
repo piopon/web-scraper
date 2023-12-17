@@ -448,5 +448,9 @@ export class GroupsController {
     const previousElement = childIndex < 0 ? parentContainer.lastElementChild : parentContainer.children[childIndex];
     parentContainer.replaceChild(restoredElement, previousElement);
     this.#groupExpanded = undefined;
+    // re-initialize group controller for all groups (including the replaced one)
+    this.#initController();
+    // notify other controllers that groups were reloaded
+    this.emitEvent("groups-reloaded", undefined);
   }
 }
