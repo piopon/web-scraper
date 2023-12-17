@@ -41,13 +41,13 @@ export class GroupsController {
   /**
    * Method used to (re)initialize controller
    */
-  #initController() {
+  #initController(groupContainer = undefined) {
     // get all elements representing group columns
     this.#groupColumns = document.querySelectorAll(".group-column > .group-container");
     // initialize style, size, and logic of all group columns
     this.#initStyle();
     this.#initDimensions();
-    this.#bindListeners();
+    this.#bindListeners(groupContainer);
   }
 
   /**
@@ -92,7 +92,7 @@ export class GroupsController {
    * Method used to bind UI listeners to controller methods.
    * This method handles: group column and close column buttons clicks & new column hint
    */
-  #bindListeners() {
+  #bindListeners(groupContainer = undefined) {
     this.#groupColumns.forEach((column) => {
       column.addEventListener("click", (event) => {
         this.#expand(column);
@@ -449,7 +449,7 @@ export class GroupsController {
     parentContainer.replaceChild(restoredElement, previousElement);
     this.#groupExpanded = undefined;
     // re-initialize group controller for all groups (including the replaced one)
-    this.#initController();
+    this.#initController(restoredElement.querySelector("div.group-container"));
     // notify other controllers that groups were reloaded
     this.emitEvent("groups-reloaded", undefined);
   }
