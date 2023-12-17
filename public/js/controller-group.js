@@ -40,6 +40,8 @@ export class GroupsController {
 
   /**
    * Method used to (re)initialize controller
+   * @param {Element} groupContainer The concrete group container to initialize (listeners binding only).
+   *                                 If not specified then ALL group containers will be initialized.
    */
   #initController(groupContainer = undefined) {
     // get all elements representing group columns
@@ -89,8 +91,9 @@ export class GroupsController {
   }
 
   /**
-   * Method used to bind UI listeners to controller methods.
-   * This method handles: group column and close column buttons clicks & new column hint
+   * Method used to bind open, close and new group hint listeners to controller methods.
+   * @param {Element} groupContainer The concrete group container to bind listeners.
+   *                                 If not specified then ALL group containers will have listeners binded.
    */
   #bindListeners(groupContainer = undefined) {
     const columns = groupContainer === undefined ? this.#groupColumns : [groupContainer];
