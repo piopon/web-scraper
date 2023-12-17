@@ -93,7 +93,8 @@ export class GroupsController {
    * This method handles: group column and close column buttons clicks & new column hint
    */
   #bindListeners(groupContainer = undefined) {
-    this.#groupColumns.forEach((column) => {
+    const columns = groupContainer === undefined ? this.#groupColumns : [groupContainer];
+    columns.forEach((column) => {
       column.addEventListener("click", (event) => {
         this.#expand(column);
         event.stopPropagation();
