@@ -55,10 +55,10 @@ export class ObserversController {
    *                               If not used then this will affect ALL observer buttons/dialogs.
    */
   #bindListeners(parentGroupId = undefined) {
-    const parentGroupSelector = parentGroupId ? ".group-column.expanded " : "";
-    const observerButtons = document.querySelectorAll(`${parentGroupSelector}div.modal-button`);
+    const parentElement = parentGroupId ? CommonController.getGroupColumnWithName(parentGroupId) : document;
+    const observerButtons = parentElement.querySelectorAll("div.modal-button");
     observerButtons.forEach((button) => this.#bindOpenDialogListener(button));
-    const modalCloseButtons = document.querySelectorAll(`${parentGroupSelector}div.modal-close-btn`);
+    const modalCloseButtons = parentElement.querySelectorAll("div.modal-close-btn");
     modalCloseButtons.forEach((button) => this.#bindCloseDialogListener(button));
   }
 
