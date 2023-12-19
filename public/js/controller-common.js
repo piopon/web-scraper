@@ -4,6 +4,16 @@ export class CommonController {
   static #TYPE_SUCCESS = 0;
   static #TYPE_WARNING = 1;
 
+  static getGroupColumnWithName(groupName) {
+    const foundColumns = Array.from(document.querySelectorAll("article.group-column h2.group-title"))
+        .filter((element) => element.innerText === groupName)
+        .map((element) => element.closest("article.group-column"));
+    if (1 !== foundColumns.length) {
+      showToastError(`Internal error! Found ${foundColumns.length} columns with name: ${groupName}`);
+    }
+    return foundColumns[0];
+  }
+
   /**
    * Method used to convert HTML string/code to HTML element/object
    * @param {String} string The input HTML code to be converted
