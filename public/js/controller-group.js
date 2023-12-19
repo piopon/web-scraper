@@ -480,12 +480,12 @@ export class GroupsController {
     const restoredElement = CommonController.htmlToElement(GroupsView.toHtml(this.#groupExpanded));
     const previousElement = childIndex < 0 ? parentContainer.lastElementChild : parentContainer.children[childIndex];
     // restore child elements to keep group collapse animation continuity
-    const restoreChildren = ["div.group-root-data", "div.group-observers"];
+    const restoreChildren = ["div.group-root-data", "div.group-observers", "div.group-buttons"];
     restoreChildren.forEach((childSelector) => {
       previousElement.querySelector(childSelector).innerHTML = restoredElement.querySelector(childSelector).innerHTML;
     });
-    // re-initialize group controller for all groups (including the replaced one)
-    this.#initController(restoredElement.querySelector("div.group-container"));
+    // re-initialize controller for all groups (but bind listeners only for the restored one)
+    this.#initController(previousElement.querySelector("div.group-container"));
     // notify other controllers that groups were reloaded
     this.emitEvent("group-restored", this.#groupExpanded.name);
     // clean stored group data
