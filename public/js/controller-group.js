@@ -60,10 +60,15 @@ export class GroupsController {
     const animations = ["column-from-top", "column-from-right", "column-from-bottom", "column-from-left"];
     this.#groupColumns.forEach((column) => {
       if ("update" === column.dataset.action) {
-        // get color from array and then remove it so no duplicates are selected (in next iterations)
-        column.classList.add(colors.length > 0
-            ? "background-" + this.#getRandomElement(colors, true)
-            : this.#createColorClass(this.#getRandomColor()));
+        const columnClasses = Array.from(column.classList);
+        // add color class only when current column does not have it already (possible when restoring group)
+        const hasColorClass = (className) => className.startsWith("background-");
+        if (!columnClasses.filter(hasColorClass).length) {
+          // get color from array and then remove it so no duplicates are selected (in next iterations)
+          column.classList.add(colors.length > 0
+              ? "background-" + this.#getRandomElement(colors, true)
+              : this.#createColorClass(this.#getRandomColor()));
+        }
         // get animation from array (duplicates are allowed in this case)
         column.classList.add(this.#getRandomElement(animations, false));
       } else {
