@@ -380,7 +380,13 @@ export class GroupsController {
     const generatedColors = Array.from(pageHeadElement.getElementsByTagName("style")).map((element) => {
       return element.innerHTML.match(".background-([0-9a-fA-F]+)")[1];
     });
-    return definedColors.concat(generatedColors);
+    // retrieve any color that is already in use (possible after restoring expanded group)
+    const usedColors = Array.from(this.#groupColumns)
+      .filter((column) => "update" === column.dataset.action)
+      .flatMap((column) => Array.from(column.classList))
+      .filter((className) => className.startsWith("background-"))
+      .map((className) => className.substring("background-".length));
+    return definedColors.concat(generatedColors).filter((color) => !usedColors.includes(color));
   }
 
   /**
