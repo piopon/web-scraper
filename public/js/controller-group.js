@@ -69,8 +69,12 @@ export class GroupsController {
               ? "background-" + this.#getRandomElement(colors, true)
               : this.#createColorClass(this.#getRandomColor()));
         }
-        // get animation from array (duplicates are allowed in this case)
-        column.classList.add(this.#getRandomElement(animations, false));
+        // add animation class only when current column does not have it already (possible when restoring group)
+        const hasAnimationClass = (className) => className.startsWith("column-from-");
+        if (!columnClasses.filter(hasAnimationClass).length) {
+          // get animation from array (duplicates are allowed in this case)
+          column.classList.add(this.#getRandomElement(animations, false));
+        }
       } else {
         // new group column should always appear from right and have gray background
         column.classList.add("background-violet");
