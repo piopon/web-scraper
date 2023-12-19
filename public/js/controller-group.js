@@ -479,7 +479,11 @@ export class GroupsController {
       .findIndex((name) => name === this.#groupExpanded.name);
     const restoredElement = CommonController.htmlToElement(GroupsView.toHtml(this.#groupExpanded));
     const previousElement = childIndex < 0 ? parentContainer.lastElementChild : parentContainer.children[childIndex];
-    parentContainer.replaceChild(restoredElement, previousElement);
+    // restore child elements to keep group collapse animation continuity
+    const restoreChildren = ["div.group-root-data", "div.group-observers"];
+    restoreChildren.forEach((childSelector) => {
+      previousElement.querySelector(childSelector).innerHTML = restoredElement.querySelector(childSelector).innerHTML;
+    });
     this.#groupExpanded = undefined;
     // re-initialize group controller for all groups (including the replaced one)
     this.#initController(restoredElement.querySelector("div.group-container"));
