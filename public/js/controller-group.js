@@ -484,10 +484,11 @@ export class GroupsController {
     restoreChildren.forEach((childSelector) => {
       previousElement.querySelector(childSelector).innerHTML = restoredElement.querySelector(childSelector).innerHTML;
     });
-    this.#groupExpanded = undefined;
     // re-initialize group controller for all groups (including the replaced one)
     this.#initController(restoredElement.querySelector("div.group-container"));
     // notify other controllers that groups were reloaded
-    this.emitEvent("groups-reloaded", undefined);
+    this.emitEvent("group-restored", this.#groupExpanded.name);
+    // clean stored group data
+    this.#cleanGroupData();
   }
 }

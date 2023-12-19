@@ -40,6 +40,10 @@ export class ObserversController {
       this.#bindListeners();
       // since groups were reloaded then by definition observers were also reloaded
       this.emitEvent("observers-reloaded", undefined);
+    } else if ("group-restored" === eventType) {
+      this.#bindListeners(eventObject);
+      // since the group was restored then by definition observers were also restored
+      this.emitEvent("observers-reloaded", undefined);
     }
     return;
   }
