@@ -74,7 +74,6 @@ export class GroupsController {
       } else {
         // new group column should always appear from right and have gray background
         column.classList.add("background-violet");
-        column.querySelector(".group-title").classList.add("background-violet");
         column.classList.add("column-from-right");
         // if new group is the only group then show its label, else hide the label
         if (this.#groupColumns.length < 2) {
