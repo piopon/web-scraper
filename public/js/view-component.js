@@ -120,7 +120,7 @@ export class ComponentsView {
                   </div>
                   <div class="widget">
                     <label class="component-image-label">auxiliary:</label>
-                    <input type="button" class="component-image-auxiliary" name="auxiliary" value=${auxButton} />
+                    <input type="button" class="component-image-auxiliary" name="auxiliary" value="${auxButton}" />
                   </div>
                 </div>
                 <div class="component-toggle">
