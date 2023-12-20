@@ -5,6 +5,33 @@ export class CommonController {
   static #TYPE_WARNING = 1;
 
   /**
+   * Method used to find a specific group column container which has title equal to specified group name
+   * @param {String} groupName The name of the group column which we want to find
+   * @returns Group column container with title matching the name, or undefined if no container found
+   */
+  static getGroupColumnWithName(groupName) {
+    const foundColumns = Array.from(document.querySelectorAll("article.group-column h2.group-title"))
+        .filter((element) => element.innerText === groupName)
+        .map((element) => element.closest("article.group-column"));
+    if (1 !== foundColumns.length) {
+      showToastError(`Internal error! Found ${foundColumns.length} columns with name: ${groupName}`);
+      return undefined;
+    }
+    return foundColumns[0];
+  }
+
+  /**
+   * Method used to convert HTML string/code to HTML element/object
+   * @param {String} string The input HTML code to be converted
+   * @returns HTML element node from code
+   */
+  static htmlToElement(string) {
+    var tempContainer = document.createElement('div');
+    tempContainer.innerHTML = string;
+    return tempContainer.firstChild;
+  }
+
+  /**
    * Method used to show error toast popup (and underlying error message in console)
    * @param {String} message The message to be displayed in the toast
    */

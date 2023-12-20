@@ -40,14 +40,16 @@ export class GroupsController {
 
   /**
    * Method used to (re)initialize controller
+   * @param {Element} groupContainer The concrete group container to initialize (listeners binding only).
+   *                                 If not specified then ALL group containers will be initialized.
    */
-  #initController() {
+  #initController(groupContainer = undefined) {
     // get all elements representing group columns
     this.#groupColumns = document.querySelectorAll(".group-column > .group-container");
     // initialize style, size, and logic of all group columns
     this.#initStyle();
     this.#initDimensions();
-    this.#bindListeners();
+    this.#bindListeners(groupContainer);
   }
 
   /**
@@ -58,16 +60,24 @@ export class GroupsController {
     const animations = ["column-from-top", "column-from-right", "column-from-bottom", "column-from-left"];
     this.#groupColumns.forEach((column) => {
       if ("update" === column.dataset.action) {
-        // get color from array and then remove it so no duplicates are selected (in next iterations)
-        column.classList.add(colors.length > 0
-            ? "background-" + this.#getRandomElement(colors, true)
-            : this.#createColorClass(this.#getRandomColor()));
-        // get animation from array (duplicates are allowed in this case)
-        column.classList.add(this.#getRandomElement(animations, false));
+        const columnClasses = Array.from(column.classList);
+        // add color class only when current column does not have it already (possible when restoring group)
+        const hasColorClass = (className) => className.startsWith("background-");
+        if (!columnClasses.filter(hasColorClass).length) {
+          // get color from array and then remove it so no duplicates are selected (in next iterations)
+          column.classList.add(colors.length > 0
+              ? "background-" + this.#getRandomElement(colors, true)
+              : this.#createColorClass(this.#getRandomColor()));
+        }
+        // add animation class only when current column does not have it already (possible when restoring group)
+        const hasAnimationClass = (className) => className.startsWith("column-from-");
+        if (!columnClasses.filter(hasAnimationClass).length) {
+          // get animation from array (duplicates are allowed in this case)
+          column.classList.add(this.#getRandomElement(animations, false));
+        }
       } else {
         // new group column should always appear from right and have gray background
         column.classList.add("background-violet");
-        column.querySelector(".group-title").classList.add("background-violet");
         column.classList.add("column-from-right");
         // if new group is the only group then show its label, else hide the label
         if (this.#groupColumns.length < 2) {
@@ -89,11 +99,13 @@ export class GroupsController {
   }
 
   /**
-   * Method used to bind UI listeners to controller methods.
-   * This method handles: group column and close column buttons clicks & new column hint
+   * Method used to bind open, close and new group hint listeners to controller methods.
+   * @param {Element} groupContainer The concrete group container to bind listeners.
+   *                                 If not specified then ALL group containers will have listeners binded.
    */
-  #bindListeners() {
-    this.#groupColumns.forEach((column) => {
+  #bindListeners(groupContainer = undefined) {
+    const columns = groupContainer === undefined ? this.#groupColumns : [groupContainer];
+    columns.forEach((column) => {
       column.addEventListener("click", (event) => {
         this.#expand(column);
         event.stopPropagation();
@@ -107,26 +119,28 @@ export class GroupsController {
         event.stopPropagation();
       });
     });
-    const groupCategoryButtons = document.querySelectorAll("input.group-category");
+    const groupCategoryButtons = groupContainer === undefined
+        ? document.querySelectorAll("input.group-category")
+        : groupContainer.querySelectorAll("input.group-category");
     groupCategoryButtons.forEach((button) => {
       button.addEventListener("click", (clickEvent) => {
         const initialValue = button.value;
         const categoryDialog = document.querySelector("dialog.group-category-dialog");
-        // listen to cancel event (when ESC pressed) to restore value for current catrgory dialog
-        categoryDialog.addEventListener("cancel", (cancelEvent) => {
-          categoryDialog.returnValue = initialValue;
-          cancelEvent.stopPropagation();
-        }, { once: true });
-        // listen to close event to setup category value (it can be either new one or restored one)
+        // update current initial value to dialog's value to detect update/cancel state
+        categoryDialog.returnValue = initialValue;
         categoryDialog.addEventListener("close", (closeEvent) => {
-          button.value = categoryDialog.returnValue;
+          // when user closes dialog via ESC button then return value will be empty
+          const selectedValue = categoryDialog.returnValue;
+          button.value = "" === selectedValue ? initialValue : selectedValue;
           closeEvent.stopPropagation();
         }, { once: true });
         categoryDialog.showModal();
         clickEvent.stopPropagation();
       });
     });
-    const groupCloseButtons = document.querySelectorAll(".group-buttons > .group-close-btn");
+    const groupCloseButtons = groupContainer === undefined
+        ? document.querySelectorAll(".group-buttons > .group-close-btn")
+        : groupContainer.querySelectorAll(".group-buttons > .group-close-btn");
     groupCloseButtons.forEach((closeButton) => {
       closeButton.addEventListener("click", (clickEvent) => {
         const target = clickEvent.currentTarget;
@@ -147,6 +161,7 @@ export class GroupsController {
           confirmDialog.showModal();
         } else if ("cancel" === selectedAction) {
           this.#collapse(closeButton);
+          this.#restoreGroupData(closeButton);
         } else {
           CommonController.showToastError(`Unsupported accept button action: ${selectedAction}`);
         }
@@ -165,6 +180,7 @@ export class GroupsController {
       .then((data) => {
         this.#reloadGroups(parentUserId);
         this.#collapse(closeButton);
+        this.#cleanGroupData();
         CommonController.showToastSuccess(data);
       })
       .catch((error) => {
@@ -183,6 +199,7 @@ export class GroupsController {
     GroupsService.updateGroup(editedGroupId)
       .then((data) => {
         this.#collapse(closeButton);
+        this.#cleanGroupData();
         CommonController.showToastSuccess(data);
       })
       .catch((error) => {
@@ -202,6 +219,7 @@ export class GroupsController {
       .then((data) => {
         this.#reloadGroups(0);
         this.#collapse(closeButton);
+        this.#cleanGroupData();
         CommonController.showToastSuccess(data);
       })
       .catch((error) => {
@@ -260,7 +278,7 @@ export class GroupsController {
         column.parentNode.classList.add(column === groupColumn ? "expanded" : "collapsed");
         this.#clearDimension(column);
       });
-      this.#groupExpanded = groupColumn.parentNode;
+      this.#storeGroupData(groupColumn.parentNode);
       // notify other controllers that group with specified name was expanded
       this.emitEvent("group-expanded", groupColumn.querySelector("h2.group-title").innerText);
     }
@@ -282,7 +300,6 @@ export class GroupsController {
         }
       });
       groupCloseButton.classList.remove("show");
-      this.#groupExpanded = undefined;
       // notify other controllers that none group is expanded
       this.emitEvent("group-expanded", undefined);
     }
@@ -363,7 +380,13 @@ export class GroupsController {
     const generatedColors = Array.from(pageHeadElement.getElementsByTagName("style")).map((element) => {
       return element.innerHTML.match(".background-([0-9a-fA-F]+)")[1];
     });
-    return definedColors.concat(generatedColors);
+    // retrieve any color that is already in use (possible after restoring expanded group)
+    const usedColors = Array.from(this.#groupColumns)
+      .filter((column) => "update" === column.dataset.action)
+      .flatMap((column) => Array.from(column.classList))
+      .filter((className) => className.startsWith("background-"))
+      .map((className) => className.substring("background-".length));
+    return definedColors.concat(generatedColors).filter((color) => !usedColors.includes(color));
   }
 
   /**
@@ -424,5 +447,48 @@ export class GroupsController {
     const g = parseInt(color.slice(2, 4), 16);
     const b = parseInt(color.slice(4, 6), 16);
     return r * 0.299 + g * 0.587 + b * 0.114 > 186 ? "black" : "white";
+  }
+
+  /**
+   * Method used to save specified group's data
+   * @param {Object} groupTarget The group which data we want to store
+   */
+  #storeGroupData(groupTarget) {
+    this.#groupExpanded = GroupsView.fromHtml(groupTarget);
+    // if stored group does not have a name then it's a new one = we have to remember the user ID
+    if (!this.#groupExpanded.name) {
+      this.#groupExpanded = 0;
+    }
+  }
+
+  /**
+   * Method used to clean saved group data
+   */
+  #cleanGroupData() {
+    this.#groupExpanded = undefined;
+  }
+
+  /**
+   * Method used to restore values saved earlier for specified group target
+   * @param {Object} groupTarget The group which values we want to restore
+   */
+  #restoreGroupData(groupTarget) {
+    const parentContainer = groupTarget.closest("section.group-columns");
+    const childIndex = Array.from(parentContainer.children)
+      .map((element) => element.querySelector("h2.group-title").innerText)
+      .findIndex((name) => name === this.#groupExpanded.name);
+    const restoredElement = CommonController.htmlToElement(GroupsView.toHtml(this.#groupExpanded));
+    const previousElement = childIndex < 0 ? parentContainer.lastElementChild : parentContainer.children[childIndex];
+    // restore child elements to keep group collapse animation continuity
+    const restoreChildren = ["div.group-root-data", "div.group-observers", "div.group-buttons"];
+    restoreChildren.forEach((childSelector) => {
+      previousElement.querySelector(childSelector).innerHTML = restoredElement.querySelector(childSelector).innerHTML;
+    });
+    // re-initialize controller for all groups (but bind listeners only for the restored one)
+    this.#initController(previousElement.querySelector("div.group-container"));
+    // notify other controllers that groups were reloaded
+    this.emitEvent("group-restored", this.#groupExpanded.name);
+    // clean stored group data
+    this.#cleanGroupData();
   }
 }

@@ -105,6 +105,7 @@ export class ComponentsView {
     const selector = component !== undefined ? component.selector : "";
     const attribute = component !== undefined ? component.attribute : "";
     const auxiliary = component !== undefined ? component.auxiliary : "";
+    const auxButton = "" === auxiliary ? "Select image" : auxiliary;
     return `<div class="component-card">
               <h3 class="card-title">image config</h3>
               <div class="component-content">
@@ -119,7 +120,7 @@ export class ComponentsView {
                   </div>
                   <div class="widget">
                     <label class="component-image-label">auxiliary:</label>
-                    <input type="button" class="component-image-auxiliary" name="auxiliary" value="Select image" />
+                    <input type="button" class="component-image-auxiliary" name="auxiliary" value="${auxButton}" />
                   </div>
                 </div>
                 <div class="component-toggle">
