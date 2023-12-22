@@ -101,7 +101,7 @@ export class GroupsController {
       // compare column width against title width
       const columnWidth = column.getBoundingClientRect().width;
       const titleWidth = column.querySelector("h2.group-title").getBoundingClientRect().width;
-      if ("update" === column.dataset.action && columnWidth < titleWidth) {
+      if ("update" === column.dataset.action && columnWidth > 0 && columnWidth < titleWidth) {
         console.log("title is not fully visible");
       }
     });
