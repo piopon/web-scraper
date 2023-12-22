@@ -104,7 +104,9 @@ export class GroupsController {
       const titleWidth = columnTitle.getBoundingClientRect().width;
       const titleHeight = columnTitle.getBoundingClientRect().height;
       if ("update" === column.dataset.action && columnWidth > 0 && columnWidth < titleWidth) {
-        columnTitle.classList.add("vertical");
+        const diagonalRad = 60 * Math.PI / 180;
+        const diagonalWidth = Math.abs(titleWidth * Math.cos(diagonalRad)) + Math.abs(titleHeight * Math.sin(diagonalRad));
+        columnTitle.classList.add((columnWidth < diagonalWidth) ? "vertical" : "diagonal");
       }
     });
   }
