@@ -95,7 +95,16 @@ export class GroupsController {
    * Method used to initialize column dimensions (positions and size)
    */
   #initDimensions() {
-    this.#groupColumns.forEach((column) => this.#setDimension(column));
+    this.#groupColumns.forEach((column) => {
+      // set column dimension
+      this.#setDimension(column)
+      // compare column width against title width
+      const columnWidth = column.getBoundingClientRect().width;
+      const titleWidth = column.querySelector("h2.group-title").getBoundingClientRect().width;
+      if ("update" === column.dataset.action && columnWidth < titleWidth) {
+        console.log("title is not fully visible");
+      }
+    });
   }
 
   /**
