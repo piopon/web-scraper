@@ -100,9 +100,10 @@ export class GroupsController {
       this.#setDimension(column)
       // compare column width against title width
       const columnWidth = column.getBoundingClientRect().width;
-      const titleWidth = column.querySelector("h2.group-title").getBoundingClientRect().width;
+      const columnTitle = column.querySelector("h2.group-title");
+      const titleWidth = columnTitle.getBoundingClientRect().width;
       if ("update" === column.dataset.action && columnWidth > 0 && columnWidth < titleWidth) {
-        console.log("title is not fully visible");
+        columnTitle.classList.add("vertical");
       }
     });
   }
