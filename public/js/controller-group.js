@@ -95,10 +95,11 @@ export class GroupsController {
    * Method used to initialize column dimensions (positions and size)
    */
   #initDimensions() {
+    // by default all column titles will be horizontal
+    let titleOrientationClass = "horizontal";
+    // set columns dimensions and adjust title rotate class if necessary
     this.#groupColumns.forEach((column) => {
-      // set column dimension
-      this.#setDimension(column)
-      // fit column title in available width (rotate if necessary)
+      this.#setDimension(column);
       const columnWidth = column.getBoundingClientRect().width;
       const columnTitle = column.querySelector("h2.group-title");
       const titleWidth = columnTitle.getBoundingClientRect().width;
@@ -106,9 +107,11 @@ export class GroupsController {
       if ("update" === column.dataset.action && columnWidth > 0 && columnWidth < titleWidth) {
         const diagonalRad = 60 * Math.PI / 180;
         const diagonalWidth = Math.abs(titleWidth * Math.cos(diagonalRad)) + Math.abs(titleHeight * Math.sin(diagonalRad));
-        columnTitle.classList.add((columnWidth < diagonalWidth) ? "vertical" : "diagonal");
+        titleOrientationClass = (columnWidth < diagonalWidth) ? "vertical" : "diagonal";
       }
     });
+    // apply column title orientation class to all titles
+    this.#groupColumns.forEach((column) => column.querySelector("h2.group-title").classList.add(titleOrientationClass));
   }
 
   /**
