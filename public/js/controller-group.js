@@ -98,10 +98,11 @@ export class GroupsController {
     this.#groupColumns.forEach((column) => {
       // set column dimension
       this.#setDimension(column)
-      // compare column width against title width
+      // fit column title in available width (rotate if necessary)
       const columnWidth = column.getBoundingClientRect().width;
       const columnTitle = column.querySelector("h2.group-title");
       const titleWidth = columnTitle.getBoundingClientRect().width;
+      const titleHeight = columnTitle.getBoundingClientRect().height;
       if ("update" === column.dataset.action && columnWidth > 0 && columnWidth < titleWidth) {
         columnTitle.classList.add("vertical");
       }
