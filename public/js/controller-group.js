@@ -385,6 +385,11 @@ export class GroupsController {
     column.parentNode.removeAttribute("style");
   }
 
+  /**
+   * Method used to retrieve column title orientation class based on available width
+   * @param {Element} column The column for which we want to get title orientation class
+   * @returns group title orientation class ("horizontal", "diagonal", "vertical")
+   */
   #getColumnTitleOrientationClass(column) {
     const columnWidth = column.getBoundingClientRect().width;
     const columnTitle = column.querySelector("h2.group-title");
