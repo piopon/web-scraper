@@ -100,14 +100,14 @@ export class GroupsController {
     // set columns dimensions and adjust title rotate class if necessary
     this.#groupColumns.forEach((column) => {
       this.#setDimension(column);
-      const columnWidth = column.getBoundingClientRect().width;
-      const columnTitle = column.querySelector("h2.group-title");
-      const titleWidth = columnTitle.getBoundingClientRect().width;
-      const titleHeight = columnTitle.getBoundingClientRect().height;
-      if ("update" === column.dataset.action && columnWidth > 0 && columnWidth < titleWidth) {
-        const diagonalRad = 60 * Math.PI / 180;
-        const diagonalWidth = Math.abs(titleWidth * Math.cos(diagonalRad)) + Math.abs(titleHeight * Math.sin(diagonalRad));
-        titleOrientationClass = (columnWidth < diagonalWidth) ? "vertical" : "diagonal";
+      const titleClass = this.#getColumnTitleOrientationClass(column);
+      // update the title orientation class variable for the least matching case
+      if ("vertical" === titleOrientationClass) {
+        return;
+      } else if ("horizontal" === titleOrientationClass) {
+        titleOrientationClass = titleClass;
+      } else {
+        titleOrientationClass = ("vertical" === titleClass) ? titleClass : "diagonal";
       }
     });
     // apply column title orientation class to all titles
