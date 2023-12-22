@@ -148,7 +148,6 @@
   margin: 0;
   position: relative;
   z-index: 2;
-  width: 100%;
   font-size: 3.5vw;
   background: transparent;
   transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
