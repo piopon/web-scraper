@@ -107,7 +107,7 @@ export class GroupsController {
       } else if ("horizontal" === titleOrientationClass) {
         titleOrientationClass = titleClass;
       } else {
-        titleOrientationClass = ("vertical" === titleClass) ? titleClass : "diagonal";
+        titleOrientationClass = "vertical" === titleClass ? titleClass : "diagonal";
       }
     });
     // apply column title orientation class to all titles
@@ -257,9 +257,8 @@ export class GroupsController {
     GroupsService.getGroups(parentUserId)
       .then((data) => {
         let html = "";
-        data[0].groups.forEach((group) => html += GroupsView.toHtml(group));
-        document.querySelector("section.group-columns")
-                .innerHTML = html + GroupsView.toHtml(data[0].user);
+        data[0].groups.forEach((group) => (html += GroupsView.toHtml(group)));
+        document.querySelector("section.group-columns").innerHTML = html + GroupsView.toHtml(data[0].user);
         this.#initController();
         // notify other controllers that groups were reloaded
         this.emitEvent("groups-reloaded", parentUserId);
@@ -392,9 +391,9 @@ export class GroupsController {
     const titleWidth = columnTitle.getBoundingClientRect().width;
     const titleHeight = columnTitle.getBoundingClientRect().height;
     if ("update" === column.dataset.action && columnWidth > 0 && columnWidth < titleWidth) {
-      const diagonalRad = 60 * Math.PI / 180;
+      const diagonalRad = (60 * Math.PI) / 180;
       const diagonalWidth = Math.abs(titleWidth * Math.cos(diagonalRad)) + Math.abs(titleHeight * Math.sin(diagonalRad));
-      return (columnWidth < diagonalWidth) ? "vertical" : "diagonal";
+      return columnWidth < diagonalWidth ? "vertical" : "diagonal";
     }
     return "horizontal";
   }
@@ -469,7 +468,7 @@ export class GroupsController {
       color = color[0] + color[0] + color[1] + color[1] + color[2] + color[2];
     }
     if (6 !== color.length) {
-      CommonController.showToastError(`Cannot generate color. Invalid value: ${color}`)
+      CommonController.showToastError(`Cannot generate color. Invalid value: ${color}`);
       return "black";
     }
     const r = parseInt(color.slice(0, 2), 16);
