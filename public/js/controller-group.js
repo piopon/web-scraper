@@ -386,6 +386,19 @@ export class GroupsController {
     column.parentNode.removeAttribute("style");
   }
 
+  #getColumnTitleOrientationClass(column) {
+    const columnWidth = column.getBoundingClientRect().width;
+    const columnTitle = column.querySelector("h2.group-title");
+    const titleWidth = columnTitle.getBoundingClientRect().width;
+    const titleHeight = columnTitle.getBoundingClientRect().height;
+    if ("update" === column.dataset.action && columnWidth > 0 && columnWidth < titleWidth) {
+      const diagonalRad = 60 * Math.PI / 180;
+      const diagonalWidth = Math.abs(titleWidth * Math.cos(diagonalRad)) + Math.abs(titleHeight * Math.sin(diagonalRad));
+      return (columnWidth < diagonalWidth) ? "vertical" : "diagonal";
+    }
+    return "horizontal";
+  }
+
   /**
    * Method used to receive an array of currently available colors
    * @returns an array with available colors (defined and currently generated)
