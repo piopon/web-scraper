@@ -395,11 +395,15 @@ export class GroupsController {
     const columnTitle = column.querySelector("h2.group-title");
     const titleWidth = columnTitle.getBoundingClientRect().width;
     const titleHeight = columnTitle.getBoundingClientRect().height;
+    // check if we have enough space to fit the title in the specified column
     if ("update" === column.dataset.action && columnWidth > 0 && columnWidth < titleWidth) {
+      // no space to fit it horizontally, consider diagonal orientation (60 degrees tilt)
       const diagonalRad = (60 * Math.PI) / 180;
       const diagonalWidth = Math.abs(titleWidth * Math.cos(diagonalRad)) + Math.abs(titleHeight * Math.sin(diagonalRad));
+      // return diagonal if fits into column width, else use vertical (worst-case scenario)
       return columnWidth < diagonalWidth ? "vertical" : "diagonal";
     }
+    // we have enough space to fit title horizontally (best-case scenario)
     return "horizontal";
   }
 
