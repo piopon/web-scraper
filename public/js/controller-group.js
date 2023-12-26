@@ -95,7 +95,23 @@ export class GroupsController {
    * Method used to initialize column dimensions (positions and size)
    */
   #initDimensions() {
-    this.#groupColumns.forEach((column) => this.#setDimension(column));
+    // by default all column titles will be horizontal
+    let titleOrientationClass = "horizontal";
+    // set columns dimensions and adjust title rotate class if necessary
+    this.#groupColumns.forEach((column) => {
+      this.#setDimension(column);
+      const titleClass = this.#getColumnTitleOrientationClass(column);
+      // update the title orientation class variable for the least matching case
+      if ("vertical" === titleOrientationClass) {
+        return;
+      } else if ("horizontal" === titleOrientationClass) {
+        titleOrientationClass = titleClass;
+      } else {
+        titleOrientationClass = "vertical" === titleClass ? titleClass : "diagonal";
+      }
+    });
+    // apply column title orientation class to all titles
+    this.#groupColumns.forEach((column) => column.querySelector("h2.group-title").classList.add(titleOrientationClass));
   }
 
   /**
@@ -241,9 +257,8 @@ export class GroupsController {
     GroupsService.getGroups(parentUserId)
       .then((data) => {
         let html = "";
-        data[0].groups.forEach((group) => html += GroupsView.toHtml(group));
-        document.querySelector("section.group-columns")
-                .innerHTML = html + GroupsView.toHtml(data[0].user);
+        data[0].groups.forEach((group) => (html += GroupsView.toHtml(group)));
+        document.querySelector("section.group-columns").innerHTML = html + GroupsView.toHtml(data[0].user);
         this.#initController();
         // notify other controllers that groups were reloaded
         this.emitEvent("groups-reloaded", parentUserId);
@@ -371,6 +386,28 @@ export class GroupsController {
   }
 
   /**
+   * Method used to retrieve column title orientation class based on available width
+   * @param {Element} column The column for which we want to get title orientation class
+   * @returns group title orientation class ("horizontal", "diagonal", "vertical")
+   */
+  #getColumnTitleOrientationClass(column) {
+    const columnWidth = column.getBoundingClientRect().width;
+    const columnTitle = column.querySelector("h2.group-title");
+    const titleWidth = columnTitle.getBoundingClientRect().width;
+    const titleHeight = columnTitle.getBoundingClientRect().height;
+    // check if we have enough space to fit the title in the specified column
+    if ("update" === column.dataset.action && columnWidth > 0 && columnWidth < titleWidth) {
+      // no space to fit it horizontally, consider diagonal orientation (60 degrees tilt)
+      const diagonalRad = (60 * Math.PI) / 180;
+      const diagonalWidth = Math.abs(titleWidth * Math.cos(diagonalRad)) + Math.abs(titleHeight * Math.sin(diagonalRad));
+      // return diagonal if fits into column width, else use vertical (worst-case scenario)
+      return columnWidth < diagonalWidth ? "vertical" : "diagonal";
+    }
+    // we have enough space to fit title horizontally (best-case scenario)
+    return "horizontal";
+  }
+
+  /**
    * Method used to receive an array of currently available colors
    * @returns an array with available colors (defined and currently generated)
    */
@@ -440,7 +477,7 @@ export class GroupsController {
       color = color[0] + color[0] + color[1] + color[1] + color[2] + color[2];
     }
     if (6 !== color.length) {
-      CommonController.showToastError(`Cannot generate color. Invalid value: ${color}`)
+      CommonController.showToastError(`Cannot generate color. Invalid value: ${color}`);
       return "black";
     }
     const r = parseInt(color.slice(0, 2), 16);

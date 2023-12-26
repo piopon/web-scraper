@@ -148,8 +148,19 @@
   margin: 0;
   position: relative;
   z-index: 2;
-  width: 100%;
   font-size: 3.5vw;
   background: transparent;
   transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.group-title.horizontal {
+  transform: rotate(0deg);
+}
+
+.group-title.diagonal {
+  transform: rotate(-60deg);
+}
+
+.group-title.vertical {
+  transform: rotate(-90deg);
 }
