@@ -20,6 +20,17 @@ export class ViewRouter {
    */
   createRoutes() {
     const router = express.Router();
+    this.#createGetRoutes(router);
+    this.#createPostRoutes(router);
+
+    return router;
+  }
+
+  /**
+   * Method used to create GET method routes and add them to the router object
+   * @param {Object} router The router object with GET method routes defined
+   */
+  #createGetRoutes(router) {
     router.get("/", (request, response) => {
       const scrapConfig = JSON.parse(fs.readFileSync(this.#configFilePath)).map((item) => new ScrapConfig(item));
       response.render("index", {
@@ -32,7 +43,15 @@ export class ViewRouter {
     router.get("/status", (request, response) => response.render("status", { title: "scraper running status" }));
     router.get("/register", (request, response) => response.render("register", { title: "scraper user registration" }));
     router.get("/login", (request, response) => response.render("login", { title: "scraper user login" }));
-    return router;
+  }
+
+  /**
+   * Method used to create POST method routes and add them to the router object
+   * @param {Object} router The router object with POST method routes defined
+   */
+  #createPostRoutes(router) {
+    router.post("/register", (request, response) => { });
+    router.post("/login", (request, response) => { });
   }
 
   /**
