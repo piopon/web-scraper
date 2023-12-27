@@ -73,6 +73,7 @@ export class WebServer {
     server.use(ParamsParser.middleware);
     server.use(RequestLogger.middleware(this.#status));
     server.use(express.json());
+    server.use(express.urlencoded({ extended: false }));
     // setup web server routes
     const routes = new Map([
       ["/", new ViewRouter(this.#setupConfig.dataConfigPath)],
