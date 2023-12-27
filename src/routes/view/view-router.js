@@ -30,6 +30,7 @@ export class ViewRouter {
       });
     });
     router.get("/status", (request, response) => response.render("status", { title: "scraper running status" }));
+    router.get("/login", (request, response) => response.render("login", { title: "scraper user login" }));
     return router;
   }
 
