@@ -3,8 +3,16 @@ import { ComponentsController } from "./controller-component.js";
 import { ObserversController } from "./controller-observer.js";
 import { GroupsController } from "./controller-group.js";
 
-if (isGroupsInitializationNeeded()) {
-  initializeScraperConfig();
+main();
+
+/**
+ * Method used to initialize script
+ */
+function main() {
+  // initialize scrap config only when main index page is opened
+  if (isGroupsInitializationNeeded()) {
+    initializeScraperConfig();
+  }
 }
 
 /**
