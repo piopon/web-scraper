@@ -7,6 +7,9 @@ import { StatusLogger } from "./status-logger.js";
 import { ViewRouter } from "../routes/view/view-router.js";
 
 import express from "express";
+import flash from "express-flash";
+import session from "express-session";
+import passport from "passport";
 import helpers from "handlebars-helpers";
 import { engine } from "express-handlebars";
 
@@ -74,6 +77,10 @@ export class WebServer {
     server.use(RequestLogger.middleware(this.#status));
     server.use(express.json());
     server.use(express.urlencoded({ extended: false }));
+    server.use(flash());
+    server.use(session({ secret: "SECRET", resave: false, saveUninitialized: false }));
+    server.use(passport.initialize());
+    server.use(passport.session());
     // setup web server routes
     const routes = new Map([
       ["/", new ViewRouter(this.#setupConfig.dataConfigPath)],
