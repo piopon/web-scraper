@@ -6,14 +6,16 @@ import fs from "fs";
 
 export class ViewRouter {
   #configFilePath = undefined;
+  #passport = undefined;
   #users = [];
 
   /**
    * Creates a new view router for displaying configuraion file for the user
    * @param {String} configFile The path to the configuration file
    */
-  constructor(configFile) {
+  constructor(configFile, passport) {
     this.#configFilePath = configFile;
+    this.#passport = passport;
   }
 
   /**
