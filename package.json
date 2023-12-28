@@ -28,6 +28,8 @@
     "express-handlebars": "^7.1.2",
     "handlebars-helpers": "^0.10.0",
     "moment": "^2.29.4",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
     "puppeteer": "^20.9.0"
   },
   "devDependencies": {
