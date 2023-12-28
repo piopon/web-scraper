@@ -4,6 +4,21 @@ import { ObserversController } from "./controller-observer.js";
 import { GroupsController } from "./controller-group.js";
 
 if (isGroupsInitializationNeeded()) {
+  initializeScraperConfig();
+}
+
+/**
+ * Method used to check if scrap groups init is needed (happens only when user opened index page)
+ * @returns true when root index is opened and initialization is needed, false otherwise
+ */
+function isGroupsInitializationNeeded() {
+  return document.querySelector("section.group-columns") != null;
+}
+
+/**
+ * Method used to initialize scraper configuration
+ */
+function initializeScraperConfig() {
   // persist backend variables in frontend local storage at reload
   storeInitialBackendValues();
   // creating mediator class transmitting events between controllers
@@ -16,14 +31,6 @@ if (isGroupsInitializationNeeded()) {
   mediator.register(componentsController);
   mediator.register(observersController);
   mediator.register(groupsController);
-}
-
-/**
- * Method used to check if scrap groups init is needed (happens only when user opened index page)
- * @returns true when root index is opened and initialization is needed, false otherwise
- */
-function isGroupsInitializationNeeded() {
-  return document.querySelector("section.group-columns") != null;
 }
 
 /**
