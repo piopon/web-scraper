@@ -1,10 +1,12 @@
 import { ScrapConfig } from "../../model/scrap-config.js";
 
 import express from "express";
+import bcrypt from "bcrypt";
 import fs from "fs";
 
 export class ViewRouter {
   #configFilePath = undefined;
+  #users = [];
 
   /**
    * Creates a new view router for displaying configuraion file for the user
@@ -50,7 +52,19 @@ export class ViewRouter {
    * @param {Object} router The router object with POST method routes defined
    */
   #createPostRoutes(router) {
-    router.post("/register", (request, response) => { });
+    router.post("/register", async (request, response) => {
+      try {
+        const hashPassword = await bcrypt.hash(request.body.password, 10);
+        this.#users.push({
+          id: Date.now().toString(),
+          email: request.body.email,
+          password: hashPassword
+        });
+        response.redirect("/login");
+      } catch (error) {
+        response.redirect("/register");
+      }
+    });
     router.post("/login", (request, response) => { });
   }
 
