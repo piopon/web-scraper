@@ -69,7 +69,9 @@ export class ViewRouter {
         response.redirect("/register");
       }
     });
-    router.post("/login", (request, response) => { });
+    const loginStrategy = "local";
+    const loginConfig = { successRedirect: "/", failureRedirect: "/login", failureFlash: true };
+    router.post("/login", this.#passport.authenticate(loginStrategy, loginConfig));
   }
 
   /**
