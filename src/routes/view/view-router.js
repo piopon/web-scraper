@@ -3,7 +3,7 @@ import { ScrapConfig } from "../../model/scrap-config.js";
 import express from "express";
 import bcrypt from "bcrypt";
 import fs from "fs";
-import { Strategy } from 'passport-local';
+import { Strategy } from "passport-local";
 
 export class ViewRouter {
   #configFilePath = undefined;
@@ -62,7 +62,7 @@ export class ViewRouter {
         this.#users.push({
           id: Date.now().toString(),
           email: request.body.email,
-          password: hashPassword
+          password: hashPassword,
         });
         response.redirect("/login");
       } catch (error) {
@@ -98,6 +98,6 @@ export class ViewRouter {
     const authenticateUser = (email, password, done) => {
       console.log(`Authenticating user: ${email}`);
     };
-    passport.use(new Strategy( {usernameField: "email", passwordField: "password"}, authenticateUser));
+    passport.use(new Strategy({ usernameField: "email", passwordField: "password" }, authenticateUser));
   }
 }
