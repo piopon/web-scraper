@@ -90,6 +90,10 @@ export class ViewRouter {
     return "PLN|GBP|USD|EUR|CHF|CZK|DKK|CNY|JPY|INR|AUD|CAD";
   }
 
+  /**
+   * Method used to configurate user login strategy (currently only local login is possible)
+   * @param {Object} passport The login auth and stategy object
+   */
   #configLoginStategy(passport) {
     const authenticateUser = (email, password, done) => {
       console.log(`Authenticating user: ${email}`);
