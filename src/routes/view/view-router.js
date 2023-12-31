@@ -103,11 +103,11 @@ export class ViewRouter {
         return done(null, false, { message: "Incorrect login data" });
       }
       try {
-        if (await bcrypt.compare(password, user.password)) {
+        if (!await bcrypt.compare(password, user.password)) {
           // provided password does not match the saved value - incorrect login data
-          return done(null, false, user);
+          return done(null, false, { message: "Incorrect login data" });
         }
-        return done(null, false, { message: "Incorrect login data" });
+        return done(null, user);
       } catch (error) {
         return done(error);
       }
