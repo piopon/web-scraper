@@ -1,4 +1,5 @@
 import { AppVariables } from "./app-variables.js";
+import dotenv from "dotenv"
 import path from "path";
 import url from "url";
 
@@ -12,6 +13,9 @@ export class AppConfig {
   constructor() {
     this.#currDir = path.dirname(url.fileURLToPath(import.meta.url));
     this.#rootDir = path.join(this.#currDir, "..");
+    if (process.env.NODE_ENV !== "production") {
+      dotenv.config();
+    }
   }
 
   /**
