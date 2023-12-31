@@ -78,7 +78,7 @@ export class WebServer {
     server.use(express.json());
     server.use(express.urlencoded({ extended: false }));
     server.use(flash());
-    server.use(session({ secret: "SECRET", resave: false, saveUninitialized: false }));
+    server.use(session({ secret: process.env.SESSION_SHA, resave: false, saveUninitialized: false }));
     server.use(passport.initialize());
     server.use(passport.session());
     // setup web server routes

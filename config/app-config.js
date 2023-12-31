@@ -25,7 +25,7 @@ export class AppConfig {
       screenshotPath: path.join(this.#rootDir, "user", "captures"),
       minLogLevel: AppVariables.LOG_LEVEL_INFO,
       serverConfig: {
-        port: process.env.PORT || 5000,
+        port: process.env.SERVER_PORT || 5000,
       },
       scraperConfig: {
         scrapInterval: 30_000,
