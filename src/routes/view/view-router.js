@@ -96,12 +96,15 @@ export class ViewRouter {
    */
   #configLoginStategy(passport) {
     const authenticateUser = async (email, password, done) => {
+      // check if there is an user with provided email
       const user = this.#users.find(user => user.email === email);
       if (user == null) {
+        // did not find user with provided email - incorrect login data
         return done(null, false, { message: "Incorrect login data" });
       }
       try {
         if (await bcrypt.compare(password, user.password)) {
+          // provided password does not match the saved value - incorrect login data
           return done(null, false, user);
         }
         return done(null, false, { message: "Incorrect login data" });
