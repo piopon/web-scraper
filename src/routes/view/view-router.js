@@ -95,8 +95,19 @@ export class ViewRouter {
    * @param {Object} passport The login auth and stategy object
    */
   #configLoginStategy(passport) {
-    const authenticateUser = (email, password, done) => {
-      console.log(`Authenticating user: ${email}`);
+    const authenticateUser = async (email, password, done) => {
+      const user = this.#users.find(user => user.email === email);
+      if (user == null) {
+        return done(null, false, { message: "Incorrect login data" });
+      }
+      try {
+        if (await bcrypt.compare(password, user.password)) {
+          return done(null, false, user);
+        }
+        return done(null, false, { message: "Incorrect login data" });
+      } catch (error) {
+        return done(error);
+      }
     };
     passport.use(new Strategy({ usernameField: "email", passwordField: "password" }, authenticateUser));
     passport.serializeUser((user, done) => {
