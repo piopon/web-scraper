@@ -113,9 +113,7 @@ export class ViewRouter {
       }
     };
     passport.use(new Strategy({ usernameField: "email", passwordField: "password" }, authenticateUser));
-    passport.serializeUser((user, done) => {
-      console.log(`Serializing user: ${user}`);
-    });
+    passport.serializeUser((user, done) => done(null, user.id));
     passport.deserializeUser((id, done) => {
       console.log(`Serializing user: ${id}`);
     });
