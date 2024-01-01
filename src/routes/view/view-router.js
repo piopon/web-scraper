@@ -1,5 +1,5 @@
+import { AccessChecker } from "../../middleware/access-checker.js";
 import { ScrapConfig } from "../../model/scrap-config.js";
-import { UserAccess } from "../../middleware/user-access.js";
 
 import express from "express";
 import bcrypt from "bcrypt";
@@ -38,7 +38,7 @@ export class ViewRouter {
    * @param {Object} router The router object with GET method routes defined
    */
   #createGetRoutes(router) {
-    router.get("/", UserAccess.canAccessContent, (request, response) => {
+    router.get("/", AccessChecker.canViewContent, (request, response) => {
       const scrapConfig = JSON.parse(fs.readFileSync(this.#configFilePath)).map((item) => new ScrapConfig(item));
       response.render("index", {
         title: "scraper configuration",
