@@ -63,7 +63,7 @@ export class ViewRouter {
    * @param {Object} router The router object with POST method routes defined
    */
   #createPostRoutes(router) {
-    router.post("/register", async (request, response) => {
+    router.post("/register", AccessChecker.canViewSessionUser, async (request, response) => {
       try {
         const hashPassword = await bcrypt.hash(request.body.password, 10);
         this.#users.push({
@@ -78,7 +78,7 @@ export class ViewRouter {
     });
     const loginStrategy = "local";
     const loginConfig = { successRedirect: "/", failureRedirect: "/login", failureFlash: true };
-    router.post("/login", this.#passport.authenticate(loginStrategy, loginConfig));
+    router.post("/login", AccessChecker.canViewSessionUser, this.#passport.authenticate(loginStrategy, loginConfig));
   }
 
   /**
