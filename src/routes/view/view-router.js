@@ -48,8 +48,12 @@ export class ViewRouter {
       });
     });
     router.get("/status", (request, response) => response.render("status", { title: "scraper running status" }));
-    router.get("/register", (request, response) => response.render("register", { title: "scraper user registration" }));
-    router.get("/login", (request, response) => response.render("login", { title: "scraper user login" }));
+    router.get("/register", AccessChecker.canViewSessionUser, (request, response) =>
+      response.render("register", { title: "scraper user registration" })
+    );
+    router.get("/login", AccessChecker.canViewSessionUser, (request, response) =>
+      response.render("login", { title: "scraper user login" })
+    );
   }
 
   /**
