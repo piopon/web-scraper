@@ -47,7 +47,9 @@ export class ViewRouter {
         currencies: this.#getSupportedCurrencies(),
       });
     });
-    router.get("/status", (request, response) => response.render("status", { title: "scraper running status" }));
+    router.get("/status", AccessChecker.canViewContent, (request, response) =>
+      response.render("status", { title: "scraper running status" })
+    );
     router.get("/register", AccessChecker.canViewSessionUser, (request, response) =>
       response.render("register", { title: "scraper user registration" })
     );
