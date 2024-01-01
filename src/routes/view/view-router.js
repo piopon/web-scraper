@@ -1,4 +1,5 @@
 import { ScrapConfig } from "../../model/scrap-config.js";
+import { UserAccess } from "../../middleware/user-access.js";
 
 import express from "express";
 import bcrypt from "bcrypt";
@@ -37,7 +38,7 @@ export class ViewRouter {
    * @param {Object} router The router object with GET method routes defined
    */
   #createGetRoutes(router) {
-    router.get("/", this.#isAuthenticated, (request, response) => {
+    router.get("/", UserAccess.canAccessContent, (request, response) => {
       const scrapConfig = JSON.parse(fs.readFileSync(this.#configFilePath)).map((item) => new ScrapConfig(item));
       response.render("index", {
         title: "scraper configuration",
@@ -115,12 +116,5 @@ export class ViewRouter {
     passport.use(new Strategy({ usernameField: "email", passwordField: "password" }, authenticateUser));
     passport.serializeUser((user, done) => done(null, user.id));
     passport.deserializeUser((id, done) => done(null, this.#users.find(user => user.id === id)));
-  }
-
-  #isAuthenticated(request, response, next) {
-    if (request.isAuthenticated()) {
-      return next();
-    }
-    response.redirect("/login");
   }
 }
