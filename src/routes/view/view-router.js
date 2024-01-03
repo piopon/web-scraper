@@ -81,9 +81,13 @@ export class ViewRouter {
     const loginStrategy = "local";
     const loginConfig = { successRedirect: "/", failureRedirect: "/login", failureFlash: true };
     router.post("/login", AccessChecker.canViewSessionUser, this.#passport.authenticate(loginStrategy, loginConfig));
-    router.post("/logout", AccessChecker.canViewContent, (request, response) => {
-      request.logOut();
-      response.redirect("/login");
+    router.post("/logout", AccessChecker.canViewContent, (request, response, next) => {
+      request.logout((err) => {
+        if (err) {
+          return next(err);
+        }
+        response.redirect("/login");
+      });
     });
   }
 
