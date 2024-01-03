@@ -49,7 +49,10 @@ export class ViewRouter {
       });
     });
     router.get("/status", AccessChecker.canViewContent, (request, response) =>
-      response.render("status", { title: "scraper running status" })
+      response.render("status", {
+        title: "scraper running status",
+        user: request.user.name,
+      })
     );
     router.get("/register", AccessChecker.canViewSessionUser, (request, response) =>
       response.render("register", { title: "scraper user registration" })
