@@ -68,6 +68,7 @@ export class ViewRouter {
         const hashPassword = await bcrypt.hash(request.body.password, 10);
         this.#users.push({
           id: Date.now().toString(),
+          name: request.body.name,
           email: request.body.email,
           password: hashPassword,
         });
