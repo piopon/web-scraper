@@ -42,6 +42,7 @@ export class ViewRouter {
       const scrapConfig = JSON.parse(fs.readFileSync(this.#configFilePath)).map((item) => new ScrapConfig(item));
       response.render("index", {
         title: "scraper configuration",
+        user: request.user.name,
         content: scrapConfig,
         categories: this.#getSupportedCategories(),
         currencies: this.#getSupportedCurrencies(),
