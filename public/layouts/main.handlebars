@@ -28,10 +28,12 @@
         <header id="content-header">
           <h3>{{title}}</h3>
           {{#if user}}
-          <form action="/logout" method="POST">
-            <label for="user-logout">{{user}}</label>
-            <button type="submit" id="user-logout"><i class="fa fa-sign-out"></i>logout</button>
-          </form>
+          <div class="user-management">
+            <h4>user: {{user}}</h4>
+            <form action="/logout" method="POST">
+              <button type="submit" id="user-logout"><i class="fa fa-sign-out"></i>logout</button>
+            </form>
+          </div>
           {{/if}}
         </header>
         {{{body}}}
