@@ -78,13 +78,14 @@ header#content-header {
   height: 2.5rem;
   display: flex;
   align-items: center;
-  padding-left: 1rem;
+  justify-content: space-between;
   color: black;
   background-image: linear-gradient(slateblue 15%, mediumslateblue);
 }
 
 header#content-header h3 {
-  margin: 0;
+  margin: 0rem 0rem 0rem 1rem;
+}
 }
 
 div#main-content {
