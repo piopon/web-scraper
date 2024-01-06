@@ -94,8 +94,10 @@ header#content-header div.user-management {
   margin: 0rem 1rem 0rem 0rem;
 }
 
-div.user-management h4 {
-  margin: 0rem;
+div.user-management h5 {
+  display: block;
+  font-weight: 100;
+  margin: 0.15rem 0 0 0;
 }
 
 div.user-management form {
