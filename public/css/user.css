@@ -13,6 +13,10 @@ p.user-title {
   font-size: 1.5rem;
 }
 
+section.user-management form {
+    width: 25%;
+}
+
 div.user-element {
   margin: 0.3rem 0;
 }
@@ -31,7 +35,7 @@ div.user-element input {
 button.user-action {
   height: 2rem;
   width: 100%;
-  margin: 0.5rem 0;
+  margin: 1rem 0 0 0;
   border: 1px solid black;
   border-radius: 0.5rem;
   background-color: lightgray;
