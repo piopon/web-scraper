@@ -1,0 +1,18 @@
+section.user-management {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: calc(100% - 2.5rem);
+  transition: height 1s;
+}
+
+section.user-management.hide {
+  height: 0px;
+  transition: height 1s;
+}
+
+section.user-management.show {
+  height: calc(100% - 2.5rem);
+  transition: height 1s;
+}
