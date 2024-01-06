@@ -40,6 +40,9 @@ button.user-action {
   border-radius: 0.25rem;
   background-color: rgb(190, 180, 255);
   transition: background-color 0.5s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 button.user-action:hover {

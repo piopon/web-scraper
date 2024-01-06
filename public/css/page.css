@@ -109,12 +109,15 @@ div.user-management form {
 
 div.user-management button#user-logout {
   height: 60%;
-  width: 3.5rem;
+  width: 4rem;
   margin: 0rem 0rem 0rem 0.5rem;
   border: 1px solid black;
-  border-radius: 0.5rem;
-  background-color: lightgray;
+  border-radius: 0.25rem;
+  background-color: rgb(190, 180, 255);
   transition: background-color 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 button#user-logout i {
