@@ -16,3 +16,47 @@ section.user-management.show {
   height: calc(100% - 2.5rem);
   transition: height 1s;
 }
+
+p.user-title {
+  margin: 0.5rem auto;
+  display: block;
+  color: black;
+  font-size: 1.5rem;
+}
+
+div.user-element {
+  margin: 0.3rem 0;
+}
+
+label.user-label {
+  display: block;
+  color: black;
+  font-size: 1rem;
+}
+
+div.user-element input {
+  height: 1.5rem;
+  width: 100%;
+}
+
+button.user-action {
+  height: 2rem;
+  width: 100%;
+  margin: 0.5rem 0;
+  border: 1px solid black;
+  border-radius: 0.5rem;
+  background-color: lightgray;
+  transition: background-color 0.5s ease;
+}
+
+button.user-action:hover {
+  cursor: pointer;
+  background-color: lime;
+  transition: background-color 0.5s ease;
+}
+
+div.user-switch {
+  margin: 0 auto;
+  color: black;
+  font-size: 0.75rem;
+}
