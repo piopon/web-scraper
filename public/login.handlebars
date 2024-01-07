@@ -1,7 +1,8 @@
 <section class="user-management">
-  <p class="user-title">welcome back.</p>
   {{#if messages.error}}
-  <p class="user-error">{{messages.error}}</p>
+  <p class="user-error">{{messages.error}}. Please try again.</p>
+  {{else}}
+  <p class="user-title">welcome back.</p>
   {{/if}}
   <form action="/login" method="POST">
     <div class="user-element">
