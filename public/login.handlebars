@@ -1,5 +1,8 @@
 <section class="user-management">
   <p class="user-title">welcome back.</p>
+  {{#if messages.error}}
+  <p class="user-error">{{messages.error}}</p>
+  {{/if}}
   <form action="/login" method="POST">
     <div class="user-element">
         <label class="user-label" for="user-email">e-mail</label>
