@@ -21,7 +21,12 @@
   align-items: center;
   transform: translateX(100%);
   font-size: 0.8rem;
+  opacity: 1;
   animation: toast-move-left 0.2s linear forwards;
+}
+
+.toast.auto-hide {
+  animation: toast-move-left-and-hide 6000ms linear forwards;
 }
 
 .toast i {

@@ -158,6 +158,21 @@
   }
 }
 
+@keyframes toast-move-left-and-hide {
+  3.33% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  99.99% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+}
+
 @keyframes toast-move-left {
   100% {
     transform: translateX(0);
