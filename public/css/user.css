@@ -24,12 +24,14 @@ div.user-element {
 label.user-label {
   display: block;
   color: black;
-  font-size: 1rem;
+  font-size: 0.8rem;
 }
 
 div.user-element input {
-  height: 1.5rem;
+  height: 1.8rem;
   width: 100%;
+  border: 1px solid black;
+  border-radius: 0.25rem;
 }
 
 button.user-action {
