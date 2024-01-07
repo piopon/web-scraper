@@ -1,9 +1,5 @@
 <section class="user-management">
-  {{#if messages.error}}
-  <p class="user-error">{{messages.error}}. Please try again.</p>
-  {{else}}
   <p class="user-title">welcome back.</p>
-  {{/if}}
   <form action="/login" method="POST">
     <div class="user-element">
         <label class="user-label" for="user-email">e-mail</label>
@@ -20,4 +16,11 @@
   <div class="user-switch">
     <p>not registered? go to <a href="/register">register</a> page.</p>
   </div>
+  {{#if messages.error}}
+  <div id="toastBox">
+    <div class="toast auto-hide error">
+      <i class="fa fa-times-circle"></i>{{messages.error}}. Please try again.
+    </div>
+  </div>
+  {{/if}}
 </section>
