@@ -7,6 +7,9 @@ import { StatusLogger } from "./status-logger.js";
 import { ViewRouter } from "../routes/view/view-router.js";
 
 import express from "express";
+import passport from "passport";
+import flash from "express-flash";
+import session from "express-session";
 import helpers from "handlebars-helpers";
 import { engine } from "express-handlebars";
 
@@ -73,9 +76,14 @@ export class WebServer {
     server.use(ParamsParser.middleware);
     server.use(RequestLogger.middleware(this.#status));
     server.use(express.json());
+    server.use(express.urlencoded({ extended: false }));
+    server.use(flash());
+    server.use(session(this.#getSessionConfiguration()));
+    server.use(passport.initialize());
+    server.use(passport.session());
     // setup web server routes
     const routes = new Map([
-      ["/", new ViewRouter(this.#setupConfig.dataConfigPath)],
+      ["/", new ViewRouter(this.#setupConfig.dataConfigPath, passport)],
       ["/api/v1/data", new DataRouter(this.#setupConfig.dataOutputPath)],
       ["/api/v1/configs", new ConfigRouter(this.#setupConfig.dataConfigPath)],
       ["/api/v1/status", new StatusRouter(this.#status, this.#components)],
@@ -83,5 +91,17 @@ export class WebServer {
     routes.forEach((router, url) => server.use(url, router.createRoutes()));
 
     return server;
+  }
+
+  /**
+   * Method used to retrieve session configuration object
+   * @returns session configuration object
+   */
+  #getSessionConfiguration() {
+    return {
+      secret: process.env.SESSION_SHA,
+      resave: false,
+      saveUninitialized: false,
+    };
   }
 }

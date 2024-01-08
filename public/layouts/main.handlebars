@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="./css/groups.css" />
     <link rel="stylesheet" href="./css/observers.css" />
     <link rel="stylesheet" href="./css/components.css" />
+    <link rel="stylesheet" href="./css/user.css" />
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link rel="icon" type="image/x-icon" href="./img/icon/favicon-32.ico" />
     <link href="https://fonts.googleapis.com/css2?family=Sedgwick+Ave&display=swap" rel="stylesheet" />
@@ -27,6 +28,14 @@
       <div id="main-content">
         <header id="content-header">
           <h3>{{title}}</h3>
+          {{#if user}}
+          <div class="user-management">
+            <h5>user: {{user}}</h5>
+            <form action="/logout" method="POST">
+              <button type="submit" id="user-logout"><i class="fa fa-sign-out"></i>logout</button>
+            </form>
+          </div>
+          {{/if}}
         </header>
         {{{body}}}
       </div>

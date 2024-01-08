@@ -78,13 +78,57 @@ header#content-header {
   height: 2.5rem;
   display: flex;
   align-items: center;
-  padding-left: 1rem;
+  justify-content: space-between;
   color: black;
   background-image: linear-gradient(slateblue 15%, mediumslateblue);
 }
 
 header#content-header h3 {
-  margin: 0;
+  margin: 0rem 0rem 0rem 1rem;
+}
+
+header#content-header div.user-management {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  margin: 0rem 1rem 0rem 0rem;
+}
+
+div.user-management h5 {
+  display: block;
+  font-weight: 100;
+  margin: 0.15rem 0 0 0;
+}
+
+div.user-management form {
+  display: flex;
+  height: 100%;
+  margin: 0rem;
+  align-items: center;
+}
+
+div.user-management button#user-logout {
+  height: 60%;
+  width: 4rem;
+  margin: 0rem 0rem 0rem 0.5rem;
+  border: 1px solid black;
+  border-radius: 0.25rem;
+  background-color: rgb(190, 180, 255);
+  transition: background-color 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button#user-logout i {
+  font-size: 1rem;
+  margin-right: 0.25rem;
+}
+
+div.user-management button#user-logout:hover {
+  cursor: pointer;
+  background-color: crimson;
+  transition: background-color 0.25s ease;
 }
 
 div#main-content {

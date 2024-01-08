@@ -1,0 +1,23 @@
+<section class="user-management">
+  <p class="user-title">create your account.</p>
+  <form action="/register" method="POST">
+    <div class="user-element">
+        <label class="user-label" for="user-name">name</label>
+        <input type="text" id="user-name" name="name" required>
+    </div>
+    <div class="user-element">
+        <label class="user-label" for="user-email">e-mail</label>
+        <input type="email" id="user-email" name="email" required>
+    </div>
+    <div class="user-element">
+        <label class="user-label" for="user-password">password</label>
+        <input type="password" id="user-password" name="password" required>
+    </div>
+    <button class="user-action" type="submit">
+      <i class="fa fa-check-square-o"></i>register
+    </button>
+  </form>
+  <div class="user-switch">
+    <p>already registered? go to <a href="/login">login</a> page</p>
+  </div>
+</section>
