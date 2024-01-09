@@ -110,6 +110,14 @@ export class ViewRouter {
     return "PLN|GBP|USD|EUR|CHF|CZK|DKK|CNY|JPY|INR|AUD|CAD";
   }
 
+  #configAuthenitcation(passport) {
+    // configure authenticate logic for specific endpoints
+    this.#configLoginStategy(passport);
+    // configure common serialize and deserialize user logic
+    passport.serializeUser((user, done) => done(null, user.id));
+    passport.deserializeUser((id, done) => done(null, this.#users.find(user => user.id === id)));
+  }
+
   /**
    * Method used to configurate user login strategy (currently only local login is possible)
    * @param {Object} passport The login auth and stategy object
@@ -133,7 +141,5 @@ export class ViewRouter {
       }
     };
     passport.use("local-login", new Strategy({ usernameField: "email", passwordField: "password" }, authenticateUser));
-    passport.serializeUser((user, done) => done(null, user.id));
-    passport.deserializeUser((id, done) => done(null, this.#users.find(user => user.id === id)));
   }
 }
