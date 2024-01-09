@@ -18,7 +18,7 @@ export class ViewRouter {
   constructor(configFile, passport) {
     this.#configFilePath = configFile;
     this.#passport = passport;
-    this.#configLoginStategy(passport);
+    this.#configAuthenitcation(passport);
   }
 
   /**
