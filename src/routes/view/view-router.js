@@ -68,7 +68,7 @@ export class ViewRouter {
    */
   #createPostRoutes(router) {
     const signStrategy = "local-register";
-    const signConfig = { successRedirect: "/login", failureRedirect: "/register", failureFlash: true };
+    const signConfig = { successRedirect: "/login", failureRedirect: "/register", failureFlash: true, session: false };
     router.post("/register", AccessChecker.canViewSessionUser, this.#passport.authenticate(signStrategy, signConfig));
     const loginStrategy = "local-login";
     const loginConfig = { successRedirect: "/", failureRedirect: "/login", failureFlash: true };
