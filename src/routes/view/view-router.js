@@ -81,7 +81,7 @@ export class ViewRouter {
         response.redirect("/register");
       }
     });
-    const loginStrategy = "local";
+    const loginStrategy = "local-login";
     const loginConfig = { successRedirect: "/", failureRedirect: "/login", failureFlash: true };
     router.post("/login", AccessChecker.canViewSessionUser, this.#passport.authenticate(loginStrategy, loginConfig));
     router.post("/logout", AccessChecker.canViewContent, (request, response, next) => {
@@ -132,7 +132,7 @@ export class ViewRouter {
         return done(error);
       }
     };
-    passport.use(new Strategy({ usernameField: "email", passwordField: "password" }, authenticateUser));
+    passport.use("local-login", new Strategy({ usernameField: "email", passwordField: "password" }, authenticateUser));
     passport.serializeUser((user, done) => done(null, user.id));
     passport.deserializeUser((id, done) => done(null, this.#users.find(user => user.id === id)));
   }
