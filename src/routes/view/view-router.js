@@ -113,7 +113,8 @@ export class ViewRouter {
    * @param {Object} passport The login auth and stategy object
    */
   #configLoginStategy(passport) {
-    const authenticateUser = async (email, password, done) => {
+    const options = { usernameField: "email", passwordField: "password" };
+    const verify = async (email, password, done) => {
       // check if there is an user with provided email
       const user = this.#users.find((user) => user.email === email);
       if (user == null) {
@@ -130,7 +131,7 @@ export class ViewRouter {
         return done(error);
       }
     };
-    passport.use("local-login", new Strategy({ usernameField: "email", passwordField: "password" }, authenticateUser));
+    passport.use("local-login", new Strategy(options, verify));
   }
 
   #configRegisterStategy(passport) {
