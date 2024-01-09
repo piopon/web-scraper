@@ -142,4 +142,24 @@ export class ViewRouter {
     };
     passport.use("local-login", new Strategy({ usernameField: "email", passwordField: "password" }, authenticateUser));
   }
+
+  #configRegisterStategy(passport) {
+    const options = { usernameField: "email", passwordField: "password", passReqToCallback: true };
+    const verify = async (request, username, password, done) => {
+      try {
+        const hashPassword = await bcrypt.hash(password, 10);
+        const newUser = {
+          id: Date.now().toString(),
+          name: request.body.name,
+          email: username,
+          password: hashPassword,
+        };
+        this.#users.push(newUser);
+        return done(null, newUser);
+      } catch (error) {
+        return done(error);
+      }
+    };
+    passport.use("local-register", new Strategy(options, verify));
+  }
 }
