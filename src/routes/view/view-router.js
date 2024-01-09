@@ -102,6 +102,7 @@ export class ViewRouter {
   #configAuthenitcation(passport) {
     // configure authenticate logic for specific endpoints
     this.#configLoginStategy(passport);
+    this.#configRegisterStategy(passport);
     // configure common serialize and deserialize user logic
     passport.serializeUser((user, done) => done(null, user.id));
     passport.deserializeUser((id, done) => done(null, this.#users.find(user => user.id === id)));
