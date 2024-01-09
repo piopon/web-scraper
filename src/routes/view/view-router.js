@@ -67,20 +67,9 @@ export class ViewRouter {
    * @param {Object} router The router object with POST method routes defined
    */
   #createPostRoutes(router) {
-    router.post("/register", AccessChecker.canViewSessionUser, async (request, response) => {
-      try {
-        const hashPassword = await bcrypt.hash(request.body.password, 10);
-        this.#users.push({
-          id: Date.now().toString(),
-          name: request.body.name,
-          email: request.body.email,
-          password: hashPassword,
-        });
-        response.redirect("/login");
-      } catch (error) {
-        response.redirect("/register");
-      }
-    });
+    const signStrategy = "local-register";
+    const signConfig = { successRedirect: "/login", failureRedirect: "/register", failureFlash: true };
+    router.post("/register", AccessChecker.canViewSessionUser, this.#passport.authenticate(signStrategy, signConfig));
     const loginStrategy = "local-login";
     const loginConfig = { successRedirect: "/", failureRedirect: "/login", failureFlash: true };
     router.post("/login", AccessChecker.canViewSessionUser, this.#passport.authenticate(loginStrategy, loginConfig));
