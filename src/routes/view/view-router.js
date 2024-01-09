@@ -67,20 +67,28 @@ export class ViewRouter {
    * @param {Object} router The router object with POST method routes defined
    */
   #createPostRoutes(router) {
-    const signStrategy = "local-register";
-    const signConfig = { successRedirect: "/login", failureRedirect: "/register", failureFlash: true, session: false };
-    router.post("/register", AccessChecker.canViewSessionUser, this.#passport.authenticate(signStrategy, signConfig));
-    const loginStrategy = "local-login";
-    const loginConfig = { successRedirect: "/", failureRedirect: "/login", failureFlash: true };
-    router.post("/login", AccessChecker.canViewSessionUser, this.#passport.authenticate(loginStrategy, loginConfig));
-    router.post("/logout", AccessChecker.canViewContent, (request, response, next) => {
+    // user sessions endpoints (sign-in and log-in)
+    const register = this.#passport.authenticate("local-register", {
+      successRedirect: "/login",
+      failureRedirect: "/register",
+      failureFlash: true,
+      session: false,
+    });
+    router.post("/register", AccessChecker.canViewSessionUser, register);
+    const login = this.#passport.authenticate("local-login", {
+      successRedirect: "/",
+      failureRedirect: "/login",
+      failureFlash: true,
+    });
+    router.post("/login", AccessChecker.canViewSessionUser, login);
+    // user content endpoints (log-out)
+    const logout = (request, response, next) => {
       request.logout((err) => {
-        if (err) {
-          return next(err);
-        }
+        if (err) return next(err);
         response.redirect("/login");
       });
-    });
+    };
+    router.post("/logout", AccessChecker.canViewContent, logout);
   }
 
   /**
