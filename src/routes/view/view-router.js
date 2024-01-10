@@ -146,6 +146,12 @@ export class ViewRouter {
     const options = { usernameField: "email", passwordField: "password", passReqToCallback: true };
     const verify = async (request, username, password, done) => {
       try {
+        // check if there isn't an user with provided email
+        if (this.#users.find((user) => user.email === username) != null) {
+          // find existing user with provided email - incorrect reguster data
+          return done(null, false, { message: "Provided email is already in use." });
+        }
+        // create new user with hashed password and add it to database
         const hashPassword = await bcrypt.hash(password, 10);
         const newUser = {
           id: Date.now().toString(),
