@@ -107,6 +107,10 @@ export class ViewRouter {
     return "PLN|GBP|USD|EUR|CHF|CZK|DKK|CNY|JPY|INR|AUD|CAD";
   }
 
+  /**
+   * Method used to configure Passport authentication object
+   * @param {Object} passport The auth object to be configured
+   */
   #configAuthenitcation(passport) {
     // configure authenticate logic for specific endpoints
     this.#configLoginStategy(passport);
@@ -142,6 +146,10 @@ export class ViewRouter {
     passport.use("local-login", new Strategy(options, verify));
   }
 
+  /**
+   * Method used to configurate user register strategy
+   * @param {Object} passport The login auth and stategy object
+   */
   #configRegisterStategy(passport) {
     const options = { usernameField: "email", passwordField: "password", passReqToCallback: true };
     const verify = async (request, username, password, done) => {
