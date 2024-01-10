@@ -20,4 +20,11 @@
   <div class="user-switch">
     <p>already registered? go to <a href="/login">login</a> page</p>
   </div>
+  {{#if messages.error}}
+  <div id="toastBox">
+    <div class="toast auto-hide error">
+      <i class="fa fa-times-circle"></i>{{messages.error}}. Please try again.
+    </div>
+  </div>
+  {{/if}}
 </section>

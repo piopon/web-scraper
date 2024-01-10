@@ -18,7 +18,7 @@ export class ViewRouter {
   constructor(configFile, passport) {
     this.#configFilePath = configFile;
     this.#passport = passport;
-    this.#configLoginStategy(passport);
+    this.#configAuthenitcation(passport);
   }
 
   /**
@@ -67,31 +67,28 @@ export class ViewRouter {
    * @param {Object} router The router object with POST method routes defined
    */
   #createPostRoutes(router) {
-    router.post("/register", AccessChecker.canViewSessionUser, async (request, response) => {
-      try {
-        const hashPassword = await bcrypt.hash(request.body.password, 10);
-        this.#users.push({
-          id: Date.now().toString(),
-          name: request.body.name,
-          email: request.body.email,
-          password: hashPassword,
-        });
-        response.redirect("/login");
-      } catch (error) {
-        response.redirect("/register");
-      }
+    // user sessions endpoints (sign-in and log-in)
+    const registerCallback = this.#passport.authenticate("local-register", {
+      successRedirect: "/login",
+      failureRedirect: "/register",
+      failureFlash: true,
+      session: false,
     });
-    const loginStrategy = "local";
-    const loginConfig = { successRedirect: "/", failureRedirect: "/login", failureFlash: true };
-    router.post("/login", AccessChecker.canViewSessionUser, this.#passport.authenticate(loginStrategy, loginConfig));
-    router.post("/logout", AccessChecker.canViewContent, (request, response, next) => {
+    router.post("/register", AccessChecker.canViewSessionUser, registerCallback);
+    const loginCallback = this.#passport.authenticate("local-login", {
+      successRedirect: "/",
+      failureRedirect: "/login",
+      failureFlash: true,
+    });
+    router.post("/login", AccessChecker.canViewSessionUser, loginCallback);
+    // user content endpoints (log-out)
+    const logoutCallback = (request, response, next) => {
       request.logout((err) => {
-        if (err) {
-          return next(err);
-        }
+        if (err) return next(err);
         response.redirect("/login");
       });
-    });
+    };
+    router.post("/logout", AccessChecker.canViewContent, logoutCallback);
   }
 
   /**
@@ -111,11 +108,25 @@ export class ViewRouter {
   }
 
   /**
+   * Method used to configure Passport authentication object
+   * @param {Object} passport The auth object to be configured
+   */
+  #configAuthenitcation(passport) {
+    // configure authenticate logic for specific endpoints
+    this.#configLoginStategy(passport);
+    this.#configRegisterStategy(passport);
+    // configure common serialize and deserialize user logic
+    passport.serializeUser((user, done) => done(null, user.id));
+    passport.deserializeUser((id, done) => done(null, this.#users.find(user => user.id === id)));
+  }
+
+  /**
    * Method used to configurate user login strategy (currently only local login is possible)
    * @param {Object} passport The login auth and stategy object
    */
   #configLoginStategy(passport) {
-    const authenticateUser = async (email, password, done) => {
+    const options = { usernameField: "email", passwordField: "password" };
+    const verify = async (email, password, done) => {
       // check if there is an user with provided email
       const user = this.#users.find((user) => user.email === email);
       if (user == null) {
@@ -132,8 +143,36 @@ export class ViewRouter {
         return done(error);
       }
     };
-    passport.use(new Strategy({ usernameField: "email", passwordField: "password" }, authenticateUser));
-    passport.serializeUser((user, done) => done(null, user.id));
-    passport.deserializeUser((id, done) => done(null, this.#users.find(user => user.id === id)));
+    passport.use("local-login", new Strategy(options, verify));
+  }
+
+  /**
+   * Method used to configurate user register strategy
+   * @param {Object} passport The login auth and stategy object
+   */
+  #configRegisterStategy(passport) {
+    const options = { usernameField: "email", passwordField: "password", passReqToCallback: true };
+    const verify = async (request, username, password, done) => {
+      try {
+        // check if there isn't an user with provided email
+        if (this.#users.find((user) => user.email === username) != null) {
+          // find existing user with provided email - incorrect reguster data
+          return done(null, false, { message: "Provided email is already in use." });
+        }
+        // create new user with hashed password and add it to database
+        const hashPassword = await bcrypt.hash(password, 10);
+        const newUser = {
+          id: Date.now().toString(),
+          name: request.body.name,
+          email: username,
+          password: hashPassword,
+        };
+        this.#users.push(newUser);
+        return done(null, newUser);
+      } catch (error) {
+        return done(error);
+      }
+    };
+    passport.use("local-register", new Strategy(options, verify));
   }
 }
