@@ -13,7 +13,12 @@ export class WebDatabase {
   }
 
   async start() {
-    mongoose.connect(`mongodb://${this.#dbConfig.url}:${this.#dbConfig.port}/${this.#dbConfig.name}`);
+    const connectOptions = {
+      dbName: this.#dbConfig.name,
+      user: this.#dbConfig.user,
+      pass: this.#dbConfig.password,
+    };
+    mongoose.connect(`mongodb://${this.#dbConfig.url}:${this.#dbConfig.port}`, connectOptions);
   }
 
   async stop() {
