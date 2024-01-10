@@ -68,27 +68,27 @@ export class ViewRouter {
    */
   #createPostRoutes(router) {
     // user sessions endpoints (sign-in and log-in)
-    const register = this.#passport.authenticate("local-register", {
+    const registerCallback = this.#passport.authenticate("local-register", {
       successRedirect: "/login",
       failureRedirect: "/register",
       failureFlash: true,
       session: false,
     });
-    router.post("/register", AccessChecker.canViewSessionUser, register);
-    const login = this.#passport.authenticate("local-login", {
+    router.post("/register", AccessChecker.canViewSessionUser, registerCallback);
+    const loginCallback = this.#passport.authenticate("local-login", {
       successRedirect: "/",
       failureRedirect: "/login",
       failureFlash: true,
     });
-    router.post("/login", AccessChecker.canViewSessionUser, login);
+    router.post("/login", AccessChecker.canViewSessionUser, loginCallback);
     // user content endpoints (log-out)
-    const logout = (request, response, next) => {
+    const logoutCallback = (request, response, next) => {
       request.logout((err) => {
         if (err) return next(err);
         response.redirect("/login");
       });
     };
-    router.post("/logout", AccessChecker.canViewContent, logout);
+    router.post("/logout", AccessChecker.canViewContent, logoutCallback);
   }
 
   /**
