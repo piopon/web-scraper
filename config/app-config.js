@@ -1,5 +1,5 @@
 import { AppVariables } from "./app-variables.js";
-import dotenv from "dotenv"
+import dotenv from "dotenv";
 import path from "path";
 import url from "url";
 
