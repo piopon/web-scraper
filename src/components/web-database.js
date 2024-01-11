@@ -8,12 +8,19 @@ export class WebDatabase {
   #status = undefined;
   #dbConfig = undefined;
 
+  /**
+   * Creates a new web database from the specified configuration
+   * @param {Object} config The object containing database configuration values
+   */
   constructor(config) {
     this.#dbConfig = config.databaseConfig;
     this.#status = new StatusLogger(WebDatabase.#COMPONENT_NAME, config.minLogLevel);
     this.#status.info("Created");
   }
 
+  /**
+   * Method used to start database connection
+   */
   async start() {
     const connectOptions = {
       dbName: this.#dbConfig.name,
@@ -27,6 +34,9 @@ export class WebDatabase {
       .catch((err) => this.#status.error(err));
   }
 
+  /**
+   * Method used to stop database operations and disconnect
+   */
   async stop() {
     mongoose.disconnect();
   }
