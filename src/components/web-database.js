@@ -1,3 +1,5 @@
+import { StatusLogger } from "./status-logger.js";
+
 import mongoose from "mongoose";
 
 export class WebDatabase {
