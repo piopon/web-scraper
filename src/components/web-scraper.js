@@ -25,6 +25,7 @@ export class WebScraper {
   /**
    * Creates a new web scraper with specified configuration
    * @param {Object} config The object containing scraper configuration
+   * @param {Number} userId The identifier of the user using the web scraper component
    */
   constructor(config, userId) {
     this.#setupConfig = config;
