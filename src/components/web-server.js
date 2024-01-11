@@ -14,7 +14,7 @@ import helpers from "handlebars-helpers";
 import { engine } from "express-handlebars";
 
 export class WebServer {
-  static #LOGGER_NAME = "web-server ";
+  static #LOGGER_NAME = "web-server  ";
 
   #setupConfig = undefined;
   #components = [];
