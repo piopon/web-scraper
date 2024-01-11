@@ -19,6 +19,7 @@ export class WebDatabase {
       dbName: this.#dbConfig.name,
       user: this.#dbConfig.user,
       pass: this.#dbConfig.password,
+      family: 4,
     };
     mongoose
       .connect(`mongodb://${this.#dbConfig.url}:${this.#dbConfig.port}`, connectOptions)
