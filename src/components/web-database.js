@@ -18,7 +18,10 @@ export class WebDatabase {
       user: this.#dbConfig.user,
       pass: this.#dbConfig.password,
     };
-    mongoose.connect(`mongodb://${this.#dbConfig.url}:${this.#dbConfig.port}`, connectOptions);
+    mongoose
+      .connect(`mongodb://${this.#dbConfig.url}:${this.#dbConfig.port}`, connectOptions)
+      .then(() => this.#status.info("Connected to database"))
+      .catch((err) => this.#status.error(err));
   }
 
   async stop() {
