@@ -1,5 +1,5 @@
 import { AppVariables } from "./app-variables.js";
-import dotenv from "dotenv"
+import dotenv from "dotenv";
 import path from "path";
 import url from "url";
 
@@ -30,6 +30,13 @@ export class AppConfig {
       minLogLevel: AppVariables.LOG_LEVEL_INFO,
       serverConfig: {
         port: process.env.SERVER_PORT || 5000,
+      },
+      databaseConfig: {
+        url: process.env.DB_ADDRESS || "localhost",
+        name: process.env.DB_NAME,
+        port: process.env.DB_PORT || 27017,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
       },
       scraperConfig: {
         scrapInterval: 30_000,

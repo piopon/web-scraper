@@ -10,7 +10,7 @@ import path from "path";
 import fs from "fs";
 
 export class WebScraper {
-  static #COMPONENT_NAME = "web-scraper";
+  static #COMPONENT_NAME = "web-scraper ";
   static #RUNNING_STATUS = "Running";
 
   #scrapingInProgress = false;
@@ -25,6 +25,7 @@ export class WebScraper {
   /**
    * Creates a new web scraper with specified configuration
    * @param {Object} config The object containing scraper configuration
+   * @param {Number} userId The identifier of the user using the web scraper component
    */
   constructor(config, userId) {
     this.#setupConfig = config;
