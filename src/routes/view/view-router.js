@@ -166,7 +166,9 @@ export class ViewRouter {
           return done(null, false, { message: "Provided email is already in use." });
         }
         // create new user with hashed password, add it to database and proceed with passport logic
-        return done(null, await ScrapUser.getDatabaseModel().create({
+        return done(
+          null,
+          await ScrapUser.getDatabaseModel().create({
             name: request.body.name,
             email: username,
             password: await bcrypt.hash(password, 10),
