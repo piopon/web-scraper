@@ -156,7 +156,8 @@ export class ViewRouter {
     const verify = async (request, username, password, done) => {
       try {
         // check if there isn't an user with provided email
-        if (this.#users.find((user) => user.email === username) != null) {
+        const user = await ScrapUser.getDatabaseModel().find({ email: username });
+        if (user.length > 0) {
           // find existing user with provided email - incorrect reguster data
           return done(null, false, { message: "Provided email is already in use." });
         }
