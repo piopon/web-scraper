@@ -169,7 +169,7 @@ export class ViewRouter {
           password: hashPassword,
         };
         this.#users.push(newUser);
-        await ScrapUser.getDatabaseModel(newUser).save();
+        await ScrapUser.getDatabaseModel().create(newUser);
         return done(null, newUser);
       } catch (error) {
         return done(error);
