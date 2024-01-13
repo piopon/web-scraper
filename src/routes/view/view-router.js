@@ -165,15 +165,13 @@ export class ViewRouter {
           // find existing user with provided email - incorrect reguster data
           return done(null, false, { message: "Provided email is already in use." });
         }
-        // create new user with hashed password and add it to database
-        const hashPassword = await bcrypt.hash(password, 10);
-        const newUser = {
-          name: request.body.name,
-          email: username,
-          password: hashPassword,
-        };
-        await ScrapUser.getDatabaseModel().create(newUser);
-        return done(null, newUser);
+        // create new user with hashed password, add it to database and proceed with passport logic
+        return done(null, await ScrapUser.getDatabaseModel().create({
+            name: request.body.name,
+            email: username,
+            password: await bcrypt.hash(password, 10),
+          })
+        );
       } catch (error) {
         return done(error);
       }
