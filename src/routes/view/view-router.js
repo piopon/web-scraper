@@ -117,8 +117,13 @@ export class ViewRouter {
     this.#configLoginStategy(passport);
     this.#configRegisterStategy(passport);
     // configure common serialize and deserialize user logic
-    passport.serializeUser((user, done) => done(null, user.id));
-    passport.deserializeUser((id, done) => done(null, this.#users.find(user => user.id === id)));
+    passport.serializeUser((user, done) => {
+      done(null, user._id);
+    });
+    passport.deserializeUser(async (id, done) => {
+      const user = await ScrapUser.getDatabaseModel().findById(id);
+      done(null, user);
+    });
   }
 
   /**
