@@ -1,8 +1,13 @@
 import mongoose from "mongoose";
 
 export class ScrapUser {
-  static db() {
-    return mongoose.model("user", ScrapUser.#getDatabaseSchema());
+  static db(user) {
+    const userDatabaseModel = mongoose.model("user", ScrapUser.#getDatabaseSchema());
+    return new userDatabaseModel({
+      name: user.name,
+      email: user.email,
+      password: user.password,
+    });
   }
 
   static #getDatabaseSchema() {
