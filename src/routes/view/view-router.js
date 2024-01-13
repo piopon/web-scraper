@@ -10,7 +10,6 @@ import { Strategy } from "passport-local";
 export class ViewRouter {
   #configFilePath = undefined;
   #passport = undefined;
-  #users = [];
 
   /**
    * Creates a new view router for displaying configuraion file for the user
@@ -174,7 +173,6 @@ export class ViewRouter {
           email: username,
           password: hashPassword,
         };
-        this.#users.push(newUser);
         await ScrapUser.getDatabaseModel().create(newUser);
         return done(null, newUser);
       } catch (error) {
