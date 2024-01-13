@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 
 export class ScrapUser {
-  static #DATABASE_COLLECTION_NAME = "scraper-user";
+  static #DATABASE_MODEL = mongoose.model("scraper-user", ScrapUser.#getDatabaseSchema());
 
   static getDatabaseModel() {
-    return mongoose.model(ScrapUser.#DATABASE_COLLECTION_NAME, ScrapUser.#getDatabaseSchema());
+    return ScrapUser.#DATABASE_MODEL;
   }
 
   static #getDatabaseSchema() {
