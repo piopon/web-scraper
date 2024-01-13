@@ -129,17 +129,17 @@ export class ViewRouter {
     const options = { usernameField: "email", passwordField: "password" };
     const verify = async (email, password, done) => {
       // check if there is an user with provided email
-      const user = this.#users.find((user) => user.email === email);
-      if (user == null) {
+      const user = await ScrapUser.getDatabaseModel().find({ email: email });
+      if (user.length !== 1) {
         // did not find user with provided email - incorrect login data
         return done(null, false, { message: "Incorrect login data" });
       }
       try {
-        if (!(await bcrypt.compare(password, user.password))) {
+        if (!(await bcrypt.compare(password, user[0].password))) {
           // provided password does not match the saved value - incorrect login data
           return done(null, false, { message: "Incorrect login data" });
         }
-        return done(null, user);
+        return done(null, user[0]);
       } catch (error) {
         return done(error);
       }
