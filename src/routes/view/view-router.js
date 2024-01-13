@@ -1,5 +1,6 @@
 import { AccessChecker } from "../../middleware/access-checker.js";
 import { ScrapConfig } from "../../model/scrap-config.js";
+import { ScrapUser } from "../../model/scrap-user.js";
 
 import express from "express";
 import bcrypt from "bcrypt";
@@ -168,6 +169,7 @@ export class ViewRouter {
           password: hashPassword,
         };
         this.#users.push(newUser);
+        await ScrapUser.getDatabaseModel(newUser).save();
         return done(null, newUser);
       } catch (error) {
         return done(error);
