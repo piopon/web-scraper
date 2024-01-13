@@ -168,7 +168,6 @@ export class ViewRouter {
         // create new user with hashed password and add it to database
         const hashPassword = await bcrypt.hash(password, 10);
         const newUser = {
-          id: Date.now().toString(),
           name: request.body.name,
           email: username,
           password: hashPassword,
