@@ -138,18 +138,18 @@ export class ViewRouter {
         const user = await ScrapUser.getDatabaseModel().find({ email: email });
         if (user.length !== 1) {
           // did not find user with provided email - incorrect login data
-          return done(null, false, { message: "Incorrect login data" });
+          return done(null, false, { message: "Incorrect login data. Please try again." });
         }
         if (!(await bcrypt.compare(password, user[0].password))) {
           // provided password does not match the saved value - incorrect login data
-          return done(null, false, { message: "Incorrect login data" });
+          return done(null, false, { message: "Incorrect login data. Please try again." });
         }
         return done(null, user[0]);
       } catch (error) {
         let message = error.message;
         if (error instanceof MongooseError) {
           if (error.name === "MongooseError" && message.includes(".find()")) {
-            message = "Database connection has timed out. Check connection status and try again.";
+            message = "Database connection has timed out. Check connection status and please try again.";
           }
         }
         return done(null, false, { message: message });
