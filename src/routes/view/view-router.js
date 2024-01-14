@@ -170,7 +170,7 @@ export class ViewRouter {
         const user = await ScrapUser.getDatabaseModel().find({ email: username });
         if (user.length > 0) {
           // find existing user with provided email - incorrect reguster data
-          return done(null, false, { message: "Provided email is already in use." });
+          return done(null, false, { message: "Provided email is already in use. Please try again." });
         }
         // create new user with hashed password, add it to database and proceed with passport logic
         return done(
@@ -182,7 +182,13 @@ export class ViewRouter {
           })
         );
       } catch (error) {
-        return done(error);
+        let message = error.message;
+        if (error instanceof MongooseError) {
+          if (error.name === "MongooseError" && message.includes(".find()")) {
+            message = "Database connection has timed out. Check connection status and please try again.";
+          }
+        }
+        return done(null, false, { message: message });
       }
     };
     passport.use("local-register", new Strategy(options, verify));
