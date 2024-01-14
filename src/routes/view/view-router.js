@@ -152,6 +152,9 @@ export class ViewRouter {
             message = "Database connection has timed out. Check connection status and please try again.";
           }
         }
+        if (message.includes("ECONNREFUSED")) {
+          message = "Database connection has been broken. Check connection status and please try again.";
+        }
         return done(null, false, { message: message });
       }
     };
@@ -187,6 +190,9 @@ export class ViewRouter {
           if (error.name === "MongooseError" && message.includes(".find()")) {
             message = "Database connection has timed out. Check connection status and please try again.";
           }
+        }
+        if (message.includes("ECONNREFUSED")) {
+          message = "Database connection has been broken. Check connection status and please try again.";
         }
         return done(null, false, { message: message });
       }
