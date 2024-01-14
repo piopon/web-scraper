@@ -145,7 +145,7 @@ export class ViewRouter {
         }
         return done(null, user[0]);
       } catch (error) {
-        return done(error);
+        return done(null, false, { message: error.message });
       }
     };
     passport.use("local-login", new Strategy(options, verify));
