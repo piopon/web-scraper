@@ -5,6 +5,7 @@ import { ScrapUser } from "../../model/scrap-user.js";
 import express from "express";
 import bcrypt from "bcrypt";
 import fs from "fs";
+import { MongooseError } from "mongoose";
 import { Strategy } from "passport-local";
 
 export class ViewRouter {
@@ -145,7 +146,13 @@ export class ViewRouter {
         }
         return done(null, user[0]);
       } catch (error) {
-        return done(null, false, { message: error.message });
+        let message = error.message;
+        if (error instanceof MongooseError) {
+          if (error.name === "MongooseError" && message.includes(".find()")) {
+            message = "Database connection has timed out. Check connection status and try again.";
+          }
+        }
+        return done(null, false, { message: message });
       }
     };
     passport.use("local-login", new Strategy(options, verify));
