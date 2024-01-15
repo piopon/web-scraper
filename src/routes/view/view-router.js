@@ -189,6 +189,9 @@ export class ViewRouter {
         if (error instanceof MongooseError) {
           if (error.name === "MongooseError" && message.includes(".find()")) {
             message = "Database connection has timed out. Check connection status and please try again.";
+          } else if (error.name === "ValidationError") {
+            const invalidPath = Object.keys(error.errors);
+            message = error.errors[invalidPath[0]].properties.message;
           }
         }
         if (message.includes("ECONNREFUSED")) {
