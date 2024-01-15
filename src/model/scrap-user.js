@@ -25,6 +25,7 @@ export class ScrapUser {
       },
       email: {
         type: String,
+        unique: true,
         lowercase: true,
         required: [true, "Email can't be empty"],
         match: [/\S+@\S+\.\S+/, "Provided email is invalid"],
