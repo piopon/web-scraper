@@ -9,6 +9,8 @@ import { MongooseError } from "mongoose";
 import { Strategy } from "passport-local";
 
 export class ViewRouter {
+  static #ENCRYPT_SALT = 10;
+
   #configFilePath = undefined;
   #passport = undefined;
 
@@ -184,7 +186,7 @@ export class ViewRouter {
           await ScrapUser.getDatabaseModel().create({
             name: request.body.name,
             email: username,
-            password: await bcrypt.hash(password, 10),
+            password: await bcrypt.hash(password, ViewRouter.#ENCRYPT_SALT),
           })
         );
       } catch (error) {
