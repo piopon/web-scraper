@@ -21,14 +21,14 @@ export class ScrapUser {
         type: String,
         lowercase: true,
         required: [true, "User name can't be empty"],
-        match: [/^[a-zA-Z0-9]+$/, "Provided user name is invalid"],
+        match: [/^[a-zA-Z0-9]+$/, "Provided user name is invalid: {VALUE}"],
       },
       email: {
         type: String,
         unique: true,
         lowercase: true,
         required: [true, "Email can't be empty"],
-        match: [/\S+@\S+\.\S+/, "Provided email is invalid"],
+        match: [/\S+@\S+\.\S+/, "Provided email is invalid: {VALUE}"],
         index: true,
       },
       password: {
