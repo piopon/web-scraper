@@ -17,7 +17,12 @@ export class ScrapUser {
    */
   static #getDatabaseSchema() {
     return {
-      name: String,
+      name: {
+        type: String,
+        lowercase: true,
+        required: [true, "User name can't be empty"],
+        match: [/^[a-zA-Z0-9]+$/, 'Provided user name is invalid']
+      },
       email: {
         type: String,
         lowercase: true,
