@@ -25,7 +25,10 @@ export class ScrapUser {
         match: [/\S+@\S+\.\S+/, "Provided email is invalid"],
         index: true
       },
-      password: String,
+      password: {
+        type: String,
+        required: true
+      },
     };
   }
 }
