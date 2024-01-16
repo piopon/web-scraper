@@ -1,15 +1,18 @@
 import { AccessChecker } from "../../middleware/access-checker.js";
 import { ScrapConfig } from "../../model/scrap-config.js";
+import { ScrapUser } from "../../model/scrap-user.js";
 
 import express from "express";
 import bcrypt from "bcrypt";
 import fs from "fs";
+import { MongooseError } from "mongoose";
 import { Strategy } from "passport-local";
 
 export class ViewRouter {
+  static #ENCRYPT_SALT = 10;
+
   #configFilePath = undefined;
   #passport = undefined;
-  #users = [];
 
   /**
    * Creates a new view router for displaying configuraion file for the user
@@ -116,8 +119,13 @@ export class ViewRouter {
     this.#configLoginStategy(passport);
     this.#configRegisterStategy(passport);
     // configure common serialize and deserialize user logic
-    passport.serializeUser((user, done) => done(null, user.id));
-    passport.deserializeUser((id, done) => done(null, this.#users.find(user => user.id === id)));
+    passport.serializeUser((user, done) => {
+      done(null, user._id);
+    });
+    passport.deserializeUser(async (id, done) => {
+      const user = await ScrapUser.getDatabaseModel().findById(id);
+      done(null, user);
+    });
   }
 
   /**
@@ -127,20 +135,32 @@ export class ViewRouter {
   #configLoginStategy(passport) {
     const options = { usernameField: "email", passwordField: "password" };
     const verify = async (email, password, done) => {
-      // check if there is an user with provided email
-      const user = this.#users.find((user) => user.email === email);
-      if (user == null) {
-        // did not find user with provided email - incorrect login data
-        return done(null, false, { message: "Incorrect login data" });
-      }
       try {
-        if (!(await bcrypt.compare(password, user.password))) {
-          // provided password does not match the saved value - incorrect login data
-          return done(null, false, { message: "Incorrect login data" });
+        // check if there is an user with provided email
+        const user = await ScrapUser.getDatabaseModel().find({ email: email });
+        if (user.length !== 1) {
+          // did not find user with provided email - incorrect login data
+          return done(null, false, { message: "Incorrect login data. Please try again." });
         }
-        return done(null, user);
+        if (!(await bcrypt.compare(password, user[0].password))) {
+          // provided password does not match the saved value - incorrect login data
+          return done(null, false, { message: "Incorrect login data. Please try again." });
+        }
+        return done(null, user[0]);
       } catch (error) {
-        return done(error);
+        let message = error.message;
+        if (error instanceof MongooseError) {
+          if (error.name === "MongooseError" && message.includes(".find()")) {
+            message = "Database connection has timed out. Check connection status and please try again.";
+          } else if (error.name === "ValidationError") {
+            const invalidPath = Object.keys(error.errors);
+            message = error.errors[invalidPath[0]].properties.message;
+          }
+        }
+        if (message.includes("ECONNREFUSED")) {
+          message = "Database connection has been broken. Check connection status and please try again.";
+        }
+        return done(null, false, { message: message });
       }
     };
     passport.use("local-login", new Strategy(options, verify));
@@ -155,22 +175,34 @@ export class ViewRouter {
     const verify = async (request, username, password, done) => {
       try {
         // check if there isn't an user with provided email
-        if (this.#users.find((user) => user.email === username) != null) {
+        const user = await ScrapUser.getDatabaseModel().find({ email: username });
+        if (user.length > 0) {
           // find existing user with provided email - incorrect reguster data
-          return done(null, false, { message: "Provided email is already in use." });
+          return done(null, false, { message: "Provided email is already in use. Please try again." });
         }
-        // create new user with hashed password and add it to database
-        const hashPassword = await bcrypt.hash(password, 10);
-        const newUser = {
-          id: Date.now().toString(),
-          name: request.body.name,
-          email: username,
-          password: hashPassword,
-        };
-        this.#users.push(newUser);
-        return done(null, newUser);
+        // create new user with hashed password, add it to database and proceed with passport logic
+        return done(
+          null,
+          await ScrapUser.getDatabaseModel().create({
+            name: request.body.name,
+            email: username,
+            password: await bcrypt.hash(password, ViewRouter.#ENCRYPT_SALT),
+          })
+        );
       } catch (error) {
-        return done(error);
+        let message = error.message;
+        if (error instanceof MongooseError) {
+          if (error.name === "MongooseError" && message.includes(".find()")) {
+            message = "Database connection has timed out. Check connection status and please try again.";
+          } else if (error.name === "ValidationError") {
+            const invalidPath = Object.keys(error.errors);
+            message = error.errors[invalidPath[0]].properties.message;
+          }
+        }
+        if (message.includes("ECONNREFUSED")) {
+          message = "Database connection has been broken. Check connection status and please try again.";
+        }
+        return done(null, false, { message: message });
       }
     };
     passport.use("local-register", new Strategy(options, verify));
