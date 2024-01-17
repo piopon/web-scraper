@@ -353,9 +353,9 @@ export class ConfigRouter {
   #validateBody(url, requestBody) {
     // select appropriate body validator from specified URL path
     const bodyValidator = new Map([
-      ["/", { schema: ScrapConfig.getSchema(), value: new ScrapConfig(requestBody) }],
-      ["/groups", { schema: ScrapGroup.getSchema(), value: new ScrapGroup(requestBody) }],
-      ["/groups/observers", { schema: ScrapObserver.getSchema(), value: new ScrapObserver(requestBody) }],
+      ["/", { schema: ScrapConfig.getRequestBodySchema(), value: new ScrapConfig(requestBody) }],
+      ["/groups", { schema: ScrapGroup.getRequestBodySchema(), value: new ScrapGroup(requestBody) }],
+      ["/groups/observers", { schema: ScrapObserver.getRequestBodySchema(), value: new ScrapObserver(requestBody) }],
     ]).get(url.indexOf("?") > 0 ? url.substring(0, url.indexOf("?")) : url);
     // validate JSON structure of the request body content
     const schemaValidate = new Ajv().compile(bodyValidator.schema);

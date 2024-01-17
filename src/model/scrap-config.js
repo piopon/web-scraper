@@ -52,16 +52,16 @@ export class ScrapConfig {
   }
 
   /**
-   * Method used to retrieve JSON schema
-   * @returns JSON schema object
+   * Method used to retrieve JSON schema used for validating request body
+   * @returns request body JSON schema object
    */
-  static getSchema() {
+  static getRequestBodySchema() {
     return {
       type: "object",
       additionalProperties: false,
       properties: {
         user: { type: "integer", minimum: 0 },
-        groups: { type: "array", items: ScrapGroup.getSchema() },
+        groups: { type: "array", items: ScrapGroup.getRequestBodySchema() },
       },
       required: ["user"],
     };

@@ -68,10 +68,10 @@ export class ScrapGroup {
   }
 
   /**
-   * Method used to retrieve JSON schema
-   * @returns JSON schema object
+   * Method used to retrieve JSON schema used for validating request body
+   * @returns request body JSON schema object
    */
-  static getSchema() {
+  static getRequestBodySchema() {
     return {
       type: "object",
       additionalProperties: false,
@@ -79,7 +79,7 @@ export class ScrapGroup {
         name: { type: "string", minLength: 1 },
         category: { type: "string", minLength: 1 },
         domain: { type: "string", minLength: 1 },
-        observers: { type: "array", items: ScrapObserver.getSchema() },
+        observers: { type: "array", items: ScrapObserver.getRequestBodySchema() },
       },
       required: ["name", "domain", "observers"],
     };

@@ -82,10 +82,10 @@ export class ScrapObserver {
   }
 
   /**
-   * Method used to retrieve JSON schema
-   * @returns JSON schema object
+   * Method used to retrieve JSON schema used for validating request body
+   * @returns request body JSON schema object
    */
-  static getSchema() {
+  static getRequestBodySchema() {
     return {
       type: "object",
       additionalProperties: false,
@@ -95,9 +95,9 @@ export class ScrapObserver {
         target: { enum: ScrapObserver.#TARGET_OPTIONS },
         history: { enum: ScrapObserver.#HISTORY_OPTIONS },
         container: { type: "string" },
-        title: ScrapComponent.getSchema(),
-        image: ScrapComponent.getSchema(),
-        price: ScrapComponent.getSchema(),
+        title: ScrapComponent.getRequestBodySchema(),
+        image: ScrapComponent.getRequestBodySchema(),
+        price: ScrapComponent.getRequestBodySchema(),
       },
       required: ["name", "path", "price"],
     };
