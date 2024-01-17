@@ -97,7 +97,7 @@ export class ScrapConfig {
   static getDatabaseSchema() {
     return new mongoose.Schema({
       user: mongoose.Types.ObjectId,
-      groups: [String],
+      groups: [ScrapGroup.getDatabaseSchema()],
     });
   }
 }
