@@ -83,7 +83,7 @@ export class ScrapConfig {
   }
 
   /**
-   * Method used to receive the DB model of the scraper user object
+   * Method used to receive the DB model of the scraper configuration object
    * @returns database model object
    */
   static getDatabaseModel() {
@@ -91,7 +91,7 @@ export class ScrapConfig {
   }
 
   /**
-   * Method used to receive the DB schema of the scraper user object
+   * Method used to receive the DB schema of the scraper configuration object
    * @returns database schema object
    */
   static getDatabaseSchema() {
