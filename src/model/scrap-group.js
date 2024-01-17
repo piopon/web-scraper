@@ -2,6 +2,8 @@ import { ModelUtils } from "../utils/model-utils.js";
 import { ScrapError } from "./scrap-exception.js";
 import { ScrapObserver } from "./scrap-observer.js";
 
+import mongoose from "mongoose";
+
 export class ScrapGroup {
   static #NAME_REGEX = /[a-zA-Z]/;
 
@@ -120,5 +122,18 @@ export class ScrapGroup {
         required: ["name"],
       };
     }
+  }
+
+  /**
+   * Method used to receive the DB schema of the scraper group object
+   * @returns database schema object
+   */
+  static getDatabaseSchema() {
+    return new mongoose.Schema({
+      name: String,
+      category: String,
+      domain: String,
+      observers: [String],
+    });
   }
 }
