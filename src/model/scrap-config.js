@@ -3,7 +3,7 @@ import { ScrapError } from "./scrap-exception.js";
 import { ScrapGroup } from "./scrap-group.js";
 
 export class ScrapConfig {
-  static #DATABASE_MODEL = mongoose.model("scraper-config", ScrapConfig.#getDatabaseSchema());
+  static #DATABASE_MODEL = mongoose.model("scraper-config", ScrapConfig.getDatabaseSchema());
 
   /**
    * Creates a new scrap config from a specified object
@@ -92,7 +92,7 @@ export class ScrapConfig {
    * Method used to receive the DB schema of the scraper user object
    * @returns database schema object
    */
-  static #getDatabaseSchema() {
+  static getDatabaseSchema() {
     return new mongoose.Schema({
       user: mongoose.Types.ObjectId,
       groups: [String],

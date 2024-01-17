@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export class ScrapUser {
-  static #DATABASE_MODEL = mongoose.model("scraper-user", ScrapUser.#getDatabaseSchema());
+  static #DATABASE_MODEL = mongoose.model("scraper-user", ScrapUser.getDatabaseSchema());
 
   /**
    * Method used to receive the DB model of the scraper user object
@@ -15,7 +15,7 @@ export class ScrapUser {
    * Method used to receive the DB schema of the scraper user object
    * @returns database schema object
    */
-  static #getDatabaseSchema() {
+  static getDatabaseSchema() {
     return new mongoose.Schema({
       name: {
         type: String,
