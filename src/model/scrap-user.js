@@ -40,7 +40,7 @@ export class ScrapUser {
       configs: {
         type: [mongoose.Types.ObjectId],
         ref: ScrapConfig.getDatabaseModel().modelName,
-      }
+      },
     });
   }
 }
