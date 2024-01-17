@@ -77,4 +77,15 @@ export class ScrapConfig {
       },
     };
   }
+
+  /**
+   * Method used to receive the DB schema of the scraper user object
+   * @returns database schema object
+   */
+  static #getDatabaseSchema() {
+    return new mongoose.Schema({
+      user: mongoose.Types.ObjectId,
+      groups: [String],
+    });
+  }
 }
