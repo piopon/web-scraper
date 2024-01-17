@@ -16,7 +16,7 @@ export class ScrapUser {
    * @returns database schema object
    */
   static #getDatabaseSchema() {
-    return {
+    return new mongoose.Schema({
       name: {
         type: String,
         lowercase: true,
@@ -35,6 +35,6 @@ export class ScrapUser {
         type: String,
         required: true,
       },
-    };
+    });
   }
 }
