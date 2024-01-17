@@ -1,3 +1,5 @@
+import { ScrapConfig } from "./scrap-config.js";
+
 import mongoose from "mongoose";
 
 export class ScrapUser {
@@ -35,6 +37,10 @@ export class ScrapUser {
         type: String,
         required: true,
       },
+      configs: {
+        type: [mongoose.Types.ObjectId],
+        ref: ScrapConfig.getDatabaseModel().modelName,
+      }
     });
   }
 }
