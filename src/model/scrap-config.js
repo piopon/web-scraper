@@ -2,6 +2,8 @@ import { ModelUtils } from "../utils/model-utils.js";
 import { ScrapError } from "./scrap-exception.js";
 import { ScrapGroup } from "./scrap-group.js";
 
+import mongoose from "mongoose";
+
 export class ScrapConfig {
   static #DATABASE_MODEL = mongoose.model("scraper-config", ScrapConfig.getDatabaseSchema());
 
