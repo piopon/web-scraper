@@ -68,11 +68,11 @@ export class ScrapConfig {
   }
 
   /**
-   * Method used to retrieve accepted query params object
+   * Method used to retrieve JSON schema used for validating request query params
    * @param {String} method The request method type to get accepted query params
-   * @returns accepted query parameters object
+   * @returns query parameters JSON schema object
    */
-  static getQueryParams(method) {
+  static getRequestParamsSchema(method) {
     return {
       type: "object",
       additionalProperties: false,

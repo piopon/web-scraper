@@ -335,10 +335,10 @@ export class ConfigRouter {
    */
   #validateQueryParams(method, url, params) {
     const paramsValidator = new Map([
-      ["/", ScrapConfig.getQueryParams(method)],
-      ["/groups", ScrapGroup.getQueryParams(method)],
-      ["/groups/observers", ScrapObserver.getQueryParams(method)],
-      ["/groups/observers/components", ScrapComponent.getQueryParams(method)],
+      ["/", ScrapConfig.getRequestParamsSchema(method)],
+      ["/groups", ScrapGroup.getRequestParamsSchema(method)],
+      ["/groups/observers", ScrapObserver.getRequestParamsSchema(method)],
+      ["/groups/observers/components", ScrapComponent.getRequestParamsSchema(method)],
     ]).get(url.indexOf("?") > 0 ? url.substring(0, url.indexOf("?")) : url);
     const paramsValidate = new Ajv().compile(paramsValidator);
     return { valid: paramsValidate(params), cause: paramsValidate.errors };
