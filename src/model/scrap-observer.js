@@ -2,6 +2,8 @@ import { ModelUtils } from "../utils/model-utils.js";
 import { ScrapComponent } from "./scrap-component.js";
 import { ScrapError } from "./scrap-exception.js";
 
+import mongoose from "mongoose";
+
 export class ScrapObserver {
   static #NAME_REGEX = /[a-zA-Z]/;
   static #TARGET_OPTIONS = ["load", "domcontentloaded", "networkidle0", "networkidle2"];

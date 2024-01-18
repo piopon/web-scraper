@@ -1,6 +1,8 @@
 import { ModelUtils } from "../utils/model-utils.js";
 import { ScrapError } from "./scrap-exception.js";
 
+import mongoose from "mongoose";
+
 export class ScrapComponent {
   /**
    * Creates a new scrap component from a specified object
