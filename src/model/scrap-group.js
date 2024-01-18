@@ -133,7 +133,7 @@ export class ScrapGroup {
       name: String,
       category: String,
       domain: String,
-      observers: [String],
+      observers: [ScrapObserver.getDatabaseSchema()],
     });
   }
 }
