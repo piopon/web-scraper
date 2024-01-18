@@ -84,4 +84,17 @@ export class ScrapComponent {
       },
     };
   }
+
+  /**
+   * Method used to receive the DB schema of the scraper component object
+   * @returns database schema object
+   */
+  static getDatabaseSchema() {
+    return new mongoose.Schema({
+      interval: String,
+      selector: String,
+      attribute: String,
+      auxiliary: String,
+    });
+  }
 }
