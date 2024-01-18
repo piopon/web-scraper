@@ -140,4 +140,21 @@ export class ScrapObserver {
       };
     }
   }
+
+  /**
+   * Method used to receive the DB schema of the scraper observer object
+   * @returns database schema object
+   */
+  static getDatabaseSchema() {
+    return new mongoose.Schema({
+      name: String,
+      path: String,
+      target: String,
+      history: String,
+      container: String,
+      title: ScrapComponent.getDatabaseSchema(),
+      image: ScrapComponent.getDatabaseSchema(),
+      price: ScrapComponent.getDatabaseSchema(),
+    });
+  }
 }
