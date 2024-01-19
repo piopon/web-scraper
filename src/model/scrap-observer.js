@@ -157,6 +157,14 @@ export class ScrapObserver {
         type: String,
         required: true,
       },
+      target: {
+        type: String,
+        enum: ScrapObserver.#TARGET_OPTIONS,
+      },
+      history: {
+        type: String,
+        enum: ScrapObserver.#HISTORY_OPTIONS,
+      },
       container: String,
       title: ScrapComponent.getDatabaseSchema(),
       image: ScrapComponent.getDatabaseSchema(),
