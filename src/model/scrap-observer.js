@@ -149,10 +149,14 @@ export class ScrapObserver {
    */
   static getDatabaseSchema() {
     return new mongoose.Schema({
-      name: String,
-      path: String,
-      target: String,
-      history: String,
+      name: {
+        type: String,
+        required: true,
+      },
+      path: {
+        type: String,
+        required: true,
+      },
       container: String,
       title: ScrapComponent.getDatabaseSchema(),
       image: ScrapComponent.getDatabaseSchema(),
