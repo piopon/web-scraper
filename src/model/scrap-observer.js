@@ -151,19 +151,25 @@ export class ScrapObserver {
     return new mongoose.Schema({
       name: {
         type: String,
-        required: true,
+        required: [true, "Missing observer name"],
       },
       path: {
         type: String,
-        required: true,
+        required: [true, "Missing observer path"],
       },
       target: {
         type: String,
-        enum: ScrapObserver.#TARGET_OPTIONS,
+        enum: {
+          values: ScrapObserver.#TARGET_OPTIONS,
+          message : "Invalid `{PATH}` value: `{VALUE}`",
+        },
       },
       history: {
         type: String,
-        enum: ScrapObserver.#HISTORY_OPTIONS,
+        enum: {
+          values: ScrapObserver.#HISTORY_OPTIONS,
+          message : "Invalid `{PATH}` value: `{VALUE}`",
+        },
       },
       container: String,
       title: ScrapComponent.getDatabaseSchema(),
