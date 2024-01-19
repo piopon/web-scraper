@@ -142,7 +142,10 @@ export class ScrapGroup {
         type: String,
         required: [true, "Missing group domain"],
       },
-      observers: [ScrapObserver.getDatabaseSchema()],
+      observers: {
+        type: [ScrapObserver.getDatabaseSchema()],
+        require: [true, "Missing group observers"],
+      },
     });
   }
 }
