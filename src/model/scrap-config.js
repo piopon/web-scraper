@@ -2,7 +2,11 @@ import { ModelUtils } from "../utils/model-utils.js";
 import { ScrapError } from "./scrap-exception.js";
 import { ScrapGroup } from "./scrap-group.js";
 
+import mongoose from "mongoose";
+
 export class ScrapConfig {
+  static #DATABASE_MODEL = mongoose.model("scraper-config", ScrapConfig.getDatabaseSchema());
+
   /**
    * Creates a new scrap config from a specified object
    * @param {Object} object The source object
@@ -48,27 +52,27 @@ export class ScrapConfig {
   }
 
   /**
-   * Method used to retrieve JSON schema
-   * @returns JSON schema object
+   * Method used to retrieve JSON schema used for validating request body
+   * @returns request body JSON schema object
    */
-  static getSchema() {
+  static getRequestBodySchema() {
     return {
       type: "object",
       additionalProperties: false,
       properties: {
         user: { type: "integer", minimum: 0 },
-        groups: { type: "array", items: ScrapGroup.getSchema() },
+        groups: { type: "array", items: ScrapGroup.getRequestBodySchema() },
       },
       required: ["user"],
     };
   }
 
   /**
-   * Method used to retrieve accepted query params object
+   * Method used to retrieve JSON schema used for validating request query params
    * @param {String} method The request method type to get accepted query params
-   * @returns accepted query parameters object
+   * @returns query parameters JSON schema object
    */
-  static getQueryParams(method) {
+  static getRequestParamsSchema(method) {
     return {
       type: "object",
       additionalProperties: false,
@@ -76,5 +80,30 @@ export class ScrapConfig {
         user: { type: "integer", minimum: 0 },
       },
     };
+  }
+
+  /**
+   * Method used to receive the DB model of the scraper configuration object
+   * @returns database model object
+   */
+  static getDatabaseModel() {
+    return ScrapConfig.#DATABASE_MODEL;
+  }
+
+  /**
+   * Method used to receive the DB schema of the scraper configuration object
+   * @returns database schema object
+   */
+  static getDatabaseSchema() {
+    return new mongoose.Schema({
+      user: {
+        type: mongoose.Types.ObjectId,
+        require: [true, "Missing configuration user"],
+      },
+      groups: {
+        type: [ScrapGroup.getDatabaseSchema()],
+        require: [true, "Missing configuration groups"],
+      },
+    });
   }
 }

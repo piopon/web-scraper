@@ -2,6 +2,8 @@ import { ModelUtils } from "../utils/model-utils.js";
 import { ScrapError } from "./scrap-exception.js";
 import { ScrapObserver } from "./scrap-observer.js";
 
+import mongoose from "mongoose";
+
 export class ScrapGroup {
   static #NAME_REGEX = /[a-zA-Z]/;
 
@@ -68,10 +70,10 @@ export class ScrapGroup {
   }
 
   /**
-   * Method used to retrieve JSON schema
-   * @returns JSON schema object
+   * Method used to retrieve JSON schema used for validating request body
+   * @returns request body JSON schema object
    */
-  static getSchema() {
+  static getRequestBodySchema() {
     return {
       type: "object",
       additionalProperties: false,
@@ -79,18 +81,18 @@ export class ScrapGroup {
         name: { type: "string", minLength: 1 },
         category: { type: "string", minLength: 1 },
         domain: { type: "string", minLength: 1 },
-        observers: { type: "array", items: ScrapObserver.getSchema() },
+        observers: { type: "array", items: ScrapObserver.getRequestBodySchema() },
       },
       required: ["name", "domain", "observers"],
     };
   }
 
   /**
-   * Method used to retrieve accepted query params object
+   * Method used to retrieve JSON schema used for validating request query params
    * @param {String} method The request method type to get accepted query params
-   * @returns accepted query parameters object
+   * @returns query parameters JSON schema object
    */
-  static getQueryParams(method) {
+  static getRequestParamsSchema(method) {
     if ("GET" === method) {
       return {
         type: "object",
@@ -120,5 +122,30 @@ export class ScrapGroup {
         required: ["name"],
       };
     }
+  }
+
+  /**
+   * Method used to receive the DB schema of the scraper group object
+   * @returns database schema object
+   */
+  static getDatabaseSchema() {
+    return new mongoose.Schema({
+      name: {
+        type: String,
+        required: [true, "Missing group name"],
+      },
+      category: {
+        type: String,
+        required: [true, "Missing group category"],
+      },
+      domain: {
+        type: String,
+        required: [true, "Missing group domain"],
+      },
+      observers: {
+        type: [ScrapObserver.getDatabaseSchema()],
+        require: [true, "Missing group observers"],
+      },
+    });
   }
 }

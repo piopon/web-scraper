@@ -1,6 +1,8 @@
 import { ModelUtils } from "../utils/model-utils.js";
 import { ScrapError } from "./scrap-exception.js";
 
+import mongoose from "mongoose";
+
 export class ScrapComponent {
   /**
    * Creates a new scrap component from a specified object
@@ -49,10 +51,10 @@ export class ScrapComponent {
   }
 
   /**
-   * Method used to retrieve JSON schema
-   * @returns JSON schema object
+   * Method used to retrieve JSON schema used for validating request body
+   * @returns request body JSON schema object
    */
-  static getSchema() {
+  static getRequestBodySchema() {
     return {
       type: "object",
       additionalProperties: false,
@@ -67,11 +69,11 @@ export class ScrapComponent {
   }
 
   /**
-   * Method used to retrieve accepted query params object
+   * Method used to retrieve JSON schema used for validating request query params
    * @param {String} method The request method type to get accepted query params
-   * @returns accepted query parameters object
+   * @returns query parameters JSON schema object
    */
-  static getQueryParams(method) {
+  static getRequestParamsSchema(method) {
     return {
       type: "object",
       additionalProperties: false,
@@ -83,5 +85,33 @@ export class ScrapComponent {
         auxiliary: { type: "string", minLength: 1 },
       },
     };
+  }
+
+  /**
+   * Method used to receive the DB schema of the scraper component object
+   * @returns database schema object
+   */
+  static getDatabaseSchema() {
+    return new mongoose.Schema({
+      interval: String,
+      selector: {
+        type: String,
+        required: function () {
+          return typeof this.selector === "string" ? false : true;
+        },
+      },
+      attribute: {
+        type: String,
+        required: function () {
+          return typeof this.attribute === "string" ? false : true;
+        },
+      },
+      auxiliary: {
+        type: String,
+        required: function () {
+          return typeof this.auxiliary === "string" ? false : true;
+        },
+      },
+    });
   }
 }

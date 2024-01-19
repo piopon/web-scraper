@@ -1,7 +1,9 @@
+import { ScrapConfig } from "./scrap-config.js";
+
 import mongoose from "mongoose";
 
 export class ScrapUser {
-  static #DATABASE_MODEL = mongoose.model("scraper-user", ScrapUser.#getDatabaseSchema());
+  static #DATABASE_MODEL = mongoose.model("scraper-user", ScrapUser.getDatabaseSchema());
 
   /**
    * Method used to receive the DB model of the scraper user object
@@ -15,8 +17,8 @@ export class ScrapUser {
    * Method used to receive the DB schema of the scraper user object
    * @returns database schema object
    */
-  static #getDatabaseSchema() {
-    return {
+  static getDatabaseSchema() {
+    return new mongoose.Schema({
       name: {
         type: String,
         lowercase: true,
@@ -35,6 +37,10 @@ export class ScrapUser {
         type: String,
         required: true,
       },
-    };
+      configs: {
+        type: [mongoose.Types.ObjectId],
+        ref: ScrapConfig.getDatabaseModel().modelName,
+      },
+    });
   }
 }
