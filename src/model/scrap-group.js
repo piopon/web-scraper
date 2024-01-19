@@ -130,9 +130,18 @@ export class ScrapGroup {
    */
   static getDatabaseSchema() {
     return new mongoose.Schema({
-      name: String,
-      category: String,
-      domain: String,
+      name: {
+        type: String,
+        required: [true, "Missing group name"],
+      },
+      category: {
+        type: String,
+        required: [true, "Missing group category"],
+      },
+      domain: {
+        type: String,
+        required: [true, "Missing group domain"],
+      },
       observers: [ScrapObserver.getDatabaseSchema()],
     });
   }
