@@ -96,21 +96,21 @@ export class ScrapComponent {
       interval: String,
       selector: {
         type: String,
-        required: function() {
-          return typeof this.selector === 'string'? false : true;
-        }
+        required: function () {
+          return typeof this.selector === "string" ? false : true;
+        },
       },
       attribute: {
         type: String,
-        required: function() {
-          return typeof this.attribute === 'string'? false : true;
-        }
+        required: function () {
+          return typeof this.attribute === "string" ? false : true;
+        },
       },
       auxiliary: {
         type: String,
-        required: function() {
-          return typeof this.auxiliary === 'string'? false : true;
-        }
+        required: function () {
+          return typeof this.auxiliary === "string" ? false : true;
+        },
       },
     });
   }

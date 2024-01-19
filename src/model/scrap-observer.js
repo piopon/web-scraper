@@ -161,14 +161,14 @@ export class ScrapObserver {
         type: String,
         enum: {
           values: ScrapObserver.#TARGET_OPTIONS,
-          message : "Invalid `{PATH}` value: `{VALUE}`",
+          message: "Invalid `{PATH}` value: `{VALUE}`",
         },
       },
       history: {
         type: String,
         enum: {
           values: ScrapObserver.#HISTORY_OPTIONS,
-          message : "Invalid `{PATH}` value: `{VALUE}`",
+          message: "Invalid `{PATH}` value: `{VALUE}`",
         },
       },
       container: String,
