@@ -174,7 +174,10 @@ export class ScrapObserver {
       container: String,
       title: ScrapComponent.getDatabaseSchema(),
       image: ScrapComponent.getDatabaseSchema(),
-      price: ScrapComponent.getDatabaseSchema(),
+      price: {
+        type: ScrapComponent.getDatabaseSchema(),
+        required: true,
+      },
     });
   }
 }
