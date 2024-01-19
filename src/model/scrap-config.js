@@ -98,11 +98,11 @@ export class ScrapConfig {
     return new mongoose.Schema({
       user: {
         type: mongoose.Types.ObjectId,
-        require: true,
+        require: [true, "Missing configuration user"],
       },
       groups: {
         type: [ScrapGroup.getDatabaseSchema()],
-        require: true,
+        require: [true, "Missing configuration groups"],
       },
     });
   }
