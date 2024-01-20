@@ -201,7 +201,7 @@ export class ConfigRouter {
    * @param {Function} parent The function used to get the parent of the body content
    * @param {Function} index The function used to get the index of the element to edit
    */
-  #handlePutRequest(request, response, parent, index) {
+  async #handlePutRequest(request, response, parent, index) {
     const paramsValidation = this.#validateQueryParams(request.method, request.url, request.query);
     if (!paramsValidation.valid) {
       response.status(400).json(paramsValidation.cause);
@@ -212,7 +212,7 @@ export class ConfigRouter {
       response.status(400).json(bodyValidation.cause);
       return;
     }
-    const updateResult = this.#updateConfig((initalConfig) => {
+    const updateResult = await this.#updateConfig(request.user, (initalConfig) => {
       const contentParent = parent(initalConfig);
       if (!contentParent) {
         return { success: false, message: "Undefined parent of new element" };
@@ -249,7 +249,7 @@ export class ConfigRouter {
    * @param {Object} response The outputted response object
    * @param {Function} parent The function used to get the parent of the body content
    */
-  #handlePostRequest(request, response, parent) {
+  async #handlePostRequest(request, response, parent) {
     const paramsValidation = this.#validateQueryParams(request.method, request.url, request.query);
     if (!paramsValidation.valid) {
       response.status(400).json(paramsValidation.cause);
@@ -260,7 +260,7 @@ export class ConfigRouter {
       response.status(400).json(bodyValidation.cause);
       return;
     }
-    const addResult = this.#updateConfig((initalConfig) => {
+    const addResult = await this.#updateConfig(request.user, (initalConfig) => {
       const contentParent = parent(initalConfig);
       if (!contentParent) {
         return { success: false, message: "Undefined parent of new element" };
@@ -281,13 +281,13 @@ export class ConfigRouter {
    * @param {Object} response The outputted response object
    * @param {Function} index The function used to get the parent and index of the element to delete
    */
-  #handleDeleteRequest(request, response, index) {
+  async #handleDeleteRequest(request, response, index) {
     const paramsValidation = this.#validateQueryParams(request.method, request.url, request.query);
     if (!paramsValidation.valid) {
       response.status(400).json(paramsValidation.cause);
       return;
     }
-    const deleteResult = this.#updateConfig((initalConfig) => {
+    const deleteResult = await this.#updateConfig(request.user, (initalConfig) => {
       const indexResult = index(initalConfig);
       if (!indexResult.found) {
         return { success: false, message: indexResult.reason };
