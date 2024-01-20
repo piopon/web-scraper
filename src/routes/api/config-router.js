@@ -5,8 +5,6 @@ import { ScrapObserver } from "../../model/scrap-observer.js";
 
 import Ajv from "ajv";
 import express from "express";
-import path from "path";
-import fs from "fs";
 
 export class ConfigRouter {
   #configFilePath = undefined;
