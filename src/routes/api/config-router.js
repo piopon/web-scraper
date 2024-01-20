@@ -39,9 +39,7 @@ export class ConfigRouter {
    */
   #createGetRoutes(router) {
     router.get("/", async (request, response) => {
-      await this.#handleGetRequest(request, response, (configContent) =>
-        configContent.filter((item) => (request.query.user ? item.user === request.query.user : true))
-      );
+      await this.#handleGetRequest(request, response, (configContent) => configContent);
     });
     router.get("/groups", async (request, response) => {
       await this.#handleGetRequest(request, response, (configContent) =>
