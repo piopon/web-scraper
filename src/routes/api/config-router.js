@@ -131,10 +131,7 @@ export class ConfigRouter {
       await this.#handlePostRequest(request, response, (configContent) => configContent);
     });
     router.post("/groups", async (request, response) => {
-      await this.#handlePostRequest(request, response, (configContent) => {
-        const parentConfig = configContent.filter((config) => config.user === request.query.parent);
-        return parentConfig.length > 0 ? parentConfig.at(0).groups : undefined;
-      });
+      await this.#handlePostRequest(request, response, (configContent) => configContent.groups);
     });
     router.post("/groups/observers", async (request, response) => {
       await this.#handlePostRequest(request, response, (configContent) => {
