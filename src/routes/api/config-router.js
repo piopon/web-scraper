@@ -374,10 +374,6 @@ export class ConfigRouter {
    */
   async #updateConfig(user, update) {
     try {
-      const configDirectory = path.dirname(this.#configFilePath);
-      if (!fs.existsSync(configDirectory)) {
-        fs.mkdirSync(configDirectory, { recursive: true });
-      }
       const configContent = user.config == null
         ? await ScrapConfig.getDatabaseModel().create({ user: user._id })
         : await ScrapConfig.getDatabaseModel().findById(user.config);
