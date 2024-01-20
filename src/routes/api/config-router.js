@@ -375,16 +375,22 @@ export class ConfigRouter {
    * Method used to update the configuration file with the provided logic
    * @param {Function} update The update logic to apply when altering config file (add, edit, or delete)
    */
-  #updateConfig(update) {
+  async #updateConfig(user, update) {
     try {
       const configDirectory = path.dirname(this.#configFilePath);
       if (!fs.existsSync(configDirectory)) {
         fs.mkdirSync(configDirectory, { recursive: true });
       }
-      const configContent = JSON.parse(fs.readFileSync(this.#configFilePath)).map((item) => new ScrapConfig(item));
+      const configContent = user.config == null
+        ? await ScrapConfig.getDatabaseModel().create({ user: user._id })
+        : await ScrapConfig.getDatabaseModel().findById(user.config);
       const updateStatus = update(configContent);
       if (updateStatus.success) {
-        fs.writeFileSync(this.#configFilePath, JSON.stringify(configContent, null, 2));
+        configContent.save();
+        if (user.config == null) {
+          user.config = configContent._id;
+          user.save();
+        }
       }
       return { status: updateStatus.success ? 200 : 400, message: updateStatus.message };
     } catch (error) {
