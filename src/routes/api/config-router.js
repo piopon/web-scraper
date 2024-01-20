@@ -38,13 +38,13 @@ export class ConfigRouter {
    * @param {Object} router The router object with GET method routes defined
    */
   #createGetRoutes(router) {
-    router.get("/", (request, response) => {
-      this.#handleGetRequest(request, response, (configContent) =>
+    router.get("/", async (request, response) => {
+      await this.#handleGetRequest(request, response, (configContent) =>
         configContent.filter((item) => (request.query.user ? item.user === request.query.user : true))
       );
     });
-    router.get("/groups", (request, response) => {
-      this.#handleGetRequest(request, response, (configContent) =>
+    router.get("/groups", async (request, response) => {
+      await this.#handleGetRequest(request, response, (configContent) =>
         configContent
           .flatMap((item) => item.groups)
           .filter((item) => {
@@ -55,8 +55,8 @@ export class ConfigRouter {
           })
       );
     });
-    router.get("/groups/observers", (request, response) => {
-      this.#handleGetRequest(request, response, (configContent) =>
+    router.get("/groups/observers", async (request, response) => {
+      await this.#handleGetRequest(request, response, (configContent) =>
         configContent
           .flatMap((item) => item.groups)
           .flatMap((item) => item.observers)
@@ -69,8 +69,8 @@ export class ConfigRouter {
           })
       );
     });
-    router.get("/groups/observers/components", (request, response) => {
-      this.#handleGetRequest(request, response, (configContent) =>
+    router.get("/groups/observers/components", async (request, response) => {
+      await this.#handleGetRequest(request, response, (configContent) =>
         configContent
           .flatMap((item) => item.groups)
           .flatMap((item) => item.observers)
