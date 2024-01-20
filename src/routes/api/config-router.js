@@ -376,12 +376,15 @@ export class ConfigRouter {
    */
   async #updateConfig(user, update) {
     try {
+      // get initial config content: either a new one or an existing from user object
       const configContent = user.config == null
         ? await ScrapConfig.getDatabaseModel().create({ user: user._id })
         : await ScrapConfig.getDatabaseModel().findById(user.config);
+      // perform update operation
       const updateStatus = update(configContent);
       if (updateStatus.success) {
         configContent.save();
+        // if we've created a new blank configuration then we must link it in the user
         if (user.config == null) {
           user.config = configContent._id;
           user.save();
