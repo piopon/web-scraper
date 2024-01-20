@@ -90,8 +90,8 @@ export class ConfigRouter {
    * @param {Object} router The router object with PUT method routes defined
    */
   #createPutRoutes(router) {
-    router.put("/", (request, response) => {
-      this.#handlePutRequest(
+    router.put("/", async (request, response) => {
+      await this.#handlePutRequest(
         request,
         response,
         (configContent) => configContent,
@@ -100,8 +100,8 @@ export class ConfigRouter {
         }
       );
     });
-    router.put("/groups", (request, response) => {
-      this.#handlePutRequest(
+    router.put("/groups", async (request, response) => {
+      await this.#handlePutRequest(
         request,
         response,
         (configContent) => configContent.flatMap((item) => item.groups),
@@ -110,8 +110,8 @@ export class ConfigRouter {
         }
       );
     });
-    router.put("/groups/observers", (request, response) => {
-      this.#handlePutRequest(
+    router.put("/groups/observers", async (request, response) => {
+      await this.#handlePutRequest(
         request,
         response,
         (configContent) => configContent.flatMap((item) => item.groups).flatMap((item) => item.observers),
@@ -127,17 +127,17 @@ export class ConfigRouter {
    * @param {Object} router The router object with POST method routes defined
    */
   #createPostRoutes(router) {
-    router.post("/", (request, response) => {
-      this.#handlePostRequest(request, response, (configContent) => configContent);
+    router.post("/", async (request, response) => {
+      await this.#handlePostRequest(request, response, (configContent) => configContent);
     });
-    router.post("/groups", (request, response) => {
-      this.#handlePostRequest(request, response, (configContent) => {
+    router.post("/groups", async (request, response) => {
+      await this.#handlePostRequest(request, response, (configContent) => {
         const parentConfig = configContent.filter((config) => config.user === request.query.parent);
         return parentConfig.length > 0 ? parentConfig.at(0).groups : undefined;
       });
     });
-    router.post("/groups/observers", (request, response) => {
-      this.#handlePostRequest(request, response, (configContent) => {
+    router.post("/groups/observers", async (request, response) => {
+      await this.#handlePostRequest(request, response, (configContent) => {
         const parentGroup = configContent
           .flatMap((config) => config.groups)
           .filter((group) => group.name === request.query.parent);
@@ -151,24 +151,24 @@ export class ConfigRouter {
    * @param {Object} router The router object with DELETE method routes defined
    */
   #createDeleteRoutes(router) {
-    router.delete("/", (request, response) => {
-      this.#handleDeleteRequest(request, response, (configContent) => {
+    router.delete("/", async (request, response) => {
+      await this.#handleDeleteRequest(request, response, (configContent) => {
         const details = this.#getParentDetails(configContent, { configUser: request.query.user });
         return details
           ? { found: { parent: details.parent, index: details.index }, reason: undefined }
           : { found: undefined, reason: "Could not find item to delete" };
       });
     });
-    router.delete("/groups", (request, response) => {
-      this.#handleDeleteRequest(request, response, (configContent) => {
+    router.delete("/groups", async (request, response) => {
+      await this.#handleDeleteRequest(request, response, (configContent) => {
         const details = this.#getParentDetails(configContent, { groupName: request.query.name });
         return details
           ? { found: { parent: details.parent, index: details.index }, reason: undefined }
           : { found: undefined, reason: "could not find item to delete" };
       });
     });
-    router.delete("/groups/observers", (request, response) => {
-      this.#handleDeleteRequest(request, response, (configContent) => {
+    router.delete("/groups/observers", async (request, response) => {
+      await this.#handleDeleteRequest(request, response, (configContent) => {
         const details = this.#getParentDetails(configContent, { observerName: request.query.name });
         return details
           ? { found: { parent: details.parent, index: details.index }, reason: undefined }
