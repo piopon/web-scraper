@@ -180,13 +180,15 @@ export class ConfigRouter {
    * @param {Object} response The outputted response object
    * @param {Function} filter The function using query and path params to return appropriate data
    */
-  #handleGetRequest(request, response, filter) {
+  async #handleGetRequest(request, response, filter) {
     const validationResult = this.#validateQueryParams(request.method, request.url, request.query);
     if (!validationResult.valid) {
       response.status(400).json(validationResult.cause);
       return;
     }
-    const configContent = JSON.parse(fs.readFileSync(this.#configFilePath));
+    const configContent = request.user.config == null
+      ? await ScrapConfig.getDatabaseModel().create({ user: user._id })
+      : await ScrapConfig.getDatabaseModel().findById(request.user.config);
     const filteredData = filter(configContent);
     response.status(200).json(filteredData);
   }
