@@ -90,7 +90,7 @@ export class ConfigRouter {
       await this.#handlePutRequest(
         request,
         response,
-        (configContent) => configContent.flatMap((item) => item.groups),
+        (configContent) => configContent.groups,
         (parent) => {
           return parent.findIndex((item) => (request.query.name ? item.name === request.query.name : false));
         }
@@ -100,7 +100,7 @@ export class ConfigRouter {
       await this.#handlePutRequest(
         request,
         response,
-        (configContent) => configContent.flatMap((item) => item.groups).flatMap((item) => item.observers),
+        (configContent) => configContent.groups.flatMap((item) => item.observers),
         (parent) => {
           return parent.findIndex((item) => (request.query.name ? item.name === request.query.name : false));
         }
