@@ -147,7 +147,7 @@ export class ConfigRouter {
         const details = this.#getParentDetails(configContent, { groupName: request.query.name });
         return details
           ? { found: { parent: details.parent, index: details.index }, reason: undefined }
-          : { found: undefined, reason: "could not find item to delete" };
+          : { found: undefined, reason: "Could not find item to delete" };
       });
     });
     router.delete("/groups/observers", async (request, response) => {
