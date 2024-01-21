@@ -22,18 +22,17 @@ export class GroupsService {
 
   /**
    * Method used to get groups from the specified parent
-   * @param {String} userId The identifier of the parent for which we want get groups
    * @returns promise containing the operation response JSON or error
    */
-  static async getGroups(userId) {
-    const url = `api/v1/configs?user=${encodeURIComponent(userId)}`;
+  static async getGroups() {
+    const url = `api/v1/configs`;
     const response = await fetch(url, CommonService.createRequestOptions("GET"));
     if (response.status === 200) {
       return response.json();
     }
     const errorResponse = await response.json();
     const errorDetails = CommonService.getErrorDetails(errorResponse);
-    throw new Error(`Cannot get ${parentId} observers: ${errorDetails}`);
+    throw new Error(`Cannot get user groups: ${errorDetails}`);
   }
 
   /**

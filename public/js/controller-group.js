@@ -194,7 +194,7 @@ export class GroupsController {
   #addGroup(closeButton, parentUserId) {
     GroupsService.addGroup(parentUserId)
       .then((data) => {
-        this.#reloadGroups(parentUserId);
+        this.#reloadGroups();
         this.#collapse(closeButton);
         this.#cleanGroupData();
         CommonController.showToastSuccess(data);
@@ -233,7 +233,7 @@ export class GroupsController {
   #deleteGroup(closeButton, deletedGroupId) {
     GroupsService.deleteGroup(deletedGroupId)
       .then((data) => {
-        this.#reloadGroups(0);
+        this.#reloadGroups();
         this.#collapse(closeButton);
         this.#cleanGroupData();
         CommonController.showToastSuccess(data);
@@ -247,21 +247,16 @@ export class GroupsController {
 
   /**
    * Method used to reload observers for the specified parent group
-   * @param {String} parentGroupId The observers parent group identifier
    */
-  #reloadGroups(parentUserId) {
-    if (undefined === parentUserId) {
-      CommonController.showToastWarning(`Cannot reload groups for ${parentGroupId} user.`);
-      return;
-    }
-    GroupsService.getGroups(parentUserId)
+  #reloadGroups() {
+    GroupsService.getGroups()
       .then((data) => {
         let html = "";
         data.groups.forEach((group) => (html += GroupsView.toHtml(group)));
         document.querySelector("section.group-columns").innerHTML = html + GroupsView.toHtml(0);
         this.#initController();
         // notify other controllers that groups were reloaded
-        this.emitEvent("groups-reloaded", parentUserId);
+        this.emitEvent("groups-reloaded", undefined);
       })
       .catch((error) => CommonController.showToastError(error));
   }
