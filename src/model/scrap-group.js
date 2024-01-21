@@ -149,6 +149,15 @@ export class ScrapGroup {
     schema.methods.getIdentifier = function() {
       return `name = ${this.name}`;
     }
+    schema.methods.copyValues = function(otherGroup) {
+      if (!ModelUtils.isInstanceOf(ScrapGroup, otherGroup)) {
+        throw new ScrapError("Cannot copy scrap group values: incompatible object");
+      }
+      this.name = otherGroup.name;
+      this.category = otherGroup.category;
+      this.domain = otherGroup.domain;
+      this.observers.forEach((observer, index) => observer.copyValues(otherGroup.observers[index]));
+    }
     return schema;
   }
 }
