@@ -136,7 +136,7 @@ export class ConfigRouter {
   #createDeleteRoutes(router) {
     router.delete("/", async (request, response) => {
       await this.#handleDeleteRequest(request, response, (configContent) => {
-        const details = this.#getParentDetails(configContent, { configUser: request.query.user });
+        const details = this.#getParentDetails(configContent, { configUser: request.user._id });
         return details
           ? { found: { parent: details.parent, index: details.index }, reason: undefined }
           : { found: undefined, reason: "Could not find item to delete" };
@@ -290,21 +290,18 @@ export class ConfigRouter {
    * @returns parent of the searched object and the index of the object in parent
    */
   #getParentDetails(fullConfig, { configUser = undefined, groupName = undefined, observerName = undefined }) {
-    for (let configIndex = 0; configIndex < fullConfig.length; configIndex++) {
-      const currentConfig = fullConfig[configIndex];
-      if (configUser && configUser === currentConfig.user) {
-        return { parent: fullConfig, index: configIndex };
+    if (configUser && configUser === fullConfig.user) {
+      return { parent: fullConfig, index: undefined };
+    }
+    for (let groupIndex = 0; groupIndex < fullConfig.groups.length; groupIndex++) {
+      const currentGroup = fullConfig.groups[groupIndex];
+      if (groupName && groupName === currentGroup.name) {
+        return { parent: fullConfig.groups, index: groupIndex };
       }
-      for (let groupIndex = 0; groupIndex < currentConfig.groups.length; groupIndex++) {
-        const currentGroup = currentConfig.groups[groupIndex];
-        if (groupName && groupName === currentGroup.name) {
-          return { parent: currentConfig.groups, index: groupIndex };
-        }
-        for (let observerIndex = 0; observerIndex < currentGroup.observers.length; observerIndex++) {
-          const currentObserver = currentGroup.observers[observerIndex];
-          if (observerName && observerName === currentObserver.name) {
-            return { parent: currentGroup.observers, index: observerIndex };
-          }
+      for (let observerIndex = 0; observerIndex < currentGroup.observers.length; observerIndex++) {
+        const currentObserver = currentGroup.observers[observerIndex];
+        if (observerName && observerName === currentObserver.name) {
+          return { parent: currentGroup.observers, index: observerIndex };
         }
       }
     }
