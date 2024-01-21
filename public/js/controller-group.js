@@ -162,7 +162,7 @@ export class GroupsController {
         const target = clickEvent.currentTarget;
         const selectedAction = target.dataset.action;
         if ("add" === selectedAction) {
-          this.#addGroup(closeButton, target.dataset.id);
+          this.#addGroup(closeButton);
         } else if ("update" === selectedAction) {
           this.#updateGroup(closeButton, target.dataset.id);
         } else if ("delete" === selectedAction) {
@@ -189,10 +189,9 @@ export class GroupsController {
   /**
    * Method used to handle new group addition logic
    * @param {Object} closeButton The close button of added group used for collapsing UI
-   * @param {String} parentUserId The parent identifier for which we want to add new group
    */
-  #addGroup(closeButton, parentUserId) {
-    GroupsService.addGroup(parentUserId)
+  #addGroup(closeButton) {
+    GroupsService.addGroup()
       .then((data) => {
         this.#reloadGroups();
         this.#collapse(closeButton);

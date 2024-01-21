@@ -4,11 +4,10 @@ import { GroupsView } from "./view-group.js";
 export class GroupsService {
   /**
    * Method used to add new group to the specified parent user
-   * @param {String} userId The identifier of the user to which we want to add new group
    * @returns promise containing the operation response text or error
    */
-  static async addGroup(userId) {
-    const url = `api/v1/config/groups?parent=${encodeURIComponent(userId)}`;
+  static async addGroup() {
+    const url = `api/v1/config/groups`;
     const expandedGroup = document.querySelector("article.group-column.expanded");
     const requestBody = JSON.stringify(GroupsView.fromHtml(expandedGroup));
     const response = await fetch(url, CommonService.createRequestOptions("POST", requestBody));
