@@ -110,7 +110,6 @@ export class ScrapGroup {
         properties: {
           parent: { type: "integer", minimum: 0 },
         },
-        required: ["parent"],
       };
     } else {
       return {
