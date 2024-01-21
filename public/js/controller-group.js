@@ -257,8 +257,8 @@ export class GroupsController {
     GroupsService.getGroups(parentUserId)
       .then((data) => {
         let html = "";
-        data[0].groups.forEach((group) => (html += GroupsView.toHtml(group)));
-        document.querySelector("section.group-columns").innerHTML = html + GroupsView.toHtml(data[0].user);
+        data.groups.forEach((group) => (html += GroupsView.toHtml(group)));
+        document.querySelector("section.group-columns").innerHTML = html + GroupsView.toHtml(0);
         this.#initController();
         // notify other controllers that groups were reloaded
         this.emitEvent("groups-reloaded", parentUserId);
