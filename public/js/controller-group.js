@@ -253,7 +253,7 @@ export class GroupsController {
       .then((data) => {
         let html = "";
         data.groups.forEach((group) => (html += GroupsView.toHtml(group)));
-        document.querySelector("section.group-columns").innerHTML = html + GroupsView.toHtml(0);
+        document.querySelector("section.group-columns").innerHTML = html + GroupsView.toHtml();
         this.#initController();
         // notify other controllers that groups were reloaded
         this.emitEvent("groups-reloaded", undefined);
