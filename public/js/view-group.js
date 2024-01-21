@@ -35,7 +35,7 @@ export class GroupsView {
       // adding HTML for a new group
       return GroupsView.#getNewGroupHtml();
     } else {
-      return "Invalid group! Must be an group object or empty";
+      return "Invalid group data! Must be empty or a group object";
     }
   }
 
