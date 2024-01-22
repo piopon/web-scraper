@@ -148,7 +148,7 @@ export class ScrapObserver {
    * @returns database schema object
    */
   static getDatabaseSchema() {
-    return new mongoose.Schema({
+    const schema = new mongoose.Schema({
       name: {
         type: String,
         required: [true, "Missing observer name"],
@@ -179,5 +179,11 @@ export class ScrapObserver {
         required: true,
       },
     });
+
+    schema.methods.getIdentifier = function() {
+      return `name = ${this.name}`;
+    }
+
+    return schema;
   }
 }
