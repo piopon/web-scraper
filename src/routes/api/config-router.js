@@ -42,9 +42,8 @@ export class ConfigRouter {
     });
     router.get("/groups/observers", async (request, response) => {
       await this.#handleGetRequest(request, response, (configContent) =>
-        configContent
-          .flatMap((item) => item.groups)
-          .flatMap((item) => item.observers)
+        configContent.groups
+          .flatMap((group) => group.observers)
           .filter((item) => {
             const nameOk = request.query.name ? item.name === request.query.name : true;
             const pathOk = request.query.path ? item.path === request.query.path : true;
@@ -56,9 +55,8 @@ export class ConfigRouter {
     });
     router.get("/groups/observers/components", async (request, response) => {
       await this.#handleGetRequest(request, response, (configContent) =>
-        configContent
-          .flatMap((item) => item.groups)
-          .flatMap((item) => item.observers)
+        configContent.groups
+          .flatMap((group) => group.observers)
           .map((item) => item[request.query.source])
           .filter((item) => {
             const intervalOk = request.query.interval ? item.interval === request.query.interval : true;
