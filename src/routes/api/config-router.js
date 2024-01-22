@@ -121,9 +121,7 @@ export class ConfigRouter {
     });
     router.post("/groups/observers", async (request, response) => {
       await this.#handlePostRequest(request, response, (configContent) => {
-        const parentGroup = configContent
-          .flatMap((config) => config.groups)
-          .filter((group) => group.name === request.query.parent);
+        const parentGroup = configContent.groups.filter((group) => group.name === request.query.parent);
         return parentGroup.length > 0 ? parentGroup.at(0).observers : undefined;
       });
     });
