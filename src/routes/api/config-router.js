@@ -31,12 +31,11 @@ export class ConfigRouter {
     });
     router.get("/groups", async (request, response) => {
       await this.#handleGetRequest(request, response, (configContent) =>
-        configContent
-          .flatMap((item) => item.groups)
-          .filter((item) => {
-            const nameOk = request.query.name ? item.name === request.query.name : true;
-            const categoryOk = request.query.category ? item.category === request.query.category : true;
-            const domainOk = request.query.domain ? item.domain === request.query.domain : true;
+        configContent.groups
+          .filter((group) => {
+            const nameOk = request.query.name ? group.name === request.query.name : true;
+            const categoryOk = request.query.category ? group.category === request.query.category : true;
+            const domainOk = request.query.domain ? group.domain === request.query.domain : true;
             return nameOk && categoryOk && domainOk;
           })
       );
