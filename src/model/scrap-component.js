@@ -92,7 +92,7 @@ export class ScrapComponent {
    * @returns database schema object
    */
   static getDatabaseSchema() {
-    return new mongoose.Schema({
+    const schema = new mongoose.Schema({
       interval: String,
       selector: {
         type: String,
@@ -113,5 +113,11 @@ export class ScrapComponent {
         },
       },
     });
+
+    schema.methods.getIdentifier = function() {
+      return `component = ${this.selector} | ${this.attribute} | ${this.auxiliary}`;
+    }
+
+    return schema;
   }
 }
