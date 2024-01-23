@@ -184,6 +184,20 @@ export class ScrapObserver {
       return `name = ${this.name}`;
     }
 
+    schema.methods.copyValues = function(otherObserver) {
+      if (!ModelUtils.isInstanceOf(ScrapObserver, otherObserver)) {
+        throw new ScrapError("Cannot copy scrap observer values: incompatible object");
+      }
+      this.name = otherObserver.name;
+      this.path = otherObserver.path;
+      this.target = otherObserver.target;
+      this.history = otherObserver.history;
+      this.container = otherObserver.container;
+      this.title.copyValues(otherObserver.title);
+      this.image.copyValues(otherObserver.image);
+      this.price.copyValues(otherObserver.price);
+    }
+
     return schema;
   }
 }

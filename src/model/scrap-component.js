@@ -118,6 +118,16 @@ export class ScrapComponent {
       return `component = ${this.selector} | ${this.attribute} | ${this.auxiliary}`;
     }
 
+    schema.methods.copyValues = function(otherComponent) {
+      if (!ModelUtils.isInstanceOf(ScrapComponent, otherComponent)) {
+        throw new ScrapError("Cannot copy scrap component values: incompatible object");
+      }
+      this.interval = otherComponent.interval;
+      this.selector = otherComponent.selector;
+      this.attribute = otherComponent.attribute;
+      this.auxiliary = otherComponent.auxiliary;
+    }
+
     return schema;
   }
 }
