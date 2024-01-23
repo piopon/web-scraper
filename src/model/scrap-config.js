@@ -48,7 +48,7 @@ export class ScrapConfig {
       type: "object",
       additionalProperties: false,
       properties: {
-        user: { type: "integer", minimum: 0 },
+        user: { type: "string", minLength: 1 },
         groups: { type: "array", items: ScrapGroup.getRequestBodySchema() },
       },
       required: ["user"],
@@ -65,7 +65,7 @@ export class ScrapConfig {
       type: "object",
       additionalProperties: false,
       properties: {
-        user: { type: "integer", minimum: 0 },
+        user: { type: "string", minLength: 1 },
       },
     };
   }
