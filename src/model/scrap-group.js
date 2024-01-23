@@ -28,20 +28,6 @@ export class ScrapGroup {
   }
 
   /**
-   * Method used to perform a deep copy of all values in scrap group object
-   * @param {Object} otherGroup The scrap group object with source values
-   */
-  copyValues(otherGroup) {
-    if (!ModelUtils.isInstanceOf(ScrapGroup, otherGroup)) {
-      throw new ScrapError("Cannot copy scrap group values: incompatible object");
-    }
-    this.name = otherGroup.name;
-    this.category = otherGroup.category;
-    this.domain = otherGroup.domain;
-    this.observers.forEach((observer, index) => observer.copyValues(otherGroup.observers[index]));
-  }
-
-  /**
    * Method used to check correctness of the scrap group values
    * @returns check result containing all errors and warnings
    */

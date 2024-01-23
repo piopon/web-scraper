@@ -34,24 +34,6 @@ export class ScrapObserver {
   }
 
   /**
-   * Method used to perform a deep copy of all values in scrap observer object
-   * @param {Object} otherObserver The scrap observer object with source values
-   */
-  copyValues(otherObserver) {
-    if (!ModelUtils.isInstanceOf(ScrapObserver, otherObserver)) {
-      throw new ScrapError("Cannot copy scrap observer values: incompatible object");
-    }
-    this.name = otherObserver.name;
-    this.path = otherObserver.path;
-    this.target = otherObserver.target;
-    this.history = otherObserver.history;
-    this.container = otherObserver.container;
-    this.title.copyValues(otherObserver.title);
-    this.image.copyValues(otherObserver.image);
-    this.price.copyValues(otherObserver.price);
-  }
-
-  /**
    * Method used to check correctness of the scrap observer values
    * @returns check result containing all errors and warnings
    */

@@ -25,20 +25,6 @@ export class ScrapComponent {
   }
 
   /**
-   * Method used to perform a deep copy of all values in scrap component object
-   * @param {Object} otherComponent The scrap component object with source values
-   */
-  copyValues(otherComponent) {
-    if (!ModelUtils.isInstanceOf(ScrapComponent, otherComponent)) {
-      throw new ScrapError("Cannot copy scrap component values: incompatible object");
-    }
-    this.interval = otherComponent.interval;
-    this.selector = otherComponent.selector;
-    this.attribute = otherComponent.attribute;
-    this.auxiliary = otherComponent.auxiliary;
-  }
-
-  /**
    * Method used to check correctness of the scrap group values
    * @returns check result containing all errors and warnings
    */
