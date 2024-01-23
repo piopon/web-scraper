@@ -130,6 +130,9 @@ export class ScrapObserver {
    * @returns database schema object
    */
   static getDatabaseSchema() {
+    /**
+     * Database schema object definition for ScrapObserver
+     */
     const schema = new mongoose.Schema({
       name: {
         type: String,
@@ -162,10 +165,18 @@ export class ScrapObserver {
       },
     });
 
+    /**
+     * Method used to receive the appropriate identifier of observer
+     * @returns observer identifier: string composed of title with path field value
+     */
     schema.methods.getIdentifier = function() {
       return `name = ${this.name}`;
     }
 
+    /**
+     * Method used to perform a deep copy of all values in scrap observer object
+     * @param {Object} otherObserver The scrap observer object with source values
+     */
     schema.methods.copyValues = function(otherObserver) {
       if (!ModelUtils.isInstanceOf(ScrapObserver, otherObserver)) {
         throw new ScrapError("Cannot copy scrap observer values: incompatible object");

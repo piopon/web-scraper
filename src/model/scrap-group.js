@@ -114,6 +114,9 @@ export class ScrapGroup {
    * @returns database schema object
    */
   static getDatabaseSchema() {
+    /**
+     * Database schema object definition for ScrapGroup
+     */
     const schema = new mongoose.Schema({
       name: {
         type: String,
@@ -133,10 +136,18 @@ export class ScrapGroup {
       },
     });
 
+    /**
+     * Method used to receive the appropriate identifier of group
+     * @returns group identifier: string composed of title with domain field value
+     */
     schema.methods.getIdentifier = function () {
       return `name = ${this.name}`;
     };
 
+    /**
+     * Method used to perform a deep copy of all values in scrap group object
+     * @param {Object} otherGroup The scrap group object with source values
+     */
     schema.methods.copyValues = function (otherGroup) {
       if (!ModelUtils.isInstanceOf(ScrapGroup, otherGroup)) {
         throw new ScrapError("Cannot copy scrap group values: incompatible object");

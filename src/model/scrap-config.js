@@ -95,6 +95,9 @@ export class ScrapConfig {
    * @returns database schema object
    */
   static getDatabaseSchema() {
+    /**
+     * Database schema object definition for ScrapConfig
+     */
     const schema = new mongoose.Schema({
       user: {
         type: mongoose.Types.ObjectId,
@@ -106,10 +109,18 @@ export class ScrapConfig {
       },
     });
 
+    /**
+     * Method used to receive the appropriate identifier of config
+     * @returns config identifier: string composed of title with user field value
+     */
     schema.methods.getIdentifier = function() {
       return `user = ${this.user}`;
     }
 
+    /**
+     * Method used to perform a deep copy of all values in scrap config object
+     * @param {Object} otherConfig The scrap config object with source values
+     */
     schema.methods.copyValues = function(otherConfig) {
       if (!ModelUtils.isInstanceOf(ScrapConfig, otherConfig)) {
         throw new ScrapError("Cannot copy scrap config values: incompatible object");
