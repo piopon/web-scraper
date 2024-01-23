@@ -95,7 +95,7 @@ export class ScrapConfig {
    * @returns database schema object
    */
   static getDatabaseSchema() {
-    return new mongoose.Schema({
+    const schema = new mongoose.Schema({
       user: {
         type: mongoose.Types.ObjectId,
         require: [true, "Missing configuration user"],
@@ -105,5 +105,19 @@ export class ScrapConfig {
         require: [true, "Missing configuration groups"],
       },
     });
+
+    schema.methods.getIdentifier = function() {
+      return `user = ${this.user}`;
+    }
+
+    schema.methods.copyValues = function(otherConfig) {
+      if (!ModelUtils.isInstanceOf(ScrapConfig, otherConfig)) {
+        throw new ScrapError("Cannot copy scrap config values: incompatible object");
+      }
+      this.user = otherConfig.user;
+      this.groups.forEach((group, index) => group.copyValues(otherConfig.groups[index]));
+    }
+
+    return schema;
   }
 }
