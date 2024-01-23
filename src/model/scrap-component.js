@@ -107,15 +107,15 @@ export class ScrapComponent {
      * Method used to receive the appropriate identifier of component
      * @returns component identifier: string composed of title with selector, attribute, and auxiliary values
      */
-    schema.methods.getIdentifier = function() {
+    schema.methods.getIdentifier = function () {
       return `component = ${this.selector} | ${this.attribute} | ${this.auxiliary}`;
-    }
+    };
 
     /**
      * Method used to perform a deep copy of all values in scrap component object
      * @param {Object} otherComponent The scrap component object with source values
      */
-    schema.methods.copyValues = function(otherComponent) {
+    schema.methods.copyValues = function (otherComponent) {
       if (!ModelUtils.isInstanceOf(ScrapComponent, otherComponent)) {
         throw new ScrapError("Cannot copy scrap component values: incompatible object");
       }
@@ -123,7 +123,7 @@ export class ScrapComponent {
       this.selector = otherComponent.selector;
       this.attribute = otherComponent.attribute;
       this.auxiliary = otherComponent.auxiliary;
-    }
+    };
 
     return schema;
   }

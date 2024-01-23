@@ -101,21 +101,21 @@ export class ScrapConfig {
      * Method used to receive the appropriate identifier of config
      * @returns config identifier: string composed of title with user field value
      */
-    schema.methods.getIdentifier = function() {
+    schema.methods.getIdentifier = function () {
       return `user = ${this.user}`;
-    }
+    };
 
     /**
      * Method used to perform a deep copy of all values in scrap config object
      * @param {Object} otherConfig The scrap config object with source values
      */
-    schema.methods.copyValues = function(otherConfig) {
+    schema.methods.copyValues = function (otherConfig) {
       if (!ModelUtils.isInstanceOf(ScrapConfig, otherConfig)) {
         throw new ScrapError("Cannot copy scrap config values: incompatible object");
       }
       this.user = otherConfig.user;
       this.groups.forEach((group, index) => group.copyValues(otherConfig.groups[index]));
-    }
+    };
 
     return schema;
   }
