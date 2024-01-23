@@ -272,7 +272,7 @@ export class ConfigRouter {
       if (!indexResult.found) {
         return { success: false, message: indexResult.reason };
       }
-      if (!indexResult.found.index) {
+      if (undefined === indexResult.found.index) {
         return { success: false, message: "Cannot remove non-deletable element: found index is not valid" };
       }
       const removedItem = indexResult.found.parent.splice(indexResult.found.index, 1);
