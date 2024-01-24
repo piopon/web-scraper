@@ -48,7 +48,7 @@ export class ViewRouter {
       response.render("index", {
         title: "scraper configuration",
         user: request.user.name,
-        content: scrapConfig,
+        content: scrapConfig.toJSON(),
         categories: this.#getSupportedCategories(),
         currencies: this.#getSupportedCurrencies(),
       });
