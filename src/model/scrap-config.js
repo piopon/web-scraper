@@ -5,7 +5,6 @@ import { ScrapGroup } from "./scrap-group.js";
 import mongoose from "mongoose";
 
 export class ScrapConfig {
-  static #IDENTIFIER = (instance) => `user = ${instance.user}`;
   static #DATABASE_MODEL = mongoose.model("scraper-config", ScrapConfig.getDatabaseSchema());
 
   /**
@@ -23,7 +22,7 @@ export class ScrapConfig {
    * @returns config identifier: string composed of title with user field value
    */
   getIdentifier() {
-    return ScrapConfig.#IDENTIFIER(this);
+    return ScrapConfig.#parseIdentifier(this);
   }
 
   /**
@@ -103,7 +102,7 @@ export class ScrapConfig {
      * @returns config identifier: string composed of title with user field value
      */
     schema.methods.getIdentifier = function () {
-      return ScrapConfig.#IDENTIFIER(this);
+      return ScrapConfig.#parseIdentifier(this);
     };
 
     /**
@@ -119,5 +118,9 @@ export class ScrapConfig {
     };
 
     return schema;
+  }
+
+  static #parseIdentifier(config) {
+    return `user = ${config.user}`;
   }
 }
