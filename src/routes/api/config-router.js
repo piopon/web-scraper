@@ -364,11 +364,11 @@ export class ConfigRouter {
       // perform update operation
       const updateStatus = update(configContent);
       if (updateStatus.success) {
-        configContent.save();
+        await configContent.save();
         // if we've created a new blank configuration then we must link it in the user
         if (user.config == null) {
           user.config = configContent._id;
-          user.save();
+          await user.save();
         }
       }
       return { status: updateStatus.success ? 200 : 400, message: updateStatus.message };

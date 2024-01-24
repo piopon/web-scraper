@@ -4,7 +4,6 @@ import { ScrapUser } from "../../model/scrap-user.js";
 
 import express from "express";
 import bcrypt from "bcrypt";
-import fs from "fs";
 import { MongooseError } from "mongoose";
 import { Strategy } from "passport-local";
 
@@ -41,12 +40,12 @@ export class ViewRouter {
    * @param {Object} router The router object with GET method routes defined
    */
   #createGetRoutes(router) {
-    router.get("/", AccessChecker.canViewContent, (request, response) => {
-      const scrapConfig = JSON.parse(fs.readFileSync(this.#configFilePath)).map((item) => new ScrapConfig(item));
+    router.get("/", AccessChecker.canViewContent, async (request, response) => {
+      const scrapConfig = await this.#getScrapConfigForUser(request.user);
       response.render("index", {
         title: "scraper configuration",
         user: request.user.name,
-        content: scrapConfig,
+        content: scrapConfig.toJSON(),
         categories: this.#getSupportedCategories(),
         currencies: this.#getSupportedCurrencies(),
       });
@@ -108,6 +107,23 @@ export class ViewRouter {
    */
   #getSupportedCurrencies() {
     return "PLN|GBP|USD|EUR|CHF|CZK|DKK|CNY|JPY|INR|AUD|CAD";
+  }
+
+  /**
+   * Method used to retrieve scraper configuration for specified user
+   * @param {Object} user The ID of the user which configuration we want to retrieve
+   * @returns The scraper configuration of the specified user
+   */
+  async #getScrapConfigForUser(user) {
+    if (user.config == null) {
+      // user has no config - create and link it
+      const scrapConfig = await ScrapConfig.getDatabaseModel().create({ user: user._id });
+      user.config = scrapConfig._id;
+      await user.save();
+      return scrapConfig;
+    }
+    // user has config - find and return it
+    return await ScrapConfig.getDatabaseModel().findById(user.config);
   }
 
   /**

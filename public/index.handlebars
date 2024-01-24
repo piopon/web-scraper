@@ -1,10 +1,8 @@
 <section class="group-columns hide">
-  {{#each content}}
-    {{#each groups}}
-      {{> group-edit group=this }}
-    {{/each}}
-    {{> group-add userId=user }}
+  {{#each content.groups}}
+    {{> group-edit group=this }}
   {{/each}}
+  {{> group-add userId=user }}
 </section>
 <section class="group-status show">
   <div class="group-loader loading"></div>
