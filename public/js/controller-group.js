@@ -486,10 +486,6 @@ export class GroupsController {
    */
   #storeGroupData(groupTarget) {
     this.#groupExpanded = GroupsView.fromHtml(groupTarget);
-    // if stored group does not have a name then it's a new one = we have to remember the user ID
-    if (!this.#groupExpanded.name) {
-      this.#groupExpanded = 0;
-    }
   }
 
   /**
@@ -508,7 +504,8 @@ export class GroupsController {
     const childIndex = Array.from(parentContainer.children)
       .map((element) => element.querySelector("h2.group-title").innerText)
       .findIndex((name) => name === this.#groupExpanded.name);
-    const restoredElement = CommonController.htmlToElement(GroupsView.toHtml(this.#groupExpanded));
+    const restoredObject = childIndex < 0 ? undefined : this.#groupExpanded;
+    const restoredElement = CommonController.htmlToElement(GroupsView.toHtml(restoredObject));
     const previousElement = childIndex < 0 ? parentContainer.lastElementChild : parentContainer.children[childIndex];
     // restore child elements to keep group collapse animation continuity
     const restoreChildren = ["div.group-root-data", "div.group-observers", "div.group-buttons"];
