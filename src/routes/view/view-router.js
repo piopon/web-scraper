@@ -4,7 +4,6 @@ import { ScrapUser } from "../../model/scrap-user.js";
 
 import express from "express";
 import bcrypt from "bcrypt";
-import fs from "fs";
 import { MongooseError } from "mongoose";
 import { Strategy } from "passport-local";
 
