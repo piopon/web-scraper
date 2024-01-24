@@ -42,9 +42,7 @@ export class ViewRouter {
    */
   #createGetRoutes(router) {
     router.get("/", AccessChecker.canViewContent, async (request, response) => {
-      const scrapConfig = request.user.config == null
-        ? await ScrapConfig.getDatabaseModel().create({ user: request.user._id })
-        : await ScrapConfig.getDatabaseModel().findById(request.user.config);
+      const scrapConfig = await this.#getScrapConfigForUser(request.user);
       response.render("index", {
         title: "scraper configuration",
         user: request.user.name,
@@ -110,6 +108,18 @@ export class ViewRouter {
    */
   #getSupportedCurrencies() {
     return "PLN|GBP|USD|EUR|CHF|CZK|DKK|CNY|JPY|INR|AUD|CAD";
+  }
+
+  async #getScrapConfigForUser(user) {
+    if (user.config == null) {
+      // user has no config - create and link it
+      const scrapConfig = await ScrapConfig.getDatabaseModel().create({ user: user._id });
+      user.config = scrapConfig._id;
+      await user.save();
+      return scrapConfig;
+    }
+    // user has config - find and return it
+    return await ScrapConfig.getDatabaseModel().findById(user.config);
   }
 
   /**
