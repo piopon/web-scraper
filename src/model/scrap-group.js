@@ -24,7 +24,7 @@ export class ScrapGroup {
    * @returns group identifier: string composed of title with domain field value
    */
   getIdentifier() {
-    return `name = ${this.name}`;
+    return ScrapGroup.#parseIdentifier(this);
   }
 
   /**
@@ -141,7 +141,7 @@ export class ScrapGroup {
      * @returns group identifier: string composed of title with domain field value
      */
     schema.methods.getIdentifier = function () {
-      return `name = ${this.name}`;
+      return ScrapGroup.#parseIdentifier(this);
     };
 
     /**
@@ -159,5 +159,9 @@ export class ScrapGroup {
     };
 
     return schema;
+  }
+
+  static #parseIdentifier(group) {
+    return `name = ${group.name}`;
   }
 }

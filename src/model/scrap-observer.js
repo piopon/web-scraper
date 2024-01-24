@@ -30,7 +30,7 @@ export class ScrapObserver {
    * @returns observer identifier: string composed of title with path field value
    */
   getIdentifier() {
-    return `name = ${this.name}`;
+    return ScrapObserver.#parseIdentifier(this);
   }
 
   /**
@@ -170,7 +170,7 @@ export class ScrapObserver {
      * @returns observer identifier: string composed of title with path field value
      */
     schema.methods.getIdentifier = function () {
-      return `name = ${this.name}`;
+      return ScrapObserver.#parseIdentifier(this);
     };
 
     /**
@@ -192,5 +192,9 @@ export class ScrapObserver {
     };
 
     return schema;
+  }
+
+  static #parseIdentifier(observer) {
+    return `name = ${observer.name}`;
   }
 }

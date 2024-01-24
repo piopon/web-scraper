@@ -21,7 +21,7 @@ export class ScrapComponent {
    * @returns component identifier: string composed of title with selector, attribute, and auxiliary values
    */
   getIdentifier() {
-    return `component = ${this.selector} | ${this.attribute} | ${this.auxiliary}`;
+    return ScrapComponent.#parseIdentifier(this);
   }
 
   /**
@@ -108,7 +108,7 @@ export class ScrapComponent {
      * @returns component identifier: string composed of title with selector, attribute, and auxiliary values
      */
     schema.methods.getIdentifier = function () {
-      return `component = ${this.selector} | ${this.attribute} | ${this.auxiliary}`;
+      return ScrapComponent.#parseIdentifier(this);
     };
 
     /**
@@ -126,5 +126,9 @@ export class ScrapComponent {
     };
 
     return schema;
+  }
+
+  static #parseIdentifier(component) {
+    return `component = ${component.selector} | ${component.attribute} | ${component.auxiliary}`;
   }
 }
