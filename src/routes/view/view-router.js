@@ -110,6 +110,11 @@ export class ViewRouter {
     return "PLN|GBP|USD|EUR|CHF|CZK|DKK|CNY|JPY|INR|AUD|CAD";
   }
 
+  /**
+   * Method used to retrieve scraper configuration for specified user
+   * @param {Object} user The ID of the user which configuration we want to retrieve
+   * @returns The scraper configuration of the specified user
+   */
   async #getScrapConfigForUser(user) {
     if (user.config == null) {
       // user has no config - create and link it
