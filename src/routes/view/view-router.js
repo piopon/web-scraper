@@ -41,8 +41,10 @@ export class ViewRouter {
    * @param {Object} router The router object with GET method routes defined
    */
   #createGetRoutes(router) {
-    router.get("/", AccessChecker.canViewContent, (request, response) => {
-      const scrapConfig = JSON.parse(fs.readFileSync(this.#configFilePath)).map((item) => new ScrapConfig(item));
+    router.get("/", AccessChecker.canViewContent, async (request, response) => {
+      const scrapConfig = request.user.config == null
+        ? await ScrapConfig.getDatabaseModel().create({ user: request.user._id })
+        : await ScrapConfig.getDatabaseModel().findById(request.user.config);
       response.render("index", {
         title: "scraper configuration",
         user: request.user.name,
