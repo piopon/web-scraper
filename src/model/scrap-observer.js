@@ -30,25 +30,7 @@ export class ScrapObserver {
    * @returns observer identifier: string composed of title with path field value
    */
   getIdentifier() {
-    return `name = ${this.name}`;
-  }
-
-  /**
-   * Method used to perform a deep copy of all values in scrap observer object
-   * @param {Object} otherObserver The scrap observer object with source values
-   */
-  copyValues(otherObserver) {
-    if (!ModelUtils.isInstanceOf(ScrapObserver, otherObserver)) {
-      throw new ScrapError("Cannot copy scrap observer values: incompatible object");
-    }
-    this.name = otherObserver.name;
-    this.path = otherObserver.path;
-    this.target = otherObserver.target;
-    this.history = otherObserver.history;
-    this.container = otherObserver.container;
-    this.title.copyValues(otherObserver.title);
-    this.image.copyValues(otherObserver.image);
-    this.price.copyValues(otherObserver.price);
+    return ScrapObserver.#parseIdentifier(this);
   }
 
   /**
@@ -148,7 +130,10 @@ export class ScrapObserver {
    * @returns database schema object
    */
   static getDatabaseSchema() {
-    return new mongoose.Schema({
+    /**
+     * Database schema object definition for ScrapObserver
+     */
+    const schema = new mongoose.Schema({
       name: {
         type: String,
         required: [true, "Missing observer name"],
@@ -179,5 +164,42 @@ export class ScrapObserver {
         required: true,
       },
     });
+
+    /**
+     * Method used to receive the appropriate identifier of observer
+     * @returns observer identifier: string composed of title with path field value
+     */
+    schema.methods.getIdentifier = function () {
+      return ScrapObserver.#parseIdentifier(this);
+    };
+
+    /**
+     * Method used to perform a deep copy of all values in scrap observer object
+     * @param {Object} otherObserver The scrap observer object with source values
+     */
+    schema.methods.copyValues = function (otherObserver) {
+      if (!ModelUtils.isInstanceOf(ScrapObserver, otherObserver)) {
+        throw new ScrapError("Cannot copy scrap observer values: incompatible object");
+      }
+      this.name = otherObserver.name;
+      this.path = otherObserver.path;
+      this.target = otherObserver.target;
+      this.history = otherObserver.history;
+      this.container = otherObserver.container;
+      this.title.copyValues(otherObserver.title);
+      this.image.copyValues(otherObserver.image);
+      this.price.copyValues(otherObserver.price);
+    };
+
+    return schema;
+  }
+
+  /**
+   * Method used to retrieve identifier from input object
+   * @param {Object} observer The value from which we want to retrieve identifier
+   * @returns identifier of the provided input object
+   */
+  static #parseIdentifier(observer) {
+    return `name = ${observer.name}`;
   }
 }

@@ -24,21 +24,7 @@ export class ScrapGroup {
    * @returns group identifier: string composed of title with domain field value
    */
   getIdentifier() {
-    return `name = ${this.name}`;
-  }
-
-  /**
-   * Method used to perform a deep copy of all values in scrap group object
-   * @param {Object} otherGroup The scrap group object with source values
-   */
-  copyValues(otherGroup) {
-    if (!ModelUtils.isInstanceOf(ScrapGroup, otherGroup)) {
-      throw new ScrapError("Cannot copy scrap group values: incompatible object");
-    }
-    this.name = otherGroup.name;
-    this.category = otherGroup.category;
-    this.domain = otherGroup.domain;
-    this.observers.forEach((observer, index) => observer.copyValues(otherGroup.observers[index]));
+    return ScrapGroup.#parseIdentifier(this);
   }
 
   /**
@@ -110,7 +96,6 @@ export class ScrapGroup {
         properties: {
           parent: { type: "integer", minimum: 0 },
         },
-        required: ["parent"],
       };
     } else {
       return {
@@ -129,7 +114,10 @@ export class ScrapGroup {
    * @returns database schema object
    */
   static getDatabaseSchema() {
-    return new mongoose.Schema({
+    /**
+     * Database schema object definition for ScrapGroup
+     */
+    const schema = new mongoose.Schema({
       name: {
         type: String,
         required: [true, "Missing group name"],
@@ -147,5 +135,38 @@ export class ScrapGroup {
         require: [true, "Missing group observers"],
       },
     });
+
+    /**
+     * Method used to receive the appropriate identifier of group
+     * @returns group identifier: string composed of title with domain field value
+     */
+    schema.methods.getIdentifier = function () {
+      return ScrapGroup.#parseIdentifier(this);
+    };
+
+    /**
+     * Method used to perform a deep copy of all values in scrap group object
+     * @param {Object} otherGroup The scrap group object with source values
+     */
+    schema.methods.copyValues = function (otherGroup) {
+      if (!ModelUtils.isInstanceOf(ScrapGroup, otherGroup)) {
+        throw new ScrapError("Cannot copy scrap group values: incompatible object");
+      }
+      this.name = otherGroup.name;
+      this.category = otherGroup.category;
+      this.domain = otherGroup.domain;
+      this.observers.forEach((observer, index) => observer.copyValues(otherGroup.observers[index]));
+    };
+
+    return schema;
+  }
+
+  /**
+   * Method used to retrieve identifier from input object
+   * @param {Object} group The value from which we want to retrieve identifier
+   * @returns identifier of the provided input object
+   */
+  static #parseIdentifier(group) {
+    return `name = ${group.name}`;
   }
 }

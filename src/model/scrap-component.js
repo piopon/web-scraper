@@ -21,21 +21,7 @@ export class ScrapComponent {
    * @returns component identifier: string composed of title with selector, attribute, and auxiliary values
    */
   getIdentifier() {
-    return `component = ${this.selector} | ${this.attribute} | ${this.auxiliary}`;
-  }
-
-  /**
-   * Method used to perform a deep copy of all values in scrap component object
-   * @param {Object} otherComponent The scrap component object with source values
-   */
-  copyValues(otherComponent) {
-    if (!ModelUtils.isInstanceOf(ScrapComponent, otherComponent)) {
-      throw new ScrapError("Cannot copy scrap component values: incompatible object");
-    }
-    this.interval = otherComponent.interval;
-    this.selector = otherComponent.selector;
-    this.attribute = otherComponent.attribute;
-    this.auxiliary = otherComponent.auxiliary;
+    return ScrapComponent.#parseIdentifier(this);
   }
 
   /**
@@ -92,7 +78,10 @@ export class ScrapComponent {
    * @returns database schema object
    */
   static getDatabaseSchema() {
-    return new mongoose.Schema({
+    /**
+     * Database schema object definition for ScrapObserver
+     */
+    const schema = new mongoose.Schema({
       interval: String,
       selector: {
         type: String,
@@ -113,5 +102,38 @@ export class ScrapComponent {
         },
       },
     });
+
+    /**
+     * Method used to receive the appropriate identifier of component
+     * @returns component identifier: string composed of title with selector, attribute, and auxiliary values
+     */
+    schema.methods.getIdentifier = function () {
+      return ScrapComponent.#parseIdentifier(this);
+    };
+
+    /**
+     * Method used to perform a deep copy of all values in scrap component object
+     * @param {Object} otherComponent The scrap component object with source values
+     */
+    schema.methods.copyValues = function (otherComponent) {
+      if (!ModelUtils.isInstanceOf(ScrapComponent, otherComponent)) {
+        throw new ScrapError("Cannot copy scrap component values: incompatible object");
+      }
+      this.interval = otherComponent.interval;
+      this.selector = otherComponent.selector;
+      this.attribute = otherComponent.attribute;
+      this.auxiliary = otherComponent.auxiliary;
+    };
+
+    return schema;
+  }
+
+  /**
+   * Method used to retrieve identifier from input object
+   * @param {Object} component The value from which we want to retrieve identifier
+   * @returns identifier of the provided input object
+   */
+  static #parseIdentifier(component) {
+    return `component = ${component.selector} | ${component.attribute} | ${component.auxiliary}`;
   }
 }

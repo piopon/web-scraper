@@ -8,7 +8,7 @@ export class ObserversService {
    * @returns promise containing the operation response text or error
    */
   static async addObserver(parentId) {
-    const url = `api/v1/configs/groups/observers?parent=${encodeURIComponent(parentId)}`;
+    const url = `api/v1/config/groups/observers?parent=${encodeURIComponent(parentId)}`;
     const openedObserver = document.querySelector("div.modal-dialog.init-reveal:not(.hidden)");
     const requestBody = JSON.stringify(ObserversView.fromHtml(openedObserver));
     const response = await fetch(url, CommonService.createRequestOptions("POST", requestBody));
@@ -26,7 +26,7 @@ export class ObserversService {
    * @returns promise containing the operation response JSON or error
    */
   static async getObservers(parentId) {
-    const url = `api/v1/configs/groups?name=${encodeURIComponent(parentId)}`;
+    const url = `api/v1/config/groups?name=${encodeURIComponent(parentId)}`;
     const response = await fetch(url, CommonService.createRequestOptions("GET"));
     if (response.status === 200) {
       return response.json();
@@ -42,7 +42,7 @@ export class ObserversService {
    * @returns promise containing the operation response text or error
    */
   static async updateObserver(observerId) {
-    const url = `api/v1/configs/groups/observers?name=${encodeURIComponent(observerId)}`;
+    const url = `api/v1/config/groups/observers?name=${encodeURIComponent(observerId)}`;
     const openedObserver = document.querySelector("div.modal-dialog.init-reveal:not(.hidden)");
     const requestBody = JSON.stringify(ObserversView.fromHtml(openedObserver));
     const response = await fetch(url, CommonService.createRequestOptions("PUT", requestBody));
@@ -60,7 +60,7 @@ export class ObserversService {
    * @returns promise containing the operation response text or error
    */
   static async deleteObserver(observerId) {
-    const url = `api/v1/configs/groups/observers?name=${encodeURIComponent(observerId)}`;
+    const url = `api/v1/config/groups/observers?name=${encodeURIComponent(observerId)}`;
     const response = await fetch(url, CommonService.createRequestOptions("DELETE"));
     if (response.status === 200) {
       return response.json();

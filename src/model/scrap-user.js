@@ -37,8 +37,8 @@ export class ScrapUser {
         type: String,
         required: true,
       },
-      configs: {
-        type: [mongoose.Types.ObjectId],
+      config: {
+        type: mongoose.Types.ObjectId,
         ref: ScrapConfig.getDatabaseModel().modelName,
       },
     });

@@ -22,19 +22,7 @@ export class ScrapConfig {
    * @returns config identifier: string composed of title with user field value
    */
   getIdentifier() {
-    return `user = ${this.user}`;
-  }
-
-  /**
-   * Method used to perform a deep copy of all values in scrap config object
-   * @param {Object} otherConfig The scrap config object with source values
-   */
-  copyValues(otherConfig) {
-    if (!ModelUtils.isInstanceOf(ScrapConfig, otherConfig)) {
-      throw new ScrapError("Cannot copy scrap config values: incompatible object");
-    }
-    this.user = otherConfig.user;
-    this.groups.forEach((group, index) => group.copyValues(otherConfig.groups[index]));
+    return ScrapConfig.#parseIdentifier(this);
   }
 
   /**
@@ -60,7 +48,7 @@ export class ScrapConfig {
       type: "object",
       additionalProperties: false,
       properties: {
-        user: { type: "integer", minimum: 0 },
+        user: { type: "string", minLength: 1 },
         groups: { type: "array", items: ScrapGroup.getRequestBodySchema() },
       },
       required: ["user"],
@@ -77,7 +65,7 @@ export class ScrapConfig {
       type: "object",
       additionalProperties: false,
       properties: {
-        user: { type: "integer", minimum: 0 },
+        user: { type: "string", minLength: 1 },
       },
     };
   }
@@ -95,7 +83,10 @@ export class ScrapConfig {
    * @returns database schema object
    */
   static getDatabaseSchema() {
-    return new mongoose.Schema({
+    /**
+     * Database schema object definition for ScrapConfig
+     */
+    const schema = new mongoose.Schema({
       user: {
         type: mongoose.Types.ObjectId,
         require: [true, "Missing configuration user"],
@@ -105,5 +96,36 @@ export class ScrapConfig {
         require: [true, "Missing configuration groups"],
       },
     });
+
+    /**
+     * Method used to receive the appropriate identifier of config
+     * @returns config identifier: string composed of title with user field value
+     */
+    schema.methods.getIdentifier = function () {
+      return ScrapConfig.#parseIdentifier(this);
+    };
+
+    /**
+     * Method used to perform a deep copy of all values in scrap config object
+     * @param {Object} otherConfig The scrap config object with source values
+     */
+    schema.methods.copyValues = function (otherConfig) {
+      if (!ModelUtils.isInstanceOf(ScrapConfig, otherConfig)) {
+        throw new ScrapError("Cannot copy scrap config values: incompatible object");
+      }
+      this.user = otherConfig.user;
+      this.groups.forEach((group, index) => group.copyValues(otherConfig.groups[index]));
+    };
+
+    return schema;
+  }
+
+  /**
+   * Method used to retrieve identifier from input object
+   * @param {Object} config The value from which we want to retrieve identifier
+   * @returns identifier of the provided input object
+   */
+  static #parseIdentifier(config) {
+    return `user = ${config.user}`;
   }
 }

@@ -162,7 +162,7 @@ export class GroupsController {
         const target = clickEvent.currentTarget;
         const selectedAction = target.dataset.action;
         if ("add" === selectedAction) {
-          this.#addGroup(closeButton, target.dataset.id);
+          this.#addGroup(closeButton);
         } else if ("update" === selectedAction) {
           this.#updateGroup(closeButton, target.dataset.id);
         } else if ("delete" === selectedAction) {
@@ -189,12 +189,11 @@ export class GroupsController {
   /**
    * Method used to handle new group addition logic
    * @param {Object} closeButton The close button of added group used for collapsing UI
-   * @param {String} parentUserId The parent identifier for which we want to add new group
    */
-  #addGroup(closeButton, parentUserId) {
-    GroupsService.addGroup(parentUserId)
+  #addGroup(closeButton) {
+    GroupsService.addGroup()
       .then((data) => {
-        this.#reloadGroups(parentUserId);
+        this.#reloadGroups();
         this.#collapse(closeButton);
         this.#cleanGroupData();
         CommonController.showToastSuccess(data);
@@ -233,7 +232,7 @@ export class GroupsController {
   #deleteGroup(closeButton, deletedGroupId) {
     GroupsService.deleteGroup(deletedGroupId)
       .then((data) => {
-        this.#reloadGroups(0);
+        this.#reloadGroups();
         this.#collapse(closeButton);
         this.#cleanGroupData();
         CommonController.showToastSuccess(data);
@@ -247,21 +246,16 @@ export class GroupsController {
 
   /**
    * Method used to reload observers for the specified parent group
-   * @param {String} parentGroupId The observers parent group identifier
    */
-  #reloadGroups(parentUserId) {
-    if (undefined === parentUserId) {
-      CommonController.showToastWarning(`Cannot reload groups for ${parentGroupId} user.`);
-      return;
-    }
-    GroupsService.getGroups(parentUserId)
+  #reloadGroups() {
+    GroupsService.getGroups()
       .then((data) => {
         let html = "";
-        data[0].groups.forEach((group) => (html += GroupsView.toHtml(group)));
-        document.querySelector("section.group-columns").innerHTML = html + GroupsView.toHtml(data[0].user);
+        data.groups.forEach((group) => (html += GroupsView.toHtml(group)));
+        document.querySelector("section.group-columns").innerHTML = html + GroupsView.toHtml();
         this.#initController();
         // notify other controllers that groups were reloaded
-        this.emitEvent("groups-reloaded", parentUserId);
+        this.emitEvent("groups-reloaded", undefined);
       })
       .catch((error) => CommonController.showToastError(error));
   }

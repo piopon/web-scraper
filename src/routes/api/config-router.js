@@ -5,20 +5,8 @@ import { ScrapObserver } from "../../model/scrap-observer.js";
 
 import Ajv from "ajv";
 import express from "express";
-import path from "path";
-import fs from "fs";
 
 export class ConfigRouter {
-  #configFilePath = undefined;
-
-  /**
-   * Creates a new config router for configuring appropriate endpoints
-   * @param {String} configFile The path to the configuration file
-   */
-  constructor(configFile) {
-    this.#configFilePath = configFile;
-  }
-
   /**
    * Method used to create routes for scraping ocnfiguration values
    * @returns router object for handling config requests
@@ -38,28 +26,24 @@ export class ConfigRouter {
    * @param {Object} router The router object with GET method routes defined
    */
   #createGetRoutes(router) {
-    router.get("/", (request, response) => {
-      this.#handleGetRequest(request, response, (configContent) =>
-        configContent.filter((item) => (request.query.user ? item.user === request.query.user : true))
-      );
+    router.get("/", async (request, response) => {
+      await this.#handleGetRequest(request, response, (configContent) => configContent);
     });
-    router.get("/groups", (request, response) => {
-      this.#handleGetRequest(request, response, (configContent) =>
-        configContent
-          .flatMap((item) => item.groups)
-          .filter((item) => {
-            const nameOk = request.query.name ? item.name === request.query.name : true;
-            const categoryOk = request.query.category ? item.category === request.query.category : true;
-            const domainOk = request.query.domain ? item.domain === request.query.domain : true;
+    router.get("/groups", async (request, response) => {
+      await this.#handleGetRequest(request, response, (configContent) =>
+        configContent.groups
+          .filter((group) => {
+            const nameOk = request.query.name ? group.name === request.query.name : true;
+            const categoryOk = request.query.category ? group.category === request.query.category : true;
+            const domainOk = request.query.domain ? group.domain === request.query.domain : true;
             return nameOk && categoryOk && domainOk;
           })
       );
     });
-    router.get("/groups/observers", (request, response) => {
-      this.#handleGetRequest(request, response, (configContent) =>
-        configContent
-          .flatMap((item) => item.groups)
-          .flatMap((item) => item.observers)
+    router.get("/groups/observers", async (request, response) => {
+      await this.#handleGetRequest(request, response, (configContent) =>
+        configContent.groups
+          .flatMap((group) => group.observers)
           .filter((item) => {
             const nameOk = request.query.name ? item.name === request.query.name : true;
             const pathOk = request.query.path ? item.path === request.query.path : true;
@@ -69,11 +53,10 @@ export class ConfigRouter {
           })
       );
     });
-    router.get("/groups/observers/components", (request, response) => {
-      this.#handleGetRequest(request, response, (configContent) =>
-        configContent
-          .flatMap((item) => item.groups)
-          .flatMap((item) => item.observers)
+    router.get("/groups/observers/components", async (request, response) => {
+      await this.#handleGetRequest(request, response, (configContent) =>
+        configContent.groups
+          .flatMap((group) => group.observers)
           .map((item) => item[request.query.source])
           .filter((item) => {
             const intervalOk = request.query.interval ? item.interval === request.query.interval : true;
@@ -90,8 +73,8 @@ export class ConfigRouter {
    * @param {Object} router The router object with PUT method routes defined
    */
   #createPutRoutes(router) {
-    router.put("/", (request, response) => {
-      this.#handlePutRequest(
+    router.put("/", async (request, response) => {
+      await this.#handlePutRequest(
         request,
         response,
         (configContent) => configContent,
@@ -100,21 +83,21 @@ export class ConfigRouter {
         }
       );
     });
-    router.put("/groups", (request, response) => {
-      this.#handlePutRequest(
+    router.put("/groups", async (request, response) => {
+      await this.#handlePutRequest(
         request,
         response,
-        (configContent) => configContent.flatMap((item) => item.groups),
+        (configContent) => configContent.groups,
         (parent) => {
           return parent.findIndex((item) => (request.query.name ? item.name === request.query.name : false));
         }
       );
     });
-    router.put("/groups/observers", (request, response) => {
-      this.#handlePutRequest(
+    router.put("/groups/observers", async (request, response) => {
+      await this.#handlePutRequest(
         request,
         response,
-        (configContent) => configContent.flatMap((item) => item.groups).flatMap((item) => item.observers),
+        (configContent) => configContent.groups.flatMap((item) => item.observers),
         (parent) => {
           return parent.findIndex((item) => (request.query.name ? item.name === request.query.name : false));
         }
@@ -127,20 +110,15 @@ export class ConfigRouter {
    * @param {Object} router The router object with POST method routes defined
    */
   #createPostRoutes(router) {
-    router.post("/", (request, response) => {
-      this.#handlePostRequest(request, response, (configContent) => configContent);
+    router.post("/", async (request, response) => {
+      await this.#handlePostRequest(request, response, (configContent) => configContent);
     });
-    router.post("/groups", (request, response) => {
-      this.#handlePostRequest(request, response, (configContent) => {
-        const parentConfig = configContent.filter((config) => config.user === request.query.parent);
-        return parentConfig.length > 0 ? parentConfig.at(0).groups : undefined;
-      });
+    router.post("/groups", async (request, response) => {
+      await this.#handlePostRequest(request, response, (configContent) => configContent.groups);
     });
-    router.post("/groups/observers", (request, response) => {
-      this.#handlePostRequest(request, response, (configContent) => {
-        const parentGroup = configContent
-          .flatMap((config) => config.groups)
-          .filter((group) => group.name === request.query.parent);
+    router.post("/groups/observers", async (request, response) => {
+      await this.#handlePostRequest(request, response, (configContent) => {
+        const parentGroup = configContent.groups.filter((group) => group.name === request.query.parent);
         return parentGroup.length > 0 ? parentGroup.at(0).observers : undefined;
       });
     });
@@ -151,24 +129,24 @@ export class ConfigRouter {
    * @param {Object} router The router object with DELETE method routes defined
    */
   #createDeleteRoutes(router) {
-    router.delete("/", (request, response) => {
-      this.#handleDeleteRequest(request, response, (configContent) => {
-        const details = this.#getParentDetails(configContent, { configUser: request.query.user });
+    router.delete("/", async (request, response) => {
+      await this.#handleDeleteRequest(request, response, (configContent) => {
+        const details = this.#getParentDetails(configContent, { configUser: request.user._id });
         return details
           ? { found: { parent: details.parent, index: details.index }, reason: undefined }
           : { found: undefined, reason: "Could not find item to delete" };
       });
     });
-    router.delete("/groups", (request, response) => {
-      this.#handleDeleteRequest(request, response, (configContent) => {
+    router.delete("/groups", async (request, response) => {
+      await this.#handleDeleteRequest(request, response, (configContent) => {
         const details = this.#getParentDetails(configContent, { groupName: request.query.name });
         return details
           ? { found: { parent: details.parent, index: details.index }, reason: undefined }
-          : { found: undefined, reason: "could not find item to delete" };
+          : { found: undefined, reason: "Could not find item to delete" };
       });
     });
-    router.delete("/groups/observers", (request, response) => {
-      this.#handleDeleteRequest(request, response, (configContent) => {
+    router.delete("/groups/observers", async (request, response) => {
+      await this.#handleDeleteRequest(request, response, (configContent) => {
         const details = this.#getParentDetails(configContent, { observerName: request.query.name });
         return details
           ? { found: { parent: details.parent, index: details.index }, reason: undefined }
@@ -183,13 +161,15 @@ export class ConfigRouter {
    * @param {Object} response The outputted response object
    * @param {Function} filter The function using query and path params to return appropriate data
    */
-  #handleGetRequest(request, response, filter) {
+  async #handleGetRequest(request, response, filter) {
     const validationResult = this.#validateQueryParams(request.method, request.url, request.query);
     if (!validationResult.valid) {
       response.status(400).json(validationResult.cause);
       return;
     }
-    const configContent = JSON.parse(fs.readFileSync(this.#configFilePath));
+    const configContent = request.user.config == null
+      ? await ScrapConfig.getDatabaseModel().create({ user: user._id })
+      : await ScrapConfig.getDatabaseModel().findById(request.user.config);
     const filteredData = filter(configContent);
     response.status(200).json(filteredData);
   }
@@ -201,7 +181,7 @@ export class ConfigRouter {
    * @param {Function} parent The function used to get the parent of the body content
    * @param {Function} index The function used to get the index of the element to edit
    */
-  #handlePutRequest(request, response, parent, index) {
+  async #handlePutRequest(request, response, parent, index) {
     const paramsValidation = this.#validateQueryParams(request.method, request.url, request.query);
     if (!paramsValidation.valid) {
       response.status(400).json(paramsValidation.cause);
@@ -212,7 +192,7 @@ export class ConfigRouter {
       response.status(400).json(bodyValidation.cause);
       return;
     }
-    const updateResult = this.#updateConfig((initalConfig) => {
+    const updateResult = await this.#updateConfig(request.user, (initalConfig) => {
       const contentParent = parent(initalConfig);
       if (!contentParent) {
         return { success: false, message: "Undefined parent of new element" };
@@ -249,7 +229,7 @@ export class ConfigRouter {
    * @param {Object} response The outputted response object
    * @param {Function} parent The function used to get the parent of the body content
    */
-  #handlePostRequest(request, response, parent) {
+  async #handlePostRequest(request, response, parent) {
     const paramsValidation = this.#validateQueryParams(request.method, request.url, request.query);
     if (!paramsValidation.valid) {
       response.status(400).json(paramsValidation.cause);
@@ -260,7 +240,7 @@ export class ConfigRouter {
       response.status(400).json(bodyValidation.cause);
       return;
     }
-    const addResult = this.#updateConfig((initalConfig) => {
+    const addResult = await this.#updateConfig(request.user, (initalConfig) => {
       const contentParent = parent(initalConfig);
       if (!contentParent) {
         return { success: false, message: "Undefined parent of new element" };
@@ -281,16 +261,19 @@ export class ConfigRouter {
    * @param {Object} response The outputted response object
    * @param {Function} index The function used to get the parent and index of the element to delete
    */
-  #handleDeleteRequest(request, response, index) {
+  async #handleDeleteRequest(request, response, index) {
     const paramsValidation = this.#validateQueryParams(request.method, request.url, request.query);
     if (!paramsValidation.valid) {
       response.status(400).json(paramsValidation.cause);
       return;
     }
-    const deleteResult = this.#updateConfig((initalConfig) => {
+    const deleteResult = await this.#updateConfig(request.user, (initalConfig) => {
       const indexResult = index(initalConfig);
       if (!indexResult.found) {
         return { success: false, message: indexResult.reason };
+      }
+      if (undefined === indexResult.found.index) {
+        return { success: false, message: "Cannot remove non-deletable element: found index is not valid" };
       }
       const removedItem = indexResult.found.parent.splice(indexResult.found.index, 1);
       return { success: true, message: `Removed configuration element with ${removedItem.at(0).getIdentifier()}` };
@@ -305,21 +288,18 @@ export class ConfigRouter {
    * @returns parent of the searched object and the index of the object in parent
    */
   #getParentDetails(fullConfig, { configUser = undefined, groupName = undefined, observerName = undefined }) {
-    for (let configIndex = 0; configIndex < fullConfig.length; configIndex++) {
-      const currentConfig = fullConfig[configIndex];
-      if (configUser && configUser === currentConfig.user) {
-        return { parent: fullConfig, index: configIndex };
+    if (configUser && configUser === fullConfig.user) {
+      return { parent: fullConfig, index: undefined };
+    }
+    for (let groupIndex = 0; groupIndex < fullConfig.groups.length; groupIndex++) {
+      const currentGroup = fullConfig.groups[groupIndex];
+      if (groupName && groupName === currentGroup.name) {
+        return { parent: fullConfig.groups, index: groupIndex };
       }
-      for (let groupIndex = 0; groupIndex < currentConfig.groups.length; groupIndex++) {
-        const currentGroup = currentConfig.groups[groupIndex];
-        if (groupName && groupName === currentGroup.name) {
-          return { parent: currentConfig.groups, index: groupIndex };
-        }
-        for (let observerIndex = 0; observerIndex < currentGroup.observers.length; observerIndex++) {
-          const currentObserver = currentGroup.observers[observerIndex];
-          if (observerName && observerName === currentObserver.name) {
-            return { parent: currentGroup.observers, index: observerIndex };
-          }
+      for (let observerIndex = 0; observerIndex < currentGroup.observers.length; observerIndex++) {
+        const currentObserver = currentGroup.observers[observerIndex];
+        if (observerName && observerName === currentObserver.name) {
+          return { parent: currentGroup.observers, index: observerIndex };
         }
       }
     }
@@ -375,16 +355,21 @@ export class ConfigRouter {
    * Method used to update the configuration file with the provided logic
    * @param {Function} update The update logic to apply when altering config file (add, edit, or delete)
    */
-  #updateConfig(update) {
+  async #updateConfig(user, update) {
     try {
-      const configDirectory = path.dirname(this.#configFilePath);
-      if (!fs.existsSync(configDirectory)) {
-        fs.mkdirSync(configDirectory, { recursive: true });
-      }
-      const configContent = JSON.parse(fs.readFileSync(this.#configFilePath)).map((item) => new ScrapConfig(item));
+      // get initial config content: either a new one or an existing from user object
+      const configContent = user.config == null
+        ? await ScrapConfig.getDatabaseModel().create({ user: user._id })
+        : await ScrapConfig.getDatabaseModel().findById(user.config);
+      // perform update operation
       const updateStatus = update(configContent);
       if (updateStatus.success) {
-        fs.writeFileSync(this.#configFilePath, JSON.stringify(configContent, null, 2));
+        configContent.save();
+        // if we've created a new blank configuration then we must link it in the user
+        if (user.config == null) {
+          user.config = configContent._id;
+          user.save();
+        }
       }
       return { status: updateStatus.success ? 200 : 400, message: updateStatus.message };
     } catch (error) {
