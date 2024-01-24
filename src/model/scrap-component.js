@@ -128,6 +128,11 @@ export class ScrapComponent {
     return schema;
   }
 
+  /**
+   * Method used to retrieve identifier from input object
+   * @param {Object} component The value from which we want to retrieve identifier
+   * @returns identifier of the provided input object
+   */
   static #parseIdentifier(component) {
     return `component = ${component.selector} | ${component.attribute} | ${component.auxiliary}`;
   }

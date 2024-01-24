@@ -120,6 +120,11 @@ export class ScrapConfig {
     return schema;
   }
 
+  /**
+   * Method used to retrieve identifier from input object
+   * @param {Object} config The value from which we want to retrieve identifier
+   * @returns identifier of the provided input object
+   */
   static #parseIdentifier(config) {
     return `user = ${config.user}`;
   }

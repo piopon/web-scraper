@@ -161,6 +161,11 @@ export class ScrapGroup {
     return schema;
   }
 
+  /**
+   * Method used to retrieve identifier from input object
+   * @param {Object} group The value from which we want to retrieve identifier
+   * @returns identifier of the provided input object
+   */
   static #parseIdentifier(group) {
     return `name = ${group.name}`;
   }

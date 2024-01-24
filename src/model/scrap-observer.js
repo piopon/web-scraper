@@ -194,6 +194,11 @@ export class ScrapObserver {
     return schema;
   }
 
+  /**
+   * Method used to retrieve identifier from input object
+   * @param {Object} observer The value from which we want to retrieve identifier
+   * @returns identifier of the provided input object
+   */
   static #parseIdentifier(observer) {
     return `name = ${observer.name}`;
   }
