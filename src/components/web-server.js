@@ -1,6 +1,6 @@
 import { ParamsParser } from "../middleware/params-parser.js";
 import { RequestLogger } from "../middleware/request-logger.js";
-import { ComponentType } from "../../config/app-variables.js";
+import { ComponentType } from "../../config/app-types.js";
 import { ConfigRouter } from "../routes/api/config-router.js";
 import { DataRouter } from "../routes/api/data-router.js";
 import { StatusRouter } from "../routes/api/status-router.js";

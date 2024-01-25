@@ -1,4 +1,4 @@
-import { LogLevel } from "../../config/app-variables.js";
+import { LogLevel } from "../../config/app-types.js";
 import moment from "moment";
 
 export class StatusLogger {

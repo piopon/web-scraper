@@ -1,4 +1,4 @@
-import { LogLevel } from "./app-variables.js";
+import { LogLevel } from "./app-types.js";
 import dotenv from "dotenv";
 import path from "path";
 import url from "url";
