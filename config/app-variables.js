@@ -9,3 +9,14 @@ export class LogLevel {
         this.value = value
     }
 }
+
+class ComponentType {
+    static INIT = new ComponentType("init")
+    static LOGIN = new ComponentType("login")
+
+    constructor(name) {
+      this.name = name
+    }
+}
+
+export { LogLevel, ComponentType }
