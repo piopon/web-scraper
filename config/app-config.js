@@ -1,4 +1,4 @@
-import { AppVariables } from "./app-variables.js";
+import { LogLevel } from "./app-variables.js";
 import dotenv from "dotenv";
 import path from "path";
 import url from "url";
@@ -27,7 +27,7 @@ export class AppConfig {
       dataConfigPath: path.join(this.#rootDir, "user", "input", "scrap-config.json"),
       dataOutputPath: path.join(this.#rootDir, "user", "output", "data.json"),
       screenshotPath: path.join(this.#rootDir, "user", "captures"),
-      minLogLevel: AppVariables.LOG_LEVEL_INFO,
+      minLogLevel: LogLevel.INFO,
       serverConfig: {
         port: process.env.SERVER_PORT || 5000,
       },

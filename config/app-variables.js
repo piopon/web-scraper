@@ -1,6 +1,11 @@
-export class AppVariables {
-    static LOG_LEVEL_ERROR = 0;
-    static LOG_LEVEL_WARNING = 1;
-    static LOG_LEVEL_INFO = 2;
-    static LOG_LEVEL_DEBUG = 3;
+export class LogLevel {
+    static ERROR = new LogLevel(0);
+    static WARNING = new LogLevel(1);
+    static INFO = new LogLevel(2);
+    static DEBUG = new LogLevel(3);
+
+    // variables related to log level settings
+    constructor(value) {
+        this.value = value
+    }
 }
