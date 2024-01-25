@@ -50,7 +50,9 @@ export class WebServer {
   run() {
     this.#server = this.#initializeServer();
     this.#server.listen(this.#setupConfig.serverConfig.port, () => {
-      this.#components.forEach((component) => component.item.start());
+      this.#components
+        .filter((component) => component.type.name === ComponentType.INIT.name)
+        .forEach((component) => component.item.start());
       this.#status.info(`Started on port: ${this.#setupConfig.serverConfig.port}`);
     });
   }
