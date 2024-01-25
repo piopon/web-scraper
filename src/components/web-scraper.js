@@ -14,7 +14,6 @@ export class WebScraper {
   static #RUNNING_STATUS = "Running";
 
   #scrapingInProgress = false;
-  #currentUserId = undefined;
   #setupConfig = undefined;
   #scrapConfig = undefined;
   #intervalId = undefined;
@@ -25,11 +24,9 @@ export class WebScraper {
   /**
    * Creates a new web scraper with specified configuration
    * @param {Object} config The object containing scraper configuration
-   * @param {Number} userId The identifier of the user using the web scraper component
    */
-  constructor(config, userId) {
+  constructor(config) {
     this.#setupConfig = config;
-    this.#currentUserId = userId;
     this.#status = new StatusLogger(WebScraper.#COMPONENT_NAME, config.minLogLevel);
     this.#status.info("Created");
   }
@@ -45,7 +42,7 @@ export class WebScraper {
       fs.mkdirSync(configDirectory, { recursive: true });
     }
     if (!fs.existsSync(this.#setupConfig.dataConfigPath)) {
-      const newConfig = { user: this.#currentUserId, groups: [] };
+      const newConfig = { user: 0, groups: [] };
       fs.writeFileSync(this.#setupConfig.dataConfigPath, JSON.stringify(newConfig, null, 2));
       this.#status.info(`Created new ${path.basename(this.#setupConfig.dataConfigPath)}`);
     }
@@ -54,7 +51,7 @@ export class WebScraper {
     try {
       var configCandidate = JSON.parse(fs.readFileSync(this.#setupConfig.dataConfigPath))
         .map((config) => new ScrapConfig(config))
-        .filter((config) => config.user === this.#currentUserId)
+        .filter((config) => config.user === 0)
         .at(0);
       this.#scrapConfig = new ScrapValidator(configCandidate).validate();
     } catch (e) {
