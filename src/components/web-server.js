@@ -60,7 +60,7 @@ export class WebServer {
    */
   shutdown() {
     this.#server.close(() => {
-      this.#components.forEach((component) => component.stop());
+      this.#components.forEach((component) => component.item.stop());
       this.#status.info("Stopped");
     });
   }
