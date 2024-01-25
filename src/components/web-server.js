@@ -1,5 +1,6 @@
 import { ParamsParser } from "../middleware/params-parser.js";
 import { RequestLogger } from "../middleware/request-logger.js";
+import { ComponentType } from "../../config/app-variables.js";
 import { ConfigRouter } from "../routes/api/config-router.js";
 import { DataRouter } from "../routes/api/data-router.js";
 import { StatusRouter } from "../routes/api/status-router.js";
@@ -36,7 +37,11 @@ export class WebServer {
    * @param {Object} component The component to start after running web server
    */
   addComponent(component) {
-    this.#components.push(component);
+    if (component.type instanceof ComponentType) {
+      this.#components.push(component);
+      return;
+    }
+    this.#status.warning(`Unknown component type: ${component.type}`);
   }
 
   /**
@@ -45,7 +50,7 @@ export class WebServer {
   run() {
     this.#server = this.#initializeServer();
     this.#server.listen(this.#setupConfig.serverConfig.port, () => {
-      this.#components.forEach((component) => component.start());
+      this.#components.forEach((component) => component.item.start());
       this.#status.info(`Started on port: ${this.#setupConfig.serverConfig.port}`);
     });
   }
