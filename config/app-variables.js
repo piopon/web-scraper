@@ -1,4 +1,4 @@
-export class LogLevel {
+class LogLevel {
     static ERROR = new LogLevel(0);
     static WARNING = new LogLevel(1);
     static INFO = new LogLevel(2);
