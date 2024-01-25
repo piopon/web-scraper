@@ -10,13 +10,16 @@ import { Strategy } from "passport-local";
 export class ViewRouter {
   static #ENCRYPT_SALT = 10;
 
+  #components = [];
   #passport = undefined;
 
   /**
    * Creates a new view router for displaying configuraion file for the user
+   * @param {Array} components The components list used in view change state (LOGIN)
    * @param {Object} passport The object controlling user sing-up and sing-in process
    */
-  constructor(passport) {
+  constructor(components, passport) {
+    this.#components = components;
     this.#passport = passport;
     this.#configAuthenitcation(passport);
   }

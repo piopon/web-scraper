@@ -88,9 +88,11 @@ export class WebServer {
     server.use(session(this.#getSessionConfiguration()));
     server.use(passport.initialize());
     server.use(passport.session());
+    // filter out components needed by particular routers
+    const viewComponents = this.#components.filter((component) => ComponentType.LOGIN.name === component.type.name);
     // setup web server routes
     const routes = new Map([
-      ["/", new ViewRouter(passport)],
+      ["/", new ViewRouter(viewComponents, passport)],
       ["/api/v1/data", new DataRouter(this.#setupConfig.dataOutputPath)],
       ["/api/v1/config", new ConfigRouter()],
       ["/api/v1/status", new StatusRouter(this.#status, this.#components)],
