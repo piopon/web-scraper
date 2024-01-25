@@ -1,5 +1,5 @@
 import { AppConfig } from "../config/app-config.js";
-import { ComponentType } from "../config/app-variables.js";
+import { ComponentType } from "../config/app-types.js";
 import { WebDatabase } from "./components/web-database.js";
 import { WebScraper } from "./components/web-scraper.js";
 import { WebServer } from "./components/web-server.js";
