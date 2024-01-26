@@ -34,8 +34,8 @@ export class WebScraper {
   /**
    * Method used to start web scraping action
    */
-  async start() {
-    this.#status.info("Starting");
+  async start(user = undefined) {
+    this.#status.info(`Starting for user '${user.name}'`);
     // create a new empty configuration file and directory if none exists
     const configDirectory = path.dirname(this.#setupConfig.dataConfigPath);
     if (!fs.existsSync(configDirectory)) {

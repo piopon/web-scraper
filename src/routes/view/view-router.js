@@ -163,6 +163,8 @@ export class ViewRouter {
           // provided password does not match the saved value - incorrect login data
           return done(null, false, { message: "Incorrect login data. Please try again." });
         }
+        // login success - start login components
+        this.#components.forEach((component) => component.item.start(user[0]));
         return done(null, user[0]);
       } catch (error) {
         let message = error.message;
