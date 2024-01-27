@@ -35,19 +35,7 @@ export class WebScraper {
    * Method used to start web scraping action
    */
   async start(user = undefined) {
-    this.#status.info(`Starting for user '${user.name}'`);
-    // create a new empty configuration file and directory if none exists
-    const configDirectory = path.dirname(this.#setupConfig.dataConfigPath);
-    if (!fs.existsSync(configDirectory)) {
-      fs.mkdirSync(configDirectory, { recursive: true });
-    }
-    if (!fs.existsSync(this.#setupConfig.dataConfigPath)) {
-      const newConfig = { user: 0, groups: [] };
-      fs.writeFileSync(this.#setupConfig.dataConfigPath, JSON.stringify(newConfig, null, 2));
-      this.#status.info(`Created new ${path.basename(this.#setupConfig.dataConfigPath)}`);
-    }
-    this.#status.info("Reading configuration");
-    // parse source scraper configuration file to a config class
+    this.#status.info(`Reading user '${user.name}' configuration`);
     try {
       var configCandidate = await ScrapConfig.getDatabaseModel().findById(user.config);
       if (configCandidate == null) {
