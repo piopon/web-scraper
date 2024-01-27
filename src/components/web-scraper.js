@@ -54,7 +54,7 @@ export class WebScraper {
         this.stop();
         return;
       }
-      this.#scrapConfig = new ScrapValidator(configCandidate).validate();
+      this.#scrapConfig = new ScrapValidator(new ScrapConfig(configCandidate.toJSON())).validate();
     } catch (e) {
       if (e instanceof ScrapWarning) {
         this.#scrapConfig = configCandidate;
