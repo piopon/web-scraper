@@ -42,7 +42,7 @@ export class ViewRouter {
    */
   #createGetRoutes(router) {
     router.get("/", AccessChecker.canViewContent, async (request, response) => {
-      const scrapConfig = await this.#getScrapConfigForUser(request.user);
+      const scrapConfig = await ScrapConfig.getDatabaseModel().findById(request.user.config);
       response.render("index", {
         title: "scraper configuration",
         user: request.user.name,
@@ -110,23 +110,6 @@ export class ViewRouter {
    */
   #getSupportedCurrencies() {
     return "PLN|GBP|USD|EUR|CHF|CZK|DKK|CNY|JPY|INR|AUD|CAD";
-  }
-
-  /**
-   * Method used to retrieve scraper configuration for specified user
-   * @param {Object} user The ID of the user which configuration we want to retrieve
-   * @returns The scraper configuration of the specified user
-   */
-  async #getScrapConfigForUser(user) {
-    if (user.config == null) {
-      // user has no config - create and link it
-      const scrapConfig = await ScrapConfig.getDatabaseModel().create({ user: user._id });
-      user.config = scrapConfig._id;
-      await user.save();
-      return scrapConfig;
-    }
-    // user has config - find and return it
-    return await ScrapConfig.getDatabaseModel().findById(user.config);
   }
 
   /**
