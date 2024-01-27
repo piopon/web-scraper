@@ -22,16 +22,21 @@ export class WebDatabase {
    * Method used to start database connection
    */
   async start() {
-    const connectOptions = {
-      dbName: this.#dbConfig.name,
-      user: this.#dbConfig.user,
-      pass: this.#dbConfig.password,
-      family: 4,
-    };
-    mongoose
-      .connect(`mongodb://${this.#dbConfig.url}:${this.#dbConfig.port}`, connectOptions)
-      .then(() => this.#status.info("Connected to database"))
-      .catch((err) => this.#status.error(err));
+    try {
+      const dbUrl = `mongodb://${this.#dbConfig.url}:${this.#dbConfig.port}`;
+      const dbOptions = {
+        dbName: this.#dbConfig.name,
+        user: this.#dbConfig.user,
+        pass: this.#dbConfig.password,
+        family: 4,
+      };
+      await mongoose.connect(dbUrl, dbOptions);
+      this.#status.info("Connected to database");
+      return true;
+    } catch (error) {
+      this.#status.error(error);
+      return false;
+    }
   }
 
   /**
