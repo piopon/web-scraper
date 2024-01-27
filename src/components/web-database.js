@@ -25,9 +25,12 @@ export class WebDatabase {
     try {
       const dbUrl = `mongodb://${this.#dbConfig.url}:${this.#dbConfig.port}`;
       const dbOptions = {
+        appName: this.#dbConfig.name,
         dbName: this.#dbConfig.name,
         user: this.#dbConfig.user,
         pass: this.#dbConfig.password,
+        serverSelectionTimeoutMS: this.#dbConfig.timeout,
+        connectTimeoutMS: this.#dbConfig.timeout,
         family: 4,
       };
       await mongoose.connect(dbUrl, dbOptions);

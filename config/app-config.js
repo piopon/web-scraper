@@ -36,6 +36,7 @@ export class AppConfig {
         port: process.env.DB_PORT || 27017,
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
+        timeout: process.env.DB_TIMEOUT || 15_000,
       },
       scraperConfig: {
         scrapInterval: 30_000,
