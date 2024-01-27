@@ -201,15 +201,18 @@ export class ViewRouter {
           // find existing user with provided email - incorrect reguster data
           return done(null, false, { message: "Provided email is already in use. Please try again." });
         }
-        // create new user with hashed password, add it to database and proceed with passport logic
-        return done(
-          null,
-          await ScrapUser.getDatabaseModel().create({
-            name: request.body.name,
-            email: username,
-            password: await bcrypt.hash(password, ViewRouter.#ENCRYPT_SALT),
-          })
-        );
+        // create a new user with hashed password and add it to database
+        const newUser = await ScrapUser.getDatabaseModel().create({
+          name: request.body.name,
+          email: username,
+          password: await bcrypt.hash(password, ViewRouter.#ENCRYPT_SALT),
+        });
+        // user at this point has no config - we must create and link it
+        const userConfig = await ScrapConfig.getDatabaseModel().create({ user: newUser._id });
+        newUser.config = userConfig._id;
+        await newUser.save();
+        // return the newly created user with empty config
+        return done(null, newUser);
       } catch (error) {
         let message = error.message;
         if (error instanceof MongooseError) {
