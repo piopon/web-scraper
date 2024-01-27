@@ -48,11 +48,13 @@ export class WebServer {
    * Method used to initialize and run the web server
    */
   run() {
+    for (const component of this.#components) {
+      if (component.type.name === ComponentType.INIT.name) {
+        component.item.start();
+      }
+    }
     this.#server = this.#initializeServer();
     this.#server.listen(this.#setupConfig.serverConfig.port, () => {
-      this.#components
-        .filter((component) => component.type.name === ComponentType.INIT.name)
-        .forEach((component) => component.item.start());
       this.#status.info(`Started on port: ${this.#setupConfig.serverConfig.port}`);
     });
   }
