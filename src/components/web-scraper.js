@@ -50,6 +50,10 @@ export class WebScraper {
     // parse source scraper configuration file to a config class
     try {
       var configCandidate = await ScrapConfig.getDatabaseModel().findById(user.config);
+      if (configCandidate == null) {
+        this.stop();
+        return;
+      }
       this.#scrapConfig = new ScrapValidator(configCandidate).validate();
     } catch (e) {
       if (e instanceof ScrapWarning) {
