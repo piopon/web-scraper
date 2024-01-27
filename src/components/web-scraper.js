@@ -39,6 +39,7 @@ export class WebScraper {
     try {
       var configCandidate = await ScrapConfig.getDatabaseModel().findById(user.config);
       if (configCandidate == null) {
+        this.#status.warning("User has no configuration");
         this.stop();
         return;
       }
@@ -52,7 +53,7 @@ export class WebScraper {
         return;
       }
     }
-    this.#status.info("Initializing");
+    this.#status.info("Initializing virtual browser");
     // open new Puppeteer virtual browser and an initial web page
     this.#browser = await puppeteer.launch({ headless: "new" });
     this.#page = await this.#browser.newPage();
