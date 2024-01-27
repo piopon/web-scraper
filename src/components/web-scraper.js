@@ -34,7 +34,11 @@ export class WebScraper {
   /**
    * Method used to start web scraping action
    */
-  async start(user = undefined) {
+  async start(user) {
+    if (user == null) {
+      this.stop(`Invalid scrap user: ${user}`);
+      return false;
+    }
     this.#status.info(`Reading user '${user.name}' configuration`);
     try {
       var configCandidate = await ScrapConfig.getDatabaseModel().findById(user.config);
