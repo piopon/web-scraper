@@ -88,6 +88,8 @@ export class ViewRouter {
     const logoutCallback = (request, response, next) => {
       request.logout((err) => {
         if (err) return next(err);
+        // logout success - stop login components
+        this.#components.forEach((component) => component.item.stop());
         response.redirect("/login");
       });
     };
