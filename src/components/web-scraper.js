@@ -41,7 +41,7 @@ export class WebScraper {
       if (configCandidate == null) {
         this.#status.warning("User has no configuration");
         this.stop();
-        return;
+        return false;
       }
       this.#scrapConfig = new ScrapValidator(new ScrapConfig(configCandidate.toJSON())).validate();
     } catch (e) {
@@ -49,8 +49,8 @@ export class WebScraper {
         this.#scrapConfig = configCandidate;
         this.#status.warning(e.message);
       } else {
-        this.stop(`Invalid scrap config: ${e.message}`);
-        return;
+        this.stop(`Invalid scrap configuration: ${e.message}`);
+        return false;
       }
     }
     this.#status.info("Initializing virtual browser");
@@ -59,11 +59,13 @@ export class WebScraper {
     this.#page = await this.#browser.newPage();
     this.#page.setDefaultTimeout(this.#setupConfig.scraperConfig.defaultTimeout);
     // invoke scrap data action initially and setup interval calls
-    if (true === (await this.#scrapData())) {
+    const initialScrapResult = await this.#scrapData();
+    if (true === initialScrapResult) {
       const intervalTime = this.#setupConfig.scraperConfig.scrapInterval;
       this.#intervalId = setInterval(() => this.#scrapData(), intervalTime);
       this.#status.info(`${WebScraper.#RUNNING_STATUS} (every: ${intervalTime / 1000} seconds)`);
     }
+    return initialScrapResult;
   }
 
   /**
