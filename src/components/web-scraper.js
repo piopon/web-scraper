@@ -49,10 +49,7 @@ export class WebScraper {
     this.#status.info("Reading configuration");
     // parse source scraper configuration file to a config class
     try {
-      var configCandidate = JSON.parse(fs.readFileSync(this.#setupConfig.dataConfigPath))
-        .map((config) => new ScrapConfig(config))
-        .filter((config) => config.user === 0)
-        .at(0);
+      var configCandidate = await ScrapConfig.getDatabaseModel().findById(user.config);
       this.#scrapConfig = new ScrapValidator(configCandidate).validate();
     } catch (e) {
       if (e instanceof ScrapWarning) {
