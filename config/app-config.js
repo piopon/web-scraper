@@ -24,7 +24,6 @@ export class AppConfig {
    */
   getConfig() {
     return {
-      dataConfigPath: path.join(this.#rootDir, "user", "input", "scrap-config.json"),
       dataOutputPath: path.join(this.#rootDir, "user", "output", "data.json"),
       screenshotPath: path.join(this.#rootDir, "user", "captures"),
       minLogLevel: LogLevel.INFO,
