@@ -33,6 +33,8 @@ export class WebScraper {
 
   /**
    * Method used to start web scraping action
+   * @param {Object} user The user which configuration will be used in the web scraper
+   * @returns true if scraper started successfully, false otherwise
    */
   async start(user) {
     if (user == null) {
