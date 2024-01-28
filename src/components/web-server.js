@@ -115,19 +115,18 @@ export class WebServer {
   }
 
   async #runComponents() {
-    for (const component of this.#components) {
-      if (component.type.name === ComponentType.INIT.name) {
-        // if component is not required to pass then we start it and go to the next one
-        if (!component.mustPass) {
-          component.item.start();
-          continue;
-        }
-        // component must pass so we are waiting for the result to check it
-        const result = await component.item.start();
-        if (!result) {
-          this.#status.error(`Cannot start component: ${component.item.getName()}`);
-          return false;
-        }
+    const serverComponents = this.#components.filter((item) => item.type.equals(ComponentType.INIT));
+    for (const component of serverComponents) {
+      // if component is not required to pass then we start it and go to the next one
+      if (!component.mustPass) {
+        component.item.start();
+        continue;
+      }
+      // component must pass so we are waiting for the result to check it
+      const result = await component.item.start();
+      if (!result) {
+        this.#status.error(`Cannot start component: ${component.item.getName()}`);
+        return false;
       }
     }
     return true;
