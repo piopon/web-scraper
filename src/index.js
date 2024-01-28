@@ -11,8 +11,8 @@ const webDatabase = new WebDatabase(config);
 const webScraper = new WebScraper(config);
 // create and start webserver
 const webServer = new WebServer(config);
-webServer.addComponent({ type: ComponentType.INIT, item: webDatabase });
-webServer.addComponent({ type: ComponentType.LOGIN, item: webScraper });
+webServer.addComponent({ type: ComponentType.INIT, mustPass: false, item: webDatabase });
+webServer.addComponent({ type: ComponentType.LOGIN, mustPass: true, item: webScraper });
 webServer.run();
 
 process.on("SIGTERM", () => webServer.shutdown());
