@@ -48,4 +48,12 @@ export class WebDatabase {
   async stop() {
     mongoose.disconnect();
   }
+
+  /**
+   * Method used to return the name of the component
+   * @returns web database component name
+   */
+  getName() {
+    return WebDatabase.#COMPONENT_NAME;
+  }
 }
