@@ -50,7 +50,15 @@ export class WebServer {
   run() {
     for (const component of this.#components) {
       if (component.type.name === ComponentType.INIT.name) {
-        component.item.start();
+        if (component.mustPass) {
+          const result = await component.item.start();
+          if (!result) {
+            this.#status.error(`Cannot start component: ${component.item.getName()}`);
+            return;
+          }
+        } else {
+          component.item.start();
+        }
       }
     }
     this.#server = this.#initializeServer();
