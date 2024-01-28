@@ -32,6 +32,15 @@ class ComponentType {
   constructor(name) {
     this.name = name;
   }
+
+  /**
+   * Compares this component type with other one and determines if they are equal
+   * @param {Object} other Another component type to compare
+   * @returns true if checked component matches this one
+   */
+  equals(other) {
+    return this.name === other.name;
+  }
 }
 
 export { LogLevel, ComponentType };
