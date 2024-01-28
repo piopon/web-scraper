@@ -47,7 +47,7 @@ export class WebServer {
   /**
    * Method used to initialize and run the web server
    */
-  run() {
+  async run() {
     for (const component of this.#components) {
       if (component.type.name === ComponentType.INIT.name) {
         if (component.mustPass) {
