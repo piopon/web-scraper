@@ -48,7 +48,7 @@ export class WebServer {
    * Method used to initialize and run the web server
    */
   async run() {
-    if (!await this.#runComponents()) {
+    if (!(await this.#runComponents())) {
       return;
     }
     this.#server = this.#initializeServer();
@@ -114,6 +114,10 @@ export class WebServer {
     };
   }
 
+  /**
+   * Method used to initialize and start server-related components
+   * @returns true if all components are invoked, false if at least one has an error
+   */
   async #runComponents() {
     const serverComponents = this.#components.filter((item) => item.type.equals(ComponentType.INIT));
     for (const component of serverComponents) {
