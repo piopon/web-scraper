@@ -48,18 +48,8 @@ export class WebServer {
    * Method used to initialize and run the web server
    */
   async run() {
-    for (const component of this.#components) {
-      if (component.type.name === ComponentType.INIT.name) {
-        if (component.mustPass) {
-          const result = await component.item.start();
-          if (!result) {
-            this.#status.error(`Cannot start component: ${component.item.getName()}`);
-            return;
-          }
-        } else {
-          component.item.start();
-        }
-      }
+    if (!await this.#runComponents()) {
+      return;
     }
     this.#server = this.#initializeServer();
     this.#server.listen(this.#setupConfig.serverConfig.port, () => {
@@ -122,5 +112,23 @@ export class WebServer {
       resave: false,
       saveUninitialized: false,
     };
+  }
+
+  async #runComponents() {
+    for (const component of this.#components) {
+      if (component.type.name === ComponentType.INIT.name) {
+        // if component is not required to pass then we start it and go to the next one
+        if (!component.mustPass) {
+          component.item.start();
+          return true;
+        }
+        // component must pass so we are waiting for the result to check it
+        const result = await component.item.start();
+        if (!result) {
+          this.#status.error(`Cannot start component: ${component.item.getName()}`);
+        }
+        return result;
+      }
+    }
   }
 }
