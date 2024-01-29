@@ -1,3 +1,4 @@
+import { ComponentType } from "../../config/app-types.js";
 import { RegexUtils } from "../utils/regex-utils.js";
 import { ScrapConfig } from "../model/scrap-config.js";
 import { ScrapWarning } from "../model/scrap-exception.js";
@@ -117,6 +118,14 @@ export class WebScraper {
    */
   getName() {
     return WebScraper.#COMPONENT_NAME;
+  }
+
+  /**
+   * Method used to receive additional info components
+   * @returns an object with extra info: component type and require pass flag
+   */
+  getInfo() {
+    return { type: ComponentType.LOGIN, mustPass: true };
   }
 
   /**

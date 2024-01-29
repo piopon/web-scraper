@@ -1,3 +1,4 @@
+import { ComponentType } from "../../config/app-types.js";
 import { StatusLogger } from "./status-logger.js";
 
 import mongoose from "mongoose";
@@ -55,5 +56,13 @@ export class WebDatabase {
    */
   getName() {
     return WebDatabase.#COMPONENT_NAME;
+  }
+
+  /**
+   * Method used to receive additional info components
+   * @returns an object with extra info: component type and require pass flag
+   */
+  getInfo() {
+    return { type: ComponentType.INIT, mustPass: false };
   }
 }
