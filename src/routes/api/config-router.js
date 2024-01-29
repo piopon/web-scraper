@@ -167,9 +167,7 @@ export class ConfigRouter {
       response.status(400).json(validationResult.cause);
       return;
     }
-    const configContent = request.user.config == null
-      ? await ScrapConfig.getDatabaseModel().create({ user: user._id })
-      : await ScrapConfig.getDatabaseModel().findById(request.user.config);
+    const configContent = await ScrapConfig.getDatabaseModel().findById(request.user.config);
     const filteredData = filter(configContent);
     response.status(200).json(filteredData);
   }
@@ -357,10 +355,8 @@ export class ConfigRouter {
    */
   async #updateConfig(user, update) {
     try {
-      // get initial config content: either a new one or an existing from user object
-      const configContent = user.config == null
-        ? await ScrapConfig.getDatabaseModel().create({ user: user._id })
-        : await ScrapConfig.getDatabaseModel().findById(user.config);
+      // get inital config content from user object (every registered user will have one)
+      const configContent = await ScrapConfig.getDatabaseModel().findById(user.config);
       // perform update operation
       const updateStatus = update(configContent);
       if (updateStatus.success) {

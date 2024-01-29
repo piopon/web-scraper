@@ -1,5 +1,6 @@
 import { ParamsParser } from "../middleware/params-parser.js";
 import { RequestLogger } from "../middleware/request-logger.js";
+import { ComponentType } from "../../config/app-types.js";
 import { ConfigRouter } from "../routes/api/config-router.js";
 import { DataRouter } from "../routes/api/data-router.js";
 import { StatusRouter } from "../routes/api/status-router.js";
@@ -36,16 +37,23 @@ export class WebServer {
    * @param {Object} component The component to start after running web server
    */
   addComponent(component) {
-    this.#components.push(component);
+    const componentType = component.getInfo().type;
+    if (componentType instanceof ComponentType) {
+      this.#components.push(component);
+      return;
+    }
+    this.#status.warning(`Unknown component type: ${componentType}`);
   }
 
   /**
    * Method used to initialize and run the web server
    */
-  run() {
+  async run() {
+    if (!(await this.#runComponents())) {
+      return;
+    }
     this.#server = this.#initializeServer();
     this.#server.listen(this.#setupConfig.serverConfig.port, () => {
-      this.#components.forEach((component) => component.start());
       this.#status.info(`Started on port: ${this.#setupConfig.serverConfig.port}`);
     });
   }
@@ -81,9 +89,11 @@ export class WebServer {
     server.use(session(this.#getSessionConfiguration()));
     server.use(passport.initialize());
     server.use(passport.session());
+    // filter out components needed by particular routers
+    const viewComponents = this.#components.filter((item) => ComponentType.LOGIN.equals(item.getInfo().type));
     // setup web server routes
     const routes = new Map([
-      ["/", new ViewRouter(this.#setupConfig.dataConfigPath, passport)],
+      ["/", new ViewRouter(viewComponents, passport)],
       ["/api/v1/data", new DataRouter(this.#setupConfig.dataOutputPath)],
       ["/api/v1/config", new ConfigRouter()],
       ["/api/v1/status", new StatusRouter(this.#status, this.#components)],
@@ -103,5 +113,27 @@ export class WebServer {
       resave: false,
       saveUninitialized: false,
     };
+  }
+
+  /**
+   * Method used to initialize and start server-related components
+   * @returns true if all components are invoked, false if at least one has an error
+   */
+  async #runComponents() {
+    const serverComponents = this.#components.filter((item) => ComponentType.INIT.equals(item.getInfo().type));
+    for (const component of serverComponents) {
+      // if component is not required to pass then we start it and go to the next one
+      if (!component.getInfo().mustPass) {
+        component.start();
+        continue;
+      }
+      // component must pass so we are waiting for the result to check it
+      const result = await component.start();
+      if (!result) {
+        this.#status.error(`Cannot start component: ${component.getName()}`);
+        return false;
+      }
+    }
+    return true;
   }
 }

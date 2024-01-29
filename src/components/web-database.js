@@ -1,3 +1,4 @@
+import { ComponentType } from "../../config/app-types.js";
 import { StatusLogger } from "./status-logger.js";
 
 import mongoose from "mongoose";
@@ -22,16 +23,24 @@ export class WebDatabase {
    * Method used to start database connection
    */
   async start() {
-    const connectOptions = {
-      dbName: this.#dbConfig.name,
-      user: this.#dbConfig.user,
-      pass: this.#dbConfig.password,
-      family: 4,
-    };
-    mongoose
-      .connect(`mongodb://${this.#dbConfig.url}:${this.#dbConfig.port}`, connectOptions)
-      .then(() => this.#status.info("Connected to database"))
-      .catch((err) => this.#status.error(err));
+    try {
+      const dbUrl = `mongodb://${this.#dbConfig.url}:${this.#dbConfig.port}`;
+      const dbOptions = {
+        appName: this.#dbConfig.name,
+        dbName: this.#dbConfig.name,
+        user: this.#dbConfig.user,
+        pass: this.#dbConfig.password,
+        serverSelectionTimeoutMS: this.#dbConfig.timeout,
+        connectTimeoutMS: this.#dbConfig.timeout,
+        family: 4,
+      };
+      await mongoose.connect(dbUrl, dbOptions);
+      this.#status.info("Connected to database");
+      return true;
+    } catch (error) {
+      this.#status.error(error);
+      return false;
+    }
   }
 
   /**
@@ -39,5 +48,21 @@ export class WebDatabase {
    */
   async stop() {
     mongoose.disconnect();
+  }
+
+  /**
+   * Method used to return the name of the component
+   * @returns web database component name
+   */
+  getName() {
+    return WebDatabase.#COMPONENT_NAME;
+  }
+
+  /**
+   * Method used to receive additional info components
+   * @returns an object with extra info: component type and require pass flag
+   */
+  getInfo() {
+    return { type: ComponentType.INIT, mustPass: false };
   }
 }

@@ -10,15 +10,16 @@ import { Strategy } from "passport-local";
 export class ViewRouter {
   static #ENCRYPT_SALT = 10;
 
-  #configFilePath = undefined;
+  #components = [];
   #passport = undefined;
 
   /**
    * Creates a new view router for displaying configuraion file for the user
-   * @param {String} configFile The path to the configuration file
+   * @param {Array} components The components list used in view change state (LOGIN)
+   * @param {Object} passport The object controlling user sing-up and sing-in process
    */
-  constructor(configFile, passport) {
-    this.#configFilePath = configFile;
+  constructor(components, passport) {
+    this.#components = components;
     this.#passport = passport;
     this.#configAuthenitcation(passport);
   }
@@ -41,7 +42,7 @@ export class ViewRouter {
    */
   #createGetRoutes(router) {
     router.get("/", AccessChecker.canViewContent, async (request, response) => {
-      const scrapConfig = await this.#getScrapConfigForUser(request.user);
+      const scrapConfig = await ScrapConfig.getDatabaseModel().findById(request.user.config);
       response.render("index", {
         title: "scraper configuration",
         user: request.user.name,
@@ -87,6 +88,8 @@ export class ViewRouter {
     const logoutCallback = (request, response, next) => {
       request.logout((err) => {
         if (err) return next(err);
+        // logout success - stop login components
+        this.#components.forEach((component) => component.stop());
         response.redirect("/login");
       });
     };
@@ -107,23 +110,6 @@ export class ViewRouter {
    */
   #getSupportedCurrencies() {
     return "PLN|GBP|USD|EUR|CHF|CZK|DKK|CNY|JPY|INR|AUD|CAD";
-  }
-
-  /**
-   * Method used to retrieve scraper configuration for specified user
-   * @param {Object} user The ID of the user which configuration we want to retrieve
-   * @returns The scraper configuration of the specified user
-   */
-  async #getScrapConfigForUser(user) {
-    if (user.config == null) {
-      // user has no config - create and link it
-      const scrapConfig = await ScrapConfig.getDatabaseModel().create({ user: user._id });
-      user.config = scrapConfig._id;
-      await user.save();
-      return scrapConfig;
-    }
-    // user has config - find and return it
-    return await ScrapConfig.getDatabaseModel().findById(user.config);
   }
 
   /**
@@ -162,6 +148,10 @@ export class ViewRouter {
           // provided password does not match the saved value - incorrect login data
           return done(null, false, { message: "Incorrect login data. Please try again." });
         }
+        // login success - start login components
+        if (!(await this.#runComponents(user[0]))) {
+          return done(null, false, { message: "Cannot start authenticate components. Please try again." });
+        }
         return done(null, user[0]);
       } catch (error) {
         let message = error.message;
@@ -196,15 +186,18 @@ export class ViewRouter {
           // find existing user with provided email - incorrect reguster data
           return done(null, false, { message: "Provided email is already in use. Please try again." });
         }
-        // create new user with hashed password, add it to database and proceed with passport logic
-        return done(
-          null,
-          await ScrapUser.getDatabaseModel().create({
-            name: request.body.name,
-            email: username,
-            password: await bcrypt.hash(password, ViewRouter.#ENCRYPT_SALT),
-          })
-        );
+        // create a new user with hashed password and add it to database
+        const newUser = await ScrapUser.getDatabaseModel().create({
+          name: request.body.name,
+          email: username,
+          password: await bcrypt.hash(password, ViewRouter.#ENCRYPT_SALT),
+        });
+        // user at this point has no config - we must create and link it
+        const userConfig = await ScrapConfig.getDatabaseModel().create({ user: newUser._id });
+        newUser.config = userConfig._id;
+        await newUser.save();
+        // return the newly created user with empty config
+        return done(null, newUser);
       } catch (error) {
         let message = error.message;
         if (error instanceof MongooseError) {
@@ -222,5 +215,25 @@ export class ViewRouter {
       }
     };
     passport.use("local-register", new Strategy(options, verify));
+  }
+
+  /**
+   * Method used to initialize and start view-related components
+   * @param {Object} user The authenticated user object for which we want to start components
+   * @returns true if all components are invoked, false if at least one has an error
+   */
+  async #runComponents(user) {
+    for (const component of this.#components) {
+      // if component is not required to pass then we start it and go to the next one
+      if (!component.getInfo().mustPass) {
+        component.start(user);
+        continue;
+      }
+      // component must pass so we are waiting for the result to check it
+      if (!(await component.start(user))) {
+        return false;
+      }
+    }
+    return true;
   }
 }

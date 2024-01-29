@@ -1,3 +1,4 @@
+import { ComponentType } from "../../config/app-types.js";
 import { RegexUtils } from "../utils/regex-utils.js";
 import { ScrapConfig } from "../model/scrap-config.js";
 import { ScrapWarning } from "../model/scrap-exception.js";
@@ -14,7 +15,6 @@ export class WebScraper {
   static #RUNNING_STATUS = "Running";
 
   #scrapingInProgress = false;
-  #currentUserId = undefined;
   #setupConfig = undefined;
   #scrapConfig = undefined;
   #intervalId = undefined;
@@ -25,58 +25,54 @@ export class WebScraper {
   /**
    * Creates a new web scraper with specified configuration
    * @param {Object} config The object containing scraper configuration
-   * @param {Number} userId The identifier of the user using the web scraper component
    */
-  constructor(config, userId) {
+  constructor(config) {
     this.#setupConfig = config;
-    this.#currentUserId = userId;
     this.#status = new StatusLogger(WebScraper.#COMPONENT_NAME, config.minLogLevel);
     this.#status.info("Created");
   }
 
   /**
    * Method used to start web scraping action
+   * @param {Object} user The user which configuration will be used in the web scraper
+   * @returns true if scraper started successfully, false otherwise
    */
-  async start() {
-    this.#status.info("Starting");
-    // create a new empty configuration file and directory if none exists
-    const configDirectory = path.dirname(this.#setupConfig.dataConfigPath);
-    if (!fs.existsSync(configDirectory)) {
-      fs.mkdirSync(configDirectory, { recursive: true });
+  async start(user) {
+    if (user == null) {
+      this.stop(`Invalid scrap user: ${user}`);
+      return false;
     }
-    if (!fs.existsSync(this.#setupConfig.dataConfigPath)) {
-      const newConfig = { user: this.#currentUserId, groups: [] };
-      fs.writeFileSync(this.#setupConfig.dataConfigPath, JSON.stringify(newConfig, null, 2));
-      this.#status.info(`Created new ${path.basename(this.#setupConfig.dataConfigPath)}`);
-    }
-    this.#status.info("Reading configuration");
-    // parse source scraper configuration file to a config class
+    this.#status.info(`Reading user '${user.name}' configuration`);
     try {
-      var configCandidate = JSON.parse(fs.readFileSync(this.#setupConfig.dataConfigPath))
-        .map((config) => new ScrapConfig(config))
-        .filter((config) => config.user === this.#currentUserId)
-        .at(0);
-      this.#scrapConfig = new ScrapValidator(configCandidate).validate();
+      var configCandidate = await ScrapConfig.getDatabaseModel().findById(user.config);
+      if (configCandidate == null) {
+        this.#status.warning("User has no configuration");
+        this.stop();
+        return false;
+      }
+      this.#scrapConfig = new ScrapValidator(new ScrapConfig(configCandidate.toJSON())).validate();
     } catch (e) {
       if (e instanceof ScrapWarning) {
         this.#scrapConfig = configCandidate;
         this.#status.warning(e.message);
       } else {
-        this.stop(`Invalid scrap config: ${e.message}`);
-        return;
+        this.stop(`Invalid scrap configuration: ${e.message}`);
+        return false;
       }
     }
-    this.#status.info("Initializing");
+    this.#status.info("Initializing virtual browser");
     // open new Puppeteer virtual browser and an initial web page
     this.#browser = await puppeteer.launch({ headless: "new" });
     this.#page = await this.#browser.newPage();
     this.#page.setDefaultTimeout(this.#setupConfig.scraperConfig.defaultTimeout);
     // invoke scrap data action initially and setup interval calls
-    if (true === (await this.#scrapData())) {
+    const initialScrapResult = await this.#scrapData();
+    if (true === initialScrapResult) {
       const intervalTime = this.#setupConfig.scraperConfig.scrapInterval;
       this.#intervalId = setInterval(() => this.#scrapData(), intervalTime);
       this.#status.info(`${WebScraper.#RUNNING_STATUS} (every: ${intervalTime / 1000} seconds)`);
     }
+    return initialScrapResult;
   }
 
   /**
@@ -122,6 +118,14 @@ export class WebScraper {
    */
   getName() {
     return WebScraper.#COMPONENT_NAME;
+  }
+
+  /**
+   * Method used to receive additional info components
+   * @returns an object with extra info: component type and require pass flag
+   */
+  getInfo() {
+    return { type: ComponentType.LOGIN, mustPass: true };
   }
 
   /**

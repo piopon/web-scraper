@@ -1,4 +1,4 @@
-import { AppVariables } from "../../config/app-variables.js";
+import { LogLevel } from "../../config/app-types.js";
 import moment from "moment";
 
 export class StatusLogger {
@@ -29,7 +29,7 @@ export class StatusLogger {
    * @param {String} message The message to add and print
    */
   debug(message) {
-    if (this.#minLogLevel < AppVariables.LOG_LEVEL_DEBUG) {
+    if (this.#minLogLevel.value < LogLevel.DEBUG.value) {
       return;
     }
     const dateTimeNow = moment().format("YYYY-MM-DD HH:mm:ss");
@@ -42,7 +42,7 @@ export class StatusLogger {
    * @param {String} message The message to add and print
    */
   info(message) {
-    if (this.#minLogLevel < AppVariables.LOG_LEVEL_INFO) {
+    if (this.#minLogLevel.value < LogLevel.INFO.value) {
       return;
     }
     const dateTimeNow = moment().format("YYYY-MM-DD HH:mm:ss");
@@ -55,7 +55,7 @@ export class StatusLogger {
    * @param {String} message The message to add and print
    */
   warning(message) {
-    if (this.#minLogLevel < AppVariables.LOG_LEVEL_WARNING) {
+    if (this.#minLogLevel.value < LogLevel.WARNING.value) {
       return;
     }
     const dateTimeNow = moment().format("YYYY-MM-DD HH:mm:ss");
@@ -68,7 +68,7 @@ export class StatusLogger {
    * @param {String} message The message to add and print
    */
   error(message) {
-    if (this.#minLogLevel < AppVariables.LOG_LEVEL_ERROR) {
+    if (this.#minLogLevel.value < LogLevel.ERROR.value) {
       return;
     }
     const dateTimeNow = moment().format("YYYY-MM-DD HH:mm:ss");

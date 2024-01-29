@@ -1,4 +1,5 @@
-import { AppVariables } from "./app-variables.js";
+import { LogLevel } from "./app-types.js";
+
 import dotenv from "dotenv";
 import path from "path";
 import url from "url";
@@ -24,10 +25,9 @@ export class AppConfig {
    */
   getConfig() {
     return {
-      dataConfigPath: path.join(this.#rootDir, "user", "input", "scrap-config.json"),
       dataOutputPath: path.join(this.#rootDir, "user", "output", "data.json"),
       screenshotPath: path.join(this.#rootDir, "user", "captures"),
-      minLogLevel: AppVariables.LOG_LEVEL_INFO,
+      minLogLevel: LogLevel.INFO,
       serverConfig: {
         port: process.env.SERVER_PORT || 5000,
       },
@@ -37,6 +37,7 @@ export class AppConfig {
         port: process.env.DB_PORT || 27017,
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
+        timeout: process.env.DB_TIMEOUT || 15_000,
       },
       scraperConfig: {
         scrapInterval: 30_000,
