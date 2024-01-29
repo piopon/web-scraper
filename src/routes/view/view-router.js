@@ -217,6 +217,11 @@ export class ViewRouter {
     passport.use("local-register", new Strategy(options, verify));
   }
 
+  /**
+   * Method used to initialize and start view-related components
+   * @param {Object} user The authenticated user object for which we want to start components
+   * @returns true if all components are invoked, false if at least one has an error
+   */
   async #runComponents(user) {
     for (const component of this.#components) {
       // if component is not required to pass then we start it and go to the next one
