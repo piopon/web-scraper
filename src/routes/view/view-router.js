@@ -89,7 +89,7 @@ export class ViewRouter {
       request.logout((err) => {
         if (err) return next(err);
         // logout success - stop login components
-        this.#components.forEach((component) => component.item.stop());
+        this.#components.forEach((component) => component.stop());
         response.redirect("/login");
       });
     };
@@ -149,7 +149,7 @@ export class ViewRouter {
           return done(null, false, { message: "Incorrect login data. Please try again." });
         }
         // login success - start login components
-        this.#components.forEach((component) => component.item.start(user[0]));
+        this.#components.forEach((component) => component.start(user[0]));
         return done(null, user[0]);
       } catch (error) {
         let message = error.message;

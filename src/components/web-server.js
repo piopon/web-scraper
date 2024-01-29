@@ -37,11 +37,12 @@ export class WebServer {
    * @param {Object} component The component to start after running web server
    */
   addComponent(component) {
-    if (component.type instanceof ComponentType) {
+    const componentType = component.getInfo().type
+    if (componentType instanceof ComponentType) {
       this.#components.push(component);
       return;
     }
-    this.#status.warning(`Unknown component type: ${component.type}`);
+    this.#status.warning(`Unknown component type: ${componentType}`);
   }
 
   /**
@@ -62,7 +63,7 @@ export class WebServer {
    */
   shutdown() {
     this.#server.close(() => {
-      this.#components.forEach((component) => component.item.stop());
+      this.#components.forEach((component) => component.stop());
       this.#status.info("Stopped");
     });
   }
@@ -89,7 +90,7 @@ export class WebServer {
     server.use(passport.initialize());
     server.use(passport.session());
     // filter out components needed by particular routers
-    const viewComponents = this.#components.filter((component) => ComponentType.LOGIN.name === component.type.name);
+    const viewComponents = this.#components.filter((item) => ComponentType.LOGIN.equals(item.getInfo().type));
     // setup web server routes
     const routes = new Map([
       ["/", new ViewRouter(viewComponents, passport)],
@@ -119,17 +120,17 @@ export class WebServer {
    * @returns true if all components are invoked, false if at least one has an error
    */
   async #runComponents() {
-    const serverComponents = this.#components.filter((item) => item.type.equals(ComponentType.INIT));
+    const serverComponents = this.#components.filter((item) => ComponentType.INIT.equals(item.getInfo().type));
     for (const component of serverComponents) {
       // if component is not required to pass then we start it and go to the next one
-      if (!component.mustPass) {
-        component.item.start();
+      if (!component.getInfo().mustPass) {
+        component.start();
         continue;
       }
       // component must pass so we are waiting for the result to check it
-      const result = await component.item.start();
+      const result = await component.start();
       if (!result) {
-        this.#status.error(`Cannot start component: ${component.item.getName()}`);
+        this.#status.error(`Cannot start component: ${component.getName()}`);
         return false;
       }
     }
