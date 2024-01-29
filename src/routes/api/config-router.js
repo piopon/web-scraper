@@ -167,9 +167,7 @@ export class ConfigRouter {
       response.status(400).json(validationResult.cause);
       return;
     }
-    const configContent = request.user.config == null
-      ? await ScrapConfig.getDatabaseModel().create({ user: user._id })
-      : await ScrapConfig.getDatabaseModel().findById(request.user.config);
+    const configContent = await ScrapConfig.getDatabaseModel().findById(request.user.config);
     const filteredData = filter(configContent);
     response.status(200).json(filteredData);
   }
