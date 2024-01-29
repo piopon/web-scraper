@@ -1,5 +1,4 @@
 import { AccessChecker } from "../../middleware/access-checker.js";
-import { ComponentType } from "../../../config/app-types.js";
 import { ScrapConfig } from "../../model/scrap-config.js";
 import { ScrapUser } from "../../model/scrap-user.js";
 
@@ -226,7 +225,7 @@ export class ViewRouter {
         continue;
       }
       // component must pass so we are waiting for the result to check it
-      if (!await component.start(user)) {
+      if (!(await component.start(user))) {
         return false;
       }
     }
