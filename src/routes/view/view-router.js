@@ -150,7 +150,9 @@ export class ViewRouter {
           return done(null, false, { message: "Incorrect login data. Please try again." });
         }
         // login success - start login components
-        this.#components.forEach((component) => component.start(user[0]));
+        if (!(await this.#runComponents(user[0]))) {
+          return done(null, false, { message: "Cannot start authenticate components. Please try again." });
+        }
         return done(null, user[0]);
       } catch (error) {
         let message = error.message;
