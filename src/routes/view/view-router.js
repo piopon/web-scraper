@@ -1,4 +1,5 @@
 import { AccessChecker } from "../../middleware/access-checker.js";
+import { ComponentType } from "../../../config/app-types.js";
 import { ScrapConfig } from "../../model/scrap-config.js";
 import { ScrapUser } from "../../model/scrap-user.js";
 
@@ -213,5 +214,20 @@ export class ViewRouter {
       }
     };
     passport.use("local-register", new Strategy(options, verify));
+  }
+
+  async #runComponents(user) {
+    for (const component of this.#components) {
+      // if component is not required to pass then we start it and go to the next one
+      if (!component.getInfo().mustPass) {
+        component.start(user);
+        continue;
+      }
+      // component must pass so we are waiting for the result to check it
+      if (!await component.start(user)) {
+        return false;
+      }
+    }
+    return true;
   }
 }
