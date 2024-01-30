@@ -55,7 +55,7 @@ export class AuthRouter {
     });
     router.post("/register", AccessChecker.canViewSessionUser, registerCallback);
     const loginCallback = this.#passport.authenticate("local-login", {
-      successRedirect: "../",
+      successRedirect: "/",
       failureRedirect: "/auth/login",
       failureFlash: true,
     });
