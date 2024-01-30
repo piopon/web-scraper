@@ -1,6 +1,7 @@
 import { ScrapConfig } from "../../model/scrap-config.js";
 import { ScrapUser } from "../../model/scrap-user.js";
 
+import express from "express";
 import bcrypt from "bcrypt";
 import { MongooseError } from "mongoose";
 import { Strategy } from "passport-local";
@@ -20,6 +21,23 @@ export class AuthRouter {
     this.#components = components;
     this.#passport = passport;
     this.#configAuthenitcation(passport);
+  }
+
+  /**
+   * Method used to create routes for view endpoints
+   * @returns router object for handling view requests
+   */
+  createRoutes() {
+    const router = express.Router();
+    this.#createGetRoutes(router);
+
+    return router;
+  }
+
+  #createGetRoutes(router) {
+    router.get("/login", (request, response) =>
+      response.redirect("/")
+    );
   }
 
   /**
