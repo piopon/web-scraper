@@ -1,3 +1,4 @@
+import { AccessChecker } from "../../middleware/access-checker.js";
 import { ScrapConfig } from "../../model/scrap-config.js";
 import { ScrapUser } from "../../model/scrap-user.js";
 
@@ -35,8 +36,11 @@ export class AuthRouter {
   }
 
   #createGetRoutes(router) {
-    router.get("/login", (request, response) =>
-      response.redirect("/")
+    router.get("/register", AccessChecker.canViewSessionUser, (request, response) =>
+      response.render("register", { title: "scraper user registration" })
+    );
+    router.get("/login", AccessChecker.canViewSessionUser, (request, response) =>
+      response.render("login", { title: "scraper user login" })
     );
   }
 
