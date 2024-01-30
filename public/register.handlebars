@@ -1,6 +1,6 @@
 <section class="user-management">
   <p class="user-title">create your account.</p>
-  <form action="/register" method="POST">
+  <form action="/auth/register" method="POST">
     <div class="user-element">
         <label class="user-label" for="user-name">name</label>
         <input type="text" id="user-name" name="name" required>
@@ -18,7 +18,7 @@
     </button>
   </form>
   <div class="user-switch">
-    <p>already registered? go to <a href="/login">login</a> page</p>
+    <p>already registered? go to <a href="/auth/login">login</a> page</p>
   </div>
   {{#if messages.error}}
   <div id="toastBox">

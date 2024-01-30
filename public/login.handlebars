@@ -1,6 +1,6 @@
 <section class="user-management">
   <p class="user-title">welcome back.</p>
-  <form action="/login" method="POST">
+  <form action="/auth/login" method="POST">
     <div class="user-element">
         <label class="user-label" for="user-email">e-mail</label>
         <input type="email" id="user-email" name="email" required>
@@ -14,7 +14,7 @@
     </button>
   </form>
   <div class="user-switch">
-    <p>not registered? go to <a href="/register">register</a> page.</p>
+    <p>not registered? go to <a href="/auth/register">register</a> page.</p>
   </div>
   {{#if messages.error}}
   <div id="toastBox">
