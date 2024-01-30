@@ -28,6 +28,7 @@ export class AuthRouter {
    */
   #configAuthenitcation(passport) {
     // configure authenticate logic for specific endpoints
+    this.#configLoginStategy(passport);
     this.#configRegisterStategy(passport);
     // configure common serialize and deserialize user logic
     passport.serializeUser((user, done) => {
@@ -37,6 +38,48 @@ export class AuthRouter {
       const user = await ScrapUser.getDatabaseModel().findById(id);
       done(null, user);
     });
+  }
+
+  /**
+   * Method used to configurate user login strategy (currently only local login is possible)
+   * @param {Object} passport The login auth and stategy object
+   */
+  #configLoginStategy(passport) {
+    const options = { usernameField: "email", passwordField: "password" };
+    const verify = async (email, password, done) => {
+      try {
+        // check if there is an user with provided email
+        const user = await ScrapUser.getDatabaseModel().find({ email: email });
+        if (user.length !== 1) {
+          // did not find user with provided email - incorrect login data
+          return done(null, false, { message: "Incorrect login data. Please try again." });
+        }
+        if (!(await bcrypt.compare(password, user[0].password))) {
+          // provided password does not match the saved value - incorrect login data
+          return done(null, false, { message: "Incorrect login data. Please try again." });
+        }
+        // login success - start login components
+        if (!(await this.#runComponents(user[0]))) {
+          return done(null, false, { message: "Cannot start authenticate components. Please try again." });
+        }
+        return done(null, user[0]);
+      } catch (error) {
+        let message = error.message;
+        if (error instanceof MongooseError) {
+          if (error.name === "MongooseError" && message.includes(".find()")) {
+            message = "Database connection has timed out. Check connection status and please try again.";
+          } else if (error.name === "ValidationError") {
+            const invalidPath = Object.keys(error.errors);
+            message = error.errors[invalidPath[0]].properties.message;
+          }
+        }
+        if (message.includes("ECONNREFUSED")) {
+          message = "Database connection has been broken. Check connection status and please try again.";
+        }
+        return done(null, false, { message: message });
+      }
+    };
+    passport.use("local-login", new Strategy(options, verify));
   }
 
   /**
