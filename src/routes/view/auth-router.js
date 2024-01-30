@@ -36,6 +36,10 @@ export class AuthRouter {
     return router;
   }
 
+  /**
+   * Method used to create GET method routes and add them to the router object
+   * @param {Object} router The router object with GET method routes defined
+   */
   #createGetRoutes(router) {
     router.get("/register", AccessChecker.canViewSessionUser, (request, response) =>
       response.render("register", { title: "scraper user registration" })
@@ -45,6 +49,10 @@ export class AuthRouter {
     );
   }
 
+  /**
+   * Method used to create POST method routes and add them to the router object
+   * @param {Object} router The router object with POST method routes defined
+   */
   #createPostRoutes(router) {
     // user sessions endpoints (sign-in and log-in)
     const registerCallback = this.#passport.authenticate("local-register", {
