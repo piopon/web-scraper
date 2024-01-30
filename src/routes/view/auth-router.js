@@ -20,7 +20,7 @@ export class AuthRouter {
   constructor(components, passport) {
     this.#components = components;
     this.#passport = passport;
-    this.#configAuthenitcation(passport);
+    this.#configAuthentication(passport);
   }
 
   /**
@@ -44,7 +44,7 @@ export class AuthRouter {
    * Method used to configure Passport authentication object
    * @param {Object} passport The auth object to be configured
    */
-  #configAuthenitcation(passport) {
+  #configAuthentication(passport) {
     // configure authenticate logic for specific endpoints
     this.#configLoginStategy(passport);
     this.#configRegisterStategy(passport);
