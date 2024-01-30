@@ -31,6 +31,7 @@ export class AuthRouter {
   createRoutes() {
     const router = express.Router();
     this.#createGetRoutes(router);
+    this.#createPostRoutes(router);
 
     return router;
   }
@@ -42,6 +43,33 @@ export class AuthRouter {
     router.get("/login", AccessChecker.canViewSessionUser, (request, response) =>
       response.render("login", { title: "scraper user login" })
     );
+  }
+
+  #createPostRoutes(router) {
+    // user sessions endpoints (sign-in and log-in)
+    const registerCallback = this.#passport.authenticate("local-register", {
+      successRedirect: "/auth/login",
+      failureRedirect: "/auth/register",
+      failureFlash: true,
+      session: false,
+    });
+    router.post("/register", AccessChecker.canViewSessionUser, registerCallback);
+    const loginCallback = this.#passport.authenticate("local-login", {
+      successRedirect: "../",
+      failureRedirect: "/auth/login",
+      failureFlash: true,
+    });
+    router.post("/login", AccessChecker.canViewSessionUser, loginCallback);
+    // user content endpoints (log-out)
+    const logoutCallback = (request, response, next) => {
+      request.logout((err) => {
+        if (err) return next(err);
+        // logout success - stop login components
+        this.#components.forEach((component) => component.stop());
+        response.redirect("/auth/login");
+      });
+    };
+    router.post("/logout", AccessChecker.canViewContent, logoutCallback);
   }
 
   /**
