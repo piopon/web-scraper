@@ -78,24 +78,18 @@ export class WebScraper {
   /**
    * Method used to stop web scraping action
    * @param {String} reason The message with a web scraper stop reason. Non-empty value is treated as error.
-   * @param {Boolean} takeScreenshot Flag responsible for creating an additional screenshot.
    */
-  async stop(reason = "", takeScreenshot = false) {
+  async stop(reason = "") {
     // stop running method in constant time intervals
     if (this.#intervalId != null) {
       clearInterval(this.#intervalId);
       this.#intervalId = undefined;
     }
-    // update status and make error screenshot
+    // update scraper status
     if (reason.length === 0) {
       this.#status.info("Stopped");
-    } else {
-      if (this.#status.getStatus().message !== reason) {
-        this.#status.error(reason);
-        if (takeScreenshot) {
-          await this.#createErrorScreenshot(this.#status.getStatus());
-        }
-      }
+    } else if (reason !== this.#status.getStatus().message) {
+      this.#status.error(reason);
     }
     // update internal object state
     this.#scrapingInProgress = false;
