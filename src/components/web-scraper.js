@@ -259,6 +259,8 @@ export class WebScraper {
           attempt++;
           continue;
         }
+        this.#status.warning(`Exceeded the maximum number of retries: ${maxAttempts}`);
+        await this.#createErrorScreenshot(this.#status.getStatus());
         throw new Error(`Cannot find price element in page ${pageUrl}`);
       }
     }
