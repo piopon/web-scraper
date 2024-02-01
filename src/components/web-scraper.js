@@ -219,8 +219,7 @@ export class WebScraper {
           }, observer);
           const validationResult = this.#validateData(dataObj);
           if (validationResult.length > 0) {
-            this.stop(validationResult, true);
-            return false;
+            throw new Error(validationResult);
           }
           groupObject.items.push(this.#formatData(dataObj));
         } catch (error) {
