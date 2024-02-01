@@ -178,54 +178,58 @@ export class WebScraper {
       const group = this.#scrapConfig.groups[groupIndex];
       const groupObject = { name: group.name, category: group.category, items: [] };
       for (let observerIndex = 0; observerIndex < group.observers.length; observerIndex++) {
-        const observer = group.observers[observerIndex];
-        const page = new URL(observer.path, group.domain);
         try {
-          await this.#navigateToPage(page, observer);
-        } catch (error) {
-          this.stop(`Incorrect scrap configuration: Cannot find price element in page ${page}`, true);
-          return false;
-        }
-        const dataObj = await this.#page.evaluate((observer) => {
+          const observer = group.observers[observerIndex];
+          const page = new URL(observer.path, group.domain);
           try {
-            // try to get data container
-            const dataContainer = document.querySelector(observer.container);
-            if (dataContainer == null) {
-              throw new Error("Cannot find data container");
-            }
-            // define data getter function
-            const getData = (selector, attribute, auxiliary) => {
-              if (selector && attribute) {
-                const component = Object.keys(observer).filter((key) => observer[key].selector === selector);
-                const element = dataContainer.querySelector(selector);
-                if (element == null) {
-                  throw new Error(`Cannot find ${component} element of ${observer.path}`);
-                }
-                const value = element[attribute];
-                if (value == null) {
-                  throw new Error(`Cannot find ${component} value of ${observer.path}`);
-                }
-                return value;
-              }
-              return auxiliary;
-            };
-            // return an object with collected data
-            return {
-              name: getData(observer.title.selector, observer.title.attribute, observer.title.auxiliary),
-              icon: getData(observer.image.selector, observer.image.attribute, observer.image.auxiliary),
-              price: getData(observer.price.selector, observer.price.attribute),
-              currency: observer.price.auxiliary,
-            };
+            await this.#navigateToPage(page, observer);
           } catch (error) {
-            return { err: error.message };
+            this.stop(`Incorrect scrap configuration: Cannot find price element in page ${page}`, true);
+            return false;
           }
-        }, observer);
-        const validationResult = this.#validateData(dataObj);
-        if (validationResult.length > 0) {
-          this.stop(validationResult, true);
-          return false;
+          const dataObj = await this.#page.evaluate((observer) => {
+            try {
+              // try to get data container
+              const dataContainer = document.querySelector(observer.container);
+              if (dataContainer == null) {
+                throw new Error("Cannot find data container");
+              }
+              // define data getter function
+              const getData = (selector, attribute, auxiliary) => {
+                if (selector && attribute) {
+                  const component = Object.keys(observer).filter((key) => observer[key].selector === selector);
+                  const element = dataContainer.querySelector(selector);
+                  if (element == null) {
+                    throw new Error(`Cannot find ${component} element of ${observer.path}`);
+                  }
+                  const value = element[attribute];
+                  if (value == null) {
+                    throw new Error(`Cannot find ${component} value of ${observer.path}`);
+                  }
+                  return value;
+                }
+                return auxiliary;
+              };
+              // return an object with collected data
+              return {
+                name: getData(observer.title.selector, observer.title.attribute, observer.title.auxiliary),
+                icon: getData(observer.image.selector, observer.image.attribute, observer.image.auxiliary),
+                price: getData(observer.price.selector, observer.price.attribute),
+                currency: observer.price.auxiliary,
+              };
+            } catch (error) {
+              return { err: error.message };
+            }
+          }, observer);
+          const validationResult = this.#validateData(dataObj);
+          if (validationResult.length > 0) {
+            this.stop(validationResult, true);
+            return false;
+          }
+          groupObject.items.push(this.#formatData(dataObj));
+        } catch (error) {
+          groupObject.items.push({});
         }
-        groupObject.items.push(this.#formatData(dataObj));
       }
       data.push(groupObject);
     }
