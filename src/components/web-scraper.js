@@ -212,6 +212,7 @@ export class WebScraper {
               };
               // return an object with collected data
               return {
+                status: "OK",
                 name: getData(observer.title.selector, observer.title.attribute, observer.title.auxiliary),
                 icon: getData(observer.image.selector, observer.image.attribute, observer.image.auxiliary),
                 price: getData(observer.price.selector, observer.price.attribute),
