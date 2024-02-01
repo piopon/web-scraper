@@ -226,9 +226,11 @@ export class WebScraper {
         } catch (error) {
           groupObject.items.push({
             status: "ERROR",
+            parent: group.name,
             name: observer.name,
             reason: error.message,
           });
+          this.#status.warning(`Cannot scrap ${group.name} -> ${observer.name}: ${error.message}`);
         }
       }
       data.push(groupObject);
