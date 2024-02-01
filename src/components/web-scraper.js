@@ -51,12 +51,12 @@ export class WebScraper {
         return false;
       }
       this.#scrapConfig = new ScrapValidator(new ScrapConfig(configCandidate.toJSON())).validate();
-    } catch (e) {
-      if (e instanceof ScrapWarning) {
+    } catch (error) {
+      if (error instanceof ScrapWarning) {
         this.#scrapConfig = configCandidate;
-        this.#status.warning(e.message);
+        this.#status.warning(error.message);
       } else {
-        this.stop(`Invalid scrap configuration: ${e.message}`);
+        this.stop(`Invalid scrap configuration: ${error.message}`);
         return false;
       }
     }
