@@ -228,7 +228,11 @@ export class WebScraper {
           }
           groupObject.items.push(this.#formatData(dataObj));
         } catch (error) {
-          groupObject.items.push({});
+          groupObject.items.push({
+            status: "ERROR",
+            name: observer.name,
+            reason: error.message,
+          });
         }
       }
       data.push(groupObject);
