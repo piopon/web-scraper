@@ -1,8 +1,9 @@
-import { ParamsParser } from "../middleware/params-parser.js";
-import { RequestLogger } from "../middleware/request-logger.js";
+import { AuthRouter } from "../routes/view/auth-router.js";
 import { ComponentType } from "../../config/app-types.js";
 import { ConfigRouter } from "../routes/api/config-router.js";
 import { DataRouter } from "../routes/api/data-router.js";
+import { ParamsParser } from "../middleware/params-parser.js";
+import { RequestLogger } from "../middleware/request-logger.js";
 import { StatusRouter } from "../routes/api/status-router.js";
 import { StatusLogger } from "./status-logger.js";
 import { ViewRouter } from "../routes/view/view-router.js";
@@ -93,7 +94,8 @@ export class WebServer {
     const viewComponents = this.#components.filter((item) => ComponentType.LOGIN.equals(item.getInfo().type));
     // setup web server routes
     const routes = new Map([
-      ["/", new ViewRouter(viewComponents, passport)],
+      ["/", new ViewRouter()],
+      ["/auth", new AuthRouter(viewComponents, passport)],
       ["/api/v1/data", new DataRouter(this.#setupConfig.dataOutputPath)],
       ["/api/v1/config", new ConfigRouter()],
       ["/api/v1/status", new StatusRouter(this.#status, this.#components)],

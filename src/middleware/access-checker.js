@@ -9,7 +9,7 @@ export class AccessChecker {
     if (request.isAuthenticated()) {
       return next();
     }
-    response.redirect("/login");
+    response.redirect("/auth/login");
   }
 
   /**
