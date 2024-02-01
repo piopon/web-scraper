@@ -181,12 +181,7 @@ export class WebScraper {
         try {
           const observer = group.observers[observerIndex];
           const page = new URL(observer.path, group.domain);
-          try {
-            await this.#navigateToPage(page, observer);
-          } catch (error) {
-            this.stop(`Incorrect scrap configuration: Cannot find price element in page ${page}`, true);
-            return false;
-          }
+          await this.#navigateToPage(page, observer);
           const dataObj = await this.#page.evaluate((observer) => {
             try {
               // try to get data container
@@ -263,7 +258,7 @@ export class WebScraper {
           attempt++;
           continue;
         }
-        throw error;
+        throw new Error(`Cannot find price element in page ${pageUrl}`);
       }
     }
   }
