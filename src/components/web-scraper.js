@@ -42,7 +42,7 @@ export class WebScraper {
       this.stop(`Invalid scrap user: ${user}`);
       return false;
     }
-    this.#status.info(`Reading user '${user.name}' configuration`);
+    this.#status.info(`Reading configuration for user ${user.name}`);
     try {
       var configCandidate = await ScrapConfig.getDatabaseModel().findById(user.config);
       if (configCandidate == null) {
@@ -51,12 +51,12 @@ export class WebScraper {
         return false;
       }
       this.#scrapConfig = new ScrapValidator(new ScrapConfig(configCandidate.toJSON())).validate();
-    } catch (e) {
-      if (e instanceof ScrapWarning) {
+    } catch (error) {
+      if (error instanceof ScrapWarning) {
         this.#scrapConfig = configCandidate;
-        this.#status.warning(e.message);
+        this.#status.warning(error.message);
       } else {
-        this.stop(`Invalid scrap configuration: ${e.message}`);
+        this.stop(`Invalid scrap configuration: ${error.message}`);
         return false;
       }
     }
@@ -66,6 +66,7 @@ export class WebScraper {
     this.#page = await this.#browser.newPage();
     this.#page.setDefaultTimeout(this.#setupConfig.scraperConfig.defaultTimeout);
     // invoke scrap data action initially and setup interval calls
+    this.#status.info(`Starting data scraping for user ${user.name}`);
     const initialScrapResult = await this.#scrapData();
     if (true === initialScrapResult) {
       const intervalTime = this.#setupConfig.scraperConfig.scrapInterval;
@@ -78,24 +79,18 @@ export class WebScraper {
   /**
    * Method used to stop web scraping action
    * @param {String} reason The message with a web scraper stop reason. Non-empty value is treated as error.
-   * @param {Boolean} takeScreenshot Flag responsible for creating an additional screenshot.
    */
-  async stop(reason = "", takeScreenshot = false) {
+  async stop(reason = "") {
     // stop running method in constant time intervals
     if (this.#intervalId != null) {
       clearInterval(this.#intervalId);
       this.#intervalId = undefined;
     }
-    // update status and make error screenshot
+    // update scraper status
     if (reason.length === 0) {
       this.#status.info("Stopped");
-    } else {
-      if (this.#status.getStatus().message !== reason) {
-        this.#status.error(reason);
-        if (takeScreenshot) {
-          await this.#createErrorScreenshot(this.#status.getStatus());
-        }
-      }
+    } else if (reason !== this.#status.getStatus().message) {
+      this.#status.error(reason);
     }
     // update internal object state
     this.#scrapingInProgress = false;
@@ -179,53 +174,57 @@ export class WebScraper {
       const groupObject = { name: group.name, category: group.category, items: [] };
       for (let observerIndex = 0; observerIndex < group.observers.length; observerIndex++) {
         const observer = group.observers[observerIndex];
-        const page = new URL(observer.path, group.domain);
         try {
+          const page = new URL(observer.path, group.domain);
           await this.#navigateToPage(page, observer);
-        } catch (error) {
-          this.stop(`Incorrect scrap configuration: Cannot find price element in page ${page}`, true);
-          return false;
-        }
-        const dataObj = await this.#page.evaluate((observer) => {
-          try {
-            // try to get data container
-            const dataContainer = document.querySelector(observer.container);
-            if (dataContainer == null) {
-              throw new Error("Cannot find data container");
-            }
-            // define data getter function
-            const getData = (selector, attribute, auxiliary) => {
-              if (selector && attribute) {
-                const component = Object.keys(observer).filter((key) => observer[key].selector === selector);
-                const element = dataContainer.querySelector(selector);
-                if (element == null) {
-                  throw new Error(`Cannot find ${component} element of ${observer.path}`);
-                }
-                const value = element[attribute];
-                if (value == null) {
-                  throw new Error(`Cannot find ${component} value of ${observer.path}`);
-                }
-                return value;
+          const dataObj = await this.#page.evaluate((observer) => {
+            try {
+              // try to get data container
+              const dataContainer = document.querySelector(observer.container);
+              if (dataContainer == null) {
+                throw new Error("Cannot find data container");
               }
-              return auxiliary;
-            };
-            // return an object with collected data
-            return {
-              name: getData(observer.title.selector, observer.title.attribute, observer.title.auxiliary),
-              icon: getData(observer.image.selector, observer.image.attribute, observer.image.auxiliary),
-              price: getData(observer.price.selector, observer.price.attribute),
-              currency: observer.price.auxiliary,
-            };
-          } catch (error) {
-            return { err: error.message };
+              // define data getter function
+              const getData = (selector, attribute, auxiliary) => {
+                if (selector && attribute) {
+                  const component = Object.keys(observer).filter((key) => observer[key].selector === selector);
+                  const element = dataContainer.querySelector(selector);
+                  if (element == null) {
+                    throw new Error(`Cannot find ${component} element of ${observer.path}`);
+                  }
+                  const value = element[attribute];
+                  if (value == null) {
+                    throw new Error(`Cannot find ${component} value of ${observer.path}`);
+                  }
+                  return value;
+                }
+                return auxiliary;
+              };
+              // return an object with collected data
+              return {
+                status: "OK",
+                name: getData(observer.title.selector, observer.title.attribute, observer.title.auxiliary),
+                icon: getData(observer.image.selector, observer.image.attribute, observer.image.auxiliary),
+                price: getData(observer.price.selector, observer.price.attribute),
+                currency: observer.price.auxiliary,
+              };
+            } catch (error) {
+              return { err: error.message };
+            }
+          }, observer);
+          const validationResult = this.#validateData(dataObj);
+          if (validationResult.length > 0) {
+            throw new Error(validationResult);
           }
-        }, observer);
-        const validationResult = this.#validateData(dataObj);
-        if (validationResult.length > 0) {
-          this.stop(validationResult, true);
-          return false;
+          groupObject.items.push(this.#formatData(dataObj));
+        } catch (error) {
+          groupObject.items.push({
+            status: "ERROR",
+            name: observer.name,
+            reason: error.message,
+          });
+          this.#status.warning(`Cannot get data - observer ${observer.name} (group ${group.name}): ${error.message}`);
         }
-        groupObject.items.push(this.#formatData(dataObj));
       }
       data.push(groupObject);
     }
@@ -254,7 +253,9 @@ export class WebScraper {
           attempt++;
           continue;
         }
-        throw error;
+        this.#status.warning(`Exceeded the maximum number of retries: ${maxAttempts}`);
+        await this.#createErrorScreenshot(this.#status.getStatus());
+        throw new Error(`Cannot find price element in page ${pageUrl}`);
       }
     }
   }
