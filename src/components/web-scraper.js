@@ -42,7 +42,7 @@ export class WebScraper {
       this.stop(`Invalid scrap user: ${user}`);
       return false;
     }
-    this.#status.info(`Reading user '${user.name}' configuration`);
+    this.#status.info(`Reading configuration for user ${user.name}`);
     try {
       var configCandidate = await ScrapConfig.getDatabaseModel().findById(user.config);
       if (configCandidate == null) {
@@ -66,6 +66,7 @@ export class WebScraper {
     this.#page = await this.#browser.newPage();
     this.#page.setDefaultTimeout(this.#setupConfig.scraperConfig.defaultTimeout);
     // invoke scrap data action initially and setup interval calls
+    this.#status.info(`Starting data scraping for user ${user.name}`);
     const initialScrapResult = await this.#scrapData();
     if (true === initialScrapResult) {
       const intervalTime = this.#setupConfig.scraperConfig.scrapInterval;
