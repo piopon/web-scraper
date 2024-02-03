@@ -132,8 +132,8 @@ export class WebServer {
    * @returns true if all components are invoked, false if at least one has an error
    */
   async #runComponents() {
-    const serverComponents = this.#components.filter((item) => ComponentType.INIT.equals(item.getInfo().type));
-    for (const component of serverComponents) {
+    const initComponents = this.#getComponents(ComponentType.INIT);
+    for (const component of initComponents) {
       // if component is not required to pass then we start it and go to the next one
       if (!component.getInfo().mustPass) {
         component.start();
