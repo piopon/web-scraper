@@ -38,8 +38,7 @@ export class WebServer {
    * @param {Object} component The component to start after running web server
    */
   addComponent(component) {
-    const componentType = component.getInfo().type;
-    if (componentType instanceof ComponentType) {
+    if (component.getInfo().types.length > 0) {
       this.#components.push(component);
       return;
     }
