@@ -91,7 +91,7 @@ export class WebServer {
     server.use(passport.initialize());
     server.use(passport.session());
     // filter out components needed by particular routers
-    const authComponents = this.#components.filter((item) => ComponentType.AUTH.equals(item.getInfo().type));
+    const authComponents = this.#getComponents(ComponentType.AUTH);
     // setup web server routes
     const routes = new Map([
       ["/", new ViewRouter()],
@@ -115,6 +115,15 @@ export class WebServer {
       resave: false,
       saveUninitialized: false,
     };
+  }
+
+  /**
+   * Method used to filter all components and return the one with desired type
+   * @param {Object} type The type of components that we want to receive
+   * @returns array of components of specified type
+   */
+  #getComponents(type) {
+    return this.#components.filter((item) => type.equals(item.getInfo().type))
   }
 
   /**
