@@ -123,7 +123,9 @@ export class WebServer {
    * @returns array of components of specified type
    */
   #getComponents(type) {
-    return this.#components.filter((item) => type.equals(item.getInfo().type))
+    return this.#components.filter((component) => {
+      return -1 !== component.getInfo().types.findIndex((currType) => currType.equals(type));
+    });
   }
 
   /**
