@@ -142,20 +142,23 @@ export class WebScraper {
    * Method used to receive running history status of web scraper
    * @returns array of objects containing web scraper running history status
    */
-  getStatusHistory() {
+  getStatusHistory(sessionUser) {
     const invalidStateMessage = "Invalid internal state";
     const currentStatus = this.#status.getStatus().message;
-    if (this.#intervalId == null) {
-      // scraper is NOT running in selected intervals
-      if (currentStatus.startsWith(WebScraper.#RUNNING_STATUS)) {
-        // incorrect state - update field
-        this.#status.error(invalidStateMessage);
-      }
-    } else {
-      // scraper is running in selected intervals
-      if (!currentStatus.startsWith(WebScraper.#RUNNING_STATUS)) {
-        // incorrect state - since it's running then we must stop it
-        this.stop(invalidStateMessage);
+    const userSession = WebScraper.#RUN_INSTANCES.get(sessionUser._id);
+    if (userSession != null) {
+      if (userSession.intervalId == null) {
+        // scraper is NOT running in selected intervals
+        if (currentStatus.startsWith(WebScraper.#RUNNING_STATUS)) {
+          // incorrect state - update field
+          this.#status.error(invalidStateMessage);
+        }
+      } else {
+        // scraper is running in selected intervals
+        if (!currentStatus.startsWith(WebScraper.#RUNNING_STATUS)) {
+          // incorrect state - since it's running then we must stop it
+          this.stop(sessionUser, invalidStateMessage);
+        }
       }
     }
     return this.#status.getHistory();

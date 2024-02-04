@@ -34,7 +34,7 @@ export class StatusRouter {
           return {
             name: component.getName(),
             alive: component.isAlive(request.user),
-            history: showHistory ? component.getStatusHistory() : undefined,
+            history: showHistory ? component.getStatusHistory(request.user) : undefined,
           };
         });
       if (!request.query.name || this.#serverStatus.getName().trim() === request.query.name) {
