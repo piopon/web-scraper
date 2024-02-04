@@ -81,11 +81,16 @@ export class WebScraper {
    * Method used to stop web scraping action
    * @param {String} reason The message with a web scraper stop reason. Non-empty value is treated as error.
    */
-  async stop(reason = "") {
+  async stop(user, reason = "") {
+    const userSession = WebScraper.#RUN_INSTANCES.get(user._id);
+    if (userSession == null) {
+      this.#status.error(`Invalid internal state: cannot stop not running session for user ${user.name}`);
+      return;
+    }
     // stop running method in constant time intervals
-    if (this.#intervalId != null) {
-      clearInterval(this.#intervalId);
-      this.#intervalId = undefined;
+    if (userSession.intervalId != null) {
+      clearInterval(userSession.intervalId);
+      userSession.intervalId = undefined;
     }
     // update scraper status
     if (reason.length === 0) {
@@ -94,14 +99,14 @@ export class WebScraper {
       this.#status.error(reason);
     }
     // update internal object state
-    this.#scrapingInProgress = false;
+    userSession.isRunning = false;
     // close currently opened page and browser
     try {
-      if (this.#page != null) {
-        await this.#page.close();
+      if (userSession.page != null) {
+        await userSession.page.close();
       }
-      if (this.#browser != null) {
-        await this.#browser.close();
+      if (userSession.browser != null) {
+        await userSession.browser.close();
       }
     } catch (warning) {
       this.#status.warning(`Stop issue: ${warning.message}`);

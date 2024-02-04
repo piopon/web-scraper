@@ -73,7 +73,7 @@ export class AuthRouter {
       request.logout((err) => {
         if (err) return next(err);
         // logout success - stop login components
-        this.#components.forEach((component) => component.stop());
+        this.#components.forEach((component) => component.stop(request.user));
         response.redirect("/auth/login");
       });
     };
