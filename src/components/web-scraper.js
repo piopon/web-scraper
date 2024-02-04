@@ -82,7 +82,7 @@ export class WebScraper {
    * @param {String} reason The message with a web scraper stop reason. Non-empty value is treated as error.
    */
   async stop(user, reason = "") {
-    const userSession = WebScraper.#RUN_INSTANCES.get(user._id);
+    const userSession = WebScraper.#RUN_INSTANCES.get(user);
     if (userSession == null) {
       this.#status.error(`Invalid internal state: cannot stop not running session for user ${user.name}`);
       return;
