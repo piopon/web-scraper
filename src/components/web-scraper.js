@@ -177,7 +177,7 @@ export class WebScraper {
         const observer = group.observers[observerIndex];
         try {
           const page = new URL(observer.path, group.domain);
-          await this.#navigateToPage(page, observer);
+          await this.#navigateToPage(session, page, observer);
           const dataObj = await session.page.evaluate((observer) => {
             try {
               // try to get data container
@@ -239,14 +239,14 @@ export class WebScraper {
    * @param {String} pageUrl The address of a page to navigate to
    * @param {Object} observer The observer which has the selector definition to find on a page
    */
-  async #navigateToPage(pageUrl, observer) {
+  async #navigateToPage(session, pageUrl, observer) {
     let attempt = 1;
     let foundSelector = false;
     const maxAttempts = this.#setupConfig.scraperConfig.timeoutAttempts;
     while (!foundSelector) {
       try {
-        await this.#page.goto(pageUrl, { waitUntil: observer.target });
-        await this.#page.waitForSelector(observer.price.selector, { visible: true });
+        await session.page.goto(pageUrl, { waitUntil: observer.target });
+        await session.page.waitForSelector(observer.price.selector, { visible: true });
         foundSelector = true;
       } catch (error) {
         if (attempt <= maxAttempts && error instanceof TimeoutError) {
