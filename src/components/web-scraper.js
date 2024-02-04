@@ -133,8 +133,9 @@ export class WebScraper {
    * Method used to determine if the web scraper component is running (alive) or not
    * @returns true when web scraper is running, false otherwise
    */
-  isAlive() {
-    return this.#intervalId != null;
+  isAlive(sessionUser) {
+    const userSession = WebScraper.#RUN_INSTANCES.get(sessionUser._id);
+    return userSession == null ? false : userSession.intervalId != null;
   }
 
   /**
