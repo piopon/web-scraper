@@ -14,12 +14,7 @@ export class WebScraper {
   static #COMPONENT_NAME = "web-scraper ";
   static #RUNNING_STATUS = "Running";
 
-  #scrapingInProgress = false;
   #setupConfig = undefined;
-  #scrapConfig = undefined;
-  #intervalId = undefined;
-  #browser = undefined;
-  #page = undefined;
   #status = undefined;
 
   /**
@@ -42,6 +37,13 @@ export class WebScraper {
       this.#status.error(`Invalid scrap user: ${user}`);
       return false;
     }
+    const sessionSettings = {
+      scrapConfig: undefined,
+      intervalId: undefined,
+      isRunning: false,
+      browser: undefined,
+      page: undefined,
+    };
     this.#status.info(`Reading configuration for user ${user.name}`);
     try {
       var configCandidate = await ScrapConfig.getDatabaseModel().findById(user.config);
@@ -49,10 +51,10 @@ export class WebScraper {
         this.#status.warning("User has no configuration. Start aborted.");
         return false;
       }
-      this.#scrapConfig = new ScrapValidator(new ScrapConfig(configCandidate.toJSON())).validate();
+      sessionSettings.scrapConfig = new ScrapValidator(new ScrapConfig(configCandidate.toJSON())).validate();
     } catch (error) {
       if (error instanceof ScrapWarning) {
-        this.#scrapConfig = configCandidate;
+        sessionSettings.scrapConfig = configCandidate;
         this.#status.warning(error.message);
       } else {
         this.#status.error(`Invalid scrap configuration: ${error.message}`);
@@ -61,13 +63,13 @@ export class WebScraper {
     }
     this.#status.info("Initializing virtual browser");
     // open new Puppeteer virtual browser and an initial web page
-    this.#browser = await puppeteer.launch({ headless: "new" });
-    this.#page = await this.#browser.newPage();
-    this.#page.setDefaultTimeout(this.#setupConfig.scraperConfig.defaultTimeout);
+    sessionSettings.browser = await puppeteer.launch({ headless: "new" });
+    sessionSettings.page = await sessionSettings.browser.newPage();
+    sessionSettings.page.setDefaultTimeout(this.#setupConfig.scraperConfig.defaultTimeout);
     // invoke scrap data action initially and setup interval calls
     this.#status.info(`Starting data scraping for user ${user.name}`);
     const intervalTime = this.#setupConfig.scraperConfig.scrapInterval;
-    this.#intervalId = setInterval(() => this.#scrapData(), intervalTime);
+    sessionSettings.intervalId = setInterval(() => this.#scrapData(), intervalTime);
     this.#status.info(`${WebScraper.#RUNNING_STATUS} (every: ${intervalTime / 1000} seconds)`);
     return true;
   }
