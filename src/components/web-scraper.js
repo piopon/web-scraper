@@ -13,9 +13,9 @@ import fs from "fs";
 export class WebScraper {
   static #COMPONENT_NAME = "web-scraper ";
   static #RUNNING_STATUS = "Running";
-  static #RUN_INSTANCES = new Map();
 
   #setupConfig = undefined;
+  #sessions = new Map();
   #status = undefined;
 
   /**
@@ -71,8 +71,8 @@ export class WebScraper {
     this.#status.info(`Starting data scraping for user ${user.name}`);
     const intervalTime = this.#setupConfig.scraperConfig.scrapInterval;
     sessionSettings.intervalId = setInterval(() => this.#scrapData(sessionSettings), intervalTime);
-    // store this session in running instances map
-    WebScraper.#RUN_INSTANCES.set(user._id, sessionSettings);
+    // store this session into active sessions map
+    this.#sessions.set(user._id, sessionSettings);
     this.#status.info(`${WebScraper.#RUNNING_STATUS} (every: ${intervalTime / 1000} seconds)`);
     return true;
   }
@@ -82,7 +82,7 @@ export class WebScraper {
    * @param {String} reason The message with a web scraper stop reason. Non-empty value is treated as error.
    */
   async stop(user, reason = "") {
-    const userSession = WebScraper.#RUN_INSTANCES.get(user);
+    const userSession = this.#sessions.get(user);
     if (userSession == null) {
       this.#status.error("Invalid internal state: session not started");
       return;
@@ -134,7 +134,7 @@ export class WebScraper {
    * @returns true when web scraper is running, false otherwise
    */
   isAlive(sessionUser) {
-    const userSession = WebScraper.#RUN_INSTANCES.get(sessionUser._id);
+    const userSession = this.#sessions.get(sessionUser._id);
     return userSession == null ? false : userSession.intervalId != null;
   }
 
@@ -145,7 +145,7 @@ export class WebScraper {
   getStatusHistory(sessionUser) {
     const invalidStateMessage = "Invalid internal state";
     const currentStatus = this.#status.getStatus().message;
-    const userSession = WebScraper.#RUN_INSTANCES.get(sessionUser._id);
+    const userSession = this.#sessions.get(sessionUser._id);
     if (userSession != null) {
       if (userSession.intervalId == null) {
         // scraper is NOT running in selected intervals
