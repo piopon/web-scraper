@@ -39,15 +39,14 @@ export class WebScraper {
    */
   async start(user) {
     if (user == null) {
-      this.stop(`Invalid scrap user: ${user}`);
+      this.#status.error(`Invalid scrap user: ${user}`);
       return false;
     }
     this.#status.info(`Reading configuration for user ${user.name}`);
     try {
       var configCandidate = await ScrapConfig.getDatabaseModel().findById(user.config);
       if (configCandidate == null) {
-        this.#status.warning("User has no configuration");
-        this.stop();
+        this.#status.warning("User has no configuration. Start aborted.");
         return false;
       }
       this.#scrapConfig = new ScrapValidator(new ScrapConfig(configCandidate.toJSON())).validate();
@@ -56,7 +55,7 @@ export class WebScraper {
         this.#scrapConfig = configCandidate;
         this.#status.warning(error.message);
       } else {
-        this.stop(`Invalid scrap configuration: ${error.message}`);
+        this.#status.error(`Invalid scrap configuration: ${error.message}`);
         return false;
       }
     }
@@ -67,13 +66,10 @@ export class WebScraper {
     this.#page.setDefaultTimeout(this.#setupConfig.scraperConfig.defaultTimeout);
     // invoke scrap data action initially and setup interval calls
     this.#status.info(`Starting data scraping for user ${user.name}`);
-    const initialScrapResult = await this.#scrapData();
-    if (true === initialScrapResult) {
-      const intervalTime = this.#setupConfig.scraperConfig.scrapInterval;
-      this.#intervalId = setInterval(() => this.#scrapData(), intervalTime);
-      this.#status.info(`${WebScraper.#RUNNING_STATUS} (every: ${intervalTime / 1000} seconds)`);
-    }
-    return initialScrapResult;
+    const intervalTime = this.#setupConfig.scraperConfig.scrapInterval;
+    this.#intervalId = setInterval(() => this.#scrapData(), intervalTime);
+    this.#status.info(`${WebScraper.#RUNNING_STATUS} (every: ${intervalTime / 1000} seconds)`);
+    return true;
   }
 
   /**
