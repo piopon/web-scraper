@@ -13,6 +13,7 @@ import fs from "fs";
 export class WebScraper {
   static #COMPONENT_NAME = "web-scraper ";
   static #RUNNING_STATUS = "Running";
+  static #RUN_INSTANCES = new Map();
 
   #setupConfig = undefined;
   #status = undefined;
@@ -70,6 +71,8 @@ export class WebScraper {
     this.#status.info(`Starting data scraping for user ${user.name}`);
     const intervalTime = this.#setupConfig.scraperConfig.scrapInterval;
     sessionSettings.intervalId = setInterval(() => this.#scrapData(), intervalTime);
+    // store this session in running instances map
+    WebScraper.#RUN_INSTANCES.set(user._id, sessionSettings);
     this.#status.info(`${WebScraper.#RUNNING_STATUS} (every: ${intervalTime / 1000} seconds)`);
     return true;
   }
