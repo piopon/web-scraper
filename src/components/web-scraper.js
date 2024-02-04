@@ -72,7 +72,7 @@ export class WebScraper {
     const intervalTime = this.#setupConfig.scraperConfig.scrapInterval;
     sessionSettings.intervalId = setInterval(() => this.#scrapData(sessionSettings), intervalTime);
     // store this session into active sessions map
-    this.#sessions.set(user._id, sessionSettings);
+    this.#sessions.set(user.email, sessionSettings);
     this.#status.info(`${WebScraper.#RUNNING_STATUS} (every: ${intervalTime / 1000} seconds)`);
     return true;
   }
@@ -134,7 +134,7 @@ export class WebScraper {
    * @returns true when web scraper is running, false otherwise
    */
   isAlive(sessionUser) {
-    const userSession = this.#sessions.get(sessionUser._id);
+    const userSession = this.#sessions.get(sessionUser.email);
     return userSession == null ? false : userSession.intervalId != null;
   }
 
@@ -145,7 +145,7 @@ export class WebScraper {
   getStatusHistory(sessionUser) {
     const invalidStateMessage = "Invalid internal state";
     const currentStatus = this.#status.getStatus().message;
-    const userSession = this.#sessions.get(sessionUser._id);
+    const userSession = this.#sessions.get(sessionUser.email);
     if (userSession != null) {
       if (userSession.intervalId == null) {
         // scraper is NOT running in selected intervals
@@ -157,7 +157,7 @@ export class WebScraper {
         // scraper is running in selected intervals
         if (!currentStatus.startsWith(WebScraper.#RUNNING_STATUS)) {
           // incorrect state - since it's running then we must stop it
-          this.stop(sessionUser, invalidStateMessage);
+          this.stop(sessionUser.email, invalidStateMessage);
         }
       }
     }
