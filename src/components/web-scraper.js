@@ -38,7 +38,7 @@ export class WebScraper {
       this.#status.error(`Invalid scrap user: ${sessionUser}`);
       return false;
     }
-    const sessionSettings = {
+    const session = {
       scrapConfig: undefined,
       intervalId: undefined,
       isRunning: false,
@@ -52,10 +52,10 @@ export class WebScraper {
         this.#status.warning("User has no configuration. Start aborted.");
         return false;
       }
-      sessionSettings.scrapConfig = new ScrapValidator(new ScrapConfig(configCandidate.toJSON())).validate();
+      session.scrapConfig = new ScrapValidator(new ScrapConfig(configCandidate.toJSON())).validate();
     } catch (error) {
       if (error instanceof ScrapWarning) {
-        sessionSettings.scrapConfig = configCandidate;
+        session.scrapConfig = configCandidate;
         this.#status.warning(error.message);
       } else {
         this.#status.error(`Invalid scrap configuration: ${error.message}`);
@@ -64,15 +64,15 @@ export class WebScraper {
     }
     this.#status.info("Initializing virtual browser");
     // open new Puppeteer virtual browser and an initial web page
-    sessionSettings.browser = await puppeteer.launch({ headless: "new" });
-    sessionSettings.page = await sessionSettings.browser.newPage();
-    sessionSettings.page.setDefaultTimeout(this.#setupConfig.scraperConfig.defaultTimeout);
+    session.browser = await puppeteer.launch({ headless: "new" });
+    session.page = await session.browser.newPage();
+    session.page.setDefaultTimeout(this.#setupConfig.scraperConfig.defaultTimeout);
     // invoke scrap data action initially and setup interval calls
     this.#status.info(`Starting data scraping for user ${sessionUser.name}`);
     const intervalTime = this.#setupConfig.scraperConfig.scrapInterval;
-    sessionSettings.intervalId = setInterval(() => this.#scrapData(sessionSettings), intervalTime);
+    session.intervalId = setInterval(() => this.#scrapData(session), intervalTime);
     // store this session into active sessions map
-    this.#sessions.set(sessionUser.email, sessionSettings);
+    this.#sessions.set(sessionUser.email, session);
     this.#status.info(`${WebScraper.#RUNNING_STATUS} (every: ${intervalTime / 1000} seconds)`);
     return true;
   }
