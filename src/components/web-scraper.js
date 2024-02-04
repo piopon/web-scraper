@@ -29,13 +29,13 @@ export class WebScraper {
   }
 
   /**
-   * Method used to start web scraping action
-   * @param {Object} user The user which configuration will be used in the web scraper
+   * Method used to start web scraping action for specified user
+   * @param {Object} sessionUser The user for which we want to start scrap process
    * @returns true if scraper started successfully, false otherwise
    */
-  async start(user) {
-    if (user == null) {
-      this.#status.error(`Invalid scrap user: ${user}`);
+  async start(sessionUser) {
+    if (sessionUser == null) {
+      this.#status.error(`Invalid scrap user: ${sessionUser}`);
       return false;
     }
     const sessionSettings = {
@@ -45,9 +45,9 @@ export class WebScraper {
       browser: undefined,
       page: undefined,
     };
-    this.#status.info(`Reading configuration for user ${user.name}`);
+    this.#status.info(`Reading configuration for user ${sessionUser.name}`);
     try {
-      var configCandidate = await ScrapConfig.getDatabaseModel().findById(user.config);
+      var configCandidate = await ScrapConfig.getDatabaseModel().findById(sessionUser.config);
       if (configCandidate == null) {
         this.#status.warning("User has no configuration. Start aborted.");
         return false;
@@ -68,11 +68,11 @@ export class WebScraper {
     sessionSettings.page = await sessionSettings.browser.newPage();
     sessionSettings.page.setDefaultTimeout(this.#setupConfig.scraperConfig.defaultTimeout);
     // invoke scrap data action initially and setup interval calls
-    this.#status.info(`Starting data scraping for user ${user.name}`);
+    this.#status.info(`Starting data scraping for user ${sessionUser.name}`);
     const intervalTime = this.#setupConfig.scraperConfig.scrapInterval;
     sessionSettings.intervalId = setInterval(() => this.#scrapData(sessionSettings), intervalTime);
     // store this session into active sessions map
-    this.#sessions.set(user.email, sessionSettings);
+    this.#sessions.set(sessionUser.email, sessionSettings);
     this.#status.info(`${WebScraper.#RUNNING_STATUS} (every: ${intervalTime / 1000} seconds)`);
     return true;
   }
@@ -81,8 +81,8 @@ export class WebScraper {
    * Method used to stop web scraping action
    * @param {String} reason The message with a web scraper stop reason. Non-empty value is treated as error.
    */
-  async stop(user, reason = "") {
-    const userSession = this.#sessions.get(user);
+  async stop(sessionUser, reason = "") {
+    const userSession = this.#sessions.get(sessionUser);
     if (userSession == null) {
       this.#status.error("Invalid internal state: session not started");
       return;
