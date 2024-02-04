@@ -84,7 +84,7 @@ export class WebScraper {
   async stop(user, reason = "") {
     const userSession = WebScraper.#RUN_INSTANCES.get(user);
     if (userSession == null) {
-      this.#status.error(`Invalid internal state: cannot stop not running session for user ${user.name}`);
+      this.#status.error("Invalid internal state: session not started");
       return;
     }
     // stop running method in constant time intervals
