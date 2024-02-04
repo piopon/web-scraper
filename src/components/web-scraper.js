@@ -70,7 +70,7 @@ export class WebScraper {
     // invoke scrap data action initially and setup interval calls
     this.#status.info(`Starting data scraping for user ${user.name}`);
     const intervalTime = this.#setupConfig.scraperConfig.scrapInterval;
-    sessionSettings.intervalId = setInterval(() => this.#scrapData(), intervalTime);
+    sessionSettings.intervalId = setInterval(() => this.#scrapData(sessionSettings), intervalTime);
     // store this session in running instances map
     WebScraper.#RUN_INSTANCES.set(user._id, sessionSettings);
     this.#status.info(`${WebScraper.#RUNNING_STATUS} (every: ${intervalTime / 1000} seconds)`);
@@ -159,26 +159,26 @@ export class WebScraper {
    * Method containing core web scraping logic (according to scrap user settings)
    * @returns true if scrap logic completed with no errors, false otherwise
    */
-  async #scrapData() {
-    if (this.#scrapConfig == null) {
-      this.stop("Missing scrap configuration");
+  async #scrapData(session) {
+    if (session.scrapConfig == null) {
+      this.#status.error(`Invalid internal state: Missing scrap configuration`);
       return false;
     }
-    if (this.#scrapingInProgress) {
+    if (session.isRunning) {
       this.#status.warning("Skipping current scrap iteration - previous one in progress");
       return false;
     }
     const data = [];
-    this.#scrapingInProgress = true;
-    for (let groupIndex = 0; groupIndex < this.#scrapConfig.groups.length; groupIndex++) {
-      const group = this.#scrapConfig.groups[groupIndex];
+    session.isRunning = true;
+    for (let groupIndex = 0; groupIndex < session.scrapConfig.groups.length; groupIndex++) {
+      const group = session.scrapConfig.groups[groupIndex];
       const groupObject = { name: group.name, category: group.category, items: [] };
       for (let observerIndex = 0; observerIndex < group.observers.length; observerIndex++) {
         const observer = group.observers[observerIndex];
         try {
           const page = new URL(observer.path, group.domain);
           await this.#navigateToPage(page, observer);
-          const dataObj = await this.#page.evaluate((observer) => {
+          const dataObj = await session.page.evaluate((observer) => {
             try {
               // try to get data container
               const dataContainer = document.querySelector(observer.container);
@@ -230,7 +230,7 @@ export class WebScraper {
       data.push(groupObject);
     }
     this.#saveData(data);
-    this.#scrapingInProgress = false;
+    session.isRunning = false;
     return true;
   }
 
