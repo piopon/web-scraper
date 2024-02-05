@@ -185,8 +185,8 @@ export class WebScraper {
       for (let observerIndex = 0; observerIndex < group.observers.length; observerIndex++) {
         const observer = group.observers[observerIndex];
         try {
-          const page = new URL(observer.path, group.domain);
-          await this.#navigateToPage(session, page, observer);
+          const pageUrl = new URL(observer.path, group.domain);
+          await this.#navigateToPage(session.page, pageUrl, observer);
           const dataObj = await session.page.evaluate((observer) => {
             try {
               // try to get data container
@@ -248,14 +248,14 @@ export class WebScraper {
    * @param {String} pageUrl The address of a page to navigate to
    * @param {Object} observer The observer which has the selector definition to find on a page
    */
-  async #navigateToPage(session, pageUrl, observer) {
+  async #navigateToPage(sessionPage, newUrl, observer) {
     let attempt = 1;
     let foundSelector = false;
     const maxAttempts = this.#setupConfig.scraperConfig.timeoutAttempts;
     while (!foundSelector) {
       try {
-        await session.page.goto(pageUrl, { waitUntil: observer.target });
-        await session.page.waitForSelector(observer.price.selector, { visible: true });
+        await sessionPage.goto(newUrl, { waitUntil: observer.target });
+        await sessionPage.waitForSelector(observer.price.selector, { visible: true });
         foundSelector = true;
       } catch (error) {
         if (attempt <= maxAttempts && error instanceof TimeoutError) {
@@ -264,8 +264,8 @@ export class WebScraper {
           continue;
         }
         this.#status.warning(`Exceeded the maximum number of retries: ${maxAttempts}`);
-        await this.#createErrorScreenshot(session, this.#status.getStatus());
-        throw new Error(`Cannot find price element in page ${pageUrl}`);
+        await this.#createErrorScreenshot(sessionPage, this.#status.getStatus());
+        throw new Error(`Cannot find price element in page ${newUrl}`);
       }
     }
   }
@@ -317,14 +317,14 @@ export class WebScraper {
    * Method used to create an error screenshot of current web page (if present)
    * @param {Object} error The occured error object
    */
-  async #createErrorScreenshot(session, error) {
-    if (session.page && error.type.length > 0) {
+  async #createErrorScreenshot(sessionPage, error) {
+    if (sessionPage && error.type.length > 0) {
       if (!fs.existsSync(this.#setupConfig.screenshotPath)) {
         fs.mkdirSync(this.#setupConfig.screenshotPath, { recursive: true });
       }
       const screenshotName = `error_${error.timestamp.replaceAll(":", "-").replaceAll(" ", "_")}.png`;
       const screenshotPath = path.join(this.#setupConfig.screenshotPath, screenshotName);
-      await session.page.screenshot({ path: screenshotPath });
+      await sessionPage.screenshot({ path: screenshotPath });
     }
   }
 }
