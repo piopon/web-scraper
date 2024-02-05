@@ -39,9 +39,9 @@ export class WebScraper {
       return false;
     }
     const session = {
-      scrapConfig: undefined,
-      intervalId: undefined,
-      isRunning: false,
+      id: undefined,
+      active: false,
+      config: undefined,
       browser: undefined,
       page: undefined,
     };
@@ -52,10 +52,10 @@ export class WebScraper {
         this.#status.warning("User has no configuration. Start aborted.");
         return false;
       }
-      session.scrapConfig = new ScrapValidator(new ScrapConfig(configCandidate.toJSON())).validate();
+      session.config = new ScrapValidator(new ScrapConfig(configCandidate.toJSON())).validate();
     } catch (error) {
       if (error instanceof ScrapWarning) {
-        session.scrapConfig = configCandidate;
+        session.config = configCandidate;
         this.#status.warning(error.message);
       } else {
         this.#status.error(`Invalid scrap configuration: ${error.message}`);
@@ -70,7 +70,7 @@ export class WebScraper {
     // invoke scrap data action initially and setup interval calls
     this.#status.info(`Starting data scraping for user ${sessionUser.name}`);
     const intervalTime = this.#setupConfig.scraperConfig.scrapInterval;
-    session.intervalId = setInterval(() => this.#scrapData(session), intervalTime);
+    session.id = setInterval(() => this.#scrapData(session), intervalTime);
     // store this session into active sessions map
     this.#sessions.set(sessionUser.email, session);
     this.#status.info(`${WebScraper.#RUNNING_STATUS} (every: ${intervalTime / 1000} seconds)`);
@@ -88,9 +88,9 @@ export class WebScraper {
       return;
     }
     // stop running method in constant time intervals
-    if (userSession.intervalId != null) {
-      clearInterval(userSession.intervalId);
-      userSession.intervalId = undefined;
+    if (userSession.id != null) {
+      clearInterval(userSession.id);
+      userSession.id = undefined;
     }
     // update scraper status
     if (reason.length === 0) {
@@ -99,7 +99,7 @@ export class WebScraper {
       this.#status.error(reason);
     }
     // update internal object state
-    userSession.isRunning = false;
+    userSession.active = false;
     // close currently opened page and browser
     try {
       if (userSession.page != null) {
@@ -135,7 +135,7 @@ export class WebScraper {
    */
   isAlive(sessionUser) {
     const userSession = this.#sessions.get(sessionUser.email);
-    return userSession == null ? false : userSession.intervalId != null;
+    return userSession == null ? false : userSession.id != null;
   }
 
   /**
@@ -147,7 +147,7 @@ export class WebScraper {
     const currentStatus = this.#status.getStatus().message;
     const userSession = this.#sessions.get(sessionUser.email);
     if (userSession != null) {
-      if (userSession.intervalId == null) {
+      if (userSession.id == null) {
         // scraper is NOT running in selected intervals
         if (currentStatus.startsWith(WebScraper.#RUNNING_STATUS)) {
           // incorrect state - update field
@@ -169,18 +169,18 @@ export class WebScraper {
    * @returns true if scrap logic completed with no errors, false otherwise
    */
   async #scrapData(session) {
-    if (session.scrapConfig == null) {
+    if (session.config == null) {
       this.#status.error(`Invalid internal state: Missing scrap configuration`);
       return false;
     }
-    if (session.isRunning) {
+    if (session.active) {
       this.#status.warning("Skipping current scrap iteration - previous one in progress");
       return false;
     }
     const data = [];
-    session.isRunning = true;
-    for (let groupIndex = 0; groupIndex < session.scrapConfig.groups.length; groupIndex++) {
-      const group = session.scrapConfig.groups[groupIndex];
+    session.active = true;
+    for (let groupIndex = 0; groupIndex < session.config.groups.length; groupIndex++) {
+      const group = session.config.groups[groupIndex];
       const groupObject = { name: group.name, category: group.category, items: [] };
       for (let observerIndex = 0; observerIndex < group.observers.length; observerIndex++) {
         const observer = group.observers[observerIndex];
@@ -239,7 +239,7 @@ export class WebScraper {
       data.push(groupObject);
     }
     this.#saveData(data);
-    session.isRunning = false;
+    session.active = false;
     return true;
   }
 
