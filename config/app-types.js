@@ -22,16 +22,17 @@ class LogLevel {
  * It implements an enum with values: INIT, AUTH, CONFIG
  */
 class ComponentType {
-  static INIT = new ComponentType("init");
-  static AUTH = new ComponentType("auth");
-  static CONFIG = new ComponentType("config");
+  static INIT = new ComponentType("init", ["start", "stop"]);
+  static AUTH = new ComponentType("auth", ["start", "stop"]);
+  static CONFIG = new ComponentType("config", ["update"]);
 
   /**
    * Creates an object representing component type setting
    * @param {String} name The component type name value
    */
-  constructor(name) {
+  constructor(name, methods) {
     this.name = name;
+    this.methods = methods;
   }
 
   /**
