@@ -112,6 +112,8 @@ export class WebScraper {
     } catch (warning) {
       this.#status.warning(`Stop issue: ${warning.message}`);
     }
+    // remove entry from the sessions map
+    this.#sessions.delete(sessionUser);
   }
 
   /**
