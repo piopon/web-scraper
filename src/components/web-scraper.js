@@ -82,15 +82,15 @@ export class WebScraper {
    * @param {String} reason The message with a web scraper stop reason. Non-empty value is treated as error.
    */
   async stop(sessionUser, reason = "") {
-    const userSession = this.#sessions.get(sessionUser);
-    if (userSession == null) {
+    const session = this.#sessions.get(sessionUser);
+    if (session == null) {
       this.#status.error("Invalid internal state: session not started");
       return;
     }
     // stop running method in constant time intervals
-    if (userSession.id != null) {
-      clearInterval(userSession.id);
-      userSession.id = undefined;
+    if (session.id != null) {
+      clearInterval(session.id);
+      session.id = undefined;
     }
     // update scraper status
     if (reason.length === 0) {
@@ -99,14 +99,14 @@ export class WebScraper {
       this.#status.error(reason);
     }
     // update internal object state
-    userSession.active = false;
+    session.active = false;
     // close currently opened page and browser
     try {
-      if (userSession.page != null) {
-        await userSession.page.close();
+      if (session.page != null) {
+        await session.page.close();
       }
-      if (userSession.browser != null) {
-        await userSession.browser.close();
+      if (session.browser != null) {
+        await session.browser.close();
       }
     } catch (warning) {
       this.#status.warning(`Stop issue: ${warning.message}`);
@@ -134,8 +134,8 @@ export class WebScraper {
    * @returns true when web scraper is running, false otherwise
    */
   isAlive(sessionUser) {
-    const userSession = this.#sessions.get(sessionUser.email);
-    return userSession == null ? false : userSession.id != null;
+    const session = this.#sessions.get(sessionUser.email);
+    return session == null ? false : session.id != null;
   }
 
   /**
@@ -145,9 +145,9 @@ export class WebScraper {
   getStatusHistory(sessionUser) {
     const invalidStateMessage = "Invalid internal state";
     const currentStatus = this.#status.getStatus().message;
-    const userSession = this.#sessions.get(sessionUser.email);
-    if (userSession != null) {
-      if (userSession.id == null) {
+    const session = this.#sessions.get(sessionUser.email);
+    if (session != null) {
+      if (session.id == null) {
         // scraper is NOT running in selected intervals
         if (currentStatus.startsWith(WebScraper.#RUNNING_STATUS)) {
           // incorrect state - update field
