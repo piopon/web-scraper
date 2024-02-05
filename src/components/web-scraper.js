@@ -79,6 +79,7 @@ export class WebScraper {
 
   /**
    * Method used to stop web scraping action
+   * @param {Object} sessionUser The user for which we want to stop scraper
    * @param {String} reason The message with a web scraper stop reason. Non-empty value is treated as error.
    */
   async stop(sessionUser, reason = "") {
@@ -131,6 +132,7 @@ export class WebScraper {
 
   /**
    * Method used to determine if the web scraper component is running (alive) or not
+   * @param {Object} sessionUser The user for which we want to check scraper alive status
    * @returns true when web scraper is running, false otherwise
    */
   isAlive(sessionUser) {
@@ -140,6 +142,7 @@ export class WebScraper {
 
   /**
    * Method used to receive running history status of web scraper
+   * @param {Object} sessionUser The user for which we want to get all status history
    * @returns array of objects containing web scraper running history status
    */
   getStatusHistory(sessionUser) {
@@ -166,6 +169,7 @@ export class WebScraper {
 
   /**
    * Method containing core web scraping logic (according to scrap user settings)
+   * @param {Object} session The session values/settings used for scraping data
    * @returns true if scrap logic completed with no errors, false otherwise
    */
   async #scrapData(session) {
@@ -245,7 +249,8 @@ export class WebScraper {
 
   /**
    * Method used to go to a specified URL and wait until an observer selector is available
-   * @param {String} pageUrl The address of a page to navigate to
+   * @param {Object} sessionPage The session page object which should be updated
+   * @param {String} newUrl The new URL address to navigate to
    * @param {Object} observer The observer which has the selector definition to find on a page
    */
   async #navigateToPage(sessionPage, newUrl, observer) {
@@ -315,6 +320,7 @@ export class WebScraper {
 
   /**
    * Method used to create an error screenshot of current web page (if present)
+   * @param {Object} sessionPage The session page object for which to take the screenshot
    * @param {Object} error The occured error object
    */
   async #createErrorScreenshot(sessionPage, error) {
