@@ -7,6 +7,16 @@ import Ajv from "ajv";
 import express from "express";
 
 export class ConfigRouter {
+  #components = [];
+
+  /**
+   * Creates a new config router for managing scraper configuration settings
+   * @param {Array} components The components list used in scraper config (CONFIG)
+   */
+  constructor(components) {
+    this.#components = components;
+  }
+
   /**
    * Method used to create routes for scraping ocnfiguration values
    * @returns router object for handling config requests

@@ -100,12 +100,13 @@ export class WebServer {
     server.use(passport.session());
     // filter out components needed by particular routers
     const authComponents = this.#getComponents(ComponentType.AUTH);
+    const configComponents = this.#getComponents(ComponentType.CONFIG);
     // setup web server routes
     const routes = new Map([
       ["/", new ViewRouter()],
       ["/auth", new AuthRouter(authComponents, passport)],
       ["/api/v1/data", new DataRouter(this.#setupConfig.dataOutputPath)],
-      ["/api/v1/config", new ConfigRouter()],
+      ["/api/v1/config", new ConfigRouter(configComponents)],
       ["/api/v1/status", new StatusRouter(this.#status, this.#components)],
     ]);
     routes.forEach((router, url) => server.use(url, router.createRoutes()));
