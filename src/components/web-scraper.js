@@ -118,7 +118,7 @@ export class WebScraper {
   }
 
   async update(sessionUser, scraperConfig) {
-    const session = this.#sessions.get(sessionUser);
+    const session = this.#sessions.get(sessionUser.email);
     if (session == null) {
       this.#status.error("Invalid internal state: session not started");
       return;
