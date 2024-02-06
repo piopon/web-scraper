@@ -38,11 +38,12 @@ export class WebServer {
    * @param {Object} component The component to start after running web server
    */
   addComponent(component) {
-    if (component.getInfo().types.length > 0) {
-      this.#components.push(component);
-      return;
+    const componentTypes = component.getInfo().types;
+    if (componentTypes.length === 0) {
+      this.#status.warning(`Missing component type(s): ${component}`);
     }
-    this.#status.warning(`Unknown component type: ${componentType}`);
+    this.#components.push(component);
+    return;
   }
 
   /**
