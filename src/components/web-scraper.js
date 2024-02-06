@@ -15,6 +15,7 @@ export class WebScraper {
   static #RUNNING_STATUS = "Running";
 
   #setupConfig = undefined;
+  #waitConfig = new Map();
   #sessions = new Map();
   #status = undefined;
 
@@ -116,6 +117,15 @@ export class WebScraper {
     this.#sessions.delete(sessionUser);
   }
 
+  async update(sessionUser, scraperConfig) {
+    const session = this.#sessions.get(sessionUser);
+    if (session == null) {
+      this.#status.error("Invalid internal state: session not started");
+      return;
+    }
+    this.#waitConfig.set(session.id, scraperConfig);
+  }
+
   /**
    * Method used to return the name of the component
    * @returns web scraper component name
@@ -182,6 +192,12 @@ export class WebScraper {
     if (session.active) {
       this.#status.warning("Skipping current scrap iteration - previous one in progress");
       return false;
+    }
+    // check if there is an updated version of current session config
+    const updatedConfig = this.#waitConfig.get(session.id);
+    if (updatedConfig != null) {
+      session.config = updatedConfig;
+      this.#waitConfig.delete(session.id);
     }
     const data = [];
     session.active = true;
