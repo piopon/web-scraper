@@ -29,6 +29,7 @@ class ComponentType {
   /**
    * Creates an object representing component type setting
    * @param {String} name The component type name value
+   * @param {Array} methods Required methods names for component type compability
    */
   constructor(name, methods) {
     this.name = name;
