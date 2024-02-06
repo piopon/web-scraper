@@ -47,7 +47,7 @@ export class WebServer {
       const requiredMethods = componentType.methods;
       if (!requiredMethods.every((method) => componentMethods.includes(method))) {
         this.#status.error(`Incompatible component: ${component.getName()}`);
-        return;
+        throw new Error("Cannot initialize server. Check previous logs for more information.");
       }
     }
     this.#components.push(component);
