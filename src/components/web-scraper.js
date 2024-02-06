@@ -129,7 +129,7 @@ export class WebScraper {
    * @returns an object with extra info: component type and require pass flag
    */
   getInfo() {
-    return { types: [ComponentType.AUTH], mustPass: true };
+    return { types: [ComponentType.INIT, ComponentType.CONFIG], mustPass: true };
   }
 
   /**
