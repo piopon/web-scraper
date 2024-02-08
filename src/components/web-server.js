@@ -54,11 +54,11 @@ export class WebServer {
       const newMaster = await component.master();
       const master = this.#components.find((c) => c.master.getName() === newMaster.name);
       if (master != null) {
-        console.log(`Found slave component for ${found.getName()}`);
+        master.slave = component;
       }
       return;
     }
-    this.#components.push(component);
+    this.#components.push({ master: component, slave: undefined });
   }
 
   /**
@@ -79,7 +79,7 @@ export class WebServer {
    */
   shutdown() {
     this.#server.close(() => {
-      this.#components.forEach((component) => component.stop());
+      this.#components.forEach((component) => component.master.stop());
       this.#status.info("Stopped");
     });
   }
@@ -140,7 +140,7 @@ export class WebServer {
    */
   #getComponents(type) {
     return this.#components.filter((component) => {
-      return -1 !== component.getInfo().types.findIndex((currType) => currType.equals(type));
+      return -1 !== component.master.getInfo().types.findIndex((currType) => currType.equals(type));
     });
   }
 
@@ -152,12 +152,12 @@ export class WebServer {
     const initComponents = this.#getComponents(ComponentType.INIT);
     for (const component of initComponents) {
       // if component is not required to pass then we start it and go to the next one
-      if (!component.getInfo().mustPass) {
-        component.start();
+      if (!component.master.getInfo().mustPass) {
+        component.master.start();
         continue;
       }
       // component must pass so we are waiting for the result to check it
-      const result = await component.start();
+      const result = await component.master.start();
       if (!result) {
         this.#status.error(`Cannot start component: ${component.getName()}`);
         return false;
