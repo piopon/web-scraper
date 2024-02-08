@@ -153,7 +153,11 @@ export class WebServer {
     for (const component of initComponents) {
       // if component is not required to pass then we start it and go to the next one
       if (!component.master.getInfo().mustPass) {
-        component.master.start();
+        component.master.start().then(async (hasStarted) => {
+          if (hasStarted && component.slave != null) {
+            (await component.slave.master()).call();
+          }
+        });
         continue;
       }
       // component must pass so we are waiting for the result to check it
@@ -161,6 +165,11 @@ export class WebServer {
       if (!result) {
         this.#status.error(`Cannot start component: ${component.getName()}`);
         return false;
+      }
+      // call the dependent component (if there is one)
+      if (component.slave != null) {
+        const action = await component.slave.master();
+        await action.call();
       }
     }
     return true;
