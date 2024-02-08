@@ -3,6 +3,7 @@ import { RegexUtils } from "../utils/regex-utils.js";
 import { ScrapConfig } from "../model/scrap-config.js";
 import { ScrapWarning } from "../model/scrap-exception.js";
 import { ScrapValidator } from "../model/scrap-validator.js";
+import { ScrapUser } from "../model/scrap-user.js";
 import { StatusLogger } from "./status-logger.js";
 import { TimeoutError } from "puppeteer";
 
@@ -129,6 +130,11 @@ export class WebScraper {
   async master() {
     return {
       name: "web-database",
+      call: async () => {
+        for (const user of await ScrapUser.getDatabaseModel().find()) {
+          await this.start(user);
+        }
+      }
     }
   }
 
