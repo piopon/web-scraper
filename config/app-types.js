@@ -24,6 +24,7 @@ class LogLevel {
 class ComponentType {
   static INIT = new ComponentType("init", ["start", "stop"]);
   static AUTH = new ComponentType("auth", ["start", "stop"]);
+  static SLAVE = new ComponentType("slave", ["master"]);
   static CONFIG = new ComponentType("config", ["update"]);
 
   /**
