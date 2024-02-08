@@ -56,7 +56,9 @@ export class WebServer {
       if (master != null) {
         master.slave = component;
       }
-      return;
+      if (1 === componentTypes.length) {
+        return;
+      }
     }
     this.#components.push({ master: component, slave: undefined });
   }
