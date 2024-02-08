@@ -128,11 +128,12 @@ export class WebScraper {
   }
 
   async master() {
+    var scraper = this;
     return {
       name: "web-database",
       call: async () => {
         for (const user of await ScrapUser.getDatabaseModel().find()) {
-          await this.start(user);
+          await scraper.start(user);
         }
       }
     }
