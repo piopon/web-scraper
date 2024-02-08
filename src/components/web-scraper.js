@@ -126,6 +126,12 @@ export class WebScraper {
     this.#waitConfig.set(session.id, scraperConfig);
   }
 
+  async master() {
+    return {
+      name: "web-database",
+    }
+  }
+
   /**
    * Method used to return the name of the component
    * @returns web scraper component name
@@ -139,7 +145,7 @@ export class WebScraper {
    * @returns an object with extra info: component type and require pass flag
    */
   getInfo() {
-    return { types: [ComponentType.INIT, ComponentType.CONFIG], mustPass: true };
+    return { types: [ComponentType.SLAVE, ComponentType.CONFIG], mustPass: false };
   }
 
   /**
