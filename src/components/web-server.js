@@ -51,7 +51,6 @@ export class WebServer {
       }
     }
     this.#components.push(component);
-    return;
   }
 
   /**
