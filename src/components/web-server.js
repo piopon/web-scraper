@@ -50,6 +50,13 @@ export class WebServer {
         throw new Error("Cannot initialize server. Check previous logs for more information.");
       }
     }
+    if (componentTypes.includes(ComponentType.SLAVE)) {
+      const found = this.#components.find((c) => c.getName() === component.master().name);
+      if (found != null) {
+        console.log(`Found slave component for ${found.getName()}`);
+      }
+      return;
+    }
     this.#components.push(component);
   }
 
