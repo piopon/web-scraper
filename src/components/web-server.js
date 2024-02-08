@@ -37,7 +37,7 @@ export class WebServer {
    * Method used to add a component to start after running web server
    * @param {Object} component The component to start after running web server
    */
-  addComponent(component) {
+  async addComponent(component) {
     const componentTypes = component.getInfo().types;
     if (componentTypes.length === 0) {
       this.#status.warning(`Missing component type(s): ${component}`);
@@ -51,8 +51,9 @@ export class WebServer {
       }
     }
     if (componentTypes.includes(ComponentType.SLAVE)) {
-      const found = this.#components.find((c) => c.getName() === component.master().name);
-      if (found != null) {
+      const newMaster = await component.master();
+      const master = this.#components.find((c) => c.master.getName() === newMaster.name);
+      if (master != null) {
         console.log(`Found slave component for ${found.getName()}`);
       }
       return;
