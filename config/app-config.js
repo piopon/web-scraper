@@ -25,7 +25,7 @@ export class AppConfig {
    */
   getConfig() {
     return {
-      dataOutputPath: path.join(this.#rootDir, "user", "output", "data.json"),
+      dataOutputPath: path.join(this.#rootDir, "user", "output"),
       screenshotPath: path.join(this.#rootDir, "user", "captures"),
       minLogLevel: LogLevel.INFO,
       serverConfig: {
