@@ -114,7 +114,7 @@ export class WebServer {
     const routes = new Map([
       ["/", new ViewRouter()],
       ["/auth", new AuthRouter(authComponents, passport)],
-      ["/api/v1/data", new DataRouter(this.#setupConfig.dataOutputPath)],
+      ["/api/v1/data", new DataRouter(this.#setupConfig.usersDataPath)],
       ["/api/v1/config", new ConfigRouter(configComponents)],
       ["/api/v1/status", new StatusRouter(this.#status, this.#components)],
     ]);
