@@ -282,7 +282,7 @@ export class WebScraper {
       }
       data.push(groupObject);
     }
-    this.#saveData(data);
+    this.#saveData(this.#findSessionUser(session), data);
     session.active = false;
     return true;
   }
@@ -319,12 +319,13 @@ export class WebScraper {
    * Method used to save specified object in a destination file (its path stored in configuration object)
    * @param {Object} dataToSave The data object to save in destination file
    */
-  #saveData(dataToSave) {
-    const dataDirectory = path.dirname(this.#setupConfig.dataOutputPath);
+  #saveData(sessionUser, dataToSave) {
+    const dataFile = path.join(this.#setupConfig.dataOutputPath, sessionUser, "data.json")
+    const dataDirectory = path.dirname(dataFile);
     if (!fs.existsSync(dataDirectory)) {
       fs.mkdirSync(dataDirectory, { recursive: true });
     }
-    fs.writeFileSync(this.#setupConfig.dataOutputPath, JSON.stringify(dataToSave, null, 2));
+    fs.writeFileSync(dataFile, JSON.stringify(dataToSave, null, 2));
   }
 
   /**
