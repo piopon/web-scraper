@@ -118,6 +118,11 @@ export class WebScraper {
     this.#sessions.delete(sessionUser);
   }
 
+  /**
+   * Method used to update component state
+   * @param {Object} sessionUser The session user for which we want to update
+   * @param {Object} scraperConfig The updated session configuration
+   */
   async update(sessionUser, scraperConfig) {
     const session = this.#sessions.get(sessionUser.email);
     if (session == null) {
@@ -127,6 +132,10 @@ export class WebScraper {
     this.#waitConfig.set(session.id, scraperConfig);
   }
 
+  /**
+   * Method used to receive master/host component information
+   * @returns object with master/host component info (name, callable)
+   */
   async master() {
     var scraper = this;
     return {
