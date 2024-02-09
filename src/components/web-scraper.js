@@ -309,7 +309,7 @@ export class WebScraper {
           continue;
         }
         this.#status.warning(`Exceeded the maximum number of retries: ${maxAttempts}`);
-        await this.#createErrorScreenshot(session.page, this.#status.getStatus());
+        await this.#createErrorScreenshot(session, this.#status.getStatus());
         throw new Error(`Cannot find price element in page ${newUrl}`);
       }
     }
@@ -361,17 +361,18 @@ export class WebScraper {
 
   /**
    * Method used to create an error screenshot of current web page (if present)
-   * @param {Object} sessionPage The session page object for which to take the screenshot
+   * @param {Object} session The session object for which to take the screenshot of the page
    * @param {Object} error The occured error object
    */
-  async #createErrorScreenshot(sessionPage, error) {
-    if (sessionPage && error.type.length > 0) {
+  async #createErrorScreenshot(session, error) {
+    if (session.page && error.type.length > 0) {
       if (!fs.existsSync(this.#setupConfig.screenshotPath)) {
         fs.mkdirSync(this.#setupConfig.screenshotPath, { recursive: true });
       }
+      const sessionUser = this.#findSessionUser(session);
       const screenshotName = `error_${error.timestamp.replaceAll(":", "-").replaceAll(" ", "_")}.png`;
-      const screenshotPath = path.join(this.#setupConfig.screenshotPath, screenshotName);
-      await sessionPage.screenshot({ path: screenshotPath });
+      const screenshotPath = path.join(this.#setupConfig.screenshotPath, sessionUser, screenshotName);
+      await session.page.screenshot({ path: screenshotPath });
     }
   }
 
