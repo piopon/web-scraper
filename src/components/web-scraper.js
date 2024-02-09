@@ -230,7 +230,7 @@ export class WebScraper {
         const observer = group.observers[observerIndex];
         try {
           const pageUrl = new URL(observer.path, group.domain);
-          await this.#navigateToPage(session.page, pageUrl, observer);
+          await this.#navigateToPage(session, pageUrl, observer);
           const dataObj = await session.page.evaluate((observer) => {
             try {
               // try to get data container
@@ -289,18 +289,18 @@ export class WebScraper {
 
   /**
    * Method used to go to a specified URL and wait until an observer selector is available
-   * @param {Object} sessionPage The session page object which should be updated
+   * @param {Object} session The session object for which page should be updated
    * @param {String} newUrl The new URL address to navigate to
    * @param {Object} observer The observer which has the selector definition to find on a page
    */
-  async #navigateToPage(sessionPage, newUrl, observer) {
+  async #navigateToPage(session, newUrl, observer) {
     let attempt = 1;
     let foundSelector = false;
     const maxAttempts = this.#setupConfig.scraperConfig.timeoutAttempts;
     while (!foundSelector) {
       try {
-        await sessionPage.goto(newUrl, { waitUntil: observer.target });
-        await sessionPage.waitForSelector(observer.price.selector, { visible: true });
+        await session.page.goto(newUrl, { waitUntil: observer.target });
+        await session.page.waitForSelector(observer.price.selector, { visible: true });
         foundSelector = true;
       } catch (error) {
         if (attempt <= maxAttempts && error instanceof TimeoutError) {
@@ -309,7 +309,7 @@ export class WebScraper {
           continue;
         }
         this.#status.warning(`Exceeded the maximum number of retries: ${maxAttempts}`);
-        await this.#createErrorScreenshot(sessionPage, this.#status.getStatus());
+        await this.#createErrorScreenshot(session.page, this.#status.getStatus());
         throw new Error(`Cannot find price element in page ${newUrl}`);
       }
     }
