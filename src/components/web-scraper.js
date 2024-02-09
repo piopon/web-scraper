@@ -373,4 +373,12 @@ export class WebScraper {
       await sessionPage.screenshot({ path: screenshotPath });
     }
   }
+
+  #findSessionUser(session) {
+    for (let [userKey, sessionValue] of this.#sessions.entries()) {
+      if (sessionValue.id === session.id) {
+        return userKey;
+      }
+    }
+  }
 }
