@@ -320,7 +320,7 @@ export class WebScraper {
    * @param {Object} dataToSave The data object to save in destination file
    */
   #saveData(sessionUser, dataToSave) {
-    const dataFile = path.join(this.#setupConfig.dataOutputPath, sessionUser, "data.json")
+    const dataFile = path.join(this.#setupConfig.usersDataPath, sessionUser, "data.json");
     const dataDirectory = path.dirname(dataFile);
     if (!fs.existsSync(dataDirectory)) {
       fs.mkdirSync(dataDirectory, { recursive: true });
@@ -366,13 +366,14 @@ export class WebScraper {
    */
   async #createErrorScreenshot(session, error) {
     if (session.page && error.type.length > 0) {
-      if (!fs.existsSync(this.#setupConfig.screenshotPath)) {
-        fs.mkdirSync(this.#setupConfig.screenshotPath, { recursive: true });
-      }
       const sessionUser = this.#findSessionUser(session);
-      const screenshotName = `error_${error.timestamp.replaceAll(":", "-").replaceAll(" ", "_")}.png`;
-      const screenshotPath = path.join(this.#setupConfig.screenshotPath, sessionUser, screenshotName);
-      await session.page.screenshot({ path: screenshotPath });
+      const captureName = `error_${error.timestamp.replaceAll(":", "-").replaceAll(" ", "_")}.png`;
+      const capturePath = path.join(this.#setupConfig.usersDataPath, sessionUser, "captures", captureName);
+      const captureDirectory = path.dirname(capturePath);
+      if (!fs.existsSync(captureDirectory)) {
+        fs.mkdirSync(captureDirectory, { recursive: true });
+      }
+      await session.page.screenshot({ path: capturePath });
     }
   }
 
