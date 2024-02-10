@@ -144,8 +144,8 @@ export class WebScraper {
         for (const user of await ScrapUser.getDatabaseModel().find()) {
           await scraper.start(user);
         }
-      }
-    }
+      },
+    };
   }
 
   /**
