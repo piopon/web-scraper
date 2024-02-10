@@ -377,6 +377,11 @@ export class WebScraper {
     }
   }
 
+  /**
+   * Method used to find user email from provided session
+   * @param {Object} session The session for which we want to find parent user
+   * @returns parent user email of the input session
+   */
   #findSessionUser(session) {
     for (let [userKey, sessionValue] of this.#sessions.entries()) {
       if (sessionValue.id === session.id) {
