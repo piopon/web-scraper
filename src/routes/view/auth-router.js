@@ -121,6 +121,9 @@ export class AuthRouter {
         if (!(await this.#runComponents(user[0]))) {
           return done(null, false, { message: "Cannot start authenticate components. Please try again." });
         }
+        // updated user login date
+        user[0].lastLogin = Date.now();
+        await user[0].save();
         return done(null, user[0]);
       } catch (error) {
         let message = error.message;
