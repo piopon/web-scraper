@@ -394,6 +394,12 @@ export class WebScraper {
     }
   }
 
+  /**
+   * Method used to calculate days difference between two dates
+   * @param {Date} dateRef The reference date object
+   * @param {Date} dateCurr The current date object to compare with reference one
+   * @returns number of days between compared dates
+   */
   #daysDifference(dateRef, dateCurr) {
     const milisecondsInDay = 1000 * 60 * 60 * 24;
     // discard the time and time-zone information
