@@ -39,6 +39,7 @@ export class AppConfig {
         timeout: process.env.DB_TIMEOUT || 15_000,
       },
       scraperConfig: {
+        loginInterval: 30,
         scrapInterval: 30_000,
         defaultTimeout: 15_000,
         timeoutAttempts: 10,
