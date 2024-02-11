@@ -141,8 +141,12 @@ export class WebScraper {
     return {
       name: "web-database",
       call: async () => {
+        const today = Date.now();
+        const loginInterval = scraper.#setupConfig.scraperConfig.loginInterval;
         for (const user of await ScrapUser.getDatabaseModel().find()) {
-          await scraper.start(user);
+          if (this.#daysDifference(Date.parse(user.lastLogin), today) < loginInterval) {
+            await scraper.start(user);
+          }
         }
       },
     };
