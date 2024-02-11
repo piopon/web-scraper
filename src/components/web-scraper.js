@@ -389,4 +389,12 @@ export class WebScraper {
       }
     }
   }
+
+  #daysDifference(dateRef, dateCurr) {
+    const milisecondsInDay = 1000 * 60 * 60 * 24;
+    // discard the time and time-zone information
+    const utcRef = Date.UTC(dateRef.getFullYear(), dateRef.getMonth(), dateRef.getDate());
+    const utcCurr = Date.UTC(dateCurr.getFullYear(), dateCurr.getMonth(), dateCurr.getDate());
+    return Math.floor((utcCurr - utcRef) / milisecondsInDay);
+  }
 }
