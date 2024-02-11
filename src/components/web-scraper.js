@@ -136,7 +136,7 @@ export class WebScraper {
    * Method used to receive master/host component information
    * @returns object with master/host component info (name, callable)
    */
-  master() {
+  getMaster() {
     var scraper = this;
     return {
       name: "web-database",

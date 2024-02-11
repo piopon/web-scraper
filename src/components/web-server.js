@@ -51,7 +51,7 @@ export class WebServer {
       }
     }
     if (componentTypes.includes(ComponentType.SLAVE)) {
-      const newMaster = component.master();
+      const newMaster = component.getMaster();
       const master = this.#components.find((c) => c.master.getName() === newMaster.name);
       if (master != null) {
         master.slave = component;
@@ -157,7 +157,7 @@ export class WebServer {
       if (!component.master.getInfo().mustPass) {
         component.master.start().then(async (hasStarted) => {
           if (hasStarted && component.slave != null) {
-            component.slave.master().call();
+            component.slave.getMaster().call();
           }
         });
         continue;
@@ -170,7 +170,7 @@ export class WebServer {
       }
       // call the dependent component (if there is one)
       if (component.slave != null) {
-        const action = component.slave.master();
+        const action = component.slave.getMaster();
         await action.call();
       }
     }
