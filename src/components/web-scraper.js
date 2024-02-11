@@ -133,23 +133,13 @@ export class WebScraper {
   }
 
   /**
-   * Method used to receive master/host component information
-   * @returns object with master/host component info (name, callable)
+   * Method used to determine if the web scraper component is running (alive) or not
+   * @param {Object} sessionUser The user for which we want to check scraper alive status
+   * @returns true when web scraper is running, false otherwise
    */
-  getMaster() {
-    var scraper = this;
-    return {
-      name: "web-database",
-      call: async () => {
-        const today = new Date(Date.now());
-        const loginInterval = scraper.#setupConfig.scraperConfig.loginInterval;
-        for (const user of await ScrapUser.getDatabaseModel().find()) {
-          if (this.#daysDifference(new Date(user.lastLogin), today) < loginInterval) {
-            await scraper.start(user);
-          }
-        }
-      },
-    };
+  isAlive(sessionUser) {
+    const session = this.#sessions.get(sessionUser.email);
+    return session == null ? false : session.id != null;
   }
 
   /**
@@ -169,13 +159,23 @@ export class WebScraper {
   }
 
   /**
-   * Method used to determine if the web scraper component is running (alive) or not
-   * @param {Object} sessionUser The user for which we want to check scraper alive status
-   * @returns true when web scraper is running, false otherwise
+   * Method used to receive master/host component information
+   * @returns object with master/host component info (name, callable)
    */
-  isAlive(sessionUser) {
-    const session = this.#sessions.get(sessionUser.email);
-    return session == null ? false : session.id != null;
+  getMaster() {
+    var scraper = this;
+    return {
+      name: "web-database",
+      call: async () => {
+        const today = new Date(Date.now());
+        const loginInterval = scraper.#setupConfig.scraperConfig.loginInterval;
+        for (const user of await ScrapUser.getDatabaseModel().find()) {
+          if (this.#daysDifference(new Date(user.lastLogin), today) < loginInterval) {
+            await scraper.start(user);
+          }
+        }
+      },
+    };
   }
 
   /**
