@@ -15,7 +15,7 @@ export class AuthRouter {
 
   /**
    * Creates a new auth router for managing user authentication and authorization
-   * @param {Array} components The components list used in auth process (LOGIN)
+   * @param {Array} components The components list used in auth process (AUTH)
    * @param {Object} passport The object controlling user sing-up and sing-in process
    */
   constructor(components, passport) {
@@ -70,10 +70,11 @@ export class AuthRouter {
     router.post("/login", AccessChecker.canViewSessionUser, loginCallback);
     // user content endpoints (log-out)
     const logoutCallback = (request, response, next) => {
+      const logoutUserEmail = request.user.email;
       request.logout((err) => {
         if (err) return next(err);
         // logout success - stop login components
-        this.#components.forEach((component) => component.stop());
+        this.#components.forEach((component) => component.stop(logoutUserEmail));
         response.redirect("/auth/login");
       });
     };
@@ -120,6 +121,9 @@ export class AuthRouter {
         if (!(await this.#runComponents(user[0]))) {
           return done(null, false, { message: "Cannot start authenticate components. Please try again." });
         }
+        // updated user login date
+        user[0].lastLogin = Date.now();
+        await user[0].save();
         return done(null, user[0]);
       } catch (error) {
         let message = error.message;

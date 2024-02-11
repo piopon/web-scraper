@@ -19,18 +19,22 @@ class LogLevel {
 
 /**
  * Class representing the web-server component typs
- * It implements an enum with values: INIT, LOGIN
+ * It implements an enum with values: INIT, AUTH, CONFIG
  */
 class ComponentType {
-  static INIT = new ComponentType("init");
-  static LOGIN = new ComponentType("login");
+  static INIT = new ComponentType("init", ["start", "stop"]);
+  static AUTH = new ComponentType("auth", ["start", "stop"]);
+  static SLAVE = new ComponentType("slave", ["master"]);
+  static CONFIG = new ComponentType("config", ["update"]);
 
   /**
    * Creates an object representing component type setting
    * @param {String} name The component type name value
+   * @param {Array} methods Required methods names for component type compability
    */
-  constructor(name) {
+  constructor(name, methods) {
     this.name = name;
+    this.methods = methods;
   }
 
   /**

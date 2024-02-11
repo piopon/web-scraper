@@ -33,8 +33,8 @@ export class StatusRouter {
         .map((component) => {
           return {
             name: component.getName(),
-            alive: component.isAlive(),
-            history: showHistory ? component.getStatusHistory() : undefined,
+            alive: component.isAlive(request.user),
+            history: showHistory ? component.getStatusHistory(request.user) : undefined,
           };
         });
       if (!request.query.name || this.#serverStatus.getName().trim() === request.query.name) {

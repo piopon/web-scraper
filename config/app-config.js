@@ -25,8 +25,7 @@ export class AppConfig {
    */
   getConfig() {
     return {
-      dataOutputPath: path.join(this.#rootDir, "user", "output", "data.json"),
-      screenshotPath: path.join(this.#rootDir, "user", "captures"),
+      usersDataPath: path.join(this.#rootDir, "users"),
       minLogLevel: LogLevel.INFO,
       serverConfig: {
         port: process.env.SERVER_PORT || 5000,
@@ -40,6 +39,7 @@ export class AppConfig {
         timeout: process.env.DB_TIMEOUT || 15_000,
       },
       scraperConfig: {
+        loginInterval: 30,
         scrapInterval: 30_000,
         defaultTimeout: 15_000,
         timeoutAttempts: 10,
