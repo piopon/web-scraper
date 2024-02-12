@@ -154,7 +154,7 @@ export class WebServer {
     const initComponents = this.#getComponents(ComponentType.INIT);
     for (const component of initComponents) {
       // if component is not required to pass then we start it and go to the next one
-      if (!component.master.getInfo().mustPass) {
+      if (!component.master.getInfo().initWait) {
         component.master.start().then(async (hasStarted) => {
           if (hasStarted && component.slave != null) {
             component.slave.getMaster().call();

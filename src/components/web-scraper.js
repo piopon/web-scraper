@@ -155,7 +155,7 @@ export class WebScraper {
    * @returns an object with extra info: component type and require pass flag
    */
   getInfo() {
-    return { types: [ComponentType.SLAVE, ComponentType.CONFIG], mustPass: false };
+    return { types: [ComponentType.SLAVE, ComponentType.CONFIG], initWait: false };
   }
 
   /**
