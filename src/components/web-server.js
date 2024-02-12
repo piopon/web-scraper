@@ -157,7 +157,7 @@ export class WebServer {
       if (!component.master.getInfo().initWait) {
         component.master.start().then(async (hasStarted) => {
           if (hasStarted && component.slave != null) {
-            component.slave.getMaster().call();
+            component.slave.getMaster().actions.afterInit();
           }
         });
         continue;
@@ -171,7 +171,7 @@ export class WebServer {
       // call the dependent component (if there is one)
       if (component.slave != null) {
         const action = component.slave.getMaster();
-        await action.call();
+        await action.actions.afterInit();
       }
     }
     return true;
