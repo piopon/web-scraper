@@ -170,8 +170,7 @@ export class WebServer {
       }
       // call the dependent component (if there is one)
       if (component.slave != null) {
-        const action = component.slave.getMaster();
-        await action.actions.afterInit();
+        await component.slave.getMaster().actions.afterInit();
       }
     }
     return true;
