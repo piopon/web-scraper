@@ -153,7 +153,7 @@ export class WebServer {
   async #runComponents() {
     const initComponents = this.#getComponents(ComponentType.INIT);
     for (const component of initComponents) {
-      // if component is not required to pass then we start it and go to the next one
+      // if we don't wait for component initialization then start it and go to the next one
       if (!component.master.getInfo().initWait) {
         component.master.start().then(async (initialized) => {
           // if component is initialized and has slave then run after initialization action
@@ -163,7 +163,7 @@ export class WebServer {
         });
         continue;
       }
-      // component must pass so we are waiting for the result to check it
+      // we must wait for component initialization so we wait for the result and check it
       const result = await component.master.start();
       if (!result) {
         this.#status.error(`Cannot start component: ${component.getName()}`);

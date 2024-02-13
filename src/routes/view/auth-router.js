@@ -196,12 +196,12 @@ export class AuthRouter {
    */
   async #runComponents(user) {
     for (const component of this.#components) {
-      // if component is not required to pass then we start it and go to the next one
+      // if we don't wait for component initialization then start it and go to the next one
       if (!component.getInfo().initWait) {
         component.start(user);
         continue;
       }
-      // component must pass so we are waiting for the result to check it
+      // we must wait for component initialization so we wait for the result and check it
       if (!(await component.start(user))) {
         return false;
       }
