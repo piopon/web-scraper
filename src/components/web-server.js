@@ -155,8 +155,9 @@ export class WebServer {
     for (const component of initComponents) {
       // if component is not required to pass then we start it and go to the next one
       if (!component.master.getInfo().initWait) {
-        component.master.start().then(async (hasStarted) => {
-          if (hasStarted && component.slave != null) {
+        component.master.start().then(async (initialized) => {
+          // if component is initialized and has slave then run after initialization action
+          if (initialized && component.slave != null) {
             component.slave.getMaster().actions.afterInit();
           }
         });
