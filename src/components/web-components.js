@@ -54,4 +54,31 @@ export class WebComponents {
       return -1 !== component.master.getInfo().types.findIndex((currType) => currType.equals(type));
     });
   }
+
+  async runComponents(type) {
+    const components = this.getComponents(type);
+    for (const component of components) {
+      // if we don't wait for component initialization then start it and go to the next one
+      if (!component.master.getInfo().initWait) {
+        component.master.start().then(async (initialized) => {
+          // if component is initialized and has slave then run after initialization action
+          if (initialized && component.slave != null) {
+            component.slave.getMaster().actions.afterInit();
+          }
+        });
+        continue;
+      }
+      // we must wait for component initialization so we wait for the result and check it
+      const result = await component.master.start();
+      if (!result) {
+        this.#status.error(`Cannot start component: ${component.getName()}`);
+        return false;
+      }
+      // call the dependent component (if there is one)
+      if (component.slave != null) {
+        await component.slave.getMaster().actions.afterInit();
+      }
+    }
+    return true;
+  }
 }
