@@ -19,16 +19,18 @@ export class WebServer {
   static #LOGGER_NAME = "web-server  ";
 
   #setupConfig = undefined;
-  #components = [];
+  #components = undefined;
   #server = undefined;
   #status = undefined;
 
   /**
    * Creates a new web server with specified configuration
    * @param {Object} config The object containing server configuration
+   * @param {Object} components The object containing all server dependent components
    */
-  constructor(config) {
+  constructor(config, components) {
     this.#setupConfig = config;
+    this.#components = components;
     this.#status = new StatusLogger(WebServer.#LOGGER_NAME, config.minLogLevel);
     this.#status.info("Created");
   }
