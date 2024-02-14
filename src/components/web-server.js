@@ -39,7 +39,7 @@ export class WebServer {
    * Method used to initialize and run the web server
    */
   async run() {
-    if (!(await this.#runComponents())) {
+    if (!(await this.#components.runComponents(ComponentType.INIT))) {
       return;
     }
     this.#server = this.#initializeServer();
@@ -53,7 +53,7 @@ export class WebServer {
    */
   shutdown() {
     this.#server.close(() => {
-      this.#components.forEach((component) => component.master.stop());
+      this.#components.getComponents().forEach((component) => component.master.stop());
       this.#status.info("Stopped");
     });
   }
@@ -80,8 +80,8 @@ export class WebServer {
     server.use(passport.initialize());
     server.use(passport.session());
     // filter out components needed by particular routers
-    const authComponents = this.#getComponents(ComponentType.AUTH);
-    const configComponents = this.#getComponents(ComponentType.CONFIG);
+    const authComponents = this.#components.getComponents(ComponentType.AUTH);
+    const configComponents = this.#components.getComponents(ComponentType.CONFIG);
     // setup web server routes
     const routes = new Map([
       ["/", new ViewRouter()],
