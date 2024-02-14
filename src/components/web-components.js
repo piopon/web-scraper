@@ -1,3 +1,4 @@
+import { ComponentType } from "../../config/app-types.js";
 import { StatusLogger } from "./status-logger.js";
 
 export class WebComponents {
@@ -15,7 +16,29 @@ export class WebComponents {
   }
 
   addComponent(component) {
-    this.#components.push(component);
+    const componentTypes = component.getInfo().types;
+    if (componentTypes.length === 0) {
+      this.#status.warning(`Missing component type(s): ${component}`);
+    }
+    const componentMethods = Object.getOwnPropertyNames(Object.getPrototypeOf(component));
+    for (const componentType of componentTypes) {
+      const requiredMethods = componentType.methods;
+      if (!requiredMethods.every((method) => componentMethods.includes(method))) {
+        this.#status.error(`Incompatible component: ${component.getName()}`);
+        throw new Error("Cannot initialize server. Check previous logs for more information.");
+      }
+    }
+    if (componentTypes.includes(ComponentType.SLAVE)) {
+      const newMaster = component.getMaster();
+      const master = this.#components.find((c) => c.master.getName() === newMaster.name);
+      if (master != null) {
+        master.slave = component;
+      }
+      if (1 === componentTypes.length) {
+        return;
+      }
+    }
+    this.#components.push({ master: component, slave: undefined });
   }
 
   /**
