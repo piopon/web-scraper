@@ -37,7 +37,7 @@ export class WebServer {
    * Method used to add a component to start after running web server
    * @param {Object} component The component to start after running web server
    */
-  async addComponent(component) {
+  addComponent(component) {
     const componentTypes = component.getInfo().types;
     if (componentTypes.length === 0) {
       this.#status.warning(`Missing component type(s): ${component}`);
