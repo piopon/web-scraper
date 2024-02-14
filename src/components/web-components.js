@@ -1,5 +1,18 @@
+import { StatusLogger } from "./status-logger.js";
+
 export class WebComponents {
+  static #LOGGER_NAME = "web-components";
+
+  #status = undefined;
   #components = [];
+
+  /**
+   * Creates a new web components with specified configuration
+   */
+  constructor(config) {
+    this.#status = new StatusLogger(WebComponents.#LOGGER_NAME, config.minLogLevel);
+    this.#status.info("Created");
+  }
 
   addComponent(component) {
     this.#components.push(component);
