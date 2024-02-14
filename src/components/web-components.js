@@ -1,9 +1,9 @@
 export class WebComponents {
-    #components = [];
+  #components = [];
 
-    addComponent(component) {
-        this.#components.push(component);
-    }
+  addComponent(component) {
+    this.#components.push(component);
+  }
 
   /**
    * Method used to filter all components and return the one with desired type
