@@ -9,10 +9,8 @@ try {
   const config = new AppConfig().getConfig();
   // create dependent components
   const webComponents = new WebComponents(config);
-  const webDatabase = new WebDatabase(config);
-  const webScraper = new WebScraper(config);
-  webComponents.addComponent(webDatabase);
-  webComponents.addComponent(webScraper);
+  webComponents.addComponent(new WebDatabase(config));
+  webComponents.addComponent(new WebScraper(config));
   // create and start webserver
   const webServer = new WebServer(config, webComponents);
   webServer.run();
