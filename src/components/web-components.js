@@ -9,12 +9,17 @@ export class WebComponents {
 
   /**
    * Creates a new web components with specified configuration
+   * @param {Object} config The object containing components configuration
    */
   constructor(config) {
     this.#status = new StatusLogger(WebComponents.#LOGGER_NAME, config.minLogLevel);
     this.#status.info("Created");
   }
 
+  /**
+   * Method used to add a component to start after running web server
+   * @param {Object} component The component to start after running web server
+   */
   addComponent(component) {
     const componentTypes = component.getInfo().types;
     if (componentTypes.length === 0) {
@@ -44,7 +49,7 @@ export class WebComponents {
   /**
    * Method used to filter all components and return the one with desired type
    * @param {Object} type The type of components that we want to receive (or undefined for all components)
-   * @returns array of components of specified type
+   * @returns array of components of specified type (or all components if type is undefined)
    */
   getComponents(type = undefined) {
     if (undefined === type) {
@@ -55,6 +60,11 @@ export class WebComponents {
     });
   }
 
+  /**
+   * Method used to initialize and start server-related components
+   * @param {Object} type The type of components that we want to run
+   * @returns true if all components are invoked, false if at least one has an error
+   */
   async runComponents(type) {
     const components = this.getComponents(type);
     for (const component of components) {
