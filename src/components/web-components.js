@@ -65,7 +65,7 @@ export class WebComponents {
    * @param {Object} type The type of components that we want to run
    * @returns true if all components are invoked, false if at least one has an error
    */
-  async runComponents(type) {
+  async initComponents(type) {
     const components = this.getComponents(type);
     for (const component of components) {
       // if we don't wait for component initialization then start it and go to the next one

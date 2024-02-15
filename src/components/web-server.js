@@ -39,7 +39,7 @@ export class WebServer {
    * Method used to initialize and run the web server
    */
   async run() {
-    if (!(await this.#components.runComponents(ComponentType.INIT))) {
+    if (!(await this.#components.initComponents(ComponentType.INIT))) {
       return;
     }
     this.#server = this.#initializeServer();
