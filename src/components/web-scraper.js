@@ -123,7 +123,7 @@ export class WebScraper {
    * @param {Object} sessionUser The session user for which we want to update
    * @param {Object} scraperConfig The updated session configuration
    */
-  async update(sessionUser, scraperConfig) {
+  update(sessionUser, scraperConfig) {
     const session = this.#sessions.get(sessionUser.email);
     if (session == null) {
       this.#status.error("Invalid internal state: session not started");
