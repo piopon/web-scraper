@@ -7,12 +7,12 @@ import { WebServer } from "./components/web-server.js";
 try {
   // initialize application config
   const config = new AppConfig().getConfig();
-  // create dependent components
-  const webComponents = new WebComponents(config);
-  webComponents.addComponent(new WebDatabase(config));
-  webComponents.addComponent(new WebScraper(config));
-  // create and start webserver
-  const webServer = new WebServer(config, webComponents);
+  // create server dependent components
+  const components = new WebComponents(config);
+  components.addComponent(new WebDatabase(config));
+  components.addComponent(new WebScraper(config));
+  // create and start web server
+  const webServer = new WebServer(config, components);
   webServer.run();
   // handle user termination signal
   process.on("SIGTERM", () => webServer.shutdown());
