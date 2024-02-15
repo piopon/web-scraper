@@ -1,4 +1,5 @@
 import { AccessChecker } from "../../middleware/access-checker.js";
+import { ComponentType } from "../../../config/app-types.js";
 import { ScrapConfig } from "../../model/scrap-config.js";
 import { ScrapUser } from "../../model/scrap-user.js";
 
@@ -10,12 +11,12 @@ import { Strategy } from "passport-local";
 export class AuthRouter {
   static #ENCRYPT_SALT = 10;
 
-  #components = [];
+  #components = undefined;
   #passport = undefined;
 
   /**
    * Creates a new auth router for managing user authentication and authorization
-   * @param {Array} components The components list used in auth process (AUTH)
+   * @param {Object} components The web components used in authentication process
    * @param {Object} passport The object controlling user sing-up and sing-in process
    */
   constructor(components, passport) {
@@ -73,8 +74,10 @@ export class AuthRouter {
       const logoutUserEmail = request.user.email;
       request.logout((err) => {
         if (err) return next(err);
-        // logout success - stop login components
-        this.#components.forEach((component) => component.stop(logoutUserEmail));
+        // logout success - stop authenticate components
+        this.#components
+            .getComponents(ComponentType.AUTH)
+            .forEach((component) => component.master.stop(logoutUserEmail));
         response.redirect("/auth/login");
       });
     };
