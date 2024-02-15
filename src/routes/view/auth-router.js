@@ -120,10 +120,10 @@ export class AuthRouter {
           // provided password does not match the saved value - incorrect login data
           return done(null, false, { message: "Incorrect login data. Please try again." });
         }
-        // login success - start login components
-        if (!(await this.#runComponents(user[0]))) {
-          return done(null, false, { message: "Cannot start authenticate components. Please try again." });
-        }
+        // login success - start auth components
+        this.#components
+            .getComponents(ComponentType.AUTH)
+            .forEach((component) => component.master.start(user[0]));
         // updated user login date
         user[0].lastLogin = Date.now();
         await user[0].save();
@@ -190,25 +190,5 @@ export class AuthRouter {
       }
     };
     passport.use("local-register", new Strategy(options, verify));
-  }
-
-  /**
-   * Method used to initialize and start view-related components
-   * @param {Object} user The authenticated user object for which we want to start components
-   * @returns true if all components are invoked, false if at least one has an error
-   */
-  async #runComponents(user) {
-    for (const component of this.#components) {
-      // if we don't wait for component initialization then start it and go to the next one
-      if (!component.getInfo().initWait) {
-        component.start(user);
-        continue;
-      }
-      // we must wait for component initialization so we wait for the result and check it
-      if (!(await component.start(user))) {
-        return false;
-      }
-    }
-    return true;
   }
 }
