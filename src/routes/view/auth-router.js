@@ -75,9 +75,7 @@ export class AuthRouter {
       request.logout((err) => {
         if (err) return next(err);
         // logout success - stop authenticate components
-        this.#components
-            .getComponents(ComponentType.AUTH)
-            .forEach((component) => component.master.stop(logoutUserEmail));
+        this.#components.runComponents(ComponentType.AUTH, "stop", logoutUserEmail);
         response.redirect("/auth/login");
       });
     };
@@ -121,9 +119,7 @@ export class AuthRouter {
           return done(null, false, { message: "Incorrect login data. Please try again." });
         }
         // login success - start auth components
-        this.#components
-            .getComponents(ComponentType.AUTH)
-            .forEach((component) => component.master.start(user[0]));
+        this.#components.runComponents(ComponentType.AUTH, "start", user[0]);
         // updated user login date
         user[0].lastLogin = Date.now();
         await user[0].save();

@@ -378,9 +378,7 @@ export class ConfigRouter {
           await user.save();
         }
         // we should also notify all components
-        this.#components
-            .getComponents(ComponentType.CONFIG)
-            .forEach((component) => component.master.update(user, configContent));
+        this.#components.runComponents(ComponentType.CONFIG, "update", user, configContent);
       }
       return { status: updateStatus.success ? 200 : 400, message: updateStatus.message };
     } catch (error) {
