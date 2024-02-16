@@ -92,6 +92,12 @@ export class WebComponents {
     return true;
   }
 
+  /**
+   * Method used to run specified method for registered component types
+   * @param {Object} type The type of components for which we want to invoke the method
+   * @param {String} method The method name to be invoked
+   * @param {Array} args The list of arguments to be used in specified method
+   */
   async runComponents(type, method, ...args) {
     const components = this.getComponents(type);
     for (const component of components) {
