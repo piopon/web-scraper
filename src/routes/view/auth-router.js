@@ -119,7 +119,9 @@ export class AuthRouter {
           return done(null, false, { message: "Incorrect login data. Please try again." });
         }
         // login success - initialize auth components
-        this.#components.initComponents(ComponentType.AUTH, user[0]);
+        if (!(await this.#components.initComponents(ComponentType.AUTH, user[0]))) {
+          return done(null, false, { message: "Cannot start authenticate components. Please try again." });
+        }
         // updated user login date
         user[0].lastLogin = Date.now();
         await user[0].save();
