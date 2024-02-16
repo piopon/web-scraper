@@ -82,7 +82,7 @@ export class WebComponents {
       // we must wait for component initialization so we wait for the result and check it
       const result = await component.master.start(args);
       if (!result) {
-        this.#status.error(`Cannot start component: ${component.getName()}`);
+        this.#status.error(`Cannot start component: ${component.master.getName()}`);
         return false;
       }
       // call the dependent component (if there is one)
