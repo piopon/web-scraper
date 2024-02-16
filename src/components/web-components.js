@@ -91,4 +91,11 @@ export class WebComponents {
     }
     return true;
   }
+
+  async runComponents(type, method, ...args) {
+    const components = this.getComponents(type);
+    for (const component of components) {
+      await component.master[method](args);
+    }
+  }
 }
