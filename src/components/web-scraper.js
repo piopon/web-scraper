@@ -12,7 +12,7 @@ import path from "path";
 import fs from "fs";
 
 export class WebScraper {
-  static #COMPONENT_NAME = "web-scraper ";
+  static #COMPONENT_NAME = "web-scraper   ";
   static #RUNNING_STATUS = "Running";
 
   #setupConfig = undefined;

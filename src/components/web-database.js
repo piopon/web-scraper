@@ -4,7 +4,7 @@ import { StatusLogger } from "./status-logger.js";
 import mongoose from "mongoose";
 
 export class WebDatabase {
-  static #COMPONENT_NAME = "web-database";
+  static #COMPONENT_NAME = "web-database  ";
 
   #status = undefined;
   #dbConfig = undefined;
