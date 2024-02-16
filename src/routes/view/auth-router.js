@@ -118,8 +118,8 @@ export class AuthRouter {
           // provided password does not match the saved value - incorrect login data
           return done(null, false, { message: "Incorrect login data. Please try again." });
         }
-        // login success - start auth components
-        this.#components.runComponents(ComponentType.AUTH, "start", user[0]);
+        // login success - initialize auth components
+        this.#components.initComponents(ComponentType.AUTH, user[0]);
         // updated user login date
         user[0].lastLogin = Date.now();
         await user[0].save();
