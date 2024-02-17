@@ -1,3 +1,4 @@
+import { ComponentType } from "../../../config/app-types.js";
 import { ScrapComponent } from "../../model/scrap-component.js";
 import { ScrapConfig } from "../../model/scrap-config.js";
 import { ScrapGroup } from "../../model/scrap-group.js";
@@ -7,11 +8,11 @@ import Ajv from "ajv";
 import express from "express";
 
 export class ConfigRouter {
-  #components = [];
+  #components = undefined;
 
   /**
    * Creates a new config router for managing scraper configuration settings
-   * @param {Array} components The components list used in scraper config (CONFIG)
+   * @param {Object} components The web components object used in scraper config
    */
   constructor(components) {
     this.#components = components;
@@ -377,7 +378,7 @@ export class ConfigRouter {
           await user.save();
         }
         // we should also notify all components
-        this.#components.forEach((component) => component.master.update(user, configContent));
+        this.#components.runComponents(ComponentType.CONFIG, "update", user, configContent);
       }
       return { status: updateStatus.success ? 200 : 400, message: updateStatus.message };
     } catch (error) {

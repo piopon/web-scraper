@@ -16,58 +16,30 @@ import helpers from "handlebars-helpers";
 import { engine } from "express-handlebars";
 
 export class WebServer {
-  static #LOGGER_NAME = "web-server  ";
+  static #LOGGER_NAME = "web-server    ";
 
   #setupConfig = undefined;
-  #components = [];
+  #components = undefined;
   #server = undefined;
   #status = undefined;
 
   /**
    * Creates a new web server with specified configuration
    * @param {Object} config The object containing server configuration
+   * @param {Object} components The object containing all server dependent components
    */
-  constructor(config) {
+  constructor(config, components) {
     this.#setupConfig = config;
+    this.#components = components;
     this.#status = new StatusLogger(WebServer.#LOGGER_NAME, config.minLogLevel);
     this.#status.info("Created");
-  }
-
-  /**
-   * Method used to add a component to start after running web server
-   * @param {Object} component The component to start after running web server
-   */
-  async addComponent(component) {
-    const componentTypes = component.getInfo().types;
-    if (componentTypes.length === 0) {
-      this.#status.warning(`Missing component type(s): ${component}`);
-    }
-    const componentMethods = Object.getOwnPropertyNames(Object.getPrototypeOf(component));
-    for (const componentType of componentTypes) {
-      const requiredMethods = componentType.methods;
-      if (!requiredMethods.every((method) => componentMethods.includes(method))) {
-        this.#status.error(`Incompatible component: ${component.getName()}`);
-        throw new Error("Cannot initialize server. Check previous logs for more information.");
-      }
-    }
-    if (componentTypes.includes(ComponentType.SLAVE)) {
-      const newMaster = component.master();
-      const master = this.#components.find((c) => c.master.getName() === newMaster.name);
-      if (master != null) {
-        master.slave = component;
-      }
-      if (1 === componentTypes.length) {
-        return;
-      }
-    }
-    this.#components.push({ master: component, slave: undefined });
   }
 
   /**
    * Method used to initialize and run the web server
    */
   async run() {
-    if (!(await this.#runComponents())) {
+    if (!(await this.#components.initComponents(ComponentType.INIT))) {
       return;
     }
     this.#server = this.#initializeServer();
@@ -81,7 +53,7 @@ export class WebServer {
    */
   shutdown() {
     this.#server.close(() => {
-      this.#components.forEach((component) => component.master.stop());
+      this.#components.getComponents().forEach((component) => component.master.stop());
       this.#status.info("Stopped");
     });
   }
@@ -107,15 +79,12 @@ export class WebServer {
     server.use(session(this.#getSessionConfiguration()));
     server.use(passport.initialize());
     server.use(passport.session());
-    // filter out components needed by particular routers
-    const authComponents = this.#getComponents(ComponentType.AUTH);
-    const configComponents = this.#getComponents(ComponentType.CONFIG);
     // setup web server routes
     const routes = new Map([
       ["/", new ViewRouter()],
-      ["/auth", new AuthRouter(authComponents, passport)],
+      ["/auth", new AuthRouter(this.#components, passport)],
       ["/api/v1/data", new DataRouter(this.#setupConfig.usersDataPath)],
-      ["/api/v1/config", new ConfigRouter(configComponents)],
+      ["/api/v1/config", new ConfigRouter(this.#components)],
       ["/api/v1/status", new StatusRouter(this.#status, this.#components)],
     ]);
     routes.forEach((router, url) => server.use(url, router.createRoutes()));
@@ -133,47 +102,5 @@ export class WebServer {
       resave: false,
       saveUninitialized: false,
     };
-  }
-
-  /**
-   * Method used to filter all components and return the one with desired type
-   * @param {Object} type The type of components that we want to receive
-   * @returns array of components of specified type
-   */
-  #getComponents(type) {
-    return this.#components.filter((component) => {
-      return -1 !== component.master.getInfo().types.findIndex((currType) => currType.equals(type));
-    });
-  }
-
-  /**
-   * Method used to initialize and start server-related components
-   * @returns true if all components are invoked, false if at least one has an error
-   */
-  async #runComponents() {
-    const initComponents = this.#getComponents(ComponentType.INIT);
-    for (const component of initComponents) {
-      // if component is not required to pass then we start it and go to the next one
-      if (!component.master.getInfo().mustPass) {
-        component.master.start().then(async (hasStarted) => {
-          if (hasStarted && component.slave != null) {
-            component.slave.master().call();
-          }
-        });
-        continue;
-      }
-      // component must pass so we are waiting for the result to check it
-      const result = await component.master.start();
-      if (!result) {
-        this.#status.error(`Cannot start component: ${component.getName()}`);
-        return false;
-      }
-      // call the dependent component (if there is one)
-      if (component.slave != null) {
-        const action = component.slave.master();
-        await action.call();
-      }
-    }
-    return true;
   }
 }

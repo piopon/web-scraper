@@ -4,7 +4,7 @@ import { StatusLogger } from "./status-logger.js";
 import mongoose from "mongoose";
 
 export class WebDatabase {
-  static #COMPONENT_NAME = "web-database";
+  static #COMPONENT_NAME = "web-database  ";
 
   #status = undefined;
   #dbConfig = undefined;
@@ -63,6 +63,6 @@ export class WebDatabase {
    * @returns an object with extra info: component type and require pass flag
    */
   getInfo() {
-    return { types: [ComponentType.INIT], mustPass: false };
+    return { types: [ComponentType.INIT], initWait: false };
   }
 }

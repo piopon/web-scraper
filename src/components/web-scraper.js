@@ -12,7 +12,7 @@ import path from "path";
 import fs from "fs";
 
 export class WebScraper {
-  static #COMPONENT_NAME = "web-scraper ";
+  static #COMPONENT_NAME = "web-scraper   ";
   static #RUNNING_STATUS = "Running";
 
   #setupConfig = undefined;
@@ -123,7 +123,7 @@ export class WebScraper {
    * @param {Object} sessionUser The session user for which we want to update
    * @param {Object} scraperConfig The updated session configuration
    */
-  async update(sessionUser, scraperConfig) {
+  update(sessionUser, scraperConfig) {
     const session = this.#sessions.get(sessionUser.email);
     if (session == null) {
       this.#status.error("Invalid internal state: session not started");
@@ -133,23 +133,13 @@ export class WebScraper {
   }
 
   /**
-   * Method used to receive master/host component information
-   * @returns object with master/host component info (name, callable)
+   * Method used to determine if the web scraper component is running (alive) or not
+   * @param {Object} sessionUser The user for which we want to check scraper alive status
+   * @returns true when web scraper is running, false otherwise
    */
-  master() {
-    var scraper = this;
-    return {
-      name: "web-database",
-      call: async () => {
-        const today = new Date(Date.now());
-        const loginInterval = scraper.#setupConfig.scraperConfig.loginInterval;
-        for (const user of await ScrapUser.getDatabaseModel().find()) {
-          if (this.#daysDifference(new Date(user.lastLogin), today) < loginInterval) {
-            await scraper.start(user);
-          }
-        }
-      },
-    };
+  isAlive(sessionUser) {
+    const session = this.#sessions.get(sessionUser.email);
+    return session == null ? false : session.id != null;
   }
 
   /**
@@ -165,17 +155,29 @@ export class WebScraper {
    * @returns an object with extra info: component type and require pass flag
    */
   getInfo() {
-    return { types: [ComponentType.SLAVE, ComponentType.CONFIG], mustPass: false };
+    return { types: [ComponentType.SLAVE, ComponentType.CONFIG], initWait: false };
   }
 
   /**
-   * Method used to determine if the web scraper component is running (alive) or not
-   * @param {Object} sessionUser The user for which we want to check scraper alive status
-   * @returns true when web scraper is running, false otherwise
+   * Method used to receive master/host component information
+   * @returns object with master/host component info (name, callable)
    */
-  isAlive(sessionUser) {
-    const session = this.#sessions.get(sessionUser.email);
-    return session == null ? false : session.id != null;
+  getMaster() {
+    var scraper = this;
+    return {
+      name: "web-database",
+      actions: {
+        afterInit: async () => {
+          const today = new Date(Date.now());
+          const loginInterval = scraper.#setupConfig.scraperConfig.loginInterval;
+          for (const user of await ScrapUser.getDatabaseModel().find()) {
+            if (this.#daysDifference(new Date(user.lastLogin), today) < loginInterval) {
+              await scraper.start(user);
+            }
+          }
+        },
+      },
+    };
   }
 
   /**
