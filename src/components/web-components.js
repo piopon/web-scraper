@@ -71,7 +71,7 @@ export class WebComponents {
     for (const component of components) {
       // if we don't wait for component initialization then start it and go to the next one
       if (!component.master.getInfo().initWait) {
-        component.master.start(args).then(async (initialized) => {
+        component.master.start(...args).then(async (initialized) => {
           // if component is initialized and has slave then run after initialization action
           if (initialized && component.slave != null) {
             component.slave.getMaster().actions.afterInit();
@@ -80,7 +80,7 @@ export class WebComponents {
         continue;
       }
       // we must wait for component initialization so we wait for the result and check it
-      const result = await component.master.start(args);
+      const result = await component.master.start(...args);
       if (!result) {
         this.#status.error(`Cannot start component: ${component.master.getName()}`);
         return false;
