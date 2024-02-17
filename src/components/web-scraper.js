@@ -47,7 +47,7 @@ export class WebScraper {
       browser: undefined,
       page: undefined,
     };
-    this.#status.info(`Reading configuration for user ${sessionUser.name}`);
+    this.#status.debug(`Reading configuration for user ${sessionUser.name}`);
     try {
       var configCandidate = await ScrapConfig.getDatabaseModel().findById(sessionUser.config);
       if (configCandidate == null) {
@@ -64,18 +64,19 @@ export class WebScraper {
         return false;
       }
     }
-    this.#status.info("Initializing virtual browser");
+    this.#status.debug("Initializing virtual browser");
     // open new Puppeteer virtual browser and an initial web page
     session.browser = await puppeteer.launch({ headless: "new" });
     session.page = await session.browser.newPage();
     session.page.setDefaultTimeout(this.#setupConfig.scraperConfig.defaultTimeout);
     // invoke scrap data action initially and setup interval calls
-    this.#status.info(`Starting data scraping for user ${sessionUser.name}`);
+    this.#status.debug(`Initializing data scraping for user ${sessionUser.name}`);
     const intervalTime = this.#setupConfig.scraperConfig.scrapInterval;
     session.id = setInterval(() => this.#scrapData(session), intervalTime);
     // store this session into active sessions map
     this.#sessions.set(sessionUser.email, session);
-    this.#status.info(`${WebScraper.#RUNNING_STATUS} (every: ${intervalTime / 1000} seconds)`);
+    const runDetails = `user: ${sessionUser.name}, interval: ${intervalTime / 1000} seconds`;
+    this.#status.info(`${WebScraper.#RUNNING_STATUS} (${runDetails})`);
     return true;
   }
 
