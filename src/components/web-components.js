@@ -102,7 +102,7 @@ export class WebComponents {
   async runComponents(type, method, ...args) {
     const components = this.getComponents(type);
     for (const component of components) {
-      await component.master[method](args);
+      await component.master[method](...args);
     }
   }
 }
