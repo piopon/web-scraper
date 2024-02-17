@@ -71,11 +71,8 @@ export class AuthRouter {
     router.post("/login", AccessChecker.canViewSessionUser, loginCallback);
     // user content endpoints (log-out)
     const logoutCallback = (request, response, next) => {
-      const logoutUserEmail = request.user.email;
       request.logout((err) => {
         if (err) return next(err);
-        // logout success - stop authenticate components
-        this.#components.runComponents(ComponentType.AUTH, "stop", logoutUserEmail);
         response.redirect("/auth/login");
       });
     };
