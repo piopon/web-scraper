@@ -35,7 +35,7 @@ export class WebComponents {
     }
     if (componentTypes.includes(ComponentType.SLAVE)) {
       const newMaster = component.getMaster();
-      const master = this.#components.find((c) => c.master.getName() === newMaster.name);
+      const master = this.#components.find((c) => c.master.getName().trim() === newMaster.name.trim());
       if (master != null) {
         master.slave = component;
       }
