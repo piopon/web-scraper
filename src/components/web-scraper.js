@@ -132,7 +132,7 @@ export class WebScraper {
   update(sessionUser, scraperConfig) {
     const session = this.#sessions.get(sessionUser.email);
     if (session == null) {
-      this.#status.error("Invalid internal state: session not started");
+      this.#status.error("Invalid internal state: session not updated");
       return;
     }
     this.#waitConfig.set(session.id, scraperConfig);
