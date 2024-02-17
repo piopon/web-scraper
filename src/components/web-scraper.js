@@ -36,9 +36,14 @@ export class WebScraper {
    * @returns true if scraper started successfully, false otherwise
    */
   async start(sessionUser) {
-    if (sessionUser == null) {
-      this.#status.error(`Invalid scrap user: ${sessionUser}`);
+    const user = (Array.isArray(sessionUser)) ? sessionUser[0] : sessionUser;
+    if (user == null) {
+      this.#status.error(`Invalid scrap user: ${user}`);
       return false;
+    }
+    if (this.#sessions.has(user.email)) {
+      this.#status.debug(`Session for user ${user.name} already initialized`);
+      return;
     }
     const session = {
       id: undefined,
@@ -47,9 +52,9 @@ export class WebScraper {
       browser: undefined,
       page: undefined,
     };
-    this.#status.debug(`Reading configuration for user ${sessionUser.name}`);
+    this.#status.debug(`Reading configuration for user ${user.name}`);
     try {
-      var configCandidate = await ScrapConfig.getDatabaseModel().findById(sessionUser.config);
+      var configCandidate = await ScrapConfig.getDatabaseModel().findById(user.config);
       if (configCandidate == null) {
         this.#status.warning("User has no configuration. Start aborted.");
         return false;
@@ -70,12 +75,12 @@ export class WebScraper {
     session.page = await session.browser.newPage();
     session.page.setDefaultTimeout(this.#setupConfig.scraperConfig.defaultTimeout);
     // invoke scrap data action initially and setup interval calls
-    this.#status.debug(`Initializing data scraping for user ${sessionUser.name}`);
+    this.#status.debug(`Initializing data scraping for user ${user.name}`);
     const intervalTime = this.#setupConfig.scraperConfig.scrapInterval;
     session.id = setInterval(() => this.#scrapData(session), intervalTime);
     // store this session into active sessions map
-    this.#sessions.set(sessionUser.email, session);
-    const runDetails = `user: ${sessionUser.name}, interval: ${intervalTime / 1000} seconds`;
+    this.#sessions.set(user.email, session);
+    const runDetails = `user: ${user.name}, interval: ${intervalTime / 1000} seconds`;
     this.#status.info(`${WebScraper.#RUNNING_STATUS} (${runDetails})`);
     return true;
   }
