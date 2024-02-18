@@ -331,6 +331,7 @@ export class WebScraper {
 
   /**
    * Method used to save specified object in a destination file (its path stored in configuration object)
+   * @param {String} sessionUser The email string of the user which data we want to save
    * @param {Object} dataToSave The data object to save in destination file
    */
   #saveData(sessionUser, dataToSave) {
