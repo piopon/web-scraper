@@ -40,6 +40,10 @@ export class WebScraper {
       this.#status.error(`Invalid scrap user: ${sessionUser}`);
       return false;
     }
+    if (this.#sessions.has(sessionUser.email)) {
+      this.#status.debug(`Session for user ${sessionUser.name} already initialized`);
+      return;
+    }
     const session = {
       id: undefined,
       active: false,
@@ -47,7 +51,7 @@ export class WebScraper {
       browser: undefined,
       page: undefined,
     };
-    this.#status.info(`Reading configuration for user ${sessionUser.name}`);
+    this.#status.debug(`Reading configuration for user ${sessionUser.name}`);
     try {
       var configCandidate = await ScrapConfig.getDatabaseModel().findById(sessionUser.config);
       if (configCandidate == null) {
@@ -64,18 +68,19 @@ export class WebScraper {
         return false;
       }
     }
-    this.#status.info("Initializing virtual browser");
+    this.#status.debug("Initializing virtual browser");
     // open new Puppeteer virtual browser and an initial web page
     session.browser = await puppeteer.launch({ headless: "new" });
     session.page = await session.browser.newPage();
     session.page.setDefaultTimeout(this.#setupConfig.scraperConfig.defaultTimeout);
     // invoke scrap data action initially and setup interval calls
-    this.#status.info(`Starting data scraping for user ${sessionUser.name}`);
+    this.#status.debug(`Initializing data scraping for user ${sessionUser.name}`);
     const intervalTime = this.#setupConfig.scraperConfig.scrapInterval;
     session.id = setInterval(() => this.#scrapData(session), intervalTime);
     // store this session into active sessions map
     this.#sessions.set(sessionUser.email, session);
-    this.#status.info(`${WebScraper.#RUNNING_STATUS} (every: ${intervalTime / 1000} seconds)`);
+    const runDetails = `user: ${sessionUser.name}, interval: ${intervalTime / 1000} seconds`;
+    this.#status.info(`${WebScraper.#RUNNING_STATUS} (${runDetails})`);
     return true;
   }
 
@@ -126,7 +131,7 @@ export class WebScraper {
   update(sessionUser, scraperConfig) {
     const session = this.#sessions.get(sessionUser.email);
     if (session == null) {
-      this.#status.error("Invalid internal state: session not started");
+      this.#status.error("Invalid internal state: session not updated");
       return;
     }
     this.#waitConfig.set(session.id, scraperConfig);
@@ -155,7 +160,10 @@ export class WebScraper {
    * @returns an object with extra info: component type and require pass flag
    */
   getInfo() {
-    return { types: [ComponentType.SLAVE, ComponentType.CONFIG], initWait: false };
+    return {
+      types: [ComponentType.SLAVE, ComponentType.CONFIG, ComponentType.AUTH],
+      initWait: false,
+    };
   }
 
   /**
@@ -323,6 +331,7 @@ export class WebScraper {
 
   /**
    * Method used to save specified object in a destination file (its path stored in configuration object)
+   * @param {String} sessionUser The email string of the user which data we want to save
    * @param {Object} dataToSave The data object to save in destination file
    */
   #saveData(sessionUser, dataToSave) {
