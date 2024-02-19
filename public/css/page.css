@@ -156,6 +156,9 @@ footer#main-footer h3 {
 footer#main-footer div#footer-links {
   position: absolute;
   right: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   margin: 0;
 }
 
