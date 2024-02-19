@@ -5,11 +5,18 @@ export class StatusController {
 
   start() {
     this.#monitorId = setInterval(() => {
-      console.log("monitor id");
+      this.#updateStatusIcons();
     }, StatusController.#MONITOR_INVERVAL_MS);
   }
 
   stop() {
     clearInterval(this.#monitorId);
+  }
+
+  #updateStatusIcons() {
+    document.querySelector("i#status-db").classList.toggle("status-init");
+    document.querySelector("i#status-db").classList.toggle("status-run");
+    document.querySelector("i#status-scraper").classList.toggle("status-init");
+    document.querySelector("i#status-scraper").classList.toggle("status-stop");
   }
 }
