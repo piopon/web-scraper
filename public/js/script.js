@@ -2,6 +2,7 @@ import { ControllersMediator } from "./controller-mediator.js";
 import { ComponentsController } from "./controller-component.js";
 import { ObserversController } from "./controller-observer.js";
 import { GroupsController } from "./controller-group.js";
+import { StatusController } from "./controller-status.js";
 
 main();
 
@@ -13,6 +14,8 @@ function main() {
   if (isGroupsInitializationNeeded()) {
     initializeScraperConfig();
   }
+  // start current status controller and monitor components
+  new StatusController().start();
 }
 
 /**
