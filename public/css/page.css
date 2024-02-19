@@ -162,6 +162,11 @@ footer#main-footer div#footer-links {
   margin: 0;
 }
 
+footer#main-footer div#footer-links a {
+  text-decoration: none;
+  color: inherit;
+}
+
 footer#main-footer div#status-preview {
   margin: 0 0.5rem 0 0;
   padding-right: 0.5rem;
