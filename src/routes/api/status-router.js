@@ -30,11 +30,11 @@ export class StatusRouter {
       const showHistory = request.query.history ? request.query.history : false;
       const outputData = this.#components
         .getComponents()
-        .filter((component) => (request.query.name ? component.getName().trim() === request.query.name : true))
+        .filter((component) => (request.query.name ? component.master.getName().trim() === request.query.name : true))
         .map((component) => {
           return {
-            name: component.getName(),
-            alive: component.isAlive(request.user),
+            name: component.master.getName(),
+            alive: component.master.isAlive(request.user),
             history: showHistory ? component.getStatusHistory(request.user) : undefined,
           };
         });
