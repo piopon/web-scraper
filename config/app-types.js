@@ -61,4 +61,4 @@ class ComponentStatus {
   }
 }
 
-export { LogLevel, ComponentType };
+export { LogLevel, ComponentType, ComponentStatus };
