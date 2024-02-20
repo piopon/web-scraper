@@ -29,6 +29,7 @@ export class StatusRouter {
       }
       const showHistory = request.query.history ? request.query.history : false;
       const outputData = this.#components
+        .getComponents()
         .filter((component) => (request.query.name ? component.getName().trim() === request.query.name : true))
         .map((component) => {
           return {
