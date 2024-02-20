@@ -5,12 +5,18 @@ export class StatusController {
 
   #monitorId = undefined;
 
+  /**
+   * Method used to start status controller monitoring process
+   */
   start() {
     this.#monitorId = setInterval(() => {
       this.#updateStatusIcons();
     }, StatusController.#MONITOR_INVERVAL_MS);
   }
 
+  /**
+   * Method used to stop status controller monitoring process
+   */
   stop() {
     clearInterval(this.#monitorId);
   }

@@ -8,7 +8,7 @@ export class StatusRouter {
   /**
    * Creates a new status router for configuring appropriate endpoints
    * @param {Object} serverStatus The web server status logger object
-   * @param {Array} components The array of components which status we want to receive
+   * @param {Object} components The web components object to retrieve status
    */
   constructor(serverStatus, components) {
     this.#serverStatus = serverStatus;
