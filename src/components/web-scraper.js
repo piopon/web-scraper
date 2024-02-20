@@ -143,12 +143,15 @@ export class WebScraper {
    *                             If undefined then checks if any session is running.
    * @returns true when web scraper is running, false otherwise
    */
-  isAlive(sessionUser = undefined) {
+  getStatus(sessionUser = undefined) {
     if (sessionUser == null) {
-      return this.#sessions.size > 0;
+      return this.#sessions.size > 0 ? ComponentStatus.RUNNING : ComponentStatus.STOPPED;
     }
     const session = this.#sessions.get(sessionUser.email);
-    return session == null ? false : session.id != null;
+    if (session == null) {
+      return ComponentStatus.INITIALIZING;
+    }
+    return session.id != null ? ComponentStatus.RUNNING : ComponentStatus.STOPPED;
   }
 
   /**
