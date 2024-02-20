@@ -138,10 +138,9 @@ export class WebScraper {
   }
 
   /**
-   * Method used to determine if the web scraper component is running (alive) or not
-   * @param {Object} sessionUser The session user for which to check scraper alive status.
-   *                             If undefined then checks if any session is running.
-   * @returns true when web scraper is running, false otherwise
+   * Method used to get current web scraper component working status
+   * @param {Object} sessionUser The user for which to get scraper status.
+   * @returns web scraper component status
    */
   getStatus(sessionUser = undefined) {
     if (sessionUser == null) {
