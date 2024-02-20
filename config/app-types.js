@@ -47,4 +47,18 @@ class ComponentType {
   }
 }
 
+class ComponentStatus {
+  static STOPPED = new LogLevel("stopped");
+  static INITIALIZING = new LogLevel("initializing");
+  static RUNNING = new LogLevel("running");
+
+  constructor(state) {
+    this.state = state;
+  }
+
+  equals(other) {
+    return this.state === other.state;
+  }
+}
+
 export { LogLevel, ComponentType };
