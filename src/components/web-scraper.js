@@ -142,7 +142,10 @@ export class WebScraper {
    * @param {Object} sessionUser The user for which we want to check scraper alive status
    * @returns true when web scraper is running, false otherwise
    */
-  isAlive(sessionUser) {
+  isAlive(sessionUser = undefined) {
+    if (sessionUser == null) {
+      return this.#sessions.size > 0;
+    }
     const session = this.#sessions.get(sessionUser.email);
     return session == null ? false : session.id != null;
   }
