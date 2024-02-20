@@ -50,8 +50,14 @@ export class WebDatabase {
     mongoose.disconnect();
   }
 
-  isAlive() {
-    return mongoose.connection.readyState == 1;
+  getStatus() {
+    if (1 === mongoose.connection.readyState) {
+      return ComponentStatus.RUNNING;
+    } else if (2 === mongoose.connection.readyState) {
+      return ComponentStatus.INITIALIZING;
+    } else {
+      return ComponentStatus.STOPPED;
+    }
   }
 
   /**
