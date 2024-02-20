@@ -1,3 +1,5 @@
+import { ComponentStatus } from "../../../config/app-types.js";
+
 import Ajv from "ajv";
 import express from "express";
 
@@ -34,14 +36,14 @@ export class StatusRouter {
         .map((component) => {
           return {
             name: component.master.getName(),
-            alive: component.master.isAlive(request.user),
+            status: component.master.getStatus(request.user),
             history: showHistory ? component.getStatusHistory(request.user) : undefined,
           };
         });
       if (!request.query.name || this.#serverStatus.getName().trim() === request.query.name) {
         outputData.push({
           name: this.#serverStatus.getName(),
-          alive: true,
+          status: ComponentStatus.RUNNING,
           history: showHistory ? this.#serverStatus.getHistory() : undefined,
         });
       }
