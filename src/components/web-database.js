@@ -50,6 +50,10 @@ export class WebDatabase {
     mongoose.disconnect();
   }
 
+  isAlive() {
+    return mongoose.connection.readyState == 1;
+  }
+
   /**
    * Method used to return the name of the component
    * @returns web database component name
