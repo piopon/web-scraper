@@ -199,7 +199,7 @@ export class WebScraper {
    * @param {Object} sessionUser The user for which we want to get all status history
    * @returns array of objects containing web scraper running history status
    */
-  getStatusHistory(sessionUser) {
+  getHistory(sessionUser) {
     const invalidStateMessage = "Invalid internal state";
     const currentStatus = this.#status.getStatus().message;
     const session = this.#sessions.get(sessionUser.email);

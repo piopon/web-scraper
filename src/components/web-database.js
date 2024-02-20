@@ -75,4 +75,12 @@ export class WebDatabase {
   getInfo() {
     return { types: [ComponentType.INIT], initWait: false };
   }
+
+  /**
+   * Method used to receive running history status of web database
+   * @returns array of objects containing web database running history status
+   */
+  getHistory() {
+    return this.#status.getHistory();
+  }
 }
