@@ -23,9 +23,31 @@ export class StatusController {
 
   async #updateStatusIcons() {
     const componentsStatus = await StatusService.getStatus();
-    document.querySelector("i#status-db").classList.toggle("status-init");
-    document.querySelector("i#status-db").classList.toggle("status-run");
-    document.querySelector("i#status-scraper").classList.toggle("status-init");
-    document.querySelector("i#status-scraper").classList.toggle("status-stop");
+    for (const component of componentsStatus) {
+      const currName = component.name.trim() === "web-database" ? "db" : "scraper";
+      const componentIcon = document.querySelector(`footer#main-footer i#status-${currName}`);
+      switch (component.status) {
+        case "stopped":
+          componentIcon.classList.add("status-stopped");
+          componentIcon.classList.remove("status-initializing");
+          componentIcon.classList.remove("status-running");
+          break;
+        case "initializing":
+          componentIcon.classList.remove("status-stopped");
+          componentIcon.classList.add("status-initializing");
+          componentIcon.classList.remove("status-running");
+          break;
+        case "running":
+          componentIcon.classList.remove("status-stopped");
+          componentIcon.classList.remove("status-initializing");
+          componentIcon.classList.add("status-running");
+          break;
+        default:
+          componentIcon.classList.remove("status-stopped");
+          componentIcon.classList.remove("status-initializing");
+          componentIcon.classList.remove("status-running");
+          break;
+      }
+    }
   }
 }
