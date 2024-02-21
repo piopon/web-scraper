@@ -29,6 +29,9 @@ export class StatusController {
           return;
         }
         const componentIcon = document.querySelector(`footer#main-footer i#status-${component.name.trim()}`);
+        if (componentIcon == null) {
+          return;
+        }
         switch (component.status) {
           case "stopped":
             componentIcon.classList.add("status-stopped");
