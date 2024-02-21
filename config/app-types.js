@@ -52,9 +52,9 @@ class ComponentType {
  * It implements an enum with values: STOPPED, INITIALIZING, RUNNING
  */
 class ComponentStatus {
-  static STOPPED = new LogLevel("stopped");
-  static INITIALIZING = new LogLevel("initializing");
-  static RUNNING = new LogLevel("running");
+  static STOPPED = new ComponentStatus("stopped");
+  static INITIALIZING = new ComponentStatus("initializing");
+  static RUNNING = new ComponentStatus("running");
 
   /**
    * Creates an object representing component working status
