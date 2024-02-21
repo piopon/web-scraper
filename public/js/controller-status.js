@@ -32,32 +32,29 @@ export class StatusController {
         if (componentIcon == null) {
           return;
         }
-        switch (component.status) {
-          case "stopped":
-            componentIcon.classList.add("status-stopped");
-            componentIcon.classList.remove("status-initializing");
-            componentIcon.classList.remove("status-running");
-            break;
-          case "initializing":
-            componentIcon.classList.remove("status-stopped");
-            componentIcon.classList.add("status-initializing");
-            componentIcon.classList.remove("status-running");
-            break;
-          case "running":
-            componentIcon.classList.remove("status-stopped");
-            componentIcon.classList.remove("status-initializing");
-            componentIcon.classList.add("status-running");
-            break;
-          default:
-            componentIcon.classList.remove("status-stopped");
-            componentIcon.classList.remove("status-initializing");
-            componentIcon.classList.remove("status-running");
-            break;
-        }
+        this.#setStatusStyle(componentIcon, component.status);
       }
     } catch (error) {
       console.warn("Cannot get status data. Stopping monitor...")
       this.stop();
+    }
+  }
+
+  #setStatusStyle(component, status) {
+    if ("stopped" === status) {
+      component.classList.add("status-stopped");
+    } else {
+      component.classList.remove("status-stopped");
+    }
+    if ("initializing" === status) {
+      component.classList.add("status-initializing");
+    } else {
+      component.classList.remove("status-initializing");
+    }
+    if ("running" === status) {
+      component.classList.add("status-running");
+    } else {
+      component.classList.remove("status-running");
     }
   }
 }
