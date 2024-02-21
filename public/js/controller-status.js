@@ -24,8 +24,7 @@ export class StatusController {
   async #updateStatusIcons() {
     const componentsStatus = await StatusService.getStatus();
     for (const component of componentsStatus) {
-      const currName = component.name.trim() === "web-database" ? "db" : "scraper";
-      const componentIcon = document.querySelector(`footer#main-footer i#status-${currName}`);
+      const componentIcon = document.querySelector(`footer#main-footer i#status-${component.name.trim()}`);
       switch (component.status) {
         case "stopped":
           componentIcon.classList.add("status-stopped");
