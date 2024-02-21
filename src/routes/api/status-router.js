@@ -36,14 +36,14 @@ export class StatusRouter {
         .map((component) => {
           return {
             name: component.master.getName(),
-            status: component.master.getStatus(request.user),
+            status: component.master.getStatus(request.user).state,
             history: showHistory ? component.master.getHistory(request.user) : undefined,
           };
         });
       if (!request.query.name || this.#serverStatus.getName().trim() === request.query.name) {
         outputData.push({
           name: this.#serverStatus.getName(),
-          status: ComponentStatus.RUNNING,
+          status: ComponentStatus.RUNNING.state,
           history: showHistory ? this.#serverStatus.getHistory() : undefined,
         });
       }
