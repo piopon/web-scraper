@@ -25,6 +25,9 @@ export class StatusController {
     try {
       const componentsStatus = await StatusService.getStatus();
       for (const component of componentsStatus) {
+        if ("web-server" === component.name.trim()) {
+          return;
+        }
         const componentIcon = document.querySelector(`footer#main-footer i#status-${component.name.trim()}`);
         switch (component.status) {
           case "stopped":
