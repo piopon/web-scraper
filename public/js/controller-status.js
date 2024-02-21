@@ -26,9 +26,6 @@ export class StatusController {
       const componentsStatus = await StatusService.getStatus();
       for (const component of componentsStatus) {
         const componentIcon = document.querySelector(`footer#main-footer i#status-${component.name.trim()}`);
-        if (componentIcon == null) {
-          return;
-        }
         this.#setStatusStyle(componentIcon, component.status);
       }
     } catch (error) {
@@ -37,21 +34,24 @@ export class StatusController {
     }
   }
 
-  #setStatusStyle(component, status) {
+  #setStatusStyle(componentIcon, status) {
+    if (componentIcon == null) {
+      return;
+    }
     if ("stopped" === status) {
-      component.classList.add("status-stopped");
+      componentIcon.classList.add("status-stopped");
     } else {
-      component.classList.remove("status-stopped");
+      componentIcon.classList.remove("status-stopped");
     }
     if ("initializing" === status) {
-      component.classList.add("status-initializing");
+      componentIcon.classList.add("status-initializing");
     } else {
-      component.classList.remove("status-initializing");
+      componentIcon.classList.remove("status-initializing");
     }
     if ("running" === status) {
-      component.classList.add("status-running");
+      componentIcon.classList.add("status-running");
     } else {
-      component.classList.remove("status-running");
+      componentIcon.classList.remove("status-running");
     }
   }
 }
