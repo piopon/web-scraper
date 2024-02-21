@@ -1,7 +1,7 @@
 import { StatusService } from "./service-status.js";
 
 export class StatusController {
-  static #MONITOR_INVERVAL_MS = 1000;
+  static #MONITOR_INVERVAL_MS = 5000;
 
   #monitorId = undefined;
 
@@ -53,7 +53,8 @@ export class StatusController {
         }
       }
     } catch (error) {
-      console.logc("Cannot receive status data.")
+      console.warn("Cannot get status data. Stopping monitor...")
+      this.stop();
     }
   }
 }
