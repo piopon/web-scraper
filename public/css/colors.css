@@ -43,14 +43,14 @@
   color: black;
 }
 
-.status-init {
+.status-initializing {
   color: blue;
 }
 
-.status-run {
+.status-running {
   color: lawngreen;
 }
 
-.status-stop {
+.status-stopped {
   color: tomato;
 }
