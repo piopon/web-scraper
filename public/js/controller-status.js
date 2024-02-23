@@ -25,8 +25,10 @@ export class StatusController {
     try {
       const componentsStatus = await StatusService.getStatus();
       for (const component of componentsStatus) {
-        const componentIcon = document.querySelector(`footer#main-footer i#status-${component.name.trim()}`);
-        this.#setStatusStyle(componentIcon, component.status);
+        this.#setStatusStyle(
+          document.querySelector(`footer#main-footer i#status-${component.name.trim()}`),
+          component.status
+        );
       }
     } catch (error) {
       console.warn("Cannot get status data. Stopping monitor...")
