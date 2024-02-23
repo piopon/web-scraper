@@ -173,6 +173,8 @@ footer#main-footer div#status-preview {
   padding-right: 0.5rem;
   border-right: solid 1px black;
   letter-spacing: 0.15rem;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 div#status-preview i#status-web-database {
