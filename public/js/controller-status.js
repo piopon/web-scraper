@@ -5,6 +5,18 @@ export class StatusController {
 
   #monitorId = undefined;
 
+  constructor() {
+    const statusDiv = document.querySelector("footer#main-footer div#status-preview");
+    statusDiv.addEventListener("mouseover", () => {
+      statusDiv.classList.remove("collapsed");
+      statusDiv.classList.add("expanded");
+    });
+    statusDiv.addEventListener("mouseout", () => {
+      statusDiv.classList.remove("expanded");
+      statusDiv.classList.add("collapsed");
+    })
+  }
+
   /**
    * Method used to start status controller monitoring process
    */
