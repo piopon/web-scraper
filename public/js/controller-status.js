@@ -9,6 +9,7 @@ export class StatusController {
    * Method used to start status controller monitoring process
    */
   start() {
+    this.#updateStatusIcons();
     this.#monitorId = setInterval(() => {
       this.#updateStatusIcons();
     }, StatusController.#MONITOR_INVERVAL_MS);
