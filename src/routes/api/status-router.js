@@ -52,6 +52,11 @@ export class StatusRouter {
     return router;
   }
 
+  /**
+   * Method used to validate the status router endpoint query parameters
+   * @param {Object} params The query parameters which should be validated
+   * @returns an object with validation result (true/false) and an optional cause (if validation NOK)
+   */
   #validateQueryParams(params) {
     const queryValidation = new Ajv().compile({
       type: "object",

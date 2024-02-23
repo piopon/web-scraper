@@ -21,6 +21,9 @@ export class StatusController {
     clearInterval(this.#monitorId);
   }
 
+  /**
+   * Method used to update monitor status icons style
+   */
   async #updateStatusIcons() {
     try {
       const componentsStatus = await StatusService.getStatus();
@@ -31,8 +34,8 @@ export class StatusController {
         );
       }
     } catch (error) {
-      console.warn("Cannot get status data. Stopping monitor...")
       this.stop();
+      console.warn("Cannot get status data. Monitor stopped.");
       // update all components icon to indicate that server is down
       this.#setStatusStyle(document.querySelector(`footer#main-footer i#status-web-server`), "stopped");
       this.#setStatusStyle(document.querySelector(`footer#main-footer i#status-web-scraper`), "offline");
@@ -40,6 +43,11 @@ export class StatusController {
     }
   }
 
+  /**
+   * Method used to set status icon for specified component
+   * @param {Object} componentIcon The component icon which we want to set
+   * @param {String} status The status of the icon to be set
+   */
   #setStatusStyle(componentIcon, status) {
     if (componentIcon == null) {
       return;

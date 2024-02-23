@@ -50,6 +50,10 @@ export class WebDatabase {
     mongoose.disconnect();
   }
 
+  /**
+   * Method used to get current web database component working status
+   * @returns web database component status
+   */
   getStatus() {
     if (1 === mongoose.connection.readyState) {
       return ComponentStatus.RUNNING;
