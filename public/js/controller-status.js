@@ -31,6 +31,10 @@ export class StatusController {
     } catch (error) {
       console.warn("Cannot get status data. Stopping monitor...")
       this.stop();
+      // update all components icon to indicate that server is down
+      this.#setStatusStyle(document.querySelector(`footer#main-footer i#status-web-server`), "stopped");
+      this.#setStatusStyle(document.querySelector(`footer#main-footer i#status-web-scraper`), "offline");
+      this.#setStatusStyle(document.querySelector(`footer#main-footer i#status-web-database`), "offline");
     }
   }
 
