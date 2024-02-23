@@ -177,6 +177,10 @@ footer#main-footer div#status-preview {
   white-space: nowrap;
 }
 
+footer#main-footer div#status-preview.collapsed {
+  width: 20px;
+}
+
 div#status-preview i#status-web-database {
   font-size: 17px;
 }
