@@ -181,6 +181,10 @@ footer#main-footer div#status-preview.collapsed {
   width: 20px;
 }
 
+footer#main-footer div#status-preview.expanded {
+  width: 80px;
+}
+
 div#status-preview i#status-web-database {
   font-size: 17px;
 }
