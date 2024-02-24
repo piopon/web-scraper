@@ -170,11 +170,13 @@ footer#main-footer div#footer-links a {
 
 footer#main-footer div#status-preview {
   margin: 0 0.5rem 0 0;
-  padding-right: 0.5rem;
+  padding: 0 0.5rem;
   border-right: solid 1px black;
   letter-spacing: 0.15rem;
   overflow: hidden;
   white-space: nowrap;
+  border-radius: 10px 0 0 10px;
+  background-color: darkslateblue;
 }
 
 footer#main-footer div#status-preview.collapsed {
