@@ -184,7 +184,7 @@ footer#main-footer div#status-preview.collapsed {
 
 footer#main-footer div#status-preview.expanded {
   transition: width 0.5s ease;
-  width: 80px;
+  width: 115px;
 }
 
 div#status-preview i#status-web-database {
@@ -193,4 +193,5 @@ div#status-preview i#status-web-database {
 
 div#status-preview i#status-show {
   color: white;
+  margin-left: 5px;
 }
