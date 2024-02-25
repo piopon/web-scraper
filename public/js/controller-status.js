@@ -6,7 +6,7 @@ export class StatusController {
   #monitorId = undefined;
 
   constructor() {
-    const dashboard = document.querySelector("footer#main-footer i#status-show-dashboard");
+    const dashboard = document.querySelector("footer#main-footer i#show-dashboard");
     const statusDiv = document.querySelector("footer#main-footer div#status-preview");
     statusDiv.addEventListener("mouseover", () => {
       statusDiv.classList.remove("collapsed");
