@@ -42,18 +42,15 @@ export class StatusController {
     try {
       const componentsStatus = await StatusService.getStatus();
       for (const component of componentsStatus) {
-        this.#setStatusStyle(
-          document.querySelector(`footer#main-footer i#status-${component.name.trim()}`),
-          component.status
-        );
+        this.#setStatusStyle(component.name.trim(), component.status);
       }
     } catch (error) {
       this.stop();
       console.warn("Cannot get status data. Monitor stopped.");
       // update all components icon to indicate that server is down
-      this.#setStatusStyle(document.querySelector(`footer#main-footer i#status-web-server`), "stopped");
-      this.#setStatusStyle(document.querySelector(`footer#main-footer i#status-web-scraper`), "offline");
-      this.#setStatusStyle(document.querySelector(`footer#main-footer i#status-web-database`), "offline");
+      this.#setStatusStyle("web-server", "stopped");
+      this.#setStatusStyle("web-scraper", "offline");
+      this.#setStatusStyle("web-database", "offline");
     }
   }
 
@@ -62,7 +59,8 @@ export class StatusController {
    * @param {Object} componentIcon The component icon which we want to set
    * @param {String} status The status of the icon to be set
    */
-  #setStatusStyle(componentIcon, status) {
+  #setStatusStyle(componentName, status) {
+    const componentIcon = document.querySelector(`footer#main-footer i#status-${componentName.trim()}`);
     if (componentIcon == null) {
       return;
     }
