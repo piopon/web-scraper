@@ -67,20 +67,25 @@ export class StatusController {
     if ("stopped" === status) {
       icon.classList.add("status-stopped");
       icon.title = `${componentName}: stopped`;
+      return;
     } else {
       icon.classList.remove("status-stopped");
     }
     if ("initializing" === status) {
       icon.classList.add("status-initializing");
       icon.title = `${componentName}: initializing`;
+      return;
     } else {
       icon.classList.remove("status-initializing");
     }
     if ("running" === status) {
       icon.classList.add("status-running");
       icon.title = `${componentName}: running`;
+      return;
     } else {
       icon.classList.remove("status-running");
     }
+    // no style was set upon this point - set title to status parameter
+    icon.title = `${componentName}: ${status}`;
   }
 }
