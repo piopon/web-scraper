@@ -6,13 +6,14 @@ export class StatusController {
   #monitorId = undefined;
 
   constructor() {
+    const dashboard = document.querySelector("footer#main-footer i#status-show");
     const statusDiv = document.querySelector("footer#main-footer div#status-preview");
     statusDiv.addEventListener("mouseover", () => {
       statusDiv.classList.remove("collapsed");
-      statusDiv.classList.add("expanded");
+      statusDiv.classList.add(dashboard != null ? "expanded" : "preview");
     });
     statusDiv.addEventListener("mouseout", () => {
-      statusDiv.classList.remove("expanded");
+      statusDiv.classList.remove(dashboard != null ? "expanded" : "preview");
       statusDiv.classList.add("collapsed");
     })
   }

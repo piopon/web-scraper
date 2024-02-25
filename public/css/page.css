@@ -184,6 +184,11 @@ footer#main-footer div#status-preview.collapsed {
   width: 20px;
 }
 
+footer#main-footer div#status-preview.preview {
+  transition: width 0.5s ease;
+  width: 80px;
+}
+
 footer#main-footer div#status-preview.expanded {
   transition: width 0.5s ease;
   width: 115px;
