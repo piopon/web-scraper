@@ -68,16 +68,19 @@ export class StatusController {
     }
     if ("stopped" === status) {
       componentIcon.classList.add("status-stopped");
+      componentIcon.title = "stopped";
     } else {
       componentIcon.classList.remove("status-stopped");
     }
     if ("initializing" === status) {
       componentIcon.classList.add("status-initializing");
+      componentIcon.title = "initializing";
     } else {
       componentIcon.classList.remove("status-initializing");
     }
     if ("running" === status) {
       componentIcon.classList.add("status-running");
+      componentIcon.title = "running";
     } else {
       componentIcon.classList.remove("status-running");
     }
