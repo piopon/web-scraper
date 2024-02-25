@@ -49,8 +49,8 @@ export class StatusController {
       console.warn("Cannot get status data. Monitor stopped.");
       // update all components icon to indicate that server is down
       this.#setStatusStyle("web-server", "stopped");
-      this.#setStatusStyle("web-scraper", "offline");
-      this.#setStatusStyle("web-database", "offline");
+      this.#setStatusStyle("web-scraper", "unknown");
+      this.#setStatusStyle("web-database", "unknown");
     }
   }
 
