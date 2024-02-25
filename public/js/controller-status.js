@@ -60,27 +60,27 @@ export class StatusController {
    * @param {String} status The status of the icon to be set
    */
   #setStatusStyle(componentName, status) {
-    const componentIcon = document.querySelector(`footer#main-footer i#status-${componentName.trim()}`);
-    if (componentIcon == null) {
+    const icon = document.querySelector(`footer#main-footer i#status-${componentName.trim()}`);
+    if (icon == null) {
       return;
     }
     if ("stopped" === status) {
-      componentIcon.classList.add("status-stopped");
-      componentIcon.title = "stopped";
+      icon.classList.add("status-stopped");
+      icon.title = `${componentName}: stopped`;
     } else {
-      componentIcon.classList.remove("status-stopped");
+      icon.classList.remove("status-stopped");
     }
     if ("initializing" === status) {
-      componentIcon.classList.add("status-initializing");
-      componentIcon.title = "initializing";
+      icon.classList.add("status-initializing");
+      icon.title = `${componentName}: initializing`;
     } else {
-      componentIcon.classList.remove("status-initializing");
+      icon.classList.remove("status-initializing");
     }
     if ("running" === status) {
-      componentIcon.classList.add("status-running");
-      componentIcon.title = "running";
+      icon.classList.add("status-running");
+      icon.title = `${componentName}: running`;
     } else {
-      componentIcon.classList.remove("status-running");
+      icon.classList.remove("status-running");
     }
   }
 }
