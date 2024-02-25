@@ -155,7 +155,7 @@ footer#main-footer h3 {
 
 footer#main-footer div#footer-links {
   position: absolute;
-  right: 0.5rem;
+  right: 0rem;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -169,7 +169,6 @@ footer#main-footer div#footer-links a {
 }
 
 footer#main-footer div#status-preview {
-  margin: 0 0.5rem 0 0;
   padding: 0 0.5rem;
   border-right: solid 1px black;
   letter-spacing: 0.15rem;
@@ -192,6 +191,10 @@ footer#main-footer div#status-preview.preview {
 footer#main-footer div#status-preview.expanded {
   transition: width 0.5s ease;
   width: 115px;
+}
+
+footer#main-footer i#show-github {
+  margin: 0 0.75rem;
 }
 
 div#status-preview i#status-web-database {
