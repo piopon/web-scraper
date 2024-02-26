@@ -7,7 +7,7 @@ export class RequestLogger {
   static middleware(logger) {
     return (request, response, next) => {
       const url = `${request.protocol}://${request.get("host")}${request.originalUrl}`;
-      logger.info(`${request.method} request - ${url}`);
+      logger.debug(`${request.method} request - ${url}`);
       next();
     };
   }
