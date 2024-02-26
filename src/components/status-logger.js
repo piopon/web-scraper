@@ -34,7 +34,10 @@ export class StatusLogger {
     }
     const dateTimeNow = moment().format("YYYY-MM-DD HH:mm:ss");
     this.#status.push({ timestamp: dateTimeNow, type: "debug", message: message });
-    console.debug(`${dateTimeNow} [${this.#name}] DEBUG: ${message}`);
+    const previousStatus = getStatus();
+    if ("debug" !== previousStatus.type || message !== previousStatus.message) {
+      console.debug(`${dateTimeNow} [${this.#name}] DEBUG: ${message}`);
+    }
   }
 
   /**
@@ -47,7 +50,10 @@ export class StatusLogger {
     }
     const dateTimeNow = moment().format("YYYY-MM-DD HH:mm:ss");
     this.#status.push({ timestamp: dateTimeNow, type: "info", message: message });
-    console.info(`${dateTimeNow} [${this.#name}] INFO: ${message}`);
+    const previousStatus = getStatus();
+    if ("info" !== previousStatus.type || message !== previousStatus.message) {
+      console.info(`${dateTimeNow} [${this.#name}] INFO: ${message}`);
+    }
   }
 
   /**
@@ -60,7 +66,10 @@ export class StatusLogger {
     }
     const dateTimeNow = moment().format("YYYY-MM-DD HH:mm:ss");
     this.#status.push({ timestamp: dateTimeNow, type: "warning", message: message });
-    console.warn(`${dateTimeNow} [${this.#name}] WARNING: ${message}`);
+    const previousStatus = getStatus();
+    if ("warning" !== previousStatus.type || message !== previousStatus.message) {
+      console.warn(`${dateTimeNow} [${this.#name}] WARNING: ${message}`);
+    }
   }
 
   /**
@@ -73,7 +82,11 @@ export class StatusLogger {
     }
     const dateTimeNow = moment().format("YYYY-MM-DD HH:mm:ss");
     this.#status.push({ timestamp: dateTimeNow, type: "error", message: message });
-    console.error(`${dateTimeNow} [${this.#name}] ERROR: ${message}`);
+    // console log status if it isn't the same as the last one (to increase readability)
+    const previousStatus = getStatus();
+    if ("error" !== previousStatus.type || message !== previousStatus.message) {
+      console.error(`${dateTimeNow} [${this.#name}] ERROR: ${message}`);
+    }
   }
 
   /**
