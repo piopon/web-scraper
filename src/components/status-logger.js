@@ -95,7 +95,7 @@ export class StatusLogger {
    */
   getStatus() {
     const lastStatus = this.#status.slice(-1);
-    if (lastStatus.length >= 0) {
+    if (lastStatus.length > 0) {
       return lastStatus[0];
     }
     const dateTimeNow = moment().format("YYYY-MM-DD HH:mm:ss");
