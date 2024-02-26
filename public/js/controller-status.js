@@ -56,7 +56,7 @@ export class StatusController {
 
   /**
    * Method used to set status icon for specified component
-   * @param {Object} componentIcon The component icon which we want to set
+   * @param {String} componentName The component name which we want to set
    * @param {String} status The status of the icon to be set
    */
   #setStatusStyle(componentName, status) {
