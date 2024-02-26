@@ -18,7 +18,7 @@ class LogLevel {
 }
 
 /**
- * Class representing the web-server component typs
+ * Class representing the web-server component type
  * It implements an enum with values: INIT, AUTH, CONFIG
  */
 class ComponentType {
@@ -47,4 +47,31 @@ class ComponentType {
   }
 }
 
-export { LogLevel, ComponentType };
+/**
+ * Class representing the web-server component work status
+ * It implements an enum with values: STOPPED, INITIALIZING, RUNNING
+ */
+class ComponentStatus {
+  static STOPPED = new ComponentStatus("stopped");
+  static INITIALIZING = new ComponentStatus("initializing");
+  static RUNNING = new ComponentStatus("running");
+
+  /**
+   * Creates an object representing component working status
+   * @param {String} state The component status value
+   */
+  constructor(state) {
+    this.state = state;
+  }
+
+  /**
+   * Compares this component status with other one and determines if they are equal
+   * @param {Object} other Another component status object to compare
+   * @returns true if checked component matches this one
+   */
+  equals(other) {
+    return this.state === other.state;
+  }
+}
+
+export { LogLevel, ComponentType, ComponentStatus };

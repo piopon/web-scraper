@@ -1,3 +1,5 @@
+import { ComponentStatus } from "../../../config/app-types.js";
+
 import Ajv from "ajv";
 import express from "express";
 
@@ -8,7 +10,7 @@ export class StatusRouter {
   /**
    * Creates a new status router for configuring appropriate endpoints
    * @param {Object} serverStatus The web server status logger object
-   * @param {Array} components The array of components which status we want to receive
+   * @param {Object} components The web components object to retrieve status
    */
   constructor(serverStatus, components) {
     this.#serverStatus = serverStatus;
@@ -29,18 +31,19 @@ export class StatusRouter {
       }
       const showHistory = request.query.history ? request.query.history : false;
       const outputData = this.#components
-        .filter((component) => (request.query.name ? component.getName().trim() === request.query.name : true))
+        .getComponents()
+        .filter((component) => (request.query.name ? component.master.getName().trim() === request.query.name : true))
         .map((component) => {
           return {
-            name: component.getName(),
-            alive: component.isAlive(request.user),
-            history: showHistory ? component.getStatusHistory(request.user) : undefined,
+            name: component.master.getName(),
+            status: component.master.getStatus(request.user).state,
+            history: showHistory ? component.master.getHistory(request.user) : undefined,
           };
         });
       if (!request.query.name || this.#serverStatus.getName().trim() === request.query.name) {
         outputData.push({
           name: this.#serverStatus.getName(),
-          alive: true,
+          status: ComponentStatus.RUNNING.state,
           history: showHistory ? this.#serverStatus.getHistory() : undefined,
         });
       }
@@ -49,6 +52,11 @@ export class StatusRouter {
     return router;
   }
 
+  /**
+   * Method used to validate the status router endpoint query parameters
+   * @param {Object} params The query parameters which should be validated
+   * @returns an object with validation result (true/false) and an optional cause (if validation NOK)
+   */
   #validateQueryParams(params) {
     const queryValidation = new Ajv().compile({
       type: "object",

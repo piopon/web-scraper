@@ -42,3 +42,15 @@
   background: mediumslateblue;
   color: black;
 }
+
+.status-initializing {
+  color: blue;
+}
+
+.status-running {
+  color: lawngreen;
+}
+
+.status-stopped {
+  color: tomato;
+}

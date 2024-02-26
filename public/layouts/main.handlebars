@@ -42,6 +42,25 @@
       {{!-- page footer --}}
       <footer id="main-footer">
         <h3>developed with 💚 pnk @ 2023</h3>
+        <div id="footer-links">
+          {{#if (eq title "scraper running status")}}
+          <div id="status-preview" class="expanded">
+          {{else}}
+          <div id="status-preview" class="collapsed">
+          {{/if}}
+            <i class="fa fa-wifi status-running" title="" id="status-web-server"></i>
+            <i class="fa fa-database status-initializing" title="" id="status-web-database"></i>
+            <i class="fa fa-filter status-initializing" title="" id="status-web-scraper"></i>
+            {{#if user}}
+            <a href="/status" title="show detailed status" target="_self">
+              <i class="fa fa-dashboard" id="show-dashboard"></i>
+            </a>
+            {{/if}}
+          </div>
+          <a href="https://github.com/piopon" title="show author" target="_blank">
+            <i class="fa fa-github" id="show-github"></i>
+          </a>
+        </div>
       </footer>
     </div>
   </body>

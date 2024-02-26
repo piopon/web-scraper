@@ -1,4 +1,4 @@
-import { ComponentType } from "../../config/app-types.js";
+import { ComponentStatus, ComponentType } from "../../config/app-types.js";
 import { StatusLogger } from "./status-logger.js";
 
 import mongoose from "mongoose";
@@ -51,6 +51,20 @@ export class WebDatabase {
   }
 
   /**
+   * Method used to get current web database component working status
+   * @returns web database component status
+   */
+  getStatus() {
+    if (1 === mongoose.connection.readyState) {
+      return ComponentStatus.RUNNING;
+    } else if (2 === mongoose.connection.readyState) {
+      return ComponentStatus.INITIALIZING;
+    } else {
+      return ComponentStatus.STOPPED;
+    }
+  }
+
+  /**
    * Method used to return the name of the component
    * @returns web database component name
    */
@@ -64,5 +78,13 @@ export class WebDatabase {
    */
   getInfo() {
     return { types: [ComponentType.INIT], initWait: false };
+  }
+
+  /**
+   * Method used to receive running history status of web database
+   * @returns array of objects containing web database running history status
+   */
+  getHistory() {
+    return this.#status.getHistory();
   }
 }

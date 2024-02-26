@@ -143,6 +143,7 @@ footer#main-footer {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
   color: black;
   background-color: mediumslateblue;
 }
@@ -150,4 +151,57 @@ footer#main-footer {
 footer#main-footer h3 {
   margin: 0;
   font-size: 15px;
+}
+
+footer#main-footer div#footer-links {
+  position: absolute;
+  right: 0rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 0;
+  font-size: 20px;
+}
+
+footer#main-footer div#footer-links a {
+  text-decoration: none;
+  color: inherit;
+}
+
+footer#main-footer div#status-preview {
+  padding: 0 0.5rem;
+  border-right: solid 1px black;
+  letter-spacing: 0.15rem;
+  overflow: hidden;
+  white-space: nowrap;
+  border-radius: 10px 0 0 10px;
+  background-color: darkslateblue;
+}
+
+footer#main-footer div#status-preview.collapsed {
+  transition: width 0.5s ease;
+  width: 20px;
+}
+
+footer#main-footer div#status-preview.preview {
+  transition: width 0.5s ease;
+  width: 80px;
+}
+
+footer#main-footer div#status-preview.expanded {
+  transition: width 0.5s ease;
+  width: 115px;
+}
+
+footer#main-footer i#show-github {
+  margin: 0 0.75rem;
+}
+
+div#status-preview i#show-dashboard {
+  color: white;
+  margin-left: 5px;
+}
+
+div#status-preview i#status-web-database {
+  font-size: 17px;
 }

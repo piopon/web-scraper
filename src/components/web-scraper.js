@@ -1,4 +1,4 @@
-import { ComponentType } from "../../config/app-types.js";
+import { ComponentStatus, ComponentType } from "../../config/app-types.js";
 import { RegexUtils } from "../utils/regex-utils.js";
 import { ScrapConfig } from "../model/scrap-config.js";
 import { ScrapWarning } from "../model/scrap-exception.js";
@@ -138,13 +138,19 @@ export class WebScraper {
   }
 
   /**
-   * Method used to determine if the web scraper component is running (alive) or not
-   * @param {Object} sessionUser The user for which we want to check scraper alive status
-   * @returns true when web scraper is running, false otherwise
+   * Method used to get current web scraper component working status
+   * @param {Object} sessionUser The user for which to get scraper status.
+   * @returns web scraper component status
    */
-  isAlive(sessionUser) {
+  getStatus(sessionUser = undefined) {
+    if (sessionUser == null) {
+      return this.#sessions.size > 0 ? ComponentStatus.RUNNING : ComponentStatus.STOPPED;
+    }
     const session = this.#sessions.get(sessionUser.email);
-    return session == null ? false : session.id != null;
+    if (session == null) {
+      return ComponentStatus.INITIALIZING;
+    }
+    return session.id != null ? ComponentStatus.RUNNING : ComponentStatus.STOPPED;
   }
 
   /**
@@ -193,7 +199,7 @@ export class WebScraper {
    * @param {Object} sessionUser The user for which we want to get all status history
    * @returns array of objects containing web scraper running history status
    */
-  getStatusHistory(sessionUser) {
+  getHistory(sessionUser) {
     const invalidStateMessage = "Invalid internal state";
     const currentStatus = this.#status.getStatus().message;
     const session = this.#sessions.get(sessionUser.email);
