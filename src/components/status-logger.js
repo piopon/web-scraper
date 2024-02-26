@@ -32,9 +32,12 @@ export class StatusLogger {
     if (this.#minLogLevel.value < LogLevel.DEBUG.value) {
       return;
     }
+    const previousStatus = this.getStatus();
     const dateTimeNow = moment().format("YYYY-MM-DD HH:mm:ss");
     this.#status.push({ timestamp: dateTimeNow, type: "debug", message: message });
-    console.debug(`${dateTimeNow} [${this.#name}] DEBUG: ${message}`);
+    if ("debug" !== previousStatus.type || message !== previousStatus.message) {
+      console.debug(`${dateTimeNow} [${this.#name}] DEBUG: ${message}`);
+    }
   }
 
   /**
@@ -45,9 +48,12 @@ export class StatusLogger {
     if (this.#minLogLevel.value < LogLevel.INFO.value) {
       return;
     }
+    const previousStatus = this.getStatus();
     const dateTimeNow = moment().format("YYYY-MM-DD HH:mm:ss");
     this.#status.push({ timestamp: dateTimeNow, type: "info", message: message });
-    console.info(`${dateTimeNow} [${this.#name}] INFO: ${message}`);
+    if ("info" !== previousStatus.type || message !== previousStatus.message) {
+      console.info(`${dateTimeNow} [${this.#name}] INFO: ${message}`);
+    }
   }
 
   /**
@@ -58,9 +64,12 @@ export class StatusLogger {
     if (this.#minLogLevel.value < LogLevel.WARNING.value) {
       return;
     }
+    const previousStatus = this.getStatus();
     const dateTimeNow = moment().format("YYYY-MM-DD HH:mm:ss");
     this.#status.push({ timestamp: dateTimeNow, type: "warning", message: message });
-    console.warn(`${dateTimeNow} [${this.#name}] WARNING: ${message}`);
+    if ("warning" !== previousStatus.type || message !== previousStatus.message) {
+      console.warn(`${dateTimeNow} [${this.#name}] WARNING: ${message}`);
+    }
   }
 
   /**
@@ -71,9 +80,13 @@ export class StatusLogger {
     if (this.#minLogLevel.value < LogLevel.ERROR.value) {
       return;
     }
+    const previousStatus = this.getStatus();
     const dateTimeNow = moment().format("YYYY-MM-DD HH:mm:ss");
     this.#status.push({ timestamp: dateTimeNow, type: "error", message: message });
-    console.error(`${dateTimeNow} [${this.#name}] ERROR: ${message}`);
+    // console log status if it isn't the same as the last one (to increase readability)
+    if ("error" !== previousStatus.type || message !== previousStatus.message) {
+      console.error(`${dateTimeNow} [${this.#name}] ERROR: ${message}`);
+    }
   }
 
   /**
@@ -82,7 +95,7 @@ export class StatusLogger {
    */
   getStatus() {
     const lastStatus = this.#status.slice(-1);
-    if (lastStatus.length >= 0) {
+    if (lastStatus.length > 0) {
       return lastStatus[0];
     }
     const dateTimeNow = moment().format("YYYY-MM-DD HH:mm:ss");
