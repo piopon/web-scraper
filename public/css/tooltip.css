@@ -10,6 +10,10 @@
   z-index: 10;
 }
 
+#toastBox.auto-hide {
+  animation: toast-move-left-and-hide 6000ms linear forwards;
+}
+
 .toast {
   display: flex;
   position: relative;
