@@ -1,0 +1,7 @@
+section.status-dashboard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: calc(100% - 2.5rem);
+}
