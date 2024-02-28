@@ -55,6 +55,10 @@ export class ViewRouter {
     return "PLN|GBP|USD|EUR|CHF|CZK|DKK|CNY|JPY|INR|AUD|CAD";
   }
 
+  /**
+   * Method used to receive all components supported by web scraper
+   * @returns a String with supported components separated by '|' character
+   */
   #getSupportedComponents() {
     return "ALL|web-components|web-database|web-scraper|web-server"
   }
