@@ -5,3 +5,12 @@ section.status-dashboard {
   flex-direction: column;
   height: calc(100% - 2.5rem);
 }
+
+div.status-settings {
+  height: 2.5rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: black;
+}
