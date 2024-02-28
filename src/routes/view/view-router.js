@@ -34,6 +34,7 @@ export class ViewRouter {
       response.render("status", {
         title: "scraper running status",
         user: request.user.name,
+        components: this.#getSupportedComponents(),
       })
     );
   }
@@ -52,5 +53,9 @@ export class ViewRouter {
    */
   #getSupportedCurrencies() {
     return "PLN|GBP|USD|EUR|CHF|CZK|DKK|CNY|JPY|INR|AUD|CAD";
+  }
+
+  #getSupportedComponents() {
+    return "ALL|web-components|web-database|web-scraper|web-server"
   }
 }
