@@ -60,6 +60,6 @@ export class ViewRouter {
    * @returns a String with supported components separated by '|' character
    */
   #getSupportedComponents() {
-    return "ALL|web-components|web-database|web-scraper|web-server"
+    return "all|web-components|web-database|web-scraper|web-server"
   }
 }
