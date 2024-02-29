@@ -15,3 +15,14 @@ div.status-settings {
   justify-content: space-between;
   color: black;
 }
+
+select.component-component {
+  width: 10rem;
+  height: 2rem;
+  font-size: 1rem;
+  color: black;
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: 2px 2px 5px black;
+}
