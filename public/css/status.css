@@ -32,6 +32,10 @@ div#table-container {
   color: black;
 }
 
+label.logs-label {
+  padding: 0.25rem;
+}
+
 #table-logs {
   display: block;
   empty-cells: show;
