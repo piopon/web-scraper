@@ -40,9 +40,11 @@ label.logs-label {
   display: block;
   empty-cells: show;
   border: 1px solid black;
+  border-radius: 0.25rem;
   border-spacing: 0;
   border-collapse: collapse;
   background-color: whitesmoke;
+  box-shadow: 2px 2px 5px black;
   position: absolute;
   margin: 0 0.25rem;
   padding: 0.25rem;
