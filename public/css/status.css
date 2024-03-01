@@ -40,4 +40,6 @@ div#table-container {
   border-collapse: collapse;
   background-color: whitesmoke;
   min-height: 100%;
+  margin: 0.25rem;
+  padding: 0.1rem;
 }
