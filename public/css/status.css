@@ -13,7 +13,7 @@ div.status-settings {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 select.component-component {
@@ -44,7 +44,7 @@ label.logs-label {
   border-collapse: collapse;
   background-color: whitesmoke;
   position: absolute;
-  margin: 0.25rem;
+  margin: 0 0.25rem;
   padding: 0.25rem;
   bottom: 0;
   top: 0;
