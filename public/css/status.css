@@ -60,9 +60,9 @@ label.logs-label {
 #table-logs tbody {
   display: flex;
   flex-direction: column;
-  max-height: 71vh;
+  max-height: 60vh;
   overflow-y: auto;
-  font-size: 14px;
+  font-size: 0.75rem;
 }
 
 #table-logs tbody tr {
