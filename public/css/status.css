@@ -99,3 +99,11 @@ label.logs-label {
   flex-basis: 75%;
   flex-grow: 3;
 }
+
+#table-logs tbody tr:nth-child(n) {
+  background-color: white;
+}
+
+#table-logs tbody tr:nth-child(2n) {
+  background-color: #eeeeeeee;
+}
