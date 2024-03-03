@@ -69,3 +69,28 @@ label.logs-label {
   overflow-y: auto;
   font-size: 14px;
 }
+
+#table-logs th:nth-child(1),
+#table-logs td:nth-child(1) {
+  flex-basis: 15%;
+  flex-grow: 1;
+}
+
+#table-logs td:nth-child(2),
+#table-logs th:nth-child(2) {
+  flex-basis: 15%;
+  flex-grow: 1;
+  justify-content: center;
+}
+
+#table-logs td:nth-child(3),
+#table-logs th:nth-child(3) {
+  flex-basis: 10%;
+  flex-grow: 1;
+}
+
+#table-logs td:nth-child(4),
+#table-logs th:nth-child(4) {
+  flex-basis: 75%;
+  flex-grow: 3;
+}
