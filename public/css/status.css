@@ -70,6 +70,12 @@ label.logs-label {
   font-size: 14px;
 }
 
+#table-logs tbody tr {
+  display: flex;
+  padding: 3px 10px;
+  height: 50px;
+}
+
 #table-logs th:nth-child(1),
 #table-logs td:nth-child(1) {
   flex-basis: 15%;
