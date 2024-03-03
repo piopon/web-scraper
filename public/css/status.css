@@ -50,6 +50,12 @@ label.logs-label {
   inset: 0;
 }
 
+#table-logs tr {
+  display: flex;
+  align-items: center;
+  padding: 0.25rem;
+}
+
 #table-logs thead {
   display: flex;
   padding: 1rem 0;
@@ -63,13 +69,6 @@ label.logs-label {
   max-height: 60vh;
   overflow-y: auto;
   font-size: 0.75rem;
-}
-
-#table-logs tbody tr {
-  display: flex;
-  align-items: center;
-  padding: 0.25rem;
-  height: 2rem;
 }
 
 #table-logs td:nth-child(1),
