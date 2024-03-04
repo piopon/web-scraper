@@ -54,6 +54,8 @@ label.logs-label {
   display: flex;
   align-items: center;
   padding: 0.25rem;
+  height: 2rem;
+  width: calc(100% - 0.5rem);
 }
 
 #table-logs thead {
@@ -74,7 +76,7 @@ label.logs-label {
 
 #table-logs td:nth-child(1),
 #table-logs th:nth-child(1) {
-  flex-basis: 20%;
+  flex-basis: 15%;
   flex-grow: 1;
 }
 
