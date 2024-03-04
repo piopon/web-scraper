@@ -58,9 +58,10 @@ label.logs-label {
 
 #table-logs thead {
   display: flex;
-  padding: 1rem 0;
+  padding: 0.25rem 0;
   font-size: 1.25rem;
   background-color: gray;
+  border-radius: 0.25rem 0.25rem 0 0;
 }
 
 #table-logs tbody {
