@@ -6,16 +6,6 @@ export class StatusController {
   #monitorId = undefined;
 
   constructor() {
-    const dashboard = document.querySelector("footer#main-footer i#show-dashboard");
-    const statusDiv = document.querySelector("footer#main-footer div#status-preview");
-    statusDiv.addEventListener("mouseover", () => {
-      statusDiv.classList.remove("collapsed");
-      statusDiv.classList.add(dashboard != null ? "expanded" : "preview");
-    });
-    statusDiv.addEventListener("mouseout", () => {
-      statusDiv.classList.remove(dashboard != null ? "expanded" : "preview");
-      statusDiv.classList.add("collapsed");
-    })
     this.#initController();
   }
 
@@ -56,6 +46,19 @@ export class StatusController {
                       .forEach(data => tableHtml += this.#addLogRow(data));
       logsTableBody.innerHtml = tableHtml;
     }
+  }
+
+  #bindListeners() {
+    const dashboard = document.querySelector("footer#main-footer i#show-dashboard");
+    const statusDiv = document.querySelector("footer#main-footer div#status-preview");
+    statusDiv.addEventListener("mouseover", () => {
+      statusDiv.classList.remove("collapsed");
+      statusDiv.classList.add(dashboard != null ? "expanded" : "preview");
+    });
+    statusDiv.addEventListener("mouseout", () => {
+      statusDiv.classList.remove(dashboard != null ? "expanded" : "preview");
+      statusDiv.classList.add("collapsed");
+    })
   }
 
   #addLogRow(logData) {
