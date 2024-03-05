@@ -51,7 +51,7 @@ export class StatusController {
     if (logsTableBody.length > 0) {
       let tableHtml = "";
       const componentsStatus = await StatusService.getStatus("", true);
-      componentsStatus.map(component => component.history)
+      componentsStatus.flatMap(component => component.history)
                       .forEach(log => console.log(log));
       logsTableBody.innerHtml = tableHtml;
     }
