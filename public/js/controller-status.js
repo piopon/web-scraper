@@ -16,6 +16,7 @@ export class StatusController {
       statusDiv.classList.remove(dashboard != null ? "expanded" : "preview");
       statusDiv.classList.add("collapsed");
     })
+    this.#initController();
   }
 
   /**
@@ -33,6 +34,23 @@ export class StatusController {
    */
   stop() {
     clearInterval(this.#monitorId);
+  }
+
+  /**
+   * Method used to (re)initialize controller
+   */
+  #initController() {
+    this.#initLogList();
+  }
+
+  /**
+   * Method used to (re)initialize controller
+   */
+  #initLogList() {
+    const logsTableBody = document.querySelectorAll("table#table-logs tbody");
+    if (logsTableBody.length > 0) {
+      console.log("got logs table!");
+    }
   }
 
   /**
