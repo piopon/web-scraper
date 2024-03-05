@@ -15,7 +15,8 @@ function main() {
     initializeScraperConfig();
   }
   // start current status controller and monitor components
-  new StatusController().start();
+  const statusController = new StatusController();
+  statusController.start();
 }
 
 /**
