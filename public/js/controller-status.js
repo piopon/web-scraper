@@ -52,6 +52,7 @@ export class StatusController {
       let tableHtml = "";
       const componentsStatus = await StatusService.getStatus("", true);
       componentsStatus.flatMap(component => component.history)
+                      .sort((objA, objB) => Date.parse(objA.timestamp) - Date.parse(objB.timestamp))
                       .forEach(log => console.log(log));
       logsTableBody.innerHtml = tableHtml;
     }
