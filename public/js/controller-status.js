@@ -46,10 +46,14 @@ export class StatusController {
   /**
    * Method used to (re)initialize controller
    */
-  #initLogList() {
+  async #initLogList() {
     const logsTableBody = document.querySelectorAll("table#table-logs tbody");
     if (logsTableBody.length > 0) {
-      console.log("got logs table!");
+      let tableHtml = "";
+      const componentsStatus = await StatusService.getStatus("", true);
+      componentsStatus.map(component => component.history)
+                      .forEach(log => console.log(log));
+      logsTableBody.innerHtml = tableHtml;
     }
   }
 
