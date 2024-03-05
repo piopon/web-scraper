@@ -58,6 +58,15 @@ export class StatusController {
     }
   }
 
+  #addLogRow(logData) {
+    return `<tr>
+              <td>${logData.timestamp}</td>
+              <td>web-components</td>
+              <td>${logData.type}</td>
+              <td>${logData.message}</td>
+            </tr>`;
+  }
+
   /**
    * Method used to update monitor status icons style
    */
