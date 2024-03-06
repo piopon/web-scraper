@@ -41,13 +41,14 @@ export class StatusController {
    * Method used to initialize the log table with backend data
    */
   async #initLogTable() {
-    const logsTableBody = document.querySelector("table#table-logs tbody");
+    const logsTableBody = document.querySelector("#table-logs tbody");
     if (logsTableBody != null) {
-      logsTableBody.innerHtml = "";
+      let tableContent = "";
       const componentsStatus = await StatusService.getStatus("", true);
       componentsStatus.flatMap(component => component.history)
                       .sort((objA, objB) => Date.parse(objA.timestamp) - Date.parse(objB.timestamp))
-                      .forEach(data => logsTableBody.innerHtml += this.#addLogRow(data));
+                      .forEach(data => tableContent += this.#addLogRow(data));
+      logsTableBody.innerHTML = tableContent;
     }
   }
 
