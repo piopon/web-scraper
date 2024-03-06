@@ -31,6 +31,7 @@ export class StatusController {
    */
   #initController() {
     this.#initLogList();
+    this.#bindListeners();
   }
 
   /**
