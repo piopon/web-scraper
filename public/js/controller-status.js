@@ -30,14 +30,14 @@ export class StatusController {
    * Method used to (re)initialize controller
    */
   #initController() {
-    this.#initLogList();
+    this.#initLogTable();
     this.#bindListeners();
   }
 
   /**
    * Method used to (re)initialize controller
    */
-  async #initLogList() {
+  async #initLogTable() {
     const logsTableBody = document.querySelector("table#table-logs tbody");
     if (logsTableBody != null) {
       logsTableBody.innerHtml = "";
