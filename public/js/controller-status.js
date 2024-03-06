@@ -78,7 +78,7 @@ export class StatusController {
     return `<tr>
               <td>${logData.timestamp}</td>
               <td>web-components</td>
-              <td>${logData.type}</td>
+              <td>${logData.type.toUpperCase()}</td>
               <td>${logData.message}</td>
             </tr>`;
   }
