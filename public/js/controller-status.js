@@ -5,6 +5,9 @@ export class StatusController {
 
   #monitorId = undefined;
 
+  /**
+   * Creates new status controller
+   */
   constructor() {
     this.#initController();
   }
@@ -35,7 +38,7 @@ export class StatusController {
   }
 
   /**
-   * Method used to (re)initialize controller
+   * Method used to initialize the log table with backend data
    */
   async #initLogTable() {
     const logsTableBody = document.querySelector("table#table-logs tbody");
@@ -48,6 +51,10 @@ export class StatusController {
     }
   }
 
+  /**
+   * Method used to bind UI listeners to controller methods.
+   * This method handles: status preview bottom bar
+   */
   #bindListeners() {
     const dashboard = document.querySelector("footer#main-footer i#show-dashboard");
     const statusDiv = document.querySelector("footer#main-footer div#status-preview");
@@ -61,6 +68,11 @@ export class StatusController {
     })
   }
 
+  /**
+   * Method used to add HTML code for log row data
+   * @param {Object} logData The data for which we want to create a row
+   * @returns HTML code with log row
+   */
   #addLogRow(logData) {
     return `<tr>
               <td>${logData.timestamp}</td>
