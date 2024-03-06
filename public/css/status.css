@@ -69,7 +69,7 @@ label.logs-label {
 #table-logs tbody {
   display: flex;
   flex-direction: column;
-  max-height: 60vh;
+  max-height: 25.4rem;
   overflow-y: auto;
   font-size: 0.75rem;
 }
