@@ -46,7 +46,7 @@ export class StatusController {
       let tableContent = "";
       const componentsStatus = await StatusService.getStatus("", true);
       componentsStatus.flatMap(component => component.history)
-                      .sort((objA, objB) => Date.parse(objA.timestamp) - Date.parse(objB.timestamp))
+                      .sort((h1, h2) => Date.parse(h1.timestamp) - Date.parse(h2.timestamp))
                       .forEach(data => tableContent += this.#addLogRow(data));
       logsTableBody.innerHTML = tableContent;
     }
