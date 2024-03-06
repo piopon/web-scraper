@@ -37,8 +37,8 @@ export class StatusController {
    * Method used to (re)initialize controller
    */
   async #initLogList() {
-    const logsTableBody = document.querySelectorAll("table#table-logs tbody");
-    if (logsTableBody.length > 0) {
+    const logsTableBody = document.querySelector("table#table-logs tbody");
+    if (logsTableBody != null) {
       let tableHtml = "";
       const componentsStatus = await StatusService.getStatus("", true);
       componentsStatus.flatMap(component => component.history)
