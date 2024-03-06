@@ -45,7 +45,7 @@ export class StatusController {
     if (logsTableBody != null) {
       let tableContent = "";
       const componentsStatus = await StatusService.getStatus("", true);
-      componentsStatus.flatMap(component => component.history)
+      componentsStatus.flatMap(component => this.#createLogObject(component))
                       .sort((h1, h2) => Date.parse(h1.timestamp) - Date.parse(h2.timestamp))
                       .forEach(data => tableContent += this.#addLogRow(data));
       logsTableBody.innerHTML = tableContent;
@@ -67,6 +67,17 @@ export class StatusController {
       statusDiv.classList.remove(dashboard != null ? "expanded" : "preview");
       statusDiv.classList.add("collapsed");
     })
+  }
+
+  #createLogObject(statusComponent) {
+    return statusComponent.history.map(h => {
+      return {
+        name: statusComponent.name,
+        timestamp: h.timestamp,
+        type: h.type,
+        message: h.message,
+      };
+    });
   }
 
   /**
