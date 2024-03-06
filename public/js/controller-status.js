@@ -40,12 +40,11 @@ export class StatusController {
   async #initLogList() {
     const logsTableBody = document.querySelector("table#table-logs tbody");
     if (logsTableBody != null) {
-      let tableHtml = "";
+      logsTableBody.innerHtml = "";
       const componentsStatus = await StatusService.getStatus("", true);
       componentsStatus.flatMap(component => component.history)
                       .sort((objA, objB) => Date.parse(objA.timestamp) - Date.parse(objB.timestamp))
-                      .forEach(data => tableHtml += this.#addLogRow(data));
-      logsTableBody.innerHtml = tableHtml;
+                      .forEach(data => logsTableBody.innerHtml += this.#addLogRow(data));
     }
   }
 
