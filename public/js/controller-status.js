@@ -89,12 +89,12 @@ export class StatusController {
    * @param {Object} logData The data for which we want to create a row
    * @returns HTML code with log row
    */
-  #addLogRow(logData) {
+  #addLogRow(logObject) {
     return `<tr>
-              <td>${logData.timestamp}</td>
-              <td>${logData.name}</td>
-              <td>${logData.type.toUpperCase()}</td>
-              <td>${logData.message}</td>
+              <td>${logObject.timestamp}</td>
+              <td>${logObject.name}</td>
+              <td>${logObject.type.toUpperCase()}</td>
+              <td>${logObject.message}</td>
             </tr>`;
   }
 
