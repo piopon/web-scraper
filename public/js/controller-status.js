@@ -47,7 +47,7 @@ export class StatusController {
       const componentsStatus = await StatusService.getStatus("", true);
       componentsStatus.flatMap(component => this.#createLogObject(component))
                       .sort(this.#sortLogObject)
-                      .forEach(data => tableContent += this.#addLogRow(data));
+                      .forEach(logObj => tableContent += this.#addLogRow(logObj));
       logsTableBody.innerHTML = tableContent;
     }
   }
