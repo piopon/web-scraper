@@ -46,7 +46,7 @@ export class StatusController {
       let tableContent = "";
       const componentsStatus = await StatusService.getStatus("", true);
       componentsStatus.flatMap(component => this.#createLogObject(component))
-                      .sort((h1, h2) => Date.parse(h1.timestamp) - Date.parse(h2.timestamp))
+                      .sort(this.#sortLogObject)
                       .forEach(data => tableContent += this.#addLogRow(data));
       logsTableBody.innerHTML = tableContent;
     }
@@ -78,6 +78,10 @@ export class StatusController {
         message: h.message,
       };
     });
+  }
+
+  #sortLogObject(logObjectA, logObjectB) {
+    return Date.parse(logObjectA.timestamp) - Date.parse(logObjectB.timestamp);
   }
 
   /**
