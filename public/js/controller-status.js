@@ -88,7 +88,7 @@ export class StatusController {
   #addLogRow(logData) {
     return `<tr>
               <td>${logData.timestamp}</td>
-              <td>web-components</td>
+              <td>${logData.name}</td>
               <td>${logData.type.toUpperCase()}</td>
               <td>${logData.message}</td>
             </tr>`;
