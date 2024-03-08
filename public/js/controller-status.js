@@ -79,9 +79,9 @@ export class StatusController {
   #createLogObject(statusComponent) {
     return statusComponent.history.map(h => {
       return {
-        name: statusComponent.name,
+        name: statusComponent.name.trim(),
         timestamp: h.timestamp,
-        type: h.type,
+        type: h.type.toUpperCase(),
         message: h.message,
       };
     });
@@ -110,7 +110,7 @@ export class StatusController {
     return `<tr>
               <td>${logObject.timestamp}</td>
               <td>${logObject.name}</td>
-              <td>${logObject.type.toUpperCase()}</td>
+              <td>${logObject.type}</td>
               <td>${logObject.message}</td>
             </tr>`;
   }
