@@ -37,13 +37,13 @@ export class StatusController {
   async #initController() {
     this.#logsTable = document.querySelector("#table-logs tbody");
     if (this.#logsTable != null) {
-      await this.#reloadComponentStatus();
+      await this.#updateStatusLogs();
       this.#initLogTable();
       this.#bindListeners();
     }
   }
 
-  async #reloadComponentStatus() {
+  async #updateStatusLogs() {
     const currentStatus = await StatusService.getStatus("", true);
     this.#statusLogs = currentStatus
       .flatMap((component) => this.#createLogObject(component))
