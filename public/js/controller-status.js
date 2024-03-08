@@ -69,6 +69,11 @@ export class StatusController {
     })
   }
 
+  /**
+   * Method used to create log object from status component
+   * @param {Object} statusComponent The component from which we need to create log object
+   * @returns created log object containing all fields to fill log table
+   */
   #createLogObject(statusComponent) {
     return statusComponent.history.map(h => {
       return {
@@ -80,13 +85,19 @@ export class StatusController {
     });
   }
 
+  /**
+   * Method used to sort log objects via timestamp value
+   * @param {Object} logObjectA The first log object to compare
+   * @param {Object} logObjectB The second log object to compare
+   * @returns negative value when first object is larger, positive when smaller, zero if equal
+   */
   #sortLogObject(logObjectA, logObjectB) {
     return Date.parse(logObjectA.timestamp) - Date.parse(logObjectB.timestamp);
   }
 
   /**
    * Method used to add HTML code for log row data
-   * @param {Object} logData The data for which we want to create a row
+   * @param {Object} logObject The data object for which we want to create table row
    * @returns HTML code with log row
    */
   #addLogRow(logObject) {
