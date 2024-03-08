@@ -38,7 +38,7 @@ export class StatusController {
     this.#logsTable = document.querySelector("#table-logs tbody");
     if (this.#logsTable != null) {
       await this.#updateStatusLogs();
-      this.#initLogTable();
+      this.#updateLogTable();
       this.#bindListeners();
     }
   }
@@ -52,8 +52,9 @@ export class StatusController {
 
   /**
    * Method used to initialize the log table with backend data
+   * @param {String} componentName The name of component which logs we want to display
    */
-  #initLogTable(componentName = "") {
+  #updateLogTable(componentName = "") {
     let tableContent = "";
     this.#statusLogs
       .filter((logObj) => this.#filterLogObject(logObj, componentName))
