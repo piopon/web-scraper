@@ -38,7 +38,8 @@ export class StatusController {
     this.#logsTable = document.querySelector("#table-logs tbody");
     if (this.#logsTable != null) {
       await this.#updateStatusLogs();
-      this.#updateLogTable();
+      const selectedComponent = document.querySelector("select.component-component").value;
+      this.#updateLogTable(selectedComponent);
       this.#bindListeners();
     }
   }
