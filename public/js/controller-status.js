@@ -3,6 +3,7 @@ import { StatusService } from "./service-status.js";
 export class StatusController {
   static #MONITOR_INVERVAL_MS = 5000;
 
+  #componentsStatus = undefined;
   #monitorId = undefined;
 
   /**
@@ -44,8 +45,8 @@ export class StatusController {
     const logsTableBody = document.querySelector("#table-logs tbody");
     if (logsTableBody != null) {
       let tableContent = "";
-      const componentsStatus = await StatusService.getStatus("", true);
-      componentsStatus.flatMap(component => this.#createLogObject(component))
+      this.#componentsStatus = await StatusService.getStatus("", true);
+      this.#componentsStatus.flatMap(component => this.#createLogObject(component))
                       .sort(this.#sortLogObject)
                       .forEach(logObj => tableContent += this.#addLogRow(logObj));
       logsTableBody.innerHTML = tableContent;
