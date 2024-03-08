@@ -4,6 +4,7 @@ export class StatusController {
   static #MONITOR_INVERVAL_MS = 5000;
 
   #statusLogs = undefined;
+  #logsTable = undefined
   #monitorId = undefined;
 
   /**
@@ -34,9 +35,12 @@ export class StatusController {
    * Method used to (re)initialize controller
    */
   async #initController() {
-    await this.#reloadComponentStatus();
-    this.#initLogTable();
-    this.#bindListeners();
+    this.#logsTable = document.querySelector("#table-logs tbody");
+    if (this.#logsTable != null) {
+      await this.#reloadComponentStatus();
+      this.#initLogTable();
+      this.#bindListeners();
+    }
   }
 
   async #reloadComponentStatus() {
