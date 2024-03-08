@@ -41,13 +41,14 @@ export class StatusController {
   /**
    * Method used to initialize the log table with backend data
    */
-  async #initLogTable() {
+  async #initLogTable(componentName = "") {
     const logsTableBody = document.querySelector("#table-logs tbody");
     if (logsTableBody != null) {
       let tableContent = "";
       this.#componentsStatus = await StatusService.getStatus("", true);
       this.#componentsStatus.flatMap(component => this.#createLogObject(component))
                       .sort(this.#sortLogObject)
+                      .filter(logObj => this.#filterLogObject(logObj, componentName))
                       .forEach(logObj => tableContent += this.#addLogRow(logObj));
       logsTableBody.innerHTML = tableContent;
     }
@@ -94,6 +95,10 @@ export class StatusController {
    */
   #sortLogObject(logObjectA, logObjectB) {
     return Date.parse(logObjectA.timestamp) - Date.parse(logObjectB.timestamp);
+  }
+
+  #filterLogObject(logObject, componentName = "") {
+    return "" === componentName || "all" === componentName ? true : logObject.name === componentName;
   }
 
   /**
