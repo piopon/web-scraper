@@ -4,7 +4,7 @@ export class StatusController {
   static #MONITOR_INVERVAL_MS = 5000;
 
   #statusLogs = undefined;
-  #logsTable = undefined
+  #logsTable = undefined;
   #monitorId = undefined;
 
   /**
@@ -75,7 +75,7 @@ export class StatusController {
     statusDiv.addEventListener("mouseout", () => {
       statusDiv.classList.remove(dashboard != null ? "expanded" : "preview");
       statusDiv.classList.add("collapsed");
-    })
+    });
   }
 
   /**
@@ -84,7 +84,7 @@ export class StatusController {
    * @returns created log object containing all fields to fill log table
    */
   #createLogObject(statusComponent) {
-    return statusComponent.history.map(h => {
+    return statusComponent.history.map((h) => {
       return {
         name: statusComponent.name.trim(),
         timestamp: h.timestamp,
