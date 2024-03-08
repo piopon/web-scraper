@@ -53,17 +53,12 @@ export class StatusController {
   /**
    * Method used to initialize the log table with backend data
    */
-  async #initLogTable(componentName = "") {
-    const logsTableBody = document.querySelector("#table-logs tbody");
-    if (logsTableBody != null) {
-      let tableContent = "";
-      this.#componentsStatus = await StatusService.getStatus("", true);
-      this.#componentsStatus.flatMap(component => this.#createLogObject(component))
-                      .sort(this.#sortLogObject)
-                      .filter(logObj => this.#filterLogObject(logObj, componentName))
-                      .forEach(logObj => tableContent += this.#addLogRow(logObj));
-      logsTableBody.innerHTML = tableContent;
-    }
+  #initLogTable(componentName = "") {
+    let tableContent = "";
+    this.#statusLogs
+      .filter((logObj) => this.#filterLogObject(logObj, componentName))
+      .forEach((logObj) => (tableContent += this.#addLogRow(logObj)));
+    this.#logsTable.innerHTML = tableContent;
   }
 
   /**
