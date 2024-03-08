@@ -3,7 +3,7 @@ import { StatusService } from "./service-status.js";
 export class StatusController {
   static #MONITOR_INVERVAL_MS = 5000;
 
-  #componentsStatus = undefined;
+  #statusLogs = undefined;
   #monitorId = undefined;
 
   /**
@@ -33,9 +33,17 @@ export class StatusController {
   /**
    * Method used to (re)initialize controller
    */
-  #initController() {
+  async #initController() {
+    await this.#reloadComponentStatus();
     this.#initLogTable();
     this.#bindListeners();
+  }
+
+  async #reloadComponentStatus() {
+    const currentStatus = await StatusService.getStatus("", true);
+    this.#statusLogs = currentStatus
+      .flatMap((component) => this.#createLogObject(component))
+      .toSorted(this.#sortLogObject);
   }
 
   /**
