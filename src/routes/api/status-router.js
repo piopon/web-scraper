@@ -40,6 +40,13 @@ export class StatusRouter {
             history: showHistory ? component.master.getHistory(request.user) : undefined,
           };
         });
+      if (!request.query.name || this.#components.getName().trim() === request.query.name) {
+        outputData.push({
+          name: this.#components.getName(),
+          status: this.#components.getStatus().state,
+          history: showHistory ? this.#components.getHistory() : undefined,
+        });
+      }
       if (!request.query.name || this.#serverStatus.getName().trim() === request.query.name) {
         outputData.push({
           name: this.#serverStatus.getName(),
