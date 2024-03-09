@@ -81,6 +81,10 @@ export class StatusController {
       statusDiv.classList.remove(dashboard != null ? "expanded" : "preview");
       statusDiv.classList.add("collapsed");
     });
+    // the following listeners are for widgets available in status page with logs table
+    if (this.#logsTable == null) {
+      return;
+    }
     const componentSelect = document.querySelector("select.component-component");
     componentSelect.addEventListener("change", (event) => {
       this.#updateLogTable(event.target.value);
