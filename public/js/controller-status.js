@@ -116,7 +116,7 @@ export class StatusController {
    * @returns true if log object is from component with the specified name, false otherwise
    */
   #filterLogObject(logObject, componentName) {
-    return "" === componentName || "all" === componentName ? true : logObject.name === componentName;
+    return "all" === componentName ? true : logObject.name === componentName;
   }
 
   /**
