@@ -1,4 +1,4 @@
-import { ComponentType } from "../../config/app-types.js";
+import { ComponentStatus, ComponentType } from "../../config/app-types.js";
 import { StatusLogger } from "./status-logger.js";
 
 export class WebComponents {
