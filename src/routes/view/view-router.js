@@ -2,6 +2,7 @@ import { AccessChecker } from "../../middleware/access-checker.js";
 import { ScrapConfig } from "../../model/scrap-config.js";
 
 import express from "express";
+import moment from "moment";
 
 export class ViewRouter {
   /**
@@ -34,6 +35,7 @@ export class ViewRouter {
       response.render("status", {
         title: "scraper running status",
         user: request.user.name,
+        date: moment().format("YYYY-MM-DD"),
         components: this.#getSupportedComponents(),
       })
     );
