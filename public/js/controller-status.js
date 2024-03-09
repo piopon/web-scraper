@@ -40,8 +40,8 @@ export class StatusController {
       await this.#updateStatusLogs();
       const selectedComponent = document.querySelector("select.component-component").value;
       this.#updateLogTable(selectedComponent);
-      this.#bindListeners();
     }
+    this.#bindListeners();
   }
 
   async #updateStatusLogs() {
