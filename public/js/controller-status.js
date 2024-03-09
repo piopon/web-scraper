@@ -55,7 +55,7 @@ export class StatusController {
    * Method used to initialize the log table with backend data
    * @param {String} componentName The name of component which logs we want to display
    */
-  #updateLogTable(componentName = "") {
+  #updateLogTable(componentName) {
     let tableContent = "";
     this.#statusLogs
       .filter((logObj) => this.#filterLogObject(logObj, componentName))
@@ -106,7 +106,7 @@ export class StatusController {
     return Date.parse(logObjectA.timestamp) - Date.parse(logObjectB.timestamp);
   }
 
-  #filterLogObject(logObject, componentName = "") {
+  #filterLogObject(logObject, componentName) {
     return "" === componentName || "all" === componentName ? true : logObject.name === componentName;
   }
 
