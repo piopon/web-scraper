@@ -2,7 +2,7 @@ import { ComponentType } from "../../config/app-types.js";
 import { StatusLogger } from "./status-logger.js";
 
 export class WebComponents {
-  static #LOGGER_NAME = "web-components";
+  static #COMPONENT_NAME = "web-components";
 
   #status = undefined;
   #components = [];
@@ -12,7 +12,7 @@ export class WebComponents {
    * @param {Object} config The object containing components configuration
    */
   constructor(config) {
-    this.#status = new StatusLogger(WebComponents.#LOGGER_NAME, config.minLogLevel);
+    this.#status = new StatusLogger(WebComponents.#COMPONENT_NAME, config.minLogLevel);
     this.#status.info("Created");
   }
 
@@ -119,7 +119,7 @@ export class WebComponents {
    * @returns web components name
    */
   getName() {
-    return WebComponents.#LOGGER_NAME;
+    return WebComponents.#COMPONENT_NAME;
   }
 
   /**
