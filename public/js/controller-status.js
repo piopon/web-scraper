@@ -44,6 +44,9 @@ export class StatusController {
     this.#bindListeners();
   }
 
+  /**
+   * Method used to update status logs field
+   */
   async #updateStatusLogs() {
     const currentStatus = await StatusService.getStatus("", true);
     this.#statusLogs = currentStatus
@@ -106,6 +109,12 @@ export class StatusController {
     return Date.parse(logObjectA.timestamp) - Date.parse(logObjectB.timestamp);
   }
 
+  /**
+   * Method used to check if specified log object is from component with name
+   * @param {Object} logObject The log object which we want to check
+   * @param {String} componentName The component name to check
+   * @returns true if log object is from component with the specified name, false otherwise
+   */
   #filterLogObject(logObject, componentName) {
     return "" === componentName || "all" === componentName ? true : logObject.name === componentName;
   }
