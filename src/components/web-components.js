@@ -105,4 +105,28 @@ export class WebComponents {
       await component.master[method](...args);
     }
   }
+
+  /**
+   * Method used to get current web components working status
+   * @returns web components status
+   */
+  getStatus() {
+    return ComponentStatus.RUNNING;
+  }
+
+  /**
+   * Method used to return the name of the component
+   * @returns web components name
+   */
+  getName() {
+    return WebComponents.#LOGGER_NAME;
+  }
+
+  /**
+   * Method used to receive running history status of web components
+   * @returns array of objects containing web components running history status
+   */
+  getHistory() {
+    return this.#status.getHistory();
+  }
 }
