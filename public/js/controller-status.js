@@ -81,6 +81,10 @@ export class StatusController {
       statusDiv.classList.remove(dashboard != null ? "expanded" : "preview");
       statusDiv.classList.add("collapsed");
     });
+    const componentSelect = document.querySelector("select.component-component");
+    componentSelect.addEventListener("change", (event) => {
+      this.#updateLogTable(event.target.value);
+    });
   }
 
   /**
