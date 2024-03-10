@@ -25,6 +25,7 @@ select.component-component {
   border-radius: 5px;
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
+  margin-right: 0.5rem;
 }
 
 input.date-from, input.date-to {
@@ -36,6 +37,7 @@ input.date-from, input.date-to {
   border-radius: 5px;
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
+  margin-right: 0.5rem;
 }
 
 div#table-container {
