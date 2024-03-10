@@ -27,7 +27,7 @@ select.component-component {
   box-shadow: 2px 2px 5px black;
 }
 
-input.date-from {
+input.date-from, input.date-to {
   width: 12rem;
   height: 2rem;
   font-size: 1rem;
