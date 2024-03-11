@@ -38,8 +38,7 @@ export class StatusController {
     this.#logsTable = document.querySelector("#table-logs tbody");
     if (this.#logsTable != null) {
       await this.#updateStatusLogs();
-      const selectedComponent = document.querySelector("select.filter-component").value;
-      this.#updateLogTable(selectedComponent);
+      this.#updateLogTable();
     }
     this.#bindListeners();
   }
@@ -58,10 +57,10 @@ export class StatusController {
    * Method used to initialize the log table with backend data
    * @param {String} componentName The name of component which logs we want to display
    */
-  #updateLogTable(componentName) {
+  #updateLogTable() {
     let tableContent = "";
     this.#statusLogs
-      .filter((logObj) => this.#filterLogObject(logObj, componentName))
+      .filter((logObj) => this.#filterLogObject(logObj))
       .forEach((logObj) => (tableContent += this.#addLogRow(logObj)));
     this.#logsTable.innerHTML = tableContent;
   }
@@ -123,7 +122,8 @@ export class StatusController {
    * @param {String} componentName The component name to check
    * @returns true if log object is from component with the specified name, false otherwise
    */
-  #filterLogObject(logObject, componentName) {
+  #filterLogObject(logObject) {
+    const componentName = document.querySelector("select.filter-component").value;
     return "all" === componentName ? true : logObject.name === componentName;
   }
 
