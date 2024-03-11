@@ -67,6 +67,10 @@ export class ViewRouter {
     return "all|web-components|web-database|web-scraper|web-server"
   }
 
+  /**
+   * Method used to receive all log levels supported by web scraper
+   * @returns a String with supported log levels separated by '|' character
+   */
   #getSupportedStatusTypes() {
     const allLogLevels = [LogLevel.DEBUG, LogLevel.INFO, LogLevel.WARNING, LogLevel.ERROR];
     return `all|${allLogLevels.map(level => level.description).join("|")}`
