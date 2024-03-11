@@ -86,7 +86,7 @@ export class StatusController {
     }
     const componentSelect = document.querySelector("select.filter-component");
     componentSelect.addEventListener("change", (event) => {
-      this.#updateLogTable(event.target.value);
+      this.#updateLogTable();
     });
   }
 
