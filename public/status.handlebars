@@ -1,6 +1,6 @@
 <section class="status-dashboard">
   <div class="status-settings">
-    {{> widget type="combo" parent="component" label="component" options=@root.components value="all" }}
+    {{> widget type="combo" parent="filter" label="component" options=@root.components value="all" }}
     {{> widget type="datetime-local" parent="date" label="from" value=(append @root.date "T00:00") }}
     {{> widget type="datetime-local" parent="date" label="to" value=(append @root.date "T23:59") }}
   </div>

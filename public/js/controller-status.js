@@ -38,7 +38,7 @@ export class StatusController {
     this.#logsTable = document.querySelector("#table-logs tbody");
     if (this.#logsTable != null) {
       await this.#updateStatusLogs();
-      const selectedComponent = document.querySelector("select.component-component").value;
+      const selectedComponent = document.querySelector("select.filter-component").value;
       this.#updateLogTable(selectedComponent);
     }
     this.#bindListeners();
@@ -85,7 +85,7 @@ export class StatusController {
     if (this.#logsTable == null) {
       return;
     }
-    const componentSelect = document.querySelector("select.component-component");
+    const componentSelect = document.querySelector("select.filter-component");
     componentSelect.addEventListener("change", (event) => {
       this.#updateLogTable(event.target.value);
     });
