@@ -1,3 +1,4 @@
+import { LogLevel } from "../../../config/app-types.js";
 import { AccessChecker } from "../../middleware/access-checker.js";
 import { ScrapConfig } from "../../model/scrap-config.js";
 
@@ -37,6 +38,7 @@ export class ViewRouter {
         user: request.user.name,
         date: moment().format("YYYY-MM-DD"),
         components: this.#getSupportedComponents(),
+        statusTypes: this.#getSupportedStatusTypes(),
       })
     );
   }
@@ -63,5 +65,10 @@ export class ViewRouter {
    */
   #getSupportedComponents() {
     return "all|web-components|web-database|web-scraper|web-server"
+  }
+
+  #getSupportedStatusTypes() {
+    const allLogLevels = [LogLevel.DEBUG, LogLevel.INFO, LogLevel.WARNING, LogLevel.ERROR];
+    return `all|${allLogLevels.map(level => level.description).join("|")}`
   }
 }
