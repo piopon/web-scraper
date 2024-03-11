@@ -64,7 +64,7 @@ export class ViewRouter {
    * @returns a String with supported components separated by '|' character
    */
   #getSupportedComponents() {
-    return "all|web-components|web-database|web-scraper|web-server"
+    return "all|web-components|web-database|web-scraper|web-server";
   }
 
   /**
@@ -73,6 +73,6 @@ export class ViewRouter {
    */
   #getSupportedStatusTypes() {
     const allLogLevels = [LogLevel.DEBUG, LogLevel.INFO, LogLevel.WARNING, LogLevel.ERROR];
-    return `all|${allLogLevels.map(level => level.description).join("|")}`
+    return `all|${allLogLevels.map((level) => level.description).join("|")}`;
   }
 }
