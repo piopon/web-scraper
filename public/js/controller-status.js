@@ -123,8 +123,12 @@ export class StatusController {
    * @returns true if log object is from component with the specified name, false otherwise
    */
   #filterLogObject(logObject) {
-    const componentName = document.querySelector("select.filter-component").value;
-    return "all" === componentName ? true : logObject.name === componentName;
+    const component = document.querySelector("select.filter-component").value;
+    const filterComponent = "all" === component ? true : logObject.name === component;
+    const type = document.querySelector("select.filter-type").value;
+    const filterType = "all" === type ? true : logObject.type === type;
+
+    return filterComponent && filterType;
   }
 
   /**
