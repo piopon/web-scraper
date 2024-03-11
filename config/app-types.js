@@ -3,17 +3,19 @@
  * It implements an enum with values: ERROR, WARNING, INFO, DEBUG
  */
 class LogLevel {
-  static ERROR = new LogLevel(0);
-  static WARNING = new LogLevel(1);
-  static INFO = new LogLevel(2);
-  static DEBUG = new LogLevel(3);
+  static ERROR = new LogLevel(0, "ERROR");
+  static WARNING = new LogLevel(1, "WARNING");
+  static INFO = new LogLevel(2, "INFO");
+  static DEBUG = new LogLevel(3, "DEBUG");
 
   /**
    * Creates an object representing log level setting
    * @param {Number} value The log level integer value
+   * @param {String} description The log level description
    */
-  constructor(value) {
+  constructor(value, description) {
     this.value = value;
+    this.description = description;
   }
 }
 
