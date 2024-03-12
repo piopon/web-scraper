@@ -84,13 +84,9 @@ export class StatusController {
       return;
     }
     const componentSelect = document.querySelector("select.filter-component");
-    componentSelect.addEventListener("change", (event) => {
-      this.#updateLogTable();
-    });
+    componentSelect.addEventListener("change", () => this.#updateLogTable());
     const typeSelect = document.querySelector("select.filter-type");
-    typeSelect.addEventListener("change", (event) => {
-      this.#updateLogTable();
-    });
+    typeSelect.addEventListener("change", () => this.#updateLogTable());
   }
 
   /**
