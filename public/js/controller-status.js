@@ -129,8 +129,12 @@ export class StatusController {
     const filterComponent = "all" === component ? true : logObject.name === component;
     const type = document.querySelector("select.filter-type").value;
     const filterType = "all" === type ? true : logObject.type === type;
+    const dateCurr = Date.parse(logObject.timestamp);
+    const dateFrom = Date.parse(document.querySelector("input.date-from").value);
+    const dateTo = Date.parse(document.querySelector("input.date-to").value);
+    const filterDate = dateCurr >= dateFrom && dateCurr <= dateTo;
 
-    return filterComponent && filterType;
+    return filterComponent && filterType && filterDate;
   }
 
   /**
