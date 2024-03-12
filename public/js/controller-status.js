@@ -125,10 +125,13 @@ export class StatusController {
    * @returns true if log object is from component with the specified name, false otherwise
    */
   #filterLogObject(logObject) {
+    // constructing log component filter
     const component = document.querySelector("select.filter-component").value;
     const filterComponent = "all" === component ? true : logObject.name === component;
+    // constructing log type filter
     const type = document.querySelector("select.filter-type").value;
     const filterType = "all" === type ? true : logObject.type === type;
+    // constructing log dates filter
     const dateCurr = Date.parse(logObject.timestamp);
     const dateFrom = Date.parse(document.querySelector("input.date-from").value);
     const dateTo = Date.parse(document.querySelector("input.date-to").value);
