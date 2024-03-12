@@ -4,6 +4,7 @@
     {{> widget type="combo" parent="filter" label="type" options=@root.statusTypes value="all" }}
     {{> widget type="datetime-local" parent="date" label="from" value=(append @root.date "T00:00") }}
     {{> widget type="datetime-local" parent="date" label="to" value=(append @root.date "T23:59") }}
+    {{> widget type="button" parent="refresh" value="refresh" }}
   </div>
   <label class="logs-label">logs:</label>
   <div id="table-container">
