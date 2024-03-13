@@ -52,7 +52,7 @@ input.date-from, input.date-to {
   margin-right: 0.5rem;
 }
 
-input.refresh- {
+input.btn-refresh {
   width: 10rem;
   height: 2rem;
   cursor: pointer;
@@ -65,7 +65,7 @@ input.refresh- {
   margin-top: 1.5rem;
 }
 
-input.refresh-:hover {
+input.btn-refresh:hover {
   background-color: greenyellow;
 }
 
