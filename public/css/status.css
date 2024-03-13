@@ -69,6 +69,10 @@ input.btn-refresh:hover {
   background-color: greenyellow;
 }
 
+div.widget.hide-label label {
+  color: transparent;
+}
+
 div#table-container {
   width: 100%;
   height: 100%;
