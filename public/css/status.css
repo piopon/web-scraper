@@ -62,7 +62,6 @@ input.btn-refresh {
   border-radius: 5px;
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
-  margin-top: 1.5rem;
 }
 
 input.btn-refresh:hover {
