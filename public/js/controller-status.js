@@ -91,6 +91,11 @@ export class StatusController {
     dateFromInput.addEventListener("change", () => this.#updateLogTable());
     const dateToInput = document.querySelector("input.date-to");
     dateToInput.addEventListener("change", () => this.#updateLogTable());
+    const refreshButton = document.querySelector("input.btn-refresh");
+    refreshButton.addEventListener("click", async () => {
+      await this.#updateStatusLogs();
+      this.#updateLogTable();
+    });
   }
 
   /**
