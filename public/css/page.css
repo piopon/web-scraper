@@ -74,6 +74,11 @@ header#main-header h1 {
   margin: 0;
 }
 
+header#main-header a {
+  margin: 0;
+  display: flex;
+}
+
 header#content-header {
   height: 2.5rem;
   display: flex;
