@@ -77,6 +77,8 @@ header#main-header h1 {
 header#main-header a {
   margin: 0;
   display: flex;
+  text-decoration: none;
+  color: black;
 }
 
 header#content-header {
