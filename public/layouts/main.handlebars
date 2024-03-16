@@ -30,7 +30,11 @@
       {{!-- page content --}}
       <div id="main-content">
         <header id="content-header">
+          {{#if (eq title "scraper running status")}}
+          <h3><a href="."><i class="fa fa-chevron-left" title="homepage"></i></a> {{title}}</h3>
+          {{else}}
           <h3>{{title}}</h3>
+          {{/if}}
           {{#if user}}
           <div class="user-management">
             <h5>user: {{user}}</h5>
