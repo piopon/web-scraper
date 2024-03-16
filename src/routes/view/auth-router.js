@@ -45,14 +45,14 @@ export class AuthRouter {
     router.get("/register", AccessChecker.canViewSessionUser, (request, response) =>
       response.render("register", {
         title: "scraper user registration",
-        type: "register"
+        type: "register",
       })
     );
     router.get("/login", AccessChecker.canViewSessionUser, (request, response) =>
       response.render("login", {
         title: "scraper user login",
         type: "login",
-     })
+      })
     );
   }
 

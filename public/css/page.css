@@ -21,7 +21,7 @@ header {
 }
 
 .logo {
-  background: url('../img/logo/logo-64.png');
+  background: url("../img/logo/logo-64.png");
   height: 64px;
   width: 64px;
   display: block;
@@ -54,12 +54,12 @@ div.widget {
 
 .hide {
   opacity: 0;
-  transition: opacity 1.0s;
+  transition: opacity 1s;
 }
 
 .show {
   opacity: 1;
-  transition: opacity 1.0s;
+  transition: opacity 1s;
 }
 
 header#main-header {

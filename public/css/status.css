@@ -46,7 +46,8 @@ select.filter-type {
   margin-right: 0.5rem;
 }
 
-input.date-from, input.date-to {
+input.date-from,
+input.date-to {
   width: 11rem;
   height: 2rem;
   font-size: 1rem;
