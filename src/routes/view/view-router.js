@@ -26,6 +26,7 @@ export class ViewRouter {
       const scrapConfig = await ScrapConfig.getDatabaseModel().findById(request.user.config);
       response.render("index", {
         title: "scraper configuration",
+        type: "home",
         user: request.user.name,
         content: scrapConfig.toJSON(),
         categories: this.#getSupportedCategories(),
@@ -35,6 +36,7 @@ export class ViewRouter {
     router.get("/status", AccessChecker.canViewContent, (request, response) =>
       response.render("status", {
         title: "scraper running status",
+        type: "status",
         user: request.user.name,
         date: moment().format("YYYY-MM-DD"),
         components: this.#getSupportedComponents(),

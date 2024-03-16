@@ -43,10 +43,16 @@ export class AuthRouter {
    */
   #createGetRoutes(router) {
     router.get("/register", AccessChecker.canViewSessionUser, (request, response) =>
-      response.render("register", { title: "scraper user registration" })
+      response.render("register", {
+        title: "scraper user registration",
+        type: "register"
+      })
     );
     router.get("/login", AccessChecker.canViewSessionUser, (request, response) =>
-      response.render("login", { title: "scraper user login" })
+      response.render("login", {
+        title: "scraper user login",
+        type: "login",
+     })
     );
   }
 
