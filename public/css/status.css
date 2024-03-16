@@ -1,3 +1,9 @@
+header#content-header a {
+  margin: 0;
+  text-decoration: none;
+  color: black;
+}
+
 section.status-dashboard {
   color: black;
   display: flex;
