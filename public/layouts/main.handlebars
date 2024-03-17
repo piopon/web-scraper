@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/css/groups.css" />
     <link rel="stylesheet" href="/css/observers.css" />
     <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/status.css" />
     <link rel="stylesheet" href="/css/user.css" />
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link rel="icon" type="image/x-icon" href="/img/icon/favicon-32.ico" />
@@ -21,13 +22,19 @@
     <div id="page">
       {{!-- page header --}}
       <header id="main-header">
-        <span class='logo'></span>
-        <h1>web-scraper</h1>
+        <a href="/">
+          <span class='logo'></span>
+          <h1>web-scraper</h1>
+        </a>
       </header>
       {{!-- page content --}}
       <div id="main-content">
         <header id="content-header">
+          {{#if (eq type "status")}}
+          <h3><a href="." title="homepage"><i class="fa fa-chevron-left"></i></a> {{title}}</h3>
+          {{else}}
           <h3>{{title}}</h3>
+          {{/if}}
           {{#if user}}
           <div class="user-management">
             <h5>user: {{user}}</h5>
@@ -43,7 +50,7 @@
       <footer id="main-footer">
         <h3>developed with 💚 pnk @ 2023</h3>
         <div id="footer-links">
-          {{#if (eq title "scraper running status")}}
+          {{#if (eq type "status")}}
           <div id="status-preview" class="expanded">
           {{else}}
           <div id="status-preview" class="collapsed">

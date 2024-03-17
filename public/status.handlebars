@@ -1,1 +1,24 @@
-{{content}}
+<section class="status-dashboard">
+  <div class="status-settings">
+    {{> widget type="combo" parent="filter" label="component" options=@root.components value="all" }}
+    {{> widget type="combo" parent="filter" label="type" options=@root.statusTypes value="all" }}
+    {{> widget type="datetime-local" parent="date" label="from" value=(append @root.date "T00:00") }}
+    {{> widget type="datetime-local" parent="date" label="to" value=(append @root.date "T23:59") }}
+    {{> widget type="button" parent="btn" label="refresh" value="refresh" classes=" hide-label"}}
+  </div>
+  <label class="logs-label">logs:</label>
+  <div id="table-container">
+    <table id="table-logs">
+      <thead>
+        <tr>
+          <th>time</th>
+          <th>component</th>
+          <th>type</th>
+          <th>message</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+</section>

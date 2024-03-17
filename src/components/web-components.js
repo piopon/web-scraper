@@ -1,8 +1,8 @@
-import { ComponentType } from "../../config/app-types.js";
+import { ComponentStatus, ComponentType } from "../../config/app-types.js";
 import { StatusLogger } from "./status-logger.js";
 
 export class WebComponents {
-  static #LOGGER_NAME = "web-components";
+  static #COMPONENT_NAME = "web-components";
 
   #status = undefined;
   #components = [];
@@ -12,7 +12,7 @@ export class WebComponents {
    * @param {Object} config The object containing components configuration
    */
   constructor(config) {
-    this.#status = new StatusLogger(WebComponents.#LOGGER_NAME, config.minLogLevel);
+    this.#status = new StatusLogger(WebComponents.#COMPONENT_NAME, config.minLogLevel);
     this.#status.info("Created");
   }
 
@@ -104,5 +104,29 @@ export class WebComponents {
     for (const component of components) {
       await component.master[method](...args);
     }
+  }
+
+  /**
+   * Method used to get current web components working status
+   * @returns web components status
+   */
+  getStatus() {
+    return ComponentStatus.RUNNING;
+  }
+
+  /**
+   * Method used to return the name of the component
+   * @returns web components name
+   */
+  getName() {
+    return WebComponents.#COMPONENT_NAME;
+  }
+
+  /**
+   * Method used to receive running history status of web components
+   * @returns array of objects containing web components running history status
+   */
+  getHistory() {
+    return this.#status.getHistory();
   }
 }
