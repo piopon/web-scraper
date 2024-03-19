@@ -20,6 +20,15 @@ describe("getValueOrDefault", () => {
     test("returns correct integer", () => {
       expect(ModelUtils.getValueOrDefault(123, 0)).toBe(123);
     });
+    test("returns correct float", () => {
+      expect(ModelUtils.getValueOrDefault(123.456, 0.0)).toBe(123.456);
+    });
+    test("returns correct string", () => {
+      expect(ModelUtils.getValueOrDefault("str", "")).toBe("str");
+    });
+    test("returns correct boolean", () => {
+      expect(ModelUtils.getValueOrDefault(true, false)).toBe(true);
+    });
     test("returns correct object", () => {
       expect(ModelUtils.getValueOrDefault({prop: 123}, {default: 0})).toStrictEqual({prop: 123});
     });
@@ -28,6 +37,15 @@ describe("getValueOrDefault", () => {
     test("returns default integer", () => {
       expect(ModelUtils.getValueOrDefault(undefined, 0)).toBe(0);
     });
+    test("returns default float", () => {
+      expect(ModelUtils.getValueOrDefault(undefined, 0.0)).toBe(0.0);
+    });
+    test("returns default string", () => {
+      expect(ModelUtils.getValueOrDefault(undefined, "")).toBe("");
+    });
+    test("returns default boolean", () => {
+      expect(ModelUtils.getValueOrDefault(undefined, false)).toBe(false);
+    });
     test("returns default object", () => {
       expect(ModelUtils.getValueOrDefault(undefined, {default: 0})).toStrictEqual({default: 0});
     });
@@ -35,6 +53,15 @@ describe("getValueOrDefault", () => {
   describe("when using null input value", () => {
     test("returns default integer", () => {
       expect(ModelUtils.getValueOrDefault(null, 0)).toBe(0);
+    });
+    test("returns default float", () => {
+      expect(ModelUtils.getValueOrDefault(null, 0.0)).toBe(0.0);
+    });
+    test("returns default string", () => {
+      expect(ModelUtils.getValueOrDefault(null, "")).toBe("");
+    });
+    test("returns default boolean", () => {
+      expect(ModelUtils.getValueOrDefault(null, false)).toBe(false);
     });
     test("returns default object", () => {
       expect(ModelUtils.getValueOrDefault(null, {default: 0})).toStrictEqual({default: 0});
