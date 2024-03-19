@@ -14,3 +14,15 @@ describe("isEmpty", () => {
     expect(() => ModelUtils.isEmpty(undefined)).toThrow(TypeError);
   });
 });
+
+describe("getValueOrDefault", () => {
+  test("returns integer value if input value is present", () => {
+    expect(ModelUtils.getValueOrDefault(123, 0)).toBe(123);
+  });
+  test("returns default value if input value is undefined", () => {
+    expect(ModelUtils.getValueOrDefault(undefined, 0)).toBe(0);
+  });
+  test("returns default value if input value is null", () => {
+    expect(ModelUtils.getValueOrDefault(null, 0)).toBe(0);
+  });
+});
