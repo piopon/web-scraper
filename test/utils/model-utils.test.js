@@ -25,4 +25,13 @@ describe("getValueOrDefault", () => {
   test("returns default value if input value is null", () => {
     expect(ModelUtils.getValueOrDefault(null, 0)).toBe(0);
   });
+  test("returns object value if input value is present", () => {
+    expect(ModelUtils.getValueOrDefault({prop: 123}, {default: 0})).toStrictEqual({prop: 123});
+  });
+  test("returns default value if input value is undefined", () => {
+    expect(ModelUtils.getValueOrDefault(undefined, {default: 0})).toStrictEqual({default: 0});
+  });
+  test("returns default value if input value is null", () => {
+    expect(ModelUtils.getValueOrDefault(null, {default: 0})).toStrictEqual({default: 0});
+  });
 });
