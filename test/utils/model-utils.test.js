@@ -7,4 +7,10 @@ describe("isEmpty", () => {
   test("returns false if input object is not empty", () => {
     expect(ModelUtils.isEmpty({test: 1})).toBe(false);
   });
+  test("throws if input object is null", () => {
+    expect(() => ModelUtils.isEmpty(null)).toThrow(TypeError);
+  });
+  test("throws if input object is undefined", () => {
+    expect(() => ModelUtils.isEmpty(undefined)).toThrow(TypeError);
+  });
 });
