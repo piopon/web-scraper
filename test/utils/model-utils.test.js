@@ -1,4 +1,4 @@
-import { ModelUtils } from "../../src/utils/model-utils";
+import { ModelUtils } from "../../src/utils/model-utils.js";
 
 describe("isEmpty", () => {
   test("returns true if input object is empty", () => {
