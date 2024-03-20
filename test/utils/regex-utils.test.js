@@ -26,6 +26,12 @@ describe("getPrices", () => {
     const result = ["39.99", "43.99", "41.99"];
     expect(RegexUtils.getPrices(input)).toStrictEqual(result);
   });
+  test("throws if input object is null", () => {
+    expect(() => RegexUtils.getPrices(null)).toThrow(TypeError);
+  });
+  test("throws if input object is undefined", () => {
+    expect(() => RegexUtils.getPrices(undefined)).toThrow(TypeError);
+  });
 });
 
 describe("isUnsignedInteger", () => {
@@ -53,6 +59,12 @@ describe("isUnsignedInteger", () => {
   test("returns false when array with 1+ elements is used", () => {
     expect(RegexUtils.isUnsignedInteger(["1234", "4567"])).toBe(false);
   });
+  test("returns false null input is used", () => {
+    expect(RegexUtils.isUnsignedInteger(null)).toBe(false);
+  });
+  test("returns false undefined input is used", () => {
+    expect(RegexUtils.isUnsignedInteger(undefined)).toBe(false);
+  });
 });
 
 describe("isSignedInteger", () => {
@@ -79,5 +91,11 @@ describe("isSignedInteger", () => {
   });
   test("returns false when array with 1+ elements is used", () => {
     expect(RegexUtils.isSignedInteger(["1234", "-1234"])).toBe(false);
+  });
+  test("returns false null input is used", () => {
+    expect(RegexUtils.isSignedInteger(null)).toBe(false);
+  });
+  test("returns false undefined input is used", () => {
+    expect(RegexUtils.isSignedInteger(undefined)).toBe(false);
   });
 });
