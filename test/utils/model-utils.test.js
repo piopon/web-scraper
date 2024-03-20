@@ -87,3 +87,20 @@ describe("getArrayOfModels", () => {
     expect(ModelUtils.getArrayOfModels(TestClass, inObject)).toStrictEqual(expected);
   });
 });
+
+describe("isInstanceOf", () => {
+  class TestClass {
+    constructor() {
+      this.height = 10;
+      this.width = 10;
+    }
+  }
+  test("returns true if input object has the same properties as class", () => {
+    const inObject = {height: 1, width: 2};
+    expect(ModelUtils.isInstanceOf(TestClass, inObject)).toBe(true);
+  });
+  test("returns false if input object has different properties as class", () => {
+    const inObject = {h: 1, w: 2};
+    expect(ModelUtils.isInstanceOf(TestClass, inObject)).toBe(false);
+  });
+});
