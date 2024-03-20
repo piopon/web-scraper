@@ -45,3 +45,21 @@ describe("isUnsignedInteger", () => {
     expect(RegexUtils.isUnsignedInteger("true")).toBe(false);
   });
 });
+
+describe("isSignedInteger", () => {
+  test("returns true when unsigned integer is used", () => {
+    expect(RegexUtils.isSignedInteger("1234")).toBe(true);
+  });
+  test("returns true when signed integer is used", () => {
+    expect(RegexUtils.isSignedInteger("-1234")).toBe(true);
+  });
+  test("returns false when float is used", () => {
+    expect(RegexUtils.isSignedInteger("1.234")).toBe(false);
+  });
+  test("returns false when string is used", () => {
+    expect(RegexUtils.isSignedInteger("a1.234")).toBe(false);
+  });
+  test("returns false when string is used", () => {
+    expect(RegexUtils.isSignedInteger("true")).toBe(false);
+  });
+});
