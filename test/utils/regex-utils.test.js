@@ -44,6 +44,15 @@ describe("isUnsignedInteger", () => {
   test("returns false when string is used", () => {
     expect(RegexUtils.isUnsignedInteger("true")).toBe(false);
   });
+  test("returns true when array with unsigned integer is used", () => {
+    expect(RegexUtils.isUnsignedInteger(["1234"])).toBe(true);
+  });
+  test("returns false when array with non-unsigned integer is used", () => {
+    expect(RegexUtils.isUnsignedInteger(["-1234"])).toBe(false);
+  });
+  test("returns false when array with 1+ elements is used", () => {
+    expect(RegexUtils.isUnsignedInteger(["1234", "4567"])).toBe(false);
+  });
 });
 
 describe("isSignedInteger", () => {
@@ -61,5 +70,14 @@ describe("isSignedInteger", () => {
   });
   test("returns false when string is used", () => {
     expect(RegexUtils.isSignedInteger("true")).toBe(false);
+  });
+  test("returns true when array with one integer is used", () => {
+    expect(RegexUtils.isSignedInteger(["1234"])).toBe(true);
+  });
+  test("returns false when array with non-integer is used", () => {
+    expect(RegexUtils.isSignedInteger(["1.234"])).toBe(false);
+  });
+  test("returns false when array with 1+ elements is used", () => {
+    expect(RegexUtils.isSignedInteger(["1234", "-1234"])).toBe(false);
   });
 });
