@@ -68,3 +68,22 @@ describe("getValueOrDefault", () => {
     });
   });
 });
+
+describe("getArrayOfModels", () => {
+  class TestClass {
+    constructor() {
+      this.height = 10;
+      this.width = 10;
+    }
+  }
+  test("returns correct array when object match class", () => {
+    const inObject = {height: 10, width: 10};
+    const expected = [new TestClass()];
+    expect(ModelUtils.getArrayOfModels(TestClass, inObject)).toStrictEqual(expected);
+  });
+  test("returns empty array when object does not match class", () => {
+    const inObject = {h: 10, w: 10};
+    const expected = [];
+    expect(ModelUtils.getArrayOfModels(TestClass, inObject)).toStrictEqual(expected);
+  });
+});
