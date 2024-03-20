@@ -38,10 +38,10 @@ describe("isUnsignedInteger", () => {
   test("returns false when float is used", () => {
     expect(RegexUtils.isUnsignedInteger("1.234")).toBe(false);
   });
-  test("returns false when string is used", () => {
+  test("returns false when random string is used", () => {
     expect(RegexUtils.isUnsignedInteger("a1.234")).toBe(false);
   });
-  test("returns false when string is used", () => {
+  test("returns false when boolean-like string is used", () => {
     expect(RegexUtils.isUnsignedInteger("true")).toBe(false);
   });
   test("returns true when array with unsigned integer is used", () => {
@@ -65,10 +65,10 @@ describe("isSignedInteger", () => {
   test("returns false when float is used", () => {
     expect(RegexUtils.isSignedInteger("1.234")).toBe(false);
   });
-  test("returns false when string is used", () => {
+  test("returns false when random string is used", () => {
     expect(RegexUtils.isSignedInteger("a1.234")).toBe(false);
   });
-  test("returns false when string is used", () => {
+  test("returns false when boolean-like string is used", () => {
     expect(RegexUtils.isSignedInteger("true")).toBe(false);
   });
   test("returns true when array with one integer is used", () => {
