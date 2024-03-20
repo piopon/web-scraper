@@ -5,7 +5,7 @@ describe("isEmpty", () => {
     expect(ModelUtils.isEmpty({})).toBe(true);
   });
   test("returns false if input object is not empty", () => {
-    expect(ModelUtils.isEmpty({test: 1})).toBe(false);
+    expect(ModelUtils.isEmpty({ test: 1 })).toBe(false);
   });
   test("throws if input object is null", () => {
     expect(() => ModelUtils.isEmpty(null)).toThrow(TypeError);
@@ -30,7 +30,7 @@ describe("getValueOrDefault", () => {
       expect(ModelUtils.getValueOrDefault(true, false)).toBe(true);
     });
     test("returns correct object", () => {
-      expect(ModelUtils.getValueOrDefault({prop: 123}, {default: 0})).toStrictEqual({prop: 123});
+      expect(ModelUtils.getValueOrDefault({ prop: 123 }, { default: 0 })).toStrictEqual({ prop: 123 });
     });
   });
   describe("when using undefined input value", () => {
@@ -47,7 +47,7 @@ describe("getValueOrDefault", () => {
       expect(ModelUtils.getValueOrDefault(undefined, false)).toBe(false);
     });
     test("returns default object", () => {
-      expect(ModelUtils.getValueOrDefault(undefined, {default: 0})).toStrictEqual({default: 0});
+      expect(ModelUtils.getValueOrDefault(undefined, { default: 0 })).toStrictEqual({ default: 0 });
     });
   });
   describe("when using null input value", () => {
@@ -64,7 +64,7 @@ describe("getValueOrDefault", () => {
       expect(ModelUtils.getValueOrDefault(null, false)).toBe(false);
     });
     test("returns default object", () => {
-      expect(ModelUtils.getValueOrDefault(null, {default: 0})).toStrictEqual({default: 0});
+      expect(ModelUtils.getValueOrDefault(null, { default: 0 })).toStrictEqual({ default: 0 });
     });
   });
 });
@@ -77,12 +77,12 @@ describe("getArrayOfModels", () => {
     }
   }
   test("returns correct array when object match class", () => {
-    const inObject = {height: 10, width: 10};
+    const inObject = { height: 10, width: 10 };
     const expected = [new TestClass()];
     expect(ModelUtils.getArrayOfModels(TestClass, inObject)).toStrictEqual(expected);
   });
   test("returns empty array when object does not match class", () => {
-    const inObject = {h: 10, w: 10};
+    const inObject = { h: 10, w: 10 };
     const expected = [];
     expect(ModelUtils.getArrayOfModels(TestClass, inObject)).toStrictEqual(expected);
   });
@@ -96,11 +96,11 @@ describe("isInstanceOf", () => {
     }
   }
   test("returns true if input object has the same properties as class", () => {
-    const inObject = {height: 1, width: 2};
+    const inObject = { height: 1, width: 2 };
     expect(ModelUtils.isInstanceOf(TestClass, inObject)).toBe(true);
   });
   test("returns false if input object has different properties as class", () => {
-    const inObject = {h: 1, w: 2};
+    const inObject = { h: 1, w: 2 };
     expect(ModelUtils.isInstanceOf(TestClass, inObject)).toBe(false);
   });
 });
