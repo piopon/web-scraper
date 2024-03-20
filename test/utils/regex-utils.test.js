@@ -27,3 +27,12 @@ describe("getPrices", () => {
     expect(RegexUtils.getPrices(input)).toStrictEqual(result);
   });
 });
+
+describe("isUnsignedInteger", () => {
+  test("returns true when unsigned integer is used", () => {
+    expect(RegexUtils.isUnsignedInteger("1234")).toBe(true);
+  });
+  test("returns false when signed integer is used", () => {
+    expect(RegexUtils.isUnsignedInteger("-1234")).toBe(false);
+  });
+});
