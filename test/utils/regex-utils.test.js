@@ -99,3 +99,36 @@ describe("isSignedInteger", () => {
     expect(RegexUtils.isSignedInteger(undefined)).toBe(false);
   });
 });
+
+describe("isBoolean", () => {
+  test("returns true when 'true' string is used", () => {
+    expect(RegexUtils.isBoolean("true")).toBe(true);
+  });
+  test("returns true when 'false' string is used", () => {
+    expect(RegexUtils.isBoolean("false")).toBe(true);
+  });
+  test("returns false when integer is used", () => {
+    expect(RegexUtils.isBoolean("1234")).toBe(false);
+  });
+  test("returns false when float is used", () => {
+    expect(RegexUtils.isBoolean("1.234")).toBe(false);
+  });
+  test("returns false when random string is used", () => {
+    expect(RegexUtils.isBoolean("a1.234")).toBe(false);
+  });
+  test("returns false when array with one boolean-like value is used", () => {
+    expect(RegexUtils.isBoolean(["true"])).toBe(false);
+  });
+  test("returns false when array with non-boolean-like value is used", () => {
+    expect(RegexUtils.isBoolean(["1.234"])).toBe(false);
+  });
+  test("returns false when array with 1+ elements is used", () => {
+    expect(RegexUtils.isBoolean(["true", "false"])).toBe(false);
+  });
+  test("returns false null input is used", () => {
+    expect(RegexUtils.isBoolean(null)).toBe(false);
+  });
+  test("returns false undefined input is used", () => {
+    expect(RegexUtils.isBoolean(undefined)).toBe(false);
+  });
+});
