@@ -95,3 +95,10 @@ describe("getRequestParamsSchema", () => {
     expect(schema.properties.auxiliary).toStrictEqual({ type: "string", minLength: 1 });
   });
 });
+
+describe("getDatabaseSchema", () => {
+  test("returns correct value", () => {
+    const schema = ScrapComponent.getDatabaseSchema();
+    expect(schema).not.toBe(null);
+  });
+});
