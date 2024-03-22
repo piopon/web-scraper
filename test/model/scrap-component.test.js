@@ -3,55 +3,44 @@ import { ScrapComponent } from "../../src/model/scrap-component.js";
 describe("getIdentifier", () => {
   describe("returns correct result for component", () => {
     test("with all empty values", () => {
-      const component = new ScrapComponent({});
-      expect(component.getIdentifier()).toBe("component = empty | empty | empty");
+      const inputObj = {};
+      const expected = "component = empty | empty | empty";
+      expect(new ScrapComponent(inputObj).getIdentifier()).toBe(expected);
     });
     test("with non-empty selector", () => {
-      const component = new ScrapComponent({
-        selector: "selector",
-      });
-      expect(component.getIdentifier()).toBe("component = selector | empty | empty");
+      const inputObj = { selector: "selector" };
+      const expected = "component = selector | empty | empty";
+      expect(new ScrapComponent(inputObj).getIdentifier()).toBe(expected);
     });
     test("with non-empty attribute", () => {
-      const component = new ScrapComponent({
-        attribute: "attribute",
-      });
-      expect(component.getIdentifier()).toBe("component = empty | attribute | empty");
+      const inputObj = { attribute: "attribute" };
+      const expected = "component = empty | attribute | empty";
+      expect(new ScrapComponent(inputObj).getIdentifier()).toBe(expected);
     });
     test("with non-empty auxiliary", () => {
-      const component = new ScrapComponent({
-        auxiliary: "auxiliary",
-      });
-      expect(component.getIdentifier()).toBe("component = empty | empty | auxiliary");
+      const inputObj = { auxiliary: "auxiliary" };
+      const expected = "component = empty | empty | auxiliary";
+      expect(new ScrapComponent(inputObj).getIdentifier()).toBe(expected);
     });
     test("with non-empty selector and attribute", () => {
-      const component = new ScrapComponent({
-        selector: "selector",
-        attribute: "attribute",
-      });
-      expect(component.getIdentifier()).toBe("component = selector | attribute | empty");
+      const inputObj = { selector: "selector", attribute: "attribute" };
+      const expected = "component = selector | attribute | empty";
+      expect(new ScrapComponent(inputObj).getIdentifier()).toBe(expected);
     });
     test("with non-empty selector and auxiliary", () => {
-      const component = new ScrapComponent({
-        selector: "selector",
-        auxiliary: "auxiliary",
-      });
-      expect(component.getIdentifier()).toBe("component = selector | empty | auxiliary");
+      const inputObj = { selector: "selector", auxiliary: "auxiliary" };
+      const expected = "component = selector | empty | auxiliary";
+      expect(new ScrapComponent(inputObj).getIdentifier()).toBe(expected);
     });
     test("with non-empty attribute and auxiliary", () => {
-      const component = new ScrapComponent({
-        attribute: "attribute",
-        auxiliary: "auxiliary",
-      });
-      expect(component.getIdentifier()).toBe("component = empty | attribute | auxiliary");
+      const inputObj = { attribute: "attribute", auxiliary: "auxiliary" };
+      const expected = "component = empty | attribute | auxiliary";
+      expect(new ScrapComponent(inputObj).getIdentifier()).toBe(expected);
     });
     test("with all non-empty fields", () => {
-      const component = new ScrapComponent({
-        selector: "selector",
-        attribute: "attribute",
-        auxiliary: "auxiliary",
-      });
-      expect(component.getIdentifier()).toBe("component = selector | attribute | auxiliary");
+      const inputObj = { selector: "selector", attribute: "attribute", auxiliary: "auxiliary" };
+      const expected = "component = selector | attribute | auxiliary";
+      expect(new ScrapComponent(inputObj).getIdentifier()).toBe(expected);
     });
   });
 });
