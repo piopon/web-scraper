@@ -67,3 +67,17 @@ describe("checkValues", () => {
     expect(new ScrapComponent(inputObj).checkValues()).toStrictEqual(expected);
   });
 });
+
+describe("getRequestBodySchema", () => {
+  test("returns correct value", () => {
+    const schema = ScrapComponent.getRequestBodySchema();
+    expect(schema.type).toBe("object");
+    expect(schema.additionalProperties).toBe(false);
+    expect(schema.properties).not.toBe(null);
+    expect(schema.properties.interval).toStrictEqual({ type: "string" });
+    expect(schema.properties.selector).toStrictEqual({ type: "string" });
+    expect(schema.properties.attribute).toStrictEqual({ type: "string" });
+    expect(schema.properties.auxiliary).toStrictEqual({ type: "string" });
+    expect(schema.required).toStrictEqual(["selector", "attribute", "auxiliary"]);
+  });
+});
