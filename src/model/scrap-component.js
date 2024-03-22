@@ -134,6 +134,9 @@ export class ScrapComponent {
    * @returns identifier of the provided input object
    */
   static #parseIdentifier(component) {
-    return `component = ${component.selector} | ${component.attribute} | ${component.auxiliary}`;
+    const selector = "" !== component.selector ? component.selector : "empty";
+    const attribute = "" !== component.attribute ? component.attribute : "empty";
+    const auxiliary = "" !== component.auxiliary ? component.auxiliary : "empty";
+    return `component = ${selector} | ${attribute} | ${auxiliary}`;
   }
 }
