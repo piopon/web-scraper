@@ -55,3 +55,26 @@ describe("getIdentifier", () => {
     });
   });
 });
+
+describe("checkValues", () => {
+  test("returns no errors and warnings when auxiliary is not empty", () => {
+    const inputObj = { auxiliary: "auxiliary" };
+    const expected = { errors: [], warnings: [] };
+    expect(new ScrapComponent(inputObj).checkValues()).toStrictEqual(expected);
+  });
+  test("returns no errors and warnings when selector and attribute are not empty", () => {
+    const inputObj = { selector: "selector", attribute: "attribute" };
+    const expected = { errors: [], warnings: [] };
+    expect(new ScrapComponent(inputObj).checkValues()).toStrictEqual(expected);
+  });
+  test("returns warning when auxiliary and attribute are empty", () => {
+    const inputObj = { selector: "selector" };
+    const expected = { errors: [], warnings: ["Empty title 'selector'/'attribute' and 'auxiliary'"] };
+    expect(new ScrapComponent(inputObj).checkValues()).toStrictEqual(expected);
+  });
+  test("returns warning when auxiliary and selector are empty", () => {
+    const inputObj = { attribute: "attribute" };
+    const expected = { errors: [], warnings: ["Empty title 'selector'/'attribute' and 'auxiliary'"] };
+    expect(new ScrapComponent(inputObj).checkValues()).toStrictEqual(expected);
+  });
+});
