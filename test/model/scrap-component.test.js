@@ -81,3 +81,17 @@ describe("getRequestBodySchema", () => {
     expect(schema.required).toStrictEqual(["selector", "attribute", "auxiliary"]);
   });
 });
+
+describe("getRequestParamsSchema", () => {
+  test("returns correct value", () => {
+    const schema = ScrapComponent.getRequestParamsSchema();
+    expect(schema.type).toBe("object");
+    expect(schema.additionalProperties).toBe(false);
+    expect(schema.properties).not.toBe(null);
+    expect(schema.properties.source).toStrictEqual({ enum: ["title", "image", "price"] });
+    expect(schema.properties.interval).toStrictEqual({ type: "string", minLength: 1 });
+    expect(schema.properties.selector).toStrictEqual({ type: "string", minLength: 1 });
+    expect(schema.properties.attribute).toStrictEqual({ type: "string", minLength: 1 });
+    expect(schema.properties.auxiliary).toStrictEqual({ type: "string", minLength: 1 });
+  });
+});
