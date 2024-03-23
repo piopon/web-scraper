@@ -200,6 +200,6 @@ export class ScrapObserver {
    * @returns identifier of the provided input object
    */
   static #parseIdentifier(observer) {
-    return `name = ${observer.name}`;
+    return `name = ${"" !== observer.name ? observer.name : "empty"}`;
   }
 }
