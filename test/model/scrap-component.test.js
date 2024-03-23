@@ -1,5 +1,7 @@
 import { ScrapComponent } from "../../src/model/scrap-component.js";
 
+import mongoose from "mongoose";
+
 describe("getIdentifier", () => {
   describe("returns correct result for component", () => {
     test("with all empty values", () => {
@@ -100,5 +102,25 @@ describe("getDatabaseSchema", () => {
   test("returns correct value", () => {
     const schema = ScrapComponent.getDatabaseSchema();
     expect(schema).not.toBe(null);
+  });
+  test("gets schema used for create component", () => {
+    const TestModel = mongoose.model("test-component", ScrapComponent.getDatabaseSchema())
+    const component = new TestModel({
+      unknown: "test-unknown",
+      interval: "test-interval",
+      selector: "test-selector",
+      extra: "test-extra",
+      attribute: "test-attribute",
+      auxiliary: "test-auxiliary",
+      aux: "test-aux",
+    });
+    expect(component).not.toBe(null);
+    expect(component.unknown).toBe(undefined);
+    expect(component.interval).toBe("test-interval");
+    expect(component.selector).toBe("test-selector");
+    expect(component.extra).toBe(undefined);
+    expect(component.attribute).toBe("test-attribute");
+    expect(component.auxiliary).toBe("test-auxiliary");
+    expect(component.aux).toBe(undefined);
   });
 });
