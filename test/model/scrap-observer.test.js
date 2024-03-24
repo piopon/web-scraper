@@ -43,7 +43,7 @@ describe("checkValues", () => {
     };
     expect(new ScrapObserver(inputObj).checkValues()).toStrictEqual(expected);
   });
-  test("returns correct error for missing name field", () => {
+  test("returns correct error for incorrect name field", () => {
     const inputObj = {
       name: "1",
       path: "test-path",
@@ -70,7 +70,7 @@ describe("checkValues", () => {
     };
     expect(new ScrapObserver(inputObj).checkValues()).toStrictEqual(expected);
   });
-  test("returns correct warning for missing title component", () => {
+  test("returns correct warning for missing whole title component", () => {
     const inputObj = {
       name: "test-name",
       path: "test-path",
@@ -83,7 +83,7 @@ describe("checkValues", () => {
     };
     expect(new ScrapObserver(inputObj).checkValues()).toStrictEqual(expected);
   });
-  test("returns correct warning for missing image component", () => {
+  test("returns correct warning for missing whole image component", () => {
     const inputObj = {
       name: "test-name",
       path: "test-path",
@@ -96,7 +96,7 @@ describe("checkValues", () => {
     };
     expect(new ScrapObserver(inputObj).checkValues()).toStrictEqual(expected);
   });
-  test("returns correct errors for missing price component", () => {
+  test("returns correct errors for missing whole price component", () => {
     const inputObj = {
       name: "test-name",
       path: "test-path",
