@@ -14,3 +14,17 @@ describe("getIdentifier", () => {
     });
   });
 });
+
+describe("checkValues", () => {
+  test("returns no errors and warnings when object has correct value", () => {
+    const inputObj = {
+      name: "test-name",
+      path: "test-path",
+      title: { selector: "title-selector", attribute: "title-attribute", auxiliary: "title-auxiliary" },
+      image: { selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
+      price: { selector: "price-selector", attribute: "price-attribute", auxiliary: "price-attribute" },
+    };
+    const expected = { errors: [], warnings: [] };
+    expect(new ScrapObserver(inputObj).checkValues()).toStrictEqual(expected);
+  });
+});
