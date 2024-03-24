@@ -27,6 +27,27 @@ describe("checkValues", () => {
     const expected = { errors: [], warnings: [] };
     expect(new ScrapObserver(inputObj).checkValues()).toStrictEqual(expected);
   });
+  test("returns correct error for missing name field", () => {
+    const inputObj = {
+      path: "test-path",
+      title: { selector: "title-selector", attribute: "title-attribute", auxiliary: "title-auxiliary" },
+      image: { selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
+      price: { selector: "price-selector", attribute: "price-attribute", auxiliary: "price-attribute" },
+    };
+    const expected = { errors: ["Missing required observer name"], warnings: [] };
+    expect(new ScrapObserver(inputObj).checkValues()).toStrictEqual(expected);
+  });
+  test("returns correct error for missing name field", () => {
+    const inputObj = {
+      name: "1",
+      path: "test-path",
+      title: { selector: "title-selector", attribute: "title-attribute", auxiliary: "title-auxiliary" },
+      image: { selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
+      price: { selector: "price-selector", attribute: "price-attribute", auxiliary: "price-attribute" },
+    };
+    const expected = { errors: ["Observer name must have at least one letter"], warnings: [] };
+    expect(new ScrapObserver(inputObj).checkValues()).toStrictEqual(expected);
+  });
   test("returns correct warning for missing title component", () => {
     const inputObj = {
       name: "test-name",
