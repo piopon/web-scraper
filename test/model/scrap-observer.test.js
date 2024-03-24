@@ -113,4 +113,46 @@ describe("checkValues", () => {
     };
     expect(new ScrapObserver(inputObj).checkValues()).toStrictEqual(expected);
   });
+  test("returns correct error for missing price.selector component", () => {
+    const inputObj = {
+      name: "test-name",
+      path: "test-path",
+      price: { attribute: "price-attribute", auxiliary: "price-auxiliary" },
+      title: { selector: "title-selector", attribute: "title-attribute", auxiliary: "title-auxiliary" },
+      image: { selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
+    };
+    const expected = {
+      errors: ["Missing required 'price.selector' in observer test-path"],
+      warnings: [],
+    };
+    expect(new ScrapObserver(inputObj).checkValues()).toStrictEqual(expected);
+  });
+  test("returns correct error for missing price.attribute component", () => {
+    const inputObj = {
+      name: "test-name",
+      path: "test-path",
+      price: { selector: "price-selector", auxiliary: "price-auxiliary" },
+      title: { selector: "title-selector", attribute: "title-attribute", auxiliary: "title-auxiliary" },
+      image: { selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
+    };
+    const expected = {
+      errors: ["Missing required 'price.attribute' in observer test-path"],
+      warnings: [],
+    };
+    expect(new ScrapObserver(inputObj).checkValues()).toStrictEqual(expected);
+  });
+  test("returns correct error for missing price.auxiliary component", () => {
+    const inputObj = {
+      name: "test-name",
+      path: "test-path",
+      price: { selector: "price-selector", attribute: "price-attribute" },
+      title: { selector: "title-selector", attribute: "title-attribute", auxiliary: "title-auxiliary" },
+      image: { selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
+    };
+    const expected = {
+      errors: ["Missing required 'price.auxiliary' in observer test-path"],
+      warnings: [],
+    };
+    expect(new ScrapObserver(inputObj).checkValues()).toStrictEqual(expected);
+  });
 });
