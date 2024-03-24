@@ -57,6 +57,19 @@ describe("checkValues", () => {
     };
     expect(new ScrapObserver(inputObj).checkValues()).toStrictEqual(expected);
   });
+  test("returns correct error for missing path field", () => {
+    const inputObj = {
+      name: "test-name",
+      title: { selector: "title-selector", attribute: "title-attribute", auxiliary: "title-auxiliary" },
+      image: { selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
+      price: { selector: "price-selector", attribute: "price-attribute", auxiliary: "price-attribute" },
+    };
+    const expected = {
+      errors: ["Missing required observer path"],
+      warnings: [],
+    };
+    expect(new ScrapObserver(inputObj).checkValues()).toStrictEqual(expected);
+  });
   test("returns correct warning for missing title component", () => {
     const inputObj = {
       name: "test-name",
