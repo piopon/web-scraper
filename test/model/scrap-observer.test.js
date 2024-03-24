@@ -27,4 +27,43 @@ describe("checkValues", () => {
     const expected = { errors: [], warnings: [] };
     expect(new ScrapObserver(inputObj).checkValues()).toStrictEqual(expected);
   });
+  test("returns no errors and warnings when object has correct value", () => {
+    const inputObj = {
+      name: "test-name",
+      path: "test-path",
+      image: { selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
+      price: { selector: "price-selector", attribute: "price-attribute", auxiliary: "price-attribute" },
+    };
+    const expected = {
+      errors: [],
+      warnings: ["Empty title 'selector'/'attribute' and 'auxiliary' in observer test-path"],
+    };
+    expect(new ScrapObserver(inputObj).checkValues()).toStrictEqual(expected);
+  });
+  test("returns no errors and warnings when object has correct value", () => {
+    const inputObj = {
+      name: "test-name",
+      path: "test-path",
+      title: { selector: "title-selector", attribute: "title-attribute", auxiliary: "title-auxiliary" },
+      price: { selector: "price-selector", attribute: "price-attribute", auxiliary: "price-attribute" },
+    };
+    const expected = {
+      errors: [],
+      warnings: ["Empty image 'selector'/'attribute' and 'auxiliary' in observer test-path"],
+    };
+    expect(new ScrapObserver(inputObj).checkValues()).toStrictEqual(expected);
+  });
+  test("returns no errors and warnings when object has correct value", () => {
+    const inputObj = {
+      name: "test-name",
+      path: "test-path",
+      title: { selector: "title-selector", attribute: "title-attribute", auxiliary: "title-auxiliary" },
+      image: { selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
+    };
+    const expected = {
+      errors: [],
+      warnings: ["Empty price 'selector'/'attribute' and 'auxiliary' in observer test-path"],
+    };
+    expect(new ScrapObserver(inputObj).checkValues()).toStrictEqual(expected);
+  });
 });
