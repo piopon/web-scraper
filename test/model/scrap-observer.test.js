@@ -156,3 +156,23 @@ describe("checkValues", () => {
     expect(new ScrapObserver(inputObj).checkValues()).toStrictEqual(expected);
   });
 });
+
+describe("getRequestBodySchema", () => {
+  test("returns correct value", () => {
+    const expectedHistory = ["off", "on", "onChange"];
+    const expectedTargets = ["load", "domcontentloaded", "networkidle0", "networkidle2"];
+    const schema = ScrapObserver.getRequestBodySchema();
+    expect(schema.type).toBe("object");
+    expect(schema.additionalProperties).toBe(false);
+    expect(schema.properties).not.toBe(null);
+    expect(schema.properties.name).toStrictEqual({ type: "string", minLength: 1 });
+    expect(schema.properties.path).toStrictEqual({ type: "string", minLength: 1 });
+    expect(schema.properties.target).toStrictEqual({ enum: expectedTargets });
+    expect(schema.properties.history).toStrictEqual({ enum: expectedHistory });
+    expect(schema.properties.container).toStrictEqual({ type: "string" });
+    expect(schema.properties.title).not.toBe(null);
+    expect(schema.properties.image).not.toBe(null);
+    expect(schema.properties.price).not.toBe(null);
+    expect(schema.required).toStrictEqual(["name", "path", "price"]);
+  });
+});
