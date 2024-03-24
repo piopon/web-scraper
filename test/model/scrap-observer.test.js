@@ -176,3 +176,19 @@ describe("getRequestBodySchema", () => {
     expect(schema.required).toStrictEqual(["name", "path", "price"]);
   });
 });
+
+describe("getRequestParamsSchema", () => {
+  const expectedHistory = ["off", "on", "onChange"];
+  const expectedTargets = ["load", "domcontentloaded", "networkidle0", "networkidle2"];
+  test("returns correct value for GET input method", () => {
+    const schema = ScrapObserver.getRequestParamsSchema("GET");
+    expect(schema.type).toBe("object");
+    expect(schema.additionalProperties).toBe(false);
+    expect(schema.properties).not.toBe(null);
+    expect(schema.properties.name).toStrictEqual({ type: "string", minLength: 1 });
+    expect(schema.properties.path).toStrictEqual({ type: "string", minLength: 1 });
+    expect(schema.properties.target).toStrictEqual({ enum: expectedTargets });
+    expect(schema.properties.history).toStrictEqual({ enum: expectedHistory });
+    expect(schema.required).toBe(undefined);
+  });
+});
