@@ -61,8 +61,12 @@ describe("checkValues", () => {
       image: { selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
     };
     const expected = {
-      errors: [],
-      warnings: ["Empty price 'selector'/'attribute' and 'auxiliary' in observer test-path"],
+      errors: [
+        "Missing required 'price.selector' in observer test-path",
+        "Missing required 'price.attribute' in observer test-path",
+        "Missing required 'price.auxiliary' in observer test-path",
+      ],
+      warnings: [],
     };
     expect(new ScrapObserver(inputObj).checkValues()).toStrictEqual(expected);
   });
