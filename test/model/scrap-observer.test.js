@@ -191,4 +191,20 @@ describe("getRequestParamsSchema", () => {
     expect(schema.properties.history).toStrictEqual({ enum: expectedHistory });
     expect(schema.required).toBe(undefined);
   });
+  test("returns correct value for POST input method", () => {
+    const schema = ScrapObserver.getRequestParamsSchema("POST");
+    expect(schema.type).toBe("object");
+    expect(schema.additionalProperties).toBe(false);
+    expect(schema.properties).not.toBe(null);
+    expect(schema.properties.parent).toStrictEqual({ type: "string", minLength: 1 });
+    expect(schema.required).toStrictEqual(["parent"]);
+  });
+  test("returns correct value for other input method", () => {
+    const schema = ScrapObserver.getRequestParamsSchema("PUT");
+    expect(schema.type).toBe("object");
+    expect(schema.additionalProperties).toBe(false);
+    expect(schema.properties).not.toBe(null);
+    expect(schema.properties.name).toStrictEqual({ type: "string", minLength: 1 });
+    expect(schema.required).toStrictEqual(["name"]);
+  });
 });
