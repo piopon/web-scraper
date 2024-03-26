@@ -158,9 +158,9 @@ describe("checkValues", () => {
 });
 
 describe("getRequestBodySchema", () => {
+  const expectedHistory = ["off", "on", "onChange"];
+  const expectedTargets = ["load", "domcontentloaded", "networkidle0", "networkidle2"];
   test("returns correct value", () => {
-    const expectedHistory = ["off", "on", "onChange"];
-    const expectedTargets = ["load", "domcontentloaded", "networkidle0", "networkidle2"];
     const schema = ScrapObserver.getRequestBodySchema();
     expect(schema.type).toBe("object");
     expect(schema.additionalProperties).toBe(false);
@@ -189,7 +189,7 @@ describe("getRequestParamsSchema", () => {
     expect(schema.properties.path).toStrictEqual({ type: "string", minLength: 1 });
     expect(schema.properties.target).toStrictEqual({ enum: expectedTargets });
     expect(schema.properties.history).toStrictEqual({ enum: expectedHistory });
-    expect(schema.required).toBe(undefined);
+    expect(schema.required).toStrictEqual(undefined);
   });
   test("returns correct value for POST input method", () => {
     const schema = ScrapObserver.getRequestParamsSchema("POST");
