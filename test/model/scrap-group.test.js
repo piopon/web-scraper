@@ -14,3 +14,29 @@ describe("getIdentifier", () => {
     });
   });
 });
+
+describe("checkValues", () => {
+  test("returns no errors and warnings when object has correct values", () => {
+    const inputObj = {
+      name: "test-name",
+      category: "test-path",
+      domain: "test-domain",
+      observers: [createTestObserver("test-name1", "test-path1")],
+    };
+    const expected = {
+      errors: [],
+      warnings: [],
+    };
+    expect(new ScrapGroup(inputObj).checkValues()).toStrictEqual(expected);
+  });
+});
+
+function createTestObserver(name, path) {
+  return {
+    name: name,
+    path: path,
+    title: { selector: "title-selector", attribute: "title-attribute", auxiliary: "title-auxiliary" },
+    image: { selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
+    price: { selector: "price-selector", attribute: "price-attribute", auxiliary: "price-attribute" },
+  };
+}
