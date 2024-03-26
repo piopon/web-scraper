@@ -1,5 +1,7 @@
 import { ScrapObserver } from "../../src/model/scrap-observer.js";
 
+import mongoose from "mongoose";
+
 describe("getIdentifier", () => {
   describe("returns correct result for observer", () => {
     test("with empty name values", () => {
