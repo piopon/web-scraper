@@ -199,8 +199,16 @@ describe("getRequestParamsSchema", () => {
     expect(schema.properties.parent).toStrictEqual({ type: "string", minLength: 1 });
     expect(schema.required).toStrictEqual(["parent"]);
   });
-  test("returns correct value for other input method", () => {
+  test("returns correct value for PUT input method", () => {
     const schema = ScrapObserver.getRequestParamsSchema("PUT");
+    expect(schema.type).toBe("object");
+    expect(schema.additionalProperties).toBe(false);
+    expect(schema.properties).not.toBe(null);
+    expect(schema.properties.name).toStrictEqual({ type: "string", minLength: 1 });
+    expect(schema.required).toStrictEqual(["name"]);
+  });
+  test("returns correct value for DELETE input method", () => {
+    const schema = ScrapObserver.getRequestParamsSchema("DELETE");
     expect(schema.type).toBe("object");
     expect(schema.additionalProperties).toBe(false);
     expect(schema.properties).not.toBe(null);
