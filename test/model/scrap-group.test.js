@@ -29,6 +29,31 @@ describe("checkValues", () => {
     };
     expect(new ScrapGroup(inputObj).checkValues()).toStrictEqual(expected);
   });
+  test("returns correct error for missing name field", () => {
+    const inputObj = {
+      category: "test-path",
+      domain: "test-domain",
+      observers: [createTestObserver("test-name1", "test-path1")],
+    };
+    const expected = {
+      errors: ["Missing required group name"],
+      warnings: [],
+    };
+    expect(new ScrapGroup(inputObj).checkValues()).toStrictEqual(expected);
+  });
+  test("returns correct error for incorrect name field", () => {
+    const inputObj = {
+      name: "1",
+      category: "test-path",
+      domain: "test-domain",
+      observers: [createTestObserver("test-name1", "test-path1")],
+    };
+    const expected = {
+      errors: ["Group name must have at least one letter"],
+      warnings: [],
+    };
+    expect(new ScrapGroup(inputObj).checkValues()).toStrictEqual(expected);
+  });
 });
 
 function createTestObserver(name, path) {
