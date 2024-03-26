@@ -216,3 +216,10 @@ describe("getRequestParamsSchema", () => {
     expect(schema.required).toStrictEqual(["name"]);
   });
 });
+
+describe("getDatabaseSchema", () => {
+  test("returns correct value", () => {
+    const schema = ScrapObserver.getDatabaseSchema();
+    expect(schema).not.toBe(null);
+  });
+});
