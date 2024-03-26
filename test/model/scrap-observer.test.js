@@ -222,4 +222,32 @@ describe("getDatabaseSchema", () => {
     const schema = ScrapObserver.getDatabaseSchema();
     expect(schema).not.toBe(null);
   });
+  test("gets schema used for create observer", () => {
+    const TestModel = mongoose.model("test-observer", ScrapObserver.getDatabaseSchema())
+    const observer = new TestModel({
+      unknown: "test-unknown",
+      name: "test-name",
+      path: "test-path",
+      target: "domcontentloaded",
+      history: "off",
+      container: "test-container",
+      price : {
+        selector: "test-selector",
+        attribute: "test-attribute",
+        auxiliary: "test-auxiliary",
+      },
+      extra: "test-extra",
+    });
+    expect(observer).not.toBe(null);
+    expect(observer.unknown).toBe(undefined);
+    expect(observer.name).toBe("test-name");
+    expect(observer.path).toBe("test-path");
+    expect(observer.target).toBe("domcontentloaded");
+    expect(observer.history).toBe("off");
+    expect(observer.container).toBe("test-container");
+    expect(observer.price.selector).toBe("test-selector");
+    expect(observer.price.attribute).toBe("test-attribute");
+    expect(observer.price.auxiliary).toBe("test-auxiliary");
+    expect(observer.extra).toBe(undefined);
+  });
 });
