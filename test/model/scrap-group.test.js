@@ -91,6 +91,23 @@ describe("checkValues", () => {
     };
     expect(new ScrapGroup(inputObj).checkValues()).toStrictEqual(expected);
   });
+  test("correctly aggregates observers issues", () => {
+    const inputObj = {
+      name: "test-name",
+      domain: "test-domain",
+      category: "test-path",
+      observers: [createTestObserver("test-name1"), createTestObserver()],
+    };
+    const expected = {
+      errors: [
+        "Missing required observer path",
+        "Missing required observer name",
+        "Missing required observer path"
+      ],
+      warnings: [],
+    };
+    expect(new ScrapGroup(inputObj).checkValues()).toStrictEqual(expected);
+  });
 });
 
 function createTestObserver(name, path) {
