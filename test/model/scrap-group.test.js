@@ -66,6 +66,18 @@ describe("checkValues", () => {
     };
     expect(new ScrapGroup(inputObj).checkValues()).toStrictEqual(expected);
   });
+  test("returns correct error for missing name domain", () => {
+    const inputObj = {
+      name: "test-name",
+      category: "test-path",
+      observers: [createTestObserver("test-name1", "test-path1")],
+    };
+    const expected = {
+      errors: ["Missing required group domain"],
+      warnings: [],
+    };
+    expect(new ScrapGroup(inputObj).checkValues()).toStrictEqual(expected);
+  });
 });
 
 function createTestObserver(name, path) {
