@@ -54,6 +54,18 @@ describe("checkValues", () => {
     };
     expect(new ScrapGroup(inputObj).checkValues()).toStrictEqual(expected);
   });
+  test("returns correct error for missing category field", () => {
+    const inputObj = {
+      name: "test-name",
+      domain: "test-domain",
+      observers: [createTestObserver("test-name1", "test-path1")],
+    };
+    const expected = {
+      errors: [],
+      warnings: ["Empty group category"],
+    };
+    expect(new ScrapGroup(inputObj).checkValues()).toStrictEqual(expected);
+  });
 });
 
 function createTestObserver(name, path) {
