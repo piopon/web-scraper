@@ -78,6 +78,19 @@ describe("checkValues", () => {
     };
     expect(new ScrapGroup(inputObj).checkValues()).toStrictEqual(expected);
   });
+  test("returns correct warning for missing observers", () => {
+    const inputObj = {
+      name: "test-name",
+      domain: "test-domain",
+      category: "test-path",
+      observers: [],
+    };
+    const expected = {
+      errors: [],
+      warnings: ["Add at least one observer to make things work properly"],
+    };
+    expect(new ScrapGroup(inputObj).checkValues()).toStrictEqual(expected);
+  });
 });
 
 function createTestObserver(name, path) {
