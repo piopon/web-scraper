@@ -133,7 +133,7 @@ describe("getRequestParamsSchema", () => {
     expect(schema.properties.name).toStrictEqual({ type: "string", minLength: 1 });
     expect(schema.properties.category).toStrictEqual({ type: "string", minLength: 1 });
     expect(schema.properties.domain).toStrictEqual({ type: "string", minLength: 1 });
-    expect(schema.required).toStrictEqual(undefined);
+    expect(schema.required).toBe(undefined);
   });
   test("returns correct value for POST input method", () => {
     const schema = ScrapGroup.getRequestParamsSchema("POST");
@@ -141,7 +141,7 @@ describe("getRequestParamsSchema", () => {
     expect(schema.additionalProperties).toBe(false);
     expect(schema.properties).not.toBe(null);
     expect(schema.properties.parent).toStrictEqual({ type: "integer", minimum: 0 });
-    expect(schema.required).toStrictEqual(undefined);
+    expect(schema.required).toBe(undefined);
   });
   test("returns correct value for PUT input method", () => {
     const schema = ScrapGroup.getRequestParamsSchema("PUT");
