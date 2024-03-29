@@ -19,3 +19,36 @@ describe("getIdentifier", () => {
     });
   });
 });
+
+describe("checkValues", () => {
+  test("returns no errors and warnings when object has correct values", () => {
+    const inputObj = {
+      user: "test-user",
+      groups: [createTestGroup("test-name", "test-domain")],
+    };
+    const expected = {
+      errors: [],
+      warnings: [],
+    };
+    expect(new ScrapConfig(inputObj).checkValues()).toStrictEqual(expected);
+  });
+});
+
+function createTestGroup(name, domain) {
+  return {
+    name: name,
+    category: "test-category",
+    domain: domain,
+    observers: [createTestObserver("observer-name", "observer-path")],
+  };
+}
+
+function createTestObserver(name, path) {
+    return {
+      name: name,
+      path: path,
+      title: { selector: "title-selector", attribute: "title-attribute", auxiliary: "title-auxiliary" },
+      image: { selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
+      price: { selector: "price-selector", attribute: "price-attribute", auxiliary: "price-attribute" },
+    };
+  }
