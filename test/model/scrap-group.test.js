@@ -161,6 +161,13 @@ describe("getRequestParamsSchema", () => {
   });
 });
 
+describe("getDatabaseSchema", () => {
+  test("returns correct value", () => {
+    const schema = ScrapGroup.getDatabaseSchema();
+    expect(schema).not.toBe(null);
+  });
+});
+
 function createTestObserver(name, path) {
   return {
     name: name,
