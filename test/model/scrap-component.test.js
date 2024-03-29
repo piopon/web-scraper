@@ -104,7 +104,7 @@ describe("getDatabaseSchema", () => {
     expect(schema).not.toBe(null);
   });
   test("gets schema used for create component", () => {
-    const TestModel = mongoose.model("test-component", ScrapComponent.getDatabaseSchema())
+    const TestModel = mongoose.model("test-component", ScrapComponent.getDatabaseSchema());
     const component = new TestModel({
       unknown: "test-unknown",
       interval: "test-interval",

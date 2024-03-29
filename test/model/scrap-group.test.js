@@ -174,7 +174,7 @@ describe("getDatabaseSchema", () => {
     expect(schema).not.toBe(null);
   });
   test("gets schema used for create group", () => {
-    const TestModel = mongoose.model("test-group", ScrapGroup.getDatabaseSchema())
+    const TestModel = mongoose.model("test-group", ScrapGroup.getDatabaseSchema());
     const group = new TestModel({
       unknown: "test-unknown",
       name: "test-name",

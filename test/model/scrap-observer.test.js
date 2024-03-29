@@ -230,7 +230,7 @@ describe("getDatabaseSchema", () => {
     expect(schema).not.toBe(null);
   });
   test("gets schema used for create observer", () => {
-    const TestModel = mongoose.model("test-observer", ScrapObserver.getDatabaseSchema())
+    const TestModel = mongoose.model("test-observer", ScrapObserver.getDatabaseSchema());
     const observer = new TestModel({
       unknown: "test-unknown",
       name: "test-name",
@@ -238,7 +238,7 @@ describe("getDatabaseSchema", () => {
       target: "domcontentloaded",
       history: "off",
       container: "test-container",
-      price : {
+      price: {
         selector: "test-selector",
         attribute: "test-attribute",
         auxiliary: "test-auxiliary",
