@@ -10,7 +10,7 @@ describe("getIdentifier", () => {
       expect(new ScrapObserver(inputObj).getIdentifier()).toBe(expected);
     });
     test("with missing name value", () => {
-      const inputObj = { name: "test-name" };
+      const inputObj = { unknown: "test-unknown" };
       const expected = "name = empty";
       expect(new ScrapObserver(inputObj).getIdentifier()).toBe(expected);
     });
