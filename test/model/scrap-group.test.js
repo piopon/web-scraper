@@ -110,6 +110,20 @@ describe("checkValues", () => {
   });
 });
 
+describe("getRequestBodySchema", () => {
+  test("returns correct value", () => {
+    const schema = ScrapGroup.getRequestBodySchema();
+    expect(schema.type).toBe("object");
+    expect(schema.additionalProperties).toBe(false);
+    expect(schema.properties).not.toBe(null);
+    expect(schema.properties.name).toStrictEqual({ type: "string", minLength: 1 });
+    expect(schema.properties.category).toStrictEqual({ type: "string", minLength: 1 });
+    expect(schema.properties.domain).toStrictEqual({ type: "string", minLength: 1 });
+    expect(schema.properties.observers).not.toBe(null);
+    expect(schema.required).toStrictEqual(["name", "domain", "observers"]);
+  });
+});
+
 function createTestObserver(name, path) {
   return {
     name: name,
