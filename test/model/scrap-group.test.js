@@ -1,5 +1,7 @@
 import { ScrapGroup } from "../../src/model/scrap-group.js";
 
+import mongoose from "mongoose";
+
 describe("getIdentifier", () => {
   describe("returns correct result for group", () => {
     test("with empty name values", () => {
@@ -165,6 +167,24 @@ describe("getDatabaseSchema", () => {
   test("returns correct value", () => {
     const schema = ScrapGroup.getDatabaseSchema();
     expect(schema).not.toBe(null);
+  });
+  test("gets schema used for create group", () => {
+    const TestModel = mongoose.model("test-group", ScrapGroup.getDatabaseSchema())
+    const group = new TestModel({
+      unknown: "test-unknown",
+      name: "test-name",
+      category: "test-path",
+      domain: "domcontentloaded",
+      observers: [createTestObserver("observer-name", "observer-path")],
+      extra: "test-extra",
+    });
+    expect(group).not.toBe(null);
+    expect(group.unknown).toBe(undefined);
+    expect(group.name).toBe("test-name");
+    expect(group.category).toBe("test-path");
+    expect(group.domain).toBe("domcontentloaded");
+    expect(group.observers.length).toBe(1);
+    expect(group.extra).toBe(undefined);
   });
 });
 
