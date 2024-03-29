@@ -9,6 +9,11 @@ describe("getIdentifier", () => {
       const expected = "name = empty";
       expect(new ScrapGroup(inputObj).getIdentifier()).toBe(expected);
     });
+    test("with missing name value", () => {
+      const inputObj = { extra: "test-extra" };
+      const expected = "name = empty";
+      expect(new ScrapGroup(inputObj).getIdentifier()).toBe(expected);
+    });
     test("with non-empty name value", () => {
       const inputObj = { name: "test-name" };
       const expected = "name = test-name";
