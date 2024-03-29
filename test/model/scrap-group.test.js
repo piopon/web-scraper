@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 
 describe("getIdentifier", () => {
   describe("returns correct result for group", () => {
-    test("with empty name values", () => {
+    test("with empty name value", () => {
       const inputObj = {};
       const expected = "name = empty";
       expect(new ScrapGroup(inputObj).getIdentifier()).toBe(expected);

@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 
 describe("getIdentifier", () => {
   describe("returns correct result for observer", () => {
-    test("with empty name values", () => {
+    test("with empty name value", () => {
       const inputObj = {};
       const expected = "name = empty";
       expect(new ScrapObserver(inputObj).getIdentifier()).toBe(expected);
