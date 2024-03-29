@@ -124,6 +124,19 @@ describe("getRequestBodySchema", () => {
   });
 });
 
+describe("getRequestParamsSchema", () => {
+  test("returns correct value for GET input method", () => {
+    const schema = ScrapGroup.getRequestParamsSchema("GET");
+    expect(schema.type).toBe("object");
+    expect(schema.additionalProperties).toBe(false);
+    expect(schema.properties).not.toBe(null);
+    expect(schema.properties.name).toStrictEqual({ type: "string", minLength: 1 });
+    expect(schema.properties.category).toStrictEqual({ type: "string", minLength: 1 });
+    expect(schema.properties.domain).toStrictEqual({ type: "string", minLength: 1 });
+    expect(schema.required).toStrictEqual(undefined);
+  });
+});
+
 function createTestObserver(name, path) {
   return {
     name: name,
