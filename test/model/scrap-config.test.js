@@ -32,6 +32,16 @@ describe("checkValues", () => {
     };
     expect(new ScrapConfig(inputObj).checkValues()).toStrictEqual(expected);
   });
+  test("returns no errors even with missing user field", () => {
+    const inputObj = {
+      groups: [createTestGroup("test-name", "test-domain")],
+    };
+    const expected = {
+      errors: [],
+      warnings: [],
+    };
+    expect(new ScrapConfig(inputObj).checkValues()).toStrictEqual(expected);
+  });
 });
 
 function createTestGroup(name, domain) {
