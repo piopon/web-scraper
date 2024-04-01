@@ -63,6 +63,20 @@ describe("checkValues", () => {
     };
     expect(new ScrapConfig(inputObj).checkValues()).toStrictEqual(expected);
   });
+  test("correctly aggregates groups issues", () => {
+    const inputObj = {
+      user: "test-user",
+      groups: [createTestGroup()],
+    };
+    const expected = {
+      errors: [
+        "Missing required group name",
+        "Missing required group domain",
+      ],
+      warnings: [],
+    };
+    expect(new ScrapConfig(inputObj).checkValues()).toStrictEqual(expected);
+  });
 });
 
 function createTestGroup(name, domain) {
