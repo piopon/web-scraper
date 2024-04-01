@@ -53,6 +53,16 @@ describe("checkValues", () => {
     };
     expect(new ScrapConfig(inputObj).checkValues()).toStrictEqual(expected);
   });
+  test("returns no errors for missing group container", () => {
+    const inputObj = {
+      user: "test-user",
+    };
+    const expected = {
+      errors: [],
+      warnings: [],
+    };
+    expect(new ScrapConfig(inputObj).checkValues()).toStrictEqual(expected);
+  });
 });
 
 function createTestGroup(name, domain) {
