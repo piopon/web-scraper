@@ -91,6 +91,17 @@ describe("getRequestBodySchema", () => {
   });
 });
 
+describe("getRequestParamsSchema", () => {
+  test("returns correct value for GET input method", () => {
+    const schema = ScrapConfig.getRequestParamsSchema("GET");
+    expect(schema.type).toBe("object");
+    expect(schema.additionalProperties).toBe(false);
+    expect(schema.properties).not.toBe(null);
+    expect(schema.properties.user).toStrictEqual({ type: "string", minLength: 1 });
+    expect(schema.required).toBe(undefined);
+  });
+});
+
 function createTestGroup(name, domain) {
   return {
     name: name,
