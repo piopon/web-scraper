@@ -102,6 +102,13 @@ describe("getRequestParamsSchema", () => {
   });
 });
 
+describe("getDatabaseSchema", () => {
+  test("returns correct value", () => {
+    const schema = ScrapConfig.getDatabaseSchema();
+    expect(schema).not.toBe(null);
+  });
+});
+
 function createTestGroup(name, domain) {
   return {
     name: name,
