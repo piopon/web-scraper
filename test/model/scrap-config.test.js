@@ -104,6 +104,15 @@ describe("getRequestParamsSchema", () => {
   });
 });
 
+describe("getDatabaseModel", () => {
+  test("returns correct model names fields", () => {
+    const TestModel = ScrapConfig.getDatabaseModel();
+    expect(TestModel.name).toBe("model");
+    expect(TestModel.modelName).toBe("scraper-config");
+    expect(TestModel.baseModelName).toBe(undefined);
+  });
+});
+
 describe("getDatabaseSchema", () => {
   test("returns correct value", () => {
     const schema = ScrapConfig.getDatabaseSchema();
