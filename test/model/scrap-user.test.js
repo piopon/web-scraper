@@ -12,3 +12,10 @@ describe("getDatabaseModel", () => {
     expect(new TestModel({})).not.toBe(null);
   });
 });
+
+describe("getDatabaseSchema", () => {
+  test("returns correct value", () => {
+    const schema = ScrapUser.getDatabaseSchema();
+    expect(schema).not.toBe(null);
+  });
+});
