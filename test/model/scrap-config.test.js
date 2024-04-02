@@ -79,6 +79,18 @@ describe("checkValues", () => {
   });
 });
 
+describe("getRequestBodySchema", () => {
+  test("returns correct value", () => {
+    const schema = ScrapConfig.getRequestBodySchema();
+    expect(schema.type).toBe("object");
+    expect(schema.additionalProperties).toBe(false);
+    expect(schema.properties).not.toBe(null);
+    expect(schema.properties.user).toStrictEqual({ type: "string", minLength: 1 });
+    expect(schema.properties.groups).not.toBe(null);
+    expect(schema.required).toStrictEqual(["user"]);
+  });
+});
+
 function createTestGroup(name, domain) {
   return {
     name: name,
