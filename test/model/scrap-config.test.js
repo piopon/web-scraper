@@ -110,16 +110,17 @@ describe("getDatabaseSchema", () => {
     expect(schema).not.toBe(null);
   });
   test("gets schema used for create config", () => {
+    const constId = new mongoose.Types.ObjectId();
     const TestModel = mongoose.model("test-config", ScrapConfig.getDatabaseSchema());
     const config = new TestModel({
       unknown: "test-unknown",
-      user: "test-user",
+      user: constId,
       groups: [createTestGroup("group-name", "group-domain")],
       extra: "test-extra",
     });
     expect(config).not.toBe(null);
     expect(config.unknown).toBe(undefined);
-    expect(config.user).toBe("test-user");
+    expect(config.user).toBe(constId);
     expect(config.groups.length).toBe(1);
     expect(config.extra).toBe(undefined);
   });
