@@ -7,4 +7,8 @@ describe("getDatabaseModel", () => {
     expect(TestModel.modelName).toBe("scraper-user");
     expect(TestModel.baseModelName).toBe(undefined);
   });
+  test("can be used to create object", () => {
+    const TestModel = ScrapUser.getDatabaseModel();
+    expect(new TestModel({})).not.toBe(null);
+  });
 });
