@@ -111,6 +111,10 @@ describe("getDatabaseModel", () => {
     expect(TestModel.modelName).toBe("scraper-config");
     expect(TestModel.baseModelName).toBe(undefined);
   });
+  test("can be used to create object", () => {
+    const TestModel = ScrapConfig.getDatabaseModel();
+    expect(new TestModel({})).not.toBe(null);
+  });
 });
 
 describe("getDatabaseSchema", () => {
