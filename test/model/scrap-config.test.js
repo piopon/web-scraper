@@ -1,5 +1,7 @@
 import { ScrapConfig } from "../../src/model/scrap-config.js";
 
+import mongoose from "mongoose";
+
 describe("getIdentifier", () => {
   describe("returns correct result for group", () => {
     test("with empty user value", () => {
@@ -106,6 +108,20 @@ describe("getDatabaseSchema", () => {
   test("returns correct value", () => {
     const schema = ScrapConfig.getDatabaseSchema();
     expect(schema).not.toBe(null);
+  });
+  test("gets schema used for create config", () => {
+    const TestModel = mongoose.model("test-config", ScrapConfig.getDatabaseSchema());
+    const config = new TestModel({
+      unknown: "test-unknown",
+      user: "test-user",
+      groups: [createTestGroup("group-name", "group-domain")],
+      extra: "test-extra",
+    });
+    expect(config).not.toBe(null);
+    expect(config.unknown).toBe(undefined);
+    expect(config.user).toBe("test-user");
+    expect(config.groups.length).toBe(1);
+    expect(config.extra).toBe(undefined);
   });
 });
 
