@@ -17,6 +17,12 @@ describe("validate", () => {
       expect(() => new ScrapValidator(null)).toThrow(ScrapError);
     });
   });
+  test("throws error when input config has errors", () => {
+    expect(() => new ScrapValidator(createTestConfig("ERR")).validate()).toThrow(ScrapError);
+  });
+  test("throws warning when input config has warnings", () => {
+    expect(() => new ScrapValidator(createTestConfig("WARN")).validate()).toThrow(ScrapWarning);
+  });
 });
 
 function createTestConfig(variant) {
