@@ -17,6 +17,11 @@ describe("scrap validator", () => {
       expect(() => new ScrapValidator(null)).toThrow(ScrapError);
     });
   });
+  describe("is correctly created when input config is correct", () => {
+    const inConfig = createTestConfig("OK");
+    const validator = new ScrapValidator(inConfig);
+    expect(validator).not.toBe(null);
+  });
 });
 
 describe("validate", () => {
