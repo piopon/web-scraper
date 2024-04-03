@@ -149,11 +149,11 @@ function createTestGroup(name, domain) {
 }
 
 function createTestObserver(name, path) {
-    return {
-      name: name,
-      path: path,
-      title: { selector: "title-selector", attribute: "title-attribute", auxiliary: "title-auxiliary" },
-      image: { selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
-      price: { selector: "price-selector", attribute: "price-attribute", auxiliary: "price-attribute" },
-    };
-  }
+  return {
+    name: name,
+    path: path,
+    title: { selector: "title-selector", attribute: "title-attribute", auxiliary: "title-auxiliary" },
+    image: { selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
+    price: { selector: "price-selector", attribute: "price-attribute", auxiliary: "price-attribute" },
+  };
+}
