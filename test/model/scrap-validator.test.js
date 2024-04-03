@@ -23,6 +23,11 @@ describe("validate", () => {
   test("throws warning when input config has warnings", () => {
     expect(() => new ScrapValidator(createTestConfig("WARN")).validate()).toThrow(ScrapWarning);
   });
+  test("returns input config when no problems found", () => {
+    const inConfig = createTestConfig("OK");
+    const outConfig = new ScrapValidator(inConfig).validate();
+    expect(outConfig).toStrictEqual(inConfig);
+  });
 });
 
 function createTestConfig(variant) {
