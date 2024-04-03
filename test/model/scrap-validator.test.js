@@ -5,18 +5,21 @@ import { ScrapObserver } from "../../src/model/scrap-observer.js";
 import { ScrapComponent } from "../../src/model/scrap-component.js";
 import { ScrapError, ScrapWarning } from "../../src/model/scrap-exception.js";
 
-describe("validate", () => {
-  describe("throws when constructor", () => {
-    test("has empty parameter", () => {
+describe("scrap validator", () => {
+  describe("throws when created with", () => {
+    test("empty parameter", () => {
       expect(() => new ScrapValidator()).toThrow(ScrapError);
     });
-    test("has undefined parameter", () => {
+    test("undefined parameter", () => {
       expect(() => new ScrapValidator(undefined)).toThrow(ScrapError);
     });
-    test("has null parameter", () => {
+    test("null parameter", () => {
       expect(() => new ScrapValidator(null)).toThrow(ScrapError);
     });
   });
+});
+
+describe("validate", () => {
   test("throws error when input config has errors", () => {
     expect(() => new ScrapValidator(createTestConfig("ERR")).validate()).toThrow(ScrapError);
   });
