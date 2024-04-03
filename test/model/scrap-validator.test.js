@@ -5,4 +5,10 @@ describe("validate", () => {
   test("throws on empty config input parameter", () => {
     expect(() => new ScrapValidator()).toThrow(ScrapError);
   });
+  test("throws on undefined config input parameter", () => {
+    expect(() => new ScrapValidator(undefined)).toThrow(ScrapError);
+  });
+  test("throws on null config input parameter", () => {
+    expect(() => new ScrapValidator(null)).toThrow(ScrapError);
+  });
 });
