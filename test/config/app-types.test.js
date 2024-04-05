@@ -19,4 +19,9 @@ describe("LogLevel", () => {
       expect(LogLevel.DEBUG.description).toBe("DEBUG");
     });
   });
+  test("returns correct values for custom type", () => {
+    const testLogLevel = new LogLevel(123, "TEST");
+    expect(testLogLevel.value).toBe(123);
+    expect(testLogLevel.description).toBe("TEST");
+  });
 });
