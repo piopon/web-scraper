@@ -85,4 +85,16 @@ describe("ComponentStatus", () => {
     const testComponentStatus = new ComponentStatus("test-status");
     expect(testComponentStatus.state).toBe("test-status");
   });
+  describe("equals method", () => {
+    test("returns true for identical elements", () => {
+      const testStatus1 = new ComponentStatus("test-status");
+      const testStatus2 = new ComponentStatus("test-status");
+      expect(testStatus1.equals(testStatus2)).toBe(true);
+    });
+    test("returns false for different elements", () => {
+      const testStatus1 = new ComponentStatus("test-status");
+      const testStatus2 = new ComponentStatus("test-state");
+      expect(testStatus1.equals(testStatus2)).toBe(false);
+    });
+  });
 });
