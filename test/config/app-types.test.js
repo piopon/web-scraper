@@ -32,5 +32,17 @@ describe("ComponentType", () => {
       expect(ComponentType.INIT.name).toBe("init");
       expect(ComponentType.INIT.methods).toStrictEqual(["start", "stop"]);
     });
+    test("static type = AUTH", () => {
+      expect(ComponentType.AUTH.name).toBe("auth");
+      expect(ComponentType.AUTH.methods).toStrictEqual(["start", "stop"]);
+    });
+    test("static type = SLAVE", () => {
+      expect(ComponentType.SLAVE.name).toBe("slave");
+      expect(ComponentType.SLAVE.methods).toStrictEqual(["getMaster"]);
+    });
+    test("static type = CONFIG", () => {
+      expect(ComponentType.CONFIG.name).toBe("config");
+      expect(ComponentType.CONFIG.methods).toStrictEqual(["update"]);
+    });
   });
 });
