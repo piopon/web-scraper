@@ -81,4 +81,8 @@ describe("ComponentStatus", () => {
       expect(ComponentStatus.RUNNING.state).toBe("running");
     });
   });
+  test("returns correct values for custom type", () => {
+    const testComponentStatus = new ComponentStatus("test-status");
+    expect(testComponentStatus.state).toBe("test-status");
+  });
 });
