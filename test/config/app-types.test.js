@@ -52,19 +52,19 @@ describe("ComponentType", () => {
   });
   describe("equals method", () => {
     test("returns true for identical elements", () => {
-      const testComponent1 = new ComponentType("test-name", ["test-1"]);
-      const testComponent2 = new ComponentType("test-name", ["test-1"]);
-      expect(testComponent1.equals(testComponent2)).toBe(true);
+      const testType1 = new ComponentType("test-name", ["test-1"]);
+      const testType2 = new ComponentType("test-name", ["test-1"]);
+      expect(testType1.equals(testType2)).toBe(true);
     });
     test("returns false for different names", () => {
-      const testComponent1 = new ComponentType("test-name", ["test-1"]);
-      const testComponent2 = new ComponentType("test-item", ["test-1"]);
-      expect(testComponent1.equals(testComponent2)).toBe(false);
+      const testType1 = new ComponentType("test-name", ["test-1"]);
+      const testType2 = new ComponentType("test-item", ["test-1"]);
+      expect(testType1.equals(testType2)).toBe(false);
     });
     test("returns false for different methods", () => {
-      const testComponent1 = new ComponentType("test-name", ["test-1"]);
-      const testComponent2 = new ComponentType("test-name", ["test-2"]);
-      expect(testComponent1.equals(testComponent2)).toBe(false);
+      const testType1 = new ComponentType("test-name", ["test-1"]);
+      const testType2 = new ComponentType("test-name", ["test-2"]);
+      expect(testType1.equals(testType2)).toBe(false);
     });
   });
 });
