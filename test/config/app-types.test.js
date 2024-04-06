@@ -68,3 +68,11 @@ describe("ComponentType", () => {
     });
   });
 });
+
+describe("ComponentStatus", () => {
+  describe("has correct values for", () => {
+    test("static type = STOPPED", () => {
+      expect(ComponentStatus.STOPPED.state).toBe("stopped");
+    });
+  });
+});
