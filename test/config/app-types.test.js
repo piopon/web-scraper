@@ -45,4 +45,9 @@ describe("ComponentType", () => {
       expect(ComponentType.CONFIG.methods).toStrictEqual(["update"]);
     });
   });
+  test("returns correct values for custom type", () => {
+    const testComponentType = new ComponentType("test-name", ["test-1", "test-2", "test-3"]);
+    expect(testComponentType.name).toBe("test-name");
+    expect(testComponentType.methods).toStrictEqual(["test-1", "test-2", "test-3"]);
+  });
 });
