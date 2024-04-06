@@ -45,7 +45,7 @@ class ComponentType {
    * @returns true if checked component matches this one
    */
   equals(other) {
-    return this.name === other.name;
+    return this.name === other.name && this.methods.toString() === other.methods.toString();
   }
 }
 
