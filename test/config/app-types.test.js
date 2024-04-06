@@ -74,5 +74,11 @@ describe("ComponentStatus", () => {
     test("static type = STOPPED", () => {
       expect(ComponentStatus.STOPPED.state).toBe("stopped");
     });
+    test("static type = INITIALIZING", () => {
+      expect(ComponentStatus.INITIALIZING.state).toBe("initializing");
+    });
+    test("static type = RUNNING", () => {
+      expect(ComponentStatus.RUNNING.state).toBe("running");
+    });
   });
 });
