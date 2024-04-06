@@ -25,3 +25,12 @@ describe("LogLevel", () => {
     expect(testLogLevel.description).toBe("TEST");
   });
 });
+
+describe("ComponentType", () => {
+  describe("has correct values for", () => {
+    test("static type = INIT", () => {
+      expect(ComponentType.INIT.name).toBe("init");
+      expect(ComponentType.INIT.methods).toStrictEqual(["start", "stop"]);
+    });
+  });
+});
