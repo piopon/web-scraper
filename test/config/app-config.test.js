@@ -16,5 +16,9 @@ describe("getConfig", () => {
     expect(testConfig.databaseConfig.password).toBe("");
     expect(testConfig.databaseConfig.timeout).toBe(15_000);
     expect(testConfig.scraperConfig).not.toBe(null);
+    expect(testConfig.scraperConfig.loginInterval).toBe(30);
+    expect(testConfig.scraperConfig.scrapInterval).toBe(30_000);
+    expect(testConfig.scraperConfig.defaultTimeout).toBe(15_000);
+    expect(testConfig.scraperConfig.timeoutAttempts).toBe(10);
   });
 });
