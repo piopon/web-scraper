@@ -13,4 +13,10 @@ describe("debug log", () => {
     expect(testLogger.getStatus().type).toBe("debug");
     expect(testLogger.getStatus().message).toBe("test debug log");
   });
+  test("will NOT appear when min log is higher than LogLevel.DEBUG", () => {
+    const testLogger = new StatusLogger("test-name", LogLevel.INFO);
+    testLogger.debug("test debug log");
+    expect(testLogger.getStatus().type).toBe("");
+    expect(testLogger.getStatus().message).toBe("No status logged yet");
+  });
 });
