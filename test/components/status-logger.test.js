@@ -60,20 +60,39 @@ describe("error() log", () => {
   });
 });
 
-test("status() correctly receives last log", () => {
-  const testLogger = new StatusLogger("test-name", LogLevel.DEBUG);
-  expect(testLogger.getStatus().type).toBe("");
-  expect(testLogger.getStatus().message).toBe("No status logged yet");
-  testLogger.debug("test-log-1");
-  expect(testLogger.getStatus().type).toBe("debug");
-  expect(testLogger.getStatus().message).toBe("test-log-1");
-  testLogger.info("test-log-2");
-  expect(testLogger.getStatus().type).toBe("info");
-  expect(testLogger.getStatus().message).toBe("test-log-2");
-  testLogger.warning("test-log-3");
-  expect(testLogger.getStatus().type).toBe("warning");
-  expect(testLogger.getStatus().message).toBe("test-log-3");
-  testLogger.error("test-log-4");
-  expect(testLogger.getStatus().type).toBe("error");
-  expect(testLogger.getStatus().message).toBe("test-log-4");
+describe("status()", () => {
+  test("correctly receives all logs", () => {
+    const testLogger = new StatusLogger("test-name", LogLevel.DEBUG);
+    expect(testLogger.getStatus().type).toBe("");
+    expect(testLogger.getStatus().message).toBe("No status logged yet");
+    testLogger.debug("test-log-1");
+    expect(testLogger.getStatus().type).toBe("debug");
+    expect(testLogger.getStatus().message).toBe("test-log-1");
+    testLogger.info("test-log-2");
+    expect(testLogger.getStatus().type).toBe("info");
+    expect(testLogger.getStatus().message).toBe("test-log-2");
+    testLogger.warning("test-log-3");
+    expect(testLogger.getStatus().type).toBe("warning");
+    expect(testLogger.getStatus().message).toBe("test-log-3");
+    testLogger.error("test-log-4");
+    expect(testLogger.getStatus().type).toBe("error");
+    expect(testLogger.getStatus().message).toBe("test-log-4");
+  });
+  test("correctly filters logs for specified setting", () => {
+    const testLogger = new StatusLogger("test-name", LogLevel.WARNING);
+    expect(testLogger.getStatus().type).toBe("");
+    expect(testLogger.getStatus().message).toBe("No status logged yet");
+    testLogger.debug("test-log-1");
+    expect(testLogger.getStatus().type).toBe("");
+    expect(testLogger.getStatus().message).toBe("No status logged yet");
+    testLogger.info("test-log-2");
+    expect(testLogger.getStatus().type).toBe("");
+    expect(testLogger.getStatus().message).toBe("No status logged yet");
+    testLogger.warning("test-log-3");
+    expect(testLogger.getStatus().type).toBe("warning");
+    expect(testLogger.getStatus().message).toBe("test-log-3");
+    testLogger.error("test-log-4");
+    expect(testLogger.getStatus().type).toBe("error");
+    expect(testLogger.getStatus().message).toBe("test-log-4");
+  });
 });
