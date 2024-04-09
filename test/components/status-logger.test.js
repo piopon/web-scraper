@@ -36,6 +36,21 @@ describe("info() log", () => {
   });
 });
 
+describe("warning() log", () => {
+  test("will appear when setting is equal/lower than LogLevel.WARNING", () => {
+    const testLogger = new StatusLogger("test-name", LogLevel.WARNING);
+    testLogger.warning("test warning log");
+    expect(testLogger.getStatus().type).toBe("warning");
+    expect(testLogger.getStatus().message).toBe("test warning log");
+  });
+  test("will NOT appear when setting is higher than LogLevel.WARNING", () => {
+    const testLogger = new StatusLogger("test-name", LogLevel.ERROR);
+    testLogger.warning("test warning log");
+    expect(testLogger.getStatus().type).toBe("");
+    expect(testLogger.getStatus().message).toBe("No status logged yet");
+  });
+});
+
 test("status() correctly receives last log", () => {
   const testLogger = new StatusLogger("test-name", LogLevel.DEBUG);
   expect(testLogger.getStatus().type).toBe("");
