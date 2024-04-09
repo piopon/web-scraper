@@ -51,6 +51,15 @@ describe("warning() log", () => {
   });
 });
 
+describe("error() log", () => {
+  test("will appear when setting is equal/lower than LogLevel.ERROR", () => {
+    const testLogger = new StatusLogger("test-name", LogLevel.ERROR);
+    testLogger.error("test error log");
+    expect(testLogger.getStatus().type).toBe("error");
+    expect(testLogger.getStatus().message).toBe("test error log");
+  });
+});
+
 test("status() correctly receives last log", () => {
   const testLogger = new StatusLogger("test-name", LogLevel.DEBUG);
   expect(testLogger.getStatus().type).toBe("");
