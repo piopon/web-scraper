@@ -5,3 +5,12 @@ test("getName returns correct result", () => {
   const testLogger = new StatusLogger("test-name", LogLevel.INFO);
   expect(testLogger.getName()).toBe("test-name");
 });
+
+describe("debug log", () => {
+  test("will appear when min log is equal/lower than LogLevel.DEBUG", () => {
+    const testLogger = new StatusLogger("test-name", LogLevel.DEBUG);
+    testLogger.debug("test debug log");
+    expect(testLogger.getStatus().type).toBe("debug");
+    expect(testLogger.getStatus().message).toBe("test debug log");
+  });
+});
