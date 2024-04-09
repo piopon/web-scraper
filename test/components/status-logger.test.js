@@ -96,3 +96,23 @@ describe("status()", () => {
     expect(testLogger.getStatus().message).toBe("test-log-4");
   });
 });
+
+describe("getHistory()", () => {
+  test("correctly receives all logs", () => {
+    const testLogger = new StatusLogger("test-name", LogLevel.DEBUG);
+    testLogger.debug("test-log-1");
+    testLogger.info("test-log-2");
+    testLogger.warning("test-log-3");
+    testLogger.error("test-log-4");
+    const result = testLogger.getHistory();
+    expect(result.length).toBe(4);
+    expect(result[0].type).toBe("debug");
+    expect(result[0].message).toBe("test-log-1");
+    expect(result[1].type).toBe("info");
+    expect(result[1].message).toBe("test-log-2");
+    expect(result[2].type).toBe("warning");
+    expect(result[2].message).toBe("test-log-3");
+    expect(result[3].type).toBe("error");
+    expect(result[3].message).toBe("test-log-4");
+  });
+});
