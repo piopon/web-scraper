@@ -115,7 +115,7 @@ describe("getHistory()", () => {
     expect(result[3].type).toBe("error");
     expect(result[3].message).toBe("test-log-4");
   });
-  test("correctly receives all logs", () => {
+  test("correctly receives logs depending on min level", () => {
     const testLogger = new StatusLogger("test-name", LogLevel.ERROR);
     testLogger.debug("test-log-1");
     testLogger.error("test-log-2");
