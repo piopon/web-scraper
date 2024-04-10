@@ -115,4 +115,18 @@ describe("getHistory()", () => {
     expect(result[3].type).toBe("error");
     expect(result[3].message).toBe("test-log-4");
   });
+  test("correctly receives all logs", () => {
+    const testLogger = new StatusLogger("test-name", LogLevel.ERROR);
+    testLogger.debug("test-log-1");
+    testLogger.error("test-log-2");
+    testLogger.info("test-log-3");
+    testLogger.warning("test-log-4");
+    testLogger.error("test-log-5");
+    const result = testLogger.getHistory();
+    expect(result.length).toBe(2);
+    expect(result[0].type).toBe("error");
+    expect(result[0].message).toBe("test-log-2");
+    expect(result[1].type).toBe("error");
+    expect(result[1].message).toBe("test-log-5");
+  });
 });
