@@ -17,20 +17,22 @@ describe("addComponent()", () => {
   test("correctly adds valid components", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createTestComponent([ComponentType.CONFIG]))
+    testComponent.addComponent(createTestComponent([ComponentType.CONFIG]));
     expect(testComponent.getComponents().length).toBe(1);
   });
 });
 
 function createTestComponent(types) {
   return {
-    getName() { return "foo"},
+    getName() {
+      return "foo";
+    },
     getInfo() {
       return {
         types: types,
         initWait: false,
       };
     },
-    update() {}
+    update() {},
   };
 }
