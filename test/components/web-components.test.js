@@ -24,7 +24,13 @@ describe("addComponent()", () => {
 
 function createTestComponent(types) {
   return {
-    types: types,
-    initWait: false,
+    getName() { return "foo"},
+    getInfo() {
+      return {
+        types: types,
+        initWait: false,
+      };
+    },
+    update() {}
   };
 }
