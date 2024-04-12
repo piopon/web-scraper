@@ -25,7 +25,8 @@ export class WebComponents {
     if (componentTypes.length === 0) {
       this.#status.warning(`Missing component type(s): ${component}`);
     }
-    const componentMethods = Object.getOwnPropertyNames(Object.getPrototypeOf(component));
+    const componentMethods = Object.getOwnPropertyNames(Object.getPrototypeOf(component))
+                                   .concat(Object.getOwnPropertyNames(component));
     for (const componentType of componentTypes) {
       const requiredMethods = componentType.methods;
       if (!requiredMethods.every((method) => componentMethods.includes(method))) {
