@@ -20,6 +20,11 @@ describe("addComponent()", () => {
     testComponent.addComponent(createTestComponent([ComponentType.CONFIG]));
     expect(testComponent.getComponents().length).toBe(1);
   });
+  test("throws when input object is incorrect", () => {
+    const inConfig = { minLogLevel: LogLevel.INFO };
+    const testComponent = new WebComponents(inConfig);
+    expect(() => testComponent.addComponent(createTestComponent([ComponentType.SLAVE]))).toThrow(Error);
+  });
 });
 
 function createTestComponent(types) {
