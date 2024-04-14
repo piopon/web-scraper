@@ -36,6 +36,7 @@ describe("addComponent()", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
     expect(() => testComponent.addComponent(createTestComponent([ComponentType.SLAVE]))).toThrow(Error);
+    expect(testComponent.getComponents().length).toBe(0);
   });
 });
 
