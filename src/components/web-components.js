@@ -23,7 +23,7 @@ export class WebComponents {
   addComponent(component) {
     const componentTypes = component.getInfo().types;
     if (componentTypes.length === 0) {
-      this.#status.warning(`Missing component type(s): ${component}`);
+      this.#status.warning(`Missing component type(s): ${component.getName()}`);
     }
     const componentMethods = Object.getOwnPropertyNames(Object.getPrototypeOf(component))
                                    .concat(Object.getOwnPropertyNames(component));
