@@ -37,6 +37,12 @@ describe("addComponent()", () => {
     const testComponent = new WebComponents(inConfig);
     expect(() => testComponent.addComponent(createTestComponent([ComponentType.SLAVE]))).toThrow(Error);
     expect(testComponent.getComponents().length).toBe(0);
+    const statusHistory = testComponent.getHistory();
+    expect(statusHistory.length).toBe(2);
+    expect(statusHistory[0].type).toBe("info");
+    expect(statusHistory[0].message).toBe("Created");
+    expect(statusHistory[1].type).toBe("error");
+    expect(statusHistory[1].message).toBe("Incompatible component: foo");
   });
 });
 
