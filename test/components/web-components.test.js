@@ -42,7 +42,7 @@ describe("addComponent()", () => {
     expect(components[0].master).not.toBe(undefined);
     expect(components[0].slave).not.toBe(undefined);
   });
-  test("does not add slave-only component when master NOT defined", () => {
+  test("does not add slave-only component when no component is present", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
     testComponent.addComponent(createTestComponent("foo", [ComponentType.SLAVE]));
