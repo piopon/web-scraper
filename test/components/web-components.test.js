@@ -35,7 +35,7 @@ describe("addComponent()", () => {
   test("throws when input object is incorrect", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    expect(() => testComponent.addComponent(createTestComponent([ComponentType.SLAVE]))).toThrow(Error);
+    expect(() => testComponent.addComponent(createTestComponent([ComponentType.AUTH]))).toThrow(Error);
     expect(testComponent.getComponents().length).toBe(0);
     const statusHistory = testComponent.getHistory();
     expect(statusHistory.length).toBe(2);
