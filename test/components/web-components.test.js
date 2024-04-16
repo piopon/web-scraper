@@ -37,7 +37,10 @@ describe("addComponent()", () => {
     const testComponent = new WebComponents(inConfig);
     testComponent.addComponent(createTestComponent("mas1", [ComponentType.CONFIG]));
     testComponent.addComponent(createTestComponent("foo", [ComponentType.SLAVE], "mas1"));
-    expect(testComponent.getComponents().length).toBe(1);
+    const components = testComponent.getComponents();
+    expect(components.length).toBe(1);
+    expect(components[0].master).not.toBe(undefined);
+    expect(components[0].slave).not.toBe(undefined);
   });
   test("does not add slave-only component when master NOT defined", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
@@ -56,7 +59,10 @@ describe("addComponent()", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
     testComponent.addComponent(createTestComponent("foo", [ComponentType.SLAVE, ComponentType.CONFIG]));
-    expect(testComponent.getComponents().length).toBe(1);
+    const components = testComponent.getComponents();
+    expect(components.length).toBe(1);
+    expect(components[0].master).not.toBe(undefined);
+    expect(components[0].slave).toBe(undefined);
   });
   test("throws when input object is incorrect", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
