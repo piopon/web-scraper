@@ -18,13 +18,19 @@ describe("addComponent()", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
     testComponent.addComponent(createTestComponent("foo", [ComponentType.CONFIG]));
-    expect(testComponent.getComponents().length).toBe(1);
+    const components = testComponent.getComponents();
+    expect(components.length).toBe(1);
+    expect(components[0].master).not.toBe(undefined);
+    expect(components[0].slave).toBe(undefined);
   });
   test("adds component without type but prints warning", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
     testComponent.addComponent(createTestComponent("foo", []));
-    expect(testComponent.getComponents().length).toBe(1);
+    const components = testComponent.getComponents();
+    expect(components.length).toBe(1);
+    expect(components[0].master).not.toBe(undefined);
+    expect(components[0].slave).toBe(undefined);
     const statusHistory = testComponent.getHistory();
     expect(statusHistory.length).toBe(2);
     expect(statusHistory[0].type).toBe("info");
