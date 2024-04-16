@@ -45,6 +45,13 @@ describe("addComponent()", () => {
     testComponent.addComponent(createTestComponent("foo", [ComponentType.SLAVE]));
     expect(testComponent.getComponents().length).toBe(0);
   });
+  test("does not add slave-only component when master NOT found", () => {
+    const inConfig = { minLogLevel: LogLevel.INFO };
+    const testComponent = new WebComponents(inConfig);
+    testComponent.addComponent(createTestComponent("mas1", [ComponentType.CONFIG]));
+    testComponent.addComponent(createTestComponent("foo", [ComponentType.SLAVE], "master"));
+    expect(testComponent.getComponents().length).toBe(1);
+  });
   test("does add slave component when master not defined but other type is used", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
