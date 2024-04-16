@@ -58,5 +58,10 @@ function createTestComponent(types) {
       };
     },
     update() {},
+    getMaster() {
+      return {
+        name: "web-database",
+      }
+    }
   };
 }
