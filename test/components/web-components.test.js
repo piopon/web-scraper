@@ -32,11 +32,24 @@ describe("addComponent()", () => {
     expect(statusHistory[1].type).toBe("warning");
     expect(statusHistory[1].message).toBe("Missing component type(s): foo");
   });
+  test("does add slave-only component when master IS defined", () => {
+    const inConfig = { minLogLevel: LogLevel.INFO };
+    const testComponent = new WebComponents(inConfig);
+    testComponent.addComponent(createTestComponent([ComponentType.CONFIG]));
+    testComponent.addComponent(createTestComponent([ComponentType.SLAVE]));
+    expect(testComponent.getComponents().length).toBe(1);
+  });
   test("does not add slave-only component when master NOT defined", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
     testComponent.addComponent(createTestComponent([ComponentType.SLAVE]));
     expect(testComponent.getComponents().length).toBe(0);
+  });
+  test("does add slave component when master not defined but other type is used", () => {
+    const inConfig = { minLogLevel: LogLevel.INFO };
+    const testComponent = new WebComponents(inConfig);
+    testComponent.addComponent(createTestComponent([ComponentType.SLAVE, ComponentType.CONFIG]));
+    expect(testComponent.getComponents().length).toBe(1);
   });
   test("throws when input object is incorrect", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
