@@ -80,7 +80,7 @@ function createTestComponent(types) {
     getMaster() {
       return {
         name: "foo",
-      }
-    }
+      };
+    },
   };
 }
