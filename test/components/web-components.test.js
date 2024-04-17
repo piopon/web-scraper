@@ -103,15 +103,15 @@ describe("getComponents()", () => {
     expect(testComponent.getComponents()).not.toBe(undefined);
     expect(testComponent.getComponents().length).toBe(3);
   });
-  test("correctly returns all of specified type", () => {
+  test("correctly returns all components with non-slave type", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
     testComponent.addComponent(createTestComponent("foo", [ComponentType.CONFIG]));
     testComponent.addComponent(createTestComponent("bar", [ComponentType.SLAVE]), "foo");
     testComponent.addComponent(createTestComponent("test", [ComponentType.CONFIG]));
-    const components = testComponent.getComponents(ComponentType.CONFIG);
-    expect(components).not.toBe(undefined);
-    expect(components.length).toBe(2);
+    const configComponents = testComponent.getComponents(ComponentType.CONFIG);
+    expect(configComponents).not.toBe(undefined);
+    expect(configComponents.length).toBe(2);
   });
 });
 
