@@ -125,6 +125,17 @@ describe("getComponents()", () => {
   });
 });
 
+describe("getHistory()", () => {
+  test("returns correct status after creating object", () => {
+    const inConfig = { minLogLevel: LogLevel.INFO };
+    const testComponent = new WebComponents(inConfig);
+    const statusHistory = testComponent.getHistory();
+    expect(statusHistory.length).toBe(1);
+    expect(statusHistory[0].type).toBe("info");
+    expect(statusHistory[0].message).toBe("Created");
+  });
+});
+
 function createTestComponent(componentName, componentTypes, masterName = "") {
   return {
     getName() {
