@@ -88,6 +88,12 @@ describe("addComponent()", () => {
 });
 
 describe("getComponents()", () => {
+  test("correctly returns zero components", () => {
+    const inConfig = { minLogLevel: LogLevel.INFO };
+    const testComponent = new WebComponents(inConfig);
+    expect(testComponent.getComponents()).not.toBe(undefined);
+    expect(testComponent.getComponents().length).toBe(0);
+  });
   test("correctly returns all components", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
