@@ -87,6 +87,18 @@ describe("addComponent()", () => {
   });
 });
 
+describe("getComponents()", () => {
+  test("correctly returns all components", () => {
+    const inConfig = { minLogLevel: LogLevel.INFO };
+    const testComponent = new WebComponents(inConfig);
+    testComponent.addComponent(createTestComponent("foo", [ComponentType.CONFIG]));
+    testComponent.addComponent(createTestComponent("bar", [ComponentType.CONFIG]));
+    testComponent.addComponent(createTestComponent("test", [ComponentType.CONFIG]));
+    expect(testComponent.getComponents()).not.toBe(undefined);
+    expect(testComponent.getComponents().length).toBe(3);
+  });
+});
+
 function createTestComponent(componentName, componentTypes, masterName = "") {
   return {
     getName() {
