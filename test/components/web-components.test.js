@@ -162,6 +162,9 @@ function createTestComponent(componentName, componentTypes, masterName = "") {
         initWait: false,
       };
     },
+    runTestMethod(input) {
+      input.triggered = true;
+    },
     update() {},
     getMaster() {
       return {
