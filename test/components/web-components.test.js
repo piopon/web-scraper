@@ -125,6 +125,17 @@ describe("getComponents()", () => {
   });
 });
 
+describe("runComponents()", () => {
+  test("correctly invokes existing component method", () => {
+    const inConfig = { minLogLevel: LogLevel.INFO };
+    const testComponent = new WebComponents(inConfig);
+    testComponent.addComponent(createTestComponent("comp", [ComponentType.CONFIG]));
+    const verifyObject = {triggered: false};
+    testComponent.runComponents(ComponentType.CONFIG, "runTestMethod", verifyObject);
+    expect(verifyObject.triggered).toBe(true);
+  });
+});
+
 describe("getHistory()", () => {
   test("returns correct status after creating object", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
