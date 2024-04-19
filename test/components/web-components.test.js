@@ -144,6 +144,7 @@ describe("runComponents()", () => {
       fail("Non existing method should throw");
     } catch (error) {
       expect(error instanceof TypeError).toBe(true);
+      expect(error.message).toBe("component.master[method] is not a function");
     }
     expect(verifyObject.triggered).toBe(false);
   });
