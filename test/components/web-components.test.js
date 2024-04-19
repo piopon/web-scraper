@@ -126,12 +126,12 @@ describe("getComponents()", () => {
 });
 
 describe("runComponents()", () => {
-  test("correctly invokes existing component method", () => {
+  test("correctly invokes existing component method", async () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
     testComponent.addComponent(createTestComponent("comp", [ComponentType.CONFIG]));
     const verifyObject = {triggered: false};
-    testComponent.runComponents(ComponentType.CONFIG, "runTestMethod", verifyObject);
+    await testComponent.runComponents(ComponentType.CONFIG, "runTestMethod", verifyObject);
     expect(verifyObject.triggered).toBe(true);
   });
   test("throws when trying to invoke non-existing component method", async () => {
