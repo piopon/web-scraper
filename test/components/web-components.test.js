@@ -147,6 +147,14 @@ describe("runComponents()", () => {
     }
     expect(verifyObject.triggered).toBe(false);
   });
+  test("does not invoke non-existing method for not added component type", async () => {
+    const inConfig = { minLogLevel: LogLevel.INFO };
+    const testComponent = new WebComponents(inConfig);
+    testComponent.addComponent(createTestComponent("comp", [ComponentType.CONFIG]));
+    const verifyObject = { triggered: false };
+    await testComponent.runComponents(ComponentType.INIT, "notExistingMethod", verifyObject);
+    expect(verifyObject.triggered).toBe(false);
+  });
 });
 
 describe("getHistory()", () => {
