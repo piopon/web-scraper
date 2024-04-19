@@ -130,7 +130,7 @@ describe("runComponents()", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
     testComponent.addComponent(createTestComponent("comp", [ComponentType.CONFIG]));
-    const verifyObject = {triggered: false};
+    const verifyObject = { triggered: false };
     await testComponent.runComponents(ComponentType.CONFIG, "runTestMethod", verifyObject);
     expect(verifyObject.triggered).toBe(true);
   });
@@ -141,7 +141,7 @@ describe("runComponents()", () => {
     const verifyObject = { triggered: false };
     try {
       await testComponent.runComponents(ComponentType.CONFIG, "notExistingMethod", verifyObject);
-      fail('Non existing method should throw');
+      fail("Non existing method should throw");
     } catch (error) {
       expect(error instanceof TypeError).toBe(true);
     }
