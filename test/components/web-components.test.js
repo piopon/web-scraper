@@ -134,6 +134,21 @@ describe("getHistory()", () => {
     expect(statusHistory[0].type).toBe("info");
     expect(statusHistory[0].message).toBe("Created");
   });
+  test("returns correct status after adding component", () => {
+    const inConfig = { minLogLevel: LogLevel.INFO };
+    const testComponent = new WebComponents(inConfig);
+    testComponent.addComponent(createTestComponent("component1", []));
+    testComponent.addComponent(createTestComponent("component2", [ComponentType.CONFIG]));
+    expect(() => testComponent.addComponent(createTestComponent("component3", [ComponentType.AUTH]))).toThrow(Error);
+    const statusHistory = testComponent.getHistory();
+    expect(statusHistory.length).toBe(3);
+    expect(statusHistory[0].type).toBe("info");
+    expect(statusHistory[0].message).toBe("Created");
+    expect(statusHistory[1].type).toBe("warning");
+    expect(statusHistory[1].message).toBe("Missing component type(s): component1");
+    expect(statusHistory[2].type).toBe("error");
+    expect(statusHistory[2].message).toBe("Incompatible component: component3");
+  });
 });
 
 function createTestComponent(componentName, componentTypes, masterName = "") {
