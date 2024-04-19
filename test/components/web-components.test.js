@@ -134,6 +134,19 @@ describe("runComponents()", () => {
     testComponent.runComponents(ComponentType.CONFIG, "runTestMethod", verifyObject);
     expect(verifyObject.triggered).toBe(true);
   });
+  test("throws when trying to invoke non-existing component method", async () => {
+    const inConfig = { minLogLevel: LogLevel.INFO };
+    const testComponent = new WebComponents(inConfig);
+    testComponent.addComponent(createTestComponent("comp", [ComponentType.CONFIG]));
+    const verifyObject = { triggered: false };
+    try {
+      await testComponent.runComponents(ComponentType.CONFIG, "notExistingMethod", verifyObject);
+      fail('Non existing method should throw');
+    } catch (error) {
+      expect(error instanceof TypeError).toBe(true);
+    }
+    expect(verifyObject.triggered).toBe(false);
+  });
 });
 
 describe("getHistory()", () => {
