@@ -125,6 +125,21 @@ describe("getComponents()", () => {
   });
 });
 
+describe("initComponents()", () => {
+  test("will fail for non-init component type", async () => {
+    const inConfig = { minLogLevel: LogLevel.INFO };
+    const testComponent = new WebComponents(inConfig);
+    testComponent.addComponent(createTestComponent("comp", [ComponentType.CONFIG]));
+    try {
+      await testComponent.initComponents(ComponentType.CONFIG);
+      fail("Non existing method should throw");
+    } catch (error) {
+      expect(error instanceof TypeError).toBe(true);
+      expect(error.message).toBe("component.master.start is not a function");
+    }
+  });
+});
+
 describe("runComponents()", () => {
   test("correctly invokes existing component method", async () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
