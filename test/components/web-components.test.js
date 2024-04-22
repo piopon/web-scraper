@@ -221,3 +221,25 @@ function createTestComponent(componentName, componentTypes, masterName = "") {
     },
   };
 }
+
+function createInitComponent(componentName) {
+  return {
+    getName() {
+      return componentName;
+    },
+    getInfo() {
+      return {
+        types: [ComponentType.INIT],
+        initWait: true,
+      };
+    },
+    start(input) {
+      input.running = true;
+      input.start = true;
+    },
+    stop(input) {
+      input.running = false;
+      input.stop = true;
+    },
+  };
+}
