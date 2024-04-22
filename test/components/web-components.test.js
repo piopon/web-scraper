@@ -135,6 +135,15 @@ describe("initComponents()", () => {
     expect(result).toBe(true);
     expect(verifyObject.running).toBe(true);
   });
+  test("will fail when init component cannot be started", async () => {
+    const inConfig = { minLogLevel: LogLevel.INFO };
+    const testComponent = new WebComponents(inConfig);
+    testComponent.addComponent(createInitComponent("test123", false, false));
+    const verifyObject = { running: undefined };
+    const result = await testComponent.initComponents(ComponentType.INIT, verifyObject);
+    expect(result).toBe(false);
+    expect(verifyObject.running).toBe(true);
+  });
   test("will fail for non-init component type", async () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
