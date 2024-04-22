@@ -130,7 +130,7 @@ describe("initComponents()", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
     testComponent.addComponent(createInitComponent("test123"));
-    const verifyObject = { running: undefined, start: false, stop: false };
+    const verifyObject = { running: undefined };
     const result = await testComponent.initComponents(ComponentType.INIT, verifyObject);
     expect(result).toBe(true);
     expect(verifyObject.running).toBe(true);
