@@ -129,7 +129,7 @@ describe("initComponents()", () => {
   test("will run for init component type", async () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createInitComponent("test123"));
+    testComponent.addComponent(createInitComponent("test123", true, true));
     const verifyObject = { running: undefined };
     const result = await testComponent.initComponents(ComponentType.INIT, verifyObject);
     expect(result).toBe(true);
@@ -231,7 +231,7 @@ function createTestComponent(componentName, componentTypes, masterName = "") {
   };
 }
 
-function createInitComponent(componentName) {
+function createInitComponent(componentName, startResult = true, stopResult = true) {
   return {
     getName() {
       return componentName;
@@ -244,11 +244,11 @@ function createInitComponent(componentName) {
     },
     start(input) {
       input.running = true;
-      return true;
+      return startResult;
     },
     stop(input) {
       input.running = false;
-      return true;
+      return stopResult;
     },
   };
 }
