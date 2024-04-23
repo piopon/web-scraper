@@ -166,7 +166,7 @@ describe("runComponents()", () => {
     const testComponent = new WebComponents(inConfig);
     testComponent.addComponent(createTestComponent("comp", [ComponentType.CONFIG]));
     const verifyObject = { triggered: false };
-    await testComponent.runComponents(ComponentType.CONFIG, "runTestMethod", verifyObject);
+    await testComponent.runComponents(ComponentType.CONFIG, "runTest", verifyObject);
     expect(verifyObject.triggered).toBe(true);
   });
   test("throws when trying to invoke non-existing component method", async () => {
@@ -223,9 +223,9 @@ function createTestComponent(componentName, componentTypes, masterName = "") {
   return {
     getName: () => componentName,
     getInfo: () => ({ types: componentTypes, initWait: false }),
-    runTestMethod: (input) => (input.triggered = true),
-    update: () => {},
     getMaster: () => ({ name: masterName }),
+    runTest: (input) => (input.triggered = true),
+    update: () => console.log("Called update()!"),
   };
 }
 
