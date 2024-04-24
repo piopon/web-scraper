@@ -30,7 +30,7 @@ describe("addComponent()", () => {
   test("adds component without type but prints warning", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createTestComponent("foo", []));
+    testComponent.addComponent(createTestComponent2("foo", {}));
     const components = testComponent.getComponents();
     expect(components.length).toBe(1);
     expect(components[0].master).not.toBe(undefined);
