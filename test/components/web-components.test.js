@@ -253,15 +253,21 @@ function createInitComponent(componentName, startResult = true, stopResult = tru
 
 function createTestComponent2(name, properties) {
   const componentTypes = [];
-  componentTypes.push(properties.init ? ComponentType.INIT : undefined);
-  componentTypes.push(properties.master ? ComponentType.SLAVE : undefined);
-  componentTypes.push(properties.config ? ComponentType.CONFIG : undefined);
+  if (properties.init != null) {
+    componentTypes.push(ComponentType.INIT);
+  }
+  if (properties.slave != null) {
+    componentTypes.push(ComponentType.SLAVE);
+  }
+  if (properties.config != null) {
+    componentTypes.push(ComponentType.CONFIG);
+  }
   return {
     getName: () => name,
     getInfo: () => ({ types: componentTypes, initWait: true }),
     runTest: (input) => (input.triggered = true),
     ...(properties.init ? createInitComponent2(properties.init) : {}),
-    ...(properties.master ? createSlaveComponent2(properties.master) : {}),
+    ...(properties.slave ? createSlaveComponent2(properties.slave) : {}),
     ...(properties.config ? createConfigComponent2(properties.config) : {}),
   };
 }
