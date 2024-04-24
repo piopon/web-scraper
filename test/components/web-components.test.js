@@ -1,6 +1,8 @@
 import { WebComponents } from "../../src/components/web-components.js";
 import { LogLevel, ComponentStatus, ComponentType } from "../../config/app-types.js";
 
+const COMPONENT_CONFIG_PROPS = { config: { hasUpdate: true, update: () => {} } };
+
 test("getName() returns correct result", () => {
   const inConfig = { minLogLevel: LogLevel.INFO };
   const testComponent = new WebComponents(inConfig);
@@ -17,7 +19,7 @@ describe("addComponent()", () => {
   test("correctly adds valid components", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createTestComponent("foo", [ComponentType.CONFIG]));
+    testComponent.addComponent(createTestComponent2("foo", COMPONENT_CONFIG_PROPS));
     const components = testComponent.getComponents();
     expect(components.length).toBe(1);
     expect(components[0].master).not.toBe(undefined);
