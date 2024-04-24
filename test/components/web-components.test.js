@@ -2,6 +2,7 @@ import { WebComponents } from "../../src/components/web-components.js";
 import { LogLevel, ComponentStatus, ComponentType } from "../../config/app-types.js";
 
 const COMPONENT_CONFIG_PROPS = { config: { hasUpdate: true, update: () => {} } };
+const COMPONENT_SLAVE_PROPS = { slave: { hasMaster: true, masterName: "master" } };
 
 test("getName() returns correct result", () => {
   const inConfig = { minLogLevel: LogLevel.INFO };
@@ -43,8 +44,8 @@ describe("addComponent()", () => {
   test("does add slave-only component when master IS defined", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createTestComponent("mas1", [ComponentType.CONFIG]));
-    testComponent.addComponent(createTestComponent("foo", [ComponentType.SLAVE], "mas1"));
+    testComponent.addComponent(createTestComponent2("master", COMPONENT_CONFIG_PROPS));
+    testComponent.addComponent(createTestComponent2("foo", COMPONENT_SLAVE_PROPS));
     const components = testComponent.getComponents();
     expect(components.length).toBe(1);
     expect(components[0].master).not.toBe(undefined);
@@ -53,14 +54,14 @@ describe("addComponent()", () => {
   test("does not add slave-only component when no component is present", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createTestComponent("foo", [ComponentType.SLAVE]));
+    testComponent.addComponent(createTestComponent2("foo", COMPONENT_SLAVE_PROPS));
     expect(testComponent.getComponents().length).toBe(0);
   });
   test("does not add slave-only component when master NOT found", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createTestComponent("mas1", [ComponentType.CONFIG]));
-    testComponent.addComponent(createTestComponent("foo", [ComponentType.SLAVE], "master"));
+    testComponent.addComponent(createTestComponent2("mas1", COMPONENT_CONFIG_PROPS));
+    testComponent.addComponent(createTestComponent2("foo", COMPONENT_SLAVE_PROPS));
     const components = testComponent.getComponents();
     expect(components.length).toBe(1);
     expect(components[0].master).not.toBe(undefined);
