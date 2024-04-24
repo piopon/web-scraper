@@ -256,6 +256,9 @@ function createInitComponent(componentName, startResult = true, stopResult = tru
 
 function createTestComponent2(name, properties) {
   const componentTypes = [];
+  if (properties.auth != null) {
+    componentTypes.push(ComponentType.AUTH);
+  }
   if (properties.init != null) {
     componentTypes.push(ComponentType.INIT);
   }
@@ -269,6 +272,7 @@ function createTestComponent2(name, properties) {
     getName: () => name,
     getInfo: () => ({ types: componentTypes, initWait: true }),
     runTest: (input) => (input.triggered = true),
+    ...(properties.auth ? composeAuthComponent(properties.auth) : {}),
     ...(properties.init ? composeInitComponent(properties.init) : {}),
     ...(properties.slave ? composeSlaveComponent(properties.slave) : {}),
     ...(properties.config ? composeConfigComponent(properties.config) : {}),
@@ -284,6 +288,13 @@ function composeConfigComponent(properties) {
 function composeSlaveComponent(properties) {
   return {
     ...(properties.hasMaster ? { getMaster: () => ({ name: properties.masterName }) } : {}),
+  };
+}
+
+function composeAuthComponent(properties) {
+  return {
+    ...(properties.hasStart ? { start: (input) => properties.start(input) } : {}),
+    ...(properties.hasStop ? { stop: (input) => properties.stop(input) } : {}),
   };
 }
 
