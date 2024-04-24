@@ -1,6 +1,7 @@
 import { WebComponents } from "../../src/components/web-components.js";
 import { LogLevel, ComponentStatus, ComponentType } from "../../config/app-types.js";
 
+const COMPONENT_AUTH_PROPS = { auth: { hasStart: false, hasStop: false } };
 const COMPONENT_CONFIG_PROPS = { config: { hasUpdate: true, update: () => {} } };
 const COMPONENT_SLAVE_PROPS = { slave: { hasMaster: true, masterName: "master" } };
 
@@ -79,7 +80,7 @@ describe("addComponent()", () => {
   test("throws when input object is incorrect", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    expect(() => testComponent.addComponent(createTestComponent("foo", [ComponentType.AUTH]))).toThrow(Error);
+    expect(() => testComponent.addComponent(createTestComponent2("foo", COMPONENT_AUTH_PROPS))).toThrow(Error);
     expect(testComponent.getComponents().length).toBe(0);
     const statusHistory = testComponent.getHistory();
     expect(statusHistory.length).toBe(2);
