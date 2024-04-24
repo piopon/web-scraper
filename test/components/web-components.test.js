@@ -266,25 +266,25 @@ function createTestComponent2(name, properties) {
     getName: () => name,
     getInfo: () => ({ types: componentTypes, initWait: true }),
     runTest: (input) => (input.triggered = true),
-    ...(properties.init ? createInitComponent2(properties.init) : {}),
-    ...(properties.slave ? createSlaveComponent2(properties.slave) : {}),
-    ...(properties.config ? createConfigComponent2(properties.config) : {}),
+    ...(properties.init ? composeInitComponent(properties.init) : {}),
+    ...(properties.slave ? composeSlaveComponent(properties.slave) : {}),
+    ...(properties.config ? composeConfigComponent(properties.config) : {}),
   };
 }
 
-function createConfigComponent2(properties) {
+function composeConfigComponent(properties) {
   return {
     ...(properties.hasUpdate ? { update: () => properties.update() } : {}),
   };
 }
 
-function createSlaveComponent2(properties) {
+function composeSlaveComponent(properties) {
   return {
     ...(properties.hasMaster ? { getMaster: () => ({ name: properties.masterName }) } : {}),
   };
 }
 
-function createInitComponent2(properties) {
+function composeInitComponent(properties) {
   return {
     ...(properties.hasStart ? { start: (input) => properties.start(input) } : {}),
     ...(properties.hasStop ? { stop: (input) => properties.stop(input) } : {}),
