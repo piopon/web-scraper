@@ -221,11 +221,11 @@ describe("getHistory()", () => {
 
 function createTestComponent(componentName, componentTypes, masterName = "") {
   return {
-    getName: () => componentName,
-    getInfo: () => ({ types: componentTypes, initWait: false }),
-    getMaster: () => ({ name: masterName }),
-    runTest: (input) => (input.triggered = true),
-    update: () => console.log("Called update()!"),
+    ...(true ? { getName: () => componentName } : {}),
+    ...(true ? { getInfo: () => ({ types: componentTypes, initWait: false }) } : {}),
+    ...(true ? { getMaster: () => ({ name: masterName }) } : {}),
+    ...(true ? { runTest: (input) => (input.triggered = true) } : {}),
+    ...(true ? { update: () => {} } : {}),
   };
 }
 
