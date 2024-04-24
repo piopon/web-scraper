@@ -250,3 +250,37 @@ function createInitComponent(componentName, startResult = true, stopResult = tru
     },
   };
 }
+
+function createTestComponent2(name, properties) {
+  const componentTypes = [];
+  componentTypes.push(properties.init ? ComponentType.INIT : undefined);
+  componentTypes.push(properties.master ? ComponentType.SLAVE : undefined);
+  componentTypes.push(properties.config ? ComponentType.CONFIG : undefined);
+  return {
+    getName: () => name,
+    getInfo: () => ({ types: componentTypes, initWait: true }),
+    runTest: (input) => (input.triggered = true),
+    ...(properties.init ? createInitComponent2(properties.init) : {}),
+    ...(properties.master ? createSlaveComponent2(properties.master) : {}),
+    ...(properties.config ? createConfigComponent2(properties.config) : {}),
+  };
+}
+
+function createConfigComponent2(properties) {
+  return {
+    ...(properties.hasUpdate ? { update: () => properties.update() } : {}),
+  };
+}
+
+function createSlaveComponent2(properties) {
+  return {
+    ...(properties.hasMaster ? { getMaster: () => ({ name: properties.masterName }) } : {}),
+  };
+}
+
+function createInitComponent2(properties) {
+  return {
+    ...(properties.hasStart ? { start: (input) => properties.start(input) } : {}),
+    ...(properties.hasStop ? { stop: (input) => properties.stop(input) } : {}),
+  };
+}
