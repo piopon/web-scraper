@@ -101,18 +101,18 @@ describe("getComponents()", () => {
   test("correctly returns all components", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createTestComponent("foo", [ComponentType.CONFIG]));
-    testComponent.addComponent(createTestComponent("bar", [ComponentType.CONFIG]));
-    testComponent.addComponent(createTestComponent("test", [ComponentType.CONFIG]));
+    testComponent.addComponent(createTestComponent2("foo", CONFIG_PROPS));
+    testComponent.addComponent(createTestComponent2("bar", CONFIG_PROPS));
+    testComponent.addComponent(createTestComponent2("test", CONFIG_PROPS));
     expect(testComponent.getComponents()).not.toBe(undefined);
     expect(testComponent.getComponents().length).toBe(3);
   });
   test("correctly returns all components with non-slave type", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createTestComponent("foo", [ComponentType.CONFIG]));
-    testComponent.addComponent(createTestComponent("bar", [ComponentType.SLAVE]), "foo");
-    testComponent.addComponent(createTestComponent("test", [ComponentType.CONFIG]));
+    testComponent.addComponent(createTestComponent2("master", CONFIG_PROPS));
+    testComponent.addComponent(createTestComponent2("bar", SLAVE_PROPS));
+    testComponent.addComponent(createTestComponent2("test", CONFIG_PROPS));
     const configComponents = testComponent.getComponents(ComponentType.CONFIG);
     expect(configComponents).not.toBe(undefined);
     expect(configComponents.length).toBe(2);
@@ -120,9 +120,9 @@ describe("getComponents()", () => {
   test("correctly returns all components with slave type", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createTestComponent("foo", [ComponentType.CONFIG]));
-    testComponent.addComponent(createTestComponent("bar", [ComponentType.SLAVE]), "foo");
-    testComponent.addComponent(createTestComponent("test", [ComponentType.CONFIG]));
+    testComponent.addComponent(createTestComponent2("master", CONFIG_PROPS));
+    testComponent.addComponent(createTestComponent2("bar", SLAVE_PROPS));
+    testComponent.addComponent(createTestComponent2("test", CONFIG_PROPS));
     const slaveComponents = testComponent.getComponents(ComponentType.SLAVE);
     expect(slaveComponents).not.toBe(undefined);
     expect(slaveComponents.length).toBe(0);
