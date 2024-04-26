@@ -209,9 +209,9 @@ describe("getHistory()", () => {
   test("returns correct status after adding component", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createTestComponent("component1", []));
-    testComponent.addComponent(createTestComponent("component2", [ComponentType.CONFIG]));
-    expect(() => testComponent.addComponent(createTestComponent("component3", [ComponentType.AUTH]))).toThrow(Error);
+    testComponent.addComponent(createTestComponent2("component1", {}));
+    testComponent.addComponent(createTestComponent2("component2", CONFIG_PROPS));
+    expect(() => testComponent.addComponent(createTestComponent2("component3", AUTH_PROPS))).toThrow(Error);
     const statusHistory = testComponent.getHistory();
     expect(statusHistory.length).toBe(3);
     expect(statusHistory[0].type).toBe("info");
