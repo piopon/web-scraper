@@ -237,28 +237,6 @@ describe("getHistory()", () => {
   });
 });
 
-function createInitComponent(componentName, startResult = true, stopResult = true) {
-  return {
-    getName() {
-      return componentName;
-    },
-    getInfo() {
-      return {
-        types: [ComponentType.INIT],
-        initWait: true,
-      };
-    },
-    start(input) {
-      input.triggeredStart = true;
-      return startResult;
-    },
-    stop(input) {
-      input.triggeredStop = true;
-      return stopResult;
-    },
-  };
-}
-
 function createTestComponent(name, properties) {
   const componentTypes = [];
   if (properties.auth != null) {
