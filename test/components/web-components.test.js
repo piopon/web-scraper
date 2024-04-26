@@ -21,7 +21,7 @@ describe("addComponent()", () => {
   test("correctly adds valid components", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createTestComponent2("foo", CONFIG_PROPS));
+    testComponent.addComponent(createTestComponent("foo", CONFIG_PROPS));
     const components = testComponent.getComponents();
     expect(components.length).toBe(1);
     expect(components[0].master).not.toBe(undefined);
@@ -30,7 +30,7 @@ describe("addComponent()", () => {
   test("adds component without type but prints warning", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createTestComponent2("foo", {}));
+    testComponent.addComponent(createTestComponent("foo", {}));
     const components = testComponent.getComponents();
     expect(components.length).toBe(1);
     expect(components[0].master).not.toBe(undefined);
@@ -45,8 +45,8 @@ describe("addComponent()", () => {
   test("does add slave-only component when master IS defined", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createTestComponent2("master", CONFIG_PROPS));
-    testComponent.addComponent(createTestComponent2("foo", SLAVE_PROPS));
+    testComponent.addComponent(createTestComponent("master", CONFIG_PROPS));
+    testComponent.addComponent(createTestComponent("foo", SLAVE_PROPS));
     const components = testComponent.getComponents();
     expect(components.length).toBe(1);
     expect(components[0].master).not.toBe(undefined);
@@ -55,14 +55,14 @@ describe("addComponent()", () => {
   test("does not add slave-only component when no component is present", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createTestComponent2("foo", SLAVE_PROPS));
+    testComponent.addComponent(createTestComponent("foo", SLAVE_PROPS));
     expect(testComponent.getComponents().length).toBe(0);
   });
   test("does not add slave-only component when master NOT found", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createTestComponent2("mas1", CONFIG_PROPS));
-    testComponent.addComponent(createTestComponent2("foo", SLAVE_PROPS));
+    testComponent.addComponent(createTestComponent("mas1", CONFIG_PROPS));
+    testComponent.addComponent(createTestComponent("foo", SLAVE_PROPS));
     const components = testComponent.getComponents();
     expect(components.length).toBe(1);
     expect(components[0].master).not.toBe(undefined);
@@ -71,7 +71,7 @@ describe("addComponent()", () => {
   test("does add slave component when master not defined but other type is used", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createTestComponent2("foo", { ...SLAVE_PROPS, ...CONFIG_PROPS }));
+    testComponent.addComponent(createTestComponent("foo", { ...SLAVE_PROPS, ...CONFIG_PROPS }));
     const components = testComponent.getComponents();
     expect(components.length).toBe(1);
     expect(components[0].master).not.toBe(undefined);
@@ -80,7 +80,7 @@ describe("addComponent()", () => {
   test("throws when input object is incorrect", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    expect(() => testComponent.addComponent(createTestComponent2("foo", AUTH_PROPS))).toThrow(Error);
+    expect(() => testComponent.addComponent(createTestComponent("foo", AUTH_PROPS))).toThrow(Error);
     expect(testComponent.getComponents().length).toBe(0);
     const statusHistory = testComponent.getHistory();
     expect(statusHistory.length).toBe(2);
@@ -101,18 +101,18 @@ describe("getComponents()", () => {
   test("correctly returns all components", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createTestComponent2("foo", CONFIG_PROPS));
-    testComponent.addComponent(createTestComponent2("bar", CONFIG_PROPS));
-    testComponent.addComponent(createTestComponent2("test", CONFIG_PROPS));
+    testComponent.addComponent(createTestComponent("foo", CONFIG_PROPS));
+    testComponent.addComponent(createTestComponent("bar", CONFIG_PROPS));
+    testComponent.addComponent(createTestComponent("test", CONFIG_PROPS));
     expect(testComponent.getComponents()).not.toBe(undefined);
     expect(testComponent.getComponents().length).toBe(3);
   });
   test("correctly returns all components with non-slave type", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createTestComponent2("master", CONFIG_PROPS));
-    testComponent.addComponent(createTestComponent2("bar", SLAVE_PROPS));
-    testComponent.addComponent(createTestComponent2("test", CONFIG_PROPS));
+    testComponent.addComponent(createTestComponent("master", CONFIG_PROPS));
+    testComponent.addComponent(createTestComponent("bar", SLAVE_PROPS));
+    testComponent.addComponent(createTestComponent("test", CONFIG_PROPS));
     const configComponents = testComponent.getComponents(ComponentType.CONFIG);
     expect(configComponents).not.toBe(undefined);
     expect(configComponents.length).toBe(2);
@@ -120,9 +120,9 @@ describe("getComponents()", () => {
   test("correctly returns all components with slave type", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createTestComponent2("master", CONFIG_PROPS));
-    testComponent.addComponent(createTestComponent2("bar", SLAVE_PROPS));
-    testComponent.addComponent(createTestComponent2("test", CONFIG_PROPS));
+    testComponent.addComponent(createTestComponent("master", CONFIG_PROPS));
+    testComponent.addComponent(createTestComponent("bar", SLAVE_PROPS));
+    testComponent.addComponent(createTestComponent("test", CONFIG_PROPS));
     const slaveComponents = testComponent.getComponents(ComponentType.SLAVE);
     expect(slaveComponents).not.toBe(undefined);
     expect(slaveComponents.length).toBe(0);
@@ -153,7 +153,7 @@ describe("initComponents()", () => {
   test("will fail for non-init component type", async () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createTestComponent("comp", [ComponentType.CONFIG]));
+    testComponent.addComponent(createTestComponent("comp", CONFIG_PROPS));
     try {
       await testComponent.initComponents(ComponentType.CONFIG);
       fail("Non existing method should throw");
@@ -168,7 +168,7 @@ describe("runComponents()", () => {
   test("correctly invokes existing component method", async () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createTestComponent2("comp", CONFIG_PROPS));
+    testComponent.addComponent(createTestComponent("comp", CONFIG_PROPS));
     const verifyObject = { triggered: false };
     await testComponent.runComponents(ComponentType.CONFIG, "runTest", verifyObject);
     expect(verifyObject.triggered).toBe(true);
@@ -176,7 +176,7 @@ describe("runComponents()", () => {
   test("throws when trying to invoke non-existing component method", async () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createTestComponent2("comp", CONFIG_PROPS));
+    testComponent.addComponent(createTestComponent("comp", CONFIG_PROPS));
     const verifyObject = { triggered: false };
     try {
       await testComponent.runComponents(ComponentType.CONFIG, "notExistingMethod", verifyObject);
@@ -190,7 +190,7 @@ describe("runComponents()", () => {
   test("does not invoke non-existing method for not added component type", async () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createTestComponent2("comp", CONFIG_PROPS));
+    testComponent.addComponent(createTestComponent("comp", CONFIG_PROPS));
     const verifyObject = { triggered: false };
     await testComponent.runComponents(ComponentType.INIT, "notExistingMethod", verifyObject);
     expect(verifyObject.triggered).toBe(false);
@@ -209,9 +209,9 @@ describe("getHistory()", () => {
   test("returns correct status after adding component", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createTestComponent2("component1", {}));
-    testComponent.addComponent(createTestComponent2("component2", CONFIG_PROPS));
-    expect(() => testComponent.addComponent(createTestComponent2("component3", AUTH_PROPS))).toThrow(Error);
+    testComponent.addComponent(createTestComponent("component1", {}));
+    testComponent.addComponent(createTestComponent("component2", CONFIG_PROPS));
+    expect(() => testComponent.addComponent(createTestComponent("component3", AUTH_PROPS))).toThrow(Error);
     const statusHistory = testComponent.getHistory();
     expect(statusHistory.length).toBe(3);
     expect(statusHistory[0].type).toBe("info");
@@ -222,16 +222,6 @@ describe("getHistory()", () => {
     expect(statusHistory[2].message).toBe("Incompatible component: component3");
   });
 });
-
-function createTestComponent(componentName, componentTypes, masterName = "") {
-  return {
-    ...(true ? { getName: () => componentName } : {}),
-    ...(true ? { getInfo: () => ({ types: componentTypes, initWait: false }) } : {}),
-    ...(true ? { getMaster: () => ({ name: masterName }) } : {}),
-    ...(true ? { runTest: (input) => (input.triggered = true) } : {}),
-    ...(true ? { update: () => {} } : {}),
-  };
-}
 
 function createInitComponent(componentName, startResult = true, stopResult = true) {
   return {
@@ -255,7 +245,7 @@ function createInitComponent(componentName, startResult = true, stopResult = tru
   };
 }
 
-function createTestComponent2(name, properties) {
+function createTestComponent(name, properties) {
   const componentTypes = [];
   if (properties.auth != null) {
     componentTypes.push(ComponentType.AUTH);
