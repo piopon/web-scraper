@@ -2,6 +2,20 @@ import { WebComponents } from "../../src/components/web-components.js";
 import { LogLevel, ComponentStatus, ComponentType } from "../../config/app-types.js";
 
 const AUTH_PROPS = { auth: { hasStart: false, hasStop: false } };
+const INIT_PROPS = {
+  init: {
+    hasStart: true,
+    start(input) {
+      input.triggeredStart = true;
+      return input.resultStart;
+    },
+    hasStop: true,
+    stop(input) {
+      input.triggeredStop = true;
+      return input.resultStop;
+    },
+  },
+};
 const SLAVE_PROPS = { slave: { hasMaster: true, masterName: "master" } };
 const CONFIG_PROPS = { config: { hasUpdate: true, update: () => {} } };
 
