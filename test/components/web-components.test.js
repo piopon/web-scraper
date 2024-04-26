@@ -168,7 +168,7 @@ describe("runComponents()", () => {
   test("correctly invokes existing component method", async () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createTestComponent("comp", [ComponentType.CONFIG]));
+    testComponent.addComponent(createTestComponent2("comp", CONFIG_PROPS));
     const verifyObject = { triggered: false };
     await testComponent.runComponents(ComponentType.CONFIG, "runTest", verifyObject);
     expect(verifyObject.triggered).toBe(true);
@@ -176,7 +176,7 @@ describe("runComponents()", () => {
   test("throws when trying to invoke non-existing component method", async () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createTestComponent("comp", [ComponentType.CONFIG]));
+    testComponent.addComponent(createTestComponent2("comp", CONFIG_PROPS));
     const verifyObject = { triggered: false };
     try {
       await testComponent.runComponents(ComponentType.CONFIG, "notExistingMethod", verifyObject);
@@ -190,7 +190,7 @@ describe("runComponents()", () => {
   test("does not invoke non-existing method for not added component type", async () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createTestComponent("comp", [ComponentType.CONFIG]));
+    testComponent.addComponent(createTestComponent2("comp", CONFIG_PROPS));
     const verifyObject = { triggered: false };
     await testComponent.runComponents(ComponentType.INIT, "notExistingMethod", verifyObject);
     expect(verifyObject.triggered).toBe(false);
