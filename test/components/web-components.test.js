@@ -241,7 +241,7 @@ function createTestComponent(name, properties) {
   return {
     getName: () => name,
     getInfo: () => ({ types: componentTypes, initWait: true }),
-    runTest: (input) => (input.triggered = true),
+    runTest: (input) => tester(input, ""),
     ...(properties.auth ? composeAuthComponent(properties.auth) : {}),
     ...(properties.init ? composeInitComponent(properties.init) : {}),
     ...(properties.slave ? composeSlaveComponent(properties.slave) : {}),
