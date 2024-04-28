@@ -17,7 +17,7 @@ const INIT_PROPS = {
   },
 };
 const SLAVE_PROPS = { slave: { hasMaster: true, masterName: "master" } };
-const CONFIG_PROPS = { config: { hasUpdate: true, update: () => {} } };
+const CONFIG_PROPS = { config: { update: () => {} } };
 
 test("getName() returns correct result", () => {
   const inConfig = { minLogLevel: LogLevel.INFO };
@@ -264,7 +264,7 @@ function createTestComponent(name, properties) {
 
 function composeConfigComponent(properties) {
   return {
-    ...(properties.hasUpdate ? { update: () => properties.update() } : {}),
+    ...(properties.update ? { update: () => properties.update() } : {}),
   };
 }
 
