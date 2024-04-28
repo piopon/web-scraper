@@ -285,3 +285,9 @@ function composeInitComponent(properties) {
     ...(properties.stop ? { stop: (input) => properties.stop(input) } : {}),
   };
 }
+
+function tester(input, suffix) {
+  const capitalize = (word) => word.charAt(0).toUpperCase() + word.slice(1);
+  input["triggered" + capitalize(suffix)] = true;
+  return input["result" + capitalize(suffix)];
+}
