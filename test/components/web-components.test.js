@@ -2,18 +2,7 @@ import { WebComponents } from "../../src/components/web-components.js";
 import { LogLevel, ComponentStatus, ComponentType } from "../../config/app-types.js";
 
 const AUTH_PROPS = { auth: {} };
-const INIT_PROPS = {
-  init: {
-    start(input) {
-      input.triggeredStart = true;
-      return input.resultStart;
-    },
-    stop(input) {
-      input.triggeredStop = true;
-      return input.resultStop;
-    },
-  },
-};
+const INIT_PROPS = { init: { start: (i) => tester(i, "start"), stop: (i) => tester(i, "stop") } };
 const SLAVE_PROPS = { slave: { masterName: "master" } };
 const CONFIG_PROPS = { config: { update: () => {} } };
 
