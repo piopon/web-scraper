@@ -1,15 +1,13 @@
 import { WebComponents } from "../../src/components/web-components.js";
 import { LogLevel, ComponentStatus, ComponentType } from "../../config/app-types.js";
 
-const AUTH_PROPS = { auth: { hasStart: false, hasStop: false } };
+const AUTH_PROPS = { auth: {} };
 const INIT_PROPS = {
   init: {
-    hasStart: true,
     start(input) {
       input.triggeredStart = true;
       return input.resultStart;
     },
-    hasStop: true,
     stop(input) {
       input.triggeredStop = true;
       return input.resultStop;
@@ -276,14 +274,14 @@ function composeSlaveComponent(properties) {
 
 function composeAuthComponent(properties) {
   return {
-    ...(properties.hasStart ? { start: (input) => properties.start(input) } : {}),
-    ...(properties.hasStop ? { stop: (input) => properties.stop(input) } : {}),
+    ...(properties.start ? { start: (input) => properties.start(input) } : {}),
+    ...(properties.stop ? { stop: (input) => properties.stop(input) } : {}),
   };
 }
 
 function composeInitComponent(properties) {
   return {
-    ...(properties.hasStart ? { start: (input) => properties.start(input) } : {}),
-    ...(properties.hasStop ? { stop: (input) => properties.stop(input) } : {}),
+    ...(properties.start ? { start: (input) => properties.start(input) } : {}),
+    ...(properties.stop ? { stop: (input) => properties.stop(input) } : {}),
   };
 }
