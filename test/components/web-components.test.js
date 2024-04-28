@@ -16,7 +16,7 @@ const INIT_PROPS = {
     },
   },
 };
-const SLAVE_PROPS = { slave: { hasMaster: true, masterName: "master" } };
+const SLAVE_PROPS = { slave: { masterName: "master" } };
 const CONFIG_PROPS = { config: { update: () => {} } };
 
 test("getName() returns correct result", () => {
@@ -270,7 +270,7 @@ function composeConfigComponent(properties) {
 
 function composeSlaveComponent(properties) {
   return {
-    ...(properties.hasMaster ? { getMaster: () => ({ name: properties.masterName }) } : {}),
+    ...(properties.masterName ? { getMaster: () => ({ name: properties.masterName }) } : {}),
   };
 }
 
