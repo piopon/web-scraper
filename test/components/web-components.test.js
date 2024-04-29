@@ -241,7 +241,7 @@ function createTestComponent(name, properties) {
   return {
     getName: () => name,
     getInfo: () => ({ types: componentTypes, initWait: true }),
-    runTest: (input) => tester(input, ""),
+    runTest: (input) => tester(input),
     ...(properties.auth ? composeAuthComponent(properties.auth) : {}),
     ...(properties.init ? composeInitComponent(properties.init) : {}),
     ...(properties.slave ? composeSlaveComponent(properties.slave) : {}),
@@ -275,7 +275,7 @@ function composeInitComponent(properties) {
   };
 }
 
-function tester(input, suffix) {
+function tester(input, suffix = "") {
   const capitalize = (word) => word.charAt(0).toUpperCase() + word.slice(1);
   input["triggered" + capitalize(suffix)] = true;
   return input["result" + capitalize(suffix)];
