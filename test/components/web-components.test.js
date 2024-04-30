@@ -135,21 +135,21 @@ describe("initComponents()", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
     testComponent.addComponent(createTestComponent("test123", INIT_PROPS));
-    const verifyObject = { triggeredStart: false, resultStart: true, triggeredStop: false, resultStop: true };
+    const verifyObject = { runStart: false, resultStart: true, runStop: false, resultStop: true };
     const result = await testComponent.initComponents(ComponentType.INIT, verifyObject);
     expect(result).toBe(true);
-    expect(verifyObject.triggeredStart).toBe(true);
-    expect(verifyObject.triggeredStop).toBe(false);
+    expect(verifyObject.runStart).toBe(true);
+    expect(verifyObject.runStop).toBe(false);
   });
   test("will fail when init component cannot be started", async () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
     testComponent.addComponent(createTestComponent("test123", INIT_PROPS));
-    const verifyObject = { triggeredStart: false, resultStart: false, triggeredStop: false, resultStop: false };
+    const verifyObject = { runStart: false, resultStart: false, runStop: false, resultStop: false };
     const result = await testComponent.initComponents(ComponentType.INIT, verifyObject);
     expect(result).toBe(false);
-    expect(verifyObject.triggeredStart).toBe(true);
-    expect(verifyObject.triggeredStop).toBe(false);
+    expect(verifyObject.runStart).toBe(true);
+    expect(verifyObject.runStop).toBe(false);
   });
   test("will fail for non-init component type", async () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
@@ -170,15 +170,15 @@ describe("runComponents()", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
     testComponent.addComponent(createTestComponent("comp", CONFIG_PROPS));
-    const verifyObject = { triggered: false };
+    const verifyObject = { run: false };
     await testComponent.runComponents(ComponentType.CONFIG, "runTest", verifyObject);
-    expect(verifyObject.triggered).toBe(true);
+    expect(verifyObject.run).toBe(true);
   });
   test("throws when trying to invoke non-existing component method", async () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
     testComponent.addComponent(createTestComponent("comp", CONFIG_PROPS));
-    const verifyObject = { triggered: false };
+    const verifyObject = { run: false };
     try {
       await testComponent.runComponents(ComponentType.CONFIG, "notExistingMethod", verifyObject);
       fail("Non existing method should throw");
@@ -186,15 +186,15 @@ describe("runComponents()", () => {
       expect(error instanceof TypeError).toBe(true);
       expect(error.message).toBe("component.master[method] is not a function");
     }
-    expect(verifyObject.triggered).toBe(false);
+    expect(verifyObject.run).toBe(false);
   });
   test("does not invoke non-existing method for not added component type", async () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
     testComponent.addComponent(createTestComponent("comp", CONFIG_PROPS));
-    const verifyObject = { triggered: false };
+    const verifyObject = { run: false };
     await testComponent.runComponents(ComponentType.INIT, "notExistingMethod", verifyObject);
-    expect(verifyObject.triggered).toBe(false);
+    expect(verifyObject.run).toBe(false);
   });
 });
 
@@ -277,6 +277,6 @@ function composeInitComponent(properties) {
 
 function tester(input, suffix = "") {
   const capitalize = (word) => word.charAt(0).toUpperCase() + word.slice(1);
-  input["triggered" + capitalize(suffix)] = true;
+  input["run" + capitalize(suffix)] = true;
   return input["result" + capitalize(suffix)];
 }
