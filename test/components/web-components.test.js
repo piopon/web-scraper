@@ -170,15 +170,15 @@ describe("runComponents()", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
     testComponent.addComponent(createTestComponent("comp", CONFIG_PROPS));
-    const verifyObject = { run: false };
+    const verifyObject = { runTest: false };
     await testComponent.runComponents(ComponentType.CONFIG, "runTest", verifyObject);
-    expect(verifyObject.run).toBe(true);
+    expect(verifyObject.runTest).toBe(true);
   });
   test("throws when trying to invoke non-existing component method", async () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
     testComponent.addComponent(createTestComponent("comp", CONFIG_PROPS));
-    const verifyObject = { run: false };
+    const verifyObject = { runTest: false };
     try {
       await testComponent.runComponents(ComponentType.CONFIG, "notExistingMethod", verifyObject);
       fail("Non existing method should throw");
@@ -186,15 +186,15 @@ describe("runComponents()", () => {
       expect(error instanceof TypeError).toBe(true);
       expect(error.message).toBe("component.master[method] is not a function");
     }
-    expect(verifyObject.run).toBe(false);
+    expect(verifyObject.runTest).toBe(false);
   });
   test("does not invoke non-existing method for not added component type", async () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
     testComponent.addComponent(createTestComponent("comp", CONFIG_PROPS));
-    const verifyObject = { run: false };
+    const verifyObject = { runTest: false };
     await testComponent.runComponents(ComponentType.INIT, "notExistingMethod", verifyObject);
-    expect(verifyObject.run).toBe(false);
+    expect(verifyObject.runTest).toBe(false);
   });
 });
 
@@ -241,7 +241,7 @@ function createTestComponent(name, properties) {
   return {
     getName: () => name,
     getInfo: () => ({ types: componentTypes, initWait: true }),
-    runTest: (input) => tester(input),
+    runTest: (input) => tester(input, "test"),
     ...(properties.auth ? composeAuthComponent(properties.auth) : {}),
     ...(properties.init ? composeInitComponent(properties.init) : {}),
     ...(properties.slave ? composeSlaveComponent(properties.slave) : {}),
