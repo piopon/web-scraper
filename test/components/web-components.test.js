@@ -135,7 +135,7 @@ describe("initComponents()", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
     testComponent.addComponent(createTestComponent("test123", INIT_PROPS));
-    const verifyObject = { runStart: false, resultStart: true, runStop: false, resultStop: true };
+    const verifyObject = { runStart: false, resStart: true, runStop: false, resStop: true };
     const result = await testComponent.initComponents(ComponentType.INIT, verifyObject);
     expect(result).toBe(true);
     expect(verifyObject.runStart).toBe(true);
@@ -145,7 +145,7 @@ describe("initComponents()", () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
     testComponent.addComponent(createTestComponent("test123", INIT_PROPS));
-    const verifyObject = { runStart: false, resultStart: false, runStop: false, resultStop: false };
+    const verifyObject = { runStart: false, resStart: false, runStop: false, resStop: false };
     const result = await testComponent.initComponents(ComponentType.INIT, verifyObject);
     expect(result).toBe(false);
     expect(verifyObject.runStart).toBe(true);
@@ -278,5 +278,5 @@ function composeInitComponent(properties) {
 function tester(input, suffix = "") {
   const capitalize = (word) => word.charAt(0).toUpperCase() + word.slice(1);
   input["run" + capitalize(suffix)] = true;
-  return input["result" + capitalize(suffix)];
+  return input["res" + capitalize(suffix)];
 }
