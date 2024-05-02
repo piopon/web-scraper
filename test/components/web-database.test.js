@@ -15,3 +15,8 @@ describe("creating an object", () => {
     expect(() => new WebDatabase(inputObject)).toThrow(TypeError);
   });
 });
+
+test("getName() returns correct result", () => {
+  const testDatabase = new WebDatabase({ minLogLevel: LogLevel.INFO });
+  expect(testDatabase.getName()).toBe("web-database  ");
+});
