@@ -14,6 +14,10 @@ describe("creating an object", () => {
     const inputObject = undefined;
     expect(() => new WebDatabase(inputObject)).toThrow(TypeError);
   });
+  test("throws when input object is null", () => {
+    const inputObject = null;
+    expect(() => new WebDatabase(inputObject)).toThrow(TypeError);
+  });
 });
 
 test("getName() returns correct result", () => {
