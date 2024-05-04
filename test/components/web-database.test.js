@@ -24,3 +24,11 @@ test("getName() returns correct result", () => {
   const testDatabase = new WebDatabase({ minLogLevel: LogLevel.INFO });
   expect(testDatabase.getName()).toBe("web-database  ");
 });
+
+test("getInfo() returns correct result", () => {
+  const testDatabase = new WebDatabase({ minLogLevel: LogLevel.INFO });
+  const infoObject = testDatabase.getInfo();
+  expect(infoObject).not.toBe(undefined);
+  expect(infoObject.types).toStrictEqual([ComponentType.INIT]);
+  expect(infoObject.initWait).toBe(false);
+});
