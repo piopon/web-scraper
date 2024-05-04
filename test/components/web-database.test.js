@@ -1,5 +1,5 @@
 import { WebDatabase } from "../../src/components/web-database.js";
-import { LogLevel } from "../../config/app-types.js";
+import { ComponentType, LogLevel } from "../../config/app-types.js";
 
 describe("creating an object", () => {
   test("instantiates a new object when input object is correct", () => {
