@@ -4,6 +4,8 @@ import { ComponentType, LogLevel } from "../../config/app-types.js";
 import { jest } from "@jest/globals";
 import mongoose from "mongoose";
 
+jest.mock("mongoose");
+
 describe("creating an object", () => {
   test("instantiates a new object when input object is correct", () => {
     const inputObject = { minLogLevel: LogLevel.INFO };
