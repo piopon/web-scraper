@@ -63,4 +63,9 @@ describe("start() method", () => {
     };
     expect(mongooseConnectSpyOn).toBeCalledWith(expectedUrl, expectedObj);
   });
+  test("fails with invalid input data", async () => {
+    const testDatabase = new WebDatabase({ minLogLevel: LogLevel.INFO });
+    const result = await testDatabase.start();
+    expect(result).toBe(false);
+  });
 });
