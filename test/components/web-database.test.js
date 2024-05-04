@@ -38,25 +38,29 @@ test("getInfo() returns correct result", () => {
   expect(infoObject.initWait).toBe(false);
 });
 
-test("start() has correct input data", async () => {
-  const configObject = {
-    name: "test-name",
-    user: "user-name",
-    password: "pass",
-    timeout: 1_000,
-  };
-  const testDatabase = new WebDatabase({ minLogLevel: LogLevel.INFO, databaseConfig: configObject });
-  const mongooseConnectSpyOn = jest.spyOn(mongoose, "connect").mockImplementationOnce(() => Promise.resolve(mongoose));
-  await testDatabase.start();
-  const expectedUrl = "mongodb://undefined:undefined";
-  const expectedObj = {
-    appName: configObject.name,
-    dbName: configObject.name,
-    user: configObject.user,
-    pass: configObject.password,
-    serverSelectionTimeoutMS: configObject.timeout,
-    connectTimeoutMS: configObject.timeout,
-    family: 4,
-  };
-  expect(mongooseConnectSpyOn).toBeCalledWith(expectedUrl, expectedObj);
+describe("start() method", () => {
+  test("succeeds with valid input data", async () => {
+    const configObject = {
+      name: "test-name",
+      user: "user-name",
+      password: "pass",
+      timeout: 1_000,
+    };
+    const testDatabase = new WebDatabase({ minLogLevel: LogLevel.INFO, databaseConfig: configObject });
+    const mongooseConnectSpyOn = jest
+      .spyOn(mongoose, "connect")
+      .mockImplementationOnce(() => Promise.resolve(mongoose));
+    await testDatabase.start();
+    const expectedUrl = "mongodb://undefined:undefined";
+    const expectedObj = {
+      appName: configObject.name,
+      dbName: configObject.name,
+      user: configObject.user,
+      pass: configObject.password,
+      serverSelectionTimeoutMS: configObject.timeout,
+      connectTimeoutMS: configObject.timeout,
+      family: 4,
+    };
+    expect(mongooseConnectSpyOn).toBeCalledWith(expectedUrl, expectedObj);
+  });
 });
