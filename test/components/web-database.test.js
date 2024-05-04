@@ -50,7 +50,8 @@ describe("start() method", () => {
     const mongooseConnectSpyOn = jest
       .spyOn(mongoose, "connect")
       .mockImplementationOnce(() => Promise.resolve(mongoose));
-    await testDatabase.start();
+    const result = await testDatabase.start();
+    expect(result).toBe(true);
     const expectedUrl = "mongodb://undefined:undefined";
     const expectedObj = {
       appName: configObject.name,
