@@ -70,3 +70,8 @@ describe("start() method", () => {
     expect(result).toBe(false);
   });
 });
+
+test("stop() does not throw error", async () => {
+  const testDatabase = new WebDatabase({ minLogLevel: LogLevel.INFO});
+  expect(() => testDatabase.stop()).not.toThrow();
+});
