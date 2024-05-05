@@ -41,6 +41,8 @@ test("getInfo() returns correct result", () => {
 describe("start() method", () => {
   test("succeeds with valid input data", async () => {
     const configObject = {
+      url: "test-url",
+      port: 1234,
       name: "test-name",
       user: "user-name",
       password: "pass",
@@ -52,7 +54,7 @@ describe("start() method", () => {
       .mockImplementationOnce(() => Promise.resolve(mongoose));
     const result = await testDatabase.start();
     expect(result).toBe(true);
-    const expectedUrl = "mongodb://undefined:undefined";
+    const expectedUrl = "mongodb://test-url:1234";
     const expectedObj = {
       appName: configObject.name,
       dbName: configObject.name,
