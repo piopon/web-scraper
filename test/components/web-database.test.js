@@ -1,5 +1,5 @@
 import { WebDatabase } from "../../src/components/web-database.js";
-import { ComponentType, LogLevel } from "../../config/app-types.js";
+import { ComponentType, ComponentStatus, LogLevel } from "../../config/app-types.js";
 
 import { jest } from "@jest/globals";
 import mongoose from "mongoose";
@@ -76,4 +76,9 @@ describe("start() method", () => {
 test("stop() does not throw error", async () => {
   const testDatabase = new WebDatabase({ minLogLevel: LogLevel.INFO});
   expect(() => testDatabase.stop()).not.toThrow();
+});
+
+test("getStatus() returns correct result", async () => {
+  const testDatabase = new WebDatabase({ minLogLevel: LogLevel.INFO});
+  expect(testDatabase.getStatus()).toBe(ComponentStatus.STOPPED);
 });
