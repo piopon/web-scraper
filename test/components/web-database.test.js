@@ -90,4 +90,19 @@ describe("getStatus() returns correct result", () => {
     jest.spyOn(mongoose, "connection", "get").mockReturnValue(connectionMock);
     expect(testDatabase.getStatus()).toBe(ComponentStatus.INITIALIZING);
   });
+  test("when ready state is equal to disconnected (0)", async () => {
+    const connectionMock = { readyState: 0 };
+    jest.spyOn(mongoose, "connection", "get").mockReturnValue(connectionMock);
+    expect(testDatabase.getStatus()).toBe(ComponentStatus.STOPPED);
+  });
+  test("when ready state is equal to disconnecting (3)", async () => {
+    const connectionMock = { readyState: 3 };
+    jest.spyOn(mongoose, "connection", "get").mockReturnValue(connectionMock);
+    expect(testDatabase.getStatus()).toBe(ComponentStatus.STOPPED);
+  });
+  test("when ready state is equal to uninitialized (99)", async () => {
+    const connectionMock = { readyState: 99 };
+    jest.spyOn(mongoose, "connection", "get").mockReturnValue(connectionMock);
+    expect(testDatabase.getStatus()).toBe(ComponentStatus.STOPPED);
+  });
 });
