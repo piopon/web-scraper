@@ -79,14 +79,13 @@ test("stop() does not throw error", async () => {
 });
 
 describe("getStatus() returns correct result", () => {
+  const testDatabase = new WebDatabase({ minLogLevel: LogLevel.INFO});
   test("when ready state is equal to connected (1)", async () => {
-    const testDatabase = new WebDatabase({ minLogLevel: LogLevel.INFO});
     const connectionMock = {readyState: 1};
     jest.spyOn(mongoose, 'connection', 'get').mockReturnValue(connectionMock);
     expect(testDatabase.getStatus()).toBe(ComponentStatus.RUNNING);
   });
   test("when ready state is equal to connecting (2)", async () => {
-    const testDatabase = new WebDatabase({ minLogLevel: LogLevel.INFO});
     const connectionMock = {readyState: 2};
     jest.spyOn(mongoose, 'connection', 'get').mockReturnValue(connectionMock);
     expect(testDatabase.getStatus()).toBe(ComponentStatus.INITIALIZING);
