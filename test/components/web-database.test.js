@@ -80,29 +80,24 @@ test("stop() does not throw error", async () => {
 
 describe("getStatus() returns correct result", () => {
   const testDatabase = new WebDatabase({ minLogLevel: LogLevel.INFO });
+  test("when ready state is equal to disconnected (0)", async () => {
+    jest.spyOn(mongoose, "connection", "get").mockReturnValue({ readyState: 0 });
+    expect(testDatabase.getStatus()).toBe(ComponentStatus.STOPPED);
+  });
   test("when ready state is equal to connected (1)", async () => {
-    const connectionMock = { readyState: 1 };
-    jest.spyOn(mongoose, "connection", "get").mockReturnValue(connectionMock);
+    jest.spyOn(mongoose, "connection", "get").mockReturnValue({ readyState: 1 });
     expect(testDatabase.getStatus()).toBe(ComponentStatus.RUNNING);
   });
   test("when ready state is equal to connecting (2)", async () => {
-    const connectionMock = { readyState: 2 };
-    jest.spyOn(mongoose, "connection", "get").mockReturnValue(connectionMock);
+    jest.spyOn(mongoose, "connection", "get").mockReturnValue({ readyState: 2 });
     expect(testDatabase.getStatus()).toBe(ComponentStatus.INITIALIZING);
   });
-  test("when ready state is equal to disconnected (0)", async () => {
-    const connectionMock = { readyState: 0 };
-    jest.spyOn(mongoose, "connection", "get").mockReturnValue(connectionMock);
-    expect(testDatabase.getStatus()).toBe(ComponentStatus.STOPPED);
-  });
   test("when ready state is equal to disconnecting (3)", async () => {
-    const connectionMock = { readyState: 3 };
-    jest.spyOn(mongoose, "connection", "get").mockReturnValue(connectionMock);
+    jest.spyOn(mongoose, "connection", "get").mockReturnValue({ readyState: 3 });
     expect(testDatabase.getStatus()).toBe(ComponentStatus.STOPPED);
   });
   test("when ready state is equal to uninitialized (99)", async () => {
-    const connectionMock = { readyState: 99 };
-    jest.spyOn(mongoose, "connection", "get").mockReturnValue(connectionMock);
+    jest.spyOn(mongoose, "connection", "get").mockReturnValue({ readyState: 99 });
     expect(testDatabase.getStatus()).toBe(ComponentStatus.STOPPED);
   });
 });
