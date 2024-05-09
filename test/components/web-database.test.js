@@ -102,10 +102,12 @@ describe("getStatus() returns correct result", () => {
   });
 });
 
-test("getHistory() does return correct status", async () => {
-  const testDatabase = new WebDatabase({ minLogLevel: LogLevel.INFO });
-  const result = testDatabase.getHistory();
-  expect(result.length).toBe(1);
-  expect(result[0].type).toBe("info");
-  expect(result[0].message).toBe("Created");
+describe("getStatus() returns correct result", () => {
+  test("after creating object", async () => {
+    const testDatabase = new WebDatabase({ minLogLevel: LogLevel.INFO });
+    const result = testDatabase.getHistory();
+    expect(result.length).toBe(1);
+    expect(result[0].type).toBe("info");
+    expect(result[0].message).toBe("Created");
+  });
 });
