@@ -38,7 +38,7 @@ export class WebDatabase {
       this.#status.info("Connected to database");
       return true;
     } catch (error) {
-      this.#status.error(error);
+      this.#status.error(error.message);
       return false;
     }
   }
