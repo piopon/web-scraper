@@ -102,7 +102,7 @@ describe("getStatus() returns correct result", () => {
   });
 });
 
-describe("getStatus() returns correct result", () => {
+describe("getHistory() returns correct result", () => {
   test("after creating object", async () => {
     const testDatabase = new WebDatabase({ minLogLevel: LogLevel.INFO });
     const result = testDatabase.getHistory();
