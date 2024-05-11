@@ -121,4 +121,16 @@ describe("getHistory() returns correct result", () => {
     expect(result[1].type).toBe("error");
     expect(result[1].message).toBe("Cannot read properties of undefined (reading 'url')");
   });
+  test("after correct object start", async () => {
+    const configObject = { url: "test-url", port: 1234 };
+    const testDatabase = new WebDatabase({ minLogLevel: LogLevel.INFO, databaseConfig: configObject });
+    jest.spyOn(mongoose, "connect").mockImplementationOnce(() => Promise.resolve(mongoose));
+    await testDatabase.start();
+    const result = testDatabase.getHistory();
+    expect(result.length).toBe(2);
+    expect(result[0].type).toBe("info");
+    expect(result[0].message).toBe("Created");
+    expect(result[1].type).toBe("info");
+    expect(result[1].message).toBe("Connected to database");
+  });
 });
