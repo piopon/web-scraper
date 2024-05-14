@@ -20,4 +20,5 @@ test("getMaster() returns correct result", () => {
   expect(masterObject).not.toBe(undefined);
   expect(masterObject.name).toBe("web-database");
   expect(masterObject.actions).not.toBe(undefined);
+  expect(masterObject.actions.afterInit).not.toBe(undefined);
 });
