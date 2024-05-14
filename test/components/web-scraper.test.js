@@ -13,3 +13,11 @@ test("getInfo() returns correct result", () => {
   expect(infoObject.types).toStrictEqual([ComponentType.SLAVE, ComponentType.CONFIG, ComponentType.AUTH]);
   expect(infoObject.initWait).toBe(false);
 });
+
+test("getMaster() returns correct result", () => {
+  const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO });
+  const masterObject = testScraper.getMaster();
+  expect(masterObject).not.toBe(undefined);
+  expect(masterObject.name).toBe("web-database");
+  expect(masterObject.actions).not.toBe(undefined);
+});
