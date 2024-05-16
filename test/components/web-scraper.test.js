@@ -45,4 +45,8 @@ describe("start() method", () => {
     const result = await testScraper.start({ name: "test", email: "mail" });
     expect(result).toBe(false);
   });
+  test("fails when specified user configuration is invalid", async () => {
+    const result = await testScraper.start({ name: "test", email: "mail", config: { user: "ID" } });
+    expect(result).toBe(false);
+  });
 });
