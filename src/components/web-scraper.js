@@ -36,7 +36,12 @@ export class WebScraper {
    * @returns true if scraper started successfully, false otherwise
    */
   async start(sessionUser) {
-    if (sessionUser == null) {
+    const validInput =
+      sessionUser instanceof Object &&
+      sessionUser.hasOwnProperty("name") &&
+      sessionUser.hasOwnProperty("email") &&
+      sessionUser.hasOwnProperty("config");
+    if (sessionUser == null || !validInput) {
       this.#status.error(`Invalid scrap user: ${sessionUser}`);
       return false;
     }

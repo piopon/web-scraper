@@ -126,6 +126,6 @@ export class ScrapConfig {
    * @returns identifier of the provided input object
    */
   static #parseIdentifier(config) {
-    return `user = ${config.user}`;
+    return `user = ${"" !== config.user ? config.user : "empty"}`;
   }
 }

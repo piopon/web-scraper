@@ -167,6 +167,6 @@ export class ScrapGroup {
    * @returns identifier of the provided input object
    */
   static #parseIdentifier(group) {
-    return `name = ${group.name}`;
+    return `name = ${"" !== group.name ? group.name : "empty"}`;
   }
 }

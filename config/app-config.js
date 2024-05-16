@@ -32,7 +32,7 @@ export class AppConfig {
       },
       databaseConfig: {
         url: process.env.DB_ADDRESS || "localhost",
-        name: process.env.DB_NAME,
+        name: process.env.DB_NAME || "web-scraper",
         port: process.env.DB_PORT || 27017,
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
