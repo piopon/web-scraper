@@ -22,3 +22,11 @@ test("getMaster() returns correct result", () => {
   expect(masterObject.actions).not.toBe(undefined);
   expect(masterObject.actions.afterInit).not.toBe(undefined);
 });
+
+describe("start() method", () => {
+  const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO });
+  test("fails when no session user is provided", async () => {
+    const result = await testScraper.start();
+    expect(result).toBe(false);
+  });
+});
