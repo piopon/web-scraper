@@ -29,7 +29,7 @@ describe("start() method", () => {
     const result = await testScraper.start();
     expect(result).toBe(false);
   });
-  test("fails when no session user is invalid", async () => {
+  test("fails when session user has invalid type", async () => {
     const result = await testScraper.start("user");
     expect(result).toBe(false);
   });
