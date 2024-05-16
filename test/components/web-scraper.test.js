@@ -34,15 +34,15 @@ describe("start() method", () => {
     expect(result).toBe(false);
   });
   test("fails when session user has no name property", async () => {
-    const result = await testScraper.start({email: "mail", config: {prop: "value"}});
+    const result = await testScraper.start({ email: "mail", config: { prop: "value" } });
     expect(result).toBe(false);
   });
   test("fails when session user has no email property", async () => {
-    const result = await testScraper.start({email: "mail", config: {prop: "value"}});
+    const result = await testScraper.start({ email: "mail", config: { prop: "value" } });
     expect(result).toBe(false);
   });
   test("fails when session user has no config property", async () => {
-    const result = await testScraper.start({name: "test", email: "mail"});
+    const result = await testScraper.start({ name: "test", email: "mail" });
     expect(result).toBe(false);
   });
 });
