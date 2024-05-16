@@ -34,11 +34,13 @@ describe("start() method", () => {
     expect(result).toBe(false);
   });
   test("fails when session user has no name property", async () => {
-    const result = await testScraper.start({ email: "mail", config: { prop: "value" } });
+    const userConfig = { user: "ID", groups: [] };
+    const result = await testScraper.start({ email: "mail", config: userConfig });
     expect(result).toBe(false);
   });
   test("fails when session user has no email property", async () => {
-    const result = await testScraper.start({ email: "mail", config: { prop: "value" } });
+    const userConfig = { user: "ID", groups: [] };
+    const result = await testScraper.start({ email: "mail", config: userConfig });
     expect(result).toBe(false);
   });
   test("fails when session user has no config property", async () => {
@@ -46,7 +48,8 @@ describe("start() method", () => {
     expect(result).toBe(false);
   });
   test("fails when specified user configuration is invalid", async () => {
-    const result = await testScraper.start({ name: "test", email: "mail", config: { user: "ID" } });
+    const userConfig = { user: "ID", groups: [] };
+    const result = await testScraper.start({ name: "test", email: "mail", config: userConfig });
     expect(result).toBe(false);
   });
 });
