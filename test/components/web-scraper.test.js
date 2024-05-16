@@ -33,4 +33,8 @@ describe("start() method", () => {
     const result = await testScraper.start("user");
     expect(result).toBe(false);
   });
+  test("fails when session user has no config property", async () => {
+    const result = await testScraper.start({name: "test", email: "mail"});
+    expect(result).toBe(false);
+  });
 });
