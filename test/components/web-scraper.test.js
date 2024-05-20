@@ -59,6 +59,7 @@ describe("start() method", () => {
   });
   test("fails when specified user configuration is missing", async () => {
     const userConfig = { user: "ID", groups: [] };
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => ({ findById: () => null }) );
     const result = await testScraper.start({ name: "test", email: "mail", config: userConfig });
     expect(result).toBe(false);
   });
