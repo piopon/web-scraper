@@ -1,5 +1,10 @@
 import { WebScraper } from "../../src/components/web-scraper.js";
 import { ComponentType, LogLevel } from "../../config/app-types.js";
+import { ScrapConfig } from "../../src/model/scrap-config.js";
+
+import { jest } from "@jest/globals";
+
+jest.mock("../../src/model/scrap-config.js");
 
 test("getName() returns correct result", () => {
   const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO });
