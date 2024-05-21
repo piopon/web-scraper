@@ -72,3 +72,14 @@ describe("start() method", () => {
     expect(result).toBe(true);
   });
 });
+
+describe("stop() method", () => {
+  const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO, scraperConfig: { defaultTimeout: 10 } });
+  test("does not do anything when session was not started", async () => {
+    await testScraper.stop();
+    const result = testScraper.getHistory({ name: "test", email: "mail" });
+    expect(result.length).toBe(2);
+    expect(result[1].type).toBe("error");
+    expect(result[1].message).toBe("Invalid internal state: session not started");
+  });
+});
