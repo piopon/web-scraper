@@ -59,13 +59,15 @@ describe("start() method", () => {
   });
   test("fails when specified user configuration is missing", async () => {
     const userConfig = { user: "ID", groups: [] };
-    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => ({ findById: () => null }) );
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => ({ findById: () => null }));
     const result = await testScraper.start({ name: "test", email: "mail", config: userConfig });
     expect(result).toBe(false);
   });
   test("succeeds when specified user configuration is found", async () => {
     const userConfig = { user: "ID", groups: [] };
-    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => ({ findById: () => ({ toJSON: () => userConfig }) }));
+    jest
+      .spyOn(ScrapConfig, "getDatabaseModel")
+      .mockImplementationOnce(() => ({ findById: () => ({ toJSON: () => userConfig }) }));
     const result = await testScraper.start({ name: "test", email: "mail", config: userConfig });
     expect(result).toBe(true);
   });
