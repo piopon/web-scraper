@@ -83,3 +83,13 @@ describe("stop() method", () => {
     expect(result[1].message).toBe("Invalid internal state: session not started");
   });
 });
+
+describe("getHistory() returns correct result", () => {
+  const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO, scraperConfig: { defaultTimeout: 10 } });
+  test("after creating object", async () => {
+    const result = testScraper.getHistory({ name: "test", email: "mail" });
+    expect(result.length).toBe(1);
+    expect(result[0].type).toBe("info");
+    expect(result[0].message).toBe("Created");
+  });
+});
