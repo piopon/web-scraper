@@ -29,7 +29,7 @@ test("getMaster() returns correct result", () => {
 });
 
 describe("start() method", () => {
-  const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO });
+  const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO, scraperConfig: { defaultTimeout: 10 } });
   test("fails when no session user is provided", async () => {
     const result = await testScraper.start();
     expect(result).toBe(false);
