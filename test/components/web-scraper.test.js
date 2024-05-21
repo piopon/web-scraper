@@ -63,4 +63,10 @@ describe("start() method", () => {
     const result = await testScraper.start({ name: "test", email: "mail", config: userConfig });
     expect(result).toBe(false);
   });
+  test("succeeds when specified user configuration is found", async () => {
+    const userConfig = { user: "ID", groups: [] };
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => ({ findById: () => ({ toJSON: () => userConfig }) }));
+    const result = await testScraper.start({ name: "test", email: "mail", config: userConfig });
+    expect(result).toBe(true);
+  });
 });
