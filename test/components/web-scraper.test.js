@@ -88,6 +88,20 @@ describe("start() method", () => {
 });
 
 describe("stop() method", () => {
+  const userConfig = {
+    user: "ID",
+    groups: [
+      {
+        name: "test",
+        domain: "www.google.com",
+        observers: {
+          name: "logo",
+          path: "info",
+          price: { selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
+        },
+      },
+    ],
+  };
   const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO, scraperConfig: { defaultTimeout: 10 } });
   test("does not do anything when session was not started", async () => {
     await testScraper.stop();
@@ -97,20 +111,6 @@ describe("stop() method", () => {
     expect(result[1].message).toBe("Invalid internal state: session not started");
   });
   test("does correctly stop previously started session", async () => {
-    const userConfig = {
-      user: "ID",
-      groups: [
-        {
-          name: "test",
-          domain: "www.google.com",
-          observers: {
-            name: "logo",
-            path: "info",
-            price: { selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
-          },
-        },
-      ],
-    };
     const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
     const state = await testScraper.start({ name: "test", email: "mail", config: userConfig });
@@ -121,20 +121,6 @@ describe("stop() method", () => {
     expect(result[result.length - 1].message).toBe("Stopped");
   });
   test("does correctly stop session with error message", async () => {
-    const userConfig = {
-      user: "ID",
-      groups: [
-        {
-          name: "test",
-          domain: "www.google.com",
-          observers: {
-            name: "logo",
-            path: "info",
-            price: { selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
-          },
-        },
-      ],
-    };
     const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
     const state = await testScraper.start({ name: "test", email: "mail", config: userConfig });
