@@ -65,7 +65,20 @@ describe("start() method", () => {
     expect(result).toBe(false);
   });
   test("succeeds when specified user configuration is found", async () => {
-    const userConfig = { user: "ID", groups: [] };
+    const userConfig = {
+      user: "ID",
+      groups: [
+        {
+          name: "test",
+          domain: "www.google.com",
+          observers: {
+            name: "logo",
+            path: "info",
+            price: { selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
+          },
+        },
+      ],
+    };
     const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
     const result = await testScraper.start({ name: "test", email: "mail", config: userConfig });
