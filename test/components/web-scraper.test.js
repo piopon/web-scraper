@@ -141,8 +141,29 @@ describe("getHistory() returns correct result", () => {
 });
 
 describe("getStatus() returns correct result", () => {
+  const userConfig = {
+    user: "ID",
+    groups: [
+      {
+        name: "test",
+        domain: "www.google.com",
+        observers: {
+          name: "logo",
+          path: "info",
+          price: { selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
+        },
+      },
+    ],
+  };
   const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO, scraperConfig: { defaultTimeout: 10 } });
   test("when session is not provided nor started then STOPPED", async () => {
     expect(testScraper.getStatus()).toBe(ComponentStatus.STOPPED);
+  });
+  test("when session is not provided but started then RUNNING", async () => {
+    const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
+    await testScraper.start({ name: "test", email: "mail", config: userConfig });
+    expect(testScraper.getStatus()).toBe(ComponentStatus.RUNNING);
+    await testScraper.stop("mail");
   });
 });
