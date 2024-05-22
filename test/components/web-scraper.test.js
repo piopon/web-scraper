@@ -1,5 +1,5 @@
 import { WebScraper } from "../../src/components/web-scraper.js";
-import { ComponentType, LogLevel } from "../../config/app-types.js";
+import { ComponentStatus, ComponentType, LogLevel } from "../../config/app-types.js";
 import { ScrapConfig } from "../../src/model/scrap-config.js";
 
 import { jest } from "@jest/globals";
@@ -137,5 +137,12 @@ describe("getHistory() returns correct result", () => {
     expect(result.length).toBe(1);
     expect(result[0].type).toBe("info");
     expect(result[0].message).toBe("Created");
+  });
+});
+
+describe("getStatus() returns correct result", () => {
+  const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO, scraperConfig: { defaultTimeout: 10 } });
+  test("when session is not provided nor started then STOPPED", async () => {
+    expect(testScraper.getStatus()).toBe(ComponentStatus.STOPPED);
   });
 });
