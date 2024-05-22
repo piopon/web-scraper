@@ -82,6 +82,30 @@ describe("stop() method", () => {
     expect(result[1].type).toBe("error");
     expect(result[1].message).toBe("Invalid internal state: session not started");
   });
+  test("does correctly stop previously started session", async () => {
+    const userConfig = {
+      user: "ID",
+      groups: [
+        {
+          name: "test",
+          domain: "www.google.com",
+          observers: {
+            name: "logo",
+            path: "info",
+            price: { selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
+          },
+        },
+      ],
+    };
+    const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
+    const state = await testScraper.start({ name: "test", email: "mail", config: userConfig });
+    expect(state).toBe(true);
+    await testScraper.stop("mail");
+    const result = testScraper.getHistory({ name: "test", email: "mail" });
+    expect(result[result.length - 1].type).toBe("info");
+    expect(result[result.length - 1].message).toBe("Stopped");
+  });
 });
 
 describe("getHistory() returns correct result", () => {
