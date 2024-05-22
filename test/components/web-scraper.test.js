@@ -110,7 +110,7 @@ describe("stop() method", () => {
     expect(result[1].type).toBe("error");
     expect(result[1].message).toBe("Invalid internal state: session not started");
   });
-  test("does correctly stop previously started session", async () => {
+  test("does correctly stop session with info message", async () => {
     const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
     const state = await testScraper.start({ name: "test", email: "mail", config: userConfig });
