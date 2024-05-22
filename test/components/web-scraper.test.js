@@ -83,6 +83,7 @@ describe("start() method", () => {
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
     const result = await testScraper.start({ name: "test", email: "mail", config: userConfig });
     expect(result).toBe(true);
+    await testScraper.stop("mail");
   });
 });
 
