@@ -166,4 +166,12 @@ describe("getStatus() returns correct result", () => {
     expect(testScraper.getStatus()).toBe(ComponentStatus.RUNNING);
     await testScraper.stop("mail");
   });
+  test("when session is provided and started then RUNNING", async () => {
+    const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
+    const sessionUser = { name: "test", email: "mail", config: userConfig };
+    await testScraper.start(sessionUser);
+    expect(testScraper.getStatus(sessionUser)).toBe(ComponentStatus.RUNNING);
+    await testScraper.stop("mail");
+  });
 });
