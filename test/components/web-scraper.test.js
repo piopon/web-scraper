@@ -193,4 +193,29 @@ describe("update() method", () => {
     expect(result[1].type).toBe("error");
     expect(result[1].message).toBe("Invalid internal state: session not updated");
   });
+  test("correctly updates internal state when session is existing", async () => {
+    const userConfig = {
+      user: "ID",
+      groups: [
+        {
+          name: "test",
+          domain: "www.google.com",
+          observers: {
+            name: "logo",
+            path: "info",
+            price: { selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
+          },
+        },
+      ],
+    };
+    const sessionUser = { name: "test", email: "mail", config: userConfig };
+    const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
+    await testScraper.start(sessionUser);
+    testScraper.update(sessionUser, userConfig);
+    const result = testScraper.getHistory(sessionUser);
+    expect(result[result.length - 1].type).not.toBe("error");
+    expect(result[result.length - 1].message).not.toBe("Invalid internal state: session not updated");
+    await testScraper.stop(sessionUser.email);
+  });
 });
