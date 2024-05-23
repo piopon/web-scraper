@@ -182,3 +182,15 @@ describe("getStatus() returns correct result", () => {
     await testScraper.stop("mail");
   });
 });
+
+describe("update() method", () => {
+  const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO, scraperConfig: { defaultTimeout: 10 } });
+  test("returns errors when session is not existing", async () => {
+    const sessionUser = { name: "test", email: "mail" };
+    testScraper.update(sessionUser, {config: "name"});
+    const result = testScraper.getHistory(sessionUser);
+    expect(result.length).toBe(2);
+    expect(result[1].type).toBe("error");
+    expect(result[1].message).toBe("Invalid internal state: session not updated");
+  });
+});
