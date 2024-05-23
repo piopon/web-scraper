@@ -178,7 +178,7 @@ describe("getStatus() returns correct result", () => {
     const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
     await testScraper.start({ name: "test", email: "mail", config: userConfig });
-    expect(testScraper.getStatus({ name: "test", email: "unknown"})).toBe(ComponentStatus.INITIALIZING);
+    expect(testScraper.getStatus({ name: "test", email: "unknown" })).toBe(ComponentStatus.INITIALIZING);
     await testScraper.stop("mail");
   });
 });
@@ -187,7 +187,7 @@ describe("update() method", () => {
   const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO, scraperConfig: { defaultTimeout: 10 } });
   test("returns errors when session is not existing", async () => {
     const sessionUser = { name: "test", email: "mail" };
-    testScraper.update(sessionUser, {config: "name"});
+    testScraper.update(sessionUser, { config: "name" });
     const result = testScraper.getHistory(sessionUser);
     expect(result.length).toBe(2);
     expect(result[1].type).toBe("error");
