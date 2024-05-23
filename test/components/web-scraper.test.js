@@ -102,10 +102,11 @@ describe("stop() method", () => {
       },
     ],
   };
+  const sessionUser = { name: "test", email: "mail", config: userConfig };
   const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO, scraperConfig: { defaultTimeout: 10 } });
   test("does not do anything when session was not started", async () => {
     await testScraper.stop();
-    const result = testScraper.getHistory({ name: "test", email: "mail" });
+    const result = testScraper.getHistory(sessionUser);
     expect(result.length).toBe(2);
     expect(result[1].type).toBe("error");
     expect(result[1].message).toBe("Invalid internal state: session not started");
@@ -113,27 +114,28 @@ describe("stop() method", () => {
   test("does correctly stop session with info message", async () => {
     const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
-    await testScraper.start({ name: "test", email: "mail", config: userConfig });
-    await testScraper.stop("mail");
-    const result = testScraper.getHistory({ name: "test", email: "mail" });
+    await testScraper.start(sessionUser);
+    await testScraper.stop(sessionUser.email);
+    const result = testScraper.getHistory(sessionUser);
     expect(result[result.length - 1].type).toBe("info");
     expect(result[result.length - 1].message).toBe("Stopped");
   });
   test("does correctly stop session with error message", async () => {
     const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
-    await testScraper.start({ name: "test", email: "mail", config: userConfig });
-    await testScraper.stop("mail", "Error message");
-    const result = testScraper.getHistory({ name: "test", email: "mail" });
+    await testScraper.start(sessionUser);
+    await testScraper.stop(sessionUser.email, "Error message");
+    const result = testScraper.getHistory(sessionUser);
     expect(result[result.length - 1].type).toBe("error");
     expect(result[result.length - 1].message).toBe("Error message");
   });
 });
 
 describe("getHistory() returns correct result", () => {
+  const sessionUser = { name: "test", email: "mail" };
   const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO, scraperConfig: { defaultTimeout: 10 } });
   test("after creating object", async () => {
-    const result = testScraper.getHistory({ name: "test", email: "mail" });
+    const result = testScraper.getHistory(sessionUser);
     expect(result.length).toBe(1);
     expect(result[0].type).toBe("info");
     expect(result[0].message).toBe("Created");
@@ -155,6 +157,7 @@ describe("getStatus() returns correct result", () => {
       },
     ],
   };
+  const sessionUser = { name: "test", email: "mail", config: userConfig };
   const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO, scraperConfig: { defaultTimeout: 10 } });
   test("when session is not provided nor started then STOPPED", async () => {
     expect(testScraper.getStatus()).toBe(ComponentStatus.STOPPED);
@@ -162,24 +165,23 @@ describe("getStatus() returns correct result", () => {
   test("when session is not provided but started then RUNNING", async () => {
     const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
-    await testScraper.start({ name: "test", email: "mail", config: userConfig });
+    await testScraper.start(sessionUser);
     expect(testScraper.getStatus()).toBe(ComponentStatus.RUNNING);
-    await testScraper.stop("mail");
+    await testScraper.stop(sessionUser.email);
   });
   test("when session is provided and started then RUNNING", async () => {
     const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
-    const sessionUser = { name: "test", email: "mail", config: userConfig };
     await testScraper.start(sessionUser);
     expect(testScraper.getStatus(sessionUser)).toBe(ComponentStatus.RUNNING);
-    await testScraper.stop("mail");
+    await testScraper.stop(sessionUser.email);
   });
   test("when session is started but not existing provided then INITIALIZING", async () => {
     const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
-    await testScraper.start({ name: "test", email: "mail", config: userConfig });
-    expect(testScraper.getStatus({ name: "test", email: "unknown" })).toBe(ComponentStatus.INITIALIZING);
-    await testScraper.stop("mail");
+    await testScraper.start(sessionUser);
+    expect(testScraper.getStatus({ email: "unknown" })).toBe(ComponentStatus.INITIALIZING);
+    await testScraper.stop(sessionUser.email);
   });
 });
 
