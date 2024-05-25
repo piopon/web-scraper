@@ -32,4 +32,22 @@ describe("run() method", () => {
       fail("Run should NOT throw");
     }
   });
+  test("should fail to start server when INIT components does not start", async () => {
+    const config = { minLogLevel: LogLevel.INFO, serverConfig: { port: 123 } };
+    const components = new WebComponents(config);
+    components.addComponent({
+      getName: () => "init-component",
+      getInfo: () => ({ types: [ComponentType.INIT], initWait: true }),
+      start: () => false,
+      stop: () => false,
+    });
+    const testServer = new WebServer(config, components);
+    try {
+      const result = await testServer.run();
+      testServer.shutdown();
+      expect(result).toBe(false);
+    } catch (error) {
+      fail("Run should NOT throw");
+    }
+  });
 });
