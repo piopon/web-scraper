@@ -53,6 +53,9 @@ export class WebServer {
    * Method used to gracefully shutdown the web server
    */
   shutdown() {
+    if (this.#handle == null) {
+      return;
+    }
     this.#handle.close(() => {
       this.#components.getComponents().forEach((component) => component.master.stop());
       this.#status.info("Stopped");
