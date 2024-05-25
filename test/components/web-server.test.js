@@ -5,7 +5,8 @@ import { ComponentType, LogLevel } from "../../config/app-types.js";
 describe("run() method", () => {
   test("should start server and not throw when no INIT components", async () => {
     const config = { minLogLevel: LogLevel.INFO, serverConfig: { port: 123 } };
-    const testServer = new WebServer(config, new WebComponents(config));
+    const components = new WebComponents(config);
+    const testServer = new WebServer(config, components);
     try {
       const result = await testServer.run();
       testServer.shutdown();
