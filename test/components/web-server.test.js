@@ -1,6 +1,6 @@
 import { WebServer } from "../../src/components/web-server.js";
 import { WebComponents } from "../../src/components/web-components.js";
-import { LogLevel } from "../../config/app-types.js";
+import { ComponentType, LogLevel } from "../../config/app-types.js";
 
 describe("run() method", () => {
   test("should start server and not throw when no INIT components", async () => {
