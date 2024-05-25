@@ -41,12 +41,13 @@ export class WebServer {
    */
   async run() {
     if (!(await this.#components.initComponents(ComponentType.INIT))) {
-      return;
+      return false;
     }
     this.#server = this.#initializeServer();
     this.#handle = this.#server.listen(this.#setupConfig.serverConfig.port, () => {
       this.#status.info(`Started on port: ${this.#setupConfig.serverConfig.port}`);
     });
+    return true;
   }
 
   /**

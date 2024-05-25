@@ -13,9 +13,10 @@ try {
   components.addComponent(new WebScraper(config));
   // create and start web server
   const webServer = new WebServer(config, components);
-  webServer.run();
-  // handle user termination signal
-  process.on("SIGTERM", () => webServer.shutdown());
+  if (webServer.run()) {
+    // handle user termination signal
+    process.on("SIGTERM", () => webServer.shutdown());
+  }
 } catch (exception) {
   console.error(exception.message);
 }
