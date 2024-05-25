@@ -21,6 +21,7 @@ export class WebServer {
   #setupConfig = undefined;
   #components = undefined;
   #server = undefined;
+  #handle = undefined;
   #status = undefined;
 
   /**
@@ -43,7 +44,7 @@ export class WebServer {
       return;
     }
     this.#server = this.#initializeServer();
-    this.#server.listen(this.#setupConfig.serverConfig.port, () => {
+    this.#handle = this.#server.listen(this.#setupConfig.serverConfig.port, () => {
       this.#status.info(`Started on port: ${this.#setupConfig.serverConfig.port}`);
     });
   }
@@ -52,7 +53,7 @@ export class WebServer {
    * Method used to gracefully shutdown the web server
    */
   shutdown() {
-    this.#server.close(() => {
+    this.#handle.close(() => {
       this.#components.getComponents().forEach((component) => component.master.stop());
       this.#status.info("Stopped");
     });
