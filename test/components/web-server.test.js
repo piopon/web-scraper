@@ -14,4 +14,22 @@ describe("run() method", () => {
       fail("Run should NOT throw");
     }
   });
+  test("should start server and not throw when INIT components start", async () => {
+    const config = { minLogLevel: LogLevel.INFO, serverConfig: { port: 123 } };
+    const components = new WebComponents(config);
+    components.addComponent({
+      getName: () => "init-component",
+      getInfo: () => ({ types: [ComponentType.INIT], initWait: true }),
+      start: () => true,
+      stop: () => true,
+    });
+    const testServer = new WebServer(config, components);
+    try {
+      const result = await testServer.run();
+      expect(result).toBe(true);
+      testServer.shutdown();
+    } catch (error) {
+      fail("Run should NOT throw");
+    }
+  });
 });
