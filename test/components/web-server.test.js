@@ -8,8 +8,8 @@ describe("run() method", () => {
     const testServer = new WebServer(config, new WebComponents(config));
     try {
       const result = await testServer.run();
-      expect(result).toBe(true);
       testServer.shutdown();
+      expect(result).toBe(true);
     } catch (error) {
       fail("Run should NOT throw");
     }
@@ -26,8 +26,8 @@ describe("run() method", () => {
     const testServer = new WebServer(config, components);
     try {
       const result = await testServer.run();
-      expect(result).toBe(true);
       testServer.shutdown();
+      expect(result).toBe(true);
     } catch (error) {
       fail("Run should NOT throw");
     }
