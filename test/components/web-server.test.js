@@ -52,3 +52,17 @@ describe("run() method", () => {
     }
   });
 });
+
+describe("shutdown() method", () => {
+  test("does not trow when session started", async () => {
+    const config = { minLogLevel: LogLevel.INFO, serverConfig: { port: 123 } };
+    const components = new WebComponents(config);
+    const testServer = new WebServer(config, components);
+    await testServer.run();
+    try {
+      testServer.shutdown();
+    } catch (error) {
+      fail("Shutdown should NOT throw when session was started");
+    }
+  });
+});
