@@ -54,7 +54,7 @@ describe("run() method", () => {
 });
 
 describe("shutdown() method", () => {
-  test("does not trow when session started", async () => {
+  test("does not throw when session started", async () => {
     const config = { minLogLevel: LogLevel.INFO, serverConfig: { port: 123 } };
     const components = new WebComponents(config);
     const testServer = new WebServer(config, components);
