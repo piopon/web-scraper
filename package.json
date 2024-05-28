@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node src\\index",
     "dev": "nodemon src\\index",
-    "test": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js"
+    "test": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js --silent"
   },
   "repository": {
     "type": "git",
