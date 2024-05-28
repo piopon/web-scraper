@@ -21,4 +21,13 @@ describe("middleware() method", () => {
     expect(requestObj.params.p2).toBe("test");
     expect(requestObj.query.p3).toBe(123);
   });
+  test("should correctly parse boolean in params", async () => {
+    const requestObj = { params: { p1: "true", p2: "tru" }, query: { p3: "123" } };
+    const mockedRes = jest.fn();
+    const mockedNext = jest.fn();
+    ParamsParser.middleware(requestObj, mockedRes, mockedNext);
+    expect(requestObj.params.p1).toBe(true);
+    expect(requestObj.params.p2).toBe("tru");
+    expect(requestObj.query.p3).toBe(123);
+  });
 });
