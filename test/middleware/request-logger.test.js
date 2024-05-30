@@ -12,4 +12,6 @@ test("middleware() should correctly log request using logger", async () => {
   middlewareObj(requestObj, jest.fn(), mockedNext);
   const result = logger.getHistory();
   expect(result.length).toBe(1);
+  expect(result[0].type).toBe("debug");
+  expect(result[0].message).toBe("TEMP request - proto://host/url");
 });
