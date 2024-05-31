@@ -23,9 +23,10 @@ describe("createRoutes() method", () => {
     const testRouter = new ConfigRouter(components);
     const createdRoutes = testRouter.createRoutes();
     expect(createdRoutes.stack.length).toBe(expectedRoutes.length);
-    expectedRoutes.forEach(route => {
-        expect(createdRoutes.stack.some((s) => Object.keys(s.route.methods).includes(route.method))).toBe(true);
-        expect(createdRoutes.stack.some((s) => s.route.path === route.path)).toBe(true)
-    })
+    createdRoutes.stack.map(s => s.route).forEach(route => {
+        expect(expectedRoutes.filter(
+        (expected) => expected.path === route.path && Object.keys(route.methods).includes(expected.method)
+      ).length).toBe(1);
+    });
   });
 });
