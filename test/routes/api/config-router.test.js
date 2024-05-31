@@ -48,4 +48,8 @@ describe("created config GET routes", () => {
     const response = await supertest(testApp).get("/configs/unknown");
     expect(response.statusCode).toBe(404);
   });
+  test("returns correct result for path '/'", async () => {
+    const response = await supertest(testApp).get("/config");
+    expect(response.statusCode).toBe(200);
+  });
 });
