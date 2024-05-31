@@ -6,7 +6,7 @@ import supertest from "supertest";
 import express from "express";
 
 describe("createRoutes() method", () => {
-  test("returns correct routes", async () => {
+  test("returns correct number of routes", () => {
     const expectedRoutes = [
       { path: "/", method: "get" },
       { path: "/groups", method: "get" },
