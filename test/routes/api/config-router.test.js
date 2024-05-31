@@ -1,9 +1,13 @@
 import { ConfigRouter } from "../../../src/routes/api/config-router.js";
 import { LogLevel } from "../../../config/app-types.js";
 import { WebComponents } from "../../../src/components/web-components.js";
+import { ScrapConfig } from "../../../src/model/scrap-config.js";
 
 import supertest from "supertest";
 import express from "express";
+import { jest } from "@jest/globals";
+
+jest.mock("../../../src/model/scrap-config.js");
 
 describe("createRoutes() method", () => {
   test("returns correct number of routes", () => {
@@ -44,6 +48,23 @@ describe("created config GET routes", () => {
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
   const testRouter = new ConfigRouter(components);
   testApp.use("/config", testRouter.createRoutes());
+  const userConfig = {
+    user: "ID",
+    groups: [
+      {
+        name: "test",
+        domain: "www.google.com",
+        observers: {
+          name: "logo",
+          path: "info",
+          price: { selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
+        },
+      },
+    ],
+  };
+  const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
+  jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
+
   test("returns correct result for unknown path", async () => {
     const response = await supertest(testApp).get("/configs/unknown");
     expect(response.statusCode).toBe(404);
