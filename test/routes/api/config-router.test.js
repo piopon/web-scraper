@@ -1,4 +1,4 @@
-import { ConfigRouter } from "../../../src/routes/api/config-router.js"
+import { ConfigRouter } from "../../../src/routes/api/config-router.js";
 import { LogLevel } from "../../../config/app-types.js";
 import { WebComponents } from "../../../src/components/web-components.js";
 
@@ -24,12 +24,12 @@ describe("createRoutes() method", () => {
     const createdRoutes = testRouter.createRoutes();
     expect(createdRoutes.stack.length).toBe(expectedRoutes.length);
     createdRoutes.stack
-      .map(stackRoute => stackRoute.route)
-      .forEach(route => {
-        const foundRoutesNo = expectedRoutes.filter(expected => {
-          const samePath = expected.path === route.path
-          const hasMethod = Object.keys(route.methods).includes(expected.method)
-          return samePath && hasMethod
+      .map((stackRoute) => stackRoute.route)
+      .forEach((route) => {
+        const foundRoutesNo = expectedRoutes.filter((expected) => {
+          const samePath = expected.path === route.path;
+          const hasMethod = Object.keys(route.methods).includes(expected.method);
+          return samePath && hasMethod;
         }).length;
         expect(foundRoutesNo).toBe(1);
       });
