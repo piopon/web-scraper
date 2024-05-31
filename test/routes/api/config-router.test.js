@@ -2,6 +2,9 @@ import { ConfigRouter } from "../../../src/routes/api/config-router.js";
 import { LogLevel } from "../../../config/app-types.js";
 import { WebComponents } from "../../../src/components/web-components.js";
 
+import supertest from "supertest";
+import express from "express";
+
 describe("createRoutes() method", () => {
   test("returns correct routes", async () => {
     const expectedRoutes = [
@@ -33,5 +36,16 @@ describe("createRoutes() method", () => {
         }).length;
         expect(foundRoutesNo).toBe(1);
       });
+  });
+});
+
+describe("created config GET routes", () => {
+  const testApp = express();
+  const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+  const testRouter = new ConfigRouter(components);
+  testApp.use("/config", testRouter.createRoutes());
+  test("returns correct result for unknown path", async () => {
+    const response = await supertest(testApp).get("/configs/unknown");
+    expect(response.statusCode).toBe(404);
   });
 });
