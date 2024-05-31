@@ -12,6 +12,7 @@ describe("createRoutes() method", () => {
     const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
     const testRouter = new ConfigRouter(components);
     const createdRoutes = testRouter.createRoutes();
+    expect(createdRoutes.stack.length).toBe(expectedRoutes.length);
     expectedRoutes.forEach(route => {
         expect(createdRoutes.stack.some((s) => Object.keys(s.route.methods).includes(route.method))).toBe(true);
         expect(createdRoutes.stack.some((s) => s.route.path === route.path)).toBe(true)
