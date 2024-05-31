@@ -8,6 +8,16 @@ describe("createRoutes() method", () => {
       { path: "/", method: "get" },
       { path: "/groups", method: "get" },
       { path: "/groups/observers", method: "get" },
+      { path: "/groups/observers/components", method: "get" },
+      { path: "/", method: "put" },
+      { path: "/groups", method: "put" },
+      { path: "/groups/observers", method: "put" },
+      { path: "/", method: "post" },
+      { path: "/groups", method: "post" },
+      { path: "/groups/observers", method: "post" },
+      { path: "/", method: "delete" },
+      { path: "/groups", method: "delete" },
+      { path: "/groups/observers", method: "delete" },
     ];
     const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
     const testRouter = new ConfigRouter(components);
