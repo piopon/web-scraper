@@ -55,7 +55,7 @@ describe("created config GET routes", () => {
   testApp.use(passport.initialize());
   testApp.use(passport.session());
   testApp.use("/config", new ConfigRouter(components).createRoutes());
-  testApp.use("/auth", createTestAuthRoutes());
+  testApp.use("/auth", createMockAuthRouter());
 
   const userConfig = {
     user: "ID",
@@ -90,17 +90,15 @@ describe("created config GET routes", () => {
   });
 });
 
-function createTestAuthRoutes() {
+function createMockAuthRouter() {
   const router = express.Router();
-
+  // configure mocked login logic
   const options = { usernameField: "mail", passwordField: "pass" };
-  const verify = (user, pass, done) => done(null, { id: 1, config: {} });
+  const verify = (_user, _pass, done) => done(null, { id: 1, config: {} });
   passport.use("mock-login", new Strategy(options, verify));
-
-  router.post("/login", passport.authenticate("mock-login"));
-
   passport.serializeUser((user, done) => done(null, user.id));
   passport.deserializeUser((userId, done) => done(null, { id: userId, config: {} }));
-
+  // use passport mock login in tests
+  router.post("/login", passport.authenticate("mock-login"));
   return router;
 }
