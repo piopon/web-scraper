@@ -54,7 +54,7 @@ describe("created config GET routes", () => {
   const testApp = express();
   testApp.use(express.json());
   testApp.use(express.urlencoded({ extended: false }));
-  testApp.use(session({ secret: "unit_tests" }));
+  testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
   testApp.use(passport.initialize());
   testApp.use(passport.session());
   testApp.use("/config", new ConfigRouter(components).createRoutes());
