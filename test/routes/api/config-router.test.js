@@ -1,7 +1,8 @@
 import { ConfigRouter } from "../../../src/routes/api/config-router.js";
-import { LogLevel } from "../../../config/app-types.js";
+import { AuthRouter } from "../../../src/routes/view/auth-router.js";
 import { WebComponents } from "../../../src/components/web-components.js";
 import { ScrapConfig } from "../../../src/model/scrap-config.js";
+import { LogLevel } from "../../../config/app-types.js";
 
 import supertest from "supertest";
 import express from "express";
@@ -46,8 +47,9 @@ describe("createRoutes() method", () => {
 describe("created config GET routes", () => {
   const testApp = express();
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-  const testRouter = new ConfigRouter(components);
-  testApp.use("/config", testRouter.createRoutes());
+  testApp.use("/auth", new AuthRouter(components, passport).createRoutes());
+  testApp.use("/config", new ConfigRouter(components).createRoutes());
+
   const userConfig = {
     user: "ID",
     groups: [
@@ -65,12 +67,22 @@ describe("created config GET routes", () => {
   const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
   jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
 
+  const authUser = supertest.agent(testApp);
+  beforeAll(async () => {
+    await authUser
+      .post("/auth/login")
+      .send({
+        username: "test-user",
+        password: "test-pass",
+      });
+  });
+
   test("returns correct result for unknown path", async () => {
-    const response = await supertest(testApp).get("/configs/unknown");
+    const response = await authUser.get("/configs/unknown");
     expect(response.statusCode).toBe(404);
   });
   test("returns correct result for path '/'", async () => {
-    const response = await supertest(testApp).get("/config");
+    const response = await authUser.get("/config");
     expect(response.statusCode).toBe(200);
   });
 });
