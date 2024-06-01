@@ -48,6 +48,9 @@ describe("createRoutes() method", () => {
 describe("created config GET routes", () => {
   const testApp = express();
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+  testApp.use(express.json());
+  testApp.use(express.urlencoded({ extended: false }));
+  testApp.use(passport.initialize());
   testApp.use("/config", new ConfigRouter(components).createRoutes());
   testApp.use("/auth", createTestAuthRoutes());
 
@@ -70,12 +73,8 @@ describe("created config GET routes", () => {
 
   const authUser = supertest.agent(testApp);
   beforeAll(async () => {
-    await authUser
-      .post("/auth/login")
-      .send({
-        username: "test-user",
-        password: "test-pass",
-      });
+    const mockAuth = { mail: "test@mail.com", pass: "test-secret" };
+    await authUser.post("/auth/login").send(mockAuth);
   });
 
   test("returns correct result for unknown path", async () => {
