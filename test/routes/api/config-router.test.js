@@ -48,7 +48,7 @@ describe("createRoutes() method", () => {
 
 describe("created config GET routes", () => {
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-  const mockResult = { findById: () => ({ toJSON: () => getInitConfig() }) };
+  const mockResult = { findById: (configId) => getInitConfig(configId) };
   jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
   // configue test express app server
   const testApp = express();
@@ -78,20 +78,22 @@ describe("created config GET routes", () => {
 
 function createMockAuthRouter() {
   const router = express.Router();
+  const configId = 123;
   // configure mocked login logic
   const options = { usernameField: "mail", passwordField: "pass" };
-  const verify = (_user, _pass, done) => done(null, { id: 1, config: getInitConfig() });
+  const verify = (_user, _pass, done) => done(null, { id: 1, config: configId });
   passport.use("mock-login", new Strategy(options, verify));
   passport.serializeUser((user, done) => done(null, user.id));
-  passport.deserializeUser((userId, done) => done(null, { id: userId, config: getInitConfig() }));
+  passport.deserializeUser((userId, done) => done(null, { id: userId, config: configId }));
   // use passport mock login in tests
   router.post("/login", passport.authenticate("mock-login"));
   return router;
 }
 
-function getInitConfig() {
+function getInitConfig(configId) {
   return {
-    user: "ID",
+    id: configId,
+    user: 1,
     groups: [
       {
         name: "test",
