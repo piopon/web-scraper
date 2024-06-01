@@ -6,6 +6,7 @@ import { LogLevel } from "../../../config/app-types.js";
 import supertest from "supertest";
 import passport from "passport";
 import express from "express";
+import session from "express-session";
 import { jest } from "@jest/globals";
 import { Strategy } from "passport-local";
 
@@ -50,7 +51,9 @@ describe("created config GET routes", () => {
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
   testApp.use(express.json());
   testApp.use(express.urlencoded({ extended: false }));
+  testApp.use(session({ secret: "unit_tests" }));
   testApp.use(passport.initialize());
+  testApp.use(passport.session());
   testApp.use("/config", new ConfigRouter(components).createRoutes());
   testApp.use("/auth", createTestAuthRoutes());
 
