@@ -73,6 +73,8 @@ describe("created config GET routes", () => {
   test("returns correct result for path '/'", async () => {
     const response = await testAgent.get("/config");
     expect(response.statusCode).toBe(200);
+    const expectedContent = getInitConfig(123);
+    expect(response.body).toStrictEqual(expectedContent);
   });
 });
 
