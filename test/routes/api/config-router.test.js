@@ -47,8 +47,11 @@ describe("createRoutes() method", () => {
 });
 
 describe("created config GET routes", () => {
-  const testApp = express();
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+  const mockResult = { findById: () => ({ toJSON: () => getInitConfig() }) };
+  jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
+  // configue test express app server
+  const testApp = express();
   testApp.use(express.json());
   testApp.use(express.urlencoded({ extended: false }));
   testApp.use(session({ secret: "unit_tests" }));
@@ -56,30 +59,13 @@ describe("created config GET routes", () => {
   testApp.use(passport.session());
   testApp.use("/config", new ConfigRouter(components).createRoutes());
   testApp.use("/auth", createMockAuthRouter());
-
-  const userConfig = {
-    user: "ID",
-    groups: [
-      {
-        name: "test",
-        domain: "www.google.com",
-        observers: {
-          name: "logo",
-          path: "info",
-          price: { selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
-        },
-      },
-    ],
-  };
-  const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
-  jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
-
+  // retrieve underlying superagent to correctly persist sessions
   const authUser = supertest.agent(testApp);
+
   beforeAll(async () => {
     const mockAuth = { mail: "test@mail.com", pass: "test-secret" };
     await authUser.post("/auth/login").send(mockAuth);
   });
-
   test("returns correct result for unknown path", async () => {
     const response = await authUser.get("/configs/unknown");
     expect(response.statusCode).toBe(404);
@@ -94,11 +80,28 @@ function createMockAuthRouter() {
   const router = express.Router();
   // configure mocked login logic
   const options = { usernameField: "mail", passwordField: "pass" };
-  const verify = (_user, _pass, done) => done(null, { id: 1, config: {} });
+  const verify = (_user, _pass, done) => done(null, { id: 1, config: getInitConfig() });
   passport.use("mock-login", new Strategy(options, verify));
   passport.serializeUser((user, done) => done(null, user.id));
-  passport.deserializeUser((userId, done) => done(null, { id: userId, config: {} }));
+  passport.deserializeUser((userId, done) => done(null, { id: userId, config: getInitConfig() }));
   // use passport mock login in tests
   router.post("/login", passport.authenticate("mock-login"));
   return router;
+}
+
+function getInitConfig() {
+  return {
+    user: "ID",
+    groups: [
+      {
+        name: "test",
+        domain: "www.google.com",
+        observers: {
+          name: "logo",
+          path: "info",
+          price: { selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
+        },
+      },
+    ],
+  };
 }
