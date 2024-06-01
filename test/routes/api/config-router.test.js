@@ -1,12 +1,13 @@
 import { ConfigRouter } from "../../../src/routes/api/config-router.js";
-import { AuthRouter } from "../../../src/routes/view/auth-router.js";
 import { WebComponents } from "../../../src/components/web-components.js";
 import { ScrapConfig } from "../../../src/model/scrap-config.js";
 import { LogLevel } from "../../../config/app-types.js";
 
 import supertest from "supertest";
+import passport from "passport";
 import express from "express";
 import { jest } from "@jest/globals";
+import { Strategy } from "passport-local";
 
 jest.mock("../../../src/model/scrap-config.js");
 
@@ -47,8 +48,8 @@ describe("createRoutes() method", () => {
 describe("created config GET routes", () => {
   const testApp = express();
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-  testApp.use("/auth", new AuthRouter(components, passport).createRoutes());
   testApp.use("/config", new ConfigRouter(components).createRoutes());
+  testApp.use("/auth", createTestAuthRoutes());
 
   const userConfig = {
     user: "ID",
@@ -86,3 +87,18 @@ describe("created config GET routes", () => {
     expect(response.statusCode).toBe(200);
   });
 });
+
+function createTestAuthRoutes() {
+  const router = express.Router();
+
+  const options = { usernameField: "mail", passwordField: "pass" };
+  const verify = (user, pass, done) => done(null, { id: 1, config: {} });
+  passport.use("mock-login", new Strategy(options, verify));
+
+  router.post("/login", passport.authenticate("mock-login"));
+
+  passport.serializeUser((user, done) => done(null, user.id));
+  passport.deserializeUser((userId, done) => done(null, { id: userId, config: {} }));
+
+  return router;
+}
