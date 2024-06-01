@@ -60,18 +60,18 @@ describe("created config GET routes", () => {
   testApp.use("/config", new ConfigRouter(components).createRoutes());
   testApp.use("/auth", createMockAuthRouter());
   // retrieve underlying superagent to correctly persist sessions
-  const authUser = supertest.agent(testApp);
+  const testAgent = supertest.agent(testApp);
 
   beforeAll(async () => {
     const mockAuth = { mail: "test@mail.com", pass: "test-secret" };
-    await authUser.post("/auth/login").send(mockAuth);
+    await testAgent.post("/auth/login").send(mockAuth);
   });
   test("returns correct result for unknown path", async () => {
-    const response = await authUser.get("/configs/unknown");
+    const response = await testAgent.get("/configs/unknown");
     expect(response.statusCode).toBe(404);
   });
   test("returns correct result for path '/'", async () => {
-    const response = await authUser.get("/config");
+    const response = await testAgent.get("/config");
     expect(response.statusCode).toBe(200);
   });
 });
