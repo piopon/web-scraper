@@ -76,6 +76,12 @@ describe("created config GET routes", () => {
     const expectedContent = getInitConfig(123);
     expect(response.body).toStrictEqual(expectedContent);
   });
+  test("returns correct result for path '/groups'", async () => {
+    const response = await testAgent.get("/config/groups");
+    expect(response.statusCode).toBe(200);
+    const expectedContent = getInitConfig(123).groups;
+    expect(response.body).toStrictEqual(expectedContent);
+  });
 });
 
 function createMockAuthRouter() {
