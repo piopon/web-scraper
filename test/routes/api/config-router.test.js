@@ -88,6 +88,12 @@ describe("created config GET routes", () => {
     const expectedContent = getInitConfig(123).groups.filter(g => g.name === "test1");
     expect(response.body).toStrictEqual(expectedContent);
   });
+  test("returns correct result for path '/groups&name=unknown'", async () => {
+    const response = await testAgent.get("/config/groups").query({name: "unknown"});
+    expect(response.statusCode).toBe(200);
+    const expectedContent = [];
+    expect(response.body).toStrictEqual(expectedContent);
+  });
 });
 
 function createMockAuthRouter() {
