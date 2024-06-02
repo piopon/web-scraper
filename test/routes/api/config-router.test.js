@@ -104,11 +104,20 @@ function getInitConfig(configId) {
     user: 1,
     groups: [
       {
-        name: "test",
+        name: "test1",
         domain: "www.google.com",
         observers: {
           name: "logo",
           path: "info",
+          price: { selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
+        },
+      },
+      {
+        name: "test2",
+        domain: "www.google.com",
+        observers: {
+          name: "text",
+          path: "status",
           price: { selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
         },
       },
