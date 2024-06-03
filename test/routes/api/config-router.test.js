@@ -61,7 +61,6 @@ describe("created config GET routes", () => {
   testApp.use("/auth", createMockAuthRouter());
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
-
   beforeAll(async () => {
     const mockAuth = { mail: "test@mail.com", pass: "test-secret" };
     await testAgent.post("/auth/login").send(mockAuth);
@@ -76,105 +75,107 @@ describe("created config GET routes", () => {
     const expectedContent = getInitConfig(123);
     expect(response.body).toStrictEqual(expectedContent);
   });
-  test("returns correct result for path '/groups'", async () => {
-    const response = await testAgent.get("/config/groups");
-    expect(response.statusCode).toBe(200);
-    const expectedContent = getInitConfig(123).groups;
-    expect(response.body).toStrictEqual(expectedContent);
-  });
-  test("returns correct result for path '/groups?name=test1'", async () => {
-    const response = await testAgent.get("/config/groups").query({ name: "test1" });
-    expect(response.statusCode).toBe(200);
-    const expectedContent = getInitConfig(123).groups.filter((g) => g.name === "test1");
-    expect(response.body).toStrictEqual(expectedContent);
-  });
-  test("returns correct result for path '/groups?name=unknown'", async () => {
-    const response = await testAgent.get("/config/groups").query({ name: "unknown" });
-    expect(response.statusCode).toBe(200);
-    const expectedContent = [];
-    expect(response.body).toStrictEqual(expectedContent);
-  });
-  test("returns correct result for path '/groups?category=@@@'", async () => {
-    const response = await testAgent.get("/config/groups").query({ category: "@@@" });
-    expect(response.statusCode).toBe(200);
-    const expectedContent = getInitConfig(123).groups.filter((g) => g.category === "@@@");
-    expect(response.body).toStrictEqual(expectedContent);
-  });
-  test("returns correct result for path '/groups?category=unknown'", async () => {
-    const response = await testAgent.get("/config/groups").query({ category: "unknown" });
-    expect(response.statusCode).toBe(200);
-    const expectedContent = [];
-    expect(response.body).toStrictEqual(expectedContent);
-  });
-  test("returns correct result for path '/groups?domain=www.google.com'", async () => {
-    const response = await testAgent.get("/config/groups").query({ domain: "www.google.com" });
-    expect(response.statusCode).toBe(200);
-    const expectedContent = getInitConfig(123).groups.filter((g) => g.domain === "www.google.com");
-    expect(response.body).toStrictEqual(expectedContent);
-  });
-  test("returns correct result for path '/groups?domain=unknown'", async () => {
-    const response = await testAgent.get("/config/groups").query({ domain: "unknown" });
-    expect(response.statusCode).toBe(200);
-    const expectedContent = [];
-    expect(response.body).toStrictEqual(expectedContent);
-  });
-  test("returns correct result for path '/groups?name=test1&category=$$$", async () => {
-    const response = await testAgent.get("/config/groups").query({ name: "test1", category: "$$$" });
-    expect(response.statusCode).toBe(200);
-    const expectedContent = getInitConfig(123).groups.filter((g) => g.name === "test1" && g.category === "$$$");
-    expect(response.body).toStrictEqual(expectedContent);
-  });
-  test("returns correct result for path '/groups?name=test1&category=@@@", async () => {
-    const response = await testAgent.get("/config/groups").query({ name: "test1", category: "@@@" });
-    expect(response.statusCode).toBe(200);
-    const expectedContent = [];
-    expect(response.body).toStrictEqual(expectedContent);
-  });
-  test("returns correct result for path '/groups?name=test1&domain=www.google.com", async () => {
-    const response = await testAgent.get("/config/groups").query({ name: "test1", domain: "www.google.com" });
-    expect(response.statusCode).toBe(200);
-    const expectedContent = getInitConfig(123).groups.filter(
-      (g) => g.name === "test1" && g.domain === "www.google.com"
-    );
-    expect(response.body).toStrictEqual(expectedContent);
-  });
-  test("returns correct result for path '/groups?name=test1&domain=unknown.com", async () => {
-    const response = await testAgent.get("/config/groups").query({ name: "test1", domain: "unknown.com" });
-    expect(response.statusCode).toBe(200);
-    const expectedContent = [];
-    expect(response.body).toStrictEqual(expectedContent);
-  });
-  test("returns correct result for path '/groups?category=$$$&domain=www.google.com", async () => {
-    const response = await testAgent.get("/config/groups").query({ category: "$$$", domain: "www.google.com" });
-    expect(response.statusCode).toBe(200);
-    const expectedContent = getInitConfig(123).groups.filter(
-      (g) => g.category === "$$$" && g.domain === "www.google.com"
-    );
-    expect(response.body).toStrictEqual(expectedContent);
-  });
-  test("returns correct result for path '/groups?category=unknown&domain=www.google.com", async () => {
-    const response = await testAgent.get("/config/groups").query({ category: "unknown", domain: "www.google.com" });
-    expect(response.statusCode).toBe(200);
-    const expectedContent = [];
-    expect(response.body).toStrictEqual(expectedContent);
-  });
-  test("returns correct result for path '/groups?name=test1&category=@@@&domain=www.google.com", async () => {
-    const response = await testAgent
-      .get("/config/groups")
-      .query({ name: "test1", category: "@@@", domain: "www.google.com" });
-    expect(response.statusCode).toBe(200);
-    const expectedContent = [];
-    expect(response.body).toStrictEqual(expectedContent);
-  });
-  test("returns correct result for path '/groups?name=test2&category=@@@&domain=www.google.com", async () => {
-    const response = await testAgent
-      .get("/config/groups")
-      .query({ name: "test2", category: "@@@", domain: "www.google.com" });
-    expect(response.statusCode).toBe(200);
-    const expectedContent = getInitConfig(123).groups.filter(
-      (g) => g.name === "test2" && g.category === "@@@" && g.domain === "www.google.com"
-    );
-    expect(response.body).toStrictEqual(expectedContent);
+  describe("returns correct groups using URL", () => {
+    test("/groups", async () => {
+      const response = await testAgent.get("/config/groups");
+      expect(response.statusCode).toBe(200);
+      const expectedContent = getInitConfig(123).groups;
+      expect(response.body).toStrictEqual(expectedContent);
+    });
+    test("/groups?name=test1", async () => {
+      const response = await testAgent.get("/config/groups").query({ name: "test1" });
+      expect(response.statusCode).toBe(200);
+      const expectedContent = getInitConfig(123).groups.filter((g) => g.name === "test1");
+      expect(response.body).toStrictEqual(expectedContent);
+    });
+    test("/groups?name=unknown", async () => {
+      const response = await testAgent.get("/config/groups").query({ name: "unknown" });
+      expect(response.statusCode).toBe(200);
+      const expectedContent = [];
+      expect(response.body).toStrictEqual(expectedContent);
+    });
+    test("/groups?category=@@@", async () => {
+      const response = await testAgent.get("/config/groups").query({ category: "@@@" });
+      expect(response.statusCode).toBe(200);
+      const expectedContent = getInitConfig(123).groups.filter((g) => g.category === "@@@");
+      expect(response.body).toStrictEqual(expectedContent);
+    });
+    test("/groups?category=unknown", async () => {
+      const response = await testAgent.get("/config/groups").query({ category: "unknown" });
+      expect(response.statusCode).toBe(200);
+      const expectedContent = [];
+      expect(response.body).toStrictEqual(expectedContent);
+    });
+    test("/groups?domain=www.google.com", async () => {
+      const response = await testAgent.get("/config/groups").query({ domain: "www.google.com" });
+      expect(response.statusCode).toBe(200);
+      const expectedContent = getInitConfig(123).groups.filter((g) => g.domain === "www.google.com");
+      expect(response.body).toStrictEqual(expectedContent);
+    });
+    test("/groups?domain=unknown", async () => {
+      const response = await testAgent.get("/config/groups").query({ domain: "unknown" });
+      expect(response.statusCode).toBe(200);
+      const expectedContent = [];
+      expect(response.body).toStrictEqual(expectedContent);
+    });
+    test("/groups?name=test1&category=$$$", async () => {
+      const response = await testAgent.get("/config/groups").query({ name: "test1", category: "$$$" });
+      expect(response.statusCode).toBe(200);
+      const expectedContent = getInitConfig(123).groups.filter((g) => g.name === "test1" && g.category === "$$$");
+      expect(response.body).toStrictEqual(expectedContent);
+    });
+    test("/groups?name=test1&category=@@@", async () => {
+      const response = await testAgent.get("/config/groups").query({ name: "test1", category: "@@@" });
+      expect(response.statusCode).toBe(200);
+      const expectedContent = [];
+      expect(response.body).toStrictEqual(expectedContent);
+    });
+    test("/groups?name=test1&domain=www.google.com", async () => {
+      const response = await testAgent.get("/config/groups").query({ name: "test1", domain: "www.google.com" });
+      expect(response.statusCode).toBe(200);
+      const expectedContent = getInitConfig(123).groups.filter(
+        (g) => g.name === "test1" && g.domain === "www.google.com"
+      );
+      expect(response.body).toStrictEqual(expectedContent);
+    });
+    test("/groups?name=test1&domain=unknown.com", async () => {
+      const response = await testAgent.get("/config/groups").query({ name: "test1", domain: "unknown.com" });
+      expect(response.statusCode).toBe(200);
+      const expectedContent = [];
+      expect(response.body).toStrictEqual(expectedContent);
+    });
+    test("/groups?category=$$$&domain=www.google.com", async () => {
+      const response = await testAgent.get("/config/groups").query({ category: "$$$", domain: "www.google.com" });
+      expect(response.statusCode).toBe(200);
+      const expectedContent = getInitConfig(123).groups.filter(
+        (g) => g.category === "$$$" && g.domain === "www.google.com"
+      );
+      expect(response.body).toStrictEqual(expectedContent);
+    });
+    test("/groups?category=unknown&domain=www.google.com", async () => {
+      const response = await testAgent.get("/config/groups").query({ category: "unknown", domain: "www.google.com" });
+      expect(response.statusCode).toBe(200);
+      const expectedContent = [];
+      expect(response.body).toStrictEqual(expectedContent);
+    });
+    test("/groups?name=test1&category=@@@&domain=www.google.com", async () => {
+      const response = await testAgent
+        .get("/config/groups")
+        .query({ name: "test1", category: "@@@", domain: "www.google.com" });
+      expect(response.statusCode).toBe(200);
+      const expectedContent = [];
+      expect(response.body).toStrictEqual(expectedContent);
+    });
+    test("/groups?name=test2&category=@@@&domain=www.google.com", async () => {
+      const response = await testAgent
+        .get("/config/groups")
+        .query({ name: "test2", category: "@@@", domain: "www.google.com" });
+      expect(response.statusCode).toBe(200);
+      const expectedContent = getInitConfig(123).groups.filter(
+        (g) => g.name === "test2" && g.category === "@@@" && g.domain === "www.google.com"
+      );
+      expect(response.body).toStrictEqual(expectedContent);
+    });
   });
 });
 
