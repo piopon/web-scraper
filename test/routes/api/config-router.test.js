@@ -173,18 +173,14 @@ describe("created config GET routes", () => {
     });
     test("/groups?name=test1&category=@@@&domain=www.google.com", async () => {
       const filterObj = { name: "test1", category: "@@@", domain: "www.google.com" };
-      const response = await testAgent
-        .get(urlBase)
-        .query(filterObj);
+      const response = await testAgent.get(urlBase).query(filterObj);
       expect(response.statusCode).toBe(200);
       const expectedContent = [];
       expect(response.body).toStrictEqual(expectedContent);
     });
     test("/groups?name=test2&category=@@@&domain=www.google.com", async () => {
       const filterObj = { name: "test2", category: "@@@", domain: "www.google.com" };
-      const response = await testAgent
-        .get(urlBase)
-        .query(filterObj);
+      const response = await testAgent.get(urlBase).query(filterObj);
       expect(response.statusCode).toBe(200);
       const expectedContent = getInitConfig(123).groups.filter(
         (g) => g.name === "test2" && g.category === "@@@" && g.domain === "www.google.com"
