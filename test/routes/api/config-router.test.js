@@ -117,6 +117,7 @@ function getInitConfig(configId) {
     groups: [
       {
         name: "test1",
+        category: "$$$",
         domain: "www.google.com",
         observers: {
           name: "logo",
@@ -126,6 +127,7 @@ function getInitConfig(configId) {
       },
       {
         name: "test2",
+        category: "@@@",
         domain: "www.google.com",
         observers: {
           name: "text",
