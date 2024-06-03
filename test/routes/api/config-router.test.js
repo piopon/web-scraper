@@ -106,6 +106,18 @@ describe("created config GET routes", () => {
     const expectedContent = [];
     expect(response.body).toStrictEqual(expectedContent);
   });
+  test("returns correct result for path '/groups&domain=www.google.com'", async () => {
+    const response = await testAgent.get("/config/groups").query({domain: "www.google.com"});
+    expect(response.statusCode).toBe(200);
+    const expectedContent = getInitConfig(123).groups.filter(g => g.domain === "www.google.com");
+    expect(response.body).toStrictEqual(expectedContent);
+  });
+  test("returns correct result for path '/groups&domain=unknown'", async () => {
+    const response = await testAgent.get("/config/groups").query({domain: "unknown"});
+    expect(response.statusCode).toBe(200);
+    const expectedContent = [];
+    expect(response.body).toStrictEqual(expectedContent);
+  });
 });
 
 function createMockAuthRouter() {
