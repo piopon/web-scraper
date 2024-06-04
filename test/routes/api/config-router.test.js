@@ -131,6 +131,21 @@ describe("created config GET routes", () => {
       ];
       expect(response.body).toStrictEqual(expectedErrorJson);
     });
+    test("history value outside accepted values", async () => {
+      const filterObj = { history: "unknown" };
+      const response = await testAgent.get("/config/groups/observers").query(filterObj);
+      expect(response.statusCode).toBe(400);
+      const expectedErrorJson = [
+        {
+          instancePath: "/history",
+          keyword: "enum",
+          message: "must be equal to one of the allowed values",
+          params: { allowedValues: ["off", "on", "onChange"] },
+          schemaPath: "#/properties/history/enum",
+        },
+      ];
+      expect(response.body).toStrictEqual(expectedErrorJson);
+    });
   });
 });
 
