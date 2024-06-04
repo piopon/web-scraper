@@ -94,35 +94,35 @@ describe("created config GET routes", () => {
       const filterObj = { name: "unknown" };
       const response = await testAgent.get(urlBase).query(filterObj);
       expect(response.statusCode).toBe(200);
-      const expectedContent = [];
+      const expectedContent = filterConfig(getInitConfig(123).groups, filterObj);
       expect(response.body).toStrictEqual(expectedContent);
     });
     test("/groups?category=@@@", async () => {
       const filterObj = { category: "@@@" };
       const response = await testAgent.get(urlBase).query(filterObj);
       expect(response.statusCode).toBe(200);
-      const expectedContent = getInitConfig(123).groups.filter((g) => g.category === "@@@");
+      const expectedContent = filterConfig(getInitConfig(123).groups, filterObj);
       expect(response.body).toStrictEqual(expectedContent);
     });
     test("/groups?category=unknown", async () => {
       const filterObj = { category: "unknown" };
       const response = await testAgent.get(urlBase).query(filterObj);
       expect(response.statusCode).toBe(200);
-      const expectedContent = [];
+      const expectedContent = filterConfig(getInitConfig(123).groups, filterObj);
       expect(response.body).toStrictEqual(expectedContent);
     });
     test("/groups?domain=www.google.com", async () => {
       const filterObj = { domain: "www.google.com" };
       const response = await testAgent.get(urlBase).query(filterObj);
       expect(response.statusCode).toBe(200);
-      const expectedContent = getInitConfig(123).groups.filter((g) => g.domain === "www.google.com");
+      const expectedContent = filterConfig(getInitConfig(123).groups, filterObj);
       expect(response.body).toStrictEqual(expectedContent);
     });
     test("/groups?domain=unknown", async () => {
       const filterObj = { domain: "unknown" };
       const response = await testAgent.get(urlBase).query(filterObj);
       expect(response.statusCode).toBe(200);
-      const expectedContent = [];
+      const expectedContent = filterConfig(getInitConfig(123).groups, filterObj);
       expect(response.body).toStrictEqual(expectedContent);
     });
     test("/groups?name=test1&category=$$$", async () => {
