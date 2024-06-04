@@ -102,6 +102,14 @@ describe("created config GET routes", () => {
   describe("returns correct observers using /config/groups/observers endpoint with", () => {
     it.each([
       ["filter: NONE", undefined],
+      ["filter: ?name=logo", { name: "logo" }],
+      ["filter: ?name=unknown", { name: "unknown" }],
+      ["filter: ?path=status", { path: "status" }],
+      ["filter: ?path=unknown", { path: "unknown" }],
+      ["filter: ?target=domcontentloaded", { target: "domcontentloaded" }],
+      ["filter: ?target=networkidle2", { target: "networkidle2" }],
+      ["filter: ?history=onChange", { history: "onChange" }],
+      ["filter: ?history=on", { history: "on" }],
     ])("%s", async (_, filterObj) => {
       const response = await testAgent.get("/config/groups/observers").query(filterObj);
       expect(response.statusCode).toBe(200);
