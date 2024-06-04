@@ -204,6 +204,17 @@ function createMockAuthRouter() {
   return router;
 }
 
+function filterConfig(array, filter) {
+  if (filter == null) {
+    return array;
+  }
+  let result = array;
+  for (const [key, value] of Object.entries(filter)) {
+    result = result.filter(element => element[key] === value)
+  }
+  return result;
+}
+
 function getInitConfig(configId) {
   return {
     id: configId,
