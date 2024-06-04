@@ -83,16 +83,16 @@ describe("created config GET routes", () => {
       ["/groups?name=unknown", { name: "unknown" }],
       ["/groups?category=@@@", { category: "@@@" }],
       ["/groups?category=unknown", { category: "unknown" }],
-      ["/groups?domain=www.google.com", { domain: "www.google.com" }],
+      ["/groups?domain=test.com", { domain: "test.com" }],
       ["/groups?domain=unknown", { domain: "unknown" }],
       ["/groups?name=test1&category=$$$", { name: "test1", category: "$$$" }],
       ["/groups?name=test1&category=@@@", { name: "test1", category: "@@@" }],
-      ["/groups?name=test1&domain=www.google.com", { name: "test1", domain: "www.google.com" }],
+      ["/groups?name=test1&domain=test.com", { name: "test1", domain: "test.com" }],
       ["/groups?name=test1&domain=unknown.com", { name: "test1", domain: "unknown.com" }],
-      ["/groups?category=$$$&domain=www.google.com", { category: "$$$", domain: "www.google.com" }],
-      ["/groups?category=unknown&domain=www.google.com", { category: "unknown", domain: "www.google.com" }],
-      ["/groups?name=test1&category=@@@&domain=www.google.com", { name: "test1", category: "@@@", domain: "www.google.com" }],
-      ["/groups?name=test2&category=@@@&domain=www.google.com", { name: "test2", category: "@@@", domain: "www.google.com" }],
+      ["/groups?category=$$$&domain=test.com", { category: "$$$", domain: "test.com" }],
+      ["/groups?category=unknown&domain=test.com", { category: "unknown", domain: "test.com" }],
+      ["/groups?name=test1&category=@@@&domain=test.com", { name: "test1", category: "@@@", domain: "test.com" }],
+      ["/groups?name=test2&category=@@@&domain=test.com", { name: "test2", category: "@@@", domain: "test.com" }],
     ])("%s", async (_, filterObj) => {
       const response = await testAgent.get(urlBase).query(filterObj);
       expect(response.statusCode).toBe(200);
@@ -135,7 +135,7 @@ function getInitConfig(configId) {
       {
         name: "test1",
         category: "$$$",
-        domain: "www.google.com",
+        domain: "test.com",
         observers: {
           name: "logo",
           path: "info",
@@ -145,7 +145,7 @@ function getInitConfig(configId) {
       {
         name: "test2",
         category: "@@@",
-        domain: "www.google.com",
+        domain: "test.com",
         observers: {
           name: "text",
           path: "status",
