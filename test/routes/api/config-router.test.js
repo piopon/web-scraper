@@ -116,6 +116,21 @@ describe("created config GET routes", () => {
       const expectedContent = filterConfig(getInitConfig(123).groups.flatMap(group => group.observers), filterObj);
       expect(response.body).toStrictEqual(expectedContent);
     });
+    test("target value outside accepted values", async () => {
+      const filterObj = { target: "unknown" };
+      const response = await testAgent.get("/config/groups/observers").query(filterObj);
+      expect(response.statusCode).toBe(400);
+      const expectedErrorJson = [
+        {
+          instancePath: "/target",
+          keyword: "enum",
+          message: "must be equal to one of the allowed values",
+          params: { allowedValues: ["load", "domcontentloaded", "networkidle0", "networkidle2"] },
+          schemaPath: "#/properties/target/enum",
+        },
+      ];
+      expect(response.body).toStrictEqual(expectedErrorJson);
+    });
   });
 });
 
