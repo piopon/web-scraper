@@ -122,7 +122,7 @@ function filterConfig(array, filter) {
   }
   let result = array;
   for (const [key, value] of Object.entries(filter)) {
-    result = result.filter(element => element[key] === value)
+    result = result.filter((element) => element[key] === value);
   }
   return result;
 }
