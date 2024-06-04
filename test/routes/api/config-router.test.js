@@ -75,23 +75,23 @@ describe("created config GET routes", () => {
     const expectedContent = getInitConfig(123);
     expect(response.body).toStrictEqual(expectedContent);
   });
-  describe("returns correct groups using URL", () => {
+  describe("returns correct groups using /config/groups endpoint with", () => {
     it.each([
-      ["/groups", undefined],
-      ["/groups?name=test1", { name: "test1" }],
-      ["/groups?name=unknown", { name: "unknown" }],
-      ["/groups?category=@@@", { category: "@@@" }],
-      ["/groups?category=unknown", { category: "unknown" }],
-      ["/groups?domain=test.com", { domain: "test.com" }],
-      ["/groups?domain=unknown", { domain: "unknown" }],
-      ["/groups?name=test1&category=$$$", { name: "test1", category: "$$$" }],
-      ["/groups?name=test1&category=@@@", { name: "test1", category: "@@@" }],
-      ["/groups?name=test1&domain=test.com", { name: "test1", domain: "test.com" }],
-      ["/groups?name=test1&domain=unknown.com", { name: "test1", domain: "unknown.com" }],
-      ["/groups?category=$$$&domain=test.com", { category: "$$$", domain: "test.com" }],
-      ["/groups?category=unknown&domain=test.com", { category: "unknown", domain: "test.com" }],
-      ["/groups?name=test1&category=@@@&domain=test.com", { name: "test1", category: "@@@", domain: "test.com" }],
-      ["/groups?name=test2&category=@@@&domain=test.com", { name: "test2", category: "@@@", domain: "test.com" }],
+      ["filter: NONE", undefined],
+      ["filter: ?name=test1", { name: "test1" }],
+      ["filter: ?name=unknown", { name: "unknown" }],
+      ["filter: ?category=@@@", { category: "@@@" }],
+      ["filter: ?category=unknown", { category: "unknown" }],
+      ["filter: ?domain=test.com", { domain: "test.com" }],
+      ["filter: ?domain=unknown", { domain: "unknown" }],
+      ["filter: ?name=test1&category=$$$", { name: "test1", category: "$$$" }],
+      ["filter: ?name=test1&category=@@@", { name: "test1", category: "@@@" }],
+      ["filter: ?name=test1&domain=test.com", { name: "test1", domain: "test.com" }],
+      ["filter: ?name=test1&domain=unknown.com", { name: "test1", domain: "unknown.com" }],
+      ["filter: ?category=$$$&domain=test.com", { category: "$$$", domain: "test.com" }],
+      ["filter: ?category=unknown&domain=test.com", { category: "unknown", domain: "test.com" }],
+      ["filter: ?name=test1&category=@@@&domain=test.com", { name: "test1", category: "@@@", domain: "test.com" }],
+      ["filter: ?name=test2&category=@@@&domain=test.com", { name: "test2", category: "@@@", domain: "test.com" }],
     ])("%s", async (_, filterObj) => {
       const response = await testAgent.get("/config/groups").query(filterObj);
       expect(response.statusCode).toBe(200);
