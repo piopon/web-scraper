@@ -99,6 +99,16 @@ describe("created config GET routes", () => {
       expect(response.body).toStrictEqual(expectedContent);
     });
   });
+  describe("returns correct observers using /config/groups/observers endpoint with", () => {
+    it.each([
+      ["filter: NONE", undefined],
+    ])("%s", async (_, filterObj) => {
+      const response = await testAgent.get("/config/groups/observers").query(filterObj);
+      expect(response.statusCode).toBe(200);
+      const expectedContent = filterConfig(getInitConfig(123).groups.flatMap(group => group.observers), filterObj);
+      expect(response.body).toStrictEqual(expectedContent);
+    });
+  });
 });
 
 function createMockAuthRouter() {
