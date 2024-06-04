@@ -129,62 +129,56 @@ describe("created config GET routes", () => {
       const filterObj = { name: "test1", category: "$$$" };
       const response = await testAgent.get(urlBase).query(filterObj);
       expect(response.statusCode).toBe(200);
-      const expectedContent = getInitConfig(123).groups.filter((g) => g.name === "test1" && g.category === "$$$");
+      const expectedContent = filterConfig(getInitConfig(123).groups, filterObj);
       expect(response.body).toStrictEqual(expectedContent);
     });
     test("/groups?name=test1&category=@@@", async () => {
       const filterObj = { name: "test1", category: "@@@" };
       const response = await testAgent.get(urlBase).query(filterObj);
       expect(response.statusCode).toBe(200);
-      const expectedContent = [];
+      const expectedContent = filterConfig(getInitConfig(123).groups, filterObj);
       expect(response.body).toStrictEqual(expectedContent);
     });
     test("/groups?name=test1&domain=www.google.com", async () => {
       const filterObj = { name: "test1", domain: "www.google.com" };
       const response = await testAgent.get(urlBase).query(filterObj);
       expect(response.statusCode).toBe(200);
-      const expectedContent = getInitConfig(123).groups.filter(
-        (g) => g.name === "test1" && g.domain === "www.google.com"
-      );
+      const expectedContent = filterConfig(getInitConfig(123).groups, filterObj);
       expect(response.body).toStrictEqual(expectedContent);
     });
     test("/groups?name=test1&domain=unknown.com", async () => {
       const filterObj = { name: "test1", domain: "unknown.com" };
       const response = await testAgent.get(urlBase).query(filterObj);
       expect(response.statusCode).toBe(200);
-      const expectedContent = [];
+      const expectedContent = filterConfig(getInitConfig(123).groups, filterObj);
       expect(response.body).toStrictEqual(expectedContent);
     });
     test("/groups?category=$$$&domain=www.google.com", async () => {
       const filterObj = { category: "$$$", domain: "www.google.com" };
       const response = await testAgent.get(urlBase).query(filterObj);
       expect(response.statusCode).toBe(200);
-      const expectedContent = getInitConfig(123).groups.filter(
-        (g) => g.category === "$$$" && g.domain === "www.google.com"
-      );
+      const expectedContent = filterConfig(getInitConfig(123).groups, filterObj);
       expect(response.body).toStrictEqual(expectedContent);
     });
     test("/groups?category=unknown&domain=www.google.com", async () => {
       const filterObj = { category: "unknown", domain: "www.google.com" };
       const response = await testAgent.get(urlBase).query(filterObj);
       expect(response.statusCode).toBe(200);
-      const expectedContent = [];
+      const expectedContent = filterConfig(getInitConfig(123).groups, filterObj);
       expect(response.body).toStrictEqual(expectedContent);
     });
     test("/groups?name=test1&category=@@@&domain=www.google.com", async () => {
       const filterObj = { name: "test1", category: "@@@", domain: "www.google.com" };
       const response = await testAgent.get(urlBase).query(filterObj);
       expect(response.statusCode).toBe(200);
-      const expectedContent = [];
+      const expectedContent = filterConfig(getInitConfig(123).groups, filterObj);
       expect(response.body).toStrictEqual(expectedContent);
     });
     test("/groups?name=test2&category=@@@&domain=www.google.com", async () => {
       const filterObj = { name: "test2", category: "@@@", domain: "www.google.com" };
       const response = await testAgent.get(urlBase).query(filterObj);
       expect(response.statusCode).toBe(200);
-      const expectedContent = getInitConfig(123).groups.filter(
-        (g) => g.name === "test2" && g.category === "@@@" && g.domain === "www.google.com"
-      );
+      const expectedContent = filterConfig(getInitConfig(123).groups, filterObj);
       expect(response.body).toStrictEqual(expectedContent);
     });
   });
