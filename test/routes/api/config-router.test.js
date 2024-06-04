@@ -76,7 +76,6 @@ describe("created config GET routes", () => {
     expect(response.body).toStrictEqual(expectedContent);
   });
   describe("returns correct groups using URL", () => {
-    const urlBase = "/config/groups";
     it.each([
       ["/groups", undefined],
       ["/groups?name=test1", { name: "test1" }],
@@ -94,7 +93,7 @@ describe("created config GET routes", () => {
       ["/groups?name=test1&category=@@@&domain=test.com", { name: "test1", category: "@@@", domain: "test.com" }],
       ["/groups?name=test2&category=@@@&domain=test.com", { name: "test2", category: "@@@", domain: "test.com" }],
     ])("%s", async (_, filterObj) => {
-      const response = await testAgent.get(urlBase).query(filterObj);
+      const response = await testAgent.get("/config/groups").query(filterObj);
       expect(response.statusCode).toBe(200);
       const expectedContent = filterConfig(getInitConfig(123).groups, filterObj);
       expect(response.body).toStrictEqual(expectedContent);
