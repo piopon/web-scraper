@@ -75,7 +75,7 @@ describe("created config GET routes", () => {
     const expectedContent = getInitConfig(123);
     expect(response.body).toStrictEqual(expectedContent);
   });
-  describe("returns correct groups using /config/groups endpoint with", () => {
+  describe("returns correct result using /config/groups endpoint with", () => {
     it.each([
       ["filter: NONE", undefined],
       ["filter: ?name=test1", { name: "test1" }],
@@ -99,7 +99,7 @@ describe("created config GET routes", () => {
       expect(response.body).toStrictEqual(expectedContent);
     });
   });
-  describe("returns correct observers using /config/groups/observers endpoint with", () => {
+  describe("returns correct result using /config/groups/observers endpoint with", () => {
     it.each([
       ["filter: NONE", undefined],
       ["filter: ?name=logo", { name: "logo" }],
