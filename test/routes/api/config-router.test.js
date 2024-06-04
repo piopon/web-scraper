@@ -148,6 +148,8 @@ function getInitConfig(configId) {
         observers: {
           name: "logo",
           path: "info",
+          target: "load",
+          history: "off",
           price: { selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
         },
       },
@@ -158,6 +160,8 @@ function getInitConfig(configId) {
         observers: {
           name: "text",
           path: "status",
+          target: "domcontentloaded",
+          history: "onChange",
           price: { selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
         },
       },
