@@ -80,14 +80,14 @@ describe("created config GET routes", () => {
     test("/groups", async () => {
       const response = await testAgent.get(urlBase);
       expect(response.statusCode).toBe(200);
-      const expectedContent = getInitConfig(123).groups;
+      const expectedContent = filterConfig(getInitConfig(123).groups, undefined);
       expect(response.body).toStrictEqual(expectedContent);
     });
     test("/groups?name=test1", async () => {
       const filterObj = { name: "test1" };
       const response = await testAgent.get(urlBase).query(filterObj);
       expect(response.statusCode).toBe(200);
-      const expectedContent = getInitConfig(123).groups.filter((g) => g.name === "test1");
+      const expectedContent = filterConfig(getInitConfig(123).groups, filterObj);
       expect(response.body).toStrictEqual(expectedContent);
     });
     test("/groups?name=unknown", async () => {
