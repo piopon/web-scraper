@@ -78,9 +78,10 @@ describe("created config GET routes", () => {
   describe("returns correct groups using URL", () => {
     const urlBase = "/config/groups";
     test("/groups", async () => {
-      const response = await testAgent.get(urlBase);
+      const filterObj = undefined;
+      const response = await testAgent.get(urlBase).query(filterObj);
       expect(response.statusCode).toBe(200);
-      const expectedContent = filterConfig(getInitConfig(123).groups, undefined);
+      const expectedContent = filterConfig(getInitConfig(123).groups, filterObj);
       expect(response.body).toStrictEqual(expectedContent);
     });
     test("/groups?name=test1", async () => {
