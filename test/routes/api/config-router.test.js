@@ -168,6 +168,10 @@ describe("created config GET routes", () => {
       ["source: title, filter: NONE", "title", undefined],
       ["source: image, filter: NONE", "image", undefined],
       ["source: price, filter: NONE", "price", undefined],
+      ["source: price, filter: ?interval=5m", "price", { interval: "5m" }],
+      ["source: price, filter: ?selector=body", "price", { selector: "body" }],
+      ["source: price, filter: ?attribute=innerHTML", "price", { attribute: "innerHTML" }],
+      ["source: price, filter: ?auxiliary=PLN", "price", { auxiliary: "PLN" }],
     ])("%s", async (_, source, filterObj) => {
       const queryObj = { source: source, ...filterObj };
       const response = await testAgent.get("/config/groups/observers/components").query(queryObj);
