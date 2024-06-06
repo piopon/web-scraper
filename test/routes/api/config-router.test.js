@@ -165,6 +165,8 @@ describe("created config GET routes", () => {
   });
   describe("returns correct result using /config/groups/observers/components endpoint with", () => {
     it.each([
+      ["source: title, filter: NONE", "title", undefined],
+      ["source: image, filter: NONE", "image", undefined],
       ["source: price, filter: NONE", "price", undefined],
     ])("%s", async (_, source, filterObj) => {
       const queryObj = {source: source, ...filterObj};
