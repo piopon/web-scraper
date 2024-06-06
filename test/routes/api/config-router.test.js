@@ -172,6 +172,9 @@ describe("created config GET routes", () => {
       ["source: price, filter: ?selector=body", "price", { selector: "body" }],
       ["source: price, filter: ?attribute=innerHTML", "price", { attribute: "innerHTML" }],
       ["source: price, filter: ?auxiliary=PLN", "price", { auxiliary: "PLN" }],
+      ["source: price, filter: ?interval=1h&selector=body", "price", { interval: "1h", selector: "body" }],
+      ["source: price, filter: ?interval=1h&attribute=innerHTML", "price", { interval: "1h", attribute: "innerHTML" }],
+      ["source: price, filter: ?interval=1h&auxiliary=USD", "price", { interval: "1h", auxiliary: "USD" }],
     ])("%s", async (_, source, filterObj) => {
       const queryObj = { source: source, ...filterObj };
       const response = await testAgent.get("/config/groups/observers/components").query(queryObj);
