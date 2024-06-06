@@ -119,6 +119,7 @@ describe("created config GET routes", () => {
       ["filter: ?name=logo&path=status&target=load", { name: "logo", path: "status", target: "load" }],
       ["filter: ?name=logo&path=status&history=off", { name: "logo", path: "status", history: "off" }],
       ["filter: ?path=status&target=load&history=off", { path: "status", target: "load", history: "off" }],
+      ["filter: ?name=logo&path=status&target=load&history=off", { name: "logo", path: "status", target: "load", history: "off" }],
     ])("%s", async (_, filterObj) => {
       const response = await testAgent.get("/config/groups/observers").query(filterObj);
       expect(response.statusCode).toBe(200);
