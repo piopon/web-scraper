@@ -110,6 +110,12 @@ describe("created config GET routes", () => {
       ["filter: ?target=networkidle2", { target: "networkidle2" }],
       ["filter: ?history=onChange", { history: "onChange" }],
       ["filter: ?history=on", { history: "on" }],
+      ["filter: ?name=logo&path=status", { name: "logo", path: "status" }],
+      ["filter: ?name=logo&target=load", { name: "logo", target: "load" }],
+      ["filter: ?name=logo&history=off", { name: "logo", history: "off" }],
+      ["filter: ?path=status&target=domcontentloaded", { path: "status", target: "domcontentloaded" }],
+      ["filter: ?path=status&history=off", { path: "status", history: "off" }],
+      ["filter: ?target=load&history=off", { target: "load", history: "off" }],
     ])("%s", async (_, filterObj) => {
       const response = await testAgent.get("/config/groups/observers").query(filterObj);
       expect(response.statusCode).toBe(200);
