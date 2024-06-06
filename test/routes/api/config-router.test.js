@@ -163,6 +163,22 @@ describe("created config GET routes", () => {
       expect(response.body).toStrictEqual(expectedErrorJson);
     });
   });
+  describe("returns correct result using /config/groups/observers/components endpoint with", () => {
+    it.each([
+      ["source: price, filter: NONE", "price", undefined],
+    ])("%s", async (_, source, filterObj) => {
+      const queryObj = {source: source, ...filterObj};
+      const response = await testAgent.get("/config/groups/observers/components").query(queryObj);
+      expect(response.statusCode).toBe(200);
+      const expectedContent = filterConfig(
+        getInitConfig(123)
+          .groups.flatMap((group) => group.observers)
+          .map((observer) => observer[source]),
+        filterObj
+      );
+      expect(response.body).toStrictEqual(expectedContent);
+    });
+  });
 });
 
 function createMockAuthRouter() {
