@@ -70,10 +70,11 @@ export class ConfigRouter {
           .flatMap((group) => group.observers)
           .map((item) => item[request.query.source])
           .filter((item) => {
+            const selectorOk = request.query.selector ? item.selector === request.query.selector : true;
             const intervalOk = request.query.interval ? item.interval === request.query.interval : true;
             const attributeOk = request.query.attribute ? item.attribute === request.query.attribute : true;
             const auxiliaryOk = request.query.auxiliary ? item.auxiliary === request.query.auxiliary : true;
-            return intervalOk && attributeOk && auxiliaryOk;
+            return selectorOk && intervalOk && attributeOk && auxiliaryOk;
           })
       );
     });
