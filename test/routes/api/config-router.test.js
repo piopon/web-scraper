@@ -222,7 +222,7 @@ function getInitConfig(configId) {
           path: "info",
           target: "load",
           history: "off",
-          price: { selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
+          price: { interval: "5m", selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
         },
       },
       {
@@ -234,7 +234,7 @@ function getInitConfig(configId) {
           path: "status",
           target: "domcontentloaded",
           history: "onChange",
-          price: { selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
+          price: { interval: "1h", selector: "body p b", attribute: "innerHTML", auxiliary: "USD" },
         },
       },
     ],
