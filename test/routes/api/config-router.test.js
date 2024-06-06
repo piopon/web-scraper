@@ -169,7 +169,7 @@ describe("created config GET routes", () => {
       ["source: image, filter: NONE", "image", undefined],
       ["source: price, filter: NONE", "price", undefined],
     ])("%s", async (_, source, filterObj) => {
-      const queryObj = {source: source, ...filterObj};
+      const queryObj = { source: source, ...filterObj };
       const response = await testAgent.get("/config/groups/observers/components").query(queryObj);
       expect(response.statusCode).toBe(200);
       const expectedContent = filterConfig(
@@ -177,7 +177,7 @@ describe("created config GET routes", () => {
           .groups.flatMap((group) => group.observers)
           .map((observer) => observer[source]),
         filterObj
-      ).map(item => (item === undefined ? null : item));
+      ).map((item) => (item === undefined ? null : item));
       expect(response.body).toStrictEqual(expectedContent);
     });
   });
