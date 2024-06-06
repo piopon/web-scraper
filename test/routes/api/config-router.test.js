@@ -177,7 +177,7 @@ describe("created config GET routes", () => {
           .groups.flatMap((group) => group.observers)
           .map((observer) => observer[source]),
         filterObj
-      );
+      ).map(item => (item === undefined ? null : item));
       expect(response.body).toStrictEqual(expectedContent);
     });
   });
