@@ -85,16 +85,6 @@ export class ConfigRouter {
    * @param {Object} router The router object with PUT method routes defined
    */
   #createPutRoutes(router) {
-    router.put("/", async (request, response) => {
-      await this.#handlePutRequest(
-        request,
-        response,
-        (configContent) => configContent,
-        (parent) => {
-          return parent.findIndex((item) => (request.query.user ? item.user === request.query.user : false));
-        }
-      );
-    });
     router.put("/groups", async (request, response) => {
       await this.#handlePutRequest(
         request,
