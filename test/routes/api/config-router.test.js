@@ -278,7 +278,7 @@ function filterConfig(array, filter) {
 function getInitConfig(configId) {
   return {
     id: configId,
-    user: 1,
+    user: "uname",
     groups: [
       {
         name: "test1",
