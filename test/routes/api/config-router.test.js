@@ -226,6 +226,31 @@ describe("created config GET routes", () => {
   });
 });
 
+describe("created config PUT routes", () => {
+  const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+  const mockResult = { findById: (configId) => getInitConfig(configId) };
+  jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
+  // configue test express app server
+  const testApp = express();
+  testApp.use(express.json());
+  testApp.use(express.urlencoded({ extended: false }));
+  testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
+  testApp.use(passport.initialize());
+  testApp.use(passport.session());
+  testApp.use("/config", new ConfigRouter(components).createRoutes());
+  testApp.use("/auth", createMockAuthRouter());
+  // retrieve underlying superagent to correctly persist sessions
+  const testAgent = supertest.agent(testApp);
+  beforeAll(async () => {
+    const mockAuth = { mail: "test@mail.com", pass: "test-secret" };
+    await testAgent.post("/auth/login").send(mockAuth);
+  });
+  test("returns correct result for unknown path", async () => {
+    const response = await testAgent.put("/configs/unknown");
+    expect(response.statusCode).toBe(404);
+  });
+});
+
 function createMockAuthRouter() {
   const router = express.Router();
   const configId = 123;
