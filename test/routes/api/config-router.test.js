@@ -265,7 +265,7 @@ describe("created config PUT routes", () => {
     };
     const response = await testAgent.put("/config/groups").query({ name: "test1" }).send(testObj);
     expect(response.statusCode).toBe(200);
-    expect(response.body).toStrictEqual("");
+    expect(response.body).toStrictEqual("Edited configuration element with name = test1");
   });
 });
 
