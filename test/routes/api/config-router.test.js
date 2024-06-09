@@ -248,6 +248,23 @@ describe("created config PUT routes", () => {
     const response = await testAgent.put("/configs/unknown");
     expect(response.statusCode).toBe(404);
   });
+  test("returns correct result for path '/groups'", async () => {
+    const testObj = {
+      name: "test1",
+      category: "%%%",
+      domain: "new.com",
+      observers: {
+        name: "logo",
+        path: "info",
+        target: "load",
+        history: "off",
+        price: { interval: "1D", selector: "title", attribute: "innerText", auxiliary: "CAD" },
+      },
+    };
+    const response = await testAgent.put("/config/groups").query({ name: "test1" }).send(testObj);
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toStrictEqual("");
+  });
 });
 
 function createMockAuthRouter() {
