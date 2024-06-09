@@ -253,13 +253,15 @@ describe("created config PUT routes", () => {
       name: "test1",
       category: "%%%",
       domain: "new.com",
-      observers: {
-        name: "logo",
-        path: "info",
-        target: "load",
-        history: "off",
-        price: { interval: "1D", selector: "title", attribute: "innerText", auxiliary: "CAD" },
-      },
+      observers: [
+        {
+          name: "logo",
+          path: "info",
+          target: "load",
+          history: "off",
+          price: { interval: "1D", selector: "title", attribute: "innerText", auxiliary: "CAD" },
+        },
+      ],
     };
     const response = await testAgent.put("/config/groups").query({ name: "test1" }).send(testObj);
     expect(response.statusCode).toBe(200);
@@ -301,25 +303,29 @@ function getInitConfig(configId) {
         name: "test1",
         category: "$$$",
         domain: "test.com",
-        observers: {
-          name: "logo",
-          path: "info",
-          target: "load",
-          history: "off",
-          price: { interval: "5m", selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
-        },
+        observers: [
+          {
+            name: "logo",
+            path: "info",
+            target: "load",
+            history: "off",
+            price: { interval: "5m", selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
+          },
+        ],
       },
       {
         name: "test2",
         category: "@@@",
         domain: "test.com",
-        observers: {
-          name: "text",
-          path: "status",
-          target: "domcontentloaded",
-          history: "onChange",
-          price: { interval: "1h", selector: "body p b", attribute: "innerHTML", auxiliary: "USD" },
-        },
+        observers: [
+          {
+            name: "text",
+            path: "status",
+            target: "domcontentloaded",
+            history: "onChange",
+            price: { interval: "1h", selector: "body p b", attribute: "innerHTML", auxiliary: "USD" },
+          },
+        ],
       },
     ],
   };
