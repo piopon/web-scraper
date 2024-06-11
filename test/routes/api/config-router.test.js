@@ -286,6 +286,25 @@ describe("created config PUT routes", () => {
     expect(response.statusCode).toBe(400);
     expect(response.body).toStrictEqual("Incompatible query (name = test2) and body (name = test1) identifiers");
   });
+  test("returns bad request error for path '/groups' when query ID does not exist", async () => {
+    const testObj = {
+      name: "test1",
+      category: "%%%",
+      domain: "new.com",
+      observers: [
+        {
+          name: "logo",
+          path: "info",
+          target: "load",
+          history: "off",
+          price: { interval: "1D", selector: "title", attribute: "innerText", auxiliary: "CAD" },
+        },
+      ],
+    };
+    const response = await testAgent.put("/config/groups").query({ name: "test3" }).send(testObj);
+    expect(response.statusCode).toBe(400);
+    expect(response.body).toStrictEqual("Could not find the specifed element");
+  });
 });
 
 function createMockAuthRouter() {
