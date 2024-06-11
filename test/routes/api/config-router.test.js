@@ -248,23 +248,26 @@ describe("created config PUT routes", () => {
     const response = await testAgent.put("/configs/unknown");
     expect(response.statusCode).toBe(404);
   });
-  test("returns ok result for path '/groups' when query and body IDs are compatible", async () => {
-    const testObj = createGroup("test1");
-    const response = await testAgent.put("/config/groups").query({ name: "test1" }).send(testObj);
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toStrictEqual("Edited configuration element with name = test1");
-  });
-  test("returns bad request error for path '/groups' when query and body IDs are incompatible", async () => {
-    const testObj = createGroup("test1");
-    const response = await testAgent.put("/config/groups").query({ name: "test2" }).send(testObj);
-    expect(response.statusCode).toBe(400);
-    expect(response.body).toStrictEqual("Incompatible query (name = test2) and body (name = test1) identifiers");
-  });
-  test("returns bad request error for path '/groups' when query ID does not exist", async () => {
-    const testObj = createGroup("test1");
-    const response = await testAgent.put("/config/groups").query({ name: "test3" }).send(testObj);
-    expect(response.statusCode).toBe(400);
-    expect(response.body).toStrictEqual("Could not find the specifed element");
+  it.each([
+    [
+      "returns ok result for path '/groups' when query and body IDs are compatible",
+      { query: { name: "test1" }, body: createGroup("test1") },
+      { status: 200, response: "Edited configuration element with name = test1" }
+    ],
+    [
+      "returns bad request error for path '/groups' when query and body IDs are incompatible",
+      { query: { name: "test2" }, body: createGroup("test1") },
+      { status: 400, response: "Incompatible query (name = test2) and body (name = test1) identifiers" }
+    ],
+    [
+      "returns bad request error for path '/groups' when query ID does not exist",
+      { query: { name: "test3" }, body: createGroup("test1") },
+      { status: 400, response: "Could not find the specifed element" }
+    ]
+  ])("%s", async (_, input, expected) => {
+    const response = await testAgent.put("/config/groups").query(input.query).send(input.body);
+    expect(response.statusCode).toBe(expected.status);
+    expect(response.body).toStrictEqual(expected.response);
   });
 });
 
