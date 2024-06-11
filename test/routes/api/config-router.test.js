@@ -248,7 +248,7 @@ describe("created config PUT routes", () => {
     const response = await testAgent.put("/configs/unknown");
     expect(response.statusCode).toBe(404);
   });
-  test("returns correct result for path '/groups'", async () => {
+  test("returns ok result for path '/groups' when query and body are compatible", async () => {
     const testObj = {
       name: "test1",
       category: "%%%",
