@@ -248,13 +248,13 @@ describe("created config PUT routes", () => {
     const response = await testAgent.put("/configs/unknown");
     expect(response.statusCode).toBe(404);
   });
-  test("returns ok result for path '/groups' when query and body are compatible", async () => {
+  test("returns ok result for path '/groups' when query and body IDs are compatible", async () => {
     const testObj = createGroup("test1");
     const response = await testAgent.put("/config/groups").query({ name: "test1" }).send(testObj);
     expect(response.statusCode).toBe(200);
     expect(response.body).toStrictEqual("Edited configuration element with name = test1");
   });
-  test("returns bad request error for path '/groups' when query and body are incompatible", async () => {
+  test("returns bad request error for path '/groups' when query and body IDs are incompatible", async () => {
     const testObj = createGroup("test1");
     const response = await testAgent.put("/config/groups").query({ name: "test2" }).send(testObj);
     expect(response.statusCode).toBe(400);
