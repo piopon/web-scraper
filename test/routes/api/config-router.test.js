@@ -248,26 +248,28 @@ describe("created config PUT routes", () => {
     const response = await testAgent.put("/configs/unknown");
     expect(response.statusCode).toBe(404);
   });
-  it.each([
-    [
-      "returns ok result for path '/groups' when query and body IDs are compatible",
-      { query: { name: "test1" }, body: createGroup("test1") },
-      { status: 200, response: "Edited configuration element with name = test1" },
-    ],
-    [
-      "returns bad request error for path '/groups' when query and body IDs are incompatible",
-      { query: { name: "test2" }, body: createGroup("test1") },
-      { status: 400, response: "Incompatible query (name = test2) and body (name = test1) identifiers" },
-    ],
-    [
-      "returns bad request error for path '/groups' when query ID does not exist",
-      { query: { name: "test3" }, body: createGroup("test1") },
-      { status: 400, response: "Could not find the specifed element" },
-    ],
-  ])("%s", async (_, input, expected) => {
-    const response = await testAgent.put("/config/groups").query(input.query).send(input.body);
-    expect(response.statusCode).toBe(expected.status);
-    expect(response.body).toStrictEqual(expected.response);
+  describe("returns correct result using /config/groups endpoint when", () => {
+    it.each([
+      [
+        "query and body IDs are compatible",
+        { query: { name: "test1" }, body: createGroup("test1") },
+        { status: 200, response: "Edited configuration element with name = test1" },
+      ],
+      [
+        "query and body IDs are incompatible",
+        { query: { name: "test2" }, body: createGroup("test1") },
+        { status: 400, response: "Incompatible query (name = test2) and body (name = test1) identifiers" },
+      ],
+      [
+        "query ID does not exist",
+        { query: { name: "test3" }, body: createGroup("test1") },
+        { status: 400, response: "Could not find the specifed element" },
+      ],
+    ])("%s", async (_, input, expected) => {
+      const response = await testAgent.put("/config/groups").query(input.query).send(input.body);
+      expect(response.statusCode).toBe(expected.status);
+      expect(response.body).toStrictEqual(expected.response);
+    });
   });
 });
 
