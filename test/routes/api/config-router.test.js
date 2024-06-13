@@ -362,15 +362,7 @@ function createGroup(name) {
     name: name,
     category: "%%%",
     domain: "new.com",
-    observers: [
-      {
-        name: "logo",
-        path: "info",
-        target: "load",
-        history: "off",
-        price: { interval: "1D", selector: "title", attribute: "innerText", auxiliary: "CAD" },
-      },
-    ],
+    observers: [createObserver("logo")],
   };
 }
 
