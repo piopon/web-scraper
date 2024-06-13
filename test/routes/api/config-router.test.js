@@ -280,12 +280,12 @@ describe("created config PUT routes", () => {
       ],
       [
         "query and body IDs are incompatible",
-        { query: { name: "logo" }, body: createObserver("logotyp") },
-        { status: 400, response: "Incompatible query (name = logo) and body (name = logotyp) identifiers" },
+        { query: { name: "text" }, body: createObserver("logo") },
+        { status: 400, response: "Incompatible query (name = text) and body (name = logo) identifiers" },
       ],
       [
         "query ID does not exist",
-        { query: { name: "testLogo" }, body: createObserver("logotyp") },
+        { query: { name: "test" }, body: createObserver("logo") },
         { status: 400, response: "Could not find the specifed element" },
       ],
     ])("%s", async (_, input, expected) => {
