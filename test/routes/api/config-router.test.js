@@ -271,6 +271,19 @@ describe("created config PUT routes", () => {
       expect(response.body).toStrictEqual(expected.response);
     });
   });
+  describe("returns correct result using /config/groups/observers endpoint when", () => {
+    it.each([
+      [
+        "query and body IDs are compatible",
+        { query: { name: "logo" }, body: createObserver("logo") },
+        { status: 200, response: "Edited configuration element with name = logo" },
+      ],
+    ])("%s", async (_, input, expected) => {
+      const response = await testAgent.put("/config/groups/observers").query(input.query).send(input.body);
+      expect(response.statusCode).toBe(expected.status);
+      expect(response.body).toStrictEqual(expected.response);
+    });
+  });
 });
 
 function createMockAuthRouter() {
