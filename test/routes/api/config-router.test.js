@@ -249,20 +249,21 @@ describe("created config PUT routes", () => {
     expect(response.statusCode).toBe(404);
   });
   describe("returns correct result using /config/groups endpoint when", () => {
+    const inputObject = createGroup("test1", "%%%", "new.com", createObserver("logo"));
     it.each([
       [
         "query and body IDs are compatible",
-        { query: { name: "test1" }, body: createGroup("test1", "%%%", "new.com", createObserver("logo")) },
+        { query: { name: "test1" }, body: inputObject },
         { status: 200, response: "Edited configuration element with name = test1" },
       ],
       [
         "query and body IDs are incompatible",
-        { query: { name: "test2" }, body: createGroup("test1", "%%%", "new.com", createObserver("logo")) },
+        { query: { name: "test2" }, body: inputObject },
         { status: 400, response: "Incompatible query (name = test2) and body (name = test1) identifiers" },
       ],
       [
         "query ID does not exist",
-        { query: { name: "test3" }, body: createGroup("test1", "%%%", "new.com", createObserver("logo")) },
+        { query: { name: "test3" }, body: inputObject },
         { status: 400, response: "Could not find the specifed element" },
       ],
     ])("%s", async (_, input, expected) => {
@@ -272,20 +273,21 @@ describe("created config PUT routes", () => {
     });
   });
   describe("returns correct result using /config/groups/observers endpoint when", () => {
+    const inputObject = createObserver("logo");
     it.each([
       [
         "query and body IDs are compatible",
-        { query: { name: "logo" }, body: createObserver("logo") },
+        { query: { name: "logo" }, body: inputObject },
         { status: 200, response: "Edited configuration element with name = logo" },
       ],
       [
         "query and body IDs are incompatible",
-        { query: { name: "text" }, body: createObserver("logo") },
+        { query: { name: "text" }, body: inputObject },
         { status: 400, response: "Incompatible query (name = text) and body (name = logo) identifiers" },
       ],
       [
         "query ID does not exist",
-        { query: { name: "test" }, body: createObserver("logo") },
+        { query: { name: "test" }, body: inputObject },
         { status: 400, response: "Could not find the specifed element" },
       ],
     ])("%s", async (_, input, expected) => {
