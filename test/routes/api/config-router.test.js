@@ -252,17 +252,17 @@ describe("created config PUT routes", () => {
     it.each([
       [
         "query and body IDs are compatible",
-        { query: { name: "test1" }, body: createGroup("test1") },
+        { query: { name: "test1" }, body: createGroup("test1", "%%%", "new.com", createObserver("logo")) },
         { status: 200, response: "Edited configuration element with name = test1" },
       ],
       [
         "query and body IDs are incompatible",
-        { query: { name: "test2" }, body: createGroup("test1") },
+        { query: { name: "test2" }, body: createGroup("test1", "%%%", "new.com", createObserver("logo")) },
         { status: 400, response: "Incompatible query (name = test2) and body (name = test1) identifiers" },
       ],
       [
         "query ID does not exist",
-        { query: { name: "test3" }, body: createGroup("test1") },
+        { query: { name: "test3" }, body: createGroup("test1", "%%%", "new.com", createObserver("logo")) },
         { status: 400, response: "Could not find the specifed element" },
       ],
     ])("%s", async (_, input, expected) => {
@@ -367,12 +367,12 @@ function getDbConfig(configId) {
   };
 }
 
-function createGroup(name) {
+function createGroup(name, category, domain, ...observers) {
   return {
     name: name,
-    category: "%%%",
-    domain: "new.com",
-    observers: [createObserver("logo")],
+    category: category,
+    domain: domain,
+    observers: observers,
   };
 }
 
