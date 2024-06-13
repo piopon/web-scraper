@@ -283,6 +283,11 @@ describe("created config PUT routes", () => {
         { query: { name: "logo" }, body: createObserver("logotyp") },
         { status: 400, response: "Incompatible query (name = logo) and body (name = logotyp) identifiers" },
       ],
+      [
+        "query ID does not exist",
+        { query: { name: "testLogo" }, body: createObserver("logotyp") },
+        { status: 400, response: "Could not find the specifed element" },
+      ],
     ])("%s", async (_, input, expected) => {
       const response = await testAgent.put("/config/groups/observers").query(input.query).send(input.body);
       expect(response.statusCode).toBe(expected.status);
