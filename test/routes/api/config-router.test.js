@@ -361,6 +361,16 @@ function createGroup(name) {
   };
 }
 
+function createObserver(name) {
+  return {
+    name: name,
+    path: "info",
+    target: "load",
+    history: "off",
+    price: { interval: "1D", selector: "title", attribute: "innerText", auxiliary: "CAD" },
+  };
+}
+
 function getInitConfig(configId) {
   return {
     id: configId,
