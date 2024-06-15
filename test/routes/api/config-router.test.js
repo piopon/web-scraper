@@ -249,7 +249,8 @@ describe("created config PUT routes", () => {
     expect(response.statusCode).toBe(404);
   });
   describe("returns correct result using /config/groups endpoint when", () => {
-    const observer = createObserver("logo", "info", "load", "off", { interval: "1D", selector: "title", attribute: "innerText", auxiliary: "CAD" });
+    const price = createComponent("1D", "title", "innerText", "CAD");
+    const observer = createObserver("logo", "info", "load", "off", price);
     const inputObject = createGroup("test1", "%%%", "new.com", observer);
     it.each([
       [
@@ -274,7 +275,8 @@ describe("created config PUT routes", () => {
     });
   });
   describe("returns correct result using /config/groups/observers endpoint when", () => {
-    const inputObject = createObserver("logo", "info", "load", "off", { interval: "1D", selector: "title", attribute: "innerText", auxiliary: "CAD" });
+    const price = createComponent("1D", "title", "innerText", "CAD");
+    const inputObject = createObserver("logo", "info", "load", "off", price);
     it.each([
       [
         "query and body IDs are compatible",
