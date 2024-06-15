@@ -391,6 +391,10 @@ function createObserver(name, path, target, history, ...components) {
   };
 }
 
+function createComponent(interval, selector, attribute, auxiliary) {
+  return { interval: interval, selector: selector, attribute: attribute, auxiliary: auxiliary };
+}
+
 function getInitConfig(configId) {
   return {
     id: configId,
