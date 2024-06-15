@@ -47,7 +47,7 @@ describe("createRoutes() method", () => {
 
 describe("created config GET routes", () => {
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-  const mockResult = { findById: (configId) => getInitConfig(configId, "uname") };
+  const mockResult = { findById: (configId) => getInitConfig(false, configId, "uname") };
   jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
   // configue test express app server
   const testApp = express();
@@ -71,7 +71,7 @@ describe("created config GET routes", () => {
   test("returns correct result for path '/'", async () => {
     const response = await testAgent.get("/config");
     expect(response.statusCode).toBe(200);
-    const expectedContent = getInitConfig(123, "uname");
+    const expectedContent = getInitConfig(false, 123, "uname");
     expect(response.body).toStrictEqual(expectedContent);
   });
   describe("returns correct result using /config/groups endpoint with", () => {
@@ -94,7 +94,7 @@ describe("created config GET routes", () => {
     ])("%s", async (_, filterObj) => {
       const response = await testAgent.get("/config/groups").query(filterObj);
       expect(response.statusCode).toBe(200);
-      const expectedContent = filterConfig(getInitConfig(123, "uname").groups, filterObj);
+      const expectedContent = filterConfig(getInitConfig(false, 123, "uname").groups, filterObj);
       expect(response.body).toStrictEqual(expectedContent);
     });
   });
@@ -126,7 +126,7 @@ describe("created config GET routes", () => {
       const response = await testAgent.get("/config/groups/observers").query(filterObj);
       expect(response.statusCode).toBe(200);
       const expectedContent = filterConfig(
-        getInitConfig(123, "uname").groups.flatMap((group) => group.observers),
+        getInitConfig(false, 123, "uname").groups.flatMap((group) => group.observers),
         filterObj
       );
       expect(response.body).toStrictEqual(expectedContent);
@@ -215,7 +215,7 @@ describe("created config GET routes", () => {
       const response = await testAgent.get("/config/groups/observers/components").query(queryObj);
       expect(response.statusCode).toBe(200);
       const expectedContent = filterConfig(
-        getInitConfig(123, "uname")
+        getInitConfig(false, 123, "uname")
           .groups.flatMap((group) => group.observers)
           .map((observer) => observer[source]),
         filterObj
@@ -250,8 +250,8 @@ describe("created config PUT routes", () => {
   });
   describe("returns correct result using /config/groups endpoint when", () => {
     const price = createComponent("1D", "title", "innerText", "CAD");
-    const observer = createObserver("logo", "info", "load", "off", price);
-    const inputObject = createGroup("test1", "%%%", "new.com", observer);
+    const observer = createObserver(false, "logo", "info", "load", "off", price);
+    const inputObject = createGroup(false, "test1", "%%%", "new.com", observer);
     it.each([
       [
         "query and body IDs are compatible",
@@ -276,7 +276,7 @@ describe("created config PUT routes", () => {
   });
   describe("returns correct result using /config/groups/observers endpoint when", () => {
     const price = createComponent("1D", "title", "innerText", "CAD");
-    const inputObject = createObserver("logo", "info", "load", "off", price);
+    const inputObject = createObserver(false, "logo", "info", "load", "off", price);
     it.each([
       [
         "query and body IDs are compatible",
