@@ -387,9 +387,9 @@ function createObserver(name, path, target, history, ...components) {
     path: path,
     target: target,
     history: history,
-    price: components[0],
-    title: components[1],
-    image: components[2],
+    ...(components[0] && { price: components[0] }),
+    ...(components[1] && { title: components[1] }),
+    ...(components[2] && { image: components[2] }),
   };
 }
 
