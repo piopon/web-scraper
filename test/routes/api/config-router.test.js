@@ -372,16 +372,18 @@ function getDbConfig(configId) {
   };
 }
 
-function createGroup(name, category, domain, ...observers) {
+function createGroup(db, name, category, domain, ...observers) {
   return {
     name: name,
     category: category,
     domain: domain,
     observers: observers,
+    ...(db && { getIdentifier: () => `name = ${name}` }),
+    ...(db && { copyValues: (_) => true }),
   };
 }
 
-function createObserver(name, path, target, history, ...components) {
+function createObserver(db, name, path, target, history, ...components) {
   return {
     name: name,
     path: path,
@@ -390,6 +392,8 @@ function createObserver(name, path, target, history, ...components) {
     ...(components[0] && { price: components[0] }),
     ...(components[1] && { title: components[1] }),
     ...(components[2] && { image: components[2] }),
+    ...(db && { getIdentifier: () => `name = ${name}` }),
+    ...(db && { copyValues: (_) => true }),
   };
 }
 
@@ -397,7 +401,7 @@ function createComponent(interval, selector, attribute, auxiliary) {
   return { interval: interval, selector: selector, attribute: attribute, auxiliary: auxiliary };
 }
 
-function getInitConfig(configId, name) {
+function getInitConfig(db, configId, name) {
   const component1 = createComponent("5m", "body p b", "innerHTML", "PLN");
   const component2 = createComponent("1h", "body p b", "innerHTML", "USD");
   const observer1 = createObserver("logo", "info", "load", "off", component1);
@@ -406,5 +410,7 @@ function getInitConfig(configId, name) {
     id: configId,
     user: name,
     groups: [createGroup("test1", "$$$", "test.com", observer1), createGroup("test2", "@@@", "test.com", observer2)],
+    ...(db && { getIdentifier: () => `name = ${name}` }),
+    ...(db && { copyValues: (_) => true }),
   };
 }
