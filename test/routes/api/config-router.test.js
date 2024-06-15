@@ -398,38 +398,16 @@ function createComponent(interval, selector, attribute, auxiliary) {
 }
 
 function getInitConfig(configId) {
+  const component1 = createComponent("5m", "body p b", "innerHTML", "PLN");
+  const component2 = createComponent("1h", "body p b", "innerHTML", "USD");
+  const observer1 = createObserver("logo", "info", "load", "off", component1);
+  const observer2 = createObserver("text", "status", "domcontentloaded", "onChange", component2);
   return {
     id: configId,
     user: "uname",
     groups: [
-      {
-        name: "test1",
-        category: "$$$",
-        domain: "test.com",
-        observers: [
-          {
-            name: "logo",
-            path: "info",
-            target: "load",
-            history: "off",
-            price: { interval: "5m", selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
-          },
-        ],
-      },
-      {
-        name: "test2",
-        category: "@@@",
-        domain: "test.com",
-        observers: [
-          {
-            name: "text",
-            path: "status",
-            target: "domcontentloaded",
-            history: "onChange",
-            price: { interval: "1h", selector: "body p b", attribute: "innerHTML", auxiliary: "USD" },
-          },
-        ],
-      },
+      createGroup("test1", "$$$", "test.com", observer1),
+      createGroup("test2", "@@@", "test.com", observer2),
     ],
   };
 }
