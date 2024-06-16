@@ -326,52 +326,6 @@ function filterConfig(array, filter) {
   return result;
 }
 
-function getDbConfig(configId) {
-  return {
-    id: configId,
-    user: "uname",
-    groups: [
-      {
-        name: "test1",
-        category: "$$$",
-        domain: "test.com",
-        observers: [
-          {
-            name: "logo",
-            path: "info",
-            target: "load",
-            history: "off",
-            price: { interval: "5m", selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
-            getIdentifier: () => "name = logo",
-            copyValues: (other) => true,
-          },
-        ],
-        getIdentifier: () => "name = test1",
-        copyValues: (other) => true,
-      },
-      {
-        name: "test2",
-        category: "@@@",
-        domain: "test.com",
-        observers: [
-          {
-            name: "text",
-            path: "status",
-            target: "domcontentloaded",
-            history: "onChange",
-            price: { interval: "1h", selector: "body p b", attribute: "innerHTML", auxiliary: "USD" },
-            getIdentifier: () => "name = text",
-            copyValues: (other) => true,
-          },
-        ],
-        getIdentifier: () => "name = test2",
-        copyValues: (other) => true,
-      },
-    ],
-    save: () => true,
-  };
-}
-
 function createGroup(db, name, category, domain, ...observers) {
   return {
     name: name,
