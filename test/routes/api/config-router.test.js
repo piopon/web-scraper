@@ -415,5 +415,6 @@ function getInitConfig(db, configId, name) {
     ],
     ...(db && { getIdentifier: () => `name = ${name}` }),
     ...(db && { copyValues: (_) => true }),
+    ...(db && { save: () => true }),
   };
 }
