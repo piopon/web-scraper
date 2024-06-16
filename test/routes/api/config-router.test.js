@@ -404,12 +404,15 @@ function createComponent(interval, selector, attribute, auxiliary) {
 function getInitConfig(db, configId, name) {
   const component1 = createComponent("5m", "body p b", "innerHTML", "PLN");
   const component2 = createComponent("1h", "body p b", "innerHTML", "USD");
-  const observer1 = createObserver("logo", "info", "load", "off", component1);
-  const observer2 = createObserver("text", "status", "domcontentloaded", "onChange", component2);
+  const observer1 = createObserver(db, "logo", "info", "load", "off", component1);
+  const observer2 = createObserver(db, "text", "status", "domcontentloaded", "onChange", component2);
   return {
     id: configId,
     user: name,
-    groups: [createGroup("test1", "$$$", "test.com", observer1), createGroup("test2", "@@@", "test.com", observer2)],
+    groups: [
+      createGroup(db, "test1", "$$$", "test.com", observer1),
+      createGroup(db, "test2", "@@@", "test.com", observer2),
+    ],
     ...(db && { getIdentifier: () => `name = ${name}` }),
     ...(db && { copyValues: (_) => true }),
   };
