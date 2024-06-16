@@ -227,7 +227,7 @@ describe("created config GET routes", () => {
 
 describe("created config PUT routes", () => {
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-  const mockResult = { findById: (configId) => getDbConfig(configId) };
+  const mockResult = { findById: (configId) => getInitConfig(true, configId, "uname") };
   jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
   // configue test express app server
   const testApp = express();
