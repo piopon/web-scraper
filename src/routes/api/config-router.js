@@ -112,9 +112,6 @@ export class ConfigRouter {
    * @param {Object} router The router object with POST method routes defined
    */
   #createPostRoutes(router) {
-    router.post("/", async (request, response) => {
-      await this.#handlePostRequest(request, response, (configContent) => configContent);
-    });
     router.post("/groups", async (request, response) => {
       await this.#handlePostRequest(request, response, (configContent) => configContent.groups);
     });
