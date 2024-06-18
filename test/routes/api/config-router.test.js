@@ -247,6 +247,26 @@ describe("created config POST routes", () => {
     const response = await testAgent.post("/configs/unknown");
     expect(response.statusCode).toBe(404);
   });
+  describe("returns correct result using /config/groups endpoint when", () => {
+    const price = createComponent("1D", "title", "innerText", "CAD");
+    const observer = createObserver(false, "new-observer", "info", "load", "off", price);
+    it.each([
+      [
+        "query ID does not exist",
+        createGroup(false, "new-group", "???", "test.com", observer),
+        { status: 200, response: "Added new configuration element with name = new-group" },
+      ],
+      [
+        "query ID already exist",
+        createGroup(false, "test1", "%%%", "new.com", observer),
+        { status: 400, response: "Element with identifier name = test1 already exists" },
+      ],
+    ])("%s", async (_, requestBody, expected) => {
+      const response = await testAgent.post("/config/groups").send(requestBody);
+      expect(response.statusCode).toBe(expected.status);
+      expect(response.body).toStrictEqual(expected.response);
+    });
+  });
 });
 
 describe("created config PUT routes", () => {
