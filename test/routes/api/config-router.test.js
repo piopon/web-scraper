@@ -379,6 +379,22 @@ describe("created config POST routes", () => {
     const inputObserver = createObserver(false, "new-observer", "info", "load", "off", price);
     it.each([
       [
+        "query is empty",
+        { query: {}, body: inputObserver },
+        {
+          status: 400,
+          response: [
+            {
+              instancePath: "",
+              keyword: "required",
+              message: "must have required property 'parent'",
+              params: { missingProperty: "parent" },
+              schemaPath: "#/required",
+            },
+          ],
+        },
+      ],
+      [
         "query parent ID does exist",
         { query: { parent: "test1" }, body: inputObserver },
         { status: 200, response: "Added new configuration element with name = new-observer" },
