@@ -252,6 +252,22 @@ describe("created config PUT routes", () => {
     const inputObject = createGroup(false, "test1", "%%%", "new.com", observer);
     it.each([
       [
+        "query is empty",
+        {},
+        {
+          status: 400,
+          response: [
+            {
+              instancePath: "",
+              keyword: "required",
+              message: "must have required property 'name'",
+              params: { missingProperty: "name" },
+              schemaPath: "#/required",
+            },
+          ],
+        },
+      ],
+      [
         "query and body IDs are compatible",
         { query: { name: "test1" }, body: inputObject },
         { status: 200, response: "Edited configuration element with name = test1" },
@@ -276,6 +292,22 @@ describe("created config PUT routes", () => {
     const price = createComponent("1D", "title", "innerText", "CAD");
     const inputObject = createObserver(false, "logo", "info", "load", "off", price);
     it.each([
+      [
+        "query is empty",
+        {},
+        {
+          status: 400,
+          response: [
+            {
+              instancePath: "",
+              keyword: "required",
+              message: "must have required property 'name'",
+              params: { missingProperty: "name" },
+              schemaPath: "#/required",
+            },
+          ],
+        },
+      ],
       [
         "query and body IDs are compatible",
         { query: { name: "logo" }, body: inputObject },
