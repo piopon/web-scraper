@@ -438,7 +438,7 @@ describe("created config DELETE routes", () => {
         { status: 200, response: "Removed configuration element with name = test1" },
       ],
       [
-        "query ID does mpt exist",
+        "query ID does not exist",
         { name: "test123" },
         { status: 400, response: "Could not find item to delete" },
       ],
