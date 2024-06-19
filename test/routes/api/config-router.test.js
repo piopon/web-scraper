@@ -374,6 +374,11 @@ describe("created config DELETE routes", () => {
         { name: "test1" },
         { status: 200, response: "Removed configuration element with name = test1" },
       ],
+      [
+        "query ID does mpt exist",
+        { name: "test123" },
+        { status: 400, response: "Could not find item to delete" },
+      ],
     ])("%s", async (_, requestQuery, expected) => {
       const response = await testAgent.delete("/config/groups").query(requestQuery);
       expect(response.statusCode).toBe(expected.status);
