@@ -128,14 +128,6 @@ export class ConfigRouter {
    * @param {Object} router The router object with DELETE method routes defined
    */
   #createDeleteRoutes(router) {
-    router.delete("/", async (request, response) => {
-      await this.#handleDeleteRequest(request, response, (configContent) => {
-        const details = this.#getParentDetails(configContent, { configUser: request.user._id });
-        return details
-          ? { found: { parent: details.parent, index: details.index }, reason: undefined }
-          : { found: undefined, reason: "Could not find item to delete" };
-      });
-    });
     router.delete("/groups", async (request, response) => {
       await this.#handleDeleteRequest(request, response, (configContent) => {
         const details = this.#getParentDetails(configContent, { groupName: request.query.name });

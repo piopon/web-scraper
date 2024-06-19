@@ -23,7 +23,6 @@ describe("createRoutes() method", () => {
       { path: "/groups/observers", method: "put" },
       { path: "/groups", method: "post" },
       { path: "/groups/observers", method: "post" },
-      { path: "/", method: "delete" },
       { path: "/groups", method: "delete" },
       { path: "/groups/observers", method: "delete" },
     ];
