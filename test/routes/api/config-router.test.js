@@ -374,6 +374,21 @@ describe("created config POST routes", () => {
       expect(response.body).toStrictEqual(expected.response);
     });
   });
+  describe("returns correct result using /config/groups/observers endpoint when", () => {
+    const price = createComponent("1D", "title", "innerText", "CAD");
+    const inputObserver = createObserver(false, "new-observer", "info", "load", "off", price);
+    it.each([
+      [
+        "query parent ID does exist",
+        { query: { parent: "test1" }, body: inputObserver },
+        { status: 200, response: "Added new configuration element with name = new-observer" },
+      ],
+    ])("%s", async (_, input, expected) => {
+      const response = await testAgent.post("/config/groups/observers").query(input.query).send(input.body);
+      expect(response.statusCode).toBe(expected.status);
+      expect(response.body).toStrictEqual(expected.response);
+    });
+  });
 });
 
 describe("created config DELETE routes", () => {
