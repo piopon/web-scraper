@@ -282,6 +282,38 @@ describe("created config PUT routes", () => {
         { query: { name: "test3" }, body: inputObject },
         { status: 400, response: "Could not find the specifed element" },
       ],
+      [
+        "body is empty",
+        {},
+        {
+          status: 400,
+          response: [
+            {
+              instancePath: "",
+              keyword: "required",
+              message: "must have required property 'name'",
+              params: { missingProperty: "name" },
+              schemaPath: "#/required",
+            },
+          ],
+        },
+      ],
+      [
+        "body has invalid structure",
+        observer,
+        {
+          status: 400,
+          response: [
+            {
+              instancePath: "",
+              keyword: "required",
+              message: "must have required property 'name'",
+              params: { missingProperty: "name" },
+              schemaPath: "#/required",
+            },
+          ],
+        },
+      ],
     ])("%s", async (_, input, expected) => {
       const response = await testAgent.put("/config/groups").query(input.query).send(input.body);
       expect(response.statusCode).toBe(expected.status);
