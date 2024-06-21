@@ -531,8 +531,8 @@ describe("created config POST routes", () => {
             {
               instancePath: "",
               keyword: "required",
-              message: "must have required property 'name'",
-              params: { missingProperty: "name" },
+              message: "must have required property 'parent'",
+              params: { missingProperty: "parent" },
               schemaPath: "#/required",
             },
           ],
@@ -557,8 +557,8 @@ describe("created config POST routes", () => {
             {
               instancePath: "",
               keyword: "required",
-              message: "must have required property 'name'",
-              params: { missingProperty: "name" },
+              message: "must have required property 'parent'",
+              params: { missingProperty: "parent" },
               schemaPath: "#/required",
             },
           ],
@@ -573,8 +573,8 @@ describe("created config POST routes", () => {
             {
               instancePath: "",
               keyword: "required",
-              message: "must have required property 'domain'",
-              params: { missingProperty: "domain" },
+              message: "must have required property 'parent'",
+              params: { missingProperty: "parent" },
               schemaPath: "#/required",
             },
           ],
