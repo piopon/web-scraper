@@ -448,6 +448,38 @@ describe("created config POST routes", () => {
         createGroup(false, "test1", "%%%", "new.com", observer),
         { status: 400, response: "Element with identifier name = test1 already exists" },
       ],
+      [
+        "body is empty",
+        {},
+        {
+          status: 400,
+          response: [
+            {
+              instancePath: "",
+              keyword: "required",
+              message: "must have required property 'name'",
+              params: { missingProperty: "name" },
+              schemaPath: "#/required",
+            },
+          ],
+        },
+      ],
+      [
+        "body has invalid structure",
+        observer,
+        {
+          status: 400,
+          response: [
+            {
+              instancePath: "",
+              keyword: "required",
+              message: "must have required property 'domain'",
+              params: { missingProperty: "domain" },
+              schemaPath: "#/required",
+            },
+          ],
+        },
+      ],
     ])("%s", async (_, requestBody, expected) => {
       const response = await testAgent.post("/config/groups").send(requestBody);
       expect(response.statusCode).toBe(expected.status);
