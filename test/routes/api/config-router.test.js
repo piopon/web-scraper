@@ -324,6 +324,22 @@ describe("created config PUT routes", () => {
         { status: 400, response: "Could not find the specifed element" },
       ],
       [
+        "body is empty",
+        {},
+        {
+          status: 400,
+          response: [
+            {
+              instancePath: "",
+              keyword: "required",
+              message: "must have required property 'name'",
+              params: { missingProperty: "name" },
+              schemaPath: "#/required",
+            },
+          ],
+        },
+      ],
+      [
         "body has invalid structure",
         price,
         {
