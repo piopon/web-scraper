@@ -269,7 +269,7 @@ describe("created config PUT routes", () => {
       ],
       [
         "query has invalid structure",
-        { unknown: "observer" },
+        { unknown: "group" },
         {
           status: 400,
           response: [
