@@ -566,7 +566,7 @@ describe("created config POST routes", () => {
       ],
       [
         "body has invalid structure",
-        observer,
+        price,
         {
           status: 400,
           response: [
