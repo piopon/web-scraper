@@ -399,6 +399,11 @@ describe("created config POST routes", () => {
         { query: { parent: "test1" }, body: inputObserver },
         { status: 200, response: "Added new configuration element with name = new-observer" },
       ],
+      [
+        "query parent ID does not exist",
+        { query: { parent: "test123" }, body: inputObserver },
+        { status: 400, response: "Undefined parent of new element" },
+      ],
     ])("%s", async (_, input, expected) => {
       const response = await testAgent.post("/config/groups/observers").query(input.query).send(input.body);
       expect(response.statusCode).toBe(expected.status);
