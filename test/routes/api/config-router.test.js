@@ -523,6 +523,22 @@ describe("created config POST routes", () => {
         },
       ],
       [
+        "query has invalid structure",
+        { unknown: "observer" },
+        {
+          status: 400,
+          response: [
+            {
+              instancePath: "",
+              keyword: "required",
+              message: "must have required property 'name'",
+              params: { missingProperty: "name" },
+              schemaPath: "#/required",
+            },
+          ],
+        },
+      ],
+      [
         "query parent ID does exist",
         { query: { parent: "test1" }, body: inputObserver },
         { status: 200, response: "Added new configuration element with name = new-observer" },
@@ -531,6 +547,38 @@ describe("created config POST routes", () => {
         "query parent ID does not exist",
         { query: { parent: "test123" }, body: inputObserver },
         { status: 400, response: "Undefined parent of new element" },
+      ],
+      [
+        "body is empty",
+        {},
+        {
+          status: 400,
+          response: [
+            {
+              instancePath: "",
+              keyword: "required",
+              message: "must have required property 'name'",
+              params: { missingProperty: "name" },
+              schemaPath: "#/required",
+            },
+          ],
+        },
+      ],
+      [
+        "body has invalid structure",
+        observer,
+        {
+          status: 400,
+          response: [
+            {
+              instancePath: "",
+              keyword: "required",
+              message: "must have required property 'domain'",
+              params: { missingProperty: "domain" },
+              schemaPath: "#/required",
+            },
+          ],
+        },
       ],
     ])("%s", async (_, input, expected) => {
       const response = await testAgent.post("/config/groups/observers").query(input.query).send(input.body);
