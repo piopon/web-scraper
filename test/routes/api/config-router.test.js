@@ -268,6 +268,22 @@ describe("created config PUT routes", () => {
         },
       ],
       [
+        "query has invalid structure",
+        { unknown: "observer" },
+        {
+          status: 400,
+          response: [
+            {
+              instancePath: "",
+              keyword: "required",
+              message: "must have required property 'name'",
+              params: { missingProperty: "name" },
+              schemaPath: "#/required",
+            },
+          ],
+        },
+      ],
+      [
         "query and body IDs are compatible",
         { query: { name: "test1" }, body: inputObject },
         { status: 200, response: "Edited configuration element with name = test1" },
