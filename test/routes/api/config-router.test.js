@@ -657,6 +657,19 @@ describe("created config DELETE routes", () => {
       expect(response.body).toStrictEqual(expected.response);
     });
   });
+  describe("returns correct result using /config/groups/observers endpoint when", () => {
+    it.each([
+      [
+        "query ID does exist",
+        { name: "logo" },
+        { status: 200, response: "Removed configuration element with name = logo" },
+      ],
+    ])("%s", async (_, requestQuery, expected) => {
+      const response = await testAgent.delete("/config/groups/observers").query(requestQuery);
+      expect(response.statusCode).toBe(expected.status);
+      expect(response.body).toStrictEqual(expected.response);
+    });
+  });
 });
 
 function createMockAuthRouter() {
