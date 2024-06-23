@@ -660,6 +660,38 @@ describe("created config DELETE routes", () => {
   describe("returns correct result using /config/groups/observers endpoint when", () => {
     it.each([
       [
+        "query is empty",
+        {},
+        {
+          status: 400,
+          response: [
+            {
+              instancePath: "",
+              keyword: "required",
+              message: "must have required property 'name'",
+              params: { missingProperty: "name" },
+              schemaPath: "#/required",
+            },
+          ],
+        },
+      ],
+      [
+        "query has invalid structure",
+        { unknown: "group" },
+        {
+          status: 400,
+          response: [
+            {
+              instancePath: "",
+              keyword: "required",
+              message: "must have required property 'name'",
+              params: { missingProperty: "name" },
+              schemaPath: "#/required",
+            },
+          ],
+        },
+      ],
+      [
         "query ID does exist",
         { name: "logo" },
         { status: 200, response: "Removed configuration element with name = logo" },
