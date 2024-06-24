@@ -37,9 +37,11 @@
   },
   "devDependencies": {
     "jest": "^29.7.0",
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "supertest": "^7.0.0"
   },
   "jest": {
+    "slowTestThreshold": 15,
     "transform": {}
   }
 }

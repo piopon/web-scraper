@@ -70,10 +70,11 @@ export class ConfigRouter {
           .flatMap((group) => group.observers)
           .map((item) => item[request.query.source])
           .filter((item) => {
+            const selectorOk = request.query.selector ? item.selector === request.query.selector : true;
             const intervalOk = request.query.interval ? item.interval === request.query.interval : true;
             const attributeOk = request.query.attribute ? item.attribute === request.query.attribute : true;
             const auxiliaryOk = request.query.auxiliary ? item.auxiliary === request.query.auxiliary : true;
-            return intervalOk && attributeOk && auxiliaryOk;
+            return selectorOk && intervalOk && attributeOk && auxiliaryOk;
           })
       );
     });
@@ -84,16 +85,6 @@ export class ConfigRouter {
    * @param {Object} router The router object with PUT method routes defined
    */
   #createPutRoutes(router) {
-    router.put("/", async (request, response) => {
-      await this.#handlePutRequest(
-        request,
-        response,
-        (configContent) => configContent,
-        (parent) => {
-          return parent.findIndex((item) => (request.query.user ? item.user === request.query.user : false));
-        }
-      );
-    });
     router.put("/groups", async (request, response) => {
       await this.#handlePutRequest(
         request,
@@ -121,9 +112,6 @@ export class ConfigRouter {
    * @param {Object} router The router object with POST method routes defined
    */
   #createPostRoutes(router) {
-    router.post("/", async (request, response) => {
-      await this.#handlePostRequest(request, response, (configContent) => configContent);
-    });
     router.post("/groups", async (request, response) => {
       await this.#handlePostRequest(request, response, (configContent) => configContent.groups);
     });
@@ -140,14 +128,6 @@ export class ConfigRouter {
    * @param {Object} router The router object with DELETE method routes defined
    */
   #createDeleteRoutes(router) {
-    router.delete("/", async (request, response) => {
-      await this.#handleDeleteRequest(request, response, (configContent) => {
-        const details = this.#getParentDetails(configContent, { configUser: request.user._id });
-        return details
-          ? { found: { parent: details.parent, index: details.index }, reason: undefined }
-          : { found: undefined, reason: "Could not find item to delete" };
-      });
-    });
     router.delete("/groups", async (request, response) => {
       await this.#handleDeleteRequest(request, response, (configContent) => {
         const details = this.#getParentDetails(configContent, { groupName: request.query.name });
