@@ -7,7 +7,8 @@ describe("createRoutes() method", () => {
     const expectedRoutes = [
       { path: "/", method: "get" },
     ];
-    const serverStatus = { getName: () => "Running", getHistory: () => {} };
+    const serverHistory = {};
+    const serverStatus = { getName: () => "Running", getHistory: () => serverHistory };
     const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
     const testRouter = new StatusRouter(serverStatus, components);
     const createdRoutes = testRouter.createRoutes();
