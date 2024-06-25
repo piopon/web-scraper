@@ -4,9 +4,7 @@ import { LogLevel } from "../../../config/app-types.js";
 
 describe("createRoutes() method", () => {
   test("returns correct number of routes", () => {
-    const expectedRoutes = [
-      { path: "/", method: "get" },
-    ];
+    const expectedRoutes = [{ path: "/", method: "get" }];
     const serverHistory = {};
     const serverStatus = { getName: () => "Running", getHistory: () => serverHistory };
     const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
