@@ -56,3 +56,17 @@ describe("created config GET routes", () => {
     expect(response.statusCode).toBe(404);
   });
 });
+
+function createMockAuthRouter() {
+  const router = express.Router();
+  const configId = 123;
+  // configure mocked login logic
+  const options = { usernameField: "mail", passwordField: "pass" };
+  const verify = (_user, _pass, done) => done(null, { id: 1, config: configId });
+  passport.use("mock-login", new Strategy(options, verify));
+  passport.serializeUser((user, done) => done(null, user.id));
+  passport.deserializeUser((userId, done) => done(null, { id: userId, config: configId }));
+  // use passport mock login in tests
+  router.post("/login", passport.authenticate("mock-login"));
+  return router;
+}
