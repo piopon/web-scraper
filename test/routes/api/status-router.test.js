@@ -1,5 +1,6 @@
 import { StatusRouter } from "../../../src/routes/api/status-router.js";
 import { WebComponents } from "../../../src/components/web-components.js";
+import { ScrapConfig } from "../../../src/model/scrap-config.js";
 import { LogLevel } from "../../../config/app-types.js";
 
 import supertest from "supertest";
@@ -7,6 +8,9 @@ import passport from "passport";
 import express from "express";
 import session from "express-session";
 import { jest } from "@jest/globals";
+import { Strategy } from "passport-local";
+
+jest.mock("../../../src/model/scrap-config.js");
 
 describe("createRoutes() method", () => {
   test("returns correct number of routes", () => {
