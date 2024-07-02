@@ -36,7 +36,7 @@ describe("createRoutes() method", () => {
 
 describe("created config GET routes", () => {
   const serverHistory = {};
-  const serverStatus = { getName: () => "Running", getHistory: () => serverHistory };
+  const serverStatus = { getName: () => "test-server", getHistory: () => serverHistory };
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
   const mockResult = { findById: (configId) => getInitConfig(false, configId, "uname") };
   jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
