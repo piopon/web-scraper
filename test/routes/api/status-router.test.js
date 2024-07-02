@@ -77,6 +77,17 @@ describe("created config GET routes", () => {
           ],
         },
       ],
+      [
+        "query is empty",
+        {},
+        {
+          status: 200,
+          response: [
+            { name: "web-components", status: "running" },
+            { name: "test-server", status: "running" },
+          ],
+        },
+      ],
     ])("%s", async (_, inputQuery, expected) => {
       const response = await testAgent.get("/status").query(inputQuery);
       expect(response.statusCode).toBe(expected.status);
