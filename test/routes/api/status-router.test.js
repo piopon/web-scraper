@@ -104,6 +104,14 @@ describe("created config GET routes", () => {
           response: [{ name: "web-components", status: "running" }],
         },
       ],
+      [
+        "query contains non-existing component name",
+        { name: "unknown" },
+        {
+          status: 200,
+          response: [],
+        },
+      ],
     ])("%s", async (_, inputQuery, expected) => {
       const response = await testAgent.get("/status").query(inputQuery);
       expect(response.statusCode).toBe(expected.status);
