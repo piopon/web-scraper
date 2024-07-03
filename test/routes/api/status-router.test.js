@@ -112,6 +112,14 @@ describe("created config GET routes", () => {
           response: [],
         },
       ],
+      [
+        "query wants a full history",
+        { name: "test-server", history: true },
+        {
+          status: 200,
+          response: [{ name: "test-server", status: "running", history: {} }],
+        },
+      ],
     ])("%s", async (_, inputQuery, expected) => {
       const response = await testAgent.get("/status").query(inputQuery);
       expect(response.statusCode).toBe(expected.status);
