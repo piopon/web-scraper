@@ -2,6 +2,7 @@ import { StatusRouter } from "../../../src/routes/api/status-router.js";
 import { WebComponents } from "../../../src/components/web-components.js";
 import { ScrapConfig } from "../../../src/model/scrap-config.js";
 import { LogLevel } from "../../../config/app-types.js";
+import { ParamsParser } from "../../../src/middleware/params-parser.js";
 
 import supertest from "supertest";
 import passport from "passport";
@@ -42,6 +43,7 @@ describe("created config GET routes", () => {
   jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
   // configue test express app server
   const testApp = express();
+  testApp.use(ParamsParser.middleware);
   testApp.use(express.json());
   testApp.use(express.urlencoded({ extended: false }));
   testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
