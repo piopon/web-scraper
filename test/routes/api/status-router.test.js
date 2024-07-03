@@ -88,6 +88,14 @@ describe("created config GET routes", () => {
           ],
         },
       ],
+      [
+        "query contains server name",
+        { name: "test-server" },
+        {
+          status: 200,
+          response: [{ name: "test-server", status: "running" }],
+        },
+      ],
     ])("%s", async (_, inputQuery, expected) => {
       const response = await testAgent.get("/status").query(inputQuery);
       expect(response.statusCode).toBe(expected.status);
