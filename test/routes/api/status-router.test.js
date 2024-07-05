@@ -119,7 +119,7 @@ describe("created config GET routes", () => {
         { name: "test-server", history: true },
         {
           status: 200,
-          response: [{ name: "test-server", status: "running", history: {} }],
+          response: [{ name: "test-server", status: "running", history: serverHistory }],
         },
       ],
     ])("%s", async (_, inputQuery, expected) => {
