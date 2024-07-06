@@ -50,8 +50,6 @@ describe("created config GET routes", () => {
   testApp.use(passport.initialize());
   testApp.use(passport.session());
   testApp.use("/status", new StatusRouter(serverStatus, components).createRoutes());
-  testApp.use("/auth", createMockAuthRouter());
-  // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
   beforeAll(async () => {
     const mockAuth = { mail: "test@mail.com", pass: "test-secret" };
@@ -129,17 +127,3 @@ describe("created config GET routes", () => {
     });
   });
 });
-
-function createMockAuthRouter() {
-  const router = express.Router();
-  const configId = 123;
-  // configure mocked login logic
-  const options = { usernameField: "mail", passwordField: "pass" };
-  const verify = (_user, _pass, done) => done(null, { id: 1, config: configId });
-  passport.use("mock-login", new Strategy(options, verify));
-  passport.serializeUser((user, done) => done(null, user.id));
-  passport.deserializeUser((userId, done) => done(null, { id: userId, config: configId }));
-  // use passport mock login in tests
-  router.post("/login", passport.authenticate("mock-login"));
-  return router;
-}
