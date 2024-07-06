@@ -8,10 +8,7 @@ import supertest from "supertest";
 import passport from "passport";
 import express from "express";
 import session from "express-session";
-import { jest } from "@jest/globals";
 import { Strategy } from "passport-local";
-
-jest.mock("../../../src/model/scrap-config.js");
 
 describe("createRoutes() method", () => {
   test("returns correct number of routes", () => {
@@ -39,8 +36,6 @@ describe("created config GET routes", () => {
   const serverHistory = { entry1: "history123" };
   const serverStatus = { getName: () => "test-server", getHistory: () => serverHistory };
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-  const mockResult = { findById: (configId) => getInitConfig(false, configId, "uname") };
-  jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
   // configue test express app server
   const testApp = express();
   testApp.use(ParamsParser.middleware);
