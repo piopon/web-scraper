@@ -1,14 +1,10 @@
 import { StatusRouter } from "../../../src/routes/api/status-router.js";
 import { WebComponents } from "../../../src/components/web-components.js";
-import { ScrapConfig } from "../../../src/model/scrap-config.js";
 import { LogLevel } from "../../../config/app-types.js";
 import { ParamsParser } from "../../../src/middleware/params-parser.js";
 
 import supertest from "supertest";
-import passport from "passport";
 import express from "express";
-import session from "express-session";
-import { Strategy } from "passport-local";
 
 describe("createRoutes() method", () => {
   test("returns correct number of routes", () => {
@@ -39,11 +35,6 @@ describe("created config GET routes", () => {
   // configue test express app server
   const testApp = express();
   testApp.use(ParamsParser.middleware);
-  testApp.use(express.json());
-  testApp.use(express.urlencoded({ extended: false }));
-  testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
-  testApp.use(passport.initialize());
-  testApp.use(passport.session());
   testApp.use("/status", new StatusRouter(serverStatus, components).createRoutes());
   const testAgent = supertest.agent(testApp);
   test("returns correct result for unknown path", async () => {
