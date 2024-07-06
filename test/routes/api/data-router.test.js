@@ -3,9 +3,13 @@ import { DataRouter } from "../../../src/routes/api/data-router.js";
 import fs from "fs";
 
 describe("createRoutes() method", () => {
+  // create mockup data file
+  const testDataPath = "./data-router-test.json";
+  createDataFile(testDataPath);
+  // run test(s)
   test("returns correct number of routes", () => {
     const expectedRoutes = [{ path: "/", method: "get" }];
-    const testRouter = new DataRouter("");
+    const testRouter = new DataRouter(testDataPath);
     const createdRoutes = testRouter.createRoutes();
     expect(createdRoutes.stack.length).toBe(expectedRoutes.length);
     createdRoutes.stack
@@ -19,6 +23,8 @@ describe("createRoutes() method", () => {
         expect(foundRoutesNo).toBe(1);
       });
   });
+  // delete mockup data file
+  removeDataFile(testDataPath);
 });
 
 function createDataFile(filePath) {
