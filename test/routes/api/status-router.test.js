@@ -36,9 +36,10 @@ describe("created config GET routes", () => {
   const testApp = express();
   testApp.use(ParamsParser.middleware);
   testApp.use("/status", new StatusRouter(serverStatus, components).createRoutes());
-  const testAgent = supertest.agent(testApp);
+  // create test client to call server requests
+  const testClient = supertest(testApp);
   test("returns correct result for unknown path", async () => {
-    const response = await testAgent.get("/status/unknown");
+    const response = await testClient.get("/status/unknown");
     expect(response.statusCode).toBe(404);
   });
   describe("returns correct result using /status endpoint when", () => {
@@ -103,7 +104,7 @@ describe("created config GET routes", () => {
         },
       ],
     ])("%s", async (_, inputQuery, expected) => {
-      const response = await testAgent.get("/status").query(inputQuery);
+      const response = await testClient.get("/status").query(inputQuery);
       expect(response.statusCode).toBe(expected.status);
       expect(response.body).toStrictEqual(expected.response);
     });
