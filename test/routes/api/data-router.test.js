@@ -29,3 +29,7 @@ function createDataFile(filePath) {
     console.error(`Could not create data file: ${err}`);
   }
 }
+
+function removeDataFile(filePath) {
+  fs.rmSync(filePath, { force: true });
+}
