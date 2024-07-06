@@ -1,5 +1,7 @@
 import { DataRouter } from "../../../src/routes/api/data-router.js";
 
+import fs from "fs";
+
 describe("createRoutes() method", () => {
   test("returns correct number of routes", () => {
     const expectedRoutes = [{ path: "/", method: "get" }];
@@ -18,3 +20,12 @@ describe("createRoutes() method", () => {
       });
   });
 });
+
+function createDataFile(filePath) {
+  try {
+    const dataContent = [];
+    fs.writeFileSync(filePath, JSON.stringify(dataContent));
+  } catch (err) {
+    console.error(`Could not create data file: ${err}`);
+  }
+}
