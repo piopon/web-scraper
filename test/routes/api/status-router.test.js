@@ -51,10 +51,6 @@ describe("created config GET routes", () => {
   testApp.use(passport.session());
   testApp.use("/status", new StatusRouter(serverStatus, components).createRoutes());
   const testAgent = supertest.agent(testApp);
-  beforeAll(async () => {
-    const mockAuth = { mail: "test@mail.com", pass: "test-secret" };
-    await testAgent.post("/auth/login").send(mockAuth);
-  });
   test("returns correct result for unknown path", async () => {
     const response = await testAgent.get("/status/unknown");
     expect(response.statusCode).toBe(404);
