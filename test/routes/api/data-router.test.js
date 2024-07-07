@@ -34,9 +34,6 @@ describe("createRoutes() method", () => {
 });
 
 describe("created config GET routes", () => {
-  // create mockup data file
-  const testDataPath = "./data-router-test.json";
-  createDataFile(testDataPath);
   // configue test express app server
   const testApp = express();
   testApp.use("/data", new DataRouter(testDataPath).createRoutes());
@@ -165,8 +162,6 @@ describe("created config GET routes", () => {
       expect(response.body).toStrictEqual(expected.response);
     });
   });
-  // delete mockup data file
-  removeDataFile(testDataPath);
 });
 
 function createDataFile(filePath) {
