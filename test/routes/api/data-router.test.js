@@ -68,8 +68,22 @@ describe("created config GET routes", () => {
         "query is empty",
         {},
         {
-          status: 500,
-          response: {},
+          status: 200,
+          response: [
+            {
+              name: "clothes",
+              category: "👕",
+              items: [
+                {
+                  status: "OK",
+                  name: "t-shirt Regular Fit",
+                  icon: "",
+                  price: "29.99",
+                  currency: "PLN",
+                },
+              ],
+            },
+          ],
         },
       ],
     ])("%s", async (_, inputQuery, expected) => {
