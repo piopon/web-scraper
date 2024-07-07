@@ -60,6 +60,14 @@ describe("created config GET routes", () => {
           ],
         },
       ],
+      [
+        "query is empty",
+        {},
+        {
+          status: 500,
+          response: {},
+        },
+      ],
     ])("%s", async (_, inputQuery, expected) => {
       const response = await testClient.get("/data").query(inputQuery);
       expect(response.statusCode).toBe(expected.status);
