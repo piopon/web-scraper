@@ -42,6 +42,30 @@ describe("created config GET routes", () => {
     const response = await testClient.get("/data/unknown");
     expect(response.statusCode).toBe(404);
   });
+  describe("returns correct result using /data endpoint when", () => {
+    it.each([
+      [
+        "query has invalid structure",
+        { unknown: "status" },
+        {
+          status: 400,
+          response: [
+            {
+              instancePath: "",
+              keyword: "additionalProperties",
+              message: "must NOT have additional properties",
+              params: { additionalProperty: "unknown" },
+              schemaPath: "#/additionalProperties",
+            },
+          ],
+        },
+      ],
+    ])("%s", async (_, inputQuery, expected) => {
+      const response = await testClient.get("/data").query(inputQuery);
+      expect(response.statusCode).toBe(expected.status);
+      expect(response.body).toStrictEqual(expected.response);
+    });
+  });
   // delete mockup data file
   removeDataFile(testDataPath);
 });
