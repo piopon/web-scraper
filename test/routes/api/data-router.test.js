@@ -4,11 +4,17 @@ import supertest from "supertest";
 import express from "express";
 import fs from "fs";
 
-describe("createRoutes() method", () => {
-  // create mockup data file
-  const testDataPath = "./data-router-test.json";
+const testDataPath = "./data-router-test.json";
+
+beforeAll(() => {
   createDataFile(testDataPath);
-  // run test(s)
+});
+
+afterAll(() => {
+  removeDataFile(testDataPath);
+});
+
+describe("createRoutes() method", () => {
   test("returns correct number of routes", () => {
     const expectedRoutes = [{ path: "/", method: "get" }];
     const testRouter = new DataRouter(testDataPath);
@@ -25,8 +31,6 @@ describe("createRoutes() method", () => {
         expect(foundRoutesNo).toBe(1);
       });
   });
-  // delete mockup data file
-  removeDataFile(testDataPath);
 });
 
 describe("created config GET routes", () => {
