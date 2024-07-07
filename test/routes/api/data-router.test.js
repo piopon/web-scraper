@@ -129,6 +129,28 @@ describe("created config GET routes", () => {
           response: [],
         },
       ],
+      [
+        "query contains existing category",
+        { category: "🎮" },
+        {
+          status: 200,
+          response: [
+            {
+              name: "games",
+              category: "🎮",
+              items: [
+                {
+                  status: "OK",
+                  name: "Diablo IV",
+                  icon: "",
+                  price: "349.99",
+                  currency: "PLN",
+                },
+              ],
+            },
+          ],
+        },
+      ],
     ])("%s", async (_, inputQuery, expected) => {
       const response = await testClient.get("/data").query(inputQuery);
       expect(response.statusCode).toBe(expected.status);
