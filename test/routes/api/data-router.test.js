@@ -151,6 +151,14 @@ describe("created config GET routes", () => {
           ],
         },
       ],
+      [
+        "query contains mot existing name",
+        { category: "unknown" },
+        {
+          status: 200,
+          response: [],
+        },
+      ],
     ])("%s", async (_, inputQuery, expected) => {
       const response = await testClient.get("/data").query(inputQuery);
       expect(response.statusCode).toBe(expected.status);
