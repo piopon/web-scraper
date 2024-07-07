@@ -83,6 +83,19 @@ describe("created config GET routes", () => {
                 },
               ],
             },
+            {
+              name: "games",
+              category: "🎮",
+              items: [
+                {
+                  status: "OK",
+                  name: "Diablo IV",
+                  icon: "",
+                  price: "349.99",
+                  currency: "PLN",
+                },
+              ],
+            },
           ],
         },
       ],
@@ -138,6 +151,19 @@ function createDataFile(filePath) {
             name: "t-shirt Regular Fit",
             icon: "",
             price: "29.99",
+            currency: "PLN",
+          },
+        ],
+      },
+      {
+        name: "games",
+        category: "🎮",
+        items: [
+          {
+            status: "OK",
+            name: "Diablo IV",
+            icon: "",
+            price: "349.99",
             currency: "PLN",
           },
         ],
