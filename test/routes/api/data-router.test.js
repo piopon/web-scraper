@@ -119,7 +119,7 @@ describe("created config GET routes", () => {
         },
       ],
       [
-        "query contains mot existing name",
+        "query contains not existing name",
         { name: "unknown" },
         {
           status: 200,
@@ -149,7 +149,7 @@ describe("created config GET routes", () => {
         },
       ],
       [
-        "query contains mot existing name",
+        "query contains not existing category",
         { category: "unknown" },
         {
           status: 200,
