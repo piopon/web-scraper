@@ -29,7 +29,21 @@ describe("createRoutes() method", () => {
 
 function createDataFile(filePath) {
   try {
-    const dataContent = [];
+    const dataContent = [
+      {
+        name: "clothes",
+        category: "👕",
+        items: [
+          {
+            status: "OK",
+            name: "t-shirt Regular Fit",
+            icon: "",
+            price: "29.99",
+            currency: "PLN",
+          },
+        ],
+      },
+    ];
     fs.writeFileSync(filePath, JSON.stringify(dataContent));
   } catch (err) {
     console.error(`Could not create data file: ${err}`);
