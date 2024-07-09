@@ -186,6 +186,30 @@ describe("created config GET routes", () => {
           response: [],
         },
       ],
+      [
+        "query contains existing name and not existing category",
+        { name: "games", category: "unknown" },
+        {
+          status: 200,
+          response: [],
+        },
+      ],
+      [
+        "query contains not existing name and existing category",
+        { name: "unknown", category: "👕" },
+        {
+          status: 200,
+          response: [],
+        },
+      ],
+      [
+        "query contains not existing name and category",
+        { name: "unknown", category: "unknown" },
+        {
+          status: 200,
+          response: [],
+        },
+      ],
     ])("%s", async (_, inputQuery, expected) => {
       const response = await testClient.get("/data").query(inputQuery);
       expect(response.statusCode).toBe(expected.status);
