@@ -1,5 +1,8 @@
 import { ViewRouter } from "../../../src/routes/view/view-router.js";
 
+import supertest from "supertest";
+import express from "express";
+
 describe("createRoutes() method", () => {
   test("returns correct number of routes", () => {
     const expectedRoutes = [{ path: "/", method: "get" }, { path: "/status", method: "get" }];
