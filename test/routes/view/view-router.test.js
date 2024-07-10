@@ -18,3 +18,15 @@ describe("createRoutes() method", () => {
       });
   });
 });
+
+describe("created config GET routes", () => {
+  // configue test express app server
+  const testApp = express();
+  testApp.use("/view", new ViewRouter().createRoutes());
+  // create test client to call server requests
+  const testClient = supertest(testApp);
+  test("returns correct result for unknown path", async () => {
+    const response = await testClient.get("/view/unknown");
+    expect(response.statusCode).toBe(404);
+  });
+});
