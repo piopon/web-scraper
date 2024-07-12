@@ -1,7 +1,9 @@
 import { ViewRouter } from "../../../src/routes/view/view-router.js";
 
 import supertest from "supertest";
+import passport from "passport";
 import express from "express";
+import session from "express-session";
 import helpers from "handlebars-helpers";
 import { engine } from "express-handlebars";
 
@@ -36,6 +38,9 @@ describe("created config GET routes", () => {
   testApp.use(express.static("./public"));
   testApp.use(express.json());
   testApp.use(express.urlencoded({ extended: false }));
+  testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
+  testApp.use(passport.initialize());
+  testApp.use(passport.session());
   testApp.use("/view", new ViewRouter().createRoutes());
   // create test client to call server requests
   const testClient = supertest(testApp);
