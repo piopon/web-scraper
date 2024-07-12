@@ -43,4 +43,8 @@ describe("created config GET routes", () => {
     const response = await testClient.get("/view/unknown");
     expect(response.statusCode).toBe(404);
   });
+  test("returns correct result using /view/status endpoint", async () => {
+    const response = await testClient.get("/view/status");
+    expect(response.statusCode).toBe(200);
+  });
 });
