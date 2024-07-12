@@ -2,6 +2,8 @@ import { ViewRouter } from "../../../src/routes/view/view-router.js";
 
 import supertest from "supertest";
 import express from "express";
+import helpers from "handlebars-helpers";
+import { engine } from "express-handlebars";
 
 describe("createRoutes() method", () => {
   test("returns correct number of routes", () => {
@@ -28,6 +30,12 @@ describe("createRoutes() method", () => {
 describe("created config GET routes", () => {
   // configue test express app server
   const testApp = express();
+  testApp.engine("handlebars", engine({ helpers: helpers() }));
+  testApp.set("view engine", "handlebars");
+  testApp.set("views", "./public");
+  testApp.use(express.static("./public"));
+  testApp.use(express.json());
+  testApp.use(express.urlencoded({ extended: false }));
   testApp.use("/view", new ViewRouter().createRoutes());
   // create test client to call server requests
   const testClient = supertest(testApp);
