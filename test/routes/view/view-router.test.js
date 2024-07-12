@@ -1,12 +1,16 @@
 import { ViewRouter } from "../../../src/routes/view/view-router.js";
+import { ScrapConfig } from "../../../src/model/scrap-config.js";
 
 import supertest from "supertest";
 import passport from "passport";
 import express from "express";
 import session from "express-session";
 import helpers from "handlebars-helpers";
+import { jest } from "@jest/globals";
 import { engine } from "express-handlebars";
 import { Strategy } from "passport-local";
+
+jest.mock("../../../src/model/scrap-config.js");
 
 describe("createRoutes() method", () => {
   test("returns correct number of routes", () => {
@@ -31,6 +35,8 @@ describe("createRoutes() method", () => {
 });
 
 describe("created config GET routes", () => {
+  const mockResult = { findById: (configId) => getInitConfig(true, configId, "uname") };
+  jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
   // configue test express app server
   const testApp = express();
   testApp.engine("handlebars", engine({ helpers: helpers() }));
