@@ -63,7 +63,8 @@ describe("created config GET routes", () => {
   test("returns correct result using /view/status endpoint", async () => {
     const response = await testAgent.get("/view/status");
     expect(response.statusCode).toBe(200);
-    expect(response.body).not.toStrictEqual({});
+    expect(response.type).toBe("text/html");
+    expect(response.text).toEqual(expect.not.arrayContaining(["", null, undefined]));
   });
 });
 
