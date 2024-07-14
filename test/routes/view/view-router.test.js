@@ -50,18 +50,18 @@ describe("created config GET routes", () => {
   testApp.use(passport.session());
   testApp.use("/view", new ViewRouter().createRoutes());
   testApp.use("/auth", createMockAuthRouter());
-  // create test client to call server requests
-  const testClient = supertest(testApp);
+  // retrieve underlying superagent to correctly persist sessions
+  const testAgent = supertest.agent(testApp);
   beforeAll(async () => {
     const mockAuth = { mail: "test@mail.com", pass: "test-secret" };
     await testAgent.post("/auth/login").send(mockAuth);
   });
   test("returns correct result for unknown path", async () => {
-    const response = await testClient.get("/view/unknown");
+    const response = await testAgent.get("/view/unknown");
     expect(response.statusCode).toBe(404);
   });
   test("returns correct result using /view/status endpoint", async () => {
-    const response = await testClient.get("/view/status");
+    const response = await testAgent.get("/view/status");
     expect(response.statusCode).toBe(200);
   });
 });
