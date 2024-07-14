@@ -70,12 +70,13 @@ describe("created config GET routes", () => {
 function createMockAuthRouter() {
   const router = express.Router();
   const configId = 123;
+  const userName = "test-name";
   // configure mocked login logic
   const options = { usernameField: "mail", passwordField: "pass" };
-  const verify = (_user, _pass, done) => done(null, { id: 1, config: configId });
+  const verify = (_user, _pass, done) => done(null, { id: 1, config: configId, name: userName });
   passport.use("mock-login", new Strategy(options, verify));
   passport.serializeUser((user, done) => done(null, user.id));
-  passport.deserializeUser((userId, done) => done(null, { id: userId, config: configId }));
+  passport.deserializeUser((userId, done) => done(null, { id: userId, config: configId, name: userName }));
   // use passport mock login in tests
   router.post("/login", passport.authenticate("mock-login"));
   return router;
