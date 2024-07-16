@@ -60,6 +60,12 @@ describe("created config GET routes", () => {
     const response = await testAgent.get("/view/unknown");
     expect(response.statusCode).toBe(404);
   });
+  test("returns correct result using /view endpoint", async () => {
+    const response = await testAgent.get("/view");
+    expect(response.statusCode).toBe(200);
+    expect(response.type).toBe("text/html");
+    expect(response.text).toEqual(expect.not.arrayContaining(["", null, undefined]));
+  });
   test("returns correct result using /view/status endpoint", async () => {
     const response = await testAgent.get("/view/status");
     expect(response.statusCode).toBe(200);
