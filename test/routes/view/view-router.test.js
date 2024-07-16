@@ -71,13 +71,13 @@ describe("created config GET routes", () => {
     expect(response.statusCode).toBe(200);
     expect(response.type).toBe("text/html");
     expect(response.text).toEqual(expect.not.arrayContaining(["", null, undefined]));
-    expect(response.text).toContain("<section class=\"status-dashboard\">");
-    expect(response.text).toContain("<div class=\"status-settings\">");
-    expect(response.text).toContain("<label class=\"filter-label\">component:</label>");
-    expect(response.text).toContain("<label class=\"filter-label\">type:</label>");
-    expect(response.text).toContain("<label class=\"date-label\">from:</label>");
-    expect(response.text).toContain("<label class=\"date-label\">to:</label>");
-    expect(response.text).toContain("<label class=\"btn-label\">refresh:</label>");
+    expect(response.text).toContain('<section class="status-dashboard">');
+    expect(response.text).toContain('<div class="status-settings">');
+    expect(response.text).toContain('<label class="filter-label">component:</label>');
+    expect(response.text).toContain('<label class="filter-label">type:</label>');
+    expect(response.text).toContain('<label class="date-label">from:</label>');
+    expect(response.text).toContain('<label class="date-label">to:</label>');
+    expect(response.text).toContain('<label class="btn-label">refresh:</label>');
   });
 });
 
