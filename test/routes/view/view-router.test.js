@@ -140,5 +140,15 @@ function getInitConfig(db, configId, name) {
     ...(db && { getIdentifier: () => `name = ${name}` }),
     ...(db && { copyValues: (_) => true }),
     ...(db && { save: () => true }),
+    ...(db && {
+      toJSON: () => ({
+        id: configId,
+        user: name,
+        groups: [
+          createGroup(false, "test1", "$$$", "test.com", observer1),
+          createGroup(false, "test2", "@@@", "test.com", observer2),
+        ],
+      }),
+    }),
   };
 }
