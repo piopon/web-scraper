@@ -65,8 +65,8 @@ describe("created config GET routes", () => {
     expect(response.statusCode).toBe(200);
     expect(response.type).toBe("text/html");
     expect(response.text).toEqual(expect.not.arrayContaining(["", null, undefined]));
-    expect(response.text).toContain('<h3>scraper configuration</h3>');
-    expect(response.text).toContain('<h5>user: test-name</h5>');
+    expect(response.text).toContain("<h3>scraper configuration</h3>");
+    expect(response.text).toContain("<h5>user: test-name</h5>");
     expect(response.text).toContain('<h2 class="group-title">test1</h2>');
     expect(response.text).toContain('<h2 class="group-title">test2</h2>');
     expect(response.text).toContain('<input type="text" class="group-name" name="name" value="test1" disabled />');
@@ -74,7 +74,9 @@ describe("created config GET routes", () => {
     expect(response.text).toContain('<input type="button" class="group-category" name="category" value="$$$" />');
     expect(response.text).toContain('<input type="text" class="observer-name" name="name" value="logo" disabled />');
     expect(response.text).toContain('<input type="text" class="observer-path" name="path" value="info" />');
-    expect(response.text).toContain('<input type="text" class="component-price-selector" name="selector" value="body p b" />');
+    expect(response.text).toContain(
+      '<input type="text" class="component-price-selector" name="selector" value="body p b" />'
+    );
     expect(response.text).toContain('<input type="text" class="group-name" name="name" value="test2" disabled />');
     expect(response.text).toContain('<input type="button" class="group-category" name="category" value="@@@" />');
   });
