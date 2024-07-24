@@ -33,7 +33,7 @@ describe("createRoutes() method", () => {
   });
 });
 
-describe("created config GET routes", () => {
+describe("created data GET routes", () => {
   // configue test express app server
   const testApp = express();
   testApp.use("/data", new DataRouter(testDataPath).createRoutes());

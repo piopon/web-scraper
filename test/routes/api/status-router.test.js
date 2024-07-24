@@ -28,7 +28,7 @@ describe("createRoutes() method", () => {
   });
 });
 
-describe("created config GET routes", () => {
+describe("created status GET routes", () => {
   const serverHistory = { entry1: "history123" };
   const serverStatus = { getName: () => "test-server", getHistory: () => serverHistory };
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
