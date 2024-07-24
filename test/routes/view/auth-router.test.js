@@ -61,5 +61,12 @@ describe("created auth GET routes", () => {
     expect(response.statusCode).toBe(200);
     expect(response.type).toBe("text/html");
     expect(response.text).toEqual(expect.not.arrayContaining(["", null, undefined]));
+    expect(response.text).toContain("<h3>scraper user registration</h3>");
+    expect(response.text).toContain("<p class=\"user-title\">create your account.</p>");
+    expect(response.text).toContain("<input type=\"text\" id=\"user-name\" name=\"name\" required>");
+    expect(response.text).toContain("<input type=\"email\" id=\"user-email\" name=\"email\" required>");
+    expect(response.text).toContain("<input type=\"password\" id=\"user-password\" name=\"password\" required>");
+    expect(response.text).toContain("<i class=\"fa fa-check-square-o\"></i>register");
+    expect(response.text).toContain("<p>already registered? go to <a href=\"/auth/login\">login</a> page</p>");
   });
 });
