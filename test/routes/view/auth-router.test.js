@@ -56,4 +56,10 @@ describe("created auth GET routes", () => {
     const response = await testAgent.get("/auth/unknown");
     expect(response.statusCode).toBe(404);
   });
+  test("returns correct result using /register endpoint", async () => {
+    const response = await testAgent.get("/auth/register");
+    expect(response.statusCode).toBe(200);
+    expect(response.type).toBe("text/html");
+    expect(response.text).toEqual(expect.not.arrayContaining(["", null, undefined]));
+  });
 });
