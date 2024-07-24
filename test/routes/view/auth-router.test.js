@@ -4,6 +4,16 @@ import { LogLevel } from "../../../config/app-types.js";
 
 import passport from "passport";
 
+import supertest from "supertest";
+import express from "express";
+import session from "express-session";
+import helpers from "handlebars-helpers";
+import { jest } from "@jest/globals";
+import { engine } from "express-handlebars";
+import { Strategy } from "passport-local";
+
+jest.mock("../../../src/model/scrap-config.js");
+
 describe("createRoutes() method", () => {
   test("returns correct number of routes", () => {
     const expectedRoutes = [
@@ -27,5 +37,28 @@ describe("createRoutes() method", () => {
         }).length;
         expect(foundRoutesNo).toBe(1);
       });
+  });
+});
+
+describe("created auth GET routes", () => {
+  const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+  const testRouter = new AuthRouter(components, passport);
+  // configue test express app server
+  const testApp = express();
+  testApp.engine("handlebars", engine({ helpers: helpers() }));
+  testApp.set("view engine", "handlebars");
+  testApp.set("views", "./public");
+  testApp.use(express.static("./public"));
+  testApp.use(express.json());
+  testApp.use(express.urlencoded({ extended: false }));
+  testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
+  testApp.use(passport.initialize());
+  testApp.use(passport.session());
+  testApp.use("/auth", testRouter.createRoutes());
+  // retrieve underlying superagent to correctly persist sessions
+  const testAgent = supertest.agent(testApp);
+  test("returns correct result for unknown path", async () => {
+    const response = await testAgent.get("/auth/unknown");
+    expect(response.statusCode).toBe(404);
   });
 });
