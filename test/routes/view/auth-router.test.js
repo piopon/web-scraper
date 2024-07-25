@@ -62,12 +62,12 @@ describe("created auth GET routes", () => {
     expect(response.type).toBe("text/html");
     expect(response.text).toEqual(expect.not.arrayContaining(["", null, undefined]));
     expect(response.text).toContain("<h3>scraper user registration</h3>");
-    expect(response.text).toContain("<p class=\"user-title\">create your account.</p>");
-    expect(response.text).toContain("<input type=\"text\" id=\"user-name\" name=\"name\" required>");
-    expect(response.text).toContain("<input type=\"email\" id=\"user-email\" name=\"email\" required>");
-    expect(response.text).toContain("<input type=\"password\" id=\"user-password\" name=\"password\" required>");
-    expect(response.text).toContain("<i class=\"fa fa-check-square-o\"></i>register");
-    expect(response.text).toContain("<p>already registered? go to <a href=\"/auth/login\">login</a> page</p>");
+    expect(response.text).toContain('<p class="user-title">create your account.</p>');
+    expect(response.text).toContain('<input type="text" id="user-name" name="name" required>');
+    expect(response.text).toContain('<input type="email" id="user-email" name="email" required>');
+    expect(response.text).toContain('<input type="password" id="user-password" name="password" required>');
+    expect(response.text).toContain('<i class="fa fa-check-square-o"></i>register');
+    expect(response.text).toContain('<p>already registered? go to <a href="/auth/login">login</a> page</p>');
   });
   test("returns correct result using /login endpoint", async () => {
     const response = await testAgent.get("/auth/login");
@@ -75,10 +75,10 @@ describe("created auth GET routes", () => {
     expect(response.type).toBe("text/html");
     expect(response.text).toEqual(expect.not.arrayContaining(["", null, undefined]));
     expect(response.text).toContain("<h3>scraper user login</h3>");
-    expect(response.text).toContain("<p class=\"user-title\">welcome back.</p>");
-    expect(response.text).toContain("<input type=\"email\" id=\"user-email\" name=\"email\" required>");
-    expect(response.text).toContain("<input type=\"password\" id=\"user-password\" name=\"password\" required>");
-    expect(response.text).toContain("<i class=\"fa fa-sign-in\"></i> login with email");
-    expect(response.text).toContain("<p>not registered? go to <a href=\"/auth/register\">register</a> page.</p>");
+    expect(response.text).toContain('<p class="user-title">welcome back.</p>');
+    expect(response.text).toContain('<input type="email" id="user-email" name="email" required>');
+    expect(response.text).toContain('<input type="password" id="user-password" name="password" required>');
+    expect(response.text).toContain('<i class="fa fa-sign-in"></i> login with email');
+    expect(response.text).toContain('<p>not registered? go to <a href="/auth/register">register</a> page.</p>');
   });
 });
