@@ -1,4 +1,5 @@
 import { AuthRouter } from "../../../src/routes/view/auth-router.js";
+import { ScrapConfig } from "../../../src/model/scrap-config.js";
 import { WebComponents } from "../../../src/components/web-components.js";
 import { LogLevel } from "../../../config/app-types.js";
 
@@ -8,7 +9,10 @@ import express from "express";
 import flash from "express-flash";
 import session from "express-session";
 import helpers from "handlebars-helpers";
+import { jest } from "@jest/globals";
 import { engine } from "express-handlebars";
+
+jest.mock("../../../src/model/scrap-config.js");
 
 describe("createRoutes() method", () => {
   test("returns correct number of routes", () => {
@@ -85,6 +89,8 @@ describe("created auth GET routes", () => {
 });
 
 describe("created auth POST routes", () => {
+  const mockResult = { find: (user) => { [{email: user.email, password: "pass", save: () => {} }] } };
+  jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
   const testRouter = new AuthRouter(components, passport);
   // configue test express app server
