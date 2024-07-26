@@ -112,6 +112,11 @@ describe("created auth POST routes", () => {
     const response = await testAgent.post("/auth/unknown");
     expect(response.statusCode).toBe(404);
   });
+  test("returns correct result using /register endpoint", async () => {
+    const response = await testAgent.post("/auth/register");
+    expect(response.statusCode).toBe(302);
+    expect(response.text).toBe("Found. Redirecting to /auth/register");
+  });
   test("returns correct result using /login endpoint", async () => {
     const response = await testAgent.post("/auth/login");
     expect(response.statusCode).toBe(302);
