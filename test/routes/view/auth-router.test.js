@@ -82,3 +82,26 @@ describe("created auth GET routes", () => {
     expect(response.text).toContain('<p>not registered? go to <a href="/auth/register">register</a> page.</p>');
   });
 });
+
+describe("created auth POST routes", () => {
+  const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+  const testRouter = new AuthRouter(components, passport);
+  // configue test express app server
+  const testApp = express();
+  testApp.engine("handlebars", engine({ helpers: helpers() }));
+  testApp.set("view engine", "handlebars");
+  testApp.set("views", "./public");
+  testApp.use(express.static("./public"));
+  testApp.use(express.json());
+  testApp.use(express.urlencoded({ extended: false }));
+  testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
+  testApp.use(passport.initialize());
+  testApp.use(passport.session());
+  testApp.use("/auth", testRouter.createRoutes());
+  // retrieve underlying superagent to correctly persist sessions
+  const testAgent = supertest.agent(testApp);
+  test("returns correct result for unknown path", async () => {
+    const response = await testAgent.post("/auth/unknown");
+    expect(response.statusCode).toBe(404);
+  });
+});
