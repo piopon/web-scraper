@@ -5,6 +5,7 @@ import { LogLevel } from "../../../config/app-types.js";
 import supertest from "supertest";
 import passport from "passport";
 import express from "express";
+import flash from "express-flash";
 import session from "express-session";
 import helpers from "handlebars-helpers";
 import { engine } from "express-handlebars";
@@ -94,6 +95,7 @@ describe("created auth POST routes", () => {
   testApp.use(express.static("./public"));
   testApp.use(express.json());
   testApp.use(express.urlencoded({ extended: false }));
+  testApp.use(flash());
   testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
   testApp.use(passport.initialize());
   testApp.use(passport.session());
