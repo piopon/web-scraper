@@ -86,6 +86,11 @@ describe("getArrayOfModels", () => {
     const expected = [];
     expect(ModelUtils.getArrayOfModels(TestClass, inObject)).toStrictEqual(expected);
   });
+  test("returns empty array when object is null", () => {
+    const inObject = null;
+    const expected = [];
+    expect(ModelUtils.getArrayOfModels(TestClass, inObject)).toStrictEqual(expected);
+  });
 });
 
 describe("isInstanceOf", () => {
