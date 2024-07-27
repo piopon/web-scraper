@@ -91,6 +91,11 @@ describe("getArrayOfModels", () => {
     const expected = [];
     expect(ModelUtils.getArrayOfModels(TestClass, inObject)).toStrictEqual(expected);
   });
+  test("returns empty array when reference class is null", () => {
+    const inObject = { height: 10, width: 10 };
+    const expected = [];
+    expect(ModelUtils.getArrayOfModels(null, inObject)).toStrictEqual(expected);
+  });
 });
 
 describe("isInstanceOf", () => {
@@ -111,5 +116,9 @@ describe("isInstanceOf", () => {
   test("returns false if input object is null", () => {
     const inObject = null;
     expect(ModelUtils.isInstanceOf(TestClass, inObject)).toBe(false);
+  });
+  test("returns false if reference class is null", () => {
+    const inObject = { height: 1, width: 2 };
+    expect(ModelUtils.isInstanceOf(null, inObject)).toBe(false);
   });
 });
