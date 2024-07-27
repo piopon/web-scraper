@@ -115,6 +115,7 @@ describe("getDatabaseSchema", () => {
       aux: "test-aux",
     });
     expect(component).not.toBe(null);
+    // test field values
     expect(component.unknown).toBe(undefined);
     expect(component.interval).toBe("test-interval");
     expect(component.selector).toBe("test-selector");
@@ -122,5 +123,7 @@ describe("getDatabaseSchema", () => {
     expect(component.attribute).toBe("test-attribute");
     expect(component.auxiliary).toBe("test-auxiliary");
     expect(component.aux).toBe(undefined);
+    // test schema methods logic
+    expect(component.getIdentifier()).toBe("component = test-selector | test-attribute | test-auxiliary");
   });
 });
