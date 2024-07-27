@@ -35,6 +35,13 @@ describe("info() log", () => {
     expect(testLogger.getStatus().type).toBe("info");
     expect(testLogger.getStatus().message).toBe("test info log");
   });
+  test("will appear only once when message has the same text and INFO type", () => {
+    const testLogger = new StatusLogger("test-name", LogLevel.INFO);
+    testLogger.info("test info log");
+    testLogger.info("test info log");
+    expect(testLogger.getStatus().type).toBe("info");
+    expect(testLogger.getStatus().message).toBe("test info log");
+  });
   test("will NOT appear when setting is higher than LogLevel.WARNING", () => {
     const testLogger = new StatusLogger("test-name", LogLevel.WARNING);
     testLogger.info("test info log");
@@ -50,6 +57,13 @@ describe("warning() log", () => {
     expect(testLogger.getStatus().type).toBe("warning");
     expect(testLogger.getStatus().message).toBe("test warning log");
   });
+  test("will appear only once when message has the same text and WARNING type", () => {
+    const testLogger = new StatusLogger("test-name", LogLevel.WARNING);
+    testLogger.warning("test warning log");
+    testLogger.warning("test warning log");
+    expect(testLogger.getStatus().type).toBe("warning");
+    expect(testLogger.getStatus().message).toBe("test warning log");
+  });
   test("will NOT appear when setting is higher than LogLevel.WARNING", () => {
     const testLogger = new StatusLogger("test-name", LogLevel.ERROR);
     testLogger.warning("test warning log");
@@ -61,6 +75,13 @@ describe("warning() log", () => {
 describe("error() log", () => {
   test("will appear when setting is equal/lower than LogLevel.ERROR", () => {
     const testLogger = new StatusLogger("test-name", LogLevel.ERROR);
+    testLogger.error("test error log");
+    expect(testLogger.getStatus().type).toBe("error");
+    expect(testLogger.getStatus().message).toBe("test error log");
+  });
+  test("will appear only once when message has the same text and ERROR type", () => {
+    const testLogger = new StatusLogger("test-name", LogLevel.ERROR);
+    testLogger.error("test error log");
     testLogger.error("test error log");
     expect(testLogger.getStatus().type).toBe("error");
     expect(testLogger.getStatus().message).toBe("test error log");
