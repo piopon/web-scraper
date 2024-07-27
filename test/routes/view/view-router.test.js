@@ -34,7 +34,7 @@ describe("createRoutes() method", () => {
   });
 });
 
-describe("created config GET routes", () => {
+describe("created view GET routes", () => {
   const mockResult = { findById: (configId) => getInitConfig(true, configId, "uname") };
   jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
   // configue test express app server
