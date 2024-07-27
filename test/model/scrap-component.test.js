@@ -1,4 +1,5 @@
 import { ScrapComponent } from "../../src/model/scrap-component.js";
+import { ScrapError } from "../../src/model/scrap-exception.js";
 
 import mongoose from "mongoose";
 
@@ -125,5 +126,6 @@ describe("getDatabaseSchema", () => {
     expect(component.aux).toBe(undefined);
     // test schema methods logic
     expect(component.getIdentifier()).toBe("component = test-selector | test-attribute | test-auxiliary");
+    expect(() => component.copyValues({ unknown: "" })).toThrow(ScrapError);
   });
 });
