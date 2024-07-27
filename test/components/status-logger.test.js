@@ -58,6 +58,12 @@ describe("error() log", () => {
     expect(testLogger.getStatus().type).toBe("error");
     expect(testLogger.getStatus().message).toBe("test error log");
   });
+  test("will NOT appear when setting has invalid smaller value", () => {
+    const testLogger = new StatusLogger("test-name", { value: -1 });
+    testLogger.error("test error log");
+    expect(testLogger.getStatus().type).toBe("");
+    expect(testLogger.getStatus().message).toBe("No status logged yet");
+  });
 });
 
 describe("status()", () => {
