@@ -108,4 +108,8 @@ describe("isInstanceOf", () => {
     const inObject = { h: 1, w: 2 };
     expect(ModelUtils.isInstanceOf(TestClass, inObject)).toBe(false);
   });
+  test("returns false if input object is null", () => {
+    const inObject = null;
+    expect(ModelUtils.isInstanceOf(TestClass, inObject)).toBe(false);
+  });
 });
