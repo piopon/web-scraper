@@ -13,6 +13,13 @@ describe("debug() log", () => {
     expect(testLogger.getStatus().type).toBe("debug");
     expect(testLogger.getStatus().message).toBe("test debug log");
   });
+  test("will appear only once when message has the same text and DEBUG type", () => {
+    const testLogger = new StatusLogger("test-name", LogLevel.DEBUG);
+    testLogger.debug("test debug log");
+    testLogger.debug("test debug log");
+    expect(testLogger.getStatus().type).toBe("debug");
+    expect(testLogger.getStatus().message).toBe("test debug log");
+  });
   test("will NOT appear when setting is higher than LogLevel.DEBUG", () => {
     const testLogger = new StatusLogger("test-name", LogLevel.INFO);
     testLogger.debug("test debug log");
