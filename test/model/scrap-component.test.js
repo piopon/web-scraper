@@ -127,5 +127,16 @@ describe("getDatabaseSchema", () => {
     // test schema methods logic
     expect(component.getIdentifier()).toBe("component = test-selector | test-attribute | test-auxiliary");
     expect(() => component.copyValues({ unknown: "" })).toThrow(ScrapError);
+    let sourceObject = {
+      interval: "new-interval",
+      selector: "new-selector",
+      attribute: "new-attribute",
+      auxiliary: "new-auxiliary",
+    };
+    expect(() => component.copyValues(sourceObject)).not.toThrow();
+    expect(component.interval).toBe("new-interval");
+    expect(component.selector).toBe("new-selector");
+    expect(component.attribute).toBe("new-attribute");
+    expect(component.auxiliary).toBe("new-auxiliary");
   });
 });
