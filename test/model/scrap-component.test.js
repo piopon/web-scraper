@@ -118,14 +118,15 @@ describe("getDatabaseSchema", () => {
     test("which is not null", () => {
       expect(component).not.toBe(null);
     });
-    // test field values
-    expect(component.unknown).toBe(undefined);
-    expect(component.interval).toBe("test-interval");
-    expect(component.selector).toBe("test-selector");
-    expect(component.extra).toBe(undefined);
-    expect(component.attribute).toBe("test-attribute");
-    expect(component.auxiliary).toBe("test-auxiliary");
-    expect(component.aux).toBe(undefined);
+    test("which has correct field values", () => {
+      expect(component.unknown).toBe(undefined);
+      expect(component.interval).toBe("test-interval");
+      expect(component.selector).toBe("test-selector");
+      expect(component.extra).toBe(undefined);
+      expect(component.attribute).toBe("test-attribute");
+      expect(component.auxiliary).toBe("test-auxiliary");
+      expect(component.aux).toBe(undefined);
+    });
     // test schema methods logic
     expect(component.getIdentifier()).toBe("component = test-selector | test-attribute | test-auxiliary");
     expect(() => component.copyValues({ unknown: "" })).toThrow(ScrapError);
