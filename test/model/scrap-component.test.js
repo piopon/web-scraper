@@ -104,7 +104,7 @@ describe("getDatabaseSchema", () => {
     const schema = ScrapComponent.getDatabaseSchema();
     expect(schema).not.toBe(null);
   });
-  test("gets schema used for create component", () => {
+  describe("gets schema used for create component", () => {
     const TestModel = mongoose.model("test-component", ScrapComponent.getDatabaseSchema());
     const component = new TestModel({
       unknown: "test-unknown",
@@ -115,7 +115,9 @@ describe("getDatabaseSchema", () => {
       auxiliary: "test-auxiliary",
       aux: "test-aux",
     });
-    expect(component).not.toBe(null);
+    test("which is not null", () => {
+      expect(component).not.toBe(null);
+    });
     // test field values
     expect(component.unknown).toBe(undefined);
     expect(component.interval).toBe("test-interval");
