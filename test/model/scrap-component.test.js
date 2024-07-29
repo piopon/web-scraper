@@ -127,8 +127,10 @@ describe("getDatabaseSchema", () => {
       expect(component.auxiliary).toBe("test-auxiliary");
       expect(component.aux).toBe(undefined);
     });
-    // test schema methods logic
-    expect(component.getIdentifier()).toBe("component = test-selector | test-attribute | test-auxiliary");
+    test("which has getIdentifier method returning correct result", () => {
+      const expected = "component = test-selector | test-attribute | test-auxiliary";
+      expect(component.getIdentifier()).toBe(expected);
+    });
     expect(() => component.copyValues({ unknown: "" })).toThrow(ScrapError);
     let sourceObject = {
       interval: "new-interval",
