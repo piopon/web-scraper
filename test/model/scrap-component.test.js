@@ -131,11 +131,11 @@ describe("getDatabaseSchema", () => {
       const expected = "component = test-selector | test-attribute | test-auxiliary";
       expect(component.getIdentifier()).toBe(expected);
     });
-    test("which has getIdentifier method returning correct result", () => {
+    test("which has copyValues method throwing on invalid object", () => {
       let sourceObject = { unknown: "" };
       expect(() => component.copyValues(sourceObject)).toThrow(ScrapError);
     });
-    test("which has getIdentifier method returning correct result", () => {
+    test("which has copyValues method returning correct result", () => {
       let sourceObject = {
         interval: "new-interval",
         selector: "new-selector",
