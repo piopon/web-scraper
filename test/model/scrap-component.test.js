@@ -135,16 +135,18 @@ describe("getDatabaseSchema", () => {
       let sourceObject = { unknown: "" };
       expect(() => component.copyValues(sourceObject)).toThrow(ScrapError);
     });
-    let sourceObject = {
-      interval: "new-interval",
-      selector: "new-selector",
-      attribute: "new-attribute",
-      auxiliary: "new-auxiliary",
-    };
-    expect(() => component.copyValues(sourceObject)).not.toThrow();
-    expect(component.interval).toBe("new-interval");
-    expect(component.selector).toBe("new-selector");
-    expect(component.attribute).toBe("new-attribute");
-    expect(component.auxiliary).toBe("new-auxiliary");
+    test("which has getIdentifier method returning correct result", () => {
+      let sourceObject = {
+        interval: "new-interval",
+        selector: "new-selector",
+        attribute: "new-attribute",
+        auxiliary: "new-auxiliary",
+      };
+      expect(() => component.copyValues(sourceObject)).not.toThrow();
+      expect(component.interval).toBe("new-interval");
+      expect(component.selector).toBe("new-selector");
+      expect(component.attribute).toBe("new-attribute");
+      expect(component.auxiliary).toBe("new-auxiliary");
+    });
   });
 });
