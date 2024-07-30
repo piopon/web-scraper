@@ -149,6 +149,18 @@ describe("getDatabaseSchema", () => {
       let sourceObject = { unknown: "" };
       expect(() => config.copyValues(sourceObject)).toThrow(ScrapError);
     });
+    test("which has copyValues method returning correct result", () => {
+      const newId = new mongoose.Types.ObjectId();
+      let sourceObject = {
+        user: newId,
+        groups: [createTestGroup("new-group", "new-domain")],
+      };
+      expect(() => config.copyValues(sourceObject)).not.toThrow();
+      expect(config.user).toBe(newId);
+      expect(config.groups.length).toBe(1);
+      expect(config.groups[0].name).toBe("new-group");
+      expect(config.groups[0].domain).toBe("new-domain");
+    });
   });
 });
 
