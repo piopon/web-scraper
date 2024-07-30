@@ -140,6 +140,10 @@ describe("getDatabaseSchema", () => {
       expect(config.groups.length).toBe(1);
       expect(config.extra).toBe(undefined);
     });
+    test("which has getIdentifier method returning correct result", () => {
+      const expected = `user = ${constId}`;
+      expect(config.getIdentifier()).toBe(expected);
+    });
   });
 });
 
