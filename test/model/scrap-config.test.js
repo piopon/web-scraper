@@ -1,4 +1,5 @@
 import { ScrapConfig } from "../../src/model/scrap-config.js";
+import { ScrapError } from "../../src/model/scrap-exception.js";
 
 import mongoose from "mongoose";
 
@@ -143,6 +144,10 @@ describe("getDatabaseSchema", () => {
     test("which has getIdentifier method returning correct result", () => {
       const expected = `user = ${constId}`;
       expect(config.getIdentifier()).toBe(expected);
+    });
+    test("which has copyValues method throwing on invalid object", () => {
+      let sourceObject = { unknown: "" };
+      expect(() => config.copyValues(sourceObject)).toThrow(ScrapError);
     });
   });
 });
