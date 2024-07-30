@@ -134,10 +134,12 @@ describe("getDatabaseSchema", () => {
     test("which is not null", () => {
       expect(config).not.toBe(null);
     });
-    expect(config.unknown).toBe(undefined);
-    expect(config.user).toBe(constId);
-    expect(config.groups.length).toBe(1);
-    expect(config.extra).toBe(undefined);
+    test("which has correct field values", () => {
+      expect(config.unknown).toBe(undefined);
+      expect(config.user).toBe(constId);
+      expect(config.groups.length).toBe(1);
+      expect(config.extra).toBe(undefined);
+    });
   });
 });
 
