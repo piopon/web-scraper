@@ -1,4 +1,5 @@
 import { ScrapGroup } from "../../src/model/scrap-group.js";
+import { ScrapError } from "../../src/model/scrap-exception.js";
 
 import mongoose from "mongoose";
 
