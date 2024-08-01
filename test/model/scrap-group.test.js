@@ -106,11 +106,7 @@ describe("checkValues", () => {
       observers: [createTestObserver("test-name1"), createTestObserver()],
     };
     const expected = {
-      errors: [
-        "Missing required observer path",
-        "Missing required observer name",
-        "Missing required observer path"
-      ],
+      errors: ["Missing required observer path", "Missing required observer name", "Missing required observer path"],
       warnings: [],
     };
     expect(new ScrapGroup(inputObj).checkValues()).toStrictEqual(expected);
