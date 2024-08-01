@@ -173,7 +173,7 @@ describe("getDatabaseSchema", () => {
     const schema = ScrapGroup.getDatabaseSchema();
     expect(schema).not.toBe(null);
   });
-  test("gets schema used for create group", () => {
+  describe("gets schema used for create group", () => {
     const TestModel = mongoose.model("test-group", ScrapGroup.getDatabaseSchema());
     const group = new TestModel({
       unknown: "test-unknown",
@@ -183,7 +183,9 @@ describe("getDatabaseSchema", () => {
       observers: [createTestObserver("observer-name", "observer-path")],
       extra: "test-extra",
     });
-    expect(group).not.toBe(null);
+    test("which is not null", () => {
+      expect(group).not.toBe(null);
+    });
     expect(group.unknown).toBe(undefined);
     expect(group.name).toBe("test-name");
     expect(group.category).toBe("test-path");
