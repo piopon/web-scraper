@@ -198,6 +198,10 @@ describe("getDatabaseSchema", () => {
       const expected = `name = test-name`;
       expect(group.getIdentifier()).toBe(expected);
     });
+    test("which has copyValues method throwing on invalid object", () => {
+      let sourceObject = { unknown: "" };
+      expect(() => group.copyValues(sourceObject)).toThrow(ScrapError);
+    });
   });
 });
 
