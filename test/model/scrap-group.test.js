@@ -194,6 +194,10 @@ describe("getDatabaseSchema", () => {
       expect(group.observers.length).toBe(1);
       expect(group.extra).toBe(undefined);
     });
+    test("which has getIdentifier method returning correct result", () => {
+      const expected = `name = test-name`;
+      expect(group.getIdentifier()).toBe(expected);
+    });
   });
 });
 
