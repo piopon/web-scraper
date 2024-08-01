@@ -72,10 +72,7 @@ describe("checkValues", () => {
       groups: [createTestGroup()],
     };
     const expected = {
-      errors: [
-        "Missing required group name",
-        "Missing required group domain",
-      ],
+      errors: ["Missing required group name", "Missing required group domain"],
       warnings: [],
     };
     expect(new ScrapConfig(inputObj).checkValues()).toStrictEqual(expected);
