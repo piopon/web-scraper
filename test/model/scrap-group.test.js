@@ -186,12 +186,14 @@ describe("getDatabaseSchema", () => {
     test("which is not null", () => {
       expect(group).not.toBe(null);
     });
-    expect(group.unknown).toBe(undefined);
-    expect(group.name).toBe("test-name");
-    expect(group.category).toBe("test-path");
-    expect(group.domain).toBe("domcontentloaded");
-    expect(group.observers.length).toBe(1);
-    expect(group.extra).toBe(undefined);
+    test("which has correct field values", () => {
+      expect(group.unknown).toBe(undefined);
+      expect(group.name).toBe("test-name");
+      expect(group.category).toBe("test-path");
+      expect(group.domain).toBe("domcontentloaded");
+      expect(group.observers.length).toBe(1);
+      expect(group.extra).toBe(undefined);
+    });
   });
 });
 
