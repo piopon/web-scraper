@@ -221,8 +221,11 @@ function createTestObserver(name, path) {
   return {
     name: name,
     path: path,
-    title: { selector: "title-selector", attribute: "title-attribute", auxiliary: "title-auxiliary" },
-    image: { selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
-    price: { selector: "price-selector", attribute: "price-attribute", auxiliary: "price-attribute" },
+    target: "load",
+    history: "off",
+    container: "test-container",
+    title: { interval: "", selector: "title-selector", attribute: "title-attribute", auxiliary: "title-auxiliary" },
+    image: { interval: "", selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
+    price: { interval: "", selector: "price-selector", attribute: "price-attribute", auxiliary: "price-attribute" },
   };
 }
