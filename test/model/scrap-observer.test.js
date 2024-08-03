@@ -260,5 +260,9 @@ describe("getDatabaseSchema", () => {
       expect(observer.price.auxiliary).toBe("test-auxiliary");
       expect(observer.extra).toBe(undefined);
     });
+    test("which has getIdentifier method returning correct result", () => {
+      const expected = `name = test-name`;
+      expect(observer.getIdentifier()).toBe(expected);
+    });
   });
 });
