@@ -248,15 +248,17 @@ describe("getDatabaseSchema", () => {
     test("which is not null", () => {
       expect(observer).not.toBe(null);
     });
-    expect(observer.unknown).toBe(undefined);
-    expect(observer.name).toBe("test-name");
-    expect(observer.path).toBe("test-path");
-    expect(observer.target).toBe("domcontentloaded");
-    expect(observer.history).toBe("off");
-    expect(observer.container).toBe("test-container");
-    expect(observer.price.selector).toBe("test-selector");
-    expect(observer.price.attribute).toBe("test-attribute");
-    expect(observer.price.auxiliary).toBe("test-auxiliary");
-    expect(observer.extra).toBe(undefined);
+    test("which has correct field values", () => {
+      expect(observer.unknown).toBe(undefined);
+      expect(observer.name).toBe("test-name");
+      expect(observer.path).toBe("test-path");
+      expect(observer.target).toBe("domcontentloaded");
+      expect(observer.history).toBe("off");
+      expect(observer.container).toBe("test-container");
+      expect(observer.price.selector).toBe("test-selector");
+      expect(observer.price.attribute).toBe("test-attribute");
+      expect(observer.price.auxiliary).toBe("test-auxiliary");
+      expect(observer.extra).toBe(undefined);
+    });
   });
 });
