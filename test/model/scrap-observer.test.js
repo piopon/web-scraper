@@ -229,7 +229,7 @@ describe("getDatabaseSchema", () => {
     const schema = ScrapObserver.getDatabaseSchema();
     expect(schema).not.toBe(null);
   });
-  test("gets schema used for create observer", () => {
+  describe("gets schema used for create observer", () => {
     const TestModel = mongoose.model("test-observer", ScrapObserver.getDatabaseSchema());
     const observer = new TestModel({
       unknown: "test-unknown",
@@ -245,7 +245,9 @@ describe("getDatabaseSchema", () => {
       },
       extra: "test-extra",
     });
-    expect(observer).not.toBe(null);
+    test("which is not null", () => {
+      expect(observer).not.toBe(null);
+    });
     expect(observer.unknown).toBe(undefined);
     expect(observer.name).toBe("test-name");
     expect(observer.path).toBe("test-path");
