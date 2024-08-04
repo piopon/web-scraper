@@ -1,4 +1,5 @@
 import { ScrapObserver } from "../../src/model/scrap-observer.js";
+import { ScrapError } from "../../src/model/scrap-exception.js";
 
 import mongoose from "mongoose";
 
@@ -263,6 +264,10 @@ describe("getDatabaseSchema", () => {
     test("which has getIdentifier method returning correct result", () => {
       const expected = `name = test-name`;
       expect(observer.getIdentifier()).toBe(expected);
+    });
+    test("which has copyValues method throwing on invalid object", () => {
+      let sourceObject = { unknown: "" };
+      expect(() => observer.copyValues(sourceObject)).toThrow(ScrapError);
     });
   });
 });
