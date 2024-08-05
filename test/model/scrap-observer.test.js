@@ -269,5 +269,29 @@ describe("getDatabaseSchema", () => {
       let sourceObject = { unknown: "" };
       expect(() => observer.copyValues(sourceObject)).toThrow(ScrapError);
     });
+    test("which has copyValues method returning correct result", () => {
+      let sourceObject = {
+        name: "new-name",
+        path: "new-path",
+        target: "domcontentloaded",
+        history: "off",
+        container: "new-container",
+        price: {
+          selector: "new-price-selector",
+          attribute: "new-price-attribute",
+          auxiliary: "new-price-auxiliary",
+        },
+      };
+      expect(() => observer.copyValues(sourceObject)).not.toThrow();
+      expect(observer.name).toBe("new-name");
+      expect(observer.path).toBe("new-path");
+      expect(observer.target).toBe("domcontentloaded");
+      expect(observer.history).toBe("off");
+      expect(observer.container).toBe("new-container");
+      expect(observer.price).not.toBe(undefined);
+      expect(observer.price.selector).toBe("new-price-selector");
+      expect(observer.price.attribute).toBe("new-price-attribute");
+      expect(observer.price.auxiliary).toBe("new-price-auxiliary");
+    });
   });
 });
