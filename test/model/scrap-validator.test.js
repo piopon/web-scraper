@@ -28,6 +28,9 @@ describe("validate", () => {
   test("throws single error when input config has one error", () => {
     expect(() => new ScrapValidator(createTestConfig("ERR1")).validate()).toThrow(ScrapError);
   });
+  test("throws several errors when input config has multiple errors", () => {
+    expect(() => new ScrapValidator(createTestConfig("ERR2")).validate()).toThrow(ScrapError);
+  });
   test("throws single warning when input config has one warning", () => {
     expect(() => new ScrapValidator(createTestConfig("WARN1")).validate()).toThrow(ScrapWarning);
   });
