@@ -240,16 +240,19 @@ describe("getDatabaseSchema", () => {
       history: "off",
       container: "test-container",
       title: {
+        interval: "1H",
         selector: "test-title-selector",
         attribute: "test-title-attribute",
         auxiliary: "test-title-auxiliary",
       },
       image: {
+        interval: "1M",
         selector: "test-image-selector",
         attribute: "test-image-attribute",
         auxiliary: "test-image-auxiliary",
       },
       price: {
+        interval: "1m",
         selector: "test-price-selector",
         attribute: "test-price-attribute",
         auxiliary: "test-price-auxiliary",
@@ -287,16 +290,19 @@ describe("getDatabaseSchema", () => {
         history: "off",
         container: "new-container",
         title: {
+          interval: "7d",
           selector: "new-title-selector",
           attribute: "new-title-attribute",
           auxiliary: "new-title-auxiliary",
         },
         image: {
+          interval: "1w",
           selector: "new-image-selector",
           attribute: "new-image-attribute",
           auxiliary: "new-image-auxiliary",
         },
         price: {
+          interval: "10y",
           selector: "new-price-selector",
           attribute: "new-price-attribute",
           auxiliary: "new-price-auxiliary",
@@ -309,14 +315,17 @@ describe("getDatabaseSchema", () => {
       expect(observer.history).toBe("off");
       expect(observer.container).toBe("new-container");
       expect(observer.title).not.toBe(undefined);
+      expect(observer.title.interval).toBe("7d");
       expect(observer.title.selector).toBe("new-title-selector");
       expect(observer.title.attribute).toBe("new-title-attribute");
       expect(observer.title.auxiliary).toBe("new-title-auxiliary");
       expect(observer.image).not.toBe(undefined);
+      expect(observer.image.interval).toBe("1w");
       expect(observer.image.selector).toBe("new-image-selector");
       expect(observer.image.attribute).toBe("new-image-attribute");
       expect(observer.image.auxiliary).toBe("new-image-auxiliary");
       expect(observer.price).not.toBe(undefined);
+      expect(observer.price.interval).toBe("10y");
       expect(observer.price.selector).toBe("new-price-selector");
       expect(observer.price.attribute).toBe("new-price-attribute");
       expect(observer.price.auxiliary).toBe("new-price-auxiliary");
