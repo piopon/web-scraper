@@ -269,6 +269,15 @@ describe("getDatabaseSchema", () => {
       expect(observer.target).toBe("domcontentloaded");
       expect(observer.history).toBe("off");
       expect(observer.container).toBe("test-container");
+      expect(observer.title.interval).toBe("1H");
+      expect(observer.title.selector).toBe("test-title-selector");
+      expect(observer.title.attribute).toBe("test-title-attribute");
+      expect(observer.title.auxiliary).toBe("test-title-auxiliary");
+      expect(observer.image.interval).toBe("1M");
+      expect(observer.image.selector).toBe("test-image-selector");
+      expect(observer.image.attribute).toBe("test-image-attribute");
+      expect(observer.image.auxiliary).toBe("test-image-auxiliary");
+      expect(observer.price.interval).toBe("1m");
       expect(observer.price.selector).toBe("test-price-selector");
       expect(observer.price.attribute).toBe("test-price-attribute");
       expect(observer.price.auxiliary).toBe("test-price-auxiliary");
