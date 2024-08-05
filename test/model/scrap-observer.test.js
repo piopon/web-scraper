@@ -239,10 +239,20 @@ describe("getDatabaseSchema", () => {
       target: "domcontentloaded",
       history: "off",
       container: "test-container",
+      title: {
+        selector: "test-title-selector",
+        attribute: "test-title-attribute",
+        auxiliary: "test-title-auxiliary",
+      },
+      image: {
+        selector: "test-image-selector",
+        attribute: "test-image-attribute",
+        auxiliary: "test-image-auxiliary",
+      },
       price: {
-        selector: "test-selector",
-        attribute: "test-attribute",
-        auxiliary: "test-auxiliary",
+        selector: "test-price-selector",
+        attribute: "test-price-attribute",
+        auxiliary: "test-price-auxiliary",
       },
       extra: "test-extra",
     });
@@ -276,6 +286,16 @@ describe("getDatabaseSchema", () => {
         target: "domcontentloaded",
         history: "off",
         container: "new-container",
+        title: {
+          selector: "new-title-selector",
+          attribute: "new-title-attribute",
+          auxiliary: "new-title-auxiliary",
+        },
+        image: {
+          selector: "new-image-selector",
+          attribute: "new-image-attribute",
+          auxiliary: "new-image-auxiliary",
+        },
         price: {
           selector: "new-price-selector",
           attribute: "new-price-attribute",
@@ -288,6 +308,14 @@ describe("getDatabaseSchema", () => {
       expect(observer.target).toBe("domcontentloaded");
       expect(observer.history).toBe("off");
       expect(observer.container).toBe("new-container");
+      expect(observer.title).not.toBe(undefined);
+      expect(observer.title.selector).toBe("new-title-selector");
+      expect(observer.title.attribute).toBe("new-title-attribute");
+      expect(observer.title.auxiliary).toBe("new-title-auxiliary");
+      expect(observer.image).not.toBe(undefined);
+      expect(observer.image.selector).toBe("new-image-selector");
+      expect(observer.image.attribute).toBe("new-image-attribute");
+      expect(observer.image.auxiliary).toBe("new-image-auxiliary");
       expect(observer.price).not.toBe(undefined);
       expect(observer.price.selector).toBe("new-price-selector");
       expect(observer.price.attribute).toBe("new-price-attribute");
