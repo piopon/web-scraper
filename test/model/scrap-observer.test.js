@@ -266,9 +266,9 @@ describe("getDatabaseSchema", () => {
       expect(observer.target).toBe("domcontentloaded");
       expect(observer.history).toBe("off");
       expect(observer.container).toBe("test-container");
-      expect(observer.price.selector).toBe("test-selector");
-      expect(observer.price.attribute).toBe("test-attribute");
-      expect(observer.price.auxiliary).toBe("test-auxiliary");
+      expect(observer.price.selector).toBe("test-price-selector");
+      expect(observer.price.attribute).toBe("test-price-attribute");
+      expect(observer.price.auxiliary).toBe("test-price-auxiliary");
       expect(observer.extra).toBe(undefined);
     });
     test("which has getIdentifier method returning correct result", () => {
