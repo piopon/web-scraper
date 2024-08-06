@@ -34,6 +34,9 @@ describe("validate", () => {
   test("throws single warning when input config has one warning", () => {
     expect(() => new ScrapValidator(createTestConfig("WARN1")).validate()).toThrow(ScrapWarning);
   });
+  test("throws several warnings when input config has multiple warnings", () => {
+    expect(() => new ScrapValidator(createTestConfig("WARN2")).validate()).toThrow(ScrapWarning);
+  });
   test("returns input config when no problems found", () => {
     const inConfig = createTestConfig("OK");
     const outConfig = new ScrapValidator(inConfig).validate();
