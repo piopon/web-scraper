@@ -280,8 +280,8 @@ function composeAuthComponent(properties) {
 
 function composeInitComponent(properties) {
   return {
-    ...(properties.start ? { start: (input) => properties.start(input) } : {}),
-    ...(properties.stop ? { stop: (input) => properties.stop(input) } : {}),
+    ...(properties.start ? { start: async (input) => properties.start(input) } : {}),
+    ...(properties.stop ? { stop: async (input) => properties.stop(input) } : {}),
   };
 }
 
