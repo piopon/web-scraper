@@ -224,7 +224,7 @@ describe("getHistory()", () => {
   });
 });
 
-function createTestComponent(name, properties) {
+function createTestComponent(name, properties, wait = true) {
   const componentTypes = [];
   if (properties.auth != null) {
     componentTypes.push(ComponentType.AUTH);
@@ -240,7 +240,7 @@ function createTestComponent(name, properties) {
   }
   return {
     getName: () => name,
-    getInfo: () => ({ types: componentTypes, initWait: true }),
+    getInfo: () => ({ types: componentTypes, initWait: wait }),
     runTest: (input) => tester(input, "test"),
     ...(properties.auth ? composeAuthComponent(properties.auth) : {}),
     ...(properties.init ? composeInitComponent(properties.init) : {}),
