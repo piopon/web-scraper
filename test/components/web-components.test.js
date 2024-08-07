@@ -131,7 +131,7 @@ describe("getComponents()", () => {
 });
 
 describe("initComponents()", () => {
-  test("will run for init component type", async () => {
+  test("will run for init component type with waiting for competion", async () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
     testComponent.addComponent(createTestComponent("test123", INIT_PROPS));
@@ -141,7 +141,7 @@ describe("initComponents()", () => {
     expect(verifyObject.runStart).toBe(true);
     expect(verifyObject.runStop).toBe(false);
   });
-  test("will run for init component type", async () => {
+  test("will run for init component type without waiting for competion", async () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
     const testComponent = new WebComponents(inConfig);
     testComponent.addComponent(createTestComponent("test123", INIT_PROPS, false));
