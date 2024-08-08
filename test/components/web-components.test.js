@@ -269,7 +269,9 @@ function composeConfigComponent(properties) {
 
 function composeSlaveComponent(properties) {
   return {
-    ...(properties.masterName ? { getMaster: () => ({ name: properties.masterName }) } : {}),
+    ...(properties.masterName
+      ? { getMaster: () => ({ name: properties.masterName, actions: { afterInit: async () => {} } }) }
+      : {}),
   };
 }
 
