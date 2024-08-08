@@ -142,6 +142,17 @@ describe("initComponents()", () => {
       expect(verifyObject.runStart).toBe(true);
       expect(verifyObject.runStop).toBe(false);
     });
+    test("and run slave after waiting for competion", async () => {
+      const inConfig = { minLogLevel: LogLevel.INFO };
+      const testComponent = new WebComponents(inConfig);
+      testComponent.addComponent(createTestComponent("master", INIT_PROPS));
+      testComponent.addComponent(createTestComponent("slave", SLAVE_PROPS));
+      const verifyObject = { runStart: false, resStart: true, runStop: false, resStop: true };
+      const result = await testComponent.initComponents(ComponentType.INIT, verifyObject);
+      expect(result).toBe(true);
+      expect(verifyObject.runStart).toBe(true);
+      expect(verifyObject.runStop).toBe(false);
+    });
     test("and don't wait for competion", async () => {
       const inConfig = { minLogLevel: LogLevel.INFO };
       const testComponent = new WebComponents(inConfig);
