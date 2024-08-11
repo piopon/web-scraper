@@ -82,11 +82,19 @@ describe("created status GET routes", () => {
         },
       ],
       [
-        "query contains any existing component name",
+        "query contains top-level web component name",
         { name: "web-components" },
         {
           status: 200,
           response: [{ name: "web-components", status: "running" }],
+        },
+      ],
+      [
+        "query contains existing inner component name",
+        { name: "foo" },
+        {
+          status: 200,
+          response: [{ name: "foo", status: "running" }],
         },
       ],
       [
