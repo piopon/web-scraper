@@ -106,11 +106,19 @@ describe("created status GET routes", () => {
         },
       ],
       [
-        "query wants a full history",
+        "query wants a full history of server component",
         { name: "test-server", history: true },
         {
           status: 200,
           response: [{ name: "test-server", status: "running", history: serverHistory }],
+        },
+      ],
+      [
+        "query wants a full history of a inner component",
+        { name: "foo", history: true },
+        {
+          status: 200,
+          response: [{ name: "foo", status: "running", history: [{ entryComponent: "historyComponent" }] }],
         },
       ],
     ])("%s", async (_, inputQuery, expected) => {
