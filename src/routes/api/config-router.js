@@ -261,9 +261,6 @@ export class ConfigRouter {
       if (!indexResult.found) {
         return { success: false, message: indexResult.reason };
       }
-      if (undefined === indexResult.found.index) {
-        return { success: false, message: "Cannot remove non-deletable element: found index is not valid" };
-      }
       const removedItem = indexResult.found.parent.splice(indexResult.found.index, 1);
       return { success: true, message: `Removed configuration element with ${removedItem.at(0).getIdentifier()}` };
     });
@@ -276,10 +273,7 @@ export class ConfigRouter {
    * @param {Object} object The searched object identifier for which we want to get parent details
    * @returns parent of the searched object and the index of the object in parent
    */
-  #getParentDetails(fullConfig, { configUser = undefined, groupName = undefined, observerName = undefined }) {
-    if (configUser && configUser === fullConfig.user) {
-      return { parent: fullConfig, index: undefined };
-    }
+  #getParentDetails(fullConfig, { groupName = undefined, observerName = undefined }) {
     for (let groupIndex = 0; groupIndex < fullConfig.groups.length; groupIndex++) {
       const currentGroup = fullConfig.groups[groupIndex];
       if (groupName && groupName === currentGroup.name) {
