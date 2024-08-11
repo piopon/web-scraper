@@ -316,7 +316,7 @@ describe("created config PUT routes", () => {
       ],
       [
         "body has invalid structure",
-        observer,
+        { query: { name: "test1" }, body: observer },
         {
           status: 400,
           response: [
