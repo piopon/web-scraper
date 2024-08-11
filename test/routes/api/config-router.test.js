@@ -323,8 +323,8 @@ describe("created config PUT routes", () => {
             {
               instancePath: "",
               keyword: "required",
-              message: "must have required property 'name'",
-              params: { missingProperty: "name" },
+              message: "must have required property 'domain'",
+              params: { missingProperty: "domain" },
               schemaPath: "#/required",
             },
           ],
