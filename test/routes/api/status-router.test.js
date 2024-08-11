@@ -1,6 +1,6 @@
 import { StatusRouter } from "../../../src/routes/api/status-router.js";
 import { WebComponents } from "../../../src/components/web-components.js";
-import { LogLevel } from "../../../config/app-types.js";
+import { LogLevel, ComponentType, ComponentStatus } from "../../../config/app-types.js";
 import { ParamsParser } from "../../../src/middleware/params-parser.js";
 
 import supertest from "supertest";
@@ -32,6 +32,7 @@ describe("created status GET routes", () => {
   const serverHistory = { entry1: "history123" };
   const serverStatus = { getName: () => "test-server", getHistory: () => serverHistory };
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+  components.addComponent(createInnerComponent("foo"));
   // configue test express app server
   const testApp = express();
   testApp.use(ParamsParser.middleware);
@@ -110,3 +111,13 @@ describe("created status GET routes", () => {
     });
   });
 });
+
+function createInnerComponent(name) {
+  return {
+    getName: () => name,
+    getStatus: () => ComponentStatus.RUNNING,
+    getHistory: () => [{ entryComponent: "historyComponent" }],
+    getInfo: () => ({ types: [ComponentType.CONFIG], initWait: true }),
+    update: () => {},
+  };
+}
