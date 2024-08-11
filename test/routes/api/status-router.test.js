@@ -67,6 +67,7 @@ describe("created status GET routes", () => {
         {
           status: 200,
           response: [
+            { name: "foo", status: "running" },
             { name: "web-components", status: "running" },
             { name: "test-server", status: "running" },
           ],
