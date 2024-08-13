@@ -1,4 +1,5 @@
 import { ScrapComponent } from "../../src/model/scrap-component.js";
+import { ScrapError } from "../../src/model/scrap-exception.js";
 
 import mongoose from "mongoose";
 
@@ -103,7 +104,7 @@ describe("getDatabaseSchema", () => {
     const schema = ScrapComponent.getDatabaseSchema();
     expect(schema).not.toBe(null);
   });
-  test("gets schema used for create component", () => {
+  describe("gets schema used for create component", () => {
     const TestModel = mongoose.model("test-component", ScrapComponent.getDatabaseSchema());
     const component = new TestModel({
       unknown: "test-unknown",
@@ -114,13 +115,38 @@ describe("getDatabaseSchema", () => {
       auxiliary: "test-auxiliary",
       aux: "test-aux",
     });
-    expect(component).not.toBe(null);
-    expect(component.unknown).toBe(undefined);
-    expect(component.interval).toBe("test-interval");
-    expect(component.selector).toBe("test-selector");
-    expect(component.extra).toBe(undefined);
-    expect(component.attribute).toBe("test-attribute");
-    expect(component.auxiliary).toBe("test-auxiliary");
-    expect(component.aux).toBe(undefined);
+    test("which is not null", () => {
+      expect(component).not.toBe(null);
+    });
+    test("which has correct field values", () => {
+      expect(component.unknown).toBe(undefined);
+      expect(component.interval).toBe("test-interval");
+      expect(component.selector).toBe("test-selector");
+      expect(component.extra).toBe(undefined);
+      expect(component.attribute).toBe("test-attribute");
+      expect(component.auxiliary).toBe("test-auxiliary");
+      expect(component.aux).toBe(undefined);
+    });
+    test("which has getIdentifier method returning correct result", () => {
+      const expected = "component = test-selector | test-attribute | test-auxiliary";
+      expect(component.getIdentifier()).toBe(expected);
+    });
+    test("which has copyValues method throwing on invalid object", () => {
+      let sourceObject = { unknown: "" };
+      expect(() => component.copyValues(sourceObject)).toThrow(ScrapError);
+    });
+    test("which has copyValues method returning correct result", () => {
+      let sourceObject = {
+        interval: "new-interval",
+        selector: "new-selector",
+        attribute: "new-attribute",
+        auxiliary: "new-auxiliary",
+      };
+      expect(() => component.copyValues(sourceObject)).not.toThrow();
+      expect(component.interval).toBe("new-interval");
+      expect(component.selector).toBe("new-selector");
+      expect(component.attribute).toBe("new-attribute");
+      expect(component.auxiliary).toBe("new-auxiliary");
+    });
   });
 });

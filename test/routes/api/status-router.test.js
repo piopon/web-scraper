@@ -1,6 +1,6 @@
 import { StatusRouter } from "../../../src/routes/api/status-router.js";
 import { WebComponents } from "../../../src/components/web-components.js";
-import { LogLevel } from "../../../config/app-types.js";
+import { LogLevel, ComponentType, ComponentStatus } from "../../../config/app-types.js";
 import { ParamsParser } from "../../../src/middleware/params-parser.js";
 
 import supertest from "supertest";
@@ -32,6 +32,7 @@ describe("created status GET routes", () => {
   const serverHistory = { entry1: "history123" };
   const serverStatus = { getName: () => "test-server", getHistory: () => serverHistory };
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+  components.addComponent(createInnerComponent("foo"));
   // configue test express app server
   const testApp = express();
   testApp.use(ParamsParser.middleware);
@@ -66,6 +67,7 @@ describe("created status GET routes", () => {
         {
           status: 200,
           response: [
+            { name: "foo", status: "running" },
             { name: "web-components", status: "running" },
             { name: "test-server", status: "running" },
           ],
@@ -80,11 +82,19 @@ describe("created status GET routes", () => {
         },
       ],
       [
-        "query contains any existing component name",
+        "query contains top-level web component name",
         { name: "web-components" },
         {
           status: 200,
           response: [{ name: "web-components", status: "running" }],
+        },
+      ],
+      [
+        "query contains existing inner component name",
+        { name: "foo" },
+        {
+          status: 200,
+          response: [{ name: "foo", status: "running" }],
         },
       ],
       [
@@ -96,11 +106,19 @@ describe("created status GET routes", () => {
         },
       ],
       [
-        "query wants a full history",
+        "query wants a full history of server component",
         { name: "test-server", history: true },
         {
           status: 200,
           response: [{ name: "test-server", status: "running", history: serverHistory }],
+        },
+      ],
+      [
+        "query wants a full history of a inner component",
+        { name: "foo", history: true },
+        {
+          status: 200,
+          response: [{ name: "foo", status: "running", history: [{ entryComponent: "historyComponent" }] }],
         },
       ],
     ])("%s", async (_, inputQuery, expected) => {
@@ -110,3 +128,13 @@ describe("created status GET routes", () => {
     });
   });
 });
+
+function createInnerComponent(name) {
+  return {
+    getName: () => name,
+    getStatus: () => ComponentStatus.RUNNING,
+    getHistory: () => [{ entryComponent: "historyComponent" }],
+    getInfo: () => ({ types: [ComponentType.CONFIG], initWait: true }),
+    update: () => {},
+  };
+}

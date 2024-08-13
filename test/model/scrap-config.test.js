@@ -1,4 +1,5 @@
 import { ScrapConfig } from "../../src/model/scrap-config.js";
+import { ScrapError } from "../../src/model/scrap-exception.js";
 
 import mongoose from "mongoose";
 
@@ -71,10 +72,7 @@ describe("checkValues", () => {
       groups: [createTestGroup()],
     };
     const expected = {
-      errors: [
-        "Missing required group name",
-        "Missing required group domain",
-      ],
+      errors: ["Missing required group name", "Missing required group domain"],
       warnings: [],
     };
     expect(new ScrapConfig(inputObj).checkValues()).toStrictEqual(expected);
@@ -122,7 +120,7 @@ describe("getDatabaseSchema", () => {
     const schema = ScrapConfig.getDatabaseSchema();
     expect(schema).not.toBe(null);
   });
-  test("gets schema used for create config", () => {
+  describe("gets schema used for create config", () => {
     const constId = new mongoose.Types.ObjectId();
     const TestModel = mongoose.model("test-config", ScrapConfig.getDatabaseSchema());
     const config = new TestModel({
@@ -131,11 +129,35 @@ describe("getDatabaseSchema", () => {
       groups: [createTestGroup("group-name", "group-domain")],
       extra: "test-extra",
     });
-    expect(config).not.toBe(null);
-    expect(config.unknown).toBe(undefined);
-    expect(config.user).toBe(constId);
-    expect(config.groups.length).toBe(1);
-    expect(config.extra).toBe(undefined);
+    test("which is not null", () => {
+      expect(config).not.toBe(null);
+    });
+    test("which has correct field values", () => {
+      expect(config.unknown).toBe(undefined);
+      expect(config.user).toBe(constId);
+      expect(config.groups.length).toBe(1);
+      expect(config.extra).toBe(undefined);
+    });
+    test("which has getIdentifier method returning correct result", () => {
+      const expected = `user = ${constId}`;
+      expect(config.getIdentifier()).toBe(expected);
+    });
+    test("which has copyValues method throwing on invalid object", () => {
+      let sourceObject = { unknown: "" };
+      expect(() => config.copyValues(sourceObject)).toThrow(ScrapError);
+    });
+    test("which has copyValues method returning correct result", () => {
+      const newId = new mongoose.Types.ObjectId();
+      let sourceObject = {
+        user: newId,
+        groups: [createTestGroup("new-group", "new-domain")],
+      };
+      expect(() => config.copyValues(sourceObject)).not.toThrow();
+      expect(config.user).toBe(newId);
+      expect(config.groups.length).toBe(1);
+      expect(config.groups[0].name).toBe("new-group");
+      expect(config.groups[0].domain).toBe("new-domain");
+    });
   });
 });
 
@@ -152,8 +174,11 @@ function createTestObserver(name, path) {
   return {
     name: name,
     path: path,
-    title: { selector: "title-selector", attribute: "title-attribute", auxiliary: "title-auxiliary" },
-    image: { selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
-    price: { selector: "price-selector", attribute: "price-attribute", auxiliary: "price-attribute" },
+    target: "load",
+    history: "off",
+    container: "test-container",
+    title: { interval: "", selector: "title-selector", attribute: "title-attribute", auxiliary: "title-auxiliary" },
+    image: { interval: "", selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
+    price: { interval: "", selector: "price-selector", attribute: "price-attribute", auxiliary: "price-attribute" },
   };
 }

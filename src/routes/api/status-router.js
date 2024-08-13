@@ -30,6 +30,7 @@ export class StatusRouter {
         return;
       }
       const showHistory = request.query.history ? request.query.history : false;
+      // check inner components status
       const outputData = this.#components
         .getComponents()
         .filter((component) => (request.query.name ? component.master.getName().trim() === request.query.name : true))
@@ -40,6 +41,7 @@ export class StatusRouter {
             history: showHistory ? component.master.getHistory(request.user) : undefined,
           };
         });
+      // check parent web component status
       if (!request.query.name || this.#components.getName().trim() === request.query.name) {
         outputData.push({
           name: this.#components.getName(),
@@ -47,6 +49,7 @@ export class StatusRouter {
           history: showHistory ? this.#components.getHistory() : undefined,
         });
       }
+      // check web server status
       if (!request.query.name || this.#serverStatus.getName().trim() === request.query.name) {
         outputData.push({
           name: this.#serverStatus.getName(),

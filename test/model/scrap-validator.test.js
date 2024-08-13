@@ -25,11 +25,17 @@ describe("scrap validator", () => {
 });
 
 describe("validate", () => {
-  test("throws error when input config has errors", () => {
-    expect(() => new ScrapValidator(createTestConfig("ERR")).validate()).toThrow(ScrapError);
+  test("throws single error when input config has one error", () => {
+    expect(() => new ScrapValidator(createTestConfig("ERR1")).validate()).toThrow(ScrapError);
   });
-  test("throws warning when input config has warnings", () => {
-    expect(() => new ScrapValidator(createTestConfig("WARN")).validate()).toThrow(ScrapWarning);
+  test("throws several errors when input config has multiple errors", () => {
+    expect(() => new ScrapValidator(createTestConfig("ERR2")).validate()).toThrow(ScrapError);
+  });
+  test("throws single warning when input config has one warning", () => {
+    expect(() => new ScrapValidator(createTestConfig("WARN1")).validate()).toThrow(ScrapWarning);
+  });
+  test("throws several warnings when input config has multiple warnings", () => {
+    expect(() => new ScrapValidator(createTestConfig("WARN2")).validate()).toThrow(ScrapWarning);
   });
   test("returns input config when no problems found", () => {
     const inConfig = createTestConfig("OK");
@@ -43,14 +49,14 @@ function createTestConfig(variant) {
     user: "test-user",
     groups: [
       new ScrapGroup({
-        name: "test-group",
-        category: "WARN" === variant ? undefined : "test-category",
-        domain: "ERR" === variant ? undefined : "test-domain",
+        name: "ERR2" === variant ? "12345" : "test-group",
+        category: "WARN1" === variant || "WARN2" === variant ? undefined : "test-category",
+        domain: "ERR1" === variant || "ERR2" === variant ? undefined : "test-domain",
         observers: [
           new ScrapObserver({
             name: "test-observer",
             path: "test-path",
-            title: createTestComponent("title"),
+            title: "WARN2" === variant ? undefined : createTestComponent("title"),
             image: createTestComponent("image"),
             price: createTestComponent("price"),
           }),

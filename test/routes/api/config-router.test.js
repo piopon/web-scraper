@@ -316,15 +316,15 @@ describe("created config PUT routes", () => {
       ],
       [
         "body has invalid structure",
-        observer,
+        { query: { name: "test1" }, body: observer },
         {
           status: 400,
           response: [
             {
               instancePath: "",
               keyword: "required",
-              message: "must have required property 'name'",
-              params: { missingProperty: "name" },
+              message: "must have required property 'domain'",
+              params: { missingProperty: "domain" },
               schemaPath: "#/required",
             },
           ],

@@ -1,4 +1,5 @@
 import { ScrapGroup } from "../../src/model/scrap-group.js";
+import { ScrapError } from "../../src/model/scrap-exception.js";
 
 import mongoose from "mongoose";
 
@@ -106,11 +107,7 @@ describe("checkValues", () => {
       observers: [createTestObserver("test-name1"), createTestObserver()],
     };
     const expected = {
-      errors: [
-        "Missing required observer path",
-        "Missing required observer name",
-        "Missing required observer path"
-      ],
+      errors: ["Missing required observer path", "Missing required observer name", "Missing required observer path"],
       warnings: [],
     };
     expect(new ScrapGroup(inputObj).checkValues()).toStrictEqual(expected);
@@ -173,7 +170,7 @@ describe("getDatabaseSchema", () => {
     const schema = ScrapGroup.getDatabaseSchema();
     expect(schema).not.toBe(null);
   });
-  test("gets schema used for create group", () => {
+  describe("gets schema used for create group", () => {
     const TestModel = mongoose.model("test-group", ScrapGroup.getDatabaseSchema());
     const group = new TestModel({
       unknown: "test-unknown",
@@ -183,13 +180,40 @@ describe("getDatabaseSchema", () => {
       observers: [createTestObserver("observer-name", "observer-path")],
       extra: "test-extra",
     });
-    expect(group).not.toBe(null);
-    expect(group.unknown).toBe(undefined);
-    expect(group.name).toBe("test-name");
-    expect(group.category).toBe("test-path");
-    expect(group.domain).toBe("domcontentloaded");
-    expect(group.observers.length).toBe(1);
-    expect(group.extra).toBe(undefined);
+    test("which is not null", () => {
+      expect(group).not.toBe(null);
+    });
+    test("which has correct field values", () => {
+      expect(group.unknown).toBe(undefined);
+      expect(group.name).toBe("test-name");
+      expect(group.category).toBe("test-path");
+      expect(group.domain).toBe("domcontentloaded");
+      expect(group.observers.length).toBe(1);
+      expect(group.extra).toBe(undefined);
+    });
+    test("which has getIdentifier method returning correct result", () => {
+      const expected = `name = test-name`;
+      expect(group.getIdentifier()).toBe(expected);
+    });
+    test("which has copyValues method throwing on invalid object", () => {
+      let sourceObject = { unknown: "" };
+      expect(() => group.copyValues(sourceObject)).toThrow(ScrapError);
+    });
+    test("which has copyValues method returning correct result", () => {
+      let sourceObject = {
+        name: "new-group",
+        category: "new-category",
+        domain: "new-domain",
+        observers: [createTestObserver("new-observer-name", "new-observer-path")],
+      };
+      expect(() => group.copyValues(sourceObject)).not.toThrow();
+      expect(group.name).toBe("new-group");
+      expect(group.category).toBe("new-category");
+      expect(group.domain).toBe("new-domain");
+      expect(group.observers.length).toBe(1);
+      expect(group.observers[0].name).toBe("new-observer-name");
+      expect(group.observers[0].path).toBe("new-observer-path");
+    });
   });
 });
 
@@ -197,8 +221,11 @@ function createTestObserver(name, path) {
   return {
     name: name,
     path: path,
-    title: { selector: "title-selector", attribute: "title-attribute", auxiliary: "title-auxiliary" },
-    image: { selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
-    price: { selector: "price-selector", attribute: "price-attribute", auxiliary: "price-attribute" },
+    target: "load",
+    history: "off",
+    container: "test-container",
+    title: { interval: "", selector: "title-selector", attribute: "title-attribute", auxiliary: "title-auxiliary" },
+    image: { interval: "", selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
+    price: { interval: "", selector: "price-selector", attribute: "price-attribute", auxiliary: "price-attribute" },
   };
 }

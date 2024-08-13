@@ -1,4 +1,5 @@
 import { ScrapObserver } from "../../src/model/scrap-observer.js";
+import { ScrapError } from "../../src/model/scrap-exception.js";
 
 import mongoose from "mongoose";
 
@@ -229,7 +230,7 @@ describe("getDatabaseSchema", () => {
     const schema = ScrapObserver.getDatabaseSchema();
     expect(schema).not.toBe(null);
   });
-  test("gets schema used for create observer", () => {
+  describe("gets schema used for create observer", () => {
     const TestModel = mongoose.model("test-observer", ScrapObserver.getDatabaseSchema());
     const observer = new TestModel({
       unknown: "test-unknown",
@@ -238,23 +239,105 @@ describe("getDatabaseSchema", () => {
       target: "domcontentloaded",
       history: "off",
       container: "test-container",
+      title: {
+        interval: "1H",
+        selector: "test-title-selector",
+        attribute: "test-title-attribute",
+        auxiliary: "test-title-auxiliary",
+      },
+      image: {
+        interval: "1M",
+        selector: "test-image-selector",
+        attribute: "test-image-attribute",
+        auxiliary: "test-image-auxiliary",
+      },
       price: {
-        selector: "test-selector",
-        attribute: "test-attribute",
-        auxiliary: "test-auxiliary",
+        interval: "1m",
+        selector: "test-price-selector",
+        attribute: "test-price-attribute",
+        auxiliary: "test-price-auxiliary",
       },
       extra: "test-extra",
     });
-    expect(observer).not.toBe(null);
-    expect(observer.unknown).toBe(undefined);
-    expect(observer.name).toBe("test-name");
-    expect(observer.path).toBe("test-path");
-    expect(observer.target).toBe("domcontentloaded");
-    expect(observer.history).toBe("off");
-    expect(observer.container).toBe("test-container");
-    expect(observer.price.selector).toBe("test-selector");
-    expect(observer.price.attribute).toBe("test-attribute");
-    expect(observer.price.auxiliary).toBe("test-auxiliary");
-    expect(observer.extra).toBe(undefined);
+    test("which is not null", () => {
+      expect(observer).not.toBe(null);
+    });
+    test("which has correct field values", () => {
+      expect(observer.unknown).toBe(undefined);
+      expect(observer.name).toBe("test-name");
+      expect(observer.path).toBe("test-path");
+      expect(observer.target).toBe("domcontentloaded");
+      expect(observer.history).toBe("off");
+      expect(observer.container).toBe("test-container");
+      expect(observer.title.interval).toBe("1H");
+      expect(observer.title.selector).toBe("test-title-selector");
+      expect(observer.title.attribute).toBe("test-title-attribute");
+      expect(observer.title.auxiliary).toBe("test-title-auxiliary");
+      expect(observer.image.interval).toBe("1M");
+      expect(observer.image.selector).toBe("test-image-selector");
+      expect(observer.image.attribute).toBe("test-image-attribute");
+      expect(observer.image.auxiliary).toBe("test-image-auxiliary");
+      expect(observer.price.interval).toBe("1m");
+      expect(observer.price.selector).toBe("test-price-selector");
+      expect(observer.price.attribute).toBe("test-price-attribute");
+      expect(observer.price.auxiliary).toBe("test-price-auxiliary");
+      expect(observer.extra).toBe(undefined);
+    });
+    test("which has getIdentifier method returning correct result", () => {
+      const expected = `name = test-name`;
+      expect(observer.getIdentifier()).toBe(expected);
+    });
+    test("which has copyValues method throwing on invalid object", () => {
+      let sourceObject = { unknown: "" };
+      expect(() => observer.copyValues(sourceObject)).toThrow(ScrapError);
+    });
+    test("which has copyValues method returning correct result", () => {
+      let sourceObject = {
+        name: "new-name",
+        path: "new-path",
+        target: "domcontentloaded",
+        history: "off",
+        container: "new-container",
+        title: {
+          interval: "7d",
+          selector: "new-title-selector",
+          attribute: "new-title-attribute",
+          auxiliary: "new-title-auxiliary",
+        },
+        image: {
+          interval: "1w",
+          selector: "new-image-selector",
+          attribute: "new-image-attribute",
+          auxiliary: "new-image-auxiliary",
+        },
+        price: {
+          interval: "10y",
+          selector: "new-price-selector",
+          attribute: "new-price-attribute",
+          auxiliary: "new-price-auxiliary",
+        },
+      };
+      expect(() => observer.copyValues(sourceObject)).not.toThrow();
+      expect(observer.name).toBe("new-name");
+      expect(observer.path).toBe("new-path");
+      expect(observer.target).toBe("domcontentloaded");
+      expect(observer.history).toBe("off");
+      expect(observer.container).toBe("new-container");
+      expect(observer.title).not.toBe(undefined);
+      expect(observer.title.interval).toBe("7d");
+      expect(observer.title.selector).toBe("new-title-selector");
+      expect(observer.title.attribute).toBe("new-title-attribute");
+      expect(observer.title.auxiliary).toBe("new-title-auxiliary");
+      expect(observer.image).not.toBe(undefined);
+      expect(observer.image.interval).toBe("1w");
+      expect(observer.image.selector).toBe("new-image-selector");
+      expect(observer.image.attribute).toBe("new-image-attribute");
+      expect(observer.image.auxiliary).toBe("new-image-auxiliary");
+      expect(observer.price).not.toBe(undefined);
+      expect(observer.price.interval).toBe("10y");
+      expect(observer.price.selector).toBe("new-price-selector");
+      expect(observer.price.attribute).toBe("new-price-attribute");
+      expect(observer.price.auxiliary).toBe("new-price-auxiliary");
+    });
   });
 });

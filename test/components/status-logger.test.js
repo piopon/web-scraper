@@ -9,6 +9,8 @@ test("getName() returns correct result", () => {
 describe("debug() log", () => {
   test("will appear when setting is equal/lower than LogLevel.DEBUG", () => {
     const testLogger = new StatusLogger("test-name", LogLevel.DEBUG);
+    // call logging procedure twice to increase code coverage
+    testLogger.debug("test debug log");
     testLogger.debug("test debug log");
     expect(testLogger.getStatus().type).toBe("debug");
     expect(testLogger.getStatus().message).toBe("test debug log");
@@ -24,6 +26,8 @@ describe("debug() log", () => {
 describe("info() log", () => {
   test("will appear when setting is equal/lower than LogLevel.INFO", () => {
     const testLogger = new StatusLogger("test-name", LogLevel.INFO);
+    // call logging procedure twice to increase code coverage
+    testLogger.info("test info log");
     testLogger.info("test info log");
     expect(testLogger.getStatus().type).toBe("info");
     expect(testLogger.getStatus().message).toBe("test info log");
@@ -39,6 +43,8 @@ describe("info() log", () => {
 describe("warning() log", () => {
   test("will appear when setting is equal/lower than LogLevel.WARNING", () => {
     const testLogger = new StatusLogger("test-name", LogLevel.WARNING);
+    // call logging procedure twice to increase code coverage
+    testLogger.warning("test warning log");
     testLogger.warning("test warning log");
     expect(testLogger.getStatus().type).toBe("warning");
     expect(testLogger.getStatus().message).toBe("test warning log");
@@ -54,9 +60,17 @@ describe("warning() log", () => {
 describe("error() log", () => {
   test("will appear when setting is equal/lower than LogLevel.ERROR", () => {
     const testLogger = new StatusLogger("test-name", LogLevel.ERROR);
+    // call logging procedure twice to increase code coverage
+    testLogger.error("test error log");
     testLogger.error("test error log");
     expect(testLogger.getStatus().type).toBe("error");
     expect(testLogger.getStatus().message).toBe("test error log");
+  });
+  test("will NOT appear when setting has invalid smaller value", () => {
+    const testLogger = new StatusLogger("test-name", { value: -1 });
+    testLogger.error("test error log");
+    expect(testLogger.getStatus().type).toBe("");
+    expect(testLogger.getStatus().message).toBe("No status logged yet");
   });
 });
 

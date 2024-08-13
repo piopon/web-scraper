@@ -89,7 +89,11 @@ describe("created auth GET routes", () => {
 });
 
 describe("created auth POST routes", () => {
-  const mockResult = { find: (user) => { [{email: user.email, password: "pass", save: () => {} }] } };
+  const mockResult = {
+    find: (user) => {
+      [{ email: user.email, password: "pass", save: () => {} }];
+    },
+  };
   jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
   const testRouter = new AuthRouter(components, passport);

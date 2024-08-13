@@ -131,15 +131,49 @@ describe("getComponents()", () => {
 });
 
 describe("initComponents()", () => {
-  test("will run for init component type", async () => {
-    const inConfig = { minLogLevel: LogLevel.INFO };
-    const testComponent = new WebComponents(inConfig);
-    testComponent.addComponent(createTestComponent("test123", INIT_PROPS));
-    const verifyObject = { runStart: false, resStart: true, runStop: false, resStop: true };
-    const result = await testComponent.initComponents(ComponentType.INIT, verifyObject);
-    expect(result).toBe(true);
-    expect(verifyObject.runStart).toBe(true);
-    expect(verifyObject.runStop).toBe(false);
+  describe("will correctly run for init component type", () => {
+    test("and wait for competion", async () => {
+      const inConfig = { minLogLevel: LogLevel.INFO };
+      const testComponent = new WebComponents(inConfig);
+      testComponent.addComponent(createTestComponent("test123", INIT_PROPS));
+      const verifyObject = { runStart: false, resStart: true, runStop: false, resStop: true };
+      const result = await testComponent.initComponents(ComponentType.INIT, verifyObject);
+      expect(result).toBe(true);
+      expect(verifyObject.runStart).toBe(true);
+      expect(verifyObject.runStop).toBe(false);
+    });
+    test("and run slave after waiting for competion", async () => {
+      const inConfig = { minLogLevel: LogLevel.INFO };
+      const testComponent = new WebComponents(inConfig);
+      testComponent.addComponent(createTestComponent("master", INIT_PROPS));
+      testComponent.addComponent(createTestComponent("slave", SLAVE_PROPS));
+      const verifyObject = { runStart: false, resStart: true, runStop: false, resStop: true };
+      const result = await testComponent.initComponents(ComponentType.INIT, verifyObject);
+      expect(result).toBe(true);
+      expect(verifyObject.runStart).toBe(true);
+      expect(verifyObject.runStop).toBe(false);
+    });
+    test("and don't wait for competion", async () => {
+      const inConfig = { minLogLevel: LogLevel.INFO };
+      const testComponent = new WebComponents(inConfig);
+      testComponent.addComponent(createTestComponent("test123", INIT_PROPS, false));
+      const verifyObject = { runStart: false, resStart: true, runStop: false, resStop: true };
+      const result = await testComponent.initComponents(ComponentType.INIT, verifyObject);
+      expect(result).toBe(true);
+      expect(verifyObject.runStart).toBe(true);
+      expect(verifyObject.runStop).toBe(false);
+    });
+    test("and run slave after not waiting for competion", async () => {
+      const inConfig = { minLogLevel: LogLevel.INFO };
+      const testComponent = new WebComponents(inConfig);
+      testComponent.addComponent(createTestComponent("master", INIT_PROPS, false));
+      testComponent.addComponent(createTestComponent("slave", SLAVE_PROPS));
+      const verifyObject = { runStart: false, resStart: true, runStop: false, resStop: true };
+      const result = await testComponent.initComponents(ComponentType.INIT, verifyObject);
+      expect(result).toBe(true);
+      expect(verifyObject.runStart).toBe(true);
+      expect(verifyObject.runStop).toBe(false);
+    });
   });
   test("will fail when init component cannot be started", async () => {
     const inConfig = { minLogLevel: LogLevel.INFO };
@@ -224,7 +258,7 @@ describe("getHistory()", () => {
   });
 });
 
-function createTestComponent(name, properties) {
+function createTestComponent(name, properties, wait = true) {
   const componentTypes = [];
   if (properties.auth != null) {
     componentTypes.push(ComponentType.AUTH);
@@ -240,7 +274,7 @@ function createTestComponent(name, properties) {
   }
   return {
     getName: () => name,
-    getInfo: () => ({ types: componentTypes, initWait: true }),
+    getInfo: () => ({ types: componentTypes, initWait: wait }),
     runTest: (input) => tester(input, "test"),
     ...(properties.auth ? composeAuthComponent(properties.auth) : {}),
     ...(properties.init ? composeInitComponent(properties.init) : {}),
@@ -257,7 +291,9 @@ function composeConfigComponent(properties) {
 
 function composeSlaveComponent(properties) {
   return {
-    ...(properties.masterName ? { getMaster: () => ({ name: properties.masterName }) } : {}),
+    ...(properties.masterName
+      ? { getMaster: () => ({ name: properties.masterName, actions: { afterInit: async () => {} } }) }
+      : {}),
   };
 }
 
@@ -270,8 +306,8 @@ function composeAuthComponent(properties) {
 
 function composeInitComponent(properties) {
   return {
-    ...(properties.start ? { start: (input) => properties.start(input) } : {}),
-    ...(properties.stop ? { stop: (input) => properties.stop(input) } : {}),
+    ...(properties.start ? { start: async (input) => properties.start(input) } : {}),
+    ...(properties.stop ? { stop: async (input) => properties.stop(input) } : {}),
   };
 }
 
