@@ -2,7 +2,7 @@ import { WebServer } from "../../src/components/web-server.js";
 import { WebComponents } from "../../src/components/web-components.js";
 import { ComponentType, LogLevel } from "../../config/app-types.js";
 
-const TEST_PORT = 123;
+const TEST_PORT = 1234;
 
 describe("run() method", () => {
   test("should start server and not throw when no INIT components", async () => {
