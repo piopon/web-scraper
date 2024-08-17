@@ -1,10 +1,12 @@
 import { AppConfig } from "../../config/app-config.js";
 import { LogLevel } from "../../config/app-types.js";
 
+import path from "path";
+
 describe("getConfig", () => {
   test("returns correct result", () => {
     const testConfig = new AppConfig().getConfig();
-    expect(testConfig.usersDataPath).toMatch(/web-scraper\\users/);
+    expect(testConfig.usersDataPath).toMatch("web-scraper"+path.sep+"users");
     expect(testConfig.minLogLevel).toBe(LogLevel.INFO);
     expect(testConfig.serverConfig).not.toBe(null);
     expect(testConfig.serverConfig.port).toBe("5000");
