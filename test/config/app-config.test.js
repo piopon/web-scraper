@@ -9,7 +9,7 @@ describe("getConfig", () => {
     expect(testConfig.usersDataPath).toMatch("web-scraper" + path.sep + "users");
     expect(testConfig.minLogLevel).toBe(LogLevel.INFO);
     expect(testConfig.serverConfig).not.toBe(null);
-    expect(testConfig.serverConfig.port).toBe("5000");
+    expect(testConfig.serverConfig.port).toBe(5000);
     expect(testConfig.databaseConfig).not.toBe(null);
     expect(testConfig.databaseConfig.url).toBe("localhost");
     expect(testConfig.databaseConfig.name).toBe("web-scraper");
