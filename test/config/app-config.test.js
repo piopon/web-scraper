@@ -13,7 +13,7 @@ describe("getConfig", () => {
     expect(testConfig.databaseConfig).not.toBe(null);
     expect(testConfig.databaseConfig.url).toBe("localhost");
     expect(testConfig.databaseConfig.name).toBe("web-scraper");
-    expect(testConfig.databaseConfig.port).toBe("27017");
+    expect(testConfig.databaseConfig.port).toBe(27017);
     expect(testConfig.databaseConfig.user).toBe("");
     expect(testConfig.databaseConfig.password).toBe("");
     expect(testConfig.databaseConfig.timeout).toBe(15_000);
