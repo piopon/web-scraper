@@ -34,8 +34,8 @@ export class AppConfig {
         url: process.env.DB_ADDRESS || "localhost",
         name: process.env.DB_NAME || "web-scraper",
         port: parseInt(process.env.DB_PORT) || 27017,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
+        user: process.env.DB_USER || "",
+        password: process.env.DB_PASSWORD || "",
         timeout: parseInt(process.env.DB_TIMEOUT) || 15_000,
       },
       scraperConfig: {
