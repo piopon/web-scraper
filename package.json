@@ -42,6 +42,14 @@
   },
   "jest": {
     "slowTestThreshold": 15,
-    "transform": {}
+    "transform": {},
+    "coverageThreshold": {
+      "global": {
+        "branches": 65,
+        "functions": 80,
+        "lines": 70,
+        "statements": 70
+      }
+    }
   }
 }

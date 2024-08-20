@@ -28,15 +28,15 @@ export class AppConfig {
       usersDataPath: path.join(this.#rootDir, "users"),
       minLogLevel: LogLevel.INFO,
       serverConfig: {
-        port: process.env.SERVER_PORT || 5000,
+        port: parseInt(process.env.SERVER_PORT) || 5000,
       },
       databaseConfig: {
         url: process.env.DB_ADDRESS || "localhost",
         name: process.env.DB_NAME || "web-scraper",
-        port: process.env.DB_PORT || 27017,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        timeout: process.env.DB_TIMEOUT || 15_000,
+        port: parseInt(process.env.DB_PORT) || 27017,
+        user: process.env.DB_USER || "",
+        password: process.env.DB_PASSWORD || "",
+        timeout: parseInt(process.env.DB_TIMEOUT) || 15_000,
       },
       scraperConfig: {
         loginInterval: 30,
