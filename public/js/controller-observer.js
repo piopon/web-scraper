@@ -100,8 +100,9 @@ export class ObserversController {
         confirmDialog.querySelector("label").innerText = `delete observer: ${target.dataset.id}?`
         confirmDialog.showModal();
       } else if ("view" === selectedAction) {
-        const path = document.querySelector("input.observer-path").value;
-        window.open(this.#expandedGroup.domain + "/" + path, '_blank').focus();
+        const currObserver = document.querySelector("div.modal-dialog.init-reveal");
+        const currPath = currObserver.querySelector("input.observer-path").value;
+        window.open(this.#expandedGroup.domain + "/" + currPath, '_blank').focus();
       } else if ("cancel" === selectedAction) {
         this.#hideDialog(closeButton);
         this.#restoreObserverData(target);
