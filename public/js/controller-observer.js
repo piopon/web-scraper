@@ -156,7 +156,7 @@ export class ObserversController {
   #deleteObserver(closeButton, deletedObserverId) {
     ObserversService.deleteObserver(deletedObserverId)
       .then((data) => {
-        this.#reloadObservers(this.#expandedGroup);
+        this.#reloadObservers(this.#expandedGroup.name);
         this.#hideDialog(closeButton);
         this.#clearObserverData();
         CommonController.showToastSuccess(data);
@@ -208,7 +208,7 @@ export class ObserversController {
     this.#openedObserver = ObserversView.fromHtml(observerTarget.parentNode);
     // if stored observer does not have a name then it's a new one = we have to remember the parent ID
     if (!this.#openedObserver.name) {
-      this.#openedObserver = this.#expandedGroup;
+      this.#openedObserver = this.#expandedGroup.name;
     }
   }
 

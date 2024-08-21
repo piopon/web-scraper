@@ -289,7 +289,7 @@ export class GroupsController {
       });
       this.#storeGroupData(groupColumn.parentNode);
       // notify other controllers that group with specified name was expanded
-      this.emitEvent("group-expanded", groupColumn.querySelector("h2.group-title").innerText);
+      this.emitEvent("group-expanded", this.#groupExpanded);
     }
   }
 
