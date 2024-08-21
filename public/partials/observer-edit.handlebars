@@ -20,9 +20,7 @@
           {{> component name="price" component=observer.price }}
         </div>
         <div class="observer-buttons">
-          <div class="modal-close-btn view" data-action="view" data-id="{{observer.name}}">
-            <a href="{{parent.domain}}/{{observer.path}}" target="_blank">open</a>
-          </div>
+          <div class="modal-close-btn view" data-action="view" data-id="{{observer.name}}">view</div>
           <div class="modal-close-btn accept" data-action="update" data-id="{{observer.name}}">update</div>
           <div class="modal-close-btn delete" data-action="delete" data-id="{{observer.name}}">delete</div>
           <div class="modal-close-btn cancel" data-action="cancel">cancel</div>
