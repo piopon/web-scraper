@@ -107,6 +107,13 @@ div.modal-close-btn {
   box-shadow: 2px 2px 5px black;
 }
 
+div.modal-close-btn[disabled] {
+  pointer-events: none;
+  background-color: #e5e5e5;
+  border-color: #787878;
+  color: #646464;
+}
+
 .accept {
   background-color: limegreen;
   margin-right: 0.25rem;
