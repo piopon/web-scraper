@@ -122,11 +122,7 @@ export class ObserversController {
     const observerPath = observer.querySelector("input.observer-path");
     const observerViewBtn = observer.querySelector("div.modal-close-btn.view");
     observerPath.addEventListener("input", () => {
-      if (observerPath.value.length === 0) {
-        observerViewBtn.setAttribute("disabled", "true");
-      } else {
-        observerViewBtn.removeAttribute("disabled");
-      }
+      CommonController.enableElement(observerViewBtn, observerPath.value.length > 0);
     });
   }
 
