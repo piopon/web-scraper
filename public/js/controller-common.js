@@ -31,6 +31,14 @@ export class CommonController {
     return tempContainer.firstChild;
   }
 
+  static enableElement(element, enabled) {
+    if (enabled) {
+      element.removeAttribute("disabled");
+    } else {
+      element.setAttribute("disabled", "true");
+    }
+  }
+
   /**
    * Method used to show error toast popup (and underlying error message in console)
    * @param {String} message The message to be displayed in the toast
