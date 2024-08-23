@@ -167,6 +167,16 @@ dialog.delete-group-dialog button:hover {
   background-color: slateblue;
 }
 
+div.modal-close-btn.view {
+  background-color: whitesmoke;
+  margin-right: 0.25rem;
+  width: 5rem;
+}
+
+div.modal-close-btn.view:hover {
+  background-color: white;
+}
+
 .cancel {
   background-color: orange;
   margin-left: 0.25rem;
