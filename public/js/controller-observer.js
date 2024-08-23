@@ -74,7 +74,7 @@ export class ObserversController {
       observerDialog.classList.add("init-reveal");
       event.stopPropagation();
       this.#storeObserverData(target);
-      this.#bindObserverPathListener(observerDialog);
+      this.#initializeDialog(observerDialog);
     });
   }
 
@@ -118,9 +118,9 @@ export class ObserversController {
    * Method used to add change input action listeners to observers path input
    * @param {Element} observer The observer which path input should be listened
    */
-  #bindObserverPathListener(observer) {
-    const observerPath = observer.querySelector("input.observer-path");
-    const observerViewBtn = observer.querySelector("div.modal-close-btn.view");
+  #initializeDialog(dialog) {
+    const observerPath = dialog.querySelector("input.observer-path");
+    const observerViewBtn = dialog.querySelector("div.modal-close-btn.view");
     CommonController.enableElement(observerViewBtn, observerPath.value.length > 0);
     observerPath.addEventListener("input", () => {
       CommonController.enableElement(observerViewBtn, observerPath.value.length > 0);
