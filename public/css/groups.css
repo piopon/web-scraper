@@ -171,6 +171,7 @@ div.modal-close-btn.view {
   background-color: whitesmoke;
   margin-right: 0.25rem;
   width: 5rem;
+  min-width: 5rem;
 }
 
 div.modal-close-btn.view:hover {
