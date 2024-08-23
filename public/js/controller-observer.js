@@ -74,16 +74,7 @@ export class ObserversController {
       observerDialog.classList.add("init-reveal");
       event.stopPropagation();
       this.#storeObserverData(target);
-      // add listener to the opened obsever path input
-      const observerPath = observerDialog.querySelector("input.observer-path");
-      observerPath.addEventListener("input", () => {
-        const viewButton = observerDialog.querySelector("div.modal-close-btn.view");
-        if (observerPath.value.length === 0) {
-          viewButton.setAttribute("disabled", "true");
-        } else {
-          viewButton.removeAttribute("disabled");
-        }
-      })
+      this.#bindObserverPathListener(observerDialog);
     });
   }
 
@@ -120,6 +111,18 @@ export class ObserversController {
         CommonController.showToastError(`Unsupported accept button action: ${selectedAction}`);
       }
       clickEvent.stopPropagation();
+    });
+  }
+
+  #bindObserverPathListener(observer) {
+    const observerPath = observer.querySelector("input.observer-path");
+    const observerViewBtn = observer.querySelector("div.modal-close-btn.view");
+    observerPath.addEventListener("input", () => {
+      if (observerPath.value.length === 0) {
+        observerViewBtn.setAttribute("disabled", "true");
+      } else {
+        observerViewBtn.removeAttribute("disabled");
+      }
     });
   }
 
