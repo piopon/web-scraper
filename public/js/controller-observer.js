@@ -114,6 +114,10 @@ export class ObserversController {
     });
   }
 
+  /**
+   * Method used to add change input action listeners to observers path input
+   * @param {Element} observer The observer which path input should be listened
+   */
   #bindObserverPathListener(observer) {
     const observerPath = observer.querySelector("input.observer-path");
     const observerViewBtn = observer.querySelector("div.modal-close-btn.view");
