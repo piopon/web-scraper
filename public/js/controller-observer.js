@@ -74,6 +74,16 @@ export class ObserversController {
       observerDialog.classList.add("init-reveal");
       event.stopPropagation();
       this.#storeObserverData(target);
+      // add listener to the opened obsever path input
+      const observerPath = observerDialog.querySelector("input.observer-path");
+      observerPath.addEventListener("input", () => {
+        const viewButton = observerDialog.querySelector("div.modal-close-btn.view");
+        if (observerPath.value.length === 0) {
+          viewButton.setAttribute("disabled", "true");
+        } else {
+          viewButton.removeAttribute("disabled");
+        }
+      })
     });
   }
 
