@@ -121,6 +121,7 @@ export class ObserversController {
   #bindObserverPathListener(observer) {
     const observerPath = observer.querySelector("input.observer-path");
     const observerViewBtn = observer.querySelector("div.modal-close-btn.view");
+    CommonController.enableElement(observerViewBtn, observerPath.value.length > 0);
     observerPath.addEventListener("input", () => {
       CommonController.enableElement(observerViewBtn, observerPath.value.length > 0);
     });
