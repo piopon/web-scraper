@@ -31,6 +31,11 @@ export class CommonController {
     return tempContainer.firstChild;
   }
 
+  /**
+   * Method used to update the enabled state of each HTML element
+   * @param {Element} element The HTML element which enabled state want to update
+   * @param {Boolean} enabled Flag indicating if element should be enabled (true) or not (false)
+   */
   static enableElement(element, enabled) {
     if (enabled) {
       element.removeAttribute("disabled");
