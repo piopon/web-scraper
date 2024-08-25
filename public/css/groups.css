@@ -132,6 +132,15 @@ div.modal-close-btn[disabled] {
   background-color: tomato;
 }
 
+.view {
+  background-color: dodgerblue;
+  margin-right: 0.25rem;
+}
+
+.view:hover {
+  background-color: skyblue;
+}
+
 label.delete-group-label {
   display: block;
   width: 100%;
@@ -168,14 +177,8 @@ dialog.delete-group-dialog button:hover {
 }
 
 div.modal-close-btn.view {
-  background-color: dodgerblue;
-  margin-right: 0.25rem;
   width: 5rem;
   min-width: 5rem;
-}
-
-div.modal-close-btn.view:hover {
-  background-color: skyblue;
 }
 
 .cancel {
