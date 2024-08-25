@@ -115,8 +115,8 @@ export class ObserversController {
   }
 
   /**
-   * Method used to add change input action listeners to observers path input
-   * @param {Element} observer The observer which path input should be listened
+   * Method used intialize observer dialog: init buttons state and listeners binding
+   * @param {Element} dialog The dialog to be initialized
    */
   #initializeDialog(dialog) {
     const observerPath = dialog.querySelector("input.observer-path");
