@@ -165,11 +165,13 @@ export class ObserversView {
   static #getObserverModalButtonsHtml(groupId, observer) {
     if (observer === undefined) {
       // no observer provided = we are adding a new one
-      return `<div class="modal-close-btn accept" data-action="add" data-id="${groupId}">add</div>
+      return `<div class="modal-close-btn view" data-action="view" data-id="${groupId}">view</div>
+              <div class="modal-close-btn accept" data-action="add" data-id="${groupId}">add</div>
               <div class="modal-close-btn cancel" data-action="cancel">cancel</div>`;
     }
     // provided is an edited one
-    return `<div class="modal-close-btn accept" data-action="update" data-id="${observer.name}">update</div>
+    return `<div class="modal-close-btn view" data-action="view" data-id="${observer.name}">view</div>
+            <div class="modal-close-btn accept" data-action="update" data-id="${observer.name}">update</div>
             <div class="modal-close-btn delete" data-action="delete" data-id="${observer.name}">delete</div>
             <div class="modal-close-btn cancel" data-action="cancel">cancel</div>`;
   }

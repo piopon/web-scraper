@@ -74,6 +74,7 @@ export class ObserversController {
       observerDialog.classList.add("init-reveal");
       event.stopPropagation();
       this.#storeObserverData(target);
+      this.#initializeDialog(observerDialog);
     });
   }
 
@@ -99,6 +100,10 @@ export class ObserversController {
         }, { once: true });
         confirmDialog.querySelector("label").innerText = `delete observer: ${target.dataset.id}?`
         confirmDialog.showModal();
+      } else if ("view" === selectedAction) {
+        const currObserver = document.querySelector("div.modal-dialog.init-reveal");
+        const currPath = currObserver.querySelector("input.observer-path").value;
+        window.open(this.#expandedGroup.domain + "/" + currPath, '_blank').focus();
       } else if ("cancel" === selectedAction) {
         this.#hideDialog(closeButton);
         this.#restoreObserverData(target);
@@ -106,6 +111,19 @@ export class ObserversController {
         CommonController.showToastError(`Unsupported accept button action: ${selectedAction}`);
       }
       clickEvent.stopPropagation();
+    });
+  }
+
+  /**
+   * Method used intialize observer dialog: init buttons state and listeners binding
+   * @param {Element} dialog The dialog to be initialized
+   */
+  #initializeDialog(dialog) {
+    const observerPath = dialog.querySelector("input.observer-path");
+    const observerViewBtn = dialog.querySelector("div.modal-close-btn.view");
+    CommonController.enableElement(observerViewBtn, observerPath.value.length > 0);
+    observerPath.addEventListener("input", () => {
+      CommonController.enableElement(observerViewBtn, observerPath.value.length > 0);
     });
   }
 
@@ -156,7 +174,7 @@ export class ObserversController {
   #deleteObserver(closeButton, deletedObserverId) {
     ObserversService.deleteObserver(deletedObserverId)
       .then((data) => {
-        this.#reloadObservers(this.#expandedGroup);
+        this.#reloadObservers(this.#expandedGroup.name);
         this.#hideDialog(closeButton);
         this.#clearObserverData();
         CommonController.showToastSuccess(data);
@@ -208,7 +226,7 @@ export class ObserversController {
     this.#openedObserver = ObserversView.fromHtml(observerTarget.parentNode);
     // if stored observer does not have a name then it's a new one = we have to remember the parent ID
     if (!this.#openedObserver.name) {
-      this.#openedObserver = this.#expandedGroup;
+      this.#openedObserver = this.#expandedGroup.name;
     }
   }
 
