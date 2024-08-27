@@ -81,6 +81,13 @@ export class ComponentsController {
         this.#updateCardEnableState(cardMode, cardFields);
       });
     });
+    const imageFileButtons = document.querySelectorAll("input.component-image-auxiliary-button");
+    imageFileButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const fileSelector = document.querySelector('input.component-image-auxiliary-file');
+        fileSelector.click();
+      });
+    });
   }
 
   /**
