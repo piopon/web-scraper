@@ -122,12 +122,6 @@ export class ComponentsController {
    * @param {Boolean} enabled The new enable state of specified field
    */
   #updateFieldEnableState(field, enabled) {
-    if (enabled) {
-      field.disabled = false;
-    } else {
-      // we need to treat image auxiliary field individually since it's a button with label when value is empty
-      field.value = field.classList.contains("component-image-auxiliary") ? "Select image" : "";
-      field.disabled = true;
-    }
+    field.disabled = !enabled;
   }
 }
