@@ -213,6 +213,10 @@ label.component-image-label {
   display: flex;
 }
 
+.component-image-auxiliary-file {
+  display: none;
+}
+
 .component-image-auxiliary {
   cursor: pointer;
   width: 100%;
