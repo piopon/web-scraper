@@ -209,6 +209,10 @@ label.component-image-label {
   box-shadow: 2px 2px 5px black;
 }
 
+.component-image-file-container {
+  display: flex;
+}
+
 .component-image-auxiliary {
   cursor: pointer;
   width: 100%;
