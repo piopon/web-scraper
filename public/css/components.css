@@ -217,7 +217,7 @@ label.component-image-label {
   display: none;
 }
 
-.component-image-auxiliary {
+.component-image-auxiliary-button {
   cursor: pointer;
   width: 100%;
   height: 2rem;
@@ -229,7 +229,24 @@ label.component-image-label {
   box-shadow: 2px 2px 5px black;
 }
 
-.component-image-auxiliary:hover {
+.component-image-auxiliary-button:hover {
+  color: white;
+  background-color: slateblue;
+}
+
+.component-image-auxiliary-submit {
+  cursor: pointer;
+  width: 100%;
+  height: 2rem;
+  font-size: 1rem;
+  color: black;
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: 2px 2px 5px black;
+}
+
+.component-image-auxiliary-submit:hover {
   color: white;
   background-color: slateblue;
 }
