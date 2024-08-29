@@ -234,6 +234,11 @@ label.component-image-label {
   background-color: slateblue;
 }
 
+.component-image-auxiliary-button[disabled] {
+  cursor: default;
+  pointer-events: none;
+}
+
 .component-image-auxiliary-submit {
   cursor: pointer;
   width: 100%;
@@ -249,6 +254,11 @@ label.component-image-label {
 .component-image-auxiliary-submit:hover {
   color: white;
   background-color: slateblue;
+}
+
+.component-image-auxiliary-submit[disabled] {
+  cursor: default;
+  pointer-events: none;
 }
 
 label.component-price-label {
