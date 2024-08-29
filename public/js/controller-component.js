@@ -92,7 +92,7 @@ export class ComponentsController {
     imageFileSelectors.forEach((selector) => {
       selector.addEventListener("change", (event) => {
         if (event.target.files[0]) {
-          const fileButton = document.querySelector('input.component-image-auxiliary-button');
+          const fileButton = event.target.nextElementSibling;
           fileButton.value = event.target.files[0].name;
         }
       });
