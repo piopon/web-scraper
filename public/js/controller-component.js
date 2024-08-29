@@ -120,11 +120,19 @@ export class ComponentsController {
    * @param {Element} cardFields The card fields parent HTML element container
    */
   #updateCardEnableState(toggleMode, cardFields) {
-    const currSelector = cardFields.querySelector("input[name='selector']");
-    const currAttribute = cardFields.querySelector("input[name='attribute']");
-    const currAuxiliary = cardFields.querySelector("input[name='auxiliary']");
-    if (currSelector == undefined || currAttribute == undefined || currAuxiliary == undefined) {
-      CommonController.showToastError(`Cannot update card enable state`);
+    const currSelector = cardFields.querySelectorAll("input[name='selector']");
+    const currAttribute = cardFields.querySelectorAll("input[name='attribute']");
+    const currAuxiliary = cardFields.querySelectorAll("input[name='auxiliary']");
+    if (currSelector == undefined || 0 === currSelector.length) {
+      CommonController.showToastError(`Cannot update card selector enable state`);
+      return;
+    }
+    if (currAttribute == undefined || 0 === currAttribute.length) {
+      CommonController.showToastError(`Cannot update card attribute enable state`);
+      return;
+    }
+    if (currAuxiliary == undefined || 0 === currAuxiliary.length) {
+      CommonController.showToastError(`Cannot update card auxiliary enable state`);
       return;
     }
     this.#updateFieldEnableState(currSelector, "auto" === toggleMode);
