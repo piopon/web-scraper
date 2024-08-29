@@ -142,10 +142,10 @@ export class ComponentsController {
 
   /**
    * The method used to update the enable state (and by definition the value) of a specific field
-   * @param {Element} field The field which enable state should be updated
+   * @param {Element} fieldArray The fields array which enable states should be updated
    * @param {Boolean} enabled The new enable state of specified field
    */
-  #updateFieldEnableState(field, enabled) {
-    field.disabled = !enabled;
+  #updateFieldEnableState(fieldArray, enabled) {
+    fieldArray.forEach(field => field.disabled = !enabled);
   }
 }
