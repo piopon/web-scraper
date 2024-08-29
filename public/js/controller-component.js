@@ -88,6 +88,15 @@ export class ComponentsController {
         fileSelector.click();
       });
     });
+    const imageFileSelectors = document.querySelectorAll("input.component-image-auxiliary-file");
+    imageFileSelectors.forEach((selector) => {
+      selector.addEventListener("change", (event) => {
+        if (event.target.files[0]) {
+          const fileButton = document.querySelector('input.component-image-auxiliary-button');
+          fileButton.value = event.target.files[0].name;
+        }
+      });
+    });
   }
 
   /**
