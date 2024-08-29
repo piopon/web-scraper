@@ -83,8 +83,8 @@ export class ComponentsController {
     });
     const imageFileButtons = document.querySelectorAll("input.component-image-auxiliary-button");
     imageFileButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const fileSelector = document.querySelector('input.component-image-auxiliary-file');
+      button.addEventListener("click", (event) => {
+        const fileSelector = event.target.previousElementSibling;
         fileSelector.click();
       });
     });
