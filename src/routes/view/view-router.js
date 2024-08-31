@@ -46,6 +46,10 @@ export class ViewRouter {
     );
   }
 
+  /**
+   * Method used to create POST method routes and add them to the router object
+   * @param {Object} router The router object with POST method routes defined
+   */
   #createPostRoutes(router) {
     router.post("/image", AccessChecker.canViewContent, async (request, response) => {
       console.log("image uploaded!");
