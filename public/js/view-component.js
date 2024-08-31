@@ -120,7 +120,7 @@ export class ComponentsView {
                   </div>
                   <div class="widget">
                     <label class="component-image-label">auxiliary:</label>
-                    <form action="/" method="POST" enctype="multipart/form-data">
+                    <form action="/image" method="POST" enctype="multipart/form-data">
                       <div class="component-image-file-container">
                         <input type="file" name="auxiliary" class="component-image-auxiliary-file" accept="image/*"/>
                         <input type="button" name="auxiliary" class="component-image-auxiliary-button" value="${auxButton}"/>
