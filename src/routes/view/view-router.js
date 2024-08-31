@@ -13,6 +13,7 @@ export class ViewRouter {
   createRoutes() {
     const router = express.Router();
     this.#createGetRoutes(router);
+    this.#createPostRoutes(router);
 
     return router;
   }
@@ -43,6 +44,13 @@ export class ViewRouter {
         statusTypes: this.#getSupportedStatusTypes(),
       })
     );
+  }
+
+  #createPostRoutes(router) {
+    router.post("/image", AccessChecker.canViewContent, async (request, response) => {
+      console.log("image uploaded!");
+      response.sendStatus(200);
+    });
   }
 
   /**
