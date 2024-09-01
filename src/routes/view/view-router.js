@@ -4,6 +4,8 @@ import { ScrapConfig } from "../../model/scrap-config.js";
 
 import express from "express";
 import moment from "moment";
+import path from "path";
+import fs from "fs";
 
 export class ViewRouter {
   #dataFilePath = undefined;
@@ -62,8 +64,12 @@ export class ViewRouter {
       if (!inputImage) {
         return response.status(400).json({message: "No image provided"});
       }
-      console.log(inputImage);
-      response.sendStatus(200);
+      const newImagePath = path.join(this.#dataFilePath, request.user.email, "images", inputImage.name)
+      const newImageRoot = path.dirname(newImagePath);
+      if (!fs.existsSync(newImageRoot)) {
+        fs.mkdirSync(newImageRoot, { recursive: true });
+      }
+      response.status(200).json({message: "Image uploaded"});
     });
   }
 
