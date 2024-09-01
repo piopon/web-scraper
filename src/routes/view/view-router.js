@@ -64,6 +64,11 @@ export class ViewRouter {
       if (!inputImage) {
         return response.status(400).json({message: "No image provided"});
       }
+      // verify if input file is an image (has appropriate MIME type)
+      const imageMimeRegex = /^image/;
+      if (!imageMimeRegex.test(inputImage.mimetype)) {
+        return response.status(400).json({message: "Not an image file"});
+      }
       const newImagePath = path.join(this.#dataFilePath, request.user.email, "images", inputImage.name)
       const newImageRoot = path.dirname(newImagePath);
       if (!fs.existsSync(newImageRoot)) {
