@@ -52,7 +52,11 @@ export class ViewRouter {
    */
   #createPostRoutes(router) {
     router.post("/image", AccessChecker.canViewContent, async (request, response) => {
-      console.log(request.files);
+      const inputImage = request.files.auxiliary;
+      if (!inputImage) {
+        return response.status(400).json({message: "No image provided"});
+      }
+      console.log(inputImage);
       response.sendStatus(200);
     });
   }
