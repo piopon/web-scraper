@@ -52,7 +52,7 @@ export class ViewRouter {
    */
   #createPostRoutes(router) {
     router.post("/image", AccessChecker.canViewContent, async (request, response) => {
-      console.log("image uploaded!");
+      console.log(request.files);
       response.sendStatus(200);
     });
   }
