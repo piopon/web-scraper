@@ -69,6 +69,7 @@ export class ViewRouter {
       if (!fs.existsSync(newImageRoot)) {
         fs.mkdirSync(newImageRoot, { recursive: true });
       }
+      inputImage.mv(newImagePath);
       response.status(200).json({message: "Image uploaded"});
     });
   }
