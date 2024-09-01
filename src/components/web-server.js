@@ -82,7 +82,12 @@ export class WebServer {
     server.use(express.json());
     server.use(express.urlencoded({ extended: false }));
     server.use(flash());
-    server.use(fileUpload());
+    server.use(fileUpload({
+      abortOnLimit: true,
+      limits: {
+        fileSize: 10_000_000,
+      }
+    }));
     server.use(session(this.#getSessionConfiguration()));
     server.use(passport.initialize());
     server.use(passport.session());
