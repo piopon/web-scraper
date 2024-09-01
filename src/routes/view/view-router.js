@@ -6,6 +6,12 @@ import express from "express";
 import moment from "moment";
 
 export class ViewRouter {
+  #dataFilePath = undefined;
+
+  constructor(dataFile) {
+    this.#dataFilePath = dataFile;
+  }
+
   /**
    * Method used to create routes for view endpoints
    * @returns router object for handling view requests

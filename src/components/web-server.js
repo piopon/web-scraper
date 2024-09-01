@@ -88,7 +88,7 @@ export class WebServer {
     server.use(passport.session());
     // setup web server routes
     const routes = new Map([
-      ["/", new ViewRouter()],
+      ["/", new ViewRouter(this.#setupConfig.usersDataPath)],
       ["/auth", new AuthRouter(this.#components, passport)],
       ["/api/v1/data", new DataRouter(this.#setupConfig.usersDataPath)],
       ["/api/v1/config", new ConfigRouter(this.#components)],
