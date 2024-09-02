@@ -10,6 +10,10 @@ import fs from "fs";
 export class ViewRouter {
   #dataFilePath = undefined;
 
+  /**
+   * Creates a new view router for displaying scraper config settings
+   * @param {String} dataFile The path to the data file
+   */
   constructor(dataFile) {
     this.#dataFilePath = dataFile;
   }
