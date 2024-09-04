@@ -64,21 +64,21 @@ export class ViewRouter {
    */
   #createPostRoutes(router) {
     router.post("/image", AccessChecker.canViewContent, async (request, response) => {
-      const inputImage = request.files.auxiliary;
-      if (!inputImage) {
-        return response.status(400).json({message: "No image provided"});
+      const inputFile = request.files.auxiliary;
+      if (!inputFile) {
+        return response.status(400).json({message: "No file provided"});
       }
       // verify if input file is an image (has appropriate MIME type)
       const imageMimeRegex = /^image/;
-      if (!imageMimeRegex.test(inputImage.mimetype)) {
+      if (!imageMimeRegex.test(inputFile.mimetype)) {
         return response.status(400).json({message: "Not an image file"});
       }
-      const newImagePath = path.join(this.#dataFilePath, request.user.email, "images", inputImage.name)
+      const newImagePath = path.join(this.#dataFilePath, request.user.email, "images", inputFile.name)
       const newImageRoot = path.dirname(newImagePath);
       if (!fs.existsSync(newImageRoot)) {
         fs.mkdirSync(newImageRoot, { recursive: true });
       }
-      inputImage.mv(newImagePath);
+      inputFile.mv(newImagePath);
       response.status(200).json({message: "Image uploaded"});
     });
   }
