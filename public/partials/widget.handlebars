@@ -25,13 +25,11 @@
       </form>
     </dialog>
   {{else if (eq type "file")}}
-    <form class="{{parent}}-file-form" action="{{value}}" method="POST" enctype="multipart/form-data">
-      <div class="{{parent}}-file-container">
-        <input type="file" name="{{label}}" class="{{parent}}-{{label}}-file" accept="image/*"/>
-        <input type="button" name="{{label}}" class="{{parent}}-{{label}}-button" value="Select image"/>
-        <input type="submit" name="{{label}}" class="{{parent}}-{{label}}-submit" value="upload"/>
-      </div>
-    </form>
+    <div class="{{parent}}-file-container">
+      <input type="file" name="{{label}}" class="{{parent}}-{{label}}-file" accept="image/*"/>
+      <input type="button" name="{{label}}" class="{{parent}}-{{label}}-button" value="Select image"/>
+      <input type="button" name="{{label}}" class="{{parent}}-{{label}}-submit" value="upload"/>
+    </div>
   {{else}}
     <input type="{{type}}" class="{{parent}}-{{label}}" name="{{label}}" value="{{value}}" {{#if disable}}disabled{{/if}}/>
   {{/if}}
