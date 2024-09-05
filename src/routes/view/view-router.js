@@ -68,18 +68,19 @@ export class ViewRouter {
       if (!inputFile) {
         return response.status(400).json({message: "No file provided"});
       }
-      input = inputFile.auxiliary;
+      // file data information is stored in object which name is equal to HTML file input name attribute
+      const fileObject = inputFile.auxiliary;
       // verify if input file is an image (has appropriate MIME type)
       const imageMimeRegex = /^image/;
-      if (!imageMimeRegex.test(inputFile.mimetype)) {
+      if (!imageMimeRegex.test(fileObject.mimetype)) {
         return response.status(400).json({message: "Not an image file"});
       }
-      const newImagePath = path.join(this.#dataFilePath, request.user.email, "images", inputFile.name)
+      const newImagePath = path.join(this.#dataFilePath, request.user.email, "images", fileObject.name)
       const newImageRoot = path.dirname(newImagePath);
       if (!fs.existsSync(newImageRoot)) {
         fs.mkdirSync(newImageRoot, { recursive: true });
       }
-      inputFile.mv(newImagePath);
+      fileObject.mv(newImagePath);
       response.status(200).json({message: "Image uploaded"});
     });
   }
