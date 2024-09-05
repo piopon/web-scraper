@@ -246,7 +246,7 @@ label.component-image-label {
 
 .component-image-auxiliary-submit {
   cursor: pointer;
-  width: 100%;
+  width: 25%;
   height: 2rem;
   font-size: 1rem;
   color: black;
