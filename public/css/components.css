@@ -254,6 +254,7 @@ label.component-image-label {
   border-radius: 5px;
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
+  margin-left: 0.5rem;
 }
 
 .component-image-auxiliary-submit:hover {
