@@ -209,10 +209,6 @@ label.component-image-label {
   box-shadow: 2px 2px 5px black;
 }
 
-.component-image-file-form {
-  width: 100%;
-}
-
 .component-image-file-container {
   display: flex;
   width: 100%;
