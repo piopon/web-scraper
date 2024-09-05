@@ -25,7 +25,7 @@
       </form>
     </dialog>
   {{else if (eq type "file")}}
-    <form action="{{value}}" method="POST" enctype="multipart/form-data">
+    <form class="{{parent}}-file-form" action="{{value}}" method="POST" enctype="multipart/form-data">
       <div class="{{parent}}-file-container">
         <input type="file" name="{{label}}" class="{{parent}}-{{label}}-file" accept="image/*"/>
         <input type="button" name="{{label}}" class="{{parent}}-{{label}}-button" value="Select image"/>
