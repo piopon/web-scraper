@@ -64,10 +64,11 @@ export class ViewRouter {
    */
   #createPostRoutes(router) {
     router.post("/image", AccessChecker.canViewContent, async (request, response) => {
-      const inputFile = request.files.auxiliary;
+      const inputFile = request.files;
       if (!inputFile) {
         return response.status(400).json({message: "No file provided"});
       }
+      input = inputFile.auxiliary;
       // verify if input file is an image (has appropriate MIME type)
       const imageMimeRegex = /^image/;
       if (!imageMimeRegex.test(inputFile.mimetype)) {
