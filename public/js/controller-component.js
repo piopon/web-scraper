@@ -97,6 +97,17 @@ export class ComponentsController {
         }
       });
     });
+    const uploadFileButtons = document.querySelectorAll("input.component-image-auxiliary-submit");
+    uploadFileButtons.forEach((button) => {
+      button.addEventListener("click", (event) => {
+        var request = new XMLHttpRequest();
+        request.open("POST", "/image");
+        const fileInput = event.target.previousElementSibling.previousElementSibling;
+        var fd = new FormData();
+        fd.append(fileInput.getAttribute("name"), fileInput.files[0]);
+        request.send(fd);
+      });
+    });
   }
 
   /**
