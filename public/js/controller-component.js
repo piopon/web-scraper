@@ -99,13 +99,12 @@ export class ComponentsController {
     });
     const uploadFileButtons = document.querySelectorAll("input.component-image-auxiliary-submit");
     uploadFileButtons.forEach((button) => {
-      button.addEventListener("click", (event) => {
-        var request = new XMLHttpRequest();
-        request.open("POST", "/image");
+      button.addEventListener("click", async (event) => {
         const fileInput = event.target.previousElementSibling.previousElementSibling;
-        var fd = new FormData();
-        fd.append(fileInput.getAttribute("name"), fileInput.files[0]);
-        request.send(fd);
+        const imageFormData = new FormData();
+        imageFormData.append(fileInput.getAttribute("name"), fileInput.files[0]);
+        const response = await fetch("/image", { method: 'POST', body: imageFormData });
+        console.log(`image upload result = ${response.status}: ${response.json}`)
       });
     });
   }
