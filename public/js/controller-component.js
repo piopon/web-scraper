@@ -104,7 +104,13 @@ export class ComponentsController {
         const imageFormData = new FormData();
         imageFormData.append(fileInput.getAttribute("name"), fileInput.files[0]);
         const response = await fetch("/image", { method: 'POST', body: imageFormData });
-        response.json().then(data => console.log(`upload ${response.status}: ${data.message}`));
+        response.json().then(data => {
+          if (200 === response.status) {
+            CommonController.showToastSuccess(data.message);
+          } else {
+            CommonController.showToastError(data.message);
+          }
+        });
       });
     });
   }
