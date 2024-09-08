@@ -104,7 +104,7 @@ export class ComponentsController {
         const imageFormData = new FormData();
         imageFormData.append(fileInput.getAttribute("name"), fileInput.files[0]);
         const response = await fetch("/image", { method: 'POST', body: imageFormData });
-        console.log(`image upload result = ${response.status}: ${response.json}`)
+        response.json().then(data => console.log(`upload ${response.status}: ${data.message}`));
       });
     });
   }
