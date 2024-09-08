@@ -73,7 +73,7 @@ export class ViewRouter {
       // verify if input file is an image (has appropriate MIME type)
       const imageMimeRegex = /^image/;
       if (!imageMimeRegex.test(fileObject.mimetype)) {
-        return response.status(400).json({message: "Not an image file"});
+        return response.status(400).json({message: "Provided file is NOT an image file"});
       }
       const newImagePath = path.join(this.#dataFilePath, request.user.email, "images", fileObject.name)
       const newImageRoot = path.dirname(newImagePath);
@@ -81,7 +81,7 @@ export class ViewRouter {
         fs.mkdirSync(newImageRoot, { recursive: true });
       }
       fileObject.mv(newImagePath);
-      response.status(200).json({message: "Image uploaded"});
+      response.status(200).json({message: `Successfully uploaded image: ${fileObject.name}`});
     });
   }
 
