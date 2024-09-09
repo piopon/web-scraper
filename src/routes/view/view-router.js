@@ -66,14 +66,14 @@ export class ViewRouter {
     router.post("/image", AccessChecker.canViewContent, async (request, response) => {
       const inputFile = request.files;
       if (!inputFile) {
-        return response.status(400).json({message: "No file provided"});
+        return response.status(400).json("No file provided");
       }
       // file data information is stored in object which name is equal to HTML file input name attribute
       const fileObject = inputFile.auxiliary;
       // verify if input file is an image (has appropriate MIME type)
       const imageMimeRegex = /^image/;
       if (!imageMimeRegex.test(fileObject.mimetype)) {
-        return response.status(400).json({message: "Provided file is NOT an image file"});
+        return response.status(400).json("Provided file is NOT an image file");
       }
       const newImagePath = path.join(this.#dataFilePath, request.user.email, "images", fileObject.name)
       const newImageRoot = path.dirname(newImagePath);
@@ -81,7 +81,7 @@ export class ViewRouter {
         fs.mkdirSync(newImageRoot, { recursive: true });
       }
       fileObject.mv(newImagePath);
-      response.status(200).json({message: `Successfully uploaded image: ${fileObject.name}`});
+      response.status(200).json(`Successfully uploaded image: ${fileObject.name}`);
     });
   }
 
