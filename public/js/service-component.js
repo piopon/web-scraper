@@ -1,7 +1,11 @@
 import { CommonService } from "./service-common.js";
 
 export class ComponentService {
-
+  /**
+   * Method used to add new image to the user specified component
+   * @param {Element} inputFile The HTML input element used for file selection
+   * @returns promise containing the operation response text or error
+   */
   static async addImage(inputFile) {
     const url = `/image`;
     const requestBody = new FormData();
