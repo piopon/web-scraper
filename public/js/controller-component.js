@@ -2,6 +2,8 @@ import { CommonController } from "./controller-common.js";
 import { ComponentService } from "./service-component.js";
 
 export class ComponentsController {
+  static #EMPTY_IMAGE_ID = "Select image";
+
   #mediator = undefined;
 
   /**
@@ -55,14 +57,14 @@ export class ComponentsController {
       const cardFields = toggle.parentNode.parentNode.querySelector("div.component-fields");
       const manualId = cardFields.querySelector("input[name='auxiliary']").value;
       // if manual identifier field is empty or contains "Select image" then it's not used = auto mode selected
-      const cardMode = "" === manualId || "Select image" === manualId ? "auto" : "manual";
+      const cardMode = "" === manualId || ComponentsController.#EMPTY_IMAGE_ID === manualId ? "auto" : "manual";
       toggle.checked = "manual" === cardMode;
       this.#updateCardEnableState(cardMode, cardFields);
     });
     const uploadFileButtons = document.querySelectorAll("input.component-image-auxiliary-submit");
     uploadFileButtons.forEach((button) => {
       const imageButton = button.previousElementSibling;
-      button.disabled = imageButton.value !== "Select image";
+      button.disabled = imageButton.value === ComponentsController.#EMPTY_IMAGE_ID;
     });
   }
 
