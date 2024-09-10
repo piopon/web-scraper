@@ -59,6 +59,11 @@ export class ComponentsController {
       toggle.checked = "manual" === cardMode;
       this.#updateCardEnableState(cardMode, cardFields);
     });
+    const uploadFileButtons = document.querySelectorAll("input.component-image-auxiliary-submit");
+    uploadFileButtons.forEach((button) => {
+      const imageButton = button.previousElementSibling;
+      button.disabled = imageButton.value !== "Select image";
+    });
   }
 
   /**
