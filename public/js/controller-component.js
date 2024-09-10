@@ -100,6 +100,7 @@ export class ComponentsController {
         if (event.target.files[0]) {
           const fileButton = event.target.nextElementSibling;
           fileButton.value = event.target.files[0].name;
+          event.target.nextElementSibling.nextElementSibling.disabled = false;
         }
       });
     });
