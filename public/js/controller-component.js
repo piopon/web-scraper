@@ -121,6 +121,21 @@ export class ComponentsController {
     });
   }
 
+  #getComponentCardMode(cardFields) {
+    const auxField = cardFields.querySelector("input[name='auxiliary']");
+    if (auxField != undefined) {
+      // this card has field with "auxiliary" name hence it must be a title card
+      return "" === auxField.value ? "auto" : "manual";
+    }
+    const imgSelectButton = cardFields.querySelector("input[name='aux-img-select']");
+    const imgUploadButton = cardFields.querySelector("input[name='aux-img-upload']");
+    if (imgSelectButton != undefined && imgUploadButton != undefined) {
+      // this card has buttons with "aux-img" names hence it must be a image card
+      return ComponentsController.#EMPTY_IMAGE_ID === imgSelectButton.value ? "auto" : "manual";
+    }
+    throw new Error("Cannot retrieve component card mode");
+  }
+
   /**
    * Method used to update component cards expand/collapse effect
    * @param {Element} activeCard The card which should be expanded (other should be collapsed)
