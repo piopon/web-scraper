@@ -54,12 +54,16 @@ export class ComponentsController {
   #initStyle() {
     const componentToggles = document.querySelectorAll("input.check-auto-manual");
     componentToggles.forEach((toggle) => {
-      const cardFields = toggle.parentNode.parentNode.querySelector("div.component-fields");
-      const manualId = cardFields.querySelector("input[name='auxiliary']").value;
-      // if manual identifier field is empty or contains "Select image" then it's not used = auto mode selected
-      const cardMode = "" === manualId || ComponentsController.#EMPTY_IMAGE_ID === manualId ? "auto" : "manual";
-      toggle.checked = "manual" === cardMode;
-      this.#updateCardEnableState(cardMode, cardFields);
+      try {
+        const cardFields = toggle.parentNode.parentNode.querySelector("div.component-fields");
+        const manualId = cardFields.querySelector("input[name='auxiliary']").value;
+        // if manual identifier field is empty or contains "Select image" then it's not used = auto mode selected
+        const cardMode = "" === manualId || ComponentsController.#EMPTY_IMAGE_ID === manualId ? "auto" : "manual";
+        toggle.checked = "manual" === cardMode;
+        this.#updateCardEnableState(cardMode, cardFields);
+      } catch (error) {
+        CommonController.showToastError(error.message);
+      }
     });
     const uploadFileButtons = document.querySelectorAll("input.component-image-auxiliary-submit");
     uploadFileButtons.forEach((button) => {
@@ -84,9 +88,13 @@ export class ComponentsController {
     const componentToggles = document.querySelectorAll("input.check-auto-manual");
     componentToggles.forEach((toggle) => {
       toggle.addEventListener("change", () => {
-        const cardMode = toggle.checked ? "manual" : "auto";
-        const cardFields = toggle.parentNode.parentNode.querySelector("div.component-fields");
-        this.#updateCardEnableState(cardMode, cardFields);
+        try {
+          const cardMode = toggle.checked ? "manual" : "auto";
+          const cardFields = toggle.parentNode.parentNode.querySelector("div.component-fields");
+          this.#updateCardEnableState(cardMode, cardFields);
+        } catch (error) {
+          CommonController.showToastError(error.message);
+        }
       });
     });
     const imageFileButtons = document.querySelectorAll("input.component-image-auxiliary-button");
