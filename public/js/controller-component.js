@@ -158,15 +158,12 @@ export class ComponentsController {
    */
   #updateCardEnableState(toggleMode, cardFields) {
     const currSelector = cardFields.querySelectorAll("input[name='selector']");
-    const currAttribute = cardFields.querySelectorAll("input[name='attribute']");
-    const currAuxiliary = cardFields.querySelectorAll("input[name='auxiliary']");
     if (currSelector == undefined || 0 === currSelector.length) {
-      CommonController.showToastError(`Cannot update card selector enable state`);
-      return;
+      throw new Error(`Cannot update card selector enable state`);
     }
+    const currAttribute = cardFields.querySelectorAll("input[name='attribute']");
     if (currAttribute == undefined || 0 === currAttribute.length) {
-      CommonController.showToastError(`Cannot update card attribute enable state`);
-      return;
+      throw new Error(`Cannot update card attribute enable state`);
     }
     const currAuxiliary = cardFields.querySelectorAll("input[name='auxiliary']");
     const currImgSelect = cardFields.querySelectorAll("input[name='aux-img-select']");
@@ -177,8 +174,7 @@ export class ComponentsController {
       this.#updateFieldEnableState(currImgSelect, "manual" === toggleMode);
       this.#updateFieldEnableState(currImgUpload, "manual" === toggleMode);
     } else {
-      CommonController.showToastError(`Cannot update card auxiliary enable state`);
-      return;
+      throw new Error(`Cannot update card auxiliary enable state`);
     }
     this.#updateFieldEnableState(currSelector, "auto" === toggleMode);
     this.#updateFieldEnableState(currAttribute, "auto" === toggleMode);
