@@ -56,9 +56,7 @@ export class ComponentsController {
     componentToggles.forEach((toggle) => {
       try {
         const cardFields = toggle.parentNode.parentNode.querySelector("div.component-fields");
-        const manualId = cardFields.querySelector("input[name='auxiliary']").value;
-        // if manual identifier field is empty or contains "Select image" then it's not used = auto mode selected
-        const cardMode = "" === manualId || ComponentsController.#EMPTY_IMAGE_ID === manualId ? "auto" : "manual";
+        const cardMode = this.#getComponentCardMode(cardFields);
         toggle.checked = "manual" === cardMode;
         this.#updateCardEnableState(cardMode, cardFields);
       } catch (error) {
