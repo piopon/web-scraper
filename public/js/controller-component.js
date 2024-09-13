@@ -168,13 +168,20 @@ export class ComponentsController {
       CommonController.showToastError(`Cannot update card attribute enable state`);
       return;
     }
-    if (currAuxiliary == undefined || 0 === currAuxiliary.length) {
+    const currAuxiliary = cardFields.querySelectorAll("input[name='auxiliary']");
+    const currImgSelect = cardFields.querySelectorAll("input[name='aux-img-select']");
+    const currImgUpload = cardFields.querySelectorAll("input[name='aux-img-upload']");
+    if (currAuxiliary != undefined && currAuxiliary.length >= 1) {
+      this.#updateFieldEnableState(currAuxiliary, "manual" === toggleMode);
+    } else if (currImgSelect != undefined && currImgSelect.length >= 1) {
+      this.#updateFieldEnableState(currImgSelect, "manual" === toggleMode);
+      this.#updateFieldEnableState(currImgUpload, "manual" === toggleMode);
+    } else {
       CommonController.showToastError(`Cannot update card auxiliary enable state`);
       return;
     }
     this.#updateFieldEnableState(currSelector, "auto" === toggleMode);
     this.#updateFieldEnableState(currAttribute, "auto" === toggleMode);
-    this.#updateFieldEnableState(currAuxiliary, "manual" === toggleMode);
   }
 
   /**
