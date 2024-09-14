@@ -95,14 +95,14 @@ export class ComponentsController {
         }
       });
     });
-    const imageFileButtons = document.querySelectorAll("input.component-image-auxiliary-button");
+    const imageFileButtons = document.querySelectorAll("input.component-image-aux-img-button");
     imageFileButtons.forEach((button) => {
       button.addEventListener("click", (event) => {
         event.target.previousElementSibling.click();
         event.stopPropagation();
       });
     });
-    const imageFileSelectors = document.querySelectorAll("input.component-image-auxiliary-file");
+    const imageFileSelectors = document.querySelectorAll("input.component-image-aux-img-file");
     imageFileSelectors.forEach((selector) => {
       selector.addEventListener("change", (event) => {
         if (event.target.files[0]) {
@@ -112,7 +112,7 @@ export class ComponentsController {
         }
       });
     });
-    const uploadFileButtons = document.querySelectorAll("input.component-image-auxiliary-submit");
+    const uploadFileButtons = document.querySelectorAll("input.component-image-aux-img-submit");
     uploadFileButtons.forEach((button) => {
       button.addEventListener("click", async (event) => {
         const fileInput = event.target.previousElementSibling.previousElementSibling;
