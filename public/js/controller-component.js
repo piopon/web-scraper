@@ -177,7 +177,7 @@ export class ComponentsController {
       this.#updateFieldEnableState(currAuxiliary, "manual" === toggleMode);
     } else if (currImgSelect != undefined && currImgSelect.length >= 1) {
       this.#updateFieldEnableState(currImgSelect, "manual" === toggleMode);
-      currImgSelect.forEach(imgSelect => {
+      currImgSelect.forEach((imgSelect) => {
         const uploadButton = imgSelect.nextElementSibling;
         const uploadEnable = imgSelect.value !== ComponentsController.#EMPTY_IMAGE_ID;
         this.#updateFieldEnableState([uploadButton], uploadEnable);
@@ -195,6 +195,6 @@ export class ComponentsController {
    * @param {Boolean} enabled The new enable state of specified field
    */
   #updateFieldEnableState(fieldArray, enabled) {
-    fieldArray.forEach(field => field.disabled = !enabled);
+    fieldArray.forEach((field) => (field.disabled = !enabled));
   }
 }
