@@ -122,9 +122,9 @@ export class ComponentsView {
                     <label class="component-image-label">auxiliary:</label>
                     <form action="/image" method="POST" enctype="multipart/form-data">
                       <div class="component-image-file-container">
-                        <input type="file" name="auxiliary" class="component-image-auxiliary-file" accept="image/*"/>
-                        <input type="button" name="auxiliary" class="component-image-auxiliary-button" value="${auxButton}"/>
-                        <input type="submit" name="auxiliary" class="component-image-auxiliary-submit" value="upload"/>
+                        <input type="file" name="aux-img-file" class="component-image-auxiliary-file" accept="image/*"/>
+                        <input type="button" name="aux-img-select" class="component-image-auxiliary-button" value="${auxButton}"/>
+                        <input type="submit" name="aux-img-upload" class="component-image-auxiliary-submit" value="upload"/>
                       </div>
                     </form>
                   </div>
