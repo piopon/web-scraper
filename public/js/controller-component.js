@@ -179,7 +179,7 @@ export class ComponentsController {
       this.#updateFieldEnableState(currImgSelect, "manual" === toggleMode);
       currImgSelect.forEach((imgSelect) => {
         const uploadButton = imgSelect.nextElementSibling;
-        const uploadEnable = imgSelect.value !== ComponentsController.#EMPTY_IMAGE_ID;
+        const uploadEnable = "manual" === toggleMode && imgSelect.value !== ComponentsController.#EMPTY_IMAGE_ID;
         this.#updateFieldEnableState([uploadButton], uploadEnable);
       });
     } else {
