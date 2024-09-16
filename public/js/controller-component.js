@@ -71,6 +71,26 @@ export class ComponentsController {
   }
 
   /**
+   * Method used to receive the current card mode base on its fields state
+   * @param {Element} cardFields The HTML element with cards field container
+   * @returns "auto" or "manual" string based on the specified card current fields values
+   */
+  #getComponentCardMode(cardFields) {
+    const auxField = cardFields.querySelector("input[name='auxiliary']");
+    if (auxField != undefined) {
+      // this card has field with "auxiliary" name hence it must be a title card
+      return "" === auxField.value ? "auto" : "manual";
+    }
+    const imgSelectButton = cardFields.querySelector("input[name='auxiliary-select']");
+    const imgUploadButton = cardFields.querySelector("input[name='auxiliary-upload']");
+    if (imgSelectButton != undefined && imgUploadButton != undefined) {
+      // this card has buttons with auxiliary names related to image hence it must be a image card
+      return ComponentsController.#EMPTY_IMAGE_ID === imgSelectButton.value ? "auto" : "manual";
+    }
+    throw new Error("Cannot retrieve component card mode");
+  }
+
+  /**
    * Method used to bind UI listeners to controller methods.
    * This method handles: component cards expand/collapse effects
    */
@@ -122,26 +142,6 @@ export class ComponentsController {
           });
       });
     });
-  }
-
-  /**
-   * Method used to receive the current card mode base on its fields state
-   * @param {Element} cardFields The HTML element with cards field container
-   * @returns "auto" or "manual" string based on the specified card current fields values
-   */
-  #getComponentCardMode(cardFields) {
-    const auxField = cardFields.querySelector("input[name='auxiliary']");
-    if (auxField != undefined) {
-      // this card has field with "auxiliary" name hence it must be a title card
-      return "" === auxField.value ? "auto" : "manual";
-    }
-    const imgSelectButton = cardFields.querySelector("input[name='auxiliary-select']");
-    const imgUploadButton = cardFields.querySelector("input[name='auxiliary-upload']");
-    if (imgSelectButton != undefined && imgUploadButton != undefined) {
-      // this card has buttons with auxiliary names related to image hence it must be a image card
-      return ComponentsController.#EMPTY_IMAGE_ID === imgSelectButton.value ? "auto" : "manual";
-    }
-    throw new Error("Cannot retrieve component card mode");
   }
 
   #openImageSelector(event) {
