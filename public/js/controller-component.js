@@ -171,22 +171,23 @@ export class ComponentsController {
     if (currAttribute == undefined || 0 === currAttribute.length) {
       throw new Error(`Cannot update card attribute enable state`);
     }
+    const autoEnabled = "auto" === toggleMode;
     const currAuxiliary = cardFields.querySelectorAll("input[name='auxiliary']");
     const currImgSelect = cardFields.querySelectorAll("input[name='aux-img-select']");
     if (currAuxiliary != undefined && currAuxiliary.length >= 1) {
-      this.#updateFieldEnableState(currAuxiliary, "manual" === toggleMode);
+      this.#updateFieldEnableState(currAuxiliary, !autoEnabled);
     } else if (currImgSelect != undefined && currImgSelect.length >= 1) {
-      this.#updateFieldEnableState(currImgSelect, "manual" === toggleMode);
+      this.#updateFieldEnableState(currImgSelect, !autoEnabled);
       currImgSelect.forEach((imgSelect) => {
         const uploadButton = imgSelect.nextElementSibling;
-        const uploadEnable = "manual" === toggleMode && imgSelect.value !== ComponentsController.#EMPTY_IMAGE_ID;
+        const uploadEnable = !autoEnabled && imgSelect.value !== ComponentsController.#EMPTY_IMAGE_ID;
         this.#updateFieldEnableState([uploadButton], uploadEnable);
       });
     } else {
       throw new Error(`Cannot update card auxiliary enable state`);
     }
-    this.#updateFieldEnableState(currSelector, "auto" === toggleMode);
-    this.#updateFieldEnableState(currAttribute, "auto" === toggleMode);
+    this.#updateFieldEnableState(currSelector, autoEnabled);
+    this.#updateFieldEnableState(currAttribute, autoEnabled);
   }
 
   /**
