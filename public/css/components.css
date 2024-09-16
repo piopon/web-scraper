@@ -215,11 +215,11 @@ label.component-image-label {
   width: 100%;
 }
 
-.component-image-aux-img-file {
+.component-image-auxiliary-file {
   display: none;
 }
 
-.component-image-aux-img-button {
+.component-image-auxiliary-button {
   cursor: pointer;
   width: 100%;
   height: 2rem;
@@ -231,17 +231,17 @@ label.component-image-label {
   box-shadow: 2px 2px 5px black;
 }
 
-.component-image-aux-img-button:hover {
+.component-image-auxiliary-button:hover {
   color: white;
   background-color: slateblue;
 }
 
-.component-image-aux-img-button[disabled] {
+.component-image-auxiliary-button[disabled] {
   cursor: default;
   pointer-events: none;
 }
 
-.component-image-aux-img-submit {
+.component-image-auxiliary-submit {
   cursor: pointer;
   width: 25%;
   height: 2rem;
@@ -254,12 +254,12 @@ label.component-image-label {
   margin-left: 0.5rem;
 }
 
-.component-image-aux-img-submit:hover {
+.component-image-auxiliary-submit:hover {
   color: white;
   background-color: slateblue;
 }
 
-.component-image-aux-img-submit[disabled] {
+.component-image-auxiliary-submit[disabled] {
   cursor: default;
   pointer-events: none;
 }
