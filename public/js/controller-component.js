@@ -133,10 +133,10 @@ export class ComponentsController {
       // this card has field with "auxiliary" name hence it must be a title card
       return "" === auxField.value ? "auto" : "manual";
     }
-    const imgSelectButton = cardFields.querySelector("input[name='aux-img-select']");
-    const imgUploadButton = cardFields.querySelector("input[name='aux-img-upload']");
+    const imgSelectButton = cardFields.querySelector("input[name='auxiliary-select']");
+    const imgUploadButton = cardFields.querySelector("input[name='auxiliary-upload']");
     if (imgSelectButton != undefined && imgUploadButton != undefined) {
-      // this card has buttons with "aux-img" names hence it must be a image card
+      // this card has buttons with auxiliary names related to image hence it must be a image card
       return ComponentsController.#EMPTY_IMAGE_ID === imgSelectButton.value ? "auto" : "manual";
     }
     throw new Error("Cannot retrieve component card mode");
@@ -173,7 +173,7 @@ export class ComponentsController {
     }
     const autoEnabled = "auto" === toggleMode;
     const currAuxiliary = cardFields.querySelectorAll("input[name='auxiliary']");
-    const currImgSelect = cardFields.querySelectorAll("input[name='aux-img-select']");
+    const currImgSelect = cardFields.querySelectorAll("input[name='auxiliary-select']");
     if (currAuxiliary != undefined && currAuxiliary.length >= 1) {
       this.#updateFieldEnableState(currAuxiliary, !autoEnabled);
     } else if (currImgSelect != undefined && currImgSelect.length >= 1) {

@@ -69,7 +69,7 @@ export class ViewRouter {
         return response.status(400).json("No file provided");
       }
       // file data information is stored in object which name is equal to HTML file input name attribute
-      const fileObject = inputFile["aux-img-file"];
+      const fileObject = inputFile["auxiliary-file"];
       // verify if input file is an image (has appropriate MIME type)
       const imageMimeRegex = /^image/;
       if (!imageMimeRegex.test(fileObject.mimetype)) {
