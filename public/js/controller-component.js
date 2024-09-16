@@ -127,6 +127,11 @@ export class ComponentsController {
     });
   }
 
+  /**
+   * Method used to receive the current card mode base on its fields state
+   * @param {Element} cardFields The HTML element with cards field container
+   * @returns "auto" or "manual" string based on the specified card current fields values
+   */
   #getComponentCardMode(cardFields) {
     const auxField = cardFields.querySelector("input[name='auxiliary']");
     if (auxField != undefined) {
