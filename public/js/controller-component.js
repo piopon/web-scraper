@@ -97,10 +97,7 @@ export class ComponentsController {
     });
     const imageFileButtons = document.querySelectorAll("input.component-image-auxiliary-button");
     imageFileButtons.forEach((button) => {
-      button.addEventListener("click", (event) => {
-        event.target.previousElementSibling.click();
-        event.stopPropagation();
-      });
+      button.addEventListener("click", this.#openImageSelector);
     });
     const imageFileSelectors = document.querySelectorAll("input.component-image-auxiliary-file");
     imageFileSelectors.forEach((selector) => {
@@ -145,6 +142,11 @@ export class ComponentsController {
       return ComponentsController.#EMPTY_IMAGE_ID === imgSelectButton.value ? "auto" : "manual";
     }
     throw new Error("Cannot retrieve component card mode");
+  }
+
+  #openImageSelector(event) {
+    event.target.previousElementSibling.click();
+    event.stopPropagation();
   }
 
   /**
