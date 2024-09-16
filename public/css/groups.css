@@ -20,6 +20,7 @@ div.modal-dialog.hidden {
 div.modal-dialog div.modal-background {
   display: flex;
   justify-content: center;
+  height: auto;
   width: 100%;
   padding: 1.5rem;
   z-index: 5;
@@ -41,6 +42,7 @@ div.modal-dialog div.modal-content {
   background: whitesmoke;
   border: 3px solid black;
   border-radius: 0.35rem;
+  height: auto;
   width: 90%;
 }
 
