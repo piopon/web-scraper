@@ -20,7 +20,7 @@ export class ComponentsView {
         };
       case ComponentsView.COMPONENT_IMAGE:
         // we need to check image auxiliary value to correctly determine if empty or not
-        const imageAux = componentHtml.querySelector("input.component-image-aux-img-button").value;
+        const imageAux = componentHtml.querySelector("input.component-image-auxiliary-button").value;
         return {
           interval: "",
           selector: componentHtml.querySelector("input.component-image-selector").value,
