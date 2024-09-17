@@ -144,6 +144,10 @@ export class ComponentsController {
     });
   }
 
+  /**
+   * Handler used to be called when image select button was clicked
+   * @param {Event} event A listener event object
+   */
   #openImageSelector(event) {
     event.target.previousElementSibling.click();
     event.stopPropagation();
