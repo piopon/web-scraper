@@ -97,18 +97,20 @@ export class ComponentsController {
   #bindListeners() {
     const componentCards = document.querySelectorAll(".component-card");
     componentCards.forEach((card) => {
-      card.addEventListener("click", () => {
-        if (!card.hasAttribute("active")) {
-          this.#updateComponentCards(card);
+      card.addEventListener("click", (event) => {
+        const currentCard = event.target;
+        if (!currentCard.hasAttribute("active")) {
+          this.#updateComponentCards(currentCard);
         }
       });
     });
     const componentToggles = document.querySelectorAll("input.check-auto-manual");
     componentToggles.forEach((toggle) => {
-      toggle.addEventListener("change", () => {
+      toggle.addEventListener("change", (event) => {
         try {
-          const cardMode = toggle.checked ? "manual" : "auto";
-          const cardFields = toggle.parentNode.parentNode.querySelector("div.component-fields");
+          const currentToggle = event.target;
+          const cardMode = currentToggle.checked ? "manual" : "auto";
+          const cardFields = currentToggle.parentNode.parentNode.querySelector("div.component-fields");
           this.#updateCardEnableState(cardMode, cardFields);
         } catch (error) {
           CommonController.showToastError(error.message);
