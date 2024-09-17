@@ -97,12 +97,7 @@ export class ComponentsController {
   #bindListeners() {
     const componentCards = document.querySelectorAll(".component-card");
     componentCards.forEach((card) => {
-      card.addEventListener("click", (event) => {
-        const currentCard = event.currentTarget;
-        if (!currentCard.hasAttribute("active")) {
-          this.#updateComponentCards(currentCard);
-        }
-      });
+      card.addEventListener("click", this.#cardChangeHandler);
     });
     const componentToggles = document.querySelectorAll("input.check-auto-manual");
     componentToggles.forEach((toggle) => {
@@ -119,7 +114,7 @@ export class ComponentsController {
     });
     const imageFileButtons = document.querySelectorAll("input.component-image-auxiliary-button");
     imageFileButtons.forEach((button) => {
-      button.addEventListener("click", this.#openImageSelector);
+      button.addEventListener("click", this.#selectImageHandler);
     });
     const imageFileSelectors = document.querySelectorAll("input.component-image-auxiliary-file");
     imageFileSelectors.forEach((selector) => {
@@ -146,11 +141,18 @@ export class ComponentsController {
     });
   }
 
+  #cardChangeHandler(event) {
+    const currentCard = event.currentTarget;
+    if (!currentCard.hasAttribute("active")) {
+      this.#updateComponentCards(currentCard);
+    }
+  }
+
   /**
    * Handler used to be called when image select button was clicked
    * @param {Event} event A listener event object
    */
-  #openImageSelector(event) {
+  #selectImageHandler(event) {
     event.target.previousElementSibling.click();
     event.stopPropagation();
   }
