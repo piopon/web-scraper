@@ -98,7 +98,7 @@ export class ComponentsController {
     const componentCards = document.querySelectorAll(".component-card");
     componentCards.forEach((card) => {
       card.addEventListener("click", (event) => {
-        const currentCard = event.target;
+        const currentCard = event.currentTarget;
         if (!currentCard.hasAttribute("active")) {
           this.#updateComponentCards(currentCard);
         }
@@ -108,7 +108,7 @@ export class ComponentsController {
     componentToggles.forEach((toggle) => {
       toggle.addEventListener("change", (event) => {
         try {
-          const currentToggle = event.target;
+          const currentToggle = event.currentTarget;
           const cardMode = currentToggle.checked ? "manual" : "auto";
           const cardFields = currentToggle.parentNode.parentNode.querySelector("div.component-fields");
           this.#updateCardEnableState(cardMode, cardFields);
