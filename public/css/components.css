@@ -46,6 +46,7 @@ div.component-card[active] .card-title {
 }
 
 div.component-content {
+  pointer-events: none;
   display: flex;
   flex-direction: row;
   transform: translateY(2rem);
@@ -54,6 +55,7 @@ div.component-content {
 }
 
 div.component-card[active] div.component-content {
+  pointer-events: all;
   transform: translateY(0);
   opacity: 1;
   border-top: 1px solid black;
