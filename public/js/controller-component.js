@@ -97,7 +97,7 @@ export class ComponentsController {
   #bindListeners() {
     const componentCards = document.querySelectorAll(".component-card");
     componentCards.forEach((card) => {
-      card.addEventListener("click", this.#cardChangeHandler);
+      card.addEventListener("click", this.#cardChangeHandler.bind(this));
     });
     const componentToggles = document.querySelectorAll("input.check-auto-manual");
     componentToggles.forEach((toggle) => {
