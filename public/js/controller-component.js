@@ -119,7 +119,7 @@ export class ComponentsController {
     });
     const uploadFileButtons = document.querySelectorAll("input.component-image-auxiliary-submit");
     uploadFileButtons.forEach((button) => {
-      button.addEventListener("click", async (event) => {
+      button.addEventListener("click", (event) => {
         const fileInput = event.target.previousElementSibling.previousElementSibling;
         ComponentService.addImage(fileInput)
           .then((data) => {
