@@ -92,7 +92,7 @@ export class ComponentsController {
 
   /**
    * Method used to bind UI listeners to controller methods.
-   * This method handles: component cards expand/collapse effects
+   * This method handles: component cards expand/collapse effects, component toggles and image selection events
    */
   #bindListeners() {
     const componentCards = document.querySelectorAll(".component-card");
