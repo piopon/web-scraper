@@ -101,16 +101,7 @@ export class ComponentsController {
     });
     const componentToggles = document.querySelectorAll("input.check-auto-manual");
     componentToggles.forEach((toggle) => {
-      toggle.addEventListener("change", (event) => {
-        try {
-          const currentToggle = event.currentTarget;
-          const cardMode = currentToggle.checked ? "manual" : "auto";
-          const cardFields = currentToggle.parentNode.parentNode.querySelector("div.component-fields");
-          this.#updateCardEnableState(cardMode, cardFields);
-        } catch (error) {
-          CommonController.showToastError(error.message);
-        }
-      });
+      toggle.addEventListener("change", this.#toggleChangeHandler.bind(this));
     });
     const imageFileButtons = document.querySelectorAll("input.component-image-auxiliary-button");
     imageFileButtons.forEach((button) => {
@@ -145,6 +136,17 @@ export class ComponentsController {
     const currentCard = event.currentTarget;
     if (!currentCard.hasAttribute("active")) {
       this.#updateComponentCards(currentCard);
+    }
+  }
+
+  #toggleChangeHandler(event) {
+    try {
+      const currentToggle = event.currentTarget;
+      const cardMode = currentToggle.checked ? "manual" : "auto";
+      const cardFields = currentToggle.parentNode.parentNode.querySelector("div.component-fields");
+      this.#updateCardEnableState(cardMode, cardFields);
+    } catch (error) {
+      CommonController.showToastError(error.message);
     }
   }
 
