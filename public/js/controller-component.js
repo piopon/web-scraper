@@ -119,16 +119,7 @@ export class ComponentsController {
     });
     const uploadFileButtons = document.querySelectorAll("input.component-image-auxiliary-submit");
     uploadFileButtons.forEach((button) => {
-      button.addEventListener("click", (event) => {
-        const fileInput = event.target.previousElementSibling.previousElementSibling;
-        ComponentService.addImage(fileInput)
-          .then((data) => {
-            CommonController.showToastSuccess(data);
-          })
-          .catch((error) => {
-            CommonController.showToastError(error);
-          });
-      });
+      button.addEventListener("click", this.#uploadImageHandler);
     });
   }
 
@@ -157,6 +148,17 @@ export class ComponentsController {
   #selectImageHandler(event) {
     event.target.previousElementSibling.click();
     event.stopPropagation();
+  }
+
+  #uploadImageHandler(event) {
+    const fileInput = event.target.previousElementSibling.previousElementSibling;
+    ComponentService.addImage(fileInput)
+      .then((data) => {
+        CommonController.showToastSuccess(data);
+      })
+      .catch((error) => {
+        CommonController.showToastError(error);
+      });
   }
 
   /**
