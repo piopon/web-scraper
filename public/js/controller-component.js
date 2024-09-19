@@ -95,24 +95,19 @@ export class ComponentsController {
    * This method handles: component cards expand/collapse effects, component toggles and image selection events
    */
   #bindListeners() {
-    const componentCards = document.querySelectorAll(".component-card");
-    componentCards.forEach((card) => {
+    document.querySelectorAll(".component-card").forEach((card) => {
       card.addEventListener("click", this.#cardChangeHandler.bind(this));
     });
-    const componentToggles = document.querySelectorAll("input.check-auto-manual");
-    componentToggles.forEach((toggle) => {
+    document.querySelectorAll("input.check-auto-manual").forEach((toggle) => {
       toggle.addEventListener("change", this.#toggleChangeHandler.bind(this));
     });
-    const imageFileButtons = document.querySelectorAll("input.component-image-auxiliary-button");
-    imageFileButtons.forEach((button) => {
+    document.querySelectorAll("input.component-image-auxiliary-button").forEach((button) => {
       button.addEventListener("click", this.#selectImageHandler);
     });
-    const imageFileSelectors = document.querySelectorAll("input.component-image-auxiliary-file");
-    imageFileSelectors.forEach((selector) => {
+    document.querySelectorAll("input.component-image-auxiliary-file").forEach((selector) => {
       selector.addEventListener("change", this.#changeImageHandler);
     });
-    const uploadFileButtons = document.querySelectorAll("input.component-image-auxiliary-submit");
-    uploadFileButtons.forEach((button) => {
+    document.querySelectorAll("input.component-image-auxiliary-submit").forEach((button) => {
       button.addEventListener("click", this.#uploadImageHandler);
     });
   }
