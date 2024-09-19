@@ -109,13 +109,7 @@ export class ComponentsController {
     });
     const imageFileSelectors = document.querySelectorAll("input.component-image-auxiliary-file");
     imageFileSelectors.forEach((selector) => {
-      selector.addEventListener("change", (event) => {
-        if (event.target.files[0]) {
-          const fileButton = event.target.nextElementSibling;
-          fileButton.value = event.target.files[0].name;
-          event.target.nextElementSibling.nextElementSibling.disabled = false;
-        }
-      });
+      selector.addEventListener("change", this.#changeImageHandler);
     });
     const uploadFileButtons = document.querySelectorAll("input.component-image-auxiliary-submit");
     uploadFileButtons.forEach((button) => {
@@ -138,6 +132,14 @@ export class ComponentsController {
       this.#updateCardEnableState(cardMode, cardFields);
     } catch (error) {
       CommonController.showToastError(error.message);
+    }
+  }
+
+  #changeImageHandler(event) {
+    if (event.target.files[0]) {
+      const fileButton = event.target.nextElementSibling;
+      fileButton.value = event.target.files[0].name;
+      event.target.nextElementSibling.nextElementSibling.disabled = false;
     }
   }
 
