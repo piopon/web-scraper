@@ -112,6 +112,10 @@ export class ComponentsController {
     });
   }
 
+  /**
+   * Handler used to be called when the active component card has changed
+   * @param {Event} event A listener event object
+   */
   #cardChangeHandler(event) {
     const currentCard = event.currentTarget;
     if (!currentCard.hasAttribute("active")) {
@@ -119,6 +123,10 @@ export class ComponentsController {
     }
   }
 
+  /**
+   * Handler used to be called when the card auto/manual toggle component is changed
+   * @param {Event} event A listener event object
+   */
   #toggleChangeHandler(event) {
     try {
       const currentToggle = event.currentTarget;
@@ -130,6 +138,10 @@ export class ComponentsController {
     }
   }
 
+  /**
+   * Handler used to be called when user changes and accepts the image in the selector dialog
+   * @param {Event} event A listener event object
+   */
   #changeImageHandler(event) {
     if (event.target.files[0]) {
       const fileButton = event.target.nextElementSibling;
@@ -147,6 +159,10 @@ export class ComponentsController {
     event.stopPropagation();
   }
 
+  /**
+   * Handler used to be called when the selected image should be uploaded to server
+   * @param {Event} event A listener event object
+   */
   #uploadImageHandler(event) {
     const fileInput = event.target.previousElementSibling.previousElementSibling;
     ComponentService.addImage(fileInput)
