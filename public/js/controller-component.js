@@ -101,11 +101,11 @@ export class ComponentsController {
     document.querySelectorAll("input.check-auto-manual").forEach((toggle) => {
       toggle.addEventListener("change", this.#toggleChangeHandler.bind(this));
     });
-    document.querySelectorAll("input.component-image-auxiliary-button").forEach((button) => {
-      button.addEventListener("click", this.#selectImageHandler);
-    });
     document.querySelectorAll("input.component-image-auxiliary-file").forEach((selector) => {
       selector.addEventListener("change", this.#changeImageHandler);
+    });
+    document.querySelectorAll("input.component-image-auxiliary-button").forEach((button) => {
+      button.addEventListener("click", this.#selectImageHandler);
     });
     document.querySelectorAll("input.component-image-auxiliary-submit").forEach((button) => {
       button.addEventListener("click", this.#uploadImageHandler);
