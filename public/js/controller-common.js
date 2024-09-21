@@ -11,8 +11,8 @@ export class CommonController {
    */
   static getGroupColumnWithName(groupName) {
     const foundColumns = Array.from(document.querySelectorAll("article.group-column h2.group-title"))
-        .filter((element) => element.innerText === groupName)
-        .map((element) => element.closest("article.group-column"));
+      .filter((element) => element.innerText === groupName)
+      .map((element) => element.closest("article.group-column"));
     if (1 !== foundColumns.length) {
       showToastError(`Internal error! Found ${foundColumns.length} columns with name: ${groupName}`);
       return undefined;
@@ -26,7 +26,7 @@ export class CommonController {
    * @returns HTML element node from code
    */
   static htmlToElement(string) {
-    var tempContainer = document.createElement('div');
+    var tempContainer = document.createElement("div");
     tempContainer.innerHTML = string;
     return tempContainer.firstChild;
   }

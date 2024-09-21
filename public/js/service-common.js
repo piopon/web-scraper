@@ -13,7 +13,7 @@ export class CommonService {
         return "Unexpected array response";
       }
       return `${errorResponse[0].instancePath} ${errorResponse[0].message}`;
-    } else if (errorResponse instanceof String || 'string' === typeof(errorResponse)) {
+    } else if (errorResponse instanceof String || "string" === typeof errorResponse) {
       return errorResponse;
     } else {
       return "Unexpected response type";

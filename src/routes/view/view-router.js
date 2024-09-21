@@ -4,8 +4,20 @@ import { ScrapConfig } from "../../model/scrap-config.js";
 
 import express from "express";
 import moment from "moment";
+import path from "path";
+import fs from "fs";
 
 export class ViewRouter {
+  #dataFilePath = undefined;
+
+  /**
+   * Creates a new view router for displaying scraper config settings
+   * @param {String} dataFile The path to the data file
+   */
+  constructor(dataFile) {
+    this.#dataFilePath = dataFile;
+  }
+
   /**
    * Method used to create routes for view endpoints
    * @returns router object for handling view requests
@@ -13,6 +25,7 @@ export class ViewRouter {
   createRoutes() {
     const router = express.Router();
     this.#createGetRoutes(router);
+    this.#createPostRoutes(router);
 
     return router;
   }
@@ -43,6 +56,33 @@ export class ViewRouter {
         statusTypes: this.#getSupportedStatusTypes(),
       })
     );
+  }
+
+  /**
+   * Method used to create POST method routes and add them to the router object
+   * @param {Object} router The router object with POST method routes defined
+   */
+  #createPostRoutes(router) {
+    router.post("/image", AccessChecker.canViewContent, async (request, response) => {
+      const inputFile = request.files;
+      if (!inputFile) {
+        return response.status(400).json("No file provided");
+      }
+      // file data information is stored in object which name is equal to HTML file input name attribute
+      const fileObject = inputFile["auxiliary-file"];
+      // verify if input file is an image (has appropriate MIME type)
+      const imageMimeRegex = /^image/;
+      if (!imageMimeRegex.test(fileObject.mimetype)) {
+        return response.status(400).json("Provided file is NOT an image file");
+      }
+      const newImagePath = path.join(this.#dataFilePath, request.user.email, "images", fileObject.name)
+      const newImageRoot = path.dirname(newImagePath);
+      if (!fs.existsSync(newImageRoot)) {
+        fs.mkdirSync(newImageRoot, { recursive: true });
+      }
+      fileObject.mv(newImagePath);
+      response.status(200).json(`Successfully uploaded image: ${fileObject.name}`);
+    });
   }
 
   /**

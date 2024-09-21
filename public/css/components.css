@@ -12,6 +12,7 @@ div.component-card {
   z-index: 1;
   transition: all 0.5s ease-in-out;
   cursor: pointer;
+  height: 15rem;
   width: 3rem;
   padding: 0.25rem;
   flex: 0 0 3rem;
@@ -45,6 +46,7 @@ div.component-card[active] .card-title {
 }
 
 div.component-content {
+  pointer-events: none;
   display: flex;
   flex-direction: row;
   transform: translateY(2rem);
@@ -53,6 +55,7 @@ div.component-content {
 }
 
 div.component-card[active] div.component-content {
+  pointer-events: all;
   transform: translateY(0);
   opacity: 1;
   border-top: 1px solid black;
@@ -209,11 +212,20 @@ label.component-image-label {
   box-shadow: 2px 2px 5px black;
 }
 
-.component-image-auxiliary {
+.component-image-file-container {
+  display: flex;
+  width: 100%;
+}
+
+.component-image-auxiliary-file {
+  display: none;
+}
+
+.component-image-auxiliary-button {
   cursor: pointer;
   width: 100%;
   height: 2rem;
-  font-size: 1rem;
+  font-size: 0.85rem;
   color: black;
   background-color: white;
   border-radius: 5px;
@@ -221,9 +233,37 @@ label.component-image-label {
   box-shadow: 2px 2px 5px black;
 }
 
-.component-image-auxiliary:hover {
+.component-image-auxiliary-button:hover {
   color: white;
   background-color: slateblue;
+}
+
+.component-image-auxiliary-button[disabled] {
+  cursor: default;
+  pointer-events: none;
+}
+
+.component-image-auxiliary-submit {
+  cursor: pointer;
+  width: 25%;
+  height: 2rem;
+  font-size: 0.85rem;
+  color: black;
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: 2px 2px 5px black;
+  margin-left: 0.5rem;
+}
+
+.component-image-auxiliary-submit:hover {
+  color: white;
+  background-color: slateblue;
+}
+
+.component-image-auxiliary-submit[disabled] {
+  cursor: default;
+  pointer-events: none;
 }
 
 label.component-price-label {

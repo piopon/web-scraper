@@ -12,6 +12,7 @@ import express from "express";
 import passport from "passport";
 import flash from "express-flash";
 import session from "express-session";
+import fileUpload from "express-fileupload";
 import helpers from "handlebars-helpers";
 import { engine } from "express-handlebars";
 
@@ -81,12 +82,18 @@ export class WebServer {
     server.use(express.json());
     server.use(express.urlencoded({ extended: false }));
     server.use(flash());
+    server.use(fileUpload({
+      abortOnLimit: true,
+      limits: {
+        fileSize: 10_000_000,
+      }
+    }));
     server.use(session(this.#getSessionConfiguration()));
     server.use(passport.initialize());
     server.use(passport.session());
     // setup web server routes
     const routes = new Map([
-      ["/", new ViewRouter()],
+      ["/", new ViewRouter(this.#setupConfig.usersDataPath)],
       ["/auth", new AuthRouter(this.#components, passport)],
       ["/api/v1/data", new DataRouter(this.#setupConfig.usersDataPath)],
       ["/api/v1/config", new ConfigRouter(this.#components)],

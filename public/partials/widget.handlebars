@@ -24,6 +24,12 @@
         {{/each}}
       </form>
     </dialog>
+  {{else if (eq type "file")}}
+    <div class="{{parent}}-file-container">
+      <input type="file" name="{{label}}-file" class="{{parent}}-{{label}}-file" accept="image/*"/>
+      <input type="button" name="{{label}}-select" class="{{parent}}-{{label}}-button" value={{#if (equalsLength value 0)}}"Select image"{{else}}"{{value}}"{{/if}}/>
+      <input type="button" name="{{label}}-upload" class="{{parent}}-{{label}}-submit" value="upload"/>
+    </div>
   {{else}}
     <input type="{{type}}" class="{{parent}}-{{label}}" name="{{label}}" value="{{value}}" {{#if disable}}disabled{{/if}}/>
   {{/if}}

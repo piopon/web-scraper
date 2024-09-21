@@ -20,7 +20,7 @@ export class ComponentsView {
         };
       case ComponentsView.COMPONENT_IMAGE:
         // we need to check image auxiliary value to correctly determine if empty or not
-        const imageAux = componentHtml.querySelector("input.component-image-auxiliary").value;
+        const imageAux = componentHtml.querySelector("input.component-image-auxiliary-button").value;
         return {
           interval: "",
           selector: componentHtml.querySelector("input.component-image-selector").value,
@@ -120,7 +120,11 @@ export class ComponentsView {
                   </div>
                   <div class="widget">
                     <label class="component-image-label">auxiliary:</label>
-                    <input type="button" class="component-image-auxiliary" name="auxiliary" value="${auxButton}" />
+                    <div class="component-image-file-container">
+                      <input type="file" name="auxiliary-file" class="component-image-auxiliary-file" accept="image/*"/>
+                      <input type="button" name="auxiliary-select" class="component-image-auxiliary-button" value="${auxButton}"/>
+                      <input type="submit" name="auxiliary-upload" class="component-image-auxiliary-submit" value="upload"/>
+                    </div>
                   </div>
                 </div>
                 <div class="component-toggle">
