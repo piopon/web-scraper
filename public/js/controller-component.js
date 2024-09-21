@@ -66,7 +66,8 @@ export class ComponentsController {
     const uploadFileButtons = document.querySelectorAll("input.component-image-auxiliary-submit");
     uploadFileButtons.forEach((button) => {
       const imageButton = button.previousElementSibling;
-      button.disabled = imageButton.value === ComponentsController.#EMPTY_IMAGE_ID;
+      const fileSelected = imageButton.previousElementSibling.files.length > 0;
+      button.disabled = imageButton.value === ComponentsController.#EMPTY_IMAGE_ID || !fileSelected;
     });
   }
 
