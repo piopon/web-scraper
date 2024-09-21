@@ -212,7 +212,8 @@ export class ComponentsController {
       this.#updateFieldEnableState(currImgSelect, !autoEnabled);
       currImgSelect.forEach((imgSelect) => {
         const uploadButton = imgSelect.nextElementSibling;
-        const uploadEnable = !autoEnabled && imgSelect.value !== ComponentsController.#EMPTY_IMAGE_ID;
+        const fileSelected = imgSelect.previousElementSibling.files.length > 0;
+        const uploadEnable = !autoEnabled && fileSelected && imgSelect.value !== ComponentsController.#EMPTY_IMAGE_ID;
         this.#updateFieldEnableState([uploadButton], uploadEnable);
       });
     } else {
