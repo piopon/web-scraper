@@ -65,9 +65,9 @@ export class ComponentsController {
     });
     const uploadFileButtons = document.querySelectorAll("input.component-image-auxiliary-submit");
     uploadFileButtons.forEach((button) => {
-      const imageButton = button.previousElementSibling;
-      const fileSelected = imageButton.previousElementSibling.files.length > 0;
-      button.disabled = imageButton.value === ComponentsController.#EMPTY_IMAGE_ID || !fileSelected;
+      const noImageSaved = button.previousElementSibling.value === ComponentsController.#EMPTY_IMAGE_ID;
+      const noImageSelected = button.previousElementSibling.previousElementSibling.files.length === 0;
+      button.disabled = noImageSaved || noImageSelected;
     });
   }
 
