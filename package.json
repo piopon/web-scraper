@@ -34,7 +34,8 @@
     "mongoose": "^8.6.3",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
-    "puppeteer": "^20.9.0"
+    "puppeteer": "^20.9.0",
+    "web-scraper": "file:"
   },
   "devDependencies": {
     "jest": "^29.7.0",
