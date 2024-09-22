@@ -52,5 +52,8 @@
         "statements": 70
       }
     }
-  }
+  },
+  "exhortignore": [
+    "web-scraper"
+  ]
 }
