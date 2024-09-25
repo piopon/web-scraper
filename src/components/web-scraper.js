@@ -14,6 +14,7 @@ import fs from "fs";
 export class WebScraper {
   static #COMPONENT_NAME = "web-scraper   ";
   static #RUNNING_STATUS = "Running";
+  static #HEADLESS_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36';
 
   #setupConfig = undefined;
   #waitConfig = new Map();
@@ -80,6 +81,8 @@ export class WebScraper {
     session.browser = await puppeteer.launch({ headless: "new" });
     session.page = await session.browser.newPage();
     session.page.setDefaultTimeout(this.#setupConfig.scraperConfig.defaultTimeout);
+    // set custom user agent in order to make things work in headless mode
+    await session.page.setUserAgent(WebScraper.#HEADLESS_AGENT);
     // invoke scrap data action initially and setup interval calls
     this.#status.debug(`Initializing data scraping for user ${sessionUser.name}`);
     const intervalTime = this.#setupConfig.scraperConfig.scrapInterval;
