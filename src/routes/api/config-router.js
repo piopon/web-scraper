@@ -1,3 +1,4 @@
+import { AccessChecker } from "../../middleware/access-checker.js";
 import { ComponentType } from "../../../config/app-types.js";
 import { ScrapComponent } from "../../model/scrap-component.js";
 import { ScrapConfig } from "../../model/scrap-config.js";
@@ -37,10 +38,10 @@ export class ConfigRouter {
    * @param {Object} router The router object with GET method routes defined
    */
   #createGetRoutes(router) {
-    router.get("/", async (request, response) => {
+    router.get("/", AccessChecker.canViewContent, async (request, response) => {
       await this.#handleGetRequest(request, response, (configContent) => configContent);
     });
-    router.get("/groups", async (request, response) => {
+    router.get("/groups", AccessChecker.canViewContent, async (request, response) => {
       await this.#handleGetRequest(request, response, (configContent) =>
         configContent.groups
           .filter((group) => {
@@ -51,7 +52,7 @@ export class ConfigRouter {
           })
       );
     });
-    router.get("/groups/observers", async (request, response) => {
+    router.get("/groups/observers", AccessChecker.canViewContent, async (request, response) => {
       await this.#handleGetRequest(request, response, (configContent) =>
         configContent.groups
           .flatMap((group) => group.observers)
@@ -64,7 +65,7 @@ export class ConfigRouter {
           })
       );
     });
-    router.get("/groups/observers/components", async (request, response) => {
+    router.get("/groups/observers/components", AccessChecker.canViewContent, async (request, response) => {
       await this.#handleGetRequest(request, response, (configContent) =>
         configContent.groups
           .flatMap((group) => group.observers)
@@ -85,7 +86,7 @@ export class ConfigRouter {
    * @param {Object} router The router object with PUT method routes defined
    */
   #createPutRoutes(router) {
-    router.put("/groups", async (request, response) => {
+    router.put("/groups", AccessChecker.canViewContent, async (request, response) => {
       await this.#handlePutRequest(
         request,
         response,
@@ -95,7 +96,7 @@ export class ConfigRouter {
         }
       );
     });
-    router.put("/groups/observers", async (request, response) => {
+    router.put("/groups/observers", AccessChecker.canViewContent, async (request, response) => {
       await this.#handlePutRequest(
         request,
         response,
@@ -112,10 +113,10 @@ export class ConfigRouter {
    * @param {Object} router The router object with POST method routes defined
    */
   #createPostRoutes(router) {
-    router.post("/groups", async (request, response) => {
+    router.post("/groups", AccessChecker.canViewContent, async (request, response) => {
       await this.#handlePostRequest(request, response, (configContent) => configContent.groups);
     });
-    router.post("/groups/observers", async (request, response) => {
+    router.post("/groups/observers", AccessChecker.canViewContent, async (request, response) => {
       await this.#handlePostRequest(request, response, (configContent) => {
         const parentGroup = configContent.groups.filter((group) => group.name === request.query.parent);
         return parentGroup.length > 0 ? parentGroup.at(0).observers : undefined;
@@ -128,7 +129,7 @@ export class ConfigRouter {
    * @param {Object} router The router object with DELETE method routes defined
    */
   #createDeleteRoutes(router) {
-    router.delete("/groups", async (request, response) => {
+    router.delete("/groups", AccessChecker.canViewContent, async (request, response) => {
       await this.#handleDeleteRequest(request, response, (configContent) => {
         const details = this.#getParentDetails(configContent, { groupName: request.query.name });
         return details
@@ -136,7 +137,7 @@ export class ConfigRouter {
           : { found: undefined, reason: "Could not find item to delete" };
       });
     });
-    router.delete("/groups/observers", async (request, response) => {
+    router.delete("/groups/observers", AccessChecker.canViewContent, async (request, response) => {
       await this.#handleDeleteRequest(request, response, (configContent) => {
         const details = this.#getParentDetails(configContent, { observerName: request.query.name });
         return details
