@@ -1,5 +1,38 @@
 import { AccessChecker } from "../../src/middleware/access-checker.js";
 
+describe("canReceiveData() method", () => {
+  test("shouldn't do anything when authorized", async () => {
+    const requestObj = { isAuthenticated: () => true };
+    const invokeState = { status: 200, text: "", next: false };
+    const mockedRes = {
+      status: (input) => {
+        invokeState.status = input;
+        return { json: (input) => (invokeState.text = input) };
+      },
+    };
+    const mockedNext = () => (invokeState.next = true);
+    AccessChecker.canReceiveData(requestObj, mockedRes, mockedNext);
+    expect(invokeState.status).toBe(200);
+    expect(invokeState.text).toBe("");
+    expect(invokeState.next).toBe(true);
+  });
+  test("should throw error 401 when not authorized", async () => {
+    const requestObj = { isAuthenticated: () => false };
+    const invokeState = { status: 200, text: "", next: false };
+    const mockedRes = {
+      status: (input) => {
+        invokeState.status = input;
+        return { json: (input) => (invokeState.text = input) };
+      },
+    };
+    const mockedNext = () => (invokeState.next = true);
+    AccessChecker.canReceiveData(requestObj, mockedRes, mockedNext);
+    expect(invokeState.status).toBe(401);
+    expect(invokeState.text).toBe("Not authenticated");
+    expect(invokeState.next).toBe(false);
+  });
+});
+
 describe("canViewContent() method", () => {
   test("should not redirect when authorized", async () => {
     const requestObj = { isAuthenticated: () => true };
