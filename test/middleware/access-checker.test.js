@@ -1,5 +1,23 @@
 import { AccessChecker } from "../../src/middleware/access-checker.js";
 
+describe("canReceiveData() method", () => {
+  test("shouldn't do anything when authorized", async () => {
+    const requestObj = { isAuthenticated: () => true };
+    const invokeState = { status: 200, text: "", next: false };
+    const mockedRes = {
+      status: (input) => {
+        invokeState.status = input;
+        return { json: (input) => (invokeState.text = input) };
+      },
+    };
+    const mockedNext = () => (invokeState.next = true);
+    AccessChecker.canReceiveData(requestObj, mockedRes, mockedNext);
+    expect(invokeState.status).toBe(200);
+    expect(invokeState.text).toBe("");
+    expect(invokeState.next).toBe(true);
+  });
+});
+
 describe("canViewContent() method", () => {
   test("should not redirect when authorized", async () => {
     const requestObj = { isAuthenticated: () => true };
