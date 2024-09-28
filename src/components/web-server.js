@@ -83,12 +83,7 @@ export class WebServer {
     server.use(express.json());
     server.use(express.urlencoded({ extended: false }));
     server.use(flash());
-    server.use(fileUpload({
-      abortOnLimit: true,
-      limits: {
-        fileSize: 10_000_000,
-      }
-    }));
+    server.use(fileUpload(this.#getFileUploadConfiguration()));
     server.use(session(this.#getSessionConfiguration()));
     server.use(passport.initialize());
     server.use(passport.session());
@@ -104,6 +99,15 @@ export class WebServer {
     routes.forEach((router, url) => server.use(url, router.createRoutes()));
 
     return server;
+  }
+
+  #getFileUploadConfiguration() {
+    return {
+      abortOnLimit: true,
+      limits: {
+        fileSize: 10_000_000,
+      }
+    };
   }
 
   /**
