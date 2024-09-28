@@ -101,6 +101,10 @@ export class WebServer {
     return server;
   }
 
+  /**
+   * Method used to retrieve file upload configuration object
+   * @returns file upload configuration object
+   */
   #getFileUploadConfiguration() {
     return {
       abortOnLimit: true,
