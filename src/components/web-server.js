@@ -92,12 +92,7 @@ export class WebServer {
     server.use(session(this.#getSessionConfiguration()));
     server.use(passport.initialize());
     server.use(passport.session());
-    server.use(cors({
-      origin: true,
-      credentials: true,
-      methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
-      allowedHeaders: ['Origin', 'X-Requested-With', 'X-AUTHENTICATION', 'X-IP', 'Content-Type', 'Accept'],
-    }))
+    server.use(cors(this.#getCorsConfiguration()))
     // setup web server routes
     const routes = new Map([
       ["/", new ViewRouter(this.#setupConfig.usersDataPath)],
@@ -120,6 +115,15 @@ export class WebServer {
       secret: process.env.SESSION_SHA,
       resave: false,
       saveUninitialized: false,
+    };
+  }
+
+  #getCorsConfiguration() {
+    return {
+      origin: true,
+      credentials: true,
+      methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
+      allowedHeaders: ['Origin', 'X-Requested-With', 'X-AUTHENTICATION', 'X-IP', 'Content-Type', 'Accept'],
     };
   }
 }
