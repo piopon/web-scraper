@@ -118,6 +118,10 @@ export class WebServer {
     };
   }
 
+  /**
+   * Method used to retrieve CORS configuration object
+   * @returns CORS configuration object
+   */
   #getCorsConfiguration() {
     return {
       origin: true,
