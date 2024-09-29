@@ -54,10 +54,10 @@ describe("created data GET routes", () => {
           response: [
             {
               instancePath: "",
-              keyword: "additionalProperties",
-              message: "must NOT have additional properties",
-              params: { additionalProperty: "unknown" },
-              schemaPath: "#/additionalProperties",
+              keyword: "required",
+              message: "must have required property 'owner'",
+              params: { missingProperty: "owner" },
+              schemaPath: "#/required",
             },
           ],
         },
@@ -66,33 +66,14 @@ describe("created data GET routes", () => {
         "query is empty",
         {},
         {
-          status: 200,
+          status: 400,
           response: [
             {
-              name: "clothes",
-              category: "👕",
-              items: [
-                {
-                  status: "OK",
-                  name: "t-shirt Regular Fit",
-                  icon: "",
-                  price: "29.99",
-                  currency: "PLN",
-                },
-              ],
-            },
-            {
-              name: "games",
-              category: "🎮",
-              items: [
-                {
-                  status: "OK",
-                  name: "Diablo IV",
-                  icon: "",
-                  price: "349.99",
-                  currency: "PLN",
-                },
-              ],
+              instancePath: "",
+              keyword: "required",
+              message: "must have required property 'owner'",
+              params: { missingProperty: "owner" },
+              schemaPath: "#/required",
             },
           ],
         },
