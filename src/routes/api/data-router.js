@@ -28,6 +28,10 @@ export class DataRouter {
         return;
       }
       const userPath = path.join(this.#dataFilePath, request.query.owner, "data.json");
+      if (!fs.existsSync(userPath)) {
+        response.status(400).json(`Invalid data owner provided`);
+        return;
+      }
       var dataContent = JSON.parse(fs.readFileSync(userPath));
       var filteredData = dataContent.filter((data) => {
         const nameOk = request.query.name ? data.name === request.query.name : true;
