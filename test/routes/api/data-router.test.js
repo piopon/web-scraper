@@ -2,9 +2,10 @@ import { DataRouter } from "../../../src/routes/api/data-router.js";
 
 import supertest from "supertest";
 import express from "express";
+import path from "path";
 import fs from "fs";
 
-const testDataPath = "./data-router-test.json";
+const testDataPath = "./owner/data.json";
 
 beforeAll(() => {
   createDataFile(testDataPath);
@@ -248,6 +249,12 @@ function createDataFile(filePath) {
         ],
       },
     ];
+    // create parent directory (if needed)
+    const fileDir = path.dirname(filePath);
+    if (!fs.existsSync(fileDir)) {
+      fs.mkdirSync(fileDir, { recursive: true });
+    }
+    // create the test data file
     fs.writeFileSync(filePath, JSON.stringify(dataContent));
   } catch (err) {
     console.error(`Could not create data file: ${err}`);
@@ -255,5 +262,11 @@ function createDataFile(filePath) {
 }
 
 function removeDataFile(filePath) {
+  // remove the test data file
   fs.rmSync(filePath, { force: true });
+  // remove parent directory (if present)
+  const fileDir = path.dirname(filePath);
+  if (fileDir !== ".") {
+    fs.rmdirSync(fileDir);
+  }
 }
