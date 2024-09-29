@@ -1,6 +1,7 @@
 import Ajv from "ajv";
 import express from "express";
 import fs from "fs";
+import path from "path";
 
 export class DataRouter {
   #dataFilePath = undefined;
@@ -26,7 +27,8 @@ export class DataRouter {
         response.status(400).json(validationResult.cause);
         return;
       }
-      var dataContent = JSON.parse(fs.readFileSync(this.#dataFilePath));
+      const userPath = path.join(this.#dataFilePath, request.query.owner, "data.json");
+      var dataContent = JSON.parse(fs.readFileSync(userPath));
       var filteredData = dataContent.filter((data) => {
         const nameOk = request.query.name ? data.name === request.query.name : true;
         const categoryOk = request.query.category ? data.category === request.query.category : true;
@@ -48,6 +50,7 @@ export class DataRouter {
       type: "object",
       additionalProperties: false,
       properties: {
+        owner: { type: "string" },
         name: { type: "string" },
         category: { type: "string" },
       },
