@@ -80,7 +80,7 @@ describe("created data GET routes", () => {
       ],
       [
         "query contains existing name",
-        { name: "clothes" },
+        { owner: "owner", name: "clothes" },
         {
           status: 200,
           response: [
@@ -102,7 +102,7 @@ describe("created data GET routes", () => {
       ],
       [
         "query contains not existing name",
-        { name: "unknown" },
+        { owner: "owner", name: "unknown" },
         {
           status: 200,
           response: [],
@@ -110,7 +110,7 @@ describe("created data GET routes", () => {
       ],
       [
         "query contains existing category",
-        { category: "🎮" },
+        { owner: "owner", category: "🎮" },
         {
           status: 200,
           response: [
@@ -132,7 +132,7 @@ describe("created data GET routes", () => {
       ],
       [
         "query contains not existing category",
-        { category: "unknown" },
+        { owner: "owner", category: "unknown" },
         {
           status: 200,
           response: [],
@@ -140,7 +140,7 @@ describe("created data GET routes", () => {
       ],
       [
         "query contains existing and matching name and category",
-        { name: "games", category: "🎮" },
+        { owner: "owner", name: "games", category: "🎮" },
         {
           status: 200,
           response: [
@@ -162,7 +162,7 @@ describe("created data GET routes", () => {
       ],
       [
         "query contains existing but not matching name and category",
-        { name: "games", category: "👕" },
+        { owner: "owner", name: "games", category: "👕" },
         {
           status: 200,
           response: [],
@@ -170,7 +170,7 @@ describe("created data GET routes", () => {
       ],
       [
         "query contains existing name and not existing category",
-        { name: "games", category: "unknown" },
+        { owner: "owner", name: "games", category: "unknown" },
         {
           status: 200,
           response: [],
@@ -178,7 +178,7 @@ describe("created data GET routes", () => {
       ],
       [
         "query contains not existing name and existing category",
-        { name: "unknown", category: "👕" },
+        { owner: "owner", name: "unknown", category: "👕" },
         {
           status: 200,
           response: [],
@@ -186,7 +186,7 @@ describe("created data GET routes", () => {
       ],
       [
         "query contains not existing name and category",
-        { name: "unknown", category: "unknown" },
+        { owner: "owner", name: "unknown", category: "unknown" },
         {
           status: 200,
           response: [],
