@@ -79,6 +79,49 @@ describe("created data GET routes", () => {
         },
       ],
       [
+        "query contains invalid user",
+        { owner: "invalid" },
+        {
+          status: 400,
+          response: "Invalid data owner provided",
+        },
+      ],
+      [
+        "query contains valid user",
+        { owner: "owner" },
+        {
+          status: 200,
+          response: [
+            {
+              name: "clothes",
+              category: "👕",
+              items: [
+                {
+                  status: "OK",
+                  name: "t-shirt Regular Fit",
+                  icon: "",
+                  price: "29.99",
+                  currency: "PLN",
+                },
+              ],
+            },
+            {
+              name: "games",
+              category: "🎮",
+              items: [
+                {
+                  status: "OK",
+                  name: "Diablo IV",
+                  icon: "",
+                  price: "349.99",
+                  currency: "PLN",
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      [
         "query contains existing name",
         { owner: "owner", name: "clothes" },
         {
