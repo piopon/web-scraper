@@ -54,6 +54,7 @@ export class DataRouter {
         name: { type: "string" },
         category: { type: "string" },
       },
+      required: ["owner"],
     });
     return {
       valid: validate(params),
