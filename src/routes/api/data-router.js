@@ -8,7 +8,7 @@ export class DataRouter {
 
   /**
    * Creates a new data router for configuring appropriate endpoints
-   * @param {String} dataFile The path to the data file
+   * @param {Object} dataFileConfig The object containing data file configuration
    */
   constructor(dataFileConfig) {
     this.#dataFileConfig = dataFileConfig;
