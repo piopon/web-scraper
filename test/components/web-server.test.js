@@ -6,7 +6,7 @@ const TEST_PORT = 1234;
 
 describe("run() method", () => {
   test("should start server and not throw when no INIT components", async () => {
-    const config = { minLogLevel: LogLevel.INFO, serverConfig: { port: TEST_PORT } };
+    const config = { usersDataConfig: {}, minLogLevel: LogLevel.INFO, serverConfig: { port: TEST_PORT } };
     const components = new WebComponents(config);
     const testServer = new WebServer(config, components);
     try {
@@ -18,7 +18,7 @@ describe("run() method", () => {
     }
   });
   test("should start server and not throw when INIT components start", async () => {
-    const config = { minLogLevel: LogLevel.INFO, serverConfig: { port: TEST_PORT } };
+    const config = { usersDataConfig: {}, minLogLevel: LogLevel.INFO, serverConfig: { port: TEST_PORT } };
     const components = new WebComponents(config);
     components.addComponent({
       getName: () => "init-component",
@@ -36,7 +36,7 @@ describe("run() method", () => {
     }
   });
   test("should fail to start server when INIT components does not start", async () => {
-    const config = { minLogLevel: LogLevel.INFO, serverConfig: { port: TEST_PORT } };
+    const config = { usersDataConfig: {}, minLogLevel: LogLevel.INFO, serverConfig: { port: TEST_PORT } };
     const components = new WebComponents(config);
     components.addComponent({
       getName: () => "init-component",
@@ -57,7 +57,7 @@ describe("run() method", () => {
 
 describe("shutdown() method", () => {
   test("does not throw when session started", async () => {
-    const config = { minLogLevel: LogLevel.INFO, serverConfig: { port: TEST_PORT } };
+    const config = { usersDataConfig: {}, minLogLevel: LogLevel.INFO, serverConfig: { port: TEST_PORT } };
     const components = new WebComponents(config);
     const testServer = new WebServer(config, components);
     await testServer.run();
@@ -68,7 +68,7 @@ describe("shutdown() method", () => {
     }
   });
   test("does not throw when session not started", async () => {
-    const config = { minLogLevel: LogLevel.INFO, serverConfig: { port: TEST_PORT } };
+    const config = { usersDataConfig: {}, minLogLevel: LogLevel.INFO, serverConfig: { port: TEST_PORT } };
     const components = new WebComponents(config);
     const testServer = new WebServer(config, components);
     try {
