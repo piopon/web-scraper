@@ -14,7 +14,8 @@ import fs from "fs";
 export class WebScraper {
   static #COMPONENT_NAME = "web-scraper   ";
   static #RUNNING_STATUS = "Running";
-  static #HEADLESS_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36';
+  static #HEADLESS_AGENT =
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36";
 
   #scrapConfig = undefined;
   #userConfig = undefined;
