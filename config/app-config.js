@@ -25,7 +25,10 @@ export class AppConfig {
    */
   getConfig() {
     return {
-      usersDataPath: path.join(this.#rootDir, "users"),
+      usersDataConfig: {
+        path: path.join(this.#rootDir, "users"),
+        file: "data.json",
+      },
       minLogLevel: LogLevel.INFO,
       serverConfig: {
         port: parseInt(process.env.SERVER_PORT) || 5000,

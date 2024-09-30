@@ -90,9 +90,9 @@ export class WebServer {
     server.use(cors(this.#getCorsConfiguration()))
     // setup web server routes
     const routes = new Map([
-      ["/", new ViewRouter(this.#setupConfig.usersDataPath)],
+      ["/", new ViewRouter(this.#setupConfig.usersDataConfig.path)],
       ["/auth", new AuthRouter(this.#components, passport)],
-      ["/api/v1/data", new DataRouter(this.#setupConfig.usersDataPath)],
+      ["/api/v1/data", new DataRouter(this.#setupConfig.usersDataConfig)],
       ["/api/v1/config", new ConfigRouter(this.#components)],
       ["/api/v1/status", new StatusRouter(this.#status, this.#components)],
     ]);

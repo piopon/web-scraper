@@ -1,16 +1,17 @@
 import Ajv from "ajv";
 import express from "express";
 import fs from "fs";
+import path from "path";
 
 export class DataRouter {
-  #dataFilePath = undefined;
+  #dataFileConfig = undefined;
 
   /**
    * Creates a new data router for configuring appropriate endpoints
-   * @param {String} dataFile The path to the data file
+   * @param {Object} dataFileConfig The object containing data file configuration
    */
-  constructor(dataFile) {
-    this.#dataFilePath = dataFile;
+  constructor(dataFileConfig) {
+    this.#dataFileConfig = dataFileConfig;
   }
 
   /**
@@ -26,7 +27,12 @@ export class DataRouter {
         response.status(400).json(validationResult.cause);
         return;
       }
-      var dataContent = JSON.parse(fs.readFileSync(this.#dataFilePath));
+      const userPath = path.join(this.#dataFileConfig.path, request.query.owner, this.#dataFileConfig.file);
+      if (!fs.existsSync(userPath)) {
+        response.status(400).json(`Invalid data owner provided`);
+        return;
+      }
+      var dataContent = JSON.parse(fs.readFileSync(userPath));
       var filteredData = dataContent.filter((data) => {
         const nameOk = request.query.name ? data.name === request.query.name : true;
         const categoryOk = request.query.category ? data.category === request.query.category : true;
@@ -48,9 +54,11 @@ export class DataRouter {
       type: "object",
       additionalProperties: false,
       properties: {
+        owner: { type: "string" },
         name: { type: "string" },
         category: { type: "string" },
       },
+      required: ["owner"],
     });
     return {
       valid: validate(params),

@@ -2,9 +2,10 @@ import { DataRouter } from "../../../src/routes/api/data-router.js";
 
 import supertest from "supertest";
 import express from "express";
+import path from "path";
 import fs from "fs";
 
-const testDataPath = "./data-router-test.json";
+const testDataPath = "./owner/data.json";
 
 beforeAll(() => {
   createDataFile(testDataPath);
@@ -17,7 +18,8 @@ afterAll(() => {
 describe("createRoutes() method", () => {
   test("returns correct number of routes", () => {
     const expectedRoutes = [{ path: "/", method: "get" }];
-    const testRouter = new DataRouter(testDataPath);
+    const testConfig = { path: path.parse(testDataPath).root, file: "data.json" };
+    const testRouter = new DataRouter(testConfig);
     const createdRoutes = testRouter.createRoutes();
     expect(createdRoutes.stack.length).toBe(expectedRoutes.length);
     createdRoutes.stack
@@ -34,9 +36,10 @@ describe("createRoutes() method", () => {
 });
 
 describe("created data GET routes", () => {
+  const testConfig = { path: path.parse(testDataPath).root, file: "data.json" };
   // configue test express app server
   const testApp = express();
-  testApp.use("/data", new DataRouter(testDataPath).createRoutes());
+  testApp.use("/data", new DataRouter(testConfig).createRoutes());
   // create test client to call server requests
   const testClient = supertest(testApp);
   test("returns correct result for unknown path", async () => {
@@ -53,10 +56,10 @@ describe("created data GET routes", () => {
           response: [
             {
               instancePath: "",
-              keyword: "additionalProperties",
-              message: "must NOT have additional properties",
-              params: { additionalProperty: "unknown" },
-              schemaPath: "#/additionalProperties",
+              keyword: "required",
+              message: "must have required property 'owner'",
+              params: { missingProperty: "owner" },
+              schemaPath: "#/required",
             },
           ],
         },
@@ -64,6 +67,30 @@ describe("created data GET routes", () => {
       [
         "query is empty",
         {},
+        {
+          status: 400,
+          response: [
+            {
+              instancePath: "",
+              keyword: "required",
+              message: "must have required property 'owner'",
+              params: { missingProperty: "owner" },
+              schemaPath: "#/required",
+            },
+          ],
+        },
+      ],
+      [
+        "query contains invalid user",
+        { owner: "invalid" },
+        {
+          status: 400,
+          response: "Invalid data owner provided",
+        },
+      ],
+      [
+        "query contains valid user",
+        { owner: "owner" },
         {
           status: 200,
           response: [
@@ -98,7 +125,7 @@ describe("created data GET routes", () => {
       ],
       [
         "query contains existing name",
-        { name: "clothes" },
+        { owner: "owner", name: "clothes" },
         {
           status: 200,
           response: [
@@ -120,7 +147,7 @@ describe("created data GET routes", () => {
       ],
       [
         "query contains not existing name",
-        { name: "unknown" },
+        { owner: "owner", name: "unknown" },
         {
           status: 200,
           response: [],
@@ -128,7 +155,7 @@ describe("created data GET routes", () => {
       ],
       [
         "query contains existing category",
-        { category: "🎮" },
+        { owner: "owner", category: "🎮" },
         {
           status: 200,
           response: [
@@ -150,7 +177,7 @@ describe("created data GET routes", () => {
       ],
       [
         "query contains not existing category",
-        { category: "unknown" },
+        { owner: "owner", category: "unknown" },
         {
           status: 200,
           response: [],
@@ -158,7 +185,7 @@ describe("created data GET routes", () => {
       ],
       [
         "query contains existing and matching name and category",
-        { name: "games", category: "🎮" },
+        { owner: "owner", name: "games", category: "🎮" },
         {
           status: 200,
           response: [
@@ -180,7 +207,7 @@ describe("created data GET routes", () => {
       ],
       [
         "query contains existing but not matching name and category",
-        { name: "games", category: "👕" },
+        { owner: "owner", name: "games", category: "👕" },
         {
           status: 200,
           response: [],
@@ -188,7 +215,7 @@ describe("created data GET routes", () => {
       ],
       [
         "query contains existing name and not existing category",
-        { name: "games", category: "unknown" },
+        { owner: "owner", name: "games", category: "unknown" },
         {
           status: 200,
           response: [],
@@ -196,7 +223,7 @@ describe("created data GET routes", () => {
       ],
       [
         "query contains not existing name and existing category",
-        { name: "unknown", category: "👕" },
+        { owner: "owner", name: "unknown", category: "👕" },
         {
           status: 200,
           response: [],
@@ -204,7 +231,7 @@ describe("created data GET routes", () => {
       ],
       [
         "query contains not existing name and category",
-        { name: "unknown", category: "unknown" },
+        { owner: "owner", name: "unknown", category: "unknown" },
         {
           status: 200,
           response: [],
@@ -248,6 +275,12 @@ function createDataFile(filePath) {
         ],
       },
     ];
+    // create parent directory (if needed)
+    const fileDir = path.dirname(filePath);
+    if (!fs.existsSync(fileDir)) {
+      fs.mkdirSync(fileDir, { recursive: true });
+    }
+    // create the test data file
     fs.writeFileSync(filePath, JSON.stringify(dataContent));
   } catch (err) {
     console.error(`Could not create data file: ${err}`);
@@ -255,5 +288,11 @@ function createDataFile(filePath) {
 }
 
 function removeDataFile(filePath) {
+  // remove the test data file
   fs.rmSync(filePath, { force: true });
+  // remove parent directory (if present)
+  const fileDir = path.dirname(filePath);
+  if (fileDir !== ".") {
+    fs.rmdirSync(fileDir);
+  }
 }
