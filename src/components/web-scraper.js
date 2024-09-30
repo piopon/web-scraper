@@ -351,7 +351,7 @@ export class WebScraper {
    * @param {Object} dataToSave The data object to save in destination file
    */
   #saveData(sessionUser, dataToSave) {
-    const dataFile = path.join(this.#setupConfig.usersDataConfig.path, sessionUser, "data.json");
+    const dataFile = path.join(this.#setupConfig.usersDataConfig.path, sessionUser, this.#setupConfig.usersDataConfig.file);
     const dataDirectory = path.dirname(dataFile);
     if (!fs.existsSync(dataDirectory)) {
       fs.mkdirSync(dataDirectory, { recursive: true });

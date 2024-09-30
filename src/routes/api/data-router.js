@@ -4,14 +4,14 @@ import fs from "fs";
 import path from "path";
 
 export class DataRouter {
-  #dataFilePath = undefined;
+  #dataFileConfig = undefined;
 
   /**
    * Creates a new data router for configuring appropriate endpoints
    * @param {String} dataFile The path to the data file
    */
-  constructor(dataFile) {
-    this.#dataFilePath = dataFile;
+  constructor(dataFileConfig) {
+    this.#dataFileConfig = dataFileConfig;
   }
 
   /**
@@ -27,7 +27,7 @@ export class DataRouter {
         response.status(400).json(validationResult.cause);
         return;
       }
-      const userPath = path.join(this.#dataFilePath, request.query.owner, "data.json");
+      const userPath = path.join(this.#dataFileConfig.path, request.query.owner, this.#dataFileConfig.file);
       if (!fs.existsSync(userPath)) {
         response.status(400).json(`Invalid data owner provided`);
         return;

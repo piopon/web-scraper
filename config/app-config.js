@@ -27,6 +27,7 @@ export class AppConfig {
     return {
       usersDataConfig: {
         path: path.join(this.#rootDir, "users"),
+        file: "data.json",
       },
       minLogLevel: LogLevel.INFO,
       serverConfig: {
