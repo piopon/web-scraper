@@ -18,7 +18,8 @@ afterAll(() => {
 describe("createRoutes() method", () => {
   test("returns correct number of routes", () => {
     const expectedRoutes = [{ path: "/", method: "get" }];
-    const testRouter = new DataRouter(path.parse(testDataPath).root);
+    const testConfig = { path: path.parse(testDataPath).root, file: "data.json" };
+    const testRouter = new DataRouter(testConfig);
     const createdRoutes = testRouter.createRoutes();
     expect(createdRoutes.stack.length).toBe(expectedRoutes.length);
     createdRoutes.stack
@@ -35,9 +36,10 @@ describe("createRoutes() method", () => {
 });
 
 describe("created data GET routes", () => {
+  const testConfig = { path: path.parse(testDataPath).root, file: "data.json" };
   // configue test express app server
   const testApp = express();
-  testApp.use("/data", new DataRouter(path.parse(testDataPath).root).createRoutes());
+  testApp.use("/data", new DataRouter(testConfig).createRoutes());
   // create test client to call server requests
   const testClient = supertest(testApp);
   test("returns correct result for unknown path", async () => {
