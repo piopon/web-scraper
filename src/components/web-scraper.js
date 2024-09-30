@@ -16,7 +16,8 @@ export class WebScraper {
   static #RUNNING_STATUS = "Running";
   static #HEADLESS_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36';
 
-  #setupConfig = undefined;
+  #scrapConfig = undefined;
+  #userConfig = undefined;
   #waitConfig = new Map();
   #sessions = new Map();
   #status = undefined;
@@ -26,7 +27,8 @@ export class WebScraper {
    * @param {Object} config The object containing scraper configuration
    */
   constructor(config) {
-    this.#setupConfig = config;
+    this.#scrapConfig = config.scraperConfig;
+    this.#userConfig = config.usersDataConfig;
     this.#status = new StatusLogger(WebScraper.#COMPONENT_NAME, config.minLogLevel);
     this.#status.info("Created");
   }
@@ -80,12 +82,12 @@ export class WebScraper {
     // open new Puppeteer virtual browser and an initial web page
     session.browser = await puppeteer.launch({ headless: "new" });
     session.page = await session.browser.newPage();
-    session.page.setDefaultTimeout(this.#setupConfig.scraperConfig.defaultTimeout);
+    session.page.setDefaultTimeout(this.#scrapConfig.defaultTimeout);
     // set custom user agent in order to make things work in headless mode
     await session.page.setUserAgent(WebScraper.#HEADLESS_AGENT);
     // invoke scrap data action initially and setup interval calls
     this.#status.debug(`Initializing data scraping for user ${sessionUser.name}`);
-    const intervalTime = this.#setupConfig.scraperConfig.scrapInterval;
+    const intervalTime = this.#scrapConfig.scrapInterval;
     session.id = setInterval(() => this.#scrapData(session), intervalTime);
     // store this session into active sessions map
     this.#sessions.set(sessionUser.email, session);
@@ -193,7 +195,7 @@ export class WebScraper {
       actions: {
         afterInit: async () => {
           const today = new Date(Date.now());
-          const loginInterval = scraper.#setupConfig.scraperConfig.loginInterval;
+          const loginInterval = scraper.#scrapConfig.loginInterval;
           for (const user of await ScrapUser.getDatabaseModel().find()) {
             if (this.#daysDifference(new Date(user.lastLogin), today) < loginInterval) {
               await scraper.start(user);
@@ -326,7 +328,7 @@ export class WebScraper {
   async #navigateToPage(session, newUrl, observer) {
     let attempt = 1;
     let foundSelector = false;
-    const maxAttempts = this.#setupConfig.scraperConfig.timeoutAttempts;
+    const maxAttempts = this.#scrapConfig.timeoutAttempts;
     while (!foundSelector) {
       try {
         await session.page.goto(newUrl, { waitUntil: observer.target });
@@ -351,7 +353,7 @@ export class WebScraper {
    * @param {Object} dataToSave The data object to save in destination file
    */
   #saveData(sessionUser, dataToSave) {
-    const dataFile = path.join(this.#setupConfig.usersDataConfig.path, sessionUser, this.#setupConfig.usersDataConfig.file);
+    const dataFile = path.join(this.#userConfig.path, sessionUser, this.#userConfig.file);
     const dataDirectory = path.dirname(dataFile);
     if (!fs.existsSync(dataDirectory)) {
       fs.mkdirSync(dataDirectory, { recursive: true });
@@ -399,7 +401,7 @@ export class WebScraper {
     if (session.page && error.type.length > 0) {
       const sessionUser = this.#findSessionUser(session);
       const captureName = `error_${error.timestamp.replaceAll(":", "-").replaceAll(" ", "_")}.png`;
-      const capturePath = path.join(this.#setupConfig.usersDataConfig.path, sessionUser, "captures", captureName);
+      const capturePath = path.join(this.#userConfig.path, sessionUser, "captures", captureName);
       const captureDirectory = path.dirname(capturePath);
       if (!fs.existsSync(captureDirectory)) {
         fs.mkdirSync(captureDirectory, { recursive: true });
