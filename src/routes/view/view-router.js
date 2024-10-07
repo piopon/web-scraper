@@ -41,10 +41,12 @@ export class ViewRouter {
         title: "scraper configuration",
         type: "home",
         user: request.user.name,
+        token: request.session.jwt,
         content: scrapConfig.toJSON(),
         categories: this.#getSupportedCategories(),
         currencies: this.#getSupportedCurrencies(),
       });
+      request.session.jwt = null;
     });
     router.get("/status", AccessChecker.canViewContent, (request, response) =>
       response.render("status", {
