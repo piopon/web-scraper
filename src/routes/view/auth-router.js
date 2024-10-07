@@ -98,7 +98,7 @@ export class AuthRouter {
           return res.json({ userJson, token });
         });
       })(req, res);
-    }
+    };
     router.post("/login", AccessChecker.canViewSessionUser, loginCallback);
     // user content endpoints (log-out)
     const logoutCallback = (request, response, next) => {
