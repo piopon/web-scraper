@@ -55,6 +55,10 @@ export class AuthRouter {
         type: "login",
       })
     );
+    router.get("/token", AccessChecker.canViewContent, (request, response) => {
+      request.session.jwt = jwt.sign(request.user.toJSON(), "your_jwt_secret");
+      console.log(request.session.jwt);
+    });
   }
 
   /**
@@ -71,7 +75,7 @@ export class AuthRouter {
     });
     router.post("/register", AccessChecker.canViewSessionUser, registerCallback);
     const loginOptions = {
-      successRedirect: "/",
+      successRedirect: "/auth/token",
       failureRedirect: "/auth/login",
       failureFlash: true,
     };
