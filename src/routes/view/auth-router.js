@@ -3,6 +3,7 @@ import { ComponentType } from "../../../config/app-types.js";
 import { ScrapConfig } from "../../model/scrap-config.js";
 import { ScrapUser } from "../../model/scrap-user.js";
 
+import jwt from "jsonwebtoken";
 import express from "express";
 import bcrypt from "bcrypt";
 import { MongooseError } from "mongoose";
