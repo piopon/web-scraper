@@ -74,6 +74,25 @@ export class AuthRouter {
       failureRedirect: "/auth/login",
       failureFlash: true,
     });
+    const loginCallbackJwt = (req, res, next) => {
+      this.#passport.authenticate("local-login", {session: false}, (err, user, info) => {
+        const userJson = user.toJSON();
+        if (err || !userJson) {
+          return res.status(400).json({
+            message: "Something is not right",
+            user: userJson,
+          });
+        }
+        req.login(userJson, {session: false}, (err) => {
+          if (err) {
+            res.send(err);
+          }
+          // generate a signed son web token with the contents of user object and return it in the response
+          const token = jwt.sign(userJson, "your_jwt_secret");
+          return res.json({ userJson, token });
+        });
+      })(req, res);
+    }
     router.post("/login", AccessChecker.canViewSessionUser, loginCallback);
     // user content endpoints (log-out)
     const logoutCallback = (request, response, next) => {
