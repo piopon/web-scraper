@@ -69,13 +69,14 @@ export class AuthRouter {
       session: false,
     });
     router.post("/register", AccessChecker.canViewSessionUser, registerCallback);
-    const loginCallback = this.#passport.authenticate("local-login", {
+    const loginOptions = {
       successRedirect: "/",
       failureRedirect: "/auth/login",
       failureFlash: true,
-    });
+    };
+    const loginCallback = this.#passport.authenticate("local-login", loginOptions);
     const loginCallbackJwt = (req, res, next) => {
-      this.#passport.authenticate("local-login", {session: false}, (err, user, info) => {
+      this.#passport.authenticate("local-login", loginOptions, (err, user, info) => {
         const userJson = user.toJSON();
         if (err || !userJson) {
           return res.status(400).json({
@@ -83,7 +84,7 @@ export class AuthRouter {
             user: userJson,
           });
         }
-        req.login(userJson, {session: false}, (err) => {
+        req.login(userJson, loginOptions, (err) => {
           if (err) {
             res.send(err);
           }
