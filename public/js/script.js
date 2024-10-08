@@ -10,9 +10,10 @@ main();
  * Method used to initialize script
  */
 function main() {
-  // initialize scrap config only when main index page is opened
+  // initialize scrap config and receive JWT only when main index page is opened and if needed
   if (isGroupsInitializationNeeded()) {
     initializeScraperConfig();
+    initializeJWT();
   }
   // start current status controller and monitor components
   const statusController = new StatusController();
@@ -43,6 +44,15 @@ function initializeScraperConfig() {
   mediator.register(componentsController);
   mediator.register(observersController);
   mediator.register(groupsController);
+}
+
+async function initializeJWT() {
+  const url = `/auth/token`;
+  const response = await fetch(url, { method: "GET" });
+  if (response.status === 200) {
+    const jwt = await response.json();
+    localStorage.setItem("JWT", jwt.token);
+  }
 }
 
 /**
