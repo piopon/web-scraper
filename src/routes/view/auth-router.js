@@ -75,7 +75,7 @@ export class AuthRouter {
     });
     router.post("/register", AccessChecker.canViewSessionUser, registerCallback);
     const loginOptions = {
-      successRedirect: "/auth/token",
+      successRedirect: "/",
       failureRedirect: "/auth/login",
       failureFlash: true,
     };
