@@ -18,6 +18,14 @@ function main() {
   // start current status controller and monitor components
   const statusController = new StatusController();
   statusController.start();
+  // add user logout button handler cleaning JWT
+  const logoutButton = document.getElementById("user-logout");
+  if (logoutButton) {
+    logoutButton.addEventListener("submit", () => {
+      localStorage.removeItem("JWT");
+      return true;
+    });
+  }
 }
 
 /**

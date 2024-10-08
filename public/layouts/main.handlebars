@@ -38,7 +38,7 @@
           {{#if user}}
           <div class="user-management">
             <h5>user: {{user}}</h5>
-            <form action="/auth/logout" method="POST">
+            <form id="user-logout" action="/auth/logout" method="POST">
               <button type="submit" id="user-logout"><i class="fa fa-sign-out"></i>logout</button>
             </form>
           </div>
