@@ -55,6 +55,9 @@ function initializeScraperConfig() {
 }
 
 async function initializeJWT() {
+  if (localStorage.getItem("JWT")) {
+    return;
+  }
   const url = `/auth/token`;
   const response = await fetch(url, { method: "GET" });
   if (response.status === 200) {
