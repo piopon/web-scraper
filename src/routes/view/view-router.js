@@ -37,7 +37,7 @@ export class ViewRouter {
   #createGetRoutes(router) {
     router.get("/", AccessChecker.canViewContent, async (request, response) => {
       const scrapConfig = await ScrapConfig.getDatabaseModel().findById(request.user.config);
-      response.status(200).header("x-auth-token", request.session.jwt).render("index", {
+      response.render("index", {
         title: "scraper configuration",
         type: "home",
         user: request.user.name,
@@ -45,7 +45,6 @@ export class ViewRouter {
         categories: this.#getSupportedCategories(),
         currencies: this.#getSupportedCurrencies(),
       });
-      request.session.jwt = null;
     });
     router.get("/status", AccessChecker.canViewContent, (request, response) =>
       response.render("status", {

@@ -56,8 +56,8 @@ export class AuthRouter {
       })
     );
     router.get("/token", AccessChecker.canViewContent, (request, response) => {
-      request.session.jwt = jwt.sign(request.user.toJSON(), "your_jwt_secret");
-      return response.redirect("/");
+      const token = jwt.sign(request.user.toJSON(), "your_jwt_secret");
+      return response.status(200).json({token});
     });
   }
 
