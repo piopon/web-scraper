@@ -56,7 +56,7 @@ export class AuthRouter {
       })
     );
     router.get("/token", AccessChecker.canViewContent, (request, response) => {
-      const token = jwt.sign(request.user.toJSON(), "your_jwt_secret");
+      const token = jwt.sign(request.user.toJSON(), process.env.JWT_SECRET);
       return response.status(200).json({token});
     });
   }
@@ -94,7 +94,7 @@ export class AuthRouter {
             res.send(err);
           }
           // generate a signed son web token with the contents of user object and return it in the response
-          const token = jwt.sign(userJson, "your_jwt_secret");
+          const token = jwt.sign(userJson, process.env.JWT_SECRET);
           return res.json({ userJson, token });
         });
       })(req, res);
