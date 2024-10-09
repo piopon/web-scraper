@@ -26,11 +26,11 @@ export class CommonService {
    * @param {Object} requestBody The HTTP body of the request
    * @returns request options object
    */
-  static createRequestOptions(requestMethod, requestBody = undefined) {
+  static createRequestOptions(requestMethod, requestBody = undefined, contentType = "application/json") {
     return {
       method: requestMethod,
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": contentType,
         Authorization: `Bearer ${localStorage.getItem("JWT")}`,
       },
       body: requestBody,
