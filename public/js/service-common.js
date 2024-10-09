@@ -29,7 +29,10 @@ export class CommonService {
   static createRequestOptions(requestMethod, requestBody = undefined) {
     return {
       method: requestMethod,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("JWT")}`,
+      },
       body: requestBody,
     };
   }
