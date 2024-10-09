@@ -26,6 +26,7 @@ export class CommonService {
    * Method used to create request options
    * @param {String} requestMethod The HTTP method of the request
    * @param {Object} requestBody The HTTP body of the request
+   * @param {String} contentType The content type of the request
    * @returns request options object
    */
   static createRequestOptions(requestMethod, requestBody = undefined, contentType = undefined) {
