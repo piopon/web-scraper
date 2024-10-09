@@ -10,7 +10,7 @@ export class ComponentService {
     const url = `/image`;
     const requestBody = new FormData();
     requestBody.append(inputFile.getAttribute("name"), inputFile.files[0]);
-    const response = await fetch(url, CommonService.createRequestOptions("POST", requestBody, "multipart/form-data"));
+    const response = await fetch(url, CommonService.createRequestOptions("POST", requestBody, ""));
     if (response.status === 200) {
       return response.json();
     }

@@ -30,7 +30,7 @@ export class CommonService {
     return {
       method: requestMethod,
       headers: {
-        "Content-Type": contentType,
+        ...(contentType && { "Content-Type": contentType }),
         Authorization: `Bearer ${localStorage.getItem("JWT")}`,
       },
       body: requestBody,
