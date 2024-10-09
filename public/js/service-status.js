@@ -10,8 +10,8 @@ export class StatusService {
   static async getStatus(componentName = undefined, withHistory = false) {
     const componentUrl = componentName ? `name=${componentName}&` : "";
     const url = `/api/v1/status?${componentUrl}history=${withHistory}`;
-    const requestOptions = CommonService.createRequestOptions("GET");
-    const response = await fetch(url, requestOptions);
+    const requestOpts = CommonService.createRequestOptions("GET");
+    const response = await fetch(url, requestOpts);
     if (response.status === 200) {
       return response.json();
     }

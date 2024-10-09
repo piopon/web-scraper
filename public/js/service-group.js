@@ -10,8 +10,8 @@ export class GroupsService {
     const url = `api/v1/config/groups`;
     const expandedGroup = document.querySelector("article.group-column.expanded");
     const requestBody = JSON.stringify(GroupsView.fromHtml(expandedGroup));
-    const requestOptions = CommonService.createRequestOptions("POST", requestBody);
-    const response = await fetch(url, requestOptions);
+    const requestOpts = CommonService.createRequestOptions("POST", requestBody, CommonService.TYPE_JSON);
+    const response = await fetch(url, requestOpts);
     if (response.status === 200) {
       return response.json();
     }
@@ -26,8 +26,8 @@ export class GroupsService {
    */
   static async getGroups() {
     const url = `api/v1/config`;
-    const requestOptions = CommonService.createRequestOptions("GET");
-    const response = await fetch(url, requestOptions);
+    const requestOpts = CommonService.createRequestOptions("GET");
+    const response = await fetch(url, requestOpts);
     if (response.status === 200) {
       return response.json();
     }
@@ -45,8 +45,8 @@ export class GroupsService {
     const url = `api/v1/config/groups?name=${encodeURIComponent(groupId)}`;
     const expandedGroup = document.querySelector("article.group-column.expanded");
     const requestBody = JSON.stringify(GroupsView.fromHtml(expandedGroup));
-    const requestOptions = CommonService.createRequestOptions("PUT", requestBody);
-    const response = await fetch(url, requestOptions);
+    const requestOpts = CommonService.createRequestOptions("PUT", requestBody, CommonService.TYPE_JSON);
+    const response = await fetch(url, requestOpts);
     if (response.status === 200) {
       return response.json();
     }
@@ -62,8 +62,8 @@ export class GroupsService {
    */
   static async deleteGroup(groupId) {
     const url = `api/v1/config/groups?name=${encodeURIComponent(groupId)}`;
-    const requestOptions = CommonService.createRequestOptions("DELETE");
-    const response = await fetch(url, requestOptions);
+    const requestOpts = CommonService.createRequestOptions("DELETE");
+    const response = await fetch(url, requestOpts);
     if (response.status === 200) {
       return response.json();
     }
