@@ -120,7 +120,7 @@ export class AuthRouter {
     };
     const verify = async (jwtPayload, done) => {
       try {
-        const user = await ScrapUser.getDatabaseModel().findById(jwtPayload.id);
+        const user = await ScrapUser.getDatabaseModel().findById(jwtPayload._id);
         if (user) {
           return done(null, user);
         }
