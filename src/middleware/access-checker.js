@@ -23,10 +23,7 @@ export class AccessChecker {
     if (request.isAuthenticated()) {
       return next();
     }
-    const jwtOpts = {
-      session: false,
-      failureRedirect: "/auth/login"
-    };
+    const jwtOpts = { session: false, failureRedirect: "/auth/login" };
     return request.app.locals.passport.authenticate("jwt", jwtOpts)(request, response, next);
   }
 
@@ -40,10 +37,7 @@ export class AccessChecker {
     if (!request.isAuthenticated()) {
       return next();
     }
-    const jwtOpts = {
-      session: false,
-      failureRedirect: "/"
-    };
+    const jwtOpts = { session: false, failureRedirect: "/" };
     return request.app.locals.passport.authenticate("jwt", jwtOpts)(request, response, next);
   }
 }
