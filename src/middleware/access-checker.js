@@ -6,6 +6,9 @@ export class AccessChecker {
    * @param {Function} next The next middleware function in the cycle
    */
   static canReceiveData(request, response, next) {
+    if (request.app.locals.passport.authenticate("jwt", {session: false})) {
+      return next();
+    }
     if (request.isAuthenticated()) {
       return next();
     }
@@ -19,6 +22,9 @@ export class AccessChecker {
    * @param {Function} next The next middleware function in the cycle
    */
   static canViewContent(request, response, next) {
+    if (request.app.locals.passport.authenticate("jwt", {session: false})) {
+      return next();
+    }
     if (request.isAuthenticated()) {
       return next();
     }
@@ -32,6 +38,9 @@ export class AccessChecker {
    * @param {Function} next The next middleware function in the cycle
    */
   static canViewSessionUser(request, response, next) {
+    if (!request.app.locals.passport.authenticate("jwt", {session: false})) {
+      return next();
+    }
     if (!request.isAuthenticated()) {
       return next();
     }
