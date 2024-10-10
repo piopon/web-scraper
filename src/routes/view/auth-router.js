@@ -7,8 +7,8 @@ import jwt from "jsonwebtoken";
 import express from "express";
 import bcrypt from "bcrypt";
 import { MongooseError } from "mongoose";
-import { Strategy } from "passport-local";
-import { ExtractJwt, Strategy } from "passport-jwt";
+import { Strategy as LocalStategy } from "passport-local";
+import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 
 export class AuthRouter {
   static #ENCRYPT_SALT = 10;
@@ -126,7 +126,7 @@ export class AuthRouter {
         return done(null, false, { message: error.message });
       }
     };
-    passport.use("jwt", new Strategy(options, verify));
+    passport.use("jwt", new JwtStrategy(options, verify));
   }
 
   /**
@@ -171,7 +171,7 @@ export class AuthRouter {
         return done(null, false, { message: message });
       }
     };
-    passport.use("local-login", new Strategy(options, verify));
+    passport.use("local-login", new LocalStategy(options, verify));
   }
 
   /**
@@ -216,6 +216,6 @@ export class AuthRouter {
         return done(null, false, { message: message });
       }
     };
-    passport.use("local-register", new Strategy(options, verify));
+    passport.use("local-register", new LocalStategy(options, verify));
   }
 }
