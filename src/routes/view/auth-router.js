@@ -113,6 +113,10 @@ export class AuthRouter {
     });
   }
 
+  /**
+   * Method used to configurate user JWT login strategy
+   * @param {Object} passport The login auth and stategy object
+   */
   #configJwtStategy(passport) {
     const options = {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -133,7 +137,7 @@ export class AuthRouter {
   }
 
   /**
-   * Method used to configurate user login strategy (currently only local login is possible)
+   * Method used to configurate user local login strategy
    * @param {Object} passport The login auth and stategy object
    */
   #configLoginStategy(passport) {
@@ -178,8 +182,8 @@ export class AuthRouter {
   }
 
   /**
-   * Method used to configurate user register strategy
-   * @param {Object} passport The login auth and stategy object
+   * Method used to configurate user local register strategy
+   * @param {Object} passport The register auth and stategy object
    */
   #configRegisterStategy(passport) {
     const options = { usernameField: "email", passwordField: "password", passReqToCallback: true };
