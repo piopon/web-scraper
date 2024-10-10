@@ -25,6 +25,7 @@ export class AccessChecker {
     }
     const jwtOpts = {
       session: false,
+      failureRedirect: "/auth/login"
     };
     return request.app.locals.passport.authenticate("jwt", jwtOpts)(request, response, next);
   }
@@ -41,6 +42,7 @@ export class AccessChecker {
     }
     const jwtOpts = {
       session: false,
+      failureRedirect: "/"
     };
     return request.app.locals.passport.authenticate("jwt", jwtOpts)(request, response, next);
   }
