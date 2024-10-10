@@ -60,6 +60,9 @@ export class AuthRouter {
       const token = jwt.sign(request.user.toJSON(), process.env.JWT_SECRET);
       return response.status(200).json({ token });
     });
+    router.get("/test", this.#passport.authenticate("jwt", {session: false}), (request, response) => {
+      return response.status(200).json({ msg: "You are successfully authenticated to this route!" });
+    });
   }
 
   /**
