@@ -8,6 +8,7 @@ import express from "express";
 import bcrypt from "bcrypt";
 import { MongooseError } from "mongoose";
 import { Strategy } from "passport-local";
+import { ExtractJwt, JwtStrategy } from "passport-jwt";
 
 export class AuthRouter {
   static #ENCRYPT_SALT = 10;
@@ -96,6 +97,7 @@ export class AuthRouter {
    */
   #configAuthentication(passport) {
     // configure authenticate logic for specific endpoints
+    this.#configJwtStategy(passport);
     this.#configLoginStategy(passport);
     this.#configRegisterStategy(passport);
     // configure common serialize and deserialize user logic
@@ -106,6 +108,18 @@ export class AuthRouter {
       const user = await ScrapUser.getDatabaseModel().findById(id);
       done(null, user);
     });
+  }
+
+  #configJwtStategy(passport) {
+    const options = {
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: process.env.JWT_SECRET,
+    };
+    const verify = async (jwtPayload, done) => {
+       const user = await ScrapUser.getDatabaseModel().findById(jwtPayload.id);
+       return done(null, user);
+    };
+    passport.use("jwt", new JwtStrategy(options, verify));
   }
 
   /**
