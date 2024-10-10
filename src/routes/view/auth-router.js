@@ -8,7 +8,7 @@ import express from "express";
 import bcrypt from "bcrypt";
 import { MongooseError } from "mongoose";
 import { Strategy } from "passport-local";
-import { ExtractJwt, JwtStrategy } from "passport-jwt";
+import { ExtractJwt, Strategy } from "passport-jwt";
 
 export class AuthRouter {
   static #ENCRYPT_SALT = 10;
@@ -116,10 +116,17 @@ export class AuthRouter {
       secretOrKey: process.env.JWT_SECRET,
     };
     const verify = async (jwtPayload, done) => {
-       const user = await ScrapUser.getDatabaseModel().findById(jwtPayload.id);
-       return done(null, user);
+      try {
+        const user = await ScrapUser.getDatabaseModel().findById(jwtPayload.id);
+        if (user) {
+          return done(null, user);
+        }
+        return done(null, false, { message: "Incorrect token." });
+      } catch (error) {
+        return done(null, false, { message: error.message });
+      }
     };
-    passport.use("jwt", new JwtStrategy(options, verify));
+    passport.use("jwt", new Strategy(options, verify));
   }
 
   /**
