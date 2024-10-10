@@ -9,7 +9,7 @@ export class AccessChecker {
     if (request.isAuthenticated()) {
       return next();
     }
-    response.status(401).json("Not authenticated");
+    response.status(401).json("Unauthorized");
   }
 
   /**
