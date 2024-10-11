@@ -58,6 +58,8 @@ describe("created auth GET routes", () => {
   testApp.use(passport.initialize());
   testApp.use(passport.session());
   testApp.use("/auth", testRouter.createRoutes());
+  // store passport configuration in app locals
+  testApp.locals.passport = passport;
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
   test("returns correct result for unknown path", async () => {
@@ -113,6 +115,8 @@ describe("created auth POST routes", () => {
   testApp.use(passport.initialize());
   testApp.use(passport.session());
   testApp.use("/auth", testRouter.createRoutes());
+  // store passport configuration in app locals
+  testApp.locals.passport = passport;
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
   test("returns correct result for unknown path", async () => {
