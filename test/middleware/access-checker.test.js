@@ -3,7 +3,7 @@ import { AccessChecker } from "../../src/middleware/access-checker.js";
 describe("canReceiveData() method", () => {
   test("shouldn't do anything when authorized", async () => {
     const invokeState = { status: 200, text: "", next: false };
-    const requestObj = { 
+    const requestObj = {
       isAuthenticated: () => true,
       app: {
         locals: {
@@ -13,11 +13,11 @@ describe("canReceiveData() method", () => {
                 invokeState.status = 401;
                 invokeState.text = "Unauthroized";
                 invokeState.next = false;
-              }
+              };
             },
           },
         },
-      }
+      },
     };
     const mockedRes = {
       status: (input) => {
@@ -33,7 +33,7 @@ describe("canReceiveData() method", () => {
   });
   test("should throw error 401 when not authorized", async () => {
     const invokeState = { status: 200, text: "", next: false };
-    const requestObj = { 
+    const requestObj = {
       isAuthenticated: () => false,
       app: {
         locals: {
@@ -43,11 +43,11 @@ describe("canReceiveData() method", () => {
                 invokeState.status = 401;
                 invokeState.text = "Unauthroized";
                 invokeState.next = false;
-              }
+              };
             },
           },
         },
-      }
+      },
     };
     const mockedRes = {
       status: (input) => {
@@ -66,7 +66,7 @@ describe("canReceiveData() method", () => {
 describe("canViewContent() method", () => {
   test("should not redirect when authorized", async () => {
     const invokeState = { redirect: "", next: false };
-    const requestObj = { 
+    const requestObj = {
       isAuthenticated: () => true,
       app: {
         locals: {
@@ -75,11 +75,11 @@ describe("canViewContent() method", () => {
               return (req, res, next) => {
                 invokeState.redirect = "/auth/login";
                 invokeState.next = false;
-              }
+              };
             },
           },
         },
-      }
+      },
     };
     const mockedRes = { redirect: (input) => (invokeState.redirect = input) };
     const mockedNext = () => (invokeState.next = true);
@@ -89,7 +89,7 @@ describe("canViewContent() method", () => {
   });
   test("should redirect when not authorized", async () => {
     const invokeState = { redirect: "", next: false };
-    const requestObj = { 
+    const requestObj = {
       isAuthenticated: () => false,
       app: {
         locals: {
@@ -98,11 +98,11 @@ describe("canViewContent() method", () => {
               return (req, res, next) => {
                 invokeState.redirect = "/auth/login";
                 invokeState.next = false;
-              }
+              };
             },
           },
         },
-      }
+      },
     };
     const mockedRes = { redirect: (input) => (invokeState.redirect = input) };
     const mockedNext = () => (invokeState.next = true);
@@ -115,7 +115,7 @@ describe("canViewContent() method", () => {
 describe("canViewSessionUser() method", () => {
   test("should not redirect when not authorized", async () => {
     const invokeState = { redirect: "", next: false };
-    const requestObj = { 
+    const requestObj = {
       isAuthenticated: () => false,
       app: {
         locals: {
@@ -124,11 +124,11 @@ describe("canViewSessionUser() method", () => {
               return (req, res, next) => {
                 invokeState.redirect = "/";
                 invokeState.next = false;
-              }
+              };
             },
           },
         },
-      }
+      },
     };
     const mockedRes = { redirect: (input) => (invokeState.redirect = input) };
     const mockedNext = () => (invokeState.next = true);
@@ -138,7 +138,7 @@ describe("canViewSessionUser() method", () => {
   });
   test("should redirect when authorized", async () => {
     const invokeState = { redirect: "", next: false };
-    const requestObj = { 
+    const requestObj = {
       isAuthenticated: () => true,
       app: {
         locals: {
@@ -147,11 +147,11 @@ describe("canViewSessionUser() method", () => {
               return (req, res, next) => {
                 invokeState.redirect = "/";
                 invokeState.next = false;
-              }
+              };
             },
           },
         },
-      }
+      },
     };
     const mockedRes = { redirect: (input) => (invokeState.redirect = input) };
     const mockedNext = () => (invokeState.next = true);
