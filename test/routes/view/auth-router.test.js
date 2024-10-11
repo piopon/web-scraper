@@ -21,6 +21,7 @@ describe("createRoutes() method", () => {
     const expectedRoutes = [
       { path: "/register", method: "get" },
       { path: "/login", method: "get" },
+      { path: "/token", method: "get" },
       { path: "/register", method: "post" },
       { path: "/login", method: "post" },
       { path: "/logout", method: "post" },
