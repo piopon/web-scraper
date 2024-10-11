@@ -11,7 +11,8 @@ export class ObserversService {
     const url = `api/v1/config/groups/observers?parent=${encodeURIComponent(parentId)}`;
     const openedObserver = document.querySelector("div.modal-dialog.init-reveal:not(.hidden)");
     const requestBody = JSON.stringify(ObserversView.fromHtml(openedObserver));
-    const response = await fetch(url, CommonService.createRequestOptions("POST", requestBody));
+    const requestOpts = CommonService.createRequestOptions("POST", requestBody, CommonService.TYPE_JSON);
+    const response = await fetch(url, requestOpts);
     if (response.status === 200) {
       return response.json();
     }
@@ -27,7 +28,8 @@ export class ObserversService {
    */
   static async getObservers(parentId) {
     const url = `api/v1/config/groups?name=${encodeURIComponent(parentId)}`;
-    const response = await fetch(url, CommonService.createRequestOptions("GET"));
+    const requestOpts = CommonService.createRequestOptions("GET");
+    const response = await fetch(url, requestOpts);
     if (response.status === 200) {
       return response.json();
     }
@@ -45,7 +47,8 @@ export class ObserversService {
     const url = `api/v1/config/groups/observers?name=${encodeURIComponent(observerId)}`;
     const openedObserver = document.querySelector("div.modal-dialog.init-reveal:not(.hidden)");
     const requestBody = JSON.stringify(ObserversView.fromHtml(openedObserver));
-    const response = await fetch(url, CommonService.createRequestOptions("PUT", requestBody));
+    const requestOpts = CommonService.createRequestOptions("PUT", requestBody, CommonService.TYPE_JSON);
+    const response = await fetch(url, requestOpts);
     if (response.status === 200) {
       return response.json();
     }
@@ -61,7 +64,8 @@ export class ObserversService {
    */
   static async deleteObserver(observerId) {
     const url = `api/v1/config/groups/observers?name=${encodeURIComponent(observerId)}`;
-    const response = await fetch(url, CommonService.createRequestOptions("DELETE"));
+    const requestOpts = CommonService.createRequestOptions("DELETE");
+    const response = await fetch(url, requestOpts);
     if (response.status === 200) {
       return response.json();
     }

@@ -14,11 +14,14 @@ import { engine } from "express-handlebars";
 
 jest.mock("../../../src/model/scrap-config.js");
 
+process.env.JWT_SECRET = "test_secret";
+
 describe("createRoutes() method", () => {
   test("returns correct number of routes", () => {
     const expectedRoutes = [
       { path: "/register", method: "get" },
       { path: "/login", method: "get" },
+      { path: "/token", method: "get" },
       { path: "/register", method: "post" },
       { path: "/login", method: "post" },
       { path: "/logout", method: "post" },
@@ -55,6 +58,8 @@ describe("created auth GET routes", () => {
   testApp.use(passport.initialize());
   testApp.use(passport.session());
   testApp.use("/auth", testRouter.createRoutes());
+  // store passport configuration in app locals
+  testApp.locals.passport = passport;
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
   test("returns correct result for unknown path", async () => {
@@ -86,6 +91,11 @@ describe("created auth GET routes", () => {
     expect(response.text).toContain('<i class="fa fa-sign-in"></i> login with email');
     expect(response.text).toContain('<p>not registered? go to <a href="/auth/register">register</a> page.</p>');
   });
+  test("returns correct result using /token endpoint", async () => {
+    const response = await testAgent.get("/auth/token");
+    expect(response.statusCode).toBe(302);
+    expect(response.text).toBe("Found. Redirecting to /auth/login");
+  });
 });
 
 describe("created auth POST routes", () => {
@@ -110,6 +120,8 @@ describe("created auth POST routes", () => {
   testApp.use(passport.initialize());
   testApp.use(passport.session());
   testApp.use("/auth", testRouter.createRoutes());
+  // store passport configuration in app locals
+  testApp.locals.passport = passport;
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
   test("returns correct result for unknown path", async () => {

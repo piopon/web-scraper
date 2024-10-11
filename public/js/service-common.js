@@ -1,4 +1,6 @@
 export class CommonService {
+  static TYPE_JSON = "application/json";
+
   /**
    * Method used to return error string from the input error response object
    * @param {Object} errorResponse The object containing error details
@@ -24,12 +26,16 @@ export class CommonService {
    * Method used to create request options
    * @param {String} requestMethod The HTTP method of the request
    * @param {Object} requestBody The HTTP body of the request
+   * @param {String} contentType The content type of the request
    * @returns request options object
    */
-  static createRequestOptions(requestMethod, requestBody = undefined) {
+  static createRequestOptions(requestMethod, requestBody = undefined, contentType = undefined) {
     return {
       method: requestMethod,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        ...(contentType && { "Content-Type": contentType }),
+        Authorization: `Bearer ${localStorage.getItem("JWT")}`,
+      },
       body: requestBody,
     };
   }

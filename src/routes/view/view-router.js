@@ -75,7 +75,7 @@ export class ViewRouter {
       if (!imageMimeRegex.test(fileObject.mimetype)) {
         return response.status(400).json("Provided file is NOT an image file");
       }
-      const newImagePath = path.join(this.#dataFilePath, request.user.email, "images", fileObject.name)
+      const newImagePath = path.join(this.#dataFilePath, request.user.email, "images", fileObject.name);
       const newImageRoot = path.dirname(newImagePath);
       if (!fs.existsSync(newImageRoot)) {
         fs.mkdirSync(newImageRoot, { recursive: true });

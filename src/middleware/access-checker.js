@@ -9,7 +9,8 @@ export class AccessChecker {
     if (request.isAuthenticated()) {
       return next();
     }
-    response.status(401).json("Not authenticated");
+    const jwtOpts = { session: false };
+    return request.app.locals.passport.authenticate("jwt", jwtOpts)(request, response, next);
   }
 
   /**
@@ -22,7 +23,8 @@ export class AccessChecker {
     if (request.isAuthenticated()) {
       return next();
     }
-    response.redirect("/auth/login");
+    const jwtOpts = { session: false, failureRedirect: "/auth/login" };
+    return request.app.locals.passport.authenticate("jwt", jwtOpts)(request, response, next);
   }
 
   /**
@@ -35,6 +37,7 @@ export class AccessChecker {
     if (!request.isAuthenticated()) {
       return next();
     }
-    response.redirect("/");
+    const jwtOpts = { session: false, failureRedirect: "/" };
+    return request.app.locals.passport.authenticate("jwt", jwtOpts)(request, response, next);
   }
 }

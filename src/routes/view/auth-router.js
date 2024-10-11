@@ -3,10 +3,12 @@ import { ComponentType } from "../../../config/app-types.js";
 import { ScrapConfig } from "../../model/scrap-config.js";
 import { ScrapUser } from "../../model/scrap-user.js";
 
+import jwt from "jsonwebtoken";
 import express from "express";
 import bcrypt from "bcrypt";
 import { MongooseError } from "mongoose";
-import { Strategy } from "passport-local";
+import { Strategy as LocalStategy } from "passport-local";
+import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 
 export class AuthRouter {
   static #ENCRYPT_SALT = 10;
@@ -54,6 +56,10 @@ export class AuthRouter {
         type: "login",
       })
     );
+    router.get("/token", AccessChecker.canViewContent, (request, response) => {
+      const token = jwt.sign(request.user.toJSON(), process.env.JWT_SECRET);
+      return response.status(200).json({ token });
+    });
   }
 
   /**
@@ -91,6 +97,7 @@ export class AuthRouter {
    */
   #configAuthentication(passport) {
     // configure authenticate logic for specific endpoints
+    this.#configJwtStategy(passport);
     this.#configLoginStategy(passport);
     this.#configRegisterStategy(passport);
     // configure common serialize and deserialize user logic
@@ -104,7 +111,30 @@ export class AuthRouter {
   }
 
   /**
-   * Method used to configurate user login strategy (currently only local login is possible)
+   * Method used to configurate user JWT login strategy
+   * @param {Object} passport The login auth and stategy object
+   */
+  #configJwtStategy(passport) {
+    const options = {
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: process.env.JWT_SECRET,
+    };
+    const verify = async (jwtPayload, done) => {
+      try {
+        const user = await ScrapUser.getDatabaseModel().findById(jwtPayload._id);
+        if (user) {
+          return done(null, user);
+        }
+        return done(null, false, { message: "Incorrect token." });
+      } catch (error) {
+        return done(null, false, { message: error.message });
+      }
+    };
+    passport.use("jwt", new JwtStrategy(options, verify));
+  }
+
+  /**
+   * Method used to configurate user local login strategy
    * @param {Object} passport The login auth and stategy object
    */
   #configLoginStategy(passport) {
@@ -145,12 +175,12 @@ export class AuthRouter {
         return done(null, false, { message: message });
       }
     };
-    passport.use("local-login", new Strategy(options, verify));
+    passport.use("local-login", new LocalStategy(options, verify));
   }
 
   /**
-   * Method used to configurate user register strategy
-   * @param {Object} passport The login auth and stategy object
+   * Method used to configurate user local register strategy
+   * @param {Object} passport The register auth and stategy object
    */
   #configRegisterStategy(passport) {
     const options = { usernameField: "email", passwordField: "password", passReqToCallback: true };
@@ -190,6 +220,6 @@ export class AuthRouter {
         return done(null, false, { message: message });
       }
     };
-    passport.use("local-register", new Strategy(options, verify));
+    passport.use("local-register", new LocalStategy(options, verify));
   }
 }

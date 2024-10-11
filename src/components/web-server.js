@@ -88,6 +88,8 @@ export class WebServer {
     server.use(passport.initialize());
     server.use(passport.session());
     server.use(cors(this.#getCorsConfiguration()))
+    // configure passport and add it to local variable
+    server.locals.passport = passport;
     // setup web server routes
     const routes = new Map([
       ["/", new ViewRouter(this.#setupConfig.usersDataConfig.path)],

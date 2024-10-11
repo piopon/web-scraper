@@ -5,6 +5,7 @@ import { ComponentType, LogLevel } from "../../config/app-types.js";
 const TEST_PORT = 1234;
 
 describe("run() method", () => {
+  process.env.JWT_SECRET = "run_tests_secret";
   test("should start server and not throw when no INIT components", async () => {
     const config = { usersDataConfig: {}, minLogLevel: LogLevel.INFO, serverConfig: { port: TEST_PORT } };
     const components = new WebComponents(config);
@@ -56,6 +57,7 @@ describe("run() method", () => {
 });
 
 describe("shutdown() method", () => {
+  process.env.JWT_SECRET = "shutdown_tests_secret";
   test("does not throw when session started", async () => {
     const config = { usersDataConfig: {}, minLogLevel: LogLevel.INFO, serverConfig: { port: TEST_PORT } };
     const components = new WebComponents(config);
