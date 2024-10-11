@@ -14,6 +14,8 @@ import { engine } from "express-handlebars";
 
 jest.mock("../../../src/model/scrap-config.js");
 
+process.env.JWT_SECRET = "test_secret";
+
 describe("createRoutes() method", () => {
   test("returns correct number of routes", () => {
     const expectedRoutes = [
