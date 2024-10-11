@@ -91,6 +91,11 @@ describe("created auth GET routes", () => {
     expect(response.text).toContain('<i class="fa fa-sign-in"></i> login with email');
     expect(response.text).toContain('<p>not registered? go to <a href="/auth/register">register</a> page.</p>');
   });
+  test("returns correct result using /token endpoint", async () => {
+    const response = await testAgent.get("/auth/token");
+    expect(response.statusCode).toBe(302);
+    expect(response.text).toBe("Found. Redirecting to /auth/login");
+  });
 });
 
 describe("created auth POST routes", () => {
