@@ -1,4 +1,4 @@
-import { ComponentStatus } from "../../../config/app-types.js";
+import { ComponentStatus } from "../../config/app-types.js";
 
 import Ajv from "ajv";
 import express from "express";
