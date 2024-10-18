@@ -1,4 +1,4 @@
-import { ComponentStatus, ComponentType } from "../../config/app-types.js";
+import { ComponentStatus, ComponentType } from "../config/app-types.js";
 import { RegexUtils } from "../utils/regex-utils.js";
 import { ScrapConfig } from "../model/scrap-config.js";
 import { ScrapWarning } from "../model/scrap-exception.js";

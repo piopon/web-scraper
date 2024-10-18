@@ -1,5 +1,5 @@
 import { AuthRouter } from "../routes/view/auth-router.js";
-import { ComponentType } from "../../config/app-types.js";
+import { ComponentType } from "../config/app-types.js";
 import { ConfigRouter } from "../routes/api/config-router.js";
 import { DataRouter } from "../routes/api/data-router.js";
 import { ParamsParser } from "../middleware/params-parser.js";
