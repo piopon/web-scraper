@@ -1,6 +1,6 @@
 import { RequestLogger } from "../../src/middleware/request-logger.js";
 import { StatusLogger } from "../../src/components/status-logger.js";
-import { LogLevel } from "../../config/app-types.js";
+import { LogLevel } from "../../src/config/app-types.js";
 
 import { jest } from "@jest/globals";
 

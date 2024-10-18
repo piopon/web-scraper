@@ -1,7 +1,7 @@
 import { ConfigRouter } from "../../../src/routes/api/config-router.js";
 import { WebComponents } from "../../../src/components/web-components.js";
 import { ScrapConfig } from "../../../src/model/scrap-config.js";
-import { LogLevel } from "../../../config/app-types.js";
+import { LogLevel } from "../../../src/config/app-types.js";
 
 import supertest from "supertest";
 import passport from "passport";

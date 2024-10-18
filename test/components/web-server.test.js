@@ -1,6 +1,6 @@
 import { WebServer } from "../../src/components/web-server.js";
 import { WebComponents } from "../../src/components/web-components.js";
-import { ComponentType, LogLevel } from "../../config/app-types.js";
+import { ComponentType, LogLevel } from "../../src/config/app-types.js";
 
 const TEST_PORT = 1234;
 
