@@ -1,3 +1,4 @@
+import { AuthConfig } from "../config/auth-config.js";
 import { AuthRouter } from "../routes/view/auth-router.js";
 import { ComponentType } from "../config/app-types.js";
 import { ConfigRouter } from "../routes/api/config-router.js";
@@ -21,6 +22,7 @@ export class WebServer {
   static #LOGGER_NAME = "web-server    ";
 
   #setupConfig = undefined;
+  #authConfig = undefined;
   #components = undefined;
   #server = undefined;
   #handle = undefined;
@@ -33,6 +35,7 @@ export class WebServer {
    */
   constructor(config, components) {
     this.#setupConfig = config;
+    this.#authConfig = new AuthConfig(passport);
     this.#components = components;
     this.#status = new StatusLogger(WebServer.#LOGGER_NAME, config.minLogLevel);
     this.#status.info("Created");
@@ -89,7 +92,7 @@ export class WebServer {
     server.use(passport.session());
     server.use(cors(this.#getCorsConfiguration()))
     // configure passport and add it to local variable
-    server.locals.passport = passport;
+    server.locals.passport = this.#authConfig.configure();
     // setup web server routes
     const routes = new Map([
       ["/", new ViewRouter(this.#setupConfig.usersDataConfig.path)],
