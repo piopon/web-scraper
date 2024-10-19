@@ -13,7 +13,7 @@ export class AppConfig {
    */
   constructor() {
     this.#currDir = path.dirname(url.fileURLToPath(import.meta.url));
-    this.#rootDir = path.join(this.#currDir, "..");
+    this.#rootDir = path.normalize(path.join(this.#currDir, "..", ".."));
     if (process.env.NODE_ENV !== "production") {
       dotenv.config();
     }

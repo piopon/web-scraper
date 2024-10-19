@@ -1,4 +1,4 @@
-import { AppConfig } from "../config/app-config.js";
+import { AppConfig } from "./config/app-config.js";
 import { WebComponents } from "./components/web-components.js";
 import { WebDatabase } from "./components/web-database.js";
 import { WebScraper } from "./components/web-scraper.js";

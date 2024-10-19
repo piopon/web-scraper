@@ -1,5 +1,5 @@
 import { WebComponents } from "../../src/components/web-components.js";
-import { LogLevel, ComponentStatus, ComponentType } from "../../config/app-types.js";
+import { LogLevel, ComponentStatus, ComponentType } from "../../src/config/app-types.js";
 
 const AUTH_PROPS = { auth: {} };
 const INIT_PROPS = { init: { start: (i) => tester(i, "start"), stop: (i) => tester(i, "stop") } };

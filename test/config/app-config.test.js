@@ -1,5 +1,5 @@
-import { AppConfig } from "../../config/app-config.js";
-import { LogLevel } from "../../config/app-types.js";
+import { AppConfig } from "../../src/config/app-config.js";
+import { LogLevel } from "../../src/config/app-types.js";
 
 import path from "path";
 

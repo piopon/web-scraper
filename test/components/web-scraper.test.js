@@ -1,5 +1,5 @@
 import { WebScraper } from "../../src/components/web-scraper.js";
-import { ComponentStatus, ComponentType, LogLevel } from "../../config/app-types.js";
+import { ComponentStatus, ComponentType, LogLevel } from "../../src/config/app-types.js";
 import { ScrapConfig } from "../../src/model/scrap-config.js";
 
 import { jest } from "@jest/globals";

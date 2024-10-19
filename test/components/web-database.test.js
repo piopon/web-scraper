@@ -1,5 +1,5 @@
 import { WebDatabase } from "../../src/components/web-database.js";
-import { ComponentType, ComponentStatus, LogLevel } from "../../config/app-types.js";
+import { ComponentType, ComponentStatus, LogLevel } from "../../src/config/app-types.js";
 
 import { jest } from "@jest/globals";
 import mongoose from "mongoose";

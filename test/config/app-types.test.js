@@ -1,4 +1,4 @@
-import { LogLevel, ComponentType, ComponentStatus } from "../../config/app-types.js";
+import { LogLevel, ComponentType, ComponentStatus } from "../../src/config/app-types.js";
 
 describe("LogLevel", () => {
   describe("has correct values for", () => {

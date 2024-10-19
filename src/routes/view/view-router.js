@@ -1,4 +1,4 @@
-import { LogLevel } from "../../../config/app-types.js";
+import { LogLevel } from "../../config/app-types.js";
 import { AccessChecker } from "../../middleware/access-checker.js";
 import { ScrapConfig } from "../../model/scrap-config.js";
 

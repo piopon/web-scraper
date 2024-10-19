@@ -1,6 +1,6 @@
 import { StatusRouter } from "../../../src/routes/api/status-router.js";
 import { WebComponents } from "../../../src/components/web-components.js";
-import { LogLevel, ComponentType, ComponentStatus } from "../../../config/app-types.js";
+import { LogLevel, ComponentType, ComponentStatus } from "../../../src/config/app-types.js";
 import { ParamsParser } from "../../../src/middleware/params-parser.js";
 
 import supertest from "supertest";

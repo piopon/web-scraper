@@ -1,5 +1,5 @@
 import { AccessChecker } from "../../middleware/access-checker.js";
-import { ComponentType } from "../../../config/app-types.js";
+import { ComponentType } from "../../config/app-types.js";
 import { ScrapConfig } from "../../model/scrap-config.js";
 import { ScrapUser } from "../../model/scrap-user.js";
 
