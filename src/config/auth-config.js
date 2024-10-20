@@ -10,9 +10,11 @@ import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 export class AuthConfig {
   static #ENCRYPT_SALT = 10;
 
+  #components = undefined;
   #passport = undefined;
 
-  constructor(passport) {
+  constructor(passport, components) {
+    this.#components = components;
     this.#passport = passport;
   }
 

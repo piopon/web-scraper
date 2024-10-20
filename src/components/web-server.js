@@ -35,8 +35,8 @@ export class WebServer {
    */
   constructor(config, components) {
     this.#setupConfig = config;
-    this.#authConfig = new AuthConfig(passport);
     this.#components = components;
+    this.#authConfig = new AuthConfig(passport, components);
     this.#status = new StatusLogger(WebServer.#LOGGER_NAME, config.minLogLevel);
     this.#status.info("Created");
   }
