@@ -1,7 +1,5 @@
 import { AuthRouter } from "../../../src/routes/view/auth-router.js";
 import { ScrapConfig } from "../../../src/model/scrap-config.js";
-import { WebComponents } from "../../../src/components/web-components.js";
-import { LogLevel } from "../../../src/config/app-types.js";
 
 import supertest from "supertest";
 import passport from "passport";
@@ -26,8 +24,7 @@ describe("createRoutes() method", () => {
       { path: "/login", method: "post" },
       { path: "/logout", method: "post" },
     ];
-    const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-    const testRouter = new AuthRouter(components, passport);
+    const testRouter = new AuthRouter(passport);
     const createdRoutes = testRouter.createRoutes();
     expect(createdRoutes.stack.length).toBe(expectedRoutes.length);
     createdRoutes.stack
@@ -44,8 +41,7 @@ describe("createRoutes() method", () => {
 });
 
 describe("created auth GET routes", () => {
-  const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-  const testRouter = new AuthRouter(components, passport);
+  const testRouter = new AuthRouter(passport);
   // configue test express app server
   const testApp = express();
   testApp.engine("handlebars", engine({ helpers: helpers() }));
@@ -105,8 +101,7 @@ describe("created auth POST routes", () => {
     },
   };
   jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
-  const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-  const testRouter = new AuthRouter(components, passport);
+  const testRouter = new AuthRouter(passport);
   // configue test express app server
   const testApp = express();
   testApp.engine("handlebars", engine({ helpers: helpers() }));
