@@ -1,5 +1,8 @@
+import { AuthConfig } from "../../../src/config/auth-config.js";
 import { AuthRouter } from "../../../src/routes/view/auth-router.js";
 import { ScrapConfig } from "../../../src/model/scrap-config.js";
+import { WebComponents } from "../../../src/components/web-components.js";
+import { LogLevel } from "../../../src/config/app-types.js";
 
 import supertest from "supertest";
 import passport from "passport";
@@ -51,11 +54,12 @@ describe("created auth GET routes", () => {
   testApp.use(express.json());
   testApp.use(express.urlencoded({ extended: false }));
   testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
+  // initialize and configure passport
   testApp.use(passport.initialize());
   testApp.use(passport.session());
+  testApp.locals.passport = new AuthConfig(passport, new WebComponents({ minLogLevel: LogLevel.DEBUG })).configure();
+  // connect test router to auth endpoint
   testApp.use("/auth", testRouter.createRoutes());
-  // store passport configuration in app locals
-  testApp.locals.passport = passport;
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
   test("returns correct result for unknown path", async () => {
@@ -112,11 +116,12 @@ describe("created auth POST routes", () => {
   testApp.use(express.urlencoded({ extended: false }));
   testApp.use(flash());
   testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
+  // initialize and configure passport
   testApp.use(passport.initialize());
   testApp.use(passport.session());
+  testApp.locals.passport = new AuthConfig(passport, new WebComponents({ minLogLevel: LogLevel.DEBUG })).configure();
+  // connect test router to auth endpoint
   testApp.use("/auth", testRouter.createRoutes());
-  // store passport configuration in app locals
-  testApp.locals.passport = passport;
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
   test("returns correct result for unknown path", async () => {
