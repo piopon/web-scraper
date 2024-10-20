@@ -88,10 +88,10 @@ export class WebServer {
     server.use(flash());
     server.use(fileUpload(this.#getFileUploadConfiguration()));
     server.use(session(this.#getSessionConfiguration()));
+    server.use(cors(this.#getCorsConfiguration()))
+    // initialize and configure passport
     server.use(passport.initialize());
     server.use(passport.session());
-    server.use(cors(this.#getCorsConfiguration()))
-    // configure passport and add it to local variable
     server.locals.passport = this.#authConfig.configure();
     // setup web server routes
     const routes = new Map([
