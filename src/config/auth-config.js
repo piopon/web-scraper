@@ -1,3 +1,4 @@
+import { ComponentType } from "../config/app-types.js";
 import { ScrapConfig } from "../model/scrap-config.js";
 import { ScrapUser } from "../model/scrap-user.js";
 
@@ -21,6 +22,7 @@ export class AuthConfig {
   configure() {
     // configure authenticate logic for specific endpoints
     this.#configJwtStategy();
+    this.#configLoginStategy();
     this.#configRegisterStategy();
     // configure common serialize and deserialize user logic
     this.#passport.serializeUser((user, done) => {
@@ -54,6 +56,51 @@ export class AuthConfig {
       }
     };
     this.#passport.use("jwt", new JwtStrategy(options, verify));
+  }
+
+  /**
+   * Method used to configurate user local login strategy
+   * @param {Object} passport The login auth and stategy object
+   */
+  #configLoginStategy() {
+    const options = { usernameField: "email", passwordField: "password" };
+    const verify = async (email, password, done) => {
+      try {
+        // check if there is an user with provided email
+        const user = await ScrapUser.getDatabaseModel().find({ email: email });
+        if (user.length !== 1) {
+          // did not find user with provided email - incorrect login data
+          return done(null, false, { message: "Incorrect login data. Please try again." });
+        }
+        if (!(await bcrypt.compare(password, user[0].password))) {
+          // provided password does not match the saved value - incorrect login data
+          return done(null, false, { message: "Incorrect login data. Please try again." });
+        }
+        // login success - initialize auth components
+        if (!(await this.#components.initComponents(ComponentType.AUTH, user[0]))) {
+          return done(null, false, { message: "Cannot start authenticate components. Please try again." });
+        }
+        // updated user login date
+        user[0].lastLogin = Date.now();
+        await user[0].save();
+        return done(null, user[0]);
+      } catch (error) {
+        let message = error.message;
+        if (error instanceof MongooseError) {
+          if (error.name === "MongooseError" && message.includes(".find()")) {
+            message = "Database connection has timed out. Check connection status and please try again.";
+          } else if (error.name === "ValidationError") {
+            const invalidPath = Object.keys(error.errors);
+            message = error.errors[invalidPath[0]].properties.message;
+          }
+        }
+        if (message.includes("ECONNREFUSED")) {
+          message = "Database connection has been broken. Check connection status and please try again.";
+        }
+        return done(null, false, { message: message });
+      }
+    };
+    this.#passport.use("local-login", new LocalStategy(options, verify));
   }
 
   /**
