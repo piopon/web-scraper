@@ -13,6 +13,11 @@ export class AuthConfig {
   #components = undefined;
   #passport = undefined;
 
+  /**
+   * Creates a new configuration object for managing authentication settings
+   * @param {Object} passport The login/register dispatcher object to be configured
+   * @param {Object} components The web components used in authentication process
+   */
   constructor(passport, components) {
     this.#components = components;
     this.#passport = passport;
@@ -39,7 +44,6 @@ export class AuthConfig {
 
   /**
    * Method used to configurate user JWT login strategy
-   * @param {Object} passport The login auth and stategy object
    */
   #configJwtStategy() {
     const options = {
@@ -62,7 +66,6 @@ export class AuthConfig {
 
   /**
    * Method used to configurate user local login strategy
-   * @param {Object} passport The login auth and stategy object
    */
   #configLoginStategy() {
     const options = { usernameField: "email", passwordField: "password" };
@@ -107,7 +110,6 @@ export class AuthConfig {
 
   /**
    * Method used to configurate user local register strategy
-   * @param {Object} passport The register auth and stategy object
    */
   #configRegisterStategy() {
     const options = { usernameField: "email", passwordField: "password", passReqToCallback: true };
