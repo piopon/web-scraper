@@ -3,8 +3,8 @@ import { ScrapUser } from "../model/scrap-user.js";
 
 import bcrypt from "bcrypt";
 import { MongooseError } from "mongoose";
-import { Strategy } from "passport-local";
-import { ExtractJwt, Strategy } from "passport-jwt";
+import { Strategy as LocalStategy } from "passport-local";
+import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 
 export class AuthConfig {
   static #ENCRYPT_SALT = 10;
@@ -53,7 +53,7 @@ export class AuthConfig {
         return done(null, false, { message: error.message });
       }
     };
-    this.#passport.use("jwt", new Strategy(options, verify));
+    this.#passport.use("jwt", new JwtStrategy(options, verify));
   }
 
   /**
