@@ -45,21 +45,7 @@ describe("createRoutes() method", () => {
 
 describe("created auth GET routes", () => {
   const testRouter = new AuthRouter(passport);
-  // configue test express app server
-  const testApp = express();
-  testApp.engine("handlebars", engine({ helpers: helpers() }));
-  testApp.set("view engine", "handlebars");
-  testApp.set("views", "./public");
-  testApp.use(express.static("./public"));
-  testApp.use(express.json());
-  testApp.use(express.urlencoded({ extended: false }));
-  testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
-  // initialize and configure passport
-  testApp.use(passport.initialize());
-  testApp.use(passport.session());
-  testApp.locals.passport = new AuthConfig(passport, new WebComponents({ minLogLevel: LogLevel.DEBUG })).configure();
-  // connect test router to auth endpoint
-  testApp.use("/auth", testRouter.createRoutes());
+  const testApp = configureTestSever(testRouter);
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
   test("returns correct result for unknown path", async () => {
@@ -106,22 +92,7 @@ describe("created auth POST routes", () => {
   };
   jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
   const testRouter = new AuthRouter(passport);
-  // configue test express app server
-  const testApp = express();
-  testApp.engine("handlebars", engine({ helpers: helpers() }));
-  testApp.set("view engine", "handlebars");
-  testApp.set("views", "./public");
-  testApp.use(express.static("./public"));
-  testApp.use(express.json());
-  testApp.use(express.urlencoded({ extended: false }));
-  testApp.use(flash());
-  testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
-  // initialize and configure passport
-  testApp.use(passport.initialize());
-  testApp.use(passport.session());
-  testApp.locals.passport = new AuthConfig(passport, new WebComponents({ minLogLevel: LogLevel.DEBUG })).configure();
-  // connect test router to auth endpoint
-  testApp.use("/auth", testRouter.createRoutes());
+  const testApp = configureTestSever(testRouter);
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
   test("returns correct result for unknown path", async () => {
@@ -144,3 +115,22 @@ describe("created auth POST routes", () => {
     expect(response.text).toBe("Found. Redirecting to /auth/login");
   });
 });
+
+function configureTestSever(testRouter) {
+  const testApp = express();
+  testApp.engine("handlebars", engine({ helpers: helpers() }));
+  testApp.set("view engine", "handlebars");
+  testApp.set("views", "./public");
+  testApp.use(express.static("./public"));
+  testApp.use(express.json());
+  testApp.use(express.urlencoded({ extended: false }));
+  testApp.use(flash());
+  testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
+  // initialize and configure passport
+  testApp.use(passport.initialize());
+  testApp.use(passport.session());
+  testApp.locals.passport = new AuthConfig(passport, new WebComponents({ minLogLevel: LogLevel.DEBUG })).configure();
+  // connect test router to auth endpoint
+  testApp.use("/auth", testRouter.createRoutes());
+  return testApp;
+}
