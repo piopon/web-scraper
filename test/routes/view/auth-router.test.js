@@ -85,12 +85,6 @@ describe("created auth GET routes", () => {
 });
 
 describe("created auth POST routes", () => {
-  const mockResult = {
-    find: (user) => {
-      [{ email: user.email, password: "pass", save: () => {} }];
-    },
-  };
-  jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
   const testRouter = new AuthRouter(passport);
   const testApp = configureTestSever(testRouter);
   // retrieve underlying superagent to correctly persist sessions
@@ -117,6 +111,14 @@ describe("created auth POST routes", () => {
 });
 
 function configureTestSever(testRouter) {
+  // configure mock result (needed by POST requests)
+  const mockResult = {
+    find: (user) => {
+      [{ email: user.email, password: "pass", save: () => {} }];
+    },
+  };
+  jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
+  // initial test server configuration
   const testApp = express();
   testApp.engine("handlebars", engine({ helpers: helpers() }));
   testApp.set("view engine", "handlebars");
