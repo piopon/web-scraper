@@ -118,6 +118,9 @@ function configureTestSever(testRouter) {
     },
   };
   jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
+  // create auth config object
+  const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+  const authConfig = new AuthConfig(passport, components);
   // initial test server configuration
   const testApp = express();
   testApp.engine("handlebars", engine({ helpers: helpers() }));
@@ -131,7 +134,7 @@ function configureTestSever(testRouter) {
   // initialize and configure passport
   testApp.use(passport.initialize());
   testApp.use(passport.session());
-  testApp.locals.passport = new AuthConfig(passport, new WebComponents({ minLogLevel: LogLevel.DEBUG })).configure();
+  testApp.locals.passport = authConfig.configure();
   // connect test router to auth endpoint
   testApp.use("/auth", testRouter.createRoutes());
   return testApp;
