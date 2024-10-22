@@ -10,5 +10,7 @@ test("configure returns correct result", () => {
     const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
     const authConfig = new AuthConfig(passport, components);
     const result = authConfig.configure();
-    expect(result).not.toBe(null);
+    expect(Object.hasOwn(result._strategies, "jwt")).toBe(true);
+    expect(Object.hasOwn(result._strategies, "local-login")).toBe(true);
+    expect(Object.hasOwn(result._strategies, "local-register")).toBe(true);
 });
