@@ -1,30 +1,17 @@
 import { AccessChecker } from "../../middleware/access-checker.js";
-import { ComponentType } from "../../config/app-types.js";
-import { ScrapConfig } from "../../model/scrap-config.js";
-import { ScrapUser } from "../../model/scrap-user.js";
 
 import jwt from "jsonwebtoken";
 import express from "express";
-import bcrypt from "bcrypt";
-import { MongooseError } from "mongoose";
-import { Strategy as LocalStategy } from "passport-local";
-import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 
 export class AuthRouter {
-  static #ENCRYPT_SALT = 10;
-
-  #components = undefined;
   #passport = undefined;
 
   /**
    * Creates a new auth router for managing user authentication and authorization
-   * @param {Object} components The web components used in authentication process
    * @param {Object} passport The object controlling user sing-up and sing-in process
    */
-  constructor(components, passport) {
-    this.#components = components;
+  constructor(passport) {
     this.#passport = passport;
-    this.#configAuthentication(passport);
   }
 
   /**
@@ -89,137 +76,5 @@ export class AuthRouter {
       });
     };
     router.post("/logout", AccessChecker.canViewContent, logoutCallback);
-  }
-
-  /**
-   * Method used to configure Passport authentication object
-   * @param {Object} passport The auth object to be configured
-   */
-  #configAuthentication(passport) {
-    // configure authenticate logic for specific endpoints
-    this.#configJwtStategy(passport);
-    this.#configLoginStategy(passport);
-    this.#configRegisterStategy(passport);
-    // configure common serialize and deserialize user logic
-    passport.serializeUser((user, done) => {
-      done(null, user._id);
-    });
-    passport.deserializeUser(async (id, done) => {
-      const user = await ScrapUser.getDatabaseModel().findById(id);
-      done(null, user);
-    });
-  }
-
-  /**
-   * Method used to configurate user JWT login strategy
-   * @param {Object} passport The login auth and stategy object
-   */
-  #configJwtStategy(passport) {
-    const options = {
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: process.env.JWT_SECRET,
-    };
-    const verify = async (jwtPayload, done) => {
-      try {
-        const user = await ScrapUser.getDatabaseModel().findById(jwtPayload._id);
-        if (user) {
-          return done(null, user);
-        }
-        return done(null, false, { message: "Incorrect token." });
-      } catch (error) {
-        return done(null, false, { message: error.message });
-      }
-    };
-    passport.use("jwt", new JwtStrategy(options, verify));
-  }
-
-  /**
-   * Method used to configurate user local login strategy
-   * @param {Object} passport The login auth and stategy object
-   */
-  #configLoginStategy(passport) {
-    const options = { usernameField: "email", passwordField: "password" };
-    const verify = async (email, password, done) => {
-      try {
-        // check if there is an user with provided email
-        const user = await ScrapUser.getDatabaseModel().find({ email: email });
-        if (user.length !== 1) {
-          // did not find user with provided email - incorrect login data
-          return done(null, false, { message: "Incorrect login data. Please try again." });
-        }
-        if (!(await bcrypt.compare(password, user[0].password))) {
-          // provided password does not match the saved value - incorrect login data
-          return done(null, false, { message: "Incorrect login data. Please try again." });
-        }
-        // login success - initialize auth components
-        if (!(await this.#components.initComponents(ComponentType.AUTH, user[0]))) {
-          return done(null, false, { message: "Cannot start authenticate components. Please try again." });
-        }
-        // updated user login date
-        user[0].lastLogin = Date.now();
-        await user[0].save();
-        return done(null, user[0]);
-      } catch (error) {
-        let message = error.message;
-        if (error instanceof MongooseError) {
-          if (error.name === "MongooseError" && message.includes(".find()")) {
-            message = "Database connection has timed out. Check connection status and please try again.";
-          } else if (error.name === "ValidationError") {
-            const invalidPath = Object.keys(error.errors);
-            message = error.errors[invalidPath[0]].properties.message;
-          }
-        }
-        if (message.includes("ECONNREFUSED")) {
-          message = "Database connection has been broken. Check connection status and please try again.";
-        }
-        return done(null, false, { message: message });
-      }
-    };
-    passport.use("local-login", new LocalStategy(options, verify));
-  }
-
-  /**
-   * Method used to configurate user local register strategy
-   * @param {Object} passport The register auth and stategy object
-   */
-  #configRegisterStategy(passport) {
-    const options = { usernameField: "email", passwordField: "password", passReqToCallback: true };
-    const verify = async (request, username, password, done) => {
-      try {
-        // check if there isn't an user with provided email
-        const user = await ScrapUser.getDatabaseModel().find({ email: username });
-        if (user.length > 0) {
-          // find existing user with provided email - incorrect reguster data
-          return done(null, false, { message: "Provided email is already in use. Please try again." });
-        }
-        // create a new user with hashed password and add it to database
-        const newUser = await ScrapUser.getDatabaseModel().create({
-          name: request.body.name,
-          email: username,
-          password: await bcrypt.hash(password, AuthRouter.#ENCRYPT_SALT),
-        });
-        // user at this point has no config - we must create and link it
-        const userConfig = await ScrapConfig.getDatabaseModel().create({ user: newUser._id });
-        newUser.config = userConfig._id;
-        await newUser.save();
-        // return the newly created user with empty config
-        return done(null, newUser);
-      } catch (error) {
-        let message = error.message;
-        if (error instanceof MongooseError) {
-          if (error.name === "MongooseError" && message.includes(".find()")) {
-            message = "Database connection has timed out. Check connection status and please try again.";
-          } else if (error.name === "ValidationError") {
-            const invalidPath = Object.keys(error.errors);
-            message = error.errors[invalidPath[0]].properties.message;
-          }
-        }
-        if (message.includes("ECONNREFUSED")) {
-          message = "Database connection has been broken. Check connection status and please try again.";
-        }
-        return done(null, false, { message: message });
-      }
-    };
-    passport.use("local-register", new LocalStategy(options, verify));
   }
 }
