@@ -4,6 +4,7 @@ section.user-management {
   align-items: center;
   flex-direction: column;
   height: calc(100% - 2.5rem);
+  position: relative;
 }
 
 p.user-title {
@@ -77,8 +78,11 @@ div.user-switch {
 }
 
 div.user-demo {
+  position: absolute;
   color: rgb(190, 180, 255);
   font-size: 0.75rem;
+  bottom: 15px;
+  right: 50px;
 }
 
 div.user-demo a {
