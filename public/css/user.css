@@ -75,3 +75,12 @@ div.user-switch {
   color: black;
   font-size: 0.75rem;
 }
+
+div.user-demo {
+  color: rgb(190, 180, 255);
+  font-size: 0.75rem;
+}
+
+div.user-demo a {
+  color: black;
+}
