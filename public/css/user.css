@@ -77,7 +77,7 @@ div.user-switch {
   font-size: 0.75rem;
 }
 
-div.user-demo {
+form.user-demo {
   position: absolute;
   color: rgb(190, 180, 255);
   font-size: 0.75rem;
@@ -85,6 +85,6 @@ div.user-demo {
   right: 50px;
 }
 
-div.user-demo a {
+form.user-demo button.btn-demo {
   color: black;
 }
