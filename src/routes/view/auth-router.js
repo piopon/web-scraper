@@ -41,6 +41,10 @@ export class AuthRouter {
       response.render("login", {
         title: "scraper user login",
         type: "login",
+        demo: {
+          user: process.env.DEMO_USER,
+          pass: process.env.DEMO_PASS,
+        },
       })
     );
     router.get("/token", AccessChecker.canViewContent, (request, response) => {
