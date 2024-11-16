@@ -85,6 +85,10 @@ form.user-demo {
   right: 50px;
 }
 
+form.user-demo input {
+  display: none;
+}
+
 form.user-demo button.btn-demo {
   font: inherit;
   background: none;
