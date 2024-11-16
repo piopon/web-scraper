@@ -31,6 +31,8 @@ export class AuthConfig {
     this.#configJwtStategy();
     this.#configLoginStategy();
     this.#configRegisterStategy();
+    // configure demo session
+    this.#configDemoStategy();
     // configure common serialize and deserialize user logic
     this.#passport.serializeUser((user, done) => {
       done(null, user._id);
