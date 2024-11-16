@@ -68,6 +68,13 @@ export class AuthRouter {
       failureFlash: true,
     });
     router.post("/login", AccessChecker.canViewSessionUser, loginCallback);
+    // demo functionality login
+    const demoCallback = this.#passport.authenticate("local-demo", {
+      successRedirect: "/",
+      failureRedirect: "/auth/login",
+      failureFlash: true,
+    });
+    router.post("/demo", AccessChecker.canViewSessionUser, demoCallback);
     // user content endpoints (log-out)
     const logoutCallback = (request, response, next) => {
       request.logout((err) => {
