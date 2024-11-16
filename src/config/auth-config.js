@@ -151,4 +151,20 @@ export class AuthConfig {
     };
     this.#passport.use("local-register", new LocalStategy(options, verify));
   }
+
+  /**
+   * Method used to configurate demo login strategy
+   */
+  #configDemoStategy() {
+    const options = { usernameField: "demo-user", passwordField: "demo-pass" };
+    const verify = async (email, password, done) => {
+      const user = {
+        name: "demo",
+        email: email,
+        password: password,
+      }
+      return done(null, user);
+    };
+    this.#passport.use("local-demo", new LocalStategy(options, verify));
+  }
 }
