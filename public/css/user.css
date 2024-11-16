@@ -86,5 +86,11 @@ form.user-demo {
 }
 
 form.user-demo button.btn-demo {
+  font: inherit;
+  background: none;
   color: black;
+  border: none;
+  padding: 0;
+  text-decoration: underline;
+  cursor: pointer;
 }
