@@ -160,12 +160,37 @@ export class AuthConfig {
   #configDemoStategy() {
     const options = { usernameField: "demo-user", passwordField: "demo-pass" };
     const verify = async (email, password, done) => {
-      const user = {
-        name: "demo",
-        email: email,
-        password: password,
+      try {
+        // check if there is an user with provided email
+        const user = await ScrapUser.getDatabaseModel().find({ email: process.env.DEMO_BASE });
+        if (user.length !== 1) {
+          // did not find user with provided email - incorrect login data
+          return done(null, false, { message: "Incorrect login data. Please try again." });
+        }
+        if (!(await bcrypt.compare(password, user[0].password))) {
+          // provided password does not match the saved value - incorrect login data
+          return done(null, false, { message: "Incorrect login data. Please try again." });
+        }
+        // login success - initialize auth components
+        if (!(await this.#components.initComponents(ComponentType.AUTH, user[0]))) {
+          return done(null, false, { message: "Cannot start authenticate components. Please try again." });
+        }
+        return done(null, user[0]);
+      } catch (error) {
+        let message = error.message;
+        if (error instanceof MongooseError) {
+          if (error.name === "MongooseError" && message.includes(".find()")) {
+            message = "Database connection has timed out. Check connection status and please try again.";
+          } else if (error.name === "ValidationError") {
+            const invalidPath = Object.keys(error.errors);
+            message = error.errors[invalidPath[0]].properties.message;
+          }
+        }
+        if (message.includes("ECONNREFUSED")) {
+          message = "Database connection has been broken. Check connection status and please try again.";
+        }
+        return done(null, false, { message: message });
       }
-      return done(null, user);
     };
     this.#passport.use("local-demo", new LocalStategy(options, verify));
   }
