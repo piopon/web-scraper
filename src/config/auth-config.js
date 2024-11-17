@@ -3,6 +3,7 @@ import { ScrapConfig } from "../model/scrap-config.js";
 import { ScrapUser } from "../model/scrap-user.js";
 
 import bcrypt from "bcrypt";
+import mongoose from "mongoose";
 import { MongooseError } from "mongoose";
 import { Strategy as LocalStategy } from "passport-local";
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
