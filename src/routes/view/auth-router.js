@@ -1,4 +1,5 @@
 import { AccessChecker } from "../../middleware/access-checker.js";
+import { ScrapConfig } from "../../model/scrap-config.js";
 import { ScrapUser } from "../../model/scrap-user.js";
 
 import jwt from "jsonwebtoken";
@@ -82,12 +83,13 @@ export class AuthRouter {
     router.post("/demo", AccessChecker.canViewSessionUser, demoCallback);
     // user content endpoints (log-out)
     const logoutCallback = (request, response, next) => {
-      const temporaryEmail = request.user.hostUser ? request.user.email : undefined;
+      const temporaryUser = request.user.hostUser ? request.user : undefined;
       request.logout(async (err) => {
         if (err) return next(err);
         response.redirect("/auth/login");
-        if (temporaryEmail) {
-          await ScrapUser.getDatabaseModel().deleteOne({ email: temporaryEmail });
+        if (temporaryUser) {
+          await ScrapUser.getDatabaseModel().deleteOne({ email: temporaryUser.email });
+          await ScrapConfig.getDatabaseModel().deleteOne({ user: temporaryUser._id });
         }
       });
     };
