@@ -182,9 +182,14 @@ export class AuthConfig {
         user[0].email = email;
         user[0].lastLogin = Date.now();
         user[0].isNew = true;
-        user[0].config._id = new mongoose.Types.ObjectId();
-        user[0].config.user = user[0]._id;
-        user[0].config.isNew = true;
+        // create a clone of base demo user configuration
+        const config = await ScrapConfig.getDatabaseModel().findOne({ user: user[0].hostUser });
+        config._id = new mongoose.Types.ObjectId();
+        config.user = user[0]._id;
+        config.isNew = true;
+        await config.save();
+        // link config clone to cloned demo user and save demo user
+        user[0].config = config._id;
         await user[0].save();
         return done(null, user[0]);
       } catch (error) {
