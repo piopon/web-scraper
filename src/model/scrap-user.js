@@ -38,6 +38,7 @@ export class ScrapUser {
         required: true,
       },
       lastLogin: Date,
+      hostUser: mongoose.Types.ObjectId,
       config: {
         type: mongoose.Types.ObjectId,
         ref: ScrapConfig.getDatabaseModel().modelName,
