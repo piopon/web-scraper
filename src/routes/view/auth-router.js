@@ -1,4 +1,5 @@
 import { AccessChecker } from "../../middleware/access-checker.js";
+import { ScrapUser } from "../../model/scrap-user.js";
 
 import jwt from "jsonwebtoken";
 import express from "express";
