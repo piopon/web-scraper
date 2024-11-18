@@ -177,8 +177,9 @@ export class AuthConfig {
           return done(null, false, { message: "Cannot start authenticate components. Please try again." });
         }
         // create a clone of the base demo user with updated email and last login entry
-        user[0]._id = new mongoose.Types.ObjectId();
+        user[0].hostUser = user[0]._id;
         user[0].email = email;
+        user[0]._id = new mongoose.Types.ObjectId();
         user[0].isNew = true;
         user[0].lastLogin = Date.now();
         await user[0].save();
