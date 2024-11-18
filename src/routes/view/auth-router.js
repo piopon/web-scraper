@@ -81,9 +81,13 @@ export class AuthRouter {
     router.post("/demo", AccessChecker.canViewSessionUser, demoCallback);
     // user content endpoints (log-out)
     const logoutCallback = (request, response, next) => {
-      request.logout((err) => {
+      const temporaryEmail = request.user.hostUser ? request.user.email : undefined;
+      request.logout(async (err) => {
         if (err) return next(err);
         response.redirect("/auth/login");
+        if (temporaryEmail) {
+          await ScrapUser.getDatabaseModel().deleteOne({ email: temporaryEmail });
+        }
       });
     };
     router.post("/logout", AccessChecker.canViewContent, logoutCallback);
