@@ -96,12 +96,15 @@ export class WebDatabase {
   #cleanUnusedConfigs() {
     const usersCount = ScrapUser.getDatabaseModel().length;
     const configsCount = ScrapConfig.getDatabaseModel().length;
-    if (configsCount != usersCount) {
+    const toDelete = configsCount - usersCount;
+    if (toDelete > 0) {
       console.log("needs maintenance: cleanup unused configs");
     }
+    return toDelete;
   }
 
   async #cleanDemoUsers() {
-    await ScrapUser.getDatabaseModel().deleteMany({ hostUser: { $ne: null }});
+    const result = await ScrapUser.getDatabaseModel().deleteMany({ hostUser: { $ne: null }});
+    return result.deletedCount;
   }
 }
