@@ -1,4 +1,6 @@
 import { ComponentStatus, ComponentType } from "../config/app-types.js";
+import { ScrapConfig } from "../model/scrap-config.js";
+import { ScrapUser } from "../model/scrap-user.js";
 import { StatusLogger } from "./status-logger.js";
 
 import mongoose from "mongoose";
@@ -36,6 +38,8 @@ export class WebDatabase {
       };
       await mongoose.connect(dbUrl, dbOptions);
       this.#status.info("Connected to database");
+      // perform simple database maintenance
+      this.#cleanUnusedConfigs();
       return true;
     } catch (error) {
       this.#status.error(error.message);
@@ -86,5 +90,13 @@ export class WebDatabase {
    */
   getHistory() {
     return this.#status.getHistory();
+  }
+
+  #cleanUnusedConfigs() {
+    const usersCount = ScrapUser.getDatabaseModel().length;
+    const configsCount = ScrapConfig.getDatabaseModel().length;
+    if (configsCount != usersCount) {
+      console.log("needs maintenance: cleanup unused configs");
+    }
   }
 }
