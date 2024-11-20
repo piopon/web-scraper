@@ -91,9 +91,9 @@ export class WebDatabase {
     return this.#status.getHistory();
   }
 
-  #doMaintenance() {
+  async #doMaintenance() {
     const configsCleaned = this.#cleanUnusedConfigs();
-    const usersCleaned = this.#cleanDemoUsers();
+    const usersCleaned = await this.#cleanDemoUsers();
     this.#status.info(`Maintenance summary: ${configsCleaned} configs, ${usersCleaned} demos`);
   }
 
