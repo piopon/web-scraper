@@ -92,8 +92,9 @@ export class WebDatabase {
   }
 
   #doMaintenance() {
-    this.#cleanUnusedConfigs();
-    this.#cleanDemoUsers();
+    const configsCleaned = this.#cleanUnusedConfigs();
+    const usersCleaned = this.#cleanDemoUsers();
+    this.#status.info(`Maintenance summary: ${configsCleaned} configs, ${usersCleaned} demos`);
   }
 
   #cleanUnusedConfigs() {
