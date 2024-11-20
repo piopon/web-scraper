@@ -38,9 +38,7 @@ export class WebDatabase {
       };
       await mongoose.connect(dbUrl, dbOptions);
       this.#status.info("Connected to database");
-      // perform simple database maintenance
-      this.#cleanUnusedConfigs();
-      this.#cleanDemoUsers();
+      this.#doMaintenance();
       return true;
     } catch (error) {
       this.#status.error(error.message);
@@ -91,6 +89,11 @@ export class WebDatabase {
    */
   getHistory() {
     return this.#status.getHistory();
+  }
+
+  #doMaintenance() {
+    this.#cleanUnusedConfigs();
+    this.#cleanDemoUsers();
   }
 
   #cleanUnusedConfigs() {
