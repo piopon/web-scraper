@@ -97,6 +97,9 @@ export class WebDatabase {
     const usersCount = ScrapUser.getDatabaseModel().length;
     const configsCount = ScrapConfig.getDatabaseModel().length;
     const toDelete = configsCount - usersCount;
+    if (toDelete < 0) {
+      throw Error("Invalid state! There is an user without a config...");
+    }
     if (toDelete > 0) {
       console.log("needs maintenance: cleanup unused configs");
     }
