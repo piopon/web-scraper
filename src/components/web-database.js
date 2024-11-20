@@ -40,6 +40,7 @@ export class WebDatabase {
       this.#status.info("Connected to database");
       // perform simple database maintenance
       this.#cleanUnusedConfigs();
+      this.#cleanDemoUsers();
       return true;
     } catch (error) {
       this.#status.error(error.message);
@@ -98,5 +99,9 @@ export class WebDatabase {
     if (configsCount != usersCount) {
       console.log("needs maintenance: cleanup unused configs");
     }
+  }
+
+  async #cleanDemoUsers() {
+    await ScrapUser.getDatabaseModel().deleteMany({ hostUser: { $ne: null }});
   }
 }
