@@ -105,7 +105,12 @@ export class WebDatabase {
       throw Error("Invalid state! There is an user without a config...");
     }
     if (toDelete > 0) {
-      console.log("needs maintenance: cleanup unused configs");
+      const users = await ScrapUser.getDatabaseModel().find();
+      const usersIds = users.map(user => user._id);
+      const result = await ScrapConfig.getDatabaseModel().deleteMany({ user: { $not: { $in: usersIds }}});
+      if (result.deletedCount != toDelete) {
+        throw Error("Invalid state! Inconsistent number of deleted configs...");
+      }
     }
     return toDelete;
   }
