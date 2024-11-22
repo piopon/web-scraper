@@ -92,12 +92,12 @@ export class WebDatabase {
   }
 
   async #doMaintenance() {
-    const configsCleaned = this.#cleanUnusedConfigs();
+    const configsCleaned = await this.#cleanUnusedConfigs();
     const usersCleaned = await this.#cleanDemoUsers();
     this.#status.info(`Maintenance summary: ${configsCleaned} configs, ${usersCleaned} demos`);
   }
 
-  #cleanUnusedConfigs() {
+  async #cleanUnusedConfigs() {
     const usersCount = await ScrapUser.getDatabaseModel().countDocuments();
     const configsCount = await ScrapConfig.getDatabaseModel().countDocuments();
     const toDelete = configsCount - usersCount;
