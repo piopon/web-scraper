@@ -98,8 +98,8 @@ export class WebDatabase {
   }
 
   #cleanUnusedConfigs() {
-    const usersCount = ScrapUser.getDatabaseModel().length;
-    const configsCount = ScrapConfig.getDatabaseModel().length;
+    const usersCount = await ScrapUser.getDatabaseModel().countDocuments();
+    const configsCount = await ScrapConfig.getDatabaseModel().countDocuments();
     const toDelete = configsCount - usersCount;
     if (toDelete < 0) {
       throw Error("Invalid state! There is an user without a config...");
