@@ -91,12 +91,19 @@ export class WebDatabase {
     return this.#status.getHistory();
   }
 
+  /**
+   * Method used to perform database maintenance operations after successfull connect
+   */
   async #doMaintenance() {
     const configsCleaned = await this.#cleanUnusedConfigs();
     const usersCleaned = await this.#cleanDemoUsers();
     this.#status.info(`Maintenance summary: ${configsCleaned} configs, ${usersCleaned} demos`);
   }
 
+  /**
+   * Method used to cleanup all unused configs (which users do not exist anymore)
+   * @returns number of unused scraper configurations removed
+   */
   async #cleanUnusedConfigs() {
     const usersCount = await ScrapUser.getDatabaseModel().countDocuments();
     const configsCount = await ScrapConfig.getDatabaseModel().countDocuments();
@@ -115,6 +122,10 @@ export class WebDatabase {
     return toDelete;
   }
 
+  /**
+   * Method used to cleanup all demo users (which are just temporary)
+   * @returns number of demo session users removed
+   */
   async #cleanDemoUsers() {
     const result = await ScrapUser.getDatabaseModel().deleteMany({ hostUser: { $ne: null }});
     return result.deletedCount;
