@@ -179,7 +179,7 @@ export class AuthConfig {
         // create a clone of the base demo user with updated email and last login entry
         user[0].hostUser = user[0]._id;
         user[0]._id = new mongoose.Types.ObjectId();
-        user[0].email = email;
+        user[0].email = await this.#generateDemoEmail(email);
         user[0].lastLogin = Date.now();
         user[0].isNew = true;
         // create a clone of base demo user configuration
@@ -209,5 +209,12 @@ export class AuthConfig {
       }
     };
     this.#passport.use("local-demo", new LocalStategy(options, verify));
+  }
+
+  async #generateDemoEmail(commonEmail) {
+    const usersCount = (await ScrapUser.getDatabaseModel().find()).filter(user => user.hostUser != undefined).length;
+    const decomposedEmail = commonEmail.split("@");
+    const randomDemoUser = decomposedEmail[0] + usersCount;
+    return randomDemoUser + "@" + decomposedEmail[1];
   }
 }
