@@ -212,9 +212,9 @@ export class AuthConfig {
   }
 
   async #generateDemoEmail(commonEmail) {
-    const usersCount = (await ScrapUser.getDatabaseModel().find()).filter(user => user.hostUser != undefined).length;
+    const demoAccounts = await ScrapUser.getDatabaseModel().find({ hostUser: { $ne: null }});
     const decomposedEmail = commonEmail.split("@");
-    const randomDemoUser = decomposedEmail[0] + usersCount;
+    const randomDemoUser = decomposedEmail[0] + demoAccounts.length;
     return randomDemoUser + "@" + decomposedEmail[1];
   }
 }
