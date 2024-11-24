@@ -169,11 +169,11 @@ export class AuthConfig {
         const user = await ScrapUser.getDatabaseModel().find({ email: process.env.DEMO_BASE });
         if (user.length !== 1) {
           // did not find user with provided email - incorrect login data
-          return done(null, false, { message: "Incorrect login data. Please try again." });
+          return done(null, false, { message: "Demo functionality is not enabled." });
         }
         if (!(await bcrypt.compare(demoPass, user[0].password))) {
           // provided password does not match the saved value - incorrect login data
-          return done(null, false, { message: "Incorrect login data. Please try again." });
+          return done(null, false, { message: "Demo functionality cannot be started." });
         }
         // login success - initialize auth components
         if (!(await this.#components.initComponents(ComponentType.AUTH, user[0]))) {
