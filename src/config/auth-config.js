@@ -214,6 +214,11 @@ export class AuthConfig {
     this.#passport.use("local-demo", new LocalStategy(options, verify));
   }
 
+  /**
+   * Method used to generate random demo user email to avoid DB key duplicates
+   * @param {String} commonEmail The base version of the email to be randomized
+   * @returns randomized email for the demo user
+   */
   async #generateDemoEmail(commonEmail) {
     const demoAccounts = await ScrapUser.getDatabaseModel().find({ hostUser: { $ne: null } });
     const decomposedEmail = commonEmail.split("@");
