@@ -95,8 +95,8 @@ export class WebDatabase {
    * Method used to perform database maintenance operations after successfull connect
    */
   async #doMaintenance() {
-    const configsCleaned = await this.#cleanUnusedConfigs();
     const usersCleaned = await this.#cleanDemoUsers();
+    const configsCleaned = await this.#cleanUnusedConfigs();
     this.#status.info(`Maintenance summary: ${configsCleaned} configs, ${usersCleaned} demos`);
   }
 
