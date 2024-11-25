@@ -180,7 +180,7 @@ export class WebScraper {
    */
   getInfo() {
     return {
-      types: [ComponentType.SLAVE, ComponentType.CONFIG, ComponentType.AUTH],
+      types: [ComponentType.SLAVE, ComponentType.CONFIG, ComponentType.AUTH, ComponentType.LOGOUT],
       initWait: false,
     };
   }
