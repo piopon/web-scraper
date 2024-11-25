@@ -1,4 +1,5 @@
 import { AccessChecker } from "../../middleware/access-checker.js";
+import { ComponentType } from "../../config/app-types.js";
 import { ScrapConfig } from "../../model/scrap-config.js";
 import { ScrapUser } from "../../model/scrap-user.js";
 
@@ -6,13 +7,15 @@ import jwt from "jsonwebtoken";
 import express from "express";
 
 export class AuthRouter {
+  #components = undefined;
   #passport = undefined;
 
   /**
    * Creates a new auth router for managing user authentication and authorization
    * @param {Object} passport The object controlling user sing-up and sing-in process
    */
-  constructor(passport) {
+  constructor(passport, components) {
+    this.#components = components;
     this.#passport = passport;
   }
 
