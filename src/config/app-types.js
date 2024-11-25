@@ -28,6 +28,7 @@ class ComponentType {
   static AUTH = new ComponentType("auth", ["start", "stop"]);
   static SLAVE = new ComponentType("slave", ["getMaster"]);
   static CONFIG = new ComponentType("config", ["update"]);
+  static LOGOUT = new ComponentType("logout", ["stop"]);
 
   /**
    * Creates an object representing component type setting
