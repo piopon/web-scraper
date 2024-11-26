@@ -113,8 +113,8 @@ export class WebDatabase {
     }
     if (toDelete > 0) {
       const users = await ScrapUser.getDatabaseModel().find();
-      const usersIds = users.map(user => user._id);
-      const result = await ScrapConfig.getDatabaseModel().deleteMany({ user: { $not: { $in: usersIds }}});
+      const usersIds = users.map((user) => user._id);
+      const result = await ScrapConfig.getDatabaseModel().deleteMany({ user: { $not: { $in: usersIds } } });
       if (result.deletedCount != toDelete) {
         throw new Error("Invalid state! Inconsistent number of deleted configs...");
       }
@@ -127,7 +127,7 @@ export class WebDatabase {
    * @returns number of demo session users removed
    */
   async #cleanDemoUsers() {
-    const result = await ScrapUser.getDatabaseModel().deleteMany({ hostUser: { $ne: null }});
+    const result = await ScrapUser.getDatabaseModel().deleteMany({ hostUser: { $ne: null } });
     return result.deletedCount;
   }
 }
