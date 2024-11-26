@@ -115,9 +115,9 @@ export class WebScraper {
     }
     // update scraper status
     if (reason.length === 0) {
-      this.#status.info("Stopped");
+      this.#status.info(`${sessionUser} + ": Stopped.`);
     } else if (reason !== this.#status.getStatus().message) {
-      this.#status.info(reason);
+      this.#status.info(`${sessionUser} + ": ${reason}`);
     }
     // update internal object state
     session.active = false;
