@@ -46,7 +46,7 @@ describe("start() method", () => {
   test("succeeds with valid input data", async () => {
     const mockConfigResult = { countDocuments: () => 1 };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockConfigResult);
-    const mockUserResult = { countDocuments: () => 1 };
+    const mockUserResult = { countDocuments: () => 1, deleteMany: (_) => ({ deletedCount: 0 }) };
     jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => mockUserResult);
     const configObject = {
       url: "test-url",
