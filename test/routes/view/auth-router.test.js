@@ -25,6 +25,7 @@ describe("createRoutes() method", () => {
       { path: "/token", method: "get" },
       { path: "/register", method: "post" },
       { path: "/login", method: "post" },
+      { path: "/demo", method: "post" },
       { path: "/logout", method: "post" },
     ];
     const testRouter = new AuthRouter(passport);
