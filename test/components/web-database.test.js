@@ -35,7 +35,7 @@ test("getInfo() returns correct result", () => {
   const infoObject = testDatabase.getInfo();
   expect(infoObject).not.toBe(undefined);
   expect(infoObject.types).toStrictEqual([ComponentType.INIT]);
-  expect(infoObject.initWait).toBe(false);
+  expect(infoObject.initWait).toBe(true);
 });
 
 describe("start() method", () => {
