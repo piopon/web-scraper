@@ -1,5 +1,7 @@
 import { WebDatabase } from "../../src/components/web-database.js";
 import { ComponentType, ComponentStatus, LogLevel } from "../../src/config/app-types.js";
+import { ScrapConfig } from "../../src/model/scrap-config.js";
+import { ScrapUser } from "../../src/model/scrap-user.js";
 
 import { jest } from "@jest/globals";
 import mongoose from "mongoose";
