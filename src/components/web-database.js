@@ -38,7 +38,7 @@ export class WebDatabase {
       };
       await mongoose.connect(dbUrl, dbOptions);
       this.#status.info("Connected to database");
-      // await this.#doMaintenance();
+      await this.#doMaintenance();
       return true;
     } catch (error) {
       this.#status.error(error.message);

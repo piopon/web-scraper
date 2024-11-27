@@ -5,6 +5,8 @@ import { jest } from "@jest/globals";
 import mongoose from "mongoose";
 
 jest.mock("mongoose");
+jest.mock("../../src/model/scrap-config.js");
+jest.mock("../../src/model/scrap-user.js");
 
 describe("creating an object", () => {
   test("instantiates a new object when input object is correct", () => {
@@ -40,6 +42,10 @@ test("getInfo() returns correct result", () => {
 
 describe("start() method", () => {
   test("succeeds with valid input data", async () => {
+    const mockConfigResult = { countDocuments: () => 1 };
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockConfigResult);
+    const mockUserResult = { countDocuments: () => 1 };
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => mockUserResult);
     const configObject = {
       url: "test-url",
       port: 1234,
