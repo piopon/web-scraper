@@ -45,9 +45,9 @@ test("getInfo() returns correct result", () => {
 describe("start() method", () => {
   test("succeeds with valid input data", async () => {
     const mockConfigResult = { countDocuments: () => 1 };
-    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockConfigResult);
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockConfigResult);
     const mockUserResult = { countDocuments: () => 1, deleteMany: (_) => ({ deletedCount: 0 }) };
-    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => mockUserResult);
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => mockUserResult);
     const configObject = {
       url: "test-url",
       port: 1234,
