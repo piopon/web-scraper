@@ -48,6 +48,9 @@ describe("start() method", () => {
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockConfigResult);
     const mockUserResult = { countDocuments: () => 1, deleteMany: (_) => ({ deletedCount: 0 }) };
     jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => mockUserResult);
+    const mongooseConnectSpyOn = jest
+      .spyOn(mongoose, "connect")
+      .mockImplementationOnce(() => Promise.resolve(mongoose));
     const configObject = {
       url: "test-url",
       port: 1234,
@@ -57,9 +60,6 @@ describe("start() method", () => {
       timeout: 1_000,
     };
     const testDatabase = new WebDatabase({ minLogLevel: LogLevel.INFO, databaseConfig: configObject });
-    const mongooseConnectSpyOn = jest
-      .spyOn(mongoose, "connect")
-      .mockImplementationOnce(() => Promise.resolve(mongoose));
     const result = await testDatabase.start();
     expect(result).toBe(true);
     const expectedUrl = "mongodb://test-url:1234";
