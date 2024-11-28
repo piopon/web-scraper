@@ -135,10 +135,12 @@ describe("getHistory() returns correct result", () => {
     jest.spyOn(mongoose, "connect").mockImplementationOnce(() => Promise.resolve(mongoose));
     await testDatabase.start();
     const result = testDatabase.getHistory();
-    expect(result.length).toBe(2);
+    expect(result.length).toBe(3);
     expect(result[0].type).toBe("info");
     expect(result[0].message).toBe("Created");
     expect(result[1].type).toBe("info");
     expect(result[1].message).toBe("Connected to database");
+    expect(result[2].type).toBe("info");
+    expect(result[2].message).toBe("Maintenance summary: 0 configs, 0 demos");
   });
 });
