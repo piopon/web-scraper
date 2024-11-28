@@ -93,8 +93,9 @@ export class AuthRouter {
         if (temporaryUser) {
           await ScrapUser.getDatabaseModel().deleteOne({ email: temporaryUser.email });
           await ScrapConfig.getDatabaseModel().deleteOne({ user: temporaryUser._id });
-          // we should stop logout action components
+          // we should stop logout action components and clean their temporary data
           this.#components.runComponents(ComponentType.LOGOUT, "stop", temporaryUser.email, "Demo session ended.");
+          this.#components.runComponents(ComponentType.LOGOUT, "clean", temporaryUser.email);
         }
       });
     };
