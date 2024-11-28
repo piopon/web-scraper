@@ -10,11 +10,6 @@ jest.mock("mongoose");
 jest.mock("../../src/model/scrap-config.js");
 jest.mock("../../src/model/scrap-user.js");
 
-const mockConfigResult = { countDocuments: () => 1 };
-jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockConfigResult);
-const mockUserResult = { countDocuments: () => 1, deleteMany: (_) => ({ deletedCount: 0 }) };
-jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => mockUserResult);
-
 describe("creating an object", () => {
   test("instantiates a new object when input object is correct", () => {
     const inputObject = { minLogLevel: LogLevel.INFO };
@@ -49,6 +44,10 @@ test("getInfo() returns correct result", () => {
 
 describe("start() method", () => {
   test("succeeds with valid input data", async () => {
+    const mockConfigResult = { countDocuments: () => 1 };
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockConfigResult);
+    const mockUserResult = { countDocuments: () => 1, deleteMany: (_) => ({ deletedCount: 0 }) };
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => mockUserResult);
     const mongooseConnectSpyOn = jest
       .spyOn(mongoose, "connect")
       .mockImplementationOnce(() => Promise.resolve(mongoose));
