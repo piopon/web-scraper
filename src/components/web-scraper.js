@@ -137,6 +137,17 @@ export class WebScraper {
   }
 
   /**
+   * Method used to clean retrieved data for specified user
+   * @param {String} userEmail The email of the user which data we want to clean
+   */
+  clean(userEmail) {
+    const userDataDir = path.join(this.#userConfig.path, userEmail);
+    if (fs.existsSync(userDataDir)) {
+      fs.rmdirSync(userDataDir, { recursive: true });
+    }
+  }
+
+  /**
    * Method used to update component state
    * @param {Object} sessionUser The session user for which we want to update
    * @param {Object} scraperConfig The updated session configuration
