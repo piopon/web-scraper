@@ -143,7 +143,7 @@ export class WebScraper {
   clean(userEmail) {
     const userDataDir = path.join(this.#userConfig.path, userEmail);
     if (fs.existsSync(userDataDir)) {
-      fs.rmdirSync(userDataDir, { recursive: true });
+      fs.rmSync(userDataDir, { recursive: true, force: true });
       this.#status.info(`${userEmail}: removed data.`);
     }
   }
