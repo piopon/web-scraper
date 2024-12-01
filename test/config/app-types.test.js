@@ -46,7 +46,7 @@ describe("ComponentType", () => {
     });
     test("static type = LOGOUT", () => {
       expect(ComponentType.LOGOUT.name).toBe("logout");
-      expect(ComponentType.LOGOUT.methods).toStrictEqual(["stop"]);
+      expect(ComponentType.LOGOUT.methods).toStrictEqual(["stop", "clean"]);
     });
   });
   test("returns correct values for custom type", () => {
