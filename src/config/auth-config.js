@@ -3,6 +3,7 @@ import { ScrapConfig } from "../model/scrap-config.js";
 import { ScrapUser } from "../model/scrap-user.js";
 
 import bcrypt from "bcrypt";
+import mongoose from "mongoose";
 import { MongooseError } from "mongoose";
 import { Strategy as LocalStategy } from "passport-local";
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
@@ -31,6 +32,8 @@ export class AuthConfig {
     this.#configJwtStategy();
     this.#configLoginStategy();
     this.#configRegisterStategy();
+    // configure demo session
+    this.#configDemoStategy();
     // configure common serialize and deserialize user logic
     this.#passport.serializeUser((user, done) => {
       done(null, user._id);
@@ -150,5 +153,77 @@ export class AuthConfig {
       }
     };
     this.#passport.use("local-register", new LocalStategy(options, verify));
+  }
+
+  /**
+   * Method used to configurate demo login strategy
+   */
+  #configDemoStategy() {
+    const options = { usernameField: "demo-user", passwordField: "demo-pass" };
+    const verify = async (email, password, done) => {
+      // since demo credentials are hardcoded in HTML then we need to verify and adjust its values
+      const demoMail = email !== process.env.DEMO_USER ? process.env.DEMO_USER : email;
+      const demoPass = password !== process.env.DEMO_PASS ? process.env.DEMO_PASS : password;
+      try {
+        // check if there is an user with provided email
+        const user = await ScrapUser.getDatabaseModel().find({ email: process.env.DEMO_BASE });
+        if (user.length !== 1) {
+          // did not find user with provided email - incorrect login data
+          return done(null, false, { message: "Demo functionality is not enabled." });
+        }
+        if (!(await bcrypt.compare(demoPass, user[0].password))) {
+          // provided password does not match the saved value - incorrect login data
+          return done(null, false, { message: "Demo functionality cannot be started." });
+        }
+        // login success - initialize auth components
+        if (!(await this.#components.initComponents(ComponentType.AUTH, user[0]))) {
+          return done(null, false, { message: "Cannot start authenticate components. Please try again." });
+        }
+        // create a clone of the base demo user with updated email and last login entry
+        user[0].hostUser = user[0]._id;
+        user[0]._id = new mongoose.Types.ObjectId();
+        user[0].email = await this.#generateDemoEmail(demoMail);
+        user[0].lastLogin = Date.now();
+        user[0].isNew = true;
+        // create a clone of base demo user configuration
+        const config = await ScrapConfig.getDatabaseModel().findOne({ user: user[0].hostUser });
+        config._id = new mongoose.Types.ObjectId();
+        config.user = user[0]._id;
+        config.isNew = true;
+        await config.save();
+        // link config clone to cloned demo user and save demo user
+        user[0].config = config._id;
+        await user[0].save();
+        return done(null, user[0]);
+      } catch (error) {
+        let message = error.message;
+        if (error instanceof MongooseError) {
+          if (error.name === "MongooseError" && message.includes(".find()")) {
+            message = "Database connection has timed out. Check connection status and please try again.";
+          } else if (error.name === "ValidationError") {
+            const invalidPath = Object.keys(error.errors);
+            message = error.errors[invalidPath[0]].properties.message;
+          }
+        }
+        if (message.includes("ECONNREFUSED")) {
+          message = "Database connection has been broken. Check connection status and please try again.";
+        }
+        return done(null, false, { message: message });
+      }
+    };
+    this.#passport.use("local-demo", new LocalStategy(options, verify));
+  }
+
+  /**
+   * Method used to generate random demo user email to avoid DB key duplicates
+   * @param {String} commonEmail The base version of the email to be randomized
+   * @returns randomized email for the demo user
+   */
+  async #generateDemoEmail(commonEmail) {
+    const demoAccounts = await ScrapUser.getDatabaseModel().find({ hostUser: { $ne: null } });
+    const decomposedEmail = commonEmail.split("@");
+    const randomDemoUser =
+      decomposedEmail[0] + demoAccounts.length + "#" + (Math.random() + 1).toString(36).substring(7);
+    return randomDemoUser + "@" + decomposedEmail[1];
   }
 }

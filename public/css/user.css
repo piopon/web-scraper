@@ -4,6 +4,7 @@ section.user-management {
   align-items: center;
   flex-direction: column;
   height: calc(100% - 2.5rem);
+  position: relative;
 }
 
 p.user-title {
@@ -74,4 +75,26 @@ div.user-switch {
   margin: 0 auto;
   color: black;
   font-size: 0.75rem;
+}
+
+form.user-demo {
+  position: absolute;
+  color: rgb(190, 180, 255);
+  font-size: 0.75rem;
+  bottom: 15px;
+  right: 50px;
+}
+
+form.user-demo input {
+  display: none;
+}
+
+form.user-demo button.btn-demo {
+  font: inherit;
+  background: none;
+  color: black;
+  border: none;
+  padding: 0;
+  text-decoration: underline;
+  cursor: pointer;
 }

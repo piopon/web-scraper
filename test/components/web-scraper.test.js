@@ -15,7 +15,12 @@ test("getInfo() returns correct result", () => {
   const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO });
   const infoObject = testScraper.getInfo();
   expect(infoObject).not.toBe(undefined);
-  expect(infoObject.types).toStrictEqual([ComponentType.SLAVE, ComponentType.CONFIG, ComponentType.AUTH]);
+  expect(infoObject.types).toStrictEqual([
+    ComponentType.SLAVE,
+    ComponentType.CONFIG,
+    ComponentType.AUTH,
+    ComponentType.LOGOUT,
+  ]);
   expect(infoObject.initWait).toBe(false);
 });
 
@@ -118,7 +123,7 @@ describe("stop() method", () => {
     await testScraper.stop(sessionUser.email);
     const result = testScraper.getHistory(sessionUser);
     expect(result[result.length - 1].type).toBe("info");
-    expect(result[result.length - 1].message).toBe("Stopped");
+    expect(result[result.length - 1].message).toBe("mail: Stopped.");
   });
   test("does correctly stop session with error message", async () => {
     const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
@@ -126,8 +131,8 @@ describe("stop() method", () => {
     await testScraper.start(sessionUser);
     await testScraper.stop(sessionUser.email, "Error message");
     const result = testScraper.getHistory(sessionUser);
-    expect(result[result.length - 1].type).toBe("error");
-    expect(result[result.length - 1].message).toBe("Error message");
+    expect(result[result.length - 1].type).toBe("info");
+    expect(result[result.length - 1].message).toBe("mail: Error message");
   });
 });
 

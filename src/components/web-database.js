@@ -1,4 +1,6 @@
 import { ComponentStatus, ComponentType } from "../config/app-types.js";
+import { ScrapConfig } from "../model/scrap-config.js";
+import { ScrapUser } from "../model/scrap-user.js";
 import { StatusLogger } from "./status-logger.js";
 
 import mongoose from "mongoose";
@@ -36,6 +38,7 @@ export class WebDatabase {
       };
       await mongoose.connect(dbUrl, dbOptions);
       this.#status.info("Connected to database");
+      await this.#doMaintenance();
       return true;
     } catch (error) {
       this.#status.error(error.message);
@@ -77,7 +80,7 @@ export class WebDatabase {
    * @returns an object with extra info: component type and require pass flag
    */
   getInfo() {
-    return { types: [ComponentType.INIT], initWait: false };
+    return { types: [ComponentType.INIT], initWait: true };
   }
 
   /**
@@ -86,5 +89,45 @@ export class WebDatabase {
    */
   getHistory() {
     return this.#status.getHistory();
+  }
+
+  /**
+   * Method used to perform database maintenance operations after successfull connect
+   */
+  async #doMaintenance() {
+    const usersCleaned = await this.#cleanDemoUsers();
+    const configsCleaned = await this.#cleanUnusedConfigs();
+    this.#status.info(`Maintenance summary: ${configsCleaned} configs, ${usersCleaned} demos`);
+  }
+
+  /**
+   * Method used to cleanup all unused configs (which users do not exist anymore)
+   * @returns number of unused scraper configurations removed
+   */
+  async #cleanUnusedConfigs() {
+    const usersCount = await ScrapUser.getDatabaseModel().countDocuments();
+    const configsCount = await ScrapConfig.getDatabaseModel().countDocuments();
+    const toDelete = configsCount - usersCount;
+    if (toDelete < 0) {
+      throw new Error("Invalid state! There is an user without a config...");
+    }
+    if (toDelete > 0) {
+      const users = await ScrapUser.getDatabaseModel().find();
+      const usersIds = users.map((user) => user._id);
+      const result = await ScrapConfig.getDatabaseModel().deleteMany({ user: { $not: { $in: usersIds } } });
+      if (result.deletedCount != toDelete) {
+        throw new Error("Invalid state! Inconsistent number of deleted configs...");
+      }
+    }
+    return toDelete;
+  }
+
+  /**
+   * Method used to cleanup all demo users (which are just temporary)
+   * @returns number of demo session users removed
+   */
+  async #cleanDemoUsers() {
+    const result = await ScrapUser.getDatabaseModel().deleteMany({ hostUser: { $ne: null } });
+    return result.deletedCount;
   }
 }

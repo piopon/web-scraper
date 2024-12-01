@@ -115,9 +115,9 @@ export class WebScraper {
     }
     // update scraper status
     if (reason.length === 0) {
-      this.#status.info("Stopped");
+      this.#status.info(`${sessionUser}: Stopped.`);
     } else if (reason !== this.#status.getStatus().message) {
-      this.#status.error(reason);
+      this.#status.info(`${sessionUser}: ${reason}`);
     }
     // update internal object state
     session.active = false;
@@ -134,6 +134,18 @@ export class WebScraper {
     }
     // remove entry from the sessions map
     this.#sessions.delete(sessionUser);
+  }
+
+  /**
+   * Method used to clean retrieved data for specified user
+   * @param {String} userEmail The email of the user which data we want to clean
+   */
+  clean(userEmail) {
+    const userDataDir = path.join(this.#userConfig.path, userEmail);
+    if (fs.existsSync(userDataDir)) {
+      fs.rmSync(userDataDir, { recursive: true, force: true });
+      this.#status.info(`${userEmail}: removed data.`);
+    }
   }
 
   /**
@@ -180,7 +192,7 @@ export class WebScraper {
    */
   getInfo() {
     return {
-      types: [ComponentType.SLAVE, ComponentType.CONFIG, ComponentType.AUTH],
+      types: [ComponentType.SLAVE, ComponentType.CONFIG, ComponentType.AUTH, ComponentType.LOGOUT],
       initWait: false,
     };
   }

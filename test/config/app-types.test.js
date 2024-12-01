@@ -44,6 +44,10 @@ describe("ComponentType", () => {
       expect(ComponentType.CONFIG.name).toBe("config");
       expect(ComponentType.CONFIG.methods).toStrictEqual(["update"]);
     });
+    test("static type = LOGOUT", () => {
+      expect(ComponentType.LOGOUT.name).toBe("logout");
+      expect(ComponentType.LOGOUT.methods).toStrictEqual(["stop", "clean"]);
+    });
   });
   test("returns correct values for custom type", () => {
     const testComponentType = new ComponentType("test-name", ["test-1", "test-2", "test-3"]);

@@ -1,10 +1,14 @@
 import { WebDatabase } from "../../src/components/web-database.js";
 import { ComponentType, ComponentStatus, LogLevel } from "../../src/config/app-types.js";
+import { ScrapConfig } from "../../src/model/scrap-config.js";
+import { ScrapUser } from "../../src/model/scrap-user.js";
 
 import { jest } from "@jest/globals";
 import mongoose from "mongoose";
 
 jest.mock("mongoose");
+jest.mock("../../src/model/scrap-config.js");
+jest.mock("../../src/model/scrap-user.js");
 
 describe("creating an object", () => {
   test("instantiates a new object when input object is correct", () => {
@@ -35,11 +39,18 @@ test("getInfo() returns correct result", () => {
   const infoObject = testDatabase.getInfo();
   expect(infoObject).not.toBe(undefined);
   expect(infoObject.types).toStrictEqual([ComponentType.INIT]);
-  expect(infoObject.initWait).toBe(false);
+  expect(infoObject.initWait).toBe(true);
 });
 
 describe("start() method", () => {
   test("succeeds with valid input data", async () => {
+    const mockConfigResult = { countDocuments: () => 1 };
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockConfigResult);
+    const mockUserResult = { countDocuments: () => 1, deleteMany: (_) => ({ deletedCount: 0 }) };
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => mockUserResult);
+    const mongooseConnectSpyOn = jest
+      .spyOn(mongoose, "connect")
+      .mockImplementationOnce(() => Promise.resolve(mongoose));
     const configObject = {
       url: "test-url",
       port: 1234,
@@ -49,9 +60,6 @@ describe("start() method", () => {
       timeout: 1_000,
     };
     const testDatabase = new WebDatabase({ minLogLevel: LogLevel.INFO, databaseConfig: configObject });
-    const mongooseConnectSpyOn = jest
-      .spyOn(mongoose, "connect")
-      .mockImplementationOnce(() => Promise.resolve(mongoose));
     const result = await testDatabase.start();
     expect(result).toBe(true);
     const expectedUrl = "mongodb://test-url:1234";
@@ -127,10 +135,12 @@ describe("getHistory() returns correct result", () => {
     jest.spyOn(mongoose, "connect").mockImplementationOnce(() => Promise.resolve(mongoose));
     await testDatabase.start();
     const result = testDatabase.getHistory();
-    expect(result.length).toBe(2);
+    expect(result.length).toBe(3);
     expect(result[0].type).toBe("info");
     expect(result[0].message).toBe("Created");
     expect(result[1].type).toBe("info");
     expect(result[1].message).toBe("Connected to database");
+    expect(result[2].type).toBe("info");
+    expect(result[2].message).toBe("Maintenance summary: 0 configs, 0 demos");
   });
 });

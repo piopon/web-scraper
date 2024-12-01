@@ -25,6 +25,7 @@ describe("createRoutes() method", () => {
       { path: "/token", method: "get" },
       { path: "/register", method: "post" },
       { path: "/login", method: "post" },
+      { path: "/demo", method: "post" },
       { path: "/logout", method: "post" },
     ];
     const testRouter = new AuthRouter(passport);
@@ -100,6 +101,11 @@ describe("created auth POST routes", () => {
   });
   test("returns correct result using /login endpoint", async () => {
     const response = await testAgent.post("/auth/login");
+    expect(response.statusCode).toBe(302);
+    expect(response.text).toBe("Found. Redirecting to /auth/login");
+  });
+  test("returns correct result using /demo endpoint", async () => {
+    const response = await testAgent.post("/auth/demo");
     expect(response.statusCode).toBe(302);
     expect(response.text).toBe("Found. Redirecting to /auth/login");
   });
