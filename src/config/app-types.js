@@ -77,4 +77,21 @@ class ComponentStatus {
   }
 }
 
-export { LogLevel, ComponentType, ComponentStatus };
+/**
+ * Class representing the demo session mode
+ * It implements an enum with values: OVERWRITE, DUPLICATE
+ */
+class DemoMode {
+  static OVERWRITE = new DemoMode("overwrite");
+  static DUPLICATE = new DemoMode("duplicate");
+
+  /**
+   * Creates an object representing demo mode setting
+   * @param {String} mode The demo mode value
+   */
+  constructor(mode) {
+    this.mode = mode;
+  }
+}
+
+export { LogLevel, ComponentType, ComponentStatus, DemoMode };
