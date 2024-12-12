@@ -1,4 +1,4 @@
-import { ComponentType } from "../config/app-types.js";
+import { ComponentType, DemoMode } from "../config/app-types.js";
 import { ScrapConfig } from "../model/scrap-config.js";
 import { ScrapUser } from "../model/scrap-user.js";
 
@@ -182,21 +182,24 @@ export class AuthConfig {
         if (!(await this.#components.initComponents(ComponentType.AUTH, user[0]))) {
           return done(null, false, { message: "Cannot start authenticate components. Please try again." });
         }
-        // create a clone of the base demo user with updated email and last login entry
-        user[0].hostUser = user[0]._id;
-        user[0]._id = new mongoose.Types.ObjectId();
-        user[0].email = await this.#generateDemoEmail(demoMail);
-        user[0].lastLogin = Date.now();
-        user[0].isNew = true;
-        // create a clone of base demo user configuration
-        const config = await ScrapConfig.getDatabaseModel().findOne({ user: user[0].hostUser });
-        config._id = new mongoose.Types.ObjectId();
-        config.user = user[0]._id;
-        config.isNew = true;
-        await config.save();
-        // link config clone to cloned demo user and save demo user
-        user[0].config = config._id;
-        await user[0].save();
+        // create demo session duplicate if needed
+        if (DemoMode.DUPLICATE.mode === this.#demoConfig.mode) {
+          // create a clone of the base demo user with updated email and last login entry
+          user[0].hostUser = user[0]._id;
+          user[0]._id = new mongoose.Types.ObjectId();
+          user[0].email = await this.#generateDemoEmail(demoMail);
+          user[0].lastLogin = Date.now();
+          user[0].isNew = true;
+          // create a clone of base demo user configuration
+          const config = await ScrapConfig.getDatabaseModel().findOne({ user: user[0].hostUser });
+          config._id = new mongoose.Types.ObjectId();
+          config.user = user[0]._id;
+          config.isNew = true;
+          await config.save();
+          // link config clone to cloned demo user and save demo user
+          user[0].config = config._id;
+          await user[0].save();
+        }
         return done(null, user[0]);
       } catch (error) {
         let message = error.message;
