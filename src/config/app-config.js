@@ -41,6 +41,9 @@ export class AppConfig {
         password: process.env.DB_PASSWORD || "",
         timeout: parseInt(process.env.DB_TIMEOUT) || 15_000,
       },
+      demoConfig: {
+        mode: process.env.DEMO_MODE || "duplicate",
+      },
       scraperConfig: {
         loginInterval: 30,
         scrapInterval: 30_000,
