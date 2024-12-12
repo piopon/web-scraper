@@ -13,15 +13,18 @@ export class AuthConfig {
 
   #components = undefined;
   #passport = undefined;
+  #demoConfig = undefined;
 
   /**
    * Creates a new configuration object for managing authentication settings
    * @param {Object} passport The login/register dispatcher object to be configured
    * @param {Object} components The web components used in authentication process
+   * @param {Object} config The object containing demo session configuration
    */
-  constructor(passport, components) {
+  constructor(passport, components, config) {
     this.#components = components;
     this.#passport = passport;
+    this.#demoConfig = config;
   }
 
   /**
