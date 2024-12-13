@@ -93,6 +93,11 @@ class DemoMode {
     this.mode = mode;
   }
 
+  /**
+   * Compares this demo modej with other one and determines if they are equal
+   * @param {Object} other Another demo mode object to compare
+   * @returns true if checked demo mode matches this one
+   */
   equals(other) {
     return this.mode === other.mode;
   }
