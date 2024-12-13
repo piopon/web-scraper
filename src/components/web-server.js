@@ -9,7 +9,7 @@ import { StatusRouter } from "../routes/api/status-router.js";
 import { StatusLogger } from "./status-logger.js";
 import { ViewRouter } from "../routes/view/view-router.js";
 
-import cors from "cors"
+import cors from "cors";
 import express from "express";
 import passport from "passport";
 import flash from "express-flash";
@@ -88,7 +88,7 @@ export class WebServer {
     server.use(flash());
     server.use(fileUpload(this.#getFileUploadConfiguration()));
     server.use(session(this.#getSessionConfiguration()));
-    server.use(cors(this.#getCorsConfiguration()))
+    server.use(cors(this.#getCorsConfiguration()));
     // initialize and configure passport
     server.use(passport.initialize());
     server.use(passport.session());
@@ -115,7 +115,7 @@ export class WebServer {
       abortOnLimit: true,
       limits: {
         fileSize: 10_000_000,
-      }
+      },
     };
   }
 
@@ -139,8 +139,8 @@ export class WebServer {
     return {
       origin: true,
       credentials: true,
-      methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
-      allowedHeaders: ['Origin', 'X-Requested-With', 'X-AUTHENTICATION', 'X-IP', 'Content-Type', 'Accept'],
+      methods: ["GET", "PUT", "POST", "DELETE", "OPTIONS"],
+      allowedHeaders: ["Origin", "X-Requested-With", "X-AUTHENTICATION", "X-IP", "Content-Type", "Accept"],
     };
   }
 }
