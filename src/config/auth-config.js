@@ -1,4 +1,4 @@
-import { ComponentType } from "../config/app-types.js";
+import { ComponentType, DemoMode } from "../config/app-types.js";
 import { ScrapConfig } from "../model/scrap-config.js";
 import { ScrapUser } from "../model/scrap-user.js";
 
@@ -13,15 +13,18 @@ export class AuthConfig {
 
   #components = undefined;
   #passport = undefined;
+  #config = undefined;
 
   /**
    * Creates a new configuration object for managing authentication settings
    * @param {Object} passport The login/register dispatcher object to be configured
    * @param {Object} components The web components used in authentication process
+   * @param {Object} config The object containing initial auth configuration values
    */
-  constructor(passport, components) {
+  constructor(passport, components, config) {
     this.#components = components;
     this.#passport = passport;
+    this.#config = config;
   }
 
   /**
@@ -179,21 +182,24 @@ export class AuthConfig {
         if (!(await this.#components.initComponents(ComponentType.AUTH, user[0]))) {
           return done(null, false, { message: "Cannot start authenticate components. Please try again." });
         }
-        // create a clone of the base demo user with updated email and last login entry
-        user[0].hostUser = user[0]._id;
-        user[0]._id = new mongoose.Types.ObjectId();
-        user[0].email = await this.#generateDemoEmail(demoMail);
-        user[0].lastLogin = Date.now();
-        user[0].isNew = true;
-        // create a clone of base demo user configuration
-        const config = await ScrapConfig.getDatabaseModel().findOne({ user: user[0].hostUser });
-        config._id = new mongoose.Types.ObjectId();
-        config.user = user[0]._id;
-        config.isNew = true;
-        await config.save();
-        // link config clone to cloned demo user and save demo user
-        user[0].config = config._id;
-        await user[0].save();
+        // create demo session duplicate if needed
+        if (!DemoMode.OVERWRITE.equals(this.#config.demoMode)) {
+          // create a clone of the base demo user with updated email and last login entry
+          user[0].hostUser = user[0]._id;
+          user[0]._id = new mongoose.Types.ObjectId();
+          user[0].email = await this.#generateDemoEmail(demoMail);
+          user[0].lastLogin = Date.now();
+          user[0].isNew = true;
+          // create a clone of base demo user configuration
+          const config = await ScrapConfig.getDatabaseModel().findOne({ user: user[0].hostUser });
+          config._id = new mongoose.Types.ObjectId();
+          config.user = user[0]._id;
+          config.isNew = true;
+          await config.save();
+          // link config clone to cloned demo user and save demo user
+          user[0].config = config._id;
+          await user[0].save();
+        }
         return done(null, user[0]);
       } catch (error) {
         let message = error.message;
