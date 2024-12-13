@@ -13,18 +13,18 @@ export class AuthConfig {
 
   #components = undefined;
   #passport = undefined;
-  #demoConfig = undefined;
+  #config = undefined;
 
   /**
    * Creates a new configuration object for managing authentication settings
    * @param {Object} passport The login/register dispatcher object to be configured
    * @param {Object} components The web components used in authentication process
-   * @param {Object} config The object containing demo session configuration
+   * @param {Object} config The object containing initial auth configuration values
    */
   constructor(passport, components, config) {
     this.#components = components;
     this.#passport = passport;
-    this.#demoConfig = config;
+    this.#config = config;
   }
 
   /**
@@ -183,7 +183,7 @@ export class AuthConfig {
           return done(null, false, { message: "Cannot start authenticate components. Please try again." });
         }
         // create demo session duplicate if needed
-        if (DemoMode.DUPLICATE.mode === this.#demoConfig.mode) {
+        if (DemoMode.DUPLICATE.mode === this.#config.demoMode) {
           // create a clone of the base demo user with updated email and last login entry
           user[0].hostUser = user[0]._id;
           user[0]._id = new mongoose.Types.ObjectId();
