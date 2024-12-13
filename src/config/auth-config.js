@@ -183,7 +183,7 @@ export class AuthConfig {
           return done(null, false, { message: "Cannot start authenticate components. Please try again." });
         }
         // create demo session duplicate if needed
-        if (DemoMode.DUPLICATE.mode === this.#config.demoMode) {
+        if (DemoMode.DUPLICATE.equals(this.#config.demoMode)) {
           // create a clone of the base demo user with updated email and last login entry
           user[0].hostUser = user[0]._id;
           user[0]._id = new mongoose.Types.ObjectId();

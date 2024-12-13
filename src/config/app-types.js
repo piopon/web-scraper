@@ -92,6 +92,10 @@ class DemoMode {
   constructor(mode) {
     this.mode = mode;
   }
+
+  equals(other) {
+    return this.mode === other.mode;
+  }
 }
 
 export { LogLevel, ComponentType, ComponentStatus, DemoMode };

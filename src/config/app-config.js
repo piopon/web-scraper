@@ -1,4 +1,4 @@
-import { LogLevel } from "./app-types.js";
+import { DemoMode, LogLevel } from "./app-types.js";
 
 import dotenv from "dotenv";
 import path from "path";
@@ -42,7 +42,7 @@ export class AppConfig {
         timeout: parseInt(process.env.DB_TIMEOUT) || 15_000,
       },
       authConfig: {
-        demoMode: process.env.DEMO_MODE || "duplicate",
+        demoMode: new DemoMode(process.env.DEMO_MODE) || DemoMode.DUPLICATE,
       },
       scraperConfig: {
         loginInterval: 30,
