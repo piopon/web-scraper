@@ -13,3 +13,9 @@ get {
 auth:bearer {
   token: {{demo-token}}
 }
+
+tests {
+  test("config is correctly received", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}
