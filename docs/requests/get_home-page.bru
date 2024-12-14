@@ -22,4 +22,12 @@ tests {
   test("home page has correct content length", function() {
     expect(res.getHeader("content-length")).to.equal("3116");
   });
+
+  test("home page has login data", function() {
+    const body = res.getBody();
+    expect(body.includes('<h3>scraper user login</h3>')).to.equal(true);
+    expect(body.includes('<form action="/auth/login" method="POST">')).to.equal(true);
+    expect(body.includes('<input type="email" id="user-email" name="email" required>')).to.equal(true);
+    expect(body.includes('<input type="password" id="user-password" name="password" required>')).to.equal(true);
+  });
 }
