@@ -14,4 +14,12 @@ tests {
   test("home page is correctly opened", function() {
     expect(res.getStatus()).to.equal(200);
   });
+
+  test("home page received HTML data", function() {
+    expect(res.getHeader("content-type")).to.equal("text/html; charset=utf-8");
+  });
+
+  test("home page has correct content length", function() {
+    expect(res.getHeader("content-length")).to.equal("3116");
+  });
 }
