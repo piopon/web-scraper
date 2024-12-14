@@ -9,3 +9,9 @@ get {
   body: none
   auth: none
 }
+
+tests {
+  test("home page is correctly opened", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}
