@@ -30,4 +30,11 @@ tests {
     expect(body).to.include('<input type="email" id="user-email" name="email" required>');
     expect(body).to.include('<input type="password" id="user-password" name="password" required>');
   });
+
+  test("home page has demo functionality", function() {
+    const body = res.getBody();
+    expect(body).to.be.a('string');
+    expect(body).to.include('<form class="user-demo" action="/auth/demo" method="POST">');
+    expect(body).to.include('<button class="btn-demo" type="submit">see</button>');
+  });
 }
