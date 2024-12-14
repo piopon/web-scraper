@@ -25,6 +25,7 @@ tests {
 
   test("home page has login data", function() {
     const body = res.getBody();
+    expect(body).to.be.a('string');
     expect(body).to.include('<h3>scraper user login</h3>');
     expect(body).to.include('<form action="/auth/login" method="POST">');
     expect(body).to.include('<input type="email" id="user-email" name="email" required>');
