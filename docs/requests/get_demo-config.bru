@@ -33,5 +33,6 @@ tests {
     expect(body).to.have.property('_id');
     expect(body).to.have.property('user');
     expect(body).to.have.property('groups');
+    expect(body.groups).to.have.lengthOf(2);
   });
 }
