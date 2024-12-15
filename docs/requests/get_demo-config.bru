@@ -33,6 +33,7 @@ tests {
     expect(body).to.have.property('_id');
     expect(body).to.have.property('user');
     expect(body).to.have.property('groups');
+    expect(body).to.have.property('__v');
   });
 
   test("config has correct group data structure", function() {
