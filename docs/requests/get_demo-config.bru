@@ -50,16 +50,21 @@ tests {
 
   test("config has correct group data structure", function() {
     const body = res.getBody().groups;
+    expect(body[0]).to.be.a('object');
     expect(body[0]).to.have.property('_id');
+    expect(body[0]._id).to.be.a('string');
     expect(body[0]).to.have.property('name');
+    expect(body[0].name).to.be.a('string');
     expect(body[0]).to.have.property('category');
+    expect(body[0].category).to.be.a('string');
     expect(body[0]).to.have.property('domain');
+    expect(body[0].domain).to.be.a('string');
     expect(body[0]).to.have.property('observers');
+    expect(body[0].observers).to.be.a('array');
   });
 
   test("config has correct observer data structure", function() {
     const body = res.getBody().groups[0].observers;
-    expect(body).to.be.a('array');
     expect(body).to.have.lengthOf(2);
     expect(body[0]).to.have.property('_id');
     expect(body[0]).to.have.property('name');
