@@ -35,4 +35,10 @@ tests {
     expect(body).to.have.property('groups');
     expect(body.groups).to.have.lengthOf(2);
   });
+
+  test("config has correct group data structure", function() {
+    const body = res.getBody().groups;
+    expect(body).to.be.a('array');
+    expect(body).to.have.lengthOf(2);
+  });
 }
