@@ -39,5 +39,10 @@ tests {
     const body = res.getBody().groups;
     expect(body).to.be.a('array');
     expect(body).to.have.lengthOf(2);
+    expect(body[0]).to.have.property('_id');
+    expect(body[0]).to.have.property('name');
+    expect(body[0]).to.have.property('category');
+    expect(body[0]).to.have.property('domain');
+    expect(body[0]).to.have.property('observers');
   });
 }
