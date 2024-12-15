@@ -36,6 +36,16 @@ tests {
     expect(body).to.have.property('__v');
   });
 
+  test("config has correct top-level data values", function() {
+    const body = res.getBody();
+    expect(body._id).to.be.a('string');
+    expect(body._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(body.user).to.be.a('string');
+    expect(body.user).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(body.__v).to.be.a('number');
+    expect(body.__v).to.be.at.least(0);
+  });
+
   test("config has correct group data structure", function() {
     const body = res.getBody().groups;
     expect(body).to.be.a('array');
