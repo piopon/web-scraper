@@ -26,4 +26,12 @@ tests {
   test("config has correct content length", function() {
     expect(res.getHeader("content-length")).to.equal("1966");
   });
+
+  test("config has correct data structure", function() {
+    const body = res.getBody();
+    expect(body).to.be.a('object');
+    expect(body).to.have.property('_id');
+    expect(body).to.have.property('user');
+    expect(body).to.have.property('groups');
+  });
 }
