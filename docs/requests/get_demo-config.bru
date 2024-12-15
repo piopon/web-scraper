@@ -31,25 +31,25 @@ tests {
     const body = res.getBody();
     expect(body).to.be.a('object');
     expect(body).to.have.property('_id');
+    expect(body._id).to.be.a('string');
     expect(body).to.have.property('user');
+    expect(body.user).to.be.a('string');
     expect(body).to.have.property('groups');
+    expect(body.groups).to.be.a('array');
     expect(body).to.have.property('__v');
+    expect(body.__v).to.be.a('number');
   });
 
   test("config has correct top-level data values", function() {
     const body = res.getBody();
-    expect(body._id).to.be.a('string');
     expect(body._id).to.match(/^[0-9a-fA-F]{24}$/);
-    expect(body.user).to.be.a('string');
     expect(body.user).to.match(/^[0-9a-fA-F]{24}$/);
-    expect(body.__v).to.be.a('number');
+    expect(body.groups).to.have.lengthOf(2);
     expect(body.__v).to.be.at.least(0);
   });
 
   test("config has correct group data structure", function() {
     const body = res.getBody().groups;
-    expect(body).to.be.a('array');
-    expect(body).to.have.lengthOf(2);
     expect(body[0]).to.have.property('_id');
     expect(body[0]).to.have.property('name');
     expect(body[0]).to.have.property('category');
