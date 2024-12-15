@@ -63,9 +63,22 @@ tests {
     expect(body[0].observers).to.be.a('array');
   });
 
+  test("config has correct group data values", function() {
+    const body = res.getBody().groups;
+    expect(body[0]._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(body[0].name).to.equal("stocks");
+    expect(body[0].category).to.equal("📈");
+    expect(body[0].domain).to.equal("https://www.tradingview.com");
+    expect(body[0].observers).to.have.lengthOf(2);
+    expect(body[1]._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(body[1].name).to.equal("games");
+    expect(body[1].category).to.equal("🎮");
+    expect(body[1].domain).to.equal("https://store.steampowered.com/");
+    expect(body[1].observers).to.have.lengthOf(1);
+  });
+
   test("config has correct observer data structure", function() {
     const body = res.getBody().groups[0].observers;
-    expect(body).to.have.lengthOf(2);
     expect(body[0]).to.have.property('_id');
     expect(body[0]).to.have.property('name');
     expect(body[0]).to.have.property('path');
