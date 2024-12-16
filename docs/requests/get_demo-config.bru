@@ -112,16 +112,19 @@ tests {
 
   test("config has correct observer data values", function() {
     const groups = res.getBody().groups;
+    expect(groups[0].observers[0]._id).to.match(/^[0-9a-fA-F]{24}$/);
     expect(groups[0].observers[0].name).to.equal("McDonald's");
     expect(groups[0].observers[0].path).to.equal("symbols/NYSE-MCD/");
     expect(groups[0].observers[0].target).to.equal("domcontentloaded");
     expect(groups[0].observers[0].history).to.equal("off");
     expect(groups[0].observers[0].container).to.equal("div[class^=symbolRow]");
+    expect(groups[0].observers[1]._id).to.match(/^[0-9a-fA-F]{24}$/);
     expect(groups[0].observers[1].name).to.equal("NVIDIA");
     expect(groups[0].observers[1].path).to.equal("symbols/NASDAQ-NVDA/");
     expect(groups[0].observers[1].target).to.equal("domcontentloaded");
     expect(groups[0].observers[1].history).to.equal("off");
     expect(groups[0].observers[1].container).to.equal("div[class^=symbolRow]");
+    expect(groups[1].observers[0]._id).to.match(/^[0-9a-fA-F]{24}$/);
     expect(groups[1].observers[0].name).to.equal("Prince of Persia");
     expect(groups[1].observers[0].path).to.equal("app/19980/Prince_of_Persia/");
     expect(groups[1].observers[0].target).to.equal("domcontentloaded");
