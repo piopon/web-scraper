@@ -82,27 +82,30 @@ tests {
   });
 
   test("config has correct observer data structure", function() {
-    const body = res.getBody().groups;
-    for(const group in body.length) {
-      for(const observer in body[group].observers.length) {
-        expect(body[group].observers[observer]).to.have.property('_id');
-        expect(body[group].observers[observer]._id).to.be.a('string');
-        expect(body[group].observers[observer]).to.have.property('name');
-        expect(body[group].observers[observer].name).to.be.a('string');
-        expect(body[group].observers[observer]).to.have.property('path');
-        expect(body[group].observers[observer].path).to.be.a('string');
-        expect(body[group].observers[observer]).to.have.property('target');
-        expect(body[group].observers[observer].target).to.be.a('string');
-        expect(body[group].observers[observer]).to.have.property('history');
-        expect(body[group].observers[observer].history).to.be.a('string');
-        expect(body[group].observers[observer]).to.have.property('container');
-        expect(body[group].observers[observer].container).to.be.a('string');
-        expect(body[group].observers[observer]).to.have.property('title');
-        expect(body[group].observers[observer].title).to.be.a('object');
-        expect(body[group].observers[observer]).to.have.property('image');
-        expect(body[group].observers[observer].image).to.be.a('object');
-        expect(body[group].observers[observer]).to.have.property('price');
-        expect(body[group].observers[observer].price).to.be.a('object');
+    const groups = res.getBody().groups;
+    for(const groupIndex in groups.length) {
+      const group = groups[groupIndex];
+      for(const observerIndex in group.observers.length) {
+        const observer = group.observers[observerIndex];
+        expect(observer).to.be.a('object');
+        expect(observer).to.have.property('_id');
+        expect(observer._id).to.be.a('string');
+        expect(observer).to.have.property('name');
+        expect(observer.name).to.be.a('string');
+        expect(observer).to.have.property('path');
+        expect(observer.path).to.be.a('string');
+        expect(observer).to.have.property('target');
+        expect(observer.target).to.be.a('string');
+        expect(observer).to.have.property('history');
+        expect(observer.history).to.be.a('string');
+        expect(observer).to.have.property('container');
+        expect(observer.container).to.be.a('string');
+        expect(observer).to.have.property('title');
+        expect(observer.title).to.be.a('object');
+        expect(observer).to.have.property('image');
+        expect(observer.image).to.be.a('object');
+        expect(observer).to.have.property('price');
+        expect(observer.price).to.be.a('object');
       }
     }
   });
