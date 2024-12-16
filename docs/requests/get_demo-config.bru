@@ -53,7 +53,6 @@ tests {
     for(const groupIndex in groups.length) {
       const group = body[groupIndex];
       expect(group).to.be.a('object');
-      expect(group).to.be.a('object');
       expect(group).to.have.property('_id');
       expect(group._id).to.be.a('string');
       expect(group).to.have.property('name');
