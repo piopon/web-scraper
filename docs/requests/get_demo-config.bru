@@ -151,6 +151,25 @@ tests {
     }
   });
 
+  test("config has correct title component data values", function() {
+    const groups = res.getBody().groups;
+    expect(groups[0].observers[0].title._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(groups[0].observers[0].title.interval).to.equal("");
+    expect(groups[0].observers[0].title.selector).to.equal("h1");
+    expect(groups[0].observers[0].title.attribute).to.equal("innerHTML");
+    expect(groups[0].observers[0].title.auxiliary).to.equal("");
+    expect(groups[0].observers[1].title._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(groups[0].observers[1].title.interval).to.equal("");
+    expect(groups[0].observers[1].title.selector).to.equal("h1");
+    expect(groups[0].observers[1].title.attribute).to.equal("innerHTML");
+    expect(groups[0].observers[1].title.auxiliary).to.equal("");
+    expect(groups[1].observers[0].title._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(groups[1].observers[0].title.interval).to.equal("");
+    expect(groups[1].observers[0].title.selector).to.equal("div#appHubAppName");
+    expect(groups[1].observers[0].title.attribute).to.equal("innerHTML");
+    expect(groups[1].observers[0].title.auxiliary).to.equal("");
+  });
+
   test("config has correct image component data structure", function() {
     const groups = res.getBody().groups;
     for(const groupIndex in groups.length) {
