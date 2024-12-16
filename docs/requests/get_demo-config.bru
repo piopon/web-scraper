@@ -49,35 +49,36 @@ tests {
   });
 
   test("config has correct group data structure", function() {
-    const body = res.getBody().groups;
-    for(const group in body.length) {
-      expect(body[group]).to.be.a('object');
-      expect(body[group]).to.be.a('object');
-      expect(body[group]).to.have.property('_id');
-      expect(body[group]._id).to.be.a('string');
-      expect(body[group]).to.have.property('name');
-      expect(body[group].name).to.be.a('string');
-      expect(body[group]).to.have.property('category');
-      expect(body[group].category).to.be.a('string');
-      expect(body[group]).to.have.property('domain');
-      expect(body[group].domain).to.be.a('string');
-      expect(body[group]).to.have.property('observers');
-      expect(body[group].observers).to.be.a('array');
+    const groups = res.getBody().groups;
+    for(const groupIndex in groups.length) {
+      const group = body[groupIndex];
+      expect(group).to.be.a('object');
+      expect(group).to.be.a('object');
+      expect(group).to.have.property('_id');
+      expect(group._id).to.be.a('string');
+      expect(group).to.have.property('name');
+      expect(group.name).to.be.a('string');
+      expect(group).to.have.property('category');
+      expect(group.category).to.be.a('string');
+      expect(group).to.have.property('domain');
+      expect(group.domain).to.be.a('string');
+      expect(group).to.have.property('observers');
+      expect(group.observers).to.be.a('array');
     }
   });
 
   test("config has correct group data values", function() {
-    const body = res.getBody().groups;
-    expect(body[0]._id).to.match(/^[0-9a-fA-F]{24}$/);
-    expect(body[0].name).to.equal("stocks");
-    expect(body[0].category).to.equal("📈");
-    expect(body[0].domain).to.equal("https://www.tradingview.com");
-    expect(body[0].observers).to.have.lengthOf(2);
-    expect(body[1]._id).to.match(/^[0-9a-fA-F]{24}$/);
-    expect(body[1].name).to.equal("games");
-    expect(body[1].category).to.equal("🎮");
-    expect(body[1].domain).to.equal("https://store.steampowered.com/");
-    expect(body[1].observers).to.have.lengthOf(1);
+    const groups = res.getBody().groups;
+    expect(groups[0]._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(groups[0].name).to.equal("stocks");
+    expect(groups[0].category).to.equal("📈");
+    expect(groups[0].domain).to.equal("https://www.tradingview.com");
+    expect(groups[0].observers).to.have.lengthOf(2);
+    expect(groups[1]._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(groups[1].name).to.equal("games");
+    expect(groups[1].category).to.equal("🎮");
+    expect(groups[1].domain).to.equal("https://store.steampowered.com/");
+    expect(groups[1].observers).to.have.lengthOf(1);
   });
 
   test("config has correct observer data structure", function() {
