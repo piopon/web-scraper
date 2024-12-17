@@ -190,6 +190,25 @@ tests {
     }
   });
 
+  test("config has correct image component data values", function() {
+    const groups = res.getBody().groups;
+    expect(groups[0].observers[0].image._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(groups[0].observers[0].image.interval).to.equal("");
+    expect(groups[0].observers[0].image.selector).to.equal("img[class*=medium]");
+    expect(groups[0].observers[0].image.attribute).to.equal("src");
+    expect(groups[0].observers[0].image.auxiliary).to.equal("");
+    expect(groups[0].observers[1].image._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(groups[0].observers[1].image.interval).to.equal("");
+    expect(groups[0].observers[1].image.selector).to.equal("img[class*=medium]");
+    expect(groups[0].observers[1].image.attribute).to.equal("src");
+    expect(groups[0].observers[1].image.auxiliary).to.equal("");
+    expect(groups[1].observers[0].image._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(groups[1].observers[0].image.interval).to.equal("");
+    expect(groups[1].observers[0].image.selector).to.equal("img.game_header_image_full");
+    expect(groups[1].observers[0].image.attribute).to.equal("src");
+    expect(groups[1].observers[0].image.auxiliary).to.equal("");
+  });
+
   test("config has correct price component data structure", function() {
     const groups = res.getBody().groups;
     for(const groupIndex in groups.length) {
@@ -208,5 +227,24 @@ tests {
         expect(observer.price.auxiliary).to.be.a('string');
       }
     }
+  });
+
+  test("config has correct price component data values", function() {
+    const groups = res.getBody().groups;
+    expect(groups[0].observers[0].price._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(groups[0].observers[0].price.interval).to.equal("");
+    expect(groups[0].observers[0].price.selector).to.equal("span[class^=last] span");
+    expect(groups[0].observers[0].price.attribute).to.equal("innerHTML");
+    expect(groups[0].observers[0].price.auxiliary).to.equal("USD");
+    expect(groups[0].observers[1].price._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(groups[0].observers[1].price.interval).to.equal("");
+    expect(groups[0].observers[1].price.selector).to.equal("span[class^=last] span");
+    expect(groups[0].observers[1].price.attribute).to.equal("innerHTML");
+    expect(groups[0].observers[1].price.auxiliary).to.equal("USD");
+    expect(groups[1].observers[0].price._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(groups[1].observers[0].price.interval).to.equal("");
+    expect(groups[1].observers[0].price.selector).to.equal("div.game_purchase_price");
+    expect(groups[1].observers[0].price.attribute).to.equal("innerHTML");
+    expect(groups[1].observers[0].price.auxiliary).to.equal("PLN");
   });
 }
