@@ -1,0 +1,17 @@
+meta {
+  name: get_demo-data
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://localhost:5000/api/v1/data
+  body: none
+  auth: none
+}
+
+params:query {
+  ~owner: q@q.q
+  ~name: stock
+  ~category: 📈
+}
