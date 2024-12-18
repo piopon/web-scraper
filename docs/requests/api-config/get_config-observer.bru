@@ -1,0 +1,19 @@
+meta {
+  name: get_config-observer
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://localhost:5000/api/v1/config/groups/observers?name=NVIDIA
+  body: none
+  auth: bearer
+}
+
+params:query {
+  name: NVIDIA
+}
+
+auth:bearer {
+  token: {{demo-token}}
+}
