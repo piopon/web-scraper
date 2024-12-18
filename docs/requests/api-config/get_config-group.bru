@@ -43,4 +43,28 @@ tests {
     expect(group).to.have.lengthOf(1);
   });
 
+  test("group has correct element structure", function() {
+    const group = res.getBody();
+    expect(group[0]).to.be.a('object');
+    expect(group[0]).to.have.property('_id');
+    expect(group[0]._id).to.be.a('string');
+    expect(group[0]).to.have.property('name');
+    expect(group[0].name).to.be.a('string');
+    expect(group[0]).to.have.property('category');
+    expect(group[0].category).to.be.a('string');
+    expect(group[0]).to.have.property('domain');
+    expect(group[0].domain).to.be.a('string');
+    expect(group[0]).to.have.property('observers');
+    expect(group[0].observers).to.be.a('array');
+  });
+
+  test("group has correct element values", function() {
+    const group = res.getBody();
+    expect(group[0]._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(group[0].name).to.equal("games");
+    expect(group[0].category).to.equal("🎮");
+    expect(group[0].domain).to.equal("https://store.steampowered.com/");
+    expect(group[0].observers).to.have.lengthOf(1);
+  });
+
 }
