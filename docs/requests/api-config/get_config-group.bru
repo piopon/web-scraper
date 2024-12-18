@@ -102,4 +102,82 @@ tests {
     expect(group[0].observers[0].history).to.equal("off");
     expect(group[0].observers[0].container).to.equal("div.page_content_ctn");
   });
+
+  test("group has correct title component data structure", function() {
+    const group = res.getBody();
+    for(const observerIndex in group[0].observers.length) {
+      const observer = group[0].observers[observerIndex];
+      expect(observer.title).to.have.property('_id');
+      expect(observer.title._id).to.be.a('string');
+      expect(observer.title).to.have.property('interval');
+      expect(observer.title.interval).to.be.a('string');
+      expect(observer.title).to.have.property('selector');
+      expect(observer.title.selector).to.be.a('string');
+      expect(observer.title).to.have.property('attribute');
+      expect(observer.title.attribute).to.be.a('string');
+      expect(observer.title).to.have.property('auxiliary');
+      expect(observer.title.auxiliary).to.be.a('string');
+    }
+  });
+
+  test("group has correct title component data values", function() {
+    const group = res.getBody();
+    expect(group[0].observers[0].title._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(group[0].observers[0].title.interval).to.equal("");
+    expect(group[0].observers[0].title.selector).to.equal("div#appHubAppName");
+    expect(group[0].observers[0].title.attribute).to.equal("innerHTML");
+    expect(group[0].observers[0].title.auxiliary).to.equal("");
+  });
+
+  test("group has correct image component data structure", function() {
+    const group = res.getBody();
+    for(const observerIndex in group[0].observers.length) {
+      const observer = group[0].observers[observerIndex];
+      expect(observer.image).to.have.property('_id');
+      expect(observer.image._id).to.be.a('string');
+      expect(observer.image).to.have.property('interval');
+      expect(observer.image.interval).to.be.a('string');
+      expect(observer.image).to.have.property('selector');
+      expect(observer.image.selector).to.be.a('string');
+      expect(observer.image).to.have.property('attribute');
+      expect(observer.image.attribute).to.be.a('string');
+      expect(observer.image).to.have.property('auxiliary');
+      expect(observer.image.auxiliary).to.be.a('string');
+    }
+  });
+
+  test("group has correct image component data values", function() {
+    const group = res.getBody();
+    expect(group[0].observers[0].image._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(group[0].observers[0].image.interval).to.equal("");
+    expect(group[0].observers[0].image.selector).to.equal("img.game_header_image_full");
+    expect(group[0].observers[0].image.attribute).to.equal("src");
+    expect(group[0].observers[0].image.auxiliary).to.equal("");
+  });
+
+  test("group has correct price component data structure", function() {
+    const group = res.getBody();
+    for(const observerIndex in group[0].observers.length) {
+      const observer = group[0].observers[observerIndex];
+      expect(observer.price).to.have.property('_id');
+      expect(observer.price._id).to.be.a('string');
+      expect(observer.price).to.have.property('interval');
+      expect(observer.price.interval).to.be.a('string');
+      expect(observer.price).to.have.property('selector');
+      expect(observer.price.selector).to.be.a('string');
+      expect(observer.price).to.have.property('attribute');
+      expect(observer.price.attribute).to.be.a('string');
+      expect(observer.price).to.have.property('auxiliary');
+      expect(observer.price.auxiliary).to.be.a('string');
+    }
+  });
+
+  test("group has correct price component data values", function() {
+    const group = res.getBody();
+    expect(group[0].observers[0].price._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(group[0].observers[0].price.interval).to.equal("");
+    expect(group[0].observers[0].price.selector).to.equal("div.game_purchase_price");
+    expect(group[0].observers[0].price.attribute).to.equal("innerHTML");
+    expect(group[0].observers[0].price.auxiliary).to.equal("PLN");
+  });
 }
