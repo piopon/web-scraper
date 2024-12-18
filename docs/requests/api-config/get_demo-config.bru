@@ -1,7 +1,7 @@
 meta {
   name: get_demo-config
   type: http
-  seq: 3
+  seq: 1
 }
 
 get {
@@ -18,15 +18,15 @@ tests {
   test("config is correctly received", function() {
     expect(res.getStatus()).to.equal(200);
   });
-
+  
   test("config received JSON data", function() {
     expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
   });
-
+  
   test("config has correct content length", function() {
     expect(res.getHeader("content-length")).to.equal("1966");
   });
-
+  
   test("config has correct top-level data structure", function() {
     const body = res.getBody();
     expect(body).to.be.a('object');
@@ -39,7 +39,7 @@ tests {
     expect(body).to.have.property('__v');
     expect(body.__v).to.be.a('number');
   });
-
+  
   test("config has correct top-level data values", function() {
     const body = res.getBody();
     expect(body._id).to.match(/^[0-9a-fA-F]{24}$/);
@@ -47,7 +47,7 @@ tests {
     expect(body.groups).to.have.lengthOf(2);
     expect(body.__v).to.be.at.least(0);
   });
-
+  
   test("config has correct group data structure", function() {
     const groups = res.getBody().groups;
     for(const groupIndex in groups.length) {
@@ -65,7 +65,7 @@ tests {
       expect(group.observers).to.be.a('array');
     }
   });
-
+  
   test("config has correct group data values", function() {
     const groups = res.getBody().groups;
     expect(groups[0]._id).to.match(/^[0-9a-fA-F]{24}$/);
@@ -79,7 +79,7 @@ tests {
     expect(groups[1].domain).to.equal("https://store.steampowered.com/");
     expect(groups[1].observers).to.have.lengthOf(1);
   });
-
+  
   test("config has correct observer data structure", function() {
     const groups = res.getBody().groups;
     for(const groupIndex in groups.length) {
@@ -108,7 +108,7 @@ tests {
       }
     }
   });
-
+  
   test("config has correct observer data values", function() {
     const groups = res.getBody().groups;
     expect(groups[0].observers[0]._id).to.match(/^[0-9a-fA-F]{24}$/);
@@ -130,7 +130,7 @@ tests {
     expect(groups[1].observers[0].history).to.equal("off");
     expect(groups[1].observers[0].container).to.equal("div.page_content_ctn");
   });
-
+  
   test("config has correct title component data structure", function() {
     const groups = res.getBody().groups;
     for(const groupIndex in groups.length) {
@@ -150,7 +150,7 @@ tests {
       }
     }
   });
-
+  
   test("config has correct title component data values", function() {
     const groups = res.getBody().groups;
     expect(groups[0].observers[0].title._id).to.match(/^[0-9a-fA-F]{24}$/);
@@ -169,7 +169,7 @@ tests {
     expect(groups[1].observers[0].title.attribute).to.equal("innerHTML");
     expect(groups[1].observers[0].title.auxiliary).to.equal("");
   });
-
+  
   test("config has correct image component data structure", function() {
     const groups = res.getBody().groups;
     for(const groupIndex in groups.length) {
@@ -189,7 +189,7 @@ tests {
       }
     }
   });
-
+  
   test("config has correct image component data values", function() {
     const groups = res.getBody().groups;
     expect(groups[0].observers[0].image._id).to.match(/^[0-9a-fA-F]{24}$/);
@@ -208,7 +208,7 @@ tests {
     expect(groups[1].observers[0].image.attribute).to.equal("src");
     expect(groups[1].observers[0].image.auxiliary).to.equal("");
   });
-
+  
   test("config has correct price component data structure", function() {
     const groups = res.getBody().groups;
     for(const groupIndex in groups.length) {
@@ -228,7 +228,7 @@ tests {
       }
     }
   });
-
+  
   test("config has correct price component data values", function() {
     const groups = res.getBody().groups;
     expect(groups[0].observers[0].price._id).to.match(/^[0-9a-fA-F]{24}$/);
