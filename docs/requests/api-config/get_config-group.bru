@@ -1,0 +1,36 @@
+meta {
+  name: get_config-group
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:5000/api/v1/config/groups?name=games&category=🎮
+  body: none
+  auth: bearer
+}
+
+params:query {
+  name: games
+  category: 🎮
+  ~domain: https://store.steampowered.com/
+}
+
+auth:bearer {
+  token: {{demo-token}}
+}
+
+tests {
+  test("config is correctly received", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("config received JSON data", function() {
+    expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
+  });
+  
+  test("config has correct content length", function() {
+    expect(res.getHeader("content-length")).to.equal("696");
+  });
+  
+}
