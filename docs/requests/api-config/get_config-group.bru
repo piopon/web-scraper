@@ -24,15 +24,15 @@ tests {
   test("config is correctly received", function() {
     expect(res.getStatus()).to.equal(200);
   });
-  
+
   test("config received JSON data", function() {
     expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
   });
-  
+
   test("config has correct content length", function() {
     expect(res.getHeader("content-length")).to.equal("696");
   });
-  
+
   test("group has correct data structure", function() {
     const group = res.getBody();
     expect(group).to.be.a('array');
@@ -66,5 +66,4 @@ tests {
     expect(group[0].domain).to.equal("https://store.steampowered.com/");
     expect(group[0].observers).to.have.lengthOf(1);
   });
-
 }
