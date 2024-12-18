@@ -33,12 +33,12 @@ tests {
     expect(res.getHeader("content-length")).to.equal("696");
   });
 
-  test("group has correct data structure", function() {
+  test("group has correct top-level structure", function() {
     const group = res.getBody();
     expect(group).to.be.a('array');
   });
 
-  test("group has correct data values", function() {
+  test("group has correct top-level values", function() {
     const group = res.getBody();
     expect(group).to.have.lengthOf(1);
   });
