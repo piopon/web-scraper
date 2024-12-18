@@ -66,4 +66,40 @@ tests {
     expect(group[0].domain).to.equal("https://store.steampowered.com/");
     expect(group[0].observers).to.have.lengthOf(1);
   });
+
+  test("group has correct observer data structure", function() {
+    const group = res.getBody();
+    for(const observerIndex in group[0].observers.length) {
+      const observer = group.observers[observerIndex];
+      expect(observer).to.be.a('object');
+      expect(observer).to.have.property('_id');
+      expect(observer._id).to.be.a('string');
+      expect(observer).to.have.property('name');
+      expect(observer.name).to.be.a('string');
+      expect(observer).to.have.property('path');
+      expect(observer.path).to.be.a('string');
+      expect(observer).to.have.property('target');
+      expect(observer.target).to.be.a('string');
+      expect(observer).to.have.property('history');
+      expect(observer.history).to.be.a('string');
+      expect(observer).to.have.property('container');
+      expect(observer.container).to.be.a('string');
+      expect(observer).to.have.property('title');
+      expect(observer.title).to.be.a('object');
+      expect(observer).to.have.property('image');
+      expect(observer.image).to.be.a('object');
+      expect(observer).to.have.property('price');
+      expect(observer.price).to.be.a('object');
+    }
+  });
+
+  test("group has correct observer data values", function() {
+    const group = res.getBody();
+    expect(group[0].observers[0]._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(group[0].observers[0].name).to.equal("Prince of Persia");
+    expect(group[0].observers[0].path).to.equal("app/19980/Prince_of_Persia/");
+    expect(group[0].observers[0].target).to.equal("domcontentloaded");
+    expect(group[0].observers[0].history).to.equal("off");
+    expect(group[0].observers[0].container).to.equal("div.page_content_ctn");
+  });
 }
