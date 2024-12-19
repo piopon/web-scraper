@@ -91,6 +91,15 @@ tests {
     expect(observer[0].title.auxiliary).to.be.a('string');
   });
 
+  test("observer has correct title component data values", function() {
+    const observer = res.getBody();
+    expect(observer[0].title._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(observer[0].title.interval).to.equal("");
+    expect(observer[0].title.selector).to.equal("h1");
+    expect(observer[0].title.attribute).to.equal("innerHTML");
+    expect(observer[0].title.auxiliary).to.equal("");
+  });
+
   test("observer has correct image component data structure", function() {
     const observer = res.getBody();
     expect(observer[0].image).to.have.property('_id');
@@ -103,6 +112,15 @@ tests {
     expect(observer[0].image.attribute).to.be.a('string');
     expect(observer[0].image).to.have.property('auxiliary');
     expect(observer[0].image.auxiliary).to.be.a('string');
+  });
+
+  test("observer has correct image component data values", function() {
+    const observer = res.getBody();
+    expect(observer[0].image._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(observer[0].image.interval).to.equal("");
+    expect(observer[0].image.selector).to.equal("img[class*=medium]");
+    expect(observer[0].image.attribute).to.equal("src");
+    expect(observer[0].image.auxiliary).to.equal("");
   });
 
   test("observer has correct price component data structure", function() {
@@ -119,4 +137,12 @@ tests {
     expect(observer[0].price.auxiliary).to.be.a('string');
   });
 
+  test("observer has correct price component data values", function() {
+    const observer = res.getBody();
+    expect(observer[0].price._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(observer[0].price.interval).to.equal("");
+    expect(observer[0].price.selector).to.equal("span[class^=last] span");
+    expect(observer[0].price.attribute).to.equal("innerHTML");
+    expect(observer[0].price.auxiliary).to.equal("USD");
+  });
 }
