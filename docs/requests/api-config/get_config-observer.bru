@@ -67,7 +67,7 @@ tests {
     expect(observer[0].price).to.be.a('object');
   });
 
-  test("observer has correct observer data values", function() {
+  test("observer has correct element data values", function() {
     const observer = res.getBody();
     expect(observer[0]._id).to.match(/^[0-9a-fA-F]{24}$/);
     expect(observer[0].name).to.equal("NVIDIA");
