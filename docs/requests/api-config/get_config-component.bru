@@ -1,0 +1,36 @@
+meta {
+  name: get_config-component
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://localhost:5000/api/v1/config/groups/observers/components?selector=h1&attribute=innerHTML
+  body: none
+  auth: bearer
+}
+
+params:query {
+  selector: h1
+  attribute: innerHTML
+  ~interval:
+  ~auxiliary:
+}
+
+auth:bearer {
+  token: {{demo-token}}
+}
+
+tests {
+  test("observer is correctly received", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("observer received JSON data", function() {
+    expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
+  });
+
+  test("observer has correct content length", function() {
+    expect(res.getHeader("content-length")).to.equal("531");
+  });
+}
