@@ -21,15 +21,15 @@ auth:bearer {
 }
 
 tests {
-  test("config is correctly received", function() {
+  test("group is correctly received", function() {
     expect(res.getStatus()).to.equal(200);
   });
 
-  test("config received JSON data", function() {
+  test("group received JSON data", function() {
     expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
   });
 
-  test("config has correct content length", function() {
+  test("group has correct content length", function() {
     expect(res.getHeader("content-length")).to.equal("696");
   });
 
