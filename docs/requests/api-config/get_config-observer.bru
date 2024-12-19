@@ -17,3 +17,13 @@ params:query {
 auth:bearer {
   token: {{demo-token}}
 }
+
+tests {
+  test("observer is correctly received", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("observer received JSON data", function() {
+    expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
+  });
+}
