@@ -5,16 +5,17 @@ meta {
 }
 
 get {
-  url: http://localhost:5000/api/v1/config/groups/observers/components?selector=h1&attribute=innerHTML
+  url: http://localhost:5000/api/v1/config/groups/observers/components?source=title&selector=h1
   body: none
   auth: bearer
 }
 
 params:query {
+  source: title
   selector: h1
-  attribute: innerHTML
-  ~interval:
-  ~auxiliary:
+  ~attribute: innerHTML
+  ~interval: 1M
+  ~auxiliary: PLN
 }
 
 auth:bearer {
