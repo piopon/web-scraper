@@ -22,48 +22,48 @@ auth:bearer {
 }
 
 tests {
-  test("observer is correctly received", function() {
+  test("component is correctly received", function() {
     expect(res.getStatus()).to.equal(200);
   });
 
-  test("observer received JSON data", function() {
+  test("component received JSON data", function() {
     expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
   });
 
-  test("observer has correct content length", function() {
+  test("component has correct content length", function() {
     expect(res.getHeader("content-length")).to.equal("531");
   });
 
-  test("observer has correct top-level structure", function() {
-    const observer = res.getBody();
-    expect(observer).to.be.a('array');
+  test("component has correct top-level structure", function() {
+    const component = res.getBody();
+    expect(component).to.be.a('array');
   });
 
-  test("observer has correct top-level values", function() {
-    const observer = res.getBody();
-    expect(observer).to.have.lengthOf(1);
+  test("component has correct top-level values", function() {
+    const component = res.getBody();
+    expect(component).to.have.lengthOf(1);
   });
 
-  test("observer has correct element data structure", function() {
-    const observer = res.getBody();
-    expect(observer[0].title).to.have.property('_id');
-    expect(observer[0].title._id).to.be.a('string');
-    expect(observer[0].title).to.have.property('interval');
-    expect(observer[0].title.interval).to.be.a('string');
-    expect(observer[0].title).to.have.property('selector');
-    expect(observer[0].title.selector).to.be.a('string');
-    expect(observer[0].title).to.have.property('attribute');
-    expect(observer[0].title.attribute).to.be.a('string');
-    expect(observer[0].title).to.have.property('auxiliary');
-    expect(observer[0].title.auxiliary).to.be.a('string');
+  test("component has correct element data structure", function() {
+    const component = res.getBody();
+    expect(component[0].title).to.have.property('_id');
+    expect(component[0].title._id).to.be.a('string');
+    expect(component[0].title).to.have.property('interval');
+    expect(component[0].title.interval).to.be.a('string');
+    expect(component[0].title).to.have.property('selector');
+    expect(component[0].title.selector).to.be.a('string');
+    expect(component[0].title).to.have.property('attribute');
+    expect(component[0].title.attribute).to.be.a('string');
+    expect(component[0].title).to.have.property('auxiliary');
+    expect(component[0].title.auxiliary).to.be.a('string');
   });
 
-  test("observer has correct element data values", function() {
-    const observer = res.getBody();
-    expect(observer[0].title._id).to.match(/^[0-9a-fA-F]{24}$/);
-    expect(observer[0].title.interval).to.equal("");
-    expect(observer[0].title.selector).to.equal("h1");
-    expect(observer[0].title.attribute).to.equal("innerHTML");
-    expect(observer[0].title.auxiliary).to.equal("");
+  test("component has correct element data values", function() {
+    const component = res.getBody();
+    expect(component[0].title._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(component[0].title.interval).to.equal("");
+    expect(component[0].title.selector).to.equal("h1");
+    expect(component[0].title.attribute).to.equal("innerHTML");
+    expect(component[0].title.auxiliary).to.equal("");
   });
 }
