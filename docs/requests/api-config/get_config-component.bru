@@ -46,17 +46,20 @@ tests {
   });
 
   test("component has correct element data structure", function() {
-    const component = res.getBody();
-    expect(component[0]).to.have.property('_id');
-    expect(component[0]._id).to.be.a('string');
-    expect(component[0]).to.have.property('interval');
-    expect(component[0].interval).to.be.a('string');
-    expect(component[0]).to.have.property('selector');
-    expect(component[0].selector).to.be.a('string');
-    expect(component[0]).to.have.property('attribute');
-    expect(component[0].attribute).to.be.a('string');
-    expect(component[0]).to.have.property('auxiliary');
-    expect(component[0].auxiliary).to.be.a('string');
+    const components = res.getBody();
+    for(const componentIndex in components.length) {
+      const component = components[componentIndex];
+      expect(component).to.have.property('_id');
+      expect(component._id).to.be.a('string');
+      expect(component).to.have.property('interval');
+      expect(component.interval).to.be.a('string');
+      expect(component).to.have.property('selector');
+      expect(component.selector).to.be.a('string');
+      expect(component).to.have.property('attribute');
+      expect(component.attribute).to.be.a('string');
+      expect(component).to.have.property('auxiliary');
+      expect(component.auxiliary).to.be.a('string');
+    }
   });
 
   test("component has correct element data values", function() {
