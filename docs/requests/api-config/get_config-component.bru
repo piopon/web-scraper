@@ -33,4 +33,15 @@ tests {
   test("observer has correct content length", function() {
     expect(res.getHeader("content-length")).to.equal("531");
   });
+
+  test("observer has correct top-level structure", function() {
+    const observer = res.getBody();
+    expect(observer).to.be.a('array');
+  });
+
+  test("observer has correct top-level values", function() {
+    const observer = res.getBody();
+    expect(observer).to.have.lengthOf(1);
+  });
+
 }
