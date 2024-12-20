@@ -47,24 +47,24 @@ tests {
 
   test("component has correct element data structure", function() {
     const component = res.getBody();
-    expect(component[0].title).to.have.property('_id');
-    expect(component[0].title._id).to.be.a('string');
-    expect(component[0].title).to.have.property('interval');
-    expect(component[0].title.interval).to.be.a('string');
-    expect(component[0].title).to.have.property('selector');
-    expect(component[0].title.selector).to.be.a('string');
-    expect(component[0].title).to.have.property('attribute');
-    expect(component[0].title.attribute).to.be.a('string');
-    expect(component[0].title).to.have.property('auxiliary');
-    expect(component[0].title.auxiliary).to.be.a('string');
+    expect(component[0]).to.have.property('_id');
+    expect(component[0]._id).to.be.a('string');
+    expect(component[0]).to.have.property('interval');
+    expect(component[0].interval).to.be.a('string');
+    expect(component[0]).to.have.property('selector');
+    expect(component[0].selector).to.be.a('string');
+    expect(component[0]).to.have.property('attribute');
+    expect(component[0].attribute).to.be.a('string');
+    expect(component[0]).to.have.property('auxiliary');
+    expect(component[0].auxiliary).to.be.a('string');
   });
 
   test("component has correct element data values", function() {
     const component = res.getBody();
-    expect(component[0].title._id).to.match(/^[0-9a-fA-F]{24}$/);
-    expect(component[0].title.interval).to.equal("");
-    expect(component[0].title.selector).to.equal("h1");
-    expect(component[0].title.attribute).to.equal("innerHTML");
-    expect(component[0].title.auxiliary).to.equal("");
+    expect(component[0]._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(component[0].interval).to.equal("");
+    expect(component[0].selector).to.equal("h1");
+    expect(component[0].attribute).to.equal("innerHTML");
+    expect(component[0].auxiliary).to.equal("");
   });
 }
