@@ -44,4 +44,26 @@ tests {
     expect(observer).to.have.lengthOf(1);
   });
 
+  test("observer has correct element data structure", function() {
+    const observer = res.getBody();
+    expect(observer[0].title).to.have.property('_id');
+    expect(observer[0].title._id).to.be.a('string');
+    expect(observer[0].title).to.have.property('interval');
+    expect(observer[0].title.interval).to.be.a('string');
+    expect(observer[0].title).to.have.property('selector');
+    expect(observer[0].title.selector).to.be.a('string');
+    expect(observer[0].title).to.have.property('attribute');
+    expect(observer[0].title.attribute).to.be.a('string');
+    expect(observer[0].title).to.have.property('auxiliary');
+    expect(observer[0].title.auxiliary).to.be.a('string');
+  });
+
+  test("observer has correct element data values", function() {
+    const observer = res.getBody();
+    expect(observer[0].title._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(observer[0].title.interval).to.equal("");
+    expect(observer[0].title.selector).to.equal("h1");
+    expect(observer[0].title.attribute).to.equal("innerHTML");
+    expect(observer[0].title.auxiliary).to.equal("");
+  });
 }
