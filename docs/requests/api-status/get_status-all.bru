@@ -33,7 +33,7 @@ tests {
     expect(status).to.have.lengthOf(4);
   });
 
-  test("observer has correct element data structure", function() {
+  test("status has correct element data structure", function() {
     const status = res.getBody();
     for(const statusIndex in status.length) {
       const serviceState = status[statusIndex];
@@ -44,7 +44,7 @@ tests {
     }
   });
 
-  test("observer has correct element data values", function() {
+  test("status has correct element data values", function() {
     const status = res.getBody();
     expect(status[0].name).to.equal("web-database  ");
     expect(status[0].status).to.equal("running");
