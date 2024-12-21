@@ -33,4 +33,26 @@ tests {
     expect(status).to.have.lengthOf(4);
   });
 
+  test("observer has correct element data structure", function() {
+    const status = res.getBody();
+    for(const statusIndex in status.length) {
+      const serviceState = status[statusIndex];
+      expect(serviceState).to.have.property('name');
+      expect(serviceState.name).to.be.a('string');
+      expect(serviceState).to.have.property('status');
+      expect(serviceState.status).to.be.a('string');
+    }
+  });
+
+  test("observer has correct element data values", function() {
+    const status = res.getBody();
+    expect(status[0].name).to.equal("web-database  ");
+    expect(status[0].status).to.equal("running");
+    expect(status[1].name).to.equal("web-scraper   ");
+    expect(status[1].status).to.equal("stopped");
+    expect(status[2].name).to.equal("web-components");
+    expect(status[2].status).to.equal("running");
+    expect(status[3].name).to.equal("web-server    ");
+    expect(status[3].status).to.equal("running");
+  });
 }
