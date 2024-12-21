@@ -22,4 +22,8 @@ tests {
   test("status received JSON data", function() {
     expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
   });
+
+  test("status has correct content length", function() {
+    expect(res.getHeader("content-length")).to.equal("46");
+  });
 }
