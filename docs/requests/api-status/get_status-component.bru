@@ -26,4 +26,14 @@ tests {
   test("status has correct content length", function() {
     expect(res.getHeader("content-length")).to.equal("46");
   });
+
+  test("status has correct top-level structure", function() {
+    const status = res.getBody();
+    expect(status).to.be.a('array');
+  });
+
+  test("status has correct top-level values", function() {
+    const status = res.getBody();
+    expect(status).to.have.lengthOf(1);
+  });
 }
