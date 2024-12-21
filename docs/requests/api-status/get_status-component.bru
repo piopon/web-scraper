@@ -13,3 +13,13 @@ get {
 params:query {
   name: web-components
 }
+
+tests {
+  test("status is correctly received", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("status received JSON data", function() {
+    expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
+  });
+}
