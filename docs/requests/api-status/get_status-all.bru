@@ -1,0 +1,25 @@
+meta {
+  name: get_status-all
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:5000/api/v1/status
+  body: none
+  auth: none
+}
+
+tests {
+  test("status is correctly received", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("status received JSON data", function() {
+    expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
+  });
+  
+  test("status has correct content length", function() {
+    expect(res.getHeader("content-length")).to.equal("181");
+  });
+}
