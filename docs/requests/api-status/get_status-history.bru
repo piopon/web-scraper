@@ -81,4 +81,30 @@ tests {
       }
     }
   });
+
+  test("status has correct history data values", function() {
+    const dateTimeRegex = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
+    const status = res.getBody();
+    expect(status[0].history[0].timestamp).to.match(dateTimeRegex);
+    expect(status[0].history[0].type).to.equal("info");
+    expect(status[0].history[0].message).to.equal("Created");
+    expect(status[0].history[1].timestamp).to.match(dateTimeRegex);
+    expect(status[0].history[1].type).to.equal("info");
+    expect(status[0].history[1].message).to.equal("Connected to database");
+    expect(status[0].history[2].timestamp).to.match(dateTimeRegex);
+    expect(status[0].history[2].type).to.equal("info");
+    expect(status[0].history[2].message).to.equal("Maintenance summary: 0 configs, 0 demos");
+    expect(status[1].history[0].timestamp).to.match(dateTimeRegex);
+    expect(status[1].history[0].type).to.equal("info");
+    expect(status[1].history[0].message).to.equal("Created");
+    expect(status[2].history[0].timestamp).to.match(dateTimeRegex);
+    expect(status[2].history[0].type).to.equal("info");
+    expect(status[2].history[0].message).to.equal("Created");
+    expect(status[3].history[0].timestamp).to.match(dateTimeRegex);
+    expect(status[3].history[0].type).to.equal("info");
+    expect(status[3].history[0].message).to.equal("Created");
+    expect(status[3].history[1].timestamp).to.match(dateTimeRegex);
+    expect(status[3].history[1].type).to.equal("info");
+    expect(status[3].history[1].message).to.equal("Started on port: 5000");
+  });
 }
