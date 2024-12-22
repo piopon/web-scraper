@@ -36,4 +36,33 @@ tests {
     const status = res.getBody();
     expect(status).to.have.lengthOf(4);
   });
+
+  test("status has correct element data structure", function() {
+    const status = res.getBody();
+    for(const statusIndex in status.length) {
+      const serviceState = status[statusIndex];
+      expect(serviceState).to.have.property('name');
+      expect(serviceState.name).to.be.a('string');
+      expect(serviceState).to.have.property('status');
+      expect(serviceState.status).to.be.a('string');
+      expect(serviceState).to.have.property('history');
+      expect(serviceState.history).to.be.a('array');
+    }
+  });
+
+  test("status has correct element data values", function() {
+    const status = res.getBody();
+    expect(status[0].name).to.equal("web-database  ");
+    expect(status[0].status).to.equal("running");
+    expect(status[0].history).to.have.lengthOf(3);
+    expect(status[1].name).to.equal("web-scraper   ");
+    expect(status[1].status).to.equal("stopped");
+    expect(status[1].history).to.have.lengthOf(1);
+    expect(status[2].name).to.equal("web-components");
+    expect(status[2].status).to.equal("running");
+    expect(status[2].history).to.have.lengthOf(1);
+    expect(status[3].name).to.equal("web-server    ");
+    expect(status[3].status).to.equal("running");
+    expect(status[3].history).to.have.lengthOf(2);
+  });
 }
