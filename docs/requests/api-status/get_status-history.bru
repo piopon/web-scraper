@@ -1,0 +1,15 @@
+meta {
+  name: get_status-history
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://localhost:5000/api/v1/status?history=true
+  body: none
+  auth: none
+}
+
+params:query {
+  history: true
+}
