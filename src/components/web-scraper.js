@@ -225,8 +225,6 @@ export class WebScraper {
    * @returns array of objects containing web scraper running history status
    */
   getHistory(sessionUser) {
-    const invalidStateMessage = "Invalid internal state";
-    const currentStatus = this.#status.getStatus().message;
     if (sessionUser == null) {
       return this.#status.getHistory();
     }
@@ -234,6 +232,9 @@ export class WebScraper {
     if (session == null) {
       return this.#status.getHistory();
     }
+    // all input correct - perform additional checks and then return history
+    const invalidStateMessage = "Invalid internal state";
+    const currentStatus = this.#status.getStatus().message;
     if (session.id == null) {
       // scraper is NOT running in selected intervals
       if (currentStatus.startsWith(WebScraper.#RUNNING_STATUS)) {
@@ -247,6 +248,7 @@ export class WebScraper {
         this.stop(sessionUser.email, invalidStateMessage);
       }
     }
+    return this.#status.getHistory();
   }
 
   /**
