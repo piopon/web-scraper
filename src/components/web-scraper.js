@@ -231,22 +231,22 @@ export class WebScraper {
       return this.#status.getHistory();
     }
     const session = this.#sessions.get(sessionUser.email);
-    if (session != null) {
-      if (session.id == null) {
-        // scraper is NOT running in selected intervals
-        if (currentStatus.startsWith(WebScraper.#RUNNING_STATUS)) {
-          // incorrect state - update field
-          this.#status.error(invalidStateMessage);
-        }
-      } else {
-        // scraper is running in selected intervals
-        if (!currentStatus.startsWith(WebScraper.#RUNNING_STATUS)) {
-          // incorrect state - since it's running then we must stop it
-          this.stop(sessionUser.email, invalidStateMessage);
-        }
+    if (session == null) {
+      return this.#status.getHistory();
+    }
+    if (session.id == null) {
+      // scraper is NOT running in selected intervals
+      if (currentStatus.startsWith(WebScraper.#RUNNING_STATUS)) {
+        // incorrect state - update field
+        this.#status.error(invalidStateMessage);
+      }
+    } else {
+      // scraper is running in selected intervals
+      if (!currentStatus.startsWith(WebScraper.#RUNNING_STATUS)) {
+        // incorrect state - since it's running then we must stop it
+        this.stop(sessionUser.email, invalidStateMessage);
       }
     }
-    return this.#status.getHistory();
   }
 
   /**
