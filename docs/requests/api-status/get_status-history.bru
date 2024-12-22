@@ -65,4 +65,20 @@ tests {
     expect(status[3].status).to.equal("running");
     expect(status[3].history).to.have.lengthOf(2);
   });
+
+  test("status has correct history data structure", function() {
+    const status = res.getBody();
+    for(const statusIndex in status.length) {
+      const serviceState = status[statusIndex];
+      for(const historyIndex in serviceState.history.length) {
+        const history = serviceState.history[historyIndex];
+        expect(history).to.have.property('timestamp');
+        expect(history.timestamp).to.be.a('string');
+        expect(history).to.have.property('type');
+        expect(history.type).to.be.a('string');
+        expect(history).to.have.property('message');
+        expect(history.message).to.be.a('string');
+      }
+    }
+  });
 }
