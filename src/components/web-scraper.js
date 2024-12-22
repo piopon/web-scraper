@@ -227,6 +227,9 @@ export class WebScraper {
   getHistory(sessionUser) {
     const invalidStateMessage = "Invalid internal state";
     const currentStatus = this.#status.getStatus().message;
+    if (sessionUser == null) {
+      return this.#status.getHistory();
+    }
     const session = this.#sessions.get(sessionUser.email);
     if (session != null) {
       if (session.id == null) {
