@@ -26,4 +26,14 @@ tests {
   test("data has correct content length", function() {
     expect(res.getHeader("content-length")).to.equal("377");
   });
+
+  test("data has correct top-level structure", function() {
+    const data = res.getBody();
+    expect(data).to.be.a('array');
+  });
+
+  test("data has correct top-level values", function() {
+    const data = res.getBody();
+    expect(data).to.have.lengthOf(2);
+  });
 }
