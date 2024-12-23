@@ -36,4 +36,27 @@ tests {
     const data = res.getBody();
     expect(data).to.have.lengthOf(2);
   });
+
+  test("data has correct element structure", function() {
+    const data = res.getBody();
+    for(const dataIndex in data.length) {
+      const dataElement = data[dataIndex];
+      expect(dataElement).to.have.property('name');
+      expect(dataElement.name).to.be.a('string');
+      expect(dataElement).to.have.property('category');
+      expect(dataElement.category).to.be.a('string');
+      expect(dataElement).to.have.property('items');
+      expect(dataElement.items).to.be.a('array');
+    }
+  });
+
+  test("data has correct element values", function() {
+    const data = res.getBody();
+    expect(data[0].name).to.equal("stocks");
+    expect(data[0].category).to.equal("📈");
+    expect(data[0].items).to.have.lengthOf(2);
+    expect(data[1].name).to.equal("games");
+    expect(data[1].category).to.equal("🎮");
+    expect(data[1].items).to.have.lengthOf(1);
+  });
 }
