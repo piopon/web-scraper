@@ -13,3 +13,17 @@ get {
 params:query {
   owner: bruno@test.ci
 }
+
+tests {
+  test("data is correctly received", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("data received JSON data", function() {
+    expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
+  });
+
+  test("data has correct content length", function() {
+    expect(res.getHeader("content-length")).to.equal("377");
+  });
+}
