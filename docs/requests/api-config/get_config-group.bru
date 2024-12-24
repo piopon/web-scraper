@@ -30,7 +30,7 @@ tests {
   });
 
   test("group has correct content length", function() {
-    expect(res.getHeader("content-length")).to.equal("696");
+    expect(res.getHeader("content-length")).to.equal("721");
   });
 
   test("group has correct top-level structure", function() {
@@ -176,7 +176,7 @@ tests {
     const group = res.getBody();
     expect(group[0].observers[0].price._id).to.match(/^[0-9a-fA-F]{24}$/);
     expect(group[0].observers[0].price.interval).to.equal("");
-    expect(group[0].observers[0].price.selector).to.equal("div.game_purchase_price");
+    expect(group[0].observers[0].price.selector).to.equal("div.game_purchase_price,div.discount_final_price");
     expect(group[0].observers[0].price.attribute).to.equal("innerHTML");
     expect(group[0].observers[0].price.auxiliary).to.equal("PLN");
   });
