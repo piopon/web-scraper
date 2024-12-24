@@ -24,7 +24,7 @@ tests {
   });
 
   test("config has correct content length", function() {
-    expect(res.getHeader("content-length")).to.equal("1966");
+    expect(res.getHeader("content-length")).to.equal("1991");
   });
 
   test("config has correct top-level data structure", function() {
@@ -243,7 +243,7 @@ tests {
     expect(groups[0].observers[1].price.auxiliary).to.equal("USD");
     expect(groups[1].observers[0].price._id).to.match(/^[0-9a-fA-F]{24}$/);
     expect(groups[1].observers[0].price.interval).to.equal("");
-    expect(groups[1].observers[0].price.selector).to.equal("div.game_purchase_price");
+    expect(groups[1].observers[0].price.selector).to.equal("div.game_purchase_price,div.discount_final_price");
     expect(groups[1].observers[0].price.attribute).to.equal("innerHTML");
     expect(groups[1].observers[0].price.auxiliary).to.equal("PLN");
   });
