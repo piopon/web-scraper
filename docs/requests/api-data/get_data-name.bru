@@ -26,7 +26,7 @@ tests {
 
   test("data has correct content length", function() {
     expect(res.getHeader("content-length")).to.equal("140");
-  })
+  });
 
   test("data has correct top-level structure", function() {
     const data = res.getBody();
@@ -73,7 +73,7 @@ tests {
       expect(item).to.have.property('currency');
       expect(item.currency).to.be.a('array');
     }
-  })
+  });
 
   test("data has correct items values", function() {
     const data = res.getBody();
@@ -82,5 +82,5 @@ tests {
     expect(data[0].items[0].icon).to.equal("logo.jpg");
     expect(data[0].items[0].price).to.equal("7.98");
     expect(data[0].items[0].currency).to.equal("PLN");
-  })
+  });
 }
