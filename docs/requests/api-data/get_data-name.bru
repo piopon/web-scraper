@@ -57,4 +57,30 @@ tests {
     expect(data[0].category).to.equal("🎮");
     expect(data[0].items).to.have.lengthOf(1);
   });
+
+  test("data has correct items structure", function() {
+    const data = res.getBody();
+    for(const dataIndex in data.length) {
+      const item = data[dataIndex].items[0];
+      expect(item).to.have.property('status');
+      expect(item.status).to.be.a('string');
+      expect(item).to.have.property('name');
+      expect(item.name).to.be.a('string');
+      expect(item).to.have.property('icon');
+      expect(item.icon).to.be.a('array');
+      expect(item).to.have.property('price');
+      expect(item.price).to.be.a('string');
+      expect(item).to.have.property('currency');
+      expect(item.currency).to.be.a('array');
+    }
+  })
+
+  test("data has correct items values", function() {
+    const data = res.getBody();
+    expect(data[0].items[0].status).to.equal("OK");
+    expect(data[0].items[0].name).to.equal("Prince of Persia®");
+    expect(data[0].items[0].icon).to.equal("logo.jpg");
+    expect(data[0].items[0].price).to.equal("7.98");
+    expect(data[0].items[0].currency).to.equal("PLN");
+  })
 }
