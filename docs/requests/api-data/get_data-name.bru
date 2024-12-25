@@ -14,3 +14,13 @@ params:query {
   owner: bruno@test.ci
   name: games
 }
+
+tests {
+  test("data is correctly received", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("data received JSON data", function() {
+    expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
+  });
+}
