@@ -55,7 +55,7 @@ tests {
     expect(data[0].instancePath).to.equal("");
     expect(data[0].schemaPath).to.equal("#/required");
     expect(data[0].keyword).to.equal("required");
-    expect(data[0].params.missingProperty).to.equal("owner");
+    expect(data[0].params).to.deep.equal({missingProperty: "owner"});
     expect(data[0].message).to.equal("must have required property 'owner'");
   });
 }
