@@ -26,4 +26,14 @@ tests {
   test("data has correct content length", function() {
     expect(res.getHeader("content-length")).to.equal("29");
   });
+
+  test("data has correct top-level structure", function() {
+    const data = res.getBody();
+    expect(data).to.be.a('string');
+  });
+
+  test("data has correct top-level value", function() {
+    const data = res.getBody();
+    expect(data).to.equal("Invalid data owner provided");
+  });
 }
