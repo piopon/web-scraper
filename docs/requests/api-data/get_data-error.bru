@@ -32,4 +32,30 @@ tests {
     const data = res.getBody();
     expect(data).to.have.lengthOf(1);
   });
+
+  test("data has correct element structure", function() {
+    const data = res.getBody();
+    for(const dataIndex in data.length) {
+      const dataElement = data[dataIndex];
+      expect(dataElement).to.have.property('instancePath');
+      expect(dataElement.instancePath).to.be.a('string');
+      expect(dataElement).to.have.property('schemaPath');
+      expect(dataElement.schemaPath).to.be.a('string');
+      expect(dataElement).to.have.property('keyword');
+      expect(dataElement.keyword).to.be.a('string');
+      expect(dataElement).to.have.property('params');
+      expect(dataElement.params).to.be.a('object');
+      expect(dataElement).to.have.property('message');
+      expect(dataElement.message).to.be.a('string');
+    }
+  });
+
+  test("data has correct element values", function() {
+    const data = res.getBody();
+    expect(data[0].instancePath).to.equal("");
+    expect(data[0].schemaPath).to.equal("#/required");
+    expect(data[0].keyword).to.equal("required");
+    expect(data[0].params.missingProperty).to.equal("owner");
+    expect(data[0].message).to.equal("must have required property 'owner'");
+  });
 }
