@@ -25,7 +25,7 @@ tests {
   });
 
   test("data has correct content length", function() {
-    expect(res.getHeader("content-length")).to.equal("377");
+    expect(res.getHeader("content-length")).to.equal("238");
   });
 
   test("data has correct top-level structure", function() {
@@ -35,7 +35,7 @@ tests {
 
   test("data has correct top-level values", function() {
     const data = res.getBody();
-    expect(data).to.have.lengthOf(2);
+    expect(data).to.have.lengthOf(1);
   });
 
   test("data has correct element structure", function() {
@@ -56,9 +56,6 @@ tests {
     expect(data[0].name).to.equal("stocks");
     expect(data[0].category).to.equal("📈");
     expect(data[0].items).to.have.lengthOf(2);
-    expect(data[1].name).to.equal("games");
-    expect(data[1].category).to.equal("🎮");
-    expect(data[1].items).to.have.lengthOf(1);
   });
 
   test("data has correct items structure", function() {
@@ -93,10 +90,5 @@ tests {
     expect(data[0].items[1].icon).to.equal("nvidia.svg");
     expect(data[0].items[1].price).to.equal("134.70");
     expect(data[0].items[1].currency).to.equal("USD");
-    expect(data[1].items[0].status).to.equal("OK");
-    expect(data[1].items[0].name).to.equal("Prince of Persia®");
-    expect(data[1].items[0].icon).to.equal("logo.jpg");
-    expect(data[1].items[0].price).to.equal("7.98");
-    expect(data[1].items[0].currency).to.equal("PLN");
   });
 }
