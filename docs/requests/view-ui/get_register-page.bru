@@ -22,4 +22,13 @@ tests {
   test("register page has correct content length", function() {
     expect(res.getHeader("content-length")).to.equal("2964");
   });
+
+  test("register page has regsiter data", function() {
+    const body = res.getBody();
+    expect(body).to.be.a('string');
+    expect(body).to.include('<h3>scraper user registration</h3>');
+    expect(body).to.include('<form action="/auth/register" method="POST">');
+    expect(body).to.include('<input type="email" id="user-email" name="email" required>');
+    expect(body).to.include('<input type="password" id="user-password" name="password" required>');
+  });
 }
