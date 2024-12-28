@@ -9,3 +9,13 @@ get {
   body: none
   auth: none
 }
+
+tests {
+  test("register page is correctly opened", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("register page received HTML data", function() {
+    expect(res.getHeader("content-type")).to.equal("text/html; charset=utf-8");
+  });
+}
