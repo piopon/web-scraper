@@ -18,4 +18,8 @@ tests {
   test("register page received HTML data", function() {
     expect(res.getHeader("content-type")).to.equal("text/html; charset=utf-8");
   });
+
+  test("register page has correct content length", function() {
+    expect(res.getHeader("content-length")).to.equal("2964");
+  });
 }
