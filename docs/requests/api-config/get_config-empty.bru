@@ -1,0 +1,43 @@
+meta {
+  name: get_config-empty
+  type: http
+  seq: 5
+}
+
+get {
+  url: http://localhost:5000/api/v1/config/groups?name=unknown
+  body: none
+  auth: bearer
+}
+
+params:query {
+  name: unknown
+}
+
+auth:bearer {
+  token: {{demo-token}}
+}
+
+tests {
+  test("group is correctly received", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("group received JSON data", function() {
+    expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
+  });
+  
+  test("group has correct content length", function() {
+    expect(res.getHeader("content-length")).to.equal("2");
+  });
+  
+  test("group has correct top-level structure", function() {
+    const group = res.getBody();
+    expect(group).to.be.a('array');
+  });
+  
+  test("group has correct top-level values", function() {
+    const group = res.getBody();
+    expect(group).to.have.lengthOf(0);
+  });
+}
