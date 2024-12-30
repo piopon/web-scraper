@@ -156,7 +156,9 @@ export class WebScraper {
   update(sessionUser, scraperConfig) {
     const session = this.#sessions.get(sessionUser.email);
     if (session == null) {
-      this.#status.error("Invalid internal state: session not updated");
+      if (sessionUser.email !== process.env.DEMO_BASE) {
+        this.#status.error("Invalid internal state: session not updated");
+      }
       return;
     }
     this.#waitConfig.set(session.id, scraperConfig);
