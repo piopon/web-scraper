@@ -1,0 +1,28 @@
+meta {
+  name: delete_config-group
+  type: http
+  seq: 8
+}
+
+delete {
+  url: http://localhost:5000/api/v1/config/groups?name=CI
+  body: json
+  auth: bearer
+}
+
+params:query {
+  name: CI
+}
+
+auth:bearer {
+  token: {{demo-token}}
+}
+
+body:json {
+  {
+      "name": "CI",
+      "category": "test",
+      "domain": "http://functional.test.com/",
+      "observers": []
+    }
+}
