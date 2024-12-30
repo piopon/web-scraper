@@ -1,0 +1,24 @@
+meta {
+  name: add_config-group
+  type: http
+  seq: 6
+}
+
+post {
+  url: http://localhost:5000/api/v1/config/groups
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{demo-token}}
+}
+
+body:json {
+  {
+      "name": "CI",
+      "category": "test",
+      "domain": "http://functional.test.com/",
+      "observers": []
+    }
+}
