@@ -3,10 +3,10 @@
   "name": "web-scraper",
   "type": "collection",
   "ignore": [
-    "node_modules",
     ".git",
     ".github",
     "coverage",
+    "node_modules",
     "users"
   ]
 }
