@@ -1,0 +1,47 @@
+meta {
+  name: add_config-observer
+  type: http
+  seq: 7
+}
+
+post {
+  url: http://localhost:5000/api/v1/config/groups/observers?parent=CI
+  body: json
+  auth: bearer
+}
+
+params:query {
+  parent: CI
+}
+
+auth:bearer {
+  token: {{demo-token}}
+}
+
+body:json {
+  {
+    "name": "test",
+    "path": "observer/1/",
+    "target": "domcontentloaded",
+    "history": "off",
+    "container": "span",
+    "title": {
+      "interval": "",
+      "selector": "h1",
+      "attribute": "innerHTML",
+      "auxiliary": ""
+    },
+    "image": {
+      "interval": "",
+      "selector": "img",
+      "attribute": "src",
+      "auxiliary": ""
+    },
+    "price": {
+      "interval": "",
+      "selector": "span",
+      "attribute": "innerHTML",
+      "auxiliary": "CAD"
+    }
+  }
+}
