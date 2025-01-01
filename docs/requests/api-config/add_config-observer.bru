@@ -45,3 +45,27 @@ body:json {
     }
   }
 }
+
+tests {
+  test("config is correctly received", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("config received JSON data", function() {
+    expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
+  });
+
+  test("config has correct content length", function() {
+    expect(res.getHeader("content-length")).to.equal("50");
+  });
+
+  test("config has correct top-level data structure", function() {
+    const body = res.getBody();
+    expect(body).to.be.a('string');
+  });
+
+  test("config has correct top-level data values", function() {
+    const body = res.getBody();
+    expect(body).to.equal("Added new configuration element with name = test");
+  });
+}
