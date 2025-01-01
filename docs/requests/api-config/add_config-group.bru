@@ -35,4 +35,14 @@ tests {
   test("config has correct content length", function() {
     expect(res.getHeader("content-length")).to.equal("48");
   });
+
+  test("config has correct top-level data structure", function() {
+    const body = res.getBody();
+    expect(body).to.be.a('string');
+  });
+
+  test("config has correct top-level data values", function() {
+    const body = res.getBody();
+    expect(body).to.equal("Added new configuration element with name = CI");
+  });
 }
