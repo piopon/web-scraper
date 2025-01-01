@@ -22,3 +22,13 @@ body:json {
       "observers": []
     }
 }
+
+tests {
+  test("config is correctly received", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("config received JSON data", function() {
+    expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
+  });
+}
