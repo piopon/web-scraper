@@ -1,0 +1,250 @@
+meta {
+  name: get_config-all
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:5000/api/v1/config
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{demo-token}}
+}
+
+tests {
+  test("config is correctly received", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("config received JSON data", function() {
+    expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
+  });
+
+  test("config has correct content length", function() {
+    expect(res.getHeader("content-length")).to.equal("1991");
+  });
+
+  test("config has correct top-level data structure", function() {
+    const body = res.getBody();
+    expect(body).to.be.a('object');
+    expect(body).to.have.property('_id');
+    expect(body._id).to.be.a('string');
+    expect(body).to.have.property('user');
+    expect(body.user).to.be.a('string');
+    expect(body).to.have.property('groups');
+    expect(body.groups).to.be.a('array');
+    expect(body).to.have.property('__v');
+    expect(body.__v).to.be.a('number');
+  });
+
+  test("config has correct top-level data values", function() {
+    const body = res.getBody();
+    expect(body._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(body.user).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(body.groups).to.have.lengthOf(2);
+    expect(body.__v).to.be.at.least(0);
+  });
+
+  test("config has correct group data structure", function() {
+    const groups = res.getBody().groups;
+    for(const groupIndex in groups.length) {
+      const group = body[groupIndex];
+      expect(group).to.be.a('object');
+      expect(group).to.have.property('_id');
+      expect(group._id).to.be.a('string');
+      expect(group).to.have.property('name');
+      expect(group.name).to.be.a('string');
+      expect(group).to.have.property('category');
+      expect(group.category).to.be.a('string');
+      expect(group).to.have.property('domain');
+      expect(group.domain).to.be.a('string');
+      expect(group).to.have.property('observers');
+      expect(group.observers).to.be.a('array');
+    }
+  });
+
+  test("config has correct group data values", function() {
+    const groups = res.getBody().groups;
+    expect(groups[0]._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(groups[0].name).to.equal("stocks");
+    expect(groups[0].category).to.equal("📈");
+    expect(groups[0].domain).to.equal("https://www.tradingview.com");
+    expect(groups[0].observers).to.have.lengthOf(2);
+    expect(groups[1]._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(groups[1].name).to.equal("games");
+    expect(groups[1].category).to.equal("🎮");
+    expect(groups[1].domain).to.equal("https://store.steampowered.com/");
+    expect(groups[1].observers).to.have.lengthOf(1);
+  });
+
+  test("config has correct observer data structure", function() {
+    const groups = res.getBody().groups;
+    for(const groupIndex in groups.length) {
+      const group = groups[groupIndex];
+      for(const observerIndex in group.observers.length) {
+        const observer = group.observers[observerIndex];
+        expect(observer).to.be.a('object');
+        expect(observer).to.have.property('_id');
+        expect(observer._id).to.be.a('string');
+        expect(observer).to.have.property('name');
+        expect(observer.name).to.be.a('string');
+        expect(observer).to.have.property('path');
+        expect(observer.path).to.be.a('string');
+        expect(observer).to.have.property('target');
+        expect(observer.target).to.be.a('string');
+        expect(observer).to.have.property('history');
+        expect(observer.history).to.be.a('string');
+        expect(observer).to.have.property('container');
+        expect(observer.container).to.be.a('string');
+        expect(observer).to.have.property('title');
+        expect(observer.title).to.be.a('object');
+        expect(observer).to.have.property('image');
+        expect(observer.image).to.be.a('object');
+        expect(observer).to.have.property('price');
+        expect(observer.price).to.be.a('object');
+      }
+    }
+  });
+
+  test("config has correct observer data values", function() {
+    const groups = res.getBody().groups;
+    expect(groups[0].observers[0]._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(groups[0].observers[0].name).to.equal("McDonald's");
+    expect(groups[0].observers[0].path).to.equal("symbols/NYSE-MCD/");
+    expect(groups[0].observers[0].target).to.equal("domcontentloaded");
+    expect(groups[0].observers[0].history).to.equal("off");
+    expect(groups[0].observers[0].container).to.equal("div[class^=symbolRow]");
+    expect(groups[0].observers[1]._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(groups[0].observers[1].name).to.equal("NVIDIA");
+    expect(groups[0].observers[1].path).to.equal("symbols/NASDAQ-NVDA/");
+    expect(groups[0].observers[1].target).to.equal("domcontentloaded");
+    expect(groups[0].observers[1].history).to.equal("off");
+    expect(groups[0].observers[1].container).to.equal("div[class^=symbolRow]");
+    expect(groups[1].observers[0]._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(groups[1].observers[0].name).to.equal("Prince of Persia");
+    expect(groups[1].observers[0].path).to.equal("app/19980/Prince_of_Persia/");
+    expect(groups[1].observers[0].target).to.equal("domcontentloaded");
+    expect(groups[1].observers[0].history).to.equal("off");
+    expect(groups[1].observers[0].container).to.equal("div.page_content_ctn");
+  });
+
+  test("config has correct title component data structure", function() {
+    const groups = res.getBody().groups;
+    for(const groupIndex in groups.length) {
+      const group = groups[groupIndex];
+      for(const observerIndex in group.observers.length) {
+        const observer = group.observers[observerIndex];
+        expect(observer.title).to.have.property('_id');
+        expect(observer.title._id).to.be.a('string');
+        expect(observer.title).to.have.property('interval');
+        expect(observer.title.interval).to.be.a('string');
+        expect(observer.title).to.have.property('selector');
+        expect(observer.title.selector).to.be.a('string');
+        expect(observer.title).to.have.property('attribute');
+        expect(observer.title.attribute).to.be.a('string');
+        expect(observer.title).to.have.property('auxiliary');
+        expect(observer.title.auxiliary).to.be.a('string');
+      }
+    }
+  });
+
+  test("config has correct title component data values", function() {
+    const groups = res.getBody().groups;
+    expect(groups[0].observers[0].title._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(groups[0].observers[0].title.interval).to.equal("");
+    expect(groups[0].observers[0].title.selector).to.equal("h1");
+    expect(groups[0].observers[0].title.attribute).to.equal("innerHTML");
+    expect(groups[0].observers[0].title.auxiliary).to.equal("");
+    expect(groups[0].observers[1].title._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(groups[0].observers[1].title.interval).to.equal("");
+    expect(groups[0].observers[1].title.selector).to.equal("h1");
+    expect(groups[0].observers[1].title.attribute).to.equal("innerHTML");
+    expect(groups[0].observers[1].title.auxiliary).to.equal("");
+    expect(groups[1].observers[0].title._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(groups[1].observers[0].title.interval).to.equal("");
+    expect(groups[1].observers[0].title.selector).to.equal("div#appHubAppName");
+    expect(groups[1].observers[0].title.attribute).to.equal("innerHTML");
+    expect(groups[1].observers[0].title.auxiliary).to.equal("");
+  });
+
+  test("config has correct image component data structure", function() {
+    const groups = res.getBody().groups;
+    for(const groupIndex in groups.length) {
+      const group = groups[groupIndex];
+      for(const observerIndex in group.observers.length) {
+        const observer = group.observers[observerIndex];
+        expect(observer.image).to.have.property('_id');
+        expect(observer.image._id).to.be.a('string');
+        expect(observer.image).to.have.property('interval');
+        expect(observer.image.interval).to.be.a('string');
+        expect(observer.image).to.have.property('selector');
+        expect(observer.image.selector).to.be.a('string');
+        expect(observer.image).to.have.property('attribute');
+        expect(observer.image.attribute).to.be.a('string');
+        expect(observer.image).to.have.property('auxiliary');
+        expect(observer.image.auxiliary).to.be.a('string');
+      }
+    }
+  });
+
+  test("config has correct image component data values", function() {
+    const groups = res.getBody().groups;
+    expect(groups[0].observers[0].image._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(groups[0].observers[0].image.interval).to.equal("");
+    expect(groups[0].observers[0].image.selector).to.equal("img[class*=medium]");
+    expect(groups[0].observers[0].image.attribute).to.equal("src");
+    expect(groups[0].observers[0].image.auxiliary).to.equal("");
+    expect(groups[0].observers[1].image._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(groups[0].observers[1].image.interval).to.equal("");
+    expect(groups[0].observers[1].image.selector).to.equal("img[class*=medium]");
+    expect(groups[0].observers[1].image.attribute).to.equal("src");
+    expect(groups[0].observers[1].image.auxiliary).to.equal("");
+    expect(groups[1].observers[0].image._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(groups[1].observers[0].image.interval).to.equal("");
+    expect(groups[1].observers[0].image.selector).to.equal("img.game_header_image_full");
+    expect(groups[1].observers[0].image.attribute).to.equal("src");
+    expect(groups[1].observers[0].image.auxiliary).to.equal("");
+  });
+
+  test("config has correct price component data structure", function() {
+    const groups = res.getBody().groups;
+    for(const groupIndex in groups.length) {
+      const group = groups[groupIndex];
+      for(const observerIndex in group.observers.length) {
+        const observer = group.observers[observerIndex];
+        expect(observer.price).to.have.property('_id');
+        expect(observer.price._id).to.be.a('string');
+        expect(observer.price).to.have.property('interval');
+        expect(observer.price.interval).to.be.a('string');
+        expect(observer.price).to.have.property('selector');
+        expect(observer.price.selector).to.be.a('string');
+        expect(observer.price).to.have.property('attribute');
+        expect(observer.price.attribute).to.be.a('string');
+        expect(observer.price).to.have.property('auxiliary');
+        expect(observer.price.auxiliary).to.be.a('string');
+      }
+    }
+  });
+
+  test("config has correct price component data values", function() {
+    const groups = res.getBody().groups;
+    expect(groups[0].observers[0].price._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(groups[0].observers[0].price.interval).to.equal("");
+    expect(groups[0].observers[0].price.selector).to.equal("span[class^=last] span");
+    expect(groups[0].observers[0].price.attribute).to.equal("innerHTML");
+    expect(groups[0].observers[0].price.auxiliary).to.equal("USD");
+    expect(groups[0].observers[1].price._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(groups[0].observers[1].price.interval).to.equal("");
+    expect(groups[0].observers[1].price.selector).to.equal("span[class^=last] span");
+    expect(groups[0].observers[1].price.attribute).to.equal("innerHTML");
+    expect(groups[0].observers[1].price.auxiliary).to.equal("USD");
+    expect(groups[1].observers[0].price._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(groups[1].observers[0].price.interval).to.equal("");
+    expect(groups[1].observers[0].price.selector).to.equal("div.game_purchase_price,div.discount_final_price");
+    expect(groups[1].observers[0].price.attribute).to.equal("innerHTML");
+    expect(groups[1].observers[0].price.auxiliary).to.equal("PLN");
+  });
+}

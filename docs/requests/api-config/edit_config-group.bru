@@ -1,0 +1,52 @@
+meta {
+  name: edit_config-group
+  type: http
+  seq: 7
+}
+
+put {
+  url: http://localhost:5000/api/v1/config/groups?name=CI
+  body: json
+  auth: bearer
+}
+
+params:query {
+  name: CI
+}
+
+auth:bearer {
+  token: {{demo-token}}
+}
+
+body:json {
+  {
+      "name": "CI",
+      "category": "🗿",
+      "domain": "http://ci.test.com/",
+      "observers": []
+    }
+}
+
+tests {
+  test("config is correctly received", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("config received JSON data", function() {
+    expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
+  });
+
+  test("config has correct content length", function() {
+    expect(res.getHeader("content-length")).to.equal("45");
+  });
+
+  test("config has correct top-level data structure", function() {
+    const body = res.getBody();
+    expect(body).to.be.a('string');
+  });
+
+  test("config has correct top-level data values", function() {
+    const body = res.getBody();
+    expect(body).to.equal("Edited configuration element with name = CI");
+  });
+}

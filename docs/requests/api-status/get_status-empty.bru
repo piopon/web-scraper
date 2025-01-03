@@ -1,0 +1,39 @@
+meta {
+  name: get_status-empty
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://localhost:5000/api/v1/status?name=unknown
+  body: none
+  auth: none
+}
+
+params:query {
+  name: unknown
+}
+
+tests {
+  test("status is correctly received", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("status received JSON data", function() {
+    expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
+  });
+
+  test("status has correct content length", function() {
+    expect(res.getHeader("content-length")).to.equal("2");
+  });
+
+  test("status has correct top-level structure", function() {
+    const status = res.getBody();
+    expect(status).to.be.a('array');
+  });
+
+  test("status has correct top-level values", function() {
+    const status = res.getBody();
+    expect(status).to.have.lengthOf(0);
+  });
+}

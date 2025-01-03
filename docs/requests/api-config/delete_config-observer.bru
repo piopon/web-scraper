@@ -1,0 +1,52 @@
+meta {
+  name: delete_config-observer
+  type: http
+  seq: 10
+}
+
+delete {
+  url: http://localhost:5000/api/v1/config/groups/observers?name=test
+  body: none
+  auth: bearer
+}
+
+params:query {
+  name: test
+}
+
+auth:bearer {
+  token: {{demo-token}}
+}
+
+body:json {
+  {
+      "name": "CI",
+      "category": "test",
+      "domain": "http://functional.test.com/",
+      "observers": []
+    }
+}
+
+tests {
+  test("config is correctly received", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("config received JSON data", function() {
+    expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
+  });
+
+  test("config has correct content length", function() {
+    expect(res.getHeader("content-length")).to.equal("48");
+  });
+
+  test("config has correct top-level data structure", function() {
+    const body = res.getBody();
+    expect(body).to.be.a('string');
+  });
+
+  test("config has correct top-level data values", function() {
+    const body = res.getBody();
+    expect(body).to.equal("Removed configuration element with name = test");
+  });
+}

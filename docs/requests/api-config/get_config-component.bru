@@ -1,0 +1,78 @@
+meta {
+  name: get_config-component
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://localhost:5000/api/v1/config/groups/observers/components?source=title&selector=h1
+  body: none
+  auth: bearer
+}
+
+params:query {
+  source: title
+  selector: h1
+  ~attribute: innerHTML
+  ~interval: 1M
+  ~auxiliary: PLN
+}
+
+auth:bearer {
+  token: {{demo-token}}
+}
+
+tests {
+  test("component is correctly received", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("component received JSON data", function() {
+    expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
+  });
+
+  test("component has correct content length", function() {
+    expect(res.getHeader("content-length")).to.equal("209");
+  });
+
+  test("component has correct top-level structure", function() {
+    const component = res.getBody();
+    expect(component).to.be.a('array');
+  });
+
+  test("component has correct top-level values", function() {
+    const component = res.getBody();
+    expect(component).to.have.lengthOf(2);
+  });
+
+  test("component has correct element data structure", function() {
+    const components = res.getBody();
+    for(const componentIndex in components.length) {
+      const component = components[componentIndex];
+      expect(component).to.have.property('_id');
+      expect(component._id).to.be.a('string');
+      expect(component).to.have.property('interval');
+      expect(component.interval).to.be.a('string');
+      expect(component).to.have.property('selector');
+      expect(component.selector).to.be.a('string');
+      expect(component).to.have.property('attribute');
+      expect(component.attribute).to.be.a('string');
+      expect(component).to.have.property('auxiliary');
+      expect(component.auxiliary).to.be.a('string');
+    }
+  });
+
+  test("component has correct element data values", function() {
+    const component = res.getBody();
+    expect(component[0]._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(component[0].interval).to.equal("");
+    expect(component[0].selector).to.equal("h1");
+    expect(component[0].attribute).to.equal("innerHTML");
+    expect(component[0].auxiliary).to.equal("");
+    expect(component[1]._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(component[1].interval).to.equal("");
+    expect(component[1].selector).to.equal("h1");
+    expect(component[1].attribute).to.equal("innerHTML");
+    expect(component[1].auxiliary).to.equal("");
+  });
+}

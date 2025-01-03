@@ -1,0 +1,101 @@
+meta {
+  name: get_data-all
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://localhost:5000/api/v1/data?owner=bruno@test.ci
+  body: none
+  auth: none
+}
+
+params:query {
+  owner: bruno@test.ci
+}
+
+tests {
+  test("data is correctly received", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("data received JSON data", function() {
+    expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
+  });
+
+  test("data has correct content length", function() {
+    expect(res.getHeader("content-length")).to.equal("377");
+  });
+
+  test("data has correct top-level structure", function() {
+    const data = res.getBody();
+    expect(data).to.be.a('array');
+  });
+
+  test("data has correct top-level values", function() {
+    const data = res.getBody();
+    expect(data).to.have.lengthOf(2);
+  });
+
+  test("data has correct element structure", function() {
+    const data = res.getBody();
+    for(const dataIndex in data.length) {
+      const dataElement = data[dataIndex];
+      expect(dataElement).to.have.property('name');
+      expect(dataElement.name).to.be.a('string');
+      expect(dataElement).to.have.property('category');
+      expect(dataElement.category).to.be.a('string');
+      expect(dataElement).to.have.property('items');
+      expect(dataElement.items).to.be.a('array');
+    }
+  });
+
+  test("data has correct element values", function() {
+    const data = res.getBody();
+    expect(data[0].name).to.equal("stocks");
+    expect(data[0].category).to.equal("📈");
+    expect(data[0].items).to.have.lengthOf(2);
+    expect(data[1].name).to.equal("games");
+    expect(data[1].category).to.equal("🎮");
+    expect(data[1].items).to.have.lengthOf(1);
+  });
+
+  test("data has correct items structure", function() {
+    const data = res.getBody();
+    for(const dataIndex in data.length) {
+      const dataElement = data[dataIndex];
+      for(const itemIndex in dataElement.items.length) {
+        const item = dataElement.items[itemIndex];
+        expect(item).to.have.property('status');
+        expect(item.status).to.be.a('string');
+        expect(item).to.have.property('name');
+        expect(item.name).to.be.a('string');
+        expect(item).to.have.property('icon');
+        expect(item.icon).to.be.a('array');
+        expect(item).to.have.property('price');
+        expect(item.price).to.be.a('string');
+        expect(item).to.have.property('currency');
+        expect(item.currency).to.be.a('array');
+      }
+    }
+  });
+
+  test("data has correct items values", function() {
+    const data = res.getBody();
+    expect(data[0].items[0].status).to.equal("OK");
+    expect(data[0].items[0].name).to.equal("McDonald's Corporation");
+    expect(data[0].items[0].icon).to.equal("mcdonalds.svg");
+    expect(data[0].items[0].price).to.equal("292.68");
+    expect(data[0].items[0].currency).to.equal("USD");
+    expect(data[0].items[1].status).to.equal("OK");
+    expect(data[0].items[1].name).to.equal("NVIDIA");
+    expect(data[0].items[1].icon).to.equal("nvidia.svg");
+    expect(data[0].items[1].price).to.equal("134.70");
+    expect(data[0].items[1].currency).to.equal("USD");
+    expect(data[1].items[0].status).to.equal("OK");
+    expect(data[1].items[0].name).to.equal("Prince of Persia®");
+    expect(data[1].items[0].icon).to.equal("logo.jpg");
+    expect(data[1].items[0].price).to.equal("7.98");
+    expect(data[1].items[0].currency).to.equal("PLN");
+  });
+}

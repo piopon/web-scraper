@@ -156,7 +156,9 @@ export class WebScraper {
   update(sessionUser, scraperConfig) {
     const session = this.#sessions.get(sessionUser.email);
     if (session == null) {
-      this.#status.error("Invalid internal state: session not updated");
+      if (sessionUser.email !== process.env.DEMO_BASE) {
+        this.#status.error("Invalid internal state: session not updated");
+      }
       return;
     }
     this.#waitConfig.set(session.id, scraperConfig);
@@ -225,22 +227,27 @@ export class WebScraper {
    * @returns array of objects containing web scraper running history status
    */
   getHistory(sessionUser) {
+    if (sessionUser == null) {
+      return this.#status.getHistory();
+    }
+    const session = this.#sessions.get(sessionUser.email);
+    if (session == null) {
+      return this.#status.getHistory();
+    }
+    // all input correct - perform additional checks and then return history
     const invalidStateMessage = "Invalid internal state";
     const currentStatus = this.#status.getStatus().message;
-    const session = this.#sessions.get(sessionUser.email);
-    if (session != null) {
-      if (session.id == null) {
-        // scraper is NOT running in selected intervals
-        if (currentStatus.startsWith(WebScraper.#RUNNING_STATUS)) {
-          // incorrect state - update field
-          this.#status.error(invalidStateMessage);
-        }
-      } else {
-        // scraper is running in selected intervals
-        if (!currentStatus.startsWith(WebScraper.#RUNNING_STATUS)) {
-          // incorrect state - since it's running then we must stop it
-          this.stop(sessionUser.email, invalidStateMessage);
-        }
+    if (session.id == null) {
+      // scraper is NOT running in selected intervals
+      if (currentStatus.startsWith(WebScraper.#RUNNING_STATUS)) {
+        // incorrect state - update field
+        this.#status.error(invalidStateMessage);
+      }
+    } else {
+      // scraper is running in selected intervals
+      if (!currentStatus.startsWith(WebScraper.#RUNNING_STATUS)) {
+        // incorrect state - since it's running then we must stop it
+        this.stop(sessionUser.email, invalidStateMessage);
       }
     }
     return this.#status.getHistory();

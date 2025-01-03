@@ -1,0 +1,71 @@
+meta {
+  name: edit_config-observer
+  type: http
+  seq: 9
+}
+
+put {
+  url: http://localhost:5000/api/v1/config/groups/observers?name=test
+  body: json
+  auth: bearer
+}
+
+params:query {
+  name: test
+}
+
+auth:bearer {
+  token: {{demo-token}}
+}
+
+body:json {
+  {
+    "name": "test",
+    "path": "observer/1/updated",
+    "target": "domcontentloaded",
+    "history": "off",
+    "container": "span",
+    "title": {
+      "interval": "",
+      "selector": "h1",
+      "attribute": "innerHTML",
+      "auxiliary": ""
+    },
+    "image": {
+      "interval": "",
+      "selector": "img",
+      "attribute": "src",
+      "auxiliary": ""
+    },
+    "price": {
+      "interval": "",
+      "selector": "span",
+      "attribute": "innerHTML",
+      "auxiliary": "CAD"
+    }
+  }
+}
+
+tests {
+  test("config is correctly received", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("config received JSON data", function() {
+    expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
+  });
+
+  test("config has correct content length", function() {
+    expect(res.getHeader("content-length")).to.equal("47");
+  });
+
+  test("config has correct top-level data structure", function() {
+    const body = res.getBody();
+    expect(body).to.be.a('string');
+  });
+
+  test("config has correct top-level data values", function() {
+    const body = res.getBody();
+    expect(body).to.equal("Edited configuration element with name = test");
+  });
+}

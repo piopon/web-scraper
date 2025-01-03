@@ -1,0 +1,148 @@
+meta {
+  name: get_config-observer
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://localhost:5000/api/v1/config/groups/observers?name=NVIDIA
+  body: none
+  auth: bearer
+}
+
+params:query {
+  name: NVIDIA
+  ~path: symbols/NASDAQ-NVDA/
+  ~target: domcontentloaded
+  ~history: off
+}
+
+auth:bearer {
+  token: {{demo-token}}
+}
+
+tests {
+  test("observer is correctly received", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("observer received JSON data", function() {
+    expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
+  });
+
+  test("observer has correct content length", function() {
+    expect(res.getHeader("content-length")).to.equal("531");
+  });
+
+  test("observer has correct top-level structure", function() {
+    const observer = res.getBody();
+    expect(observer).to.be.a('array');
+  });
+
+  test("observer has correct top-level values", function() {
+    const observer = res.getBody();
+    expect(observer).to.have.lengthOf(1);
+  });
+
+  test("observer has correct element data structure", function() {
+    const observer = res.getBody();
+    expect(observer[0]).to.be.a('object');
+    expect(observer[0]).to.have.property('_id');
+    expect(observer[0]._id).to.be.a('string');
+    expect(observer[0]).to.have.property('name');
+    expect(observer[0].name).to.be.a('string');
+    expect(observer[0]).to.have.property('path');
+    expect(observer[0].path).to.be.a('string');
+    expect(observer[0]).to.have.property('target');
+    expect(observer[0].target).to.be.a('string');
+    expect(observer[0]).to.have.property('history');
+    expect(observer[0].history).to.be.a('string');
+    expect(observer[0]).to.have.property('container');
+    expect(observer[0].container).to.be.a('string');
+    expect(observer[0]).to.have.property('title');
+    expect(observer[0].title).to.be.a('object');
+    expect(observer[0]).to.have.property('image');
+    expect(observer[0].image).to.be.a('object');
+    expect(observer[0]).to.have.property('price');
+    expect(observer[0].price).to.be.a('object');
+  });
+
+  test("observer has correct element data values", function() {
+    const observer = res.getBody();
+    expect(observer[0]._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(observer[0].name).to.equal("NVIDIA");
+    expect(observer[0].path).to.equal("symbols/NASDAQ-NVDA/");
+    expect(observer[0].target).to.equal("domcontentloaded");
+    expect(observer[0].history).to.equal("off");
+    expect(observer[0].container).to.equal("div[class^=symbolRow]");
+  });
+
+  test("observer has correct title component data structure", function() {
+    const observer = res.getBody();
+    expect(observer[0].title).to.have.property('_id');
+    expect(observer[0].title._id).to.be.a('string');
+    expect(observer[0].title).to.have.property('interval');
+    expect(observer[0].title.interval).to.be.a('string');
+    expect(observer[0].title).to.have.property('selector');
+    expect(observer[0].title.selector).to.be.a('string');
+    expect(observer[0].title).to.have.property('attribute');
+    expect(observer[0].title.attribute).to.be.a('string');
+    expect(observer[0].title).to.have.property('auxiliary');
+    expect(observer[0].title.auxiliary).to.be.a('string');
+  });
+
+  test("observer has correct title component data values", function() {
+    const observer = res.getBody();
+    expect(observer[0].title._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(observer[0].title.interval).to.equal("");
+    expect(observer[0].title.selector).to.equal("h1");
+    expect(observer[0].title.attribute).to.equal("innerHTML");
+    expect(observer[0].title.auxiliary).to.equal("");
+  });
+
+  test("observer has correct image component data structure", function() {
+    const observer = res.getBody();
+    expect(observer[0].image).to.have.property('_id');
+    expect(observer[0].image._id).to.be.a('string');
+    expect(observer[0].image).to.have.property('interval');
+    expect(observer[0].image.interval).to.be.a('string');
+    expect(observer[0].image).to.have.property('selector');
+    expect(observer[0].image.selector).to.be.a('string');
+    expect(observer[0].image).to.have.property('attribute');
+    expect(observer[0].image.attribute).to.be.a('string');
+    expect(observer[0].image).to.have.property('auxiliary');
+    expect(observer[0].image.auxiliary).to.be.a('string');
+  });
+
+  test("observer has correct image component data values", function() {
+    const observer = res.getBody();
+    expect(observer[0].image._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(observer[0].image.interval).to.equal("");
+    expect(observer[0].image.selector).to.equal("img[class*=medium]");
+    expect(observer[0].image.attribute).to.equal("src");
+    expect(observer[0].image.auxiliary).to.equal("");
+  });
+
+  test("observer has correct price component data structure", function() {
+    const observer = res.getBody();
+    expect(observer[0].price).to.have.property('_id');
+    expect(observer[0].price._id).to.be.a('string');
+    expect(observer[0].price).to.have.property('interval');
+    expect(observer[0].price.interval).to.be.a('string');
+    expect(observer[0].price).to.have.property('selector');
+    expect(observer[0].price.selector).to.be.a('string');
+    expect(observer[0].price).to.have.property('attribute');
+    expect(observer[0].price.attribute).to.be.a('string');
+    expect(observer[0].price).to.have.property('auxiliary');
+    expect(observer[0].price.auxiliary).to.be.a('string');
+  });
+
+  test("observer has correct price component data values", function() {
+    const observer = res.getBody();
+    expect(observer[0].price._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(observer[0].price.interval).to.equal("");
+    expect(observer[0].price.selector).to.equal("span[class^=last] span");
+    expect(observer[0].price.attribute).to.equal("innerHTML");
+    expect(observer[0].price.auxiliary).to.equal("USD");
+  });
+}

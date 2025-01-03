@@ -1,0 +1,58 @@
+meta {
+  name: get_status-all
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:5000/api/v1/status
+  body: none
+  auth: none
+}
+
+tests {
+  test("status is correctly received", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("status received JSON data", function() {
+    expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
+  });
+  
+  test("status has correct content length", function() {
+    expect(res.getHeader("content-length")).to.equal("181");
+  });
+
+  test("status has correct top-level structure", function() {
+    const status = res.getBody();
+    expect(status).to.be.a('array');
+  });
+
+  test("status has correct top-level values", function() {
+    const status = res.getBody();
+    expect(status).to.have.lengthOf(4);
+  });
+
+  test("status has correct element data structure", function() {
+    const status = res.getBody();
+    for(const statusIndex in status.length) {
+      const serviceState = status[statusIndex];
+      expect(serviceState).to.have.property('name');
+      expect(serviceState.name).to.be.a('string');
+      expect(serviceState).to.have.property('status');
+      expect(serviceState.status).to.be.a('string');
+    }
+  });
+
+  test("status has correct element data values", function() {
+    const status = res.getBody();
+    expect(status[0].name).to.equal("web-database  ");
+    expect(status[0].status).to.equal("running");
+    expect(status[1].name).to.equal("web-scraper   ");
+    expect(status[1].status).to.equal("stopped");
+    expect(status[2].name).to.equal("web-components");
+    expect(status[2].status).to.equal("running");
+    expect(status[3].name).to.equal("web-server    ");
+    expect(status[3].status).to.equal("running");
+  });
+}

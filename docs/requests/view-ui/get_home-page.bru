@@ -1,0 +1,51 @@
+meta {
+  name: get_home-page
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:5000/
+  body: none
+  auth: none
+}
+
+tests {
+  test("home page is correctly opened", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("home page received HTML data", function() {
+    expect(res.getHeader("content-type")).to.equal("text/html; charset=utf-8");
+  });
+
+  test("home page has correct content length", function() {
+    expect(res.getHeader("content-length")).to.equal("3116");
+  });
+
+  test("home page has login data", function() {
+    const body = res.getBody();
+    expect(body).to.be.a('string');
+    expect(body).to.include('<h3>scraper user login</h3>');
+    expect(body).to.include('<form action="/auth/login" method="POST">');
+    expect(body).to.include('<input type="email" id="user-email" name="email" required>');
+    expect(body).to.include('<input type="password" id="user-password" name="password" required>');
+  });
+
+  test("home page has demo functionality", function() {
+    const body = res.getBody();
+    expect(body).to.be.a('string');
+    expect(body).to.include('<form class="user-demo" action="/auth/demo" method="POST">');
+    expect(body).to.include('<button class="btn-demo" type="submit">see</button>');
+  });
+
+  test("home page has status without dashboard access", function() {
+    const body = res.getBody();
+    expect(body).to.be.a('string');
+    expect(body).to.include('<i class="fa fa-wifi status-running" title="" id="status-web-server">');
+    expect(body).to.include('<i class="fa fa-database status-initializing" title="" id="status-web-database">');
+    expect(body).to.include('<i class="fa fa-filter status-initializing" title="" id="status-web-scraper">');
+    expect(body).not.to.include('<a href="/status" title="show detailed status" target="_self">');
+    expect(body).not.to.include('<i class="fa fa-dashboard" id="show-dashboard">');
+  });
+}

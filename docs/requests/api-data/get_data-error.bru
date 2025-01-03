@@ -1,0 +1,61 @@
+meta {
+  name: get_data-error
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:5000/api/v1/data
+  body: none
+  auth: none
+}
+
+tests {
+  test("data is correctly received", function() {
+    expect(res.getStatus()).to.equal(400);
+  });
+
+  test("data received JSON data", function() {
+    expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
+  });
+
+  test("data has correct content length", function() {
+    expect(res.getHeader("content-length")).to.equal("153");
+  });
+
+  test("data has correct top-level structure", function() {
+    const data = res.getBody();
+    expect(data).to.be.a('array');
+  });
+
+  test("data has correct top-level values", function() {
+    const data = res.getBody();
+    expect(data).to.have.lengthOf(1);
+  });
+
+  test("data has correct element structure", function() {
+    const data = res.getBody();
+    for(const dataIndex in data.length) {
+      const dataElement = data[dataIndex];
+      expect(dataElement).to.have.property('instancePath');
+      expect(dataElement.instancePath).to.be.a('string');
+      expect(dataElement).to.have.property('schemaPath');
+      expect(dataElement.schemaPath).to.be.a('string');
+      expect(dataElement).to.have.property('keyword');
+      expect(dataElement.keyword).to.be.a('string');
+      expect(dataElement).to.have.property('params');
+      expect(dataElement.params).to.be.a('object');
+      expect(dataElement).to.have.property('message');
+      expect(dataElement.message).to.be.a('string');
+    }
+  });
+
+  test("data has correct element values", function() {
+    const data = res.getBody();
+    expect(data[0].instancePath).to.equal("");
+    expect(data[0].schemaPath).to.equal("#/required");
+    expect(data[0].keyword).to.equal("required");
+    expect(data[0].params).to.deep.equal({missingProperty: "owner"});
+    expect(data[0].message).to.equal("must have required property 'owner'");
+  });
+}

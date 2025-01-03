@@ -1,0 +1,110 @@
+meta {
+  name: get_status-history
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://localhost:5000/api/v1/status?history=true
+  body: none
+  auth: none
+}
+
+params:query {
+  history: true
+}
+
+tests {
+  test("status is correctly received", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("status received JSON data", function() {
+    expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
+  });
+
+  test("status has correct content length", function() {
+    expect(res.getHeader("content-length")).to.equal("779");
+  });
+
+  test("status has correct top-level structure", function() {
+    const status = res.getBody();
+    expect(status).to.be.a('array');
+  });
+
+  test("status has correct top-level values", function() {
+    const status = res.getBody();
+    expect(status).to.have.lengthOf(4);
+  });
+
+  test("status has correct element data structure", function() {
+    const status = res.getBody();
+    for(const statusIndex in status.length) {
+      const serviceState = status[statusIndex];
+      expect(serviceState).to.have.property('name');
+      expect(serviceState.name).to.be.a('string');
+      expect(serviceState).to.have.property('status');
+      expect(serviceState.status).to.be.a('string');
+      expect(serviceState).to.have.property('history');
+      expect(serviceState.history).to.be.a('array');
+    }
+  });
+
+  test("status has correct element data values", function() {
+    const status = res.getBody();
+    expect(status[0].name).to.equal("web-database  ");
+    expect(status[0].status).to.equal("running");
+    expect(status[0].history).to.have.lengthOf(3);
+    expect(status[1].name).to.equal("web-scraper   ");
+    expect(status[1].status).to.equal("stopped");
+    expect(status[1].history).to.have.lengthOf(1);
+    expect(status[2].name).to.equal("web-components");
+    expect(status[2].status).to.equal("running");
+    expect(status[2].history).to.have.lengthOf(1);
+    expect(status[3].name).to.equal("web-server    ");
+    expect(status[3].status).to.equal("running");
+    expect(status[3].history).to.have.lengthOf(2);
+  });
+
+  test("status has correct history data structure", function() {
+    const status = res.getBody();
+    for(const statusIndex in status.length) {
+      const serviceState = status[statusIndex];
+      for(const historyIndex in serviceState.history.length) {
+        const history = serviceState.history[historyIndex];
+        expect(history).to.have.property('timestamp');
+        expect(history.timestamp).to.be.a('string');
+        expect(history).to.have.property('type');
+        expect(history.type).to.be.a('string');
+        expect(history).to.have.property('message');
+        expect(history.message).to.be.a('string');
+      }
+    }
+  });
+
+  test("status has correct history data values", function() {
+    const dateTimeRegex = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
+    const status = res.getBody();
+    expect(status[0].history[0].timestamp).to.match(dateTimeRegex);
+    expect(status[0].history[0].type).to.equal("info");
+    expect(status[0].history[0].message).to.equal("Created");
+    expect(status[0].history[1].timestamp).to.match(dateTimeRegex);
+    expect(status[0].history[1].type).to.equal("info");
+    expect(status[0].history[1].message).to.equal("Connected to database");
+    expect(status[0].history[2].timestamp).to.match(dateTimeRegex);
+    expect(status[0].history[2].type).to.equal("info");
+    expect(status[0].history[2].message).to.equal("Maintenance summary: 0 configs, 0 demos");
+    expect(status[1].history[0].timestamp).to.match(dateTimeRegex);
+    expect(status[1].history[0].type).to.equal("info");
+    expect(status[1].history[0].message).to.equal("Created");
+    expect(status[2].history[0].timestamp).to.match(dateTimeRegex);
+    expect(status[2].history[0].type).to.equal("info");
+    expect(status[2].history[0].message).to.equal("Created");
+    expect(status[3].history[0].timestamp).to.match(dateTimeRegex);
+    expect(status[3].history[0].type).to.equal("info");
+    expect(status[3].history[0].message).to.equal("Created");
+    expect(status[3].history[1].timestamp).to.match(dateTimeRegex);
+    expect(status[3].history[1].type).to.equal("info");
+    expect(status[3].history[1].message).to.equal("Started on port: 5000");
+  });
+}

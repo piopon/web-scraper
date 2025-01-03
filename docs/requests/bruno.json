@@ -1,0 +1,12 @@
+{
+  "version": "1",
+  "name": "web-scraper",
+  "type": "collection",
+  "ignore": [
+    ".git",
+    ".github",
+    "coverage",
+    "node_modules",
+    "users"
+  ]
+}
