@@ -1,4 +1,4 @@
-name: PUBLISH web-scraper
+name: CD web-scraper
 
 on:
   release:
