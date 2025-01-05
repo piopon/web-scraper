@@ -1,3 +1,6 @@
+# This workflow will publish web-scraper application to GitHub Packages
+# For more information see: https://docs.github.com/en/actions/use-cases-and-examples/publishing-packages/publishing-nodejs-packages
+
 name: CD web-scraper
 
 on:
