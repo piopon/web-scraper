@@ -1,5 +1,5 @@
 {
-  "name": "web-scraper",
+  "name": "@piopon/web-scraper",
   "version": "1.0.0",
   "description": "Scrap publicly available data from different web pages",
   "main": "src/index.js",
