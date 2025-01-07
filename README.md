@@ -17,5 +17,19 @@ The tool is designed to handle a range of web scraping scenarios, from simple da
 - **Error handling**<br>
   Built-in mechanisms to manage failed requests and handle dynamic content
 
+### Installation
+
+1. Clone the repository:
+   ```
+   git clone https://github.com/piopon/web-scraper.git
+   ```
+2. Navigate to the project directory:
+   ```
+   cd web-scraper
+   ```
+3. Install dependencies:
+   ```
+   npm install
+   ```
  ---
 <p align="center">Created by PNK with ❤ @ 2023-2025</p>
