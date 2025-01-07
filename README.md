@@ -11,9 +11,13 @@ The tool is designed to handle a range of web scraping scenarios, from simple da
 ### Features
 
 - **User-friendly configuration**<br>
-  Easily set up scraping tasks through a simple UI
+  Easily set up scraping tasks through a simple UI or via supported API requests
 - **Customizable scraping rules**<br>
   Users can specify target elements using CSS selectors
+- **Multiple users support**<br>
+  Run scraper tasks for several users at once
+- **REST API**<br>
+  Output data can be retrieved remotely by sending a request to appropriate REST API endpoint
 - **Error handling**<br>
   Built-in mechanisms to manage failed requests and handle dynamic content
 
