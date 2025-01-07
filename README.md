@@ -46,5 +46,5 @@ See the LICENSE file for details.
 
 For questions or suggestions, feel free to contact me through GitHub.
 
- ---
+---
 <p align="center">Created by PNK with ❤ @ 2023-2025</p>
