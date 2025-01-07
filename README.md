@@ -40,7 +40,7 @@ The tool is designed to handle a range of web scraping scenarios, from simple da
 ### License
 
 This project is licensed under the GPL-2.0 license.
-See the LICENSE file for details.
+See the [LICENSE](./LICENSE) file for details.
 
 ### Contact
 
