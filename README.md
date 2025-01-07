@@ -17,6 +17,11 @@ The tool is designed to handle a range of web scraping scenarios, from simple da
 - **Error handling**<br>
   Built-in mechanisms to manage failed requests and handle dynamic content
 
+### Requirements
+
+- MongoDB instance
+- Node.js 18+
+
 ### Installation
 
 1. Clone the repository:
