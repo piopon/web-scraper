@@ -41,6 +41,13 @@ The tool is designed to handle a range of web scraping scenarios, from simple da
    npm install
    ```
 
+### Contributing
+
+Contributions are welcome! To contribute:
+- Fork the repository.
+- Create a new branch for your feature or bugfix.
+- Submit a pull request with a clear description of your changes.
+
 ### License
 
 This project is licensed under the GPL-2.0 license.
