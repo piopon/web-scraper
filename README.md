@@ -31,5 +31,15 @@ The tool is designed to handle a range of web scraping scenarios, from simple da
    ```
    npm install
    ```
+
+### License
+
+This project is licensed under the GPL-2.0 license.
+See the LICENSE file for details.
+
+### Contact
+
+For questions or suggestions, feel free to contact me through GitHub.
+
  ---
 <p align="center">Created by PNK with ❤ @ 2023-2025</p>
