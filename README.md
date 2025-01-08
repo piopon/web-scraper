@@ -43,7 +43,7 @@ The tool is designed to handle a range of web scraping scenarios, from simple da
 
 ### Configuration
 
-Before running the application service create an .env file with the following data:
+Before running the application service create an `.env` file with the following data:
 ```
 SERVER_PORT=[APP_PORT:INTEGER]       # the web-server service port number
 SESSION_SHA=[SHA_SECRET:STRING]      # hash for session cookie
@@ -63,9 +63,11 @@ Run the scraper:
 ```
 npm run start
 ```
-Customize your scraping tasks by opening the web-browser and logging to the configured IP:PORT address.
+Customize your scraping tasks by opening the web-browser and logging to the configured `IP:PORT` address.
 After that add new configuration groups, observers and fill all components data.
-Your data is now scraped!
+
+__Your data is now scraped!__
+
 Check the `users` directory for scraped data values or error details if configuration is incorrect.
 
 ### Project Structure
