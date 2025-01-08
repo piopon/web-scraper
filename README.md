@@ -41,6 +41,24 @@ The tool is designed to handle a range of web scraping scenarios, from simple da
    npm install
    ```
 
+### Project Structure
+
+```
+web-scraper/
+├── .github/workflows/  #
+├── docs/               #
+├── public              #
+├── src/                #
+├── test/               #
+├── users/              # Directory for storing scraped data
+├── .gitignore          #
+├── CODEOWNERS          #
+├── LICENSE             #
+├── package-lock.json   #
+├── package.json        # Node.js dependencies and run/test scripts
+└── README.md           # Project documentation
+```
+
 ### Contributing
 
 Contributions are welcome! To contribute:
