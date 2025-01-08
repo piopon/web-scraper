@@ -41,6 +41,22 @@ The tool is designed to handle a range of web scraping scenarios, from simple da
    npm install
    ```
 
+### Configuration
+
+Before running the application service create an .env file with the following data:
+```
+SERVER_PORT=[APP_PORT:INTEGER]
+SESSION_SHA=[SHA_SECRET:STRING]
+JWT_SECRET=[JWT_SECRET:STRING]
+DB_ADDRESS=[ADDRESS:IP STRING]
+DB_NAME=[NAME:STRING]
+DB_PORT=[DB_PORT:INTEGER]
+DEMO_MODE=[overwrite|duplicate]
+DEMO_BASE=[BASE_USER:EMAIL STRING]
+DEMO_USER=[DEMO_USER:EMAIL STRING]
+DEMO_PASS=[DEMO_SECRET:STRING]
+```
+
 ### Usage
 
 Run the scraper:
