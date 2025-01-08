@@ -41,6 +41,17 @@ The tool is designed to handle a range of web scraping scenarios, from simple da
    npm install
    ```
 
+### Usage
+
+Run the scraper:
+```
+npm run start
+```
+Customize your scraping tasks by opening the web-browser and logging to the configured IP:PORT address.
+After that add new configuration groups, observers and fill all components data.
+Your data is now scraped!
+Check the `users` directory for scraped data values or error details if configuration is incorrect.
+
 ### Project Structure
 
 ```
