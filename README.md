@@ -45,16 +45,16 @@ The tool is designed to handle a range of web scraping scenarios, from simple da
 
 Before running the application service create an .env file with the following data:
 ```
-SERVER_PORT=[APP_PORT:INTEGER]
-SESSION_SHA=[SHA_SECRET:STRING]
-JWT_SECRET=[JWT_SECRET:STRING]
-DB_ADDRESS=[ADDRESS:IP STRING]
-DB_NAME=[NAME:STRING]
-DB_PORT=[DB_PORT:INTEGER]
-DEMO_MODE=[overwrite|duplicate]
-DEMO_BASE=[BASE_USER:EMAIL STRING]
-DEMO_USER=[DEMO_USER:EMAIL STRING]
-DEMO_PASS=[DEMO_SECRET:STRING]
+SERVER_PORT=[APP_PORT:INTEGER]       # the web-server service port number
+SESSION_SHA=[SHA_SECRET:STRING]      # hash for session cookie
+JWT_SECRET=[JWT_SECRET:STRING]       # hash for JSON Web Token
+DB_ADDRESS=[ADDRESS:IP STRING]       # the IP address for DB (localhost for local DB)
+DB_NAME=[NAME:STRING]                # the name for the DB
+DB_PORT=[DB_PORT:INTEGER]            # the port for DB
+DEMO_MODE=[overwrite|duplicate]      # the demo session mode
+DEMO_BASE=[BASE_USER:EMAIL STRING]   # base demo email
+DEMO_USER=[DEMO_USER:EMAIL STRING]   # user template email
+DEMO_PASS=[DEMO_SECRET:STRING]       # base dome password
 ```
 
 ### Usage
@@ -72,18 +72,18 @@ Check the `users` directory for scraped data values or error details if configur
 
 ```
 web-scraper/
-├── .github/workflows/  #
-├── docs/               #
-├── public              #
-├── src/                #
-├── test/               #
-├── users/              # Directory for storing scraped data
-├── .gitignore          #
-├── CODEOWNERS          #
-├── LICENSE             #
-├── package-lock.json   #
-├── package.json        # Node.js dependencies and run/test scripts
-└── README.md           # Project documentation
+├── .github/workflows/     # GitHub workflows for CI/CD
+├── docs/                  # Requests documentation and docs assets
+├── public                 # Frontend UI source files
+├── src/                   # Backend UI source files
+├── test/                  # Unit tests logic
+├── users/                 # Stored scraped data
+├── .gitignore             # List of files ignored by GIT
+├── CODEOWNERS             # List of code owners
+├── LICENSE                # GPL-2.0 license description
+├── package-lock.json      # Node.js snapshot of the dependency tree
+├── package.json           # Node.js project metadata
+└── README.md              # Top-level project description
 ```
 
 ### Contributing
