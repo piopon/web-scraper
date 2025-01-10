@@ -1,9 +1,4 @@
-<div style="display: flex; align-items: center;">
-  <img style="transform: rotate(45deg)" src="./public/img/logo/logo-64.png" alt="web-scraper logo">
-  <strong><span style="padding-left: 15px; font-size: 32px;">web-scraper</span></strong>
-</div>
-
----
+# ![web-scraper logo](./public/img/logo/logo-rotated.png "web-scraper") web-scraper
 
 A versatile web scraping application built to efficiently gather data from a variety of websites.
 This project is ideal for automating data extraction tasks and transforming raw HTML data into structured formats.
