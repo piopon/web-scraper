@@ -1,6 +1,6 @@
 <div class="flex-container" style="display: flex; align-items: center;">
-  <img src="./public/img/logo/logo-64.png">
-  <span style="font-size: 32px;">web-scraper</span>
+  <img style="transform: rotate(45deg)" src="./public/img/logo/logo-64.png">
+  <span style="padding-left: 15px; font-size: 32px;">web-scraper</span>
 </div>
 
 ---
