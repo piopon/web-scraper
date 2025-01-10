@@ -59,14 +59,15 @@ DEMO_PASS=[DEMO_SECRET:STRING]       # base dome password
 
 ### Usage
 
-Run the scraper:
-```
-npm run start
-```
-Customize your scraping tasks by opening the web-browser and logging to the configured `IP:PORT` address.
-After that add new configuration groups, observers and fill all components data.
+1. Start the MongoDB instance and run web-scraper using the command:
+   ```
+   npm run start
+   ```
+2. Open the web-browser and navigate to the configured `IP:PORT` address.<br>
+   Login to your account, create a new one, or open a demo session
+3. Customize your scraping tasks by modifying configuration groups, observers and fill all components data
 
-__Your data is now scraped!__
+   __After correctly adding first observer your data is now scraped!__
 
 Check the `users` directory for scraped data values or error details if configuration is incorrect.
 
