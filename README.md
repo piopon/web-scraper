@@ -23,8 +23,9 @@ The tool is designed to handle a range of web scraping scenarios, from simple da
 
 ### Requirements
 
-- MongoDB instance
-- Node.js 18+
+- Node.js 18+ (service - [LINK](https://nodejs.org/en/download))
+- MongoDB (data storage - [LINK](https://www.mongodb.com/try/download/community))
+- Bruno (API testing - [LINK](https://github.com/usebruno/bruno))
 
 ### Installation
 
