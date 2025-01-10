@@ -72,6 +72,12 @@ DEMO_PASS=[DEMO_SECRET:STRING]       # base dome password
 
    __After correctly adding first observer your data is now scraped!__
 
+Current status of web-scraper's components can be quicky checked in the bottom right corner:
+![status general](./docs/images/003_status-general.png "web-scraper status preview")
+
+After successfull login this panel contains also a link to detailed scraper running status with logs:
+![status details](./docs/images/004_status-view.png "web-scraper status view")
+
 Check the `users` directory for scraped data values or error details if configuration is incorrect.
 
 ### Project Structure
