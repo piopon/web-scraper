@@ -65,6 +65,7 @@ DEMO_PASS=[DEMO_SECRET:STRING]       # base dome password
    ```
 2. Open the web-browser and navigate to the configured `IP:PORT` address.<br>
    Login to your account, create a new one, or open a demo session
+   ![login page](./docs/images/000_login.png "web-scraper login")
 3. Customize your scraping tasks by modifying configuration groups, observers and fill all components data
 
    __After correctly adding first observer your data is now scraped!__
