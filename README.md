@@ -10,15 +10,15 @@ The tool is designed to handle a range of web scraping scenarios, from simple da
 
 ### Features
 
-- **User-friendly configuration**<br>
+- <ins>**User-friendly configuration**</ins><br>
   Easily set up scraping tasks through a simple UI or via supported API requests
-- **Customizable scraping rules**<br>
+- <ins>**Customizable scraping rules**</ins><br>
   Users can specify target elements using CSS selectors
-- **Multiple users support**<br>
+- <ins>**Multiple users support**</ins><br>
   Run scraper tasks for several users at once
-- **REST API**<br>
+- <ins>**REST API**</ins><br>
   Output data can be retrieved remotely by sending a request to appropriate REST API endpoint
-- **Error handling**<br>
+- <ins>**Error handling**</ins><br>
   Built-in mechanisms to manage failed requests and handle dynamic content
 
 ### Requirements
@@ -70,7 +70,7 @@ DEMO_PASS=[DEMO_SECRET:STRING]       # base dome password
    ![config view](./docs/images/001_config-view.png "web-scraper config view")
    ![config edit](./docs/images/002_config-edit.png "web-scraper config edit")
 
-   __After correctly adding first observer your data is now scraped!__
+   __<ins>After correctly adding first observer your data is now scraped!</ins>__
 
 Current status of web-scraper's components can be quicky checked in the bottom right corner:
 ![status general](./docs/images/003_status-general.png "web-scraper status preview")
