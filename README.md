@@ -1,5 +1,5 @@
 <div class="flex-container" style="display: flex; align-items: center;">
-  <img style="transform: rotate(45deg)" src="./public/img/logo/logo-64.png">
+  <img style="transform: rotate(45deg)" src="./public/img/logo/logo-64.png" alt="web-scraper logo">
   <span style="padding-left: 15px; font-size: 32px;">web-scraper</span>
 </div>
 
