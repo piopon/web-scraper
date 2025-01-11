@@ -3,12 +3,12 @@
 A versatile web scraping application built to efficiently gather data from a variety of websites.<br>
 This project is ideal for automating data extraction tasks and transforming raw HTML data into structured formats.
 
-### Overview
+### Overview 💡
 
 This service application allows users to specify target websites and define the elements to extract, enabling seamless and customizable public data scraping.
 The tool is designed to handle a range of web scraping scenarios, from simple data extraction to complex, multi-page crawling tasks.
 
-### Features
+### Features 🎨
 
 - <ins>**User-friendly configuration**</ins><br>
   Easily set up scraping tasks through a simple UI or via supported API requests
@@ -21,13 +21,13 @@ The tool is designed to handle a range of web scraping scenarios, from simple da
 - <ins>**Error handling**</ins><br>
   Built-in mechanisms to manage failed requests and handle dynamic content
 
-### Requirements
+### Requirements 📝
 
 - Node.js 18+ (service - [LINK](https://nodejs.org/en/download))
 - MongoDB (data storage - [LINK](https://www.mongodb.com/try/download/community))
 - Bruno (API testing - [LINK](https://github.com/usebruno/bruno))
 
-### Installation
+### Installation 📥
 
 1. Clone the repository:
    ```
@@ -42,7 +42,7 @@ The tool is designed to handle a range of web scraping scenarios, from simple da
    npm install
    ```
 
-### Configuration
+### Configuration 🔧
 
 Before running the application service create an `.env` file with the following data:
 ```
@@ -58,7 +58,7 @@ DEMO_USER=[DEMO_USER:EMAIL STRING]   # user template email
 DEMO_PASS=[DEMO_SECRET:STRING]       # base dome password
 ```
 
-### Usage
+### Usage 💻
 
 1. Start the MongoDB instance and run web-scraper using the command:
    ```
@@ -81,7 +81,7 @@ After successfull login this panel contains also a link to detailed scraper runn
 
 Check the `users` directory for scraped data values or error details if configuration is incorrect.
 
-### Project Structure
+### Project Structure 📊
 
 ```
 web-scraper/
@@ -99,19 +99,19 @@ web-scraper/
 └── README.md              # Top-level project description
 ```
 
-### Contributing
+### Contributing 🤝
 
 Contributions are welcome! To contribute:
 - Fork the repository.
 - Create a new branch for your feature or bugfix.
 - Submit a pull request with a clear description of your changes.
 
-### License
+### License 📜
 
 This project is licensed under the GPL-2.0 license.
 See the [LICENSE](./LICENSE) file for details.
 
-### Contact
+### Contact 💬
 
 For questions or suggestions, feel free to contact me through GitHub or via [email](mailto:piopon.github@gmail.com).
 
