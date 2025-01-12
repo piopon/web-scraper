@@ -58,7 +58,7 @@ div#page {
   }
 }
 
-@media screen and (min-width: 500px) {
+@media screen and (min-width: 515px) {
   div#page {
     display: flex;
     flex-direction: column;
@@ -222,7 +222,7 @@ footer#main-footer h3 {
   font-size: 10px;
 }
 
-@media screen and (min-width: 450px) {
+@media screen and (min-width: 515px) {
   footer#main-footer h3 {
     margin: 0;
     font-size: 15px;
