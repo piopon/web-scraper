@@ -45,7 +45,7 @@ div#page {
   }
 }
 
-@media screen and (min-width: 515px) {
+@media screen and (min-width: 650px) {
   div#page {
     margin: 3rem 3rem;
   }
@@ -87,7 +87,7 @@ header#main-header h1 {
   font-size: 1.35rem;
 }
 
-@media screen and (min-width: 515px) {
+@media screen and (min-width: 650px) {
   header#main-header h1 {
     font-size: 2rem;
   }
@@ -117,7 +117,7 @@ header#content-header h3 {
   font-size: 0.85rem;
 }
 
-@media screen and (min-width: 515px) {
+@media screen and (min-width: 650px) {
   header#content-header h3 {
     margin: 0rem 0rem 0rem 1rem;
     font-size: 1.17rem;
@@ -196,7 +196,7 @@ footer#main-footer h3 {
   font-size: 10px;
 }
 
-@media screen and (min-width: 515px) {
+@media screen and (min-width: 650px) {
   footer#main-footer h3 {
     margin: 0;
     font-size: 15px;
