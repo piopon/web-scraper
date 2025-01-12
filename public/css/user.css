@@ -26,7 +26,7 @@ p.user-error {
   align-items: center;
 }
 
-section.user-management form {
+section.user-management form.user-credentials {
   width: 25%;
 }
 
