@@ -83,6 +83,7 @@ form.user-demo {
   font-size: 0.75rem;
   bottom: 15px;
   right: 50px;
+  width: auto;
 }
 
 form.user-demo input {
