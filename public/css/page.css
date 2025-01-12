@@ -3,16 +3,10 @@ html {
   font-family: "Sedgwick Ave", cursive;
   -webkit-font-smoothing: antialiased;
   text-rendering: geometricPrecision;
-  line-height: 1.0;
+  line-height: 1.5;
   user-select: none;
   -ms-user-select: none;
   -webkit-user-select: none;
-}
-
-@media screen and (min-width: 980px) {
-  html {
-    line-height: 1.5;
-  }
 }
 
 body {
