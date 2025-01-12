@@ -27,7 +27,13 @@ p.user-error {
 }
 
 section.user-management form.user-credentials {
-  width: 50%;
+  width: 90%;
+}
+
+@media screen and (min-width: 500px) {
+  section.user-management form.user-credentials {
+    width: 50%;
+  }
 }
 
 @media screen and (min-width: 800px) {
