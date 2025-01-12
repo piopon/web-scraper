@@ -207,7 +207,14 @@ footer#main-footer {
 
 footer#main-footer h3 {
   margin: 0;
-  font-size: 15px;
+  font-size: 10px;
+}
+
+@media screen and (min-width: 450px) {
+  footer#main-footer h3 {
+    margin: 0;
+    font-size: 15px;
+  }
 }
 
 footer#main-footer div#footer-links {
