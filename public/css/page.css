@@ -110,6 +110,14 @@ header#content-header {
 
 header#content-header h3 {
   margin: 0rem 0rem 0rem 1rem;
+  font-size: 0.85rem;
+}
+
+@media screen and (min-width: 500px) {
+  header#content-header h3 {
+    margin: 0rem 0rem 0rem 1rem;
+    font-size: 1.17rem;
+  }
 }
 
 header#content-header div.user-management {
