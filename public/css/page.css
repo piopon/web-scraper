@@ -79,6 +79,14 @@ header#main-header {
 
 header#main-header h1 {
   margin: 0;
+  font-size: 1.35rem;
+}
+
+@media screen and (min-width: 500px) {
+  header#main-header h1 {
+    margin: 0;
+    font-size: 2rem;
+  }
 }
 
 header#main-header a {
