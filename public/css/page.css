@@ -198,11 +198,23 @@ div#main-content {
 footer#main-footer {
   height: 2rem;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   position: relative;
   color: black;
   background-color: mediumslateblue;
+}
+
+@media screen and (min-width: 360px) {
+  footer#main-footer {
+    height: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    color: black;
+    background-color: mediumslateblue;
+  }
 }
 
 footer#main-footer h3 {
