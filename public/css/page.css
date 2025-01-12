@@ -87,7 +87,7 @@ header#main-header h1 {
   font-size: 1.35rem;
 }
 
-@media screen and (min-width: 500px) {
+@media screen and (min-width: 515px) {
   header#main-header h1 {
     font-size: 2rem;
   }
@@ -117,7 +117,7 @@ header#content-header h3 {
   font-size: 0.85rem;
 }
 
-@media screen and (min-width: 500px) {
+@media screen and (min-width: 515px) {
   header#content-header h3 {
     margin: 0rem 0rem 0rem 1rem;
     font-size: 1.17rem;
