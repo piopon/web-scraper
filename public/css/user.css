@@ -99,9 +99,15 @@ form.user-demo {
   position: absolute;
   color: rgb(190, 180, 255);
   font-size: 0.75rem;
-  bottom: 15px;
-  right: 50px;
+  bottom: -5px;
   width: auto;
+}
+
+@media screen and (min-width: 500px) {
+  form.user-demo {
+    bottom: 15px;
+    right: 50px;
+  }
 }
 
 form.user-demo input {
