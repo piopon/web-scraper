@@ -141,7 +141,13 @@ header#content-header div.user-management {
 div.user-management h5 {
   display: block;
   font-weight: 100;
-  margin: 0.15rem 0 0 0;
+  margin: 0 0 0 0;
+}
+
+@media screen and (min-width: 375px) {
+  div.user-management h5 {
+    margin: 0.15rem 0 0 0;
+  }
 }
 
 div.user-management form {
