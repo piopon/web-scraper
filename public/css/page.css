@@ -152,8 +152,7 @@ div.user-management form {
 }
 
 div.user-management button#user-logout {
-  height: 60%;
-  width: 4rem;
+  height: 100%;
   margin: 0rem 0rem 0rem 0.5rem;
   border: 1px solid black;
   border-radius: 0.25rem;
@@ -162,6 +161,13 @@ div.user-management button#user-logout {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+
+@media screen and (min-width: 375px) {
+  div.user-management button#user-logout {
+    height: 60%;
+    width: 4rem;
+  }
 }
 
 button#user-logout i {
