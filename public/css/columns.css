@@ -30,8 +30,14 @@
 
 .group-columns {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   text-align: center;
+}
+
+@media screen and (min-width: 650px) {
+  .group-columns {
+    flex-direction: row;
+  }
 }
 
 .group-columns.hide {
