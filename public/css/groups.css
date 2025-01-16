@@ -275,10 +275,16 @@ div.modal-close-btn.view {
 
 div.group-root-data {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   width: 40rem;
   margin: 2.5rem auto 0rem auto;
+}
+
+@media screen and (min-width: 980px) {
+  div.group-root-data {
+    flex-direction: row;
+  }
 }
 
 div.group-observers {
