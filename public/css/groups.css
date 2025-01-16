@@ -293,8 +293,14 @@ div.group-observers {
 div.group-buttons {
   display: flex;
   align-items: center;
-  width: 40rem;
+  width: calc(100% - 2rem);
   margin: 0.5rem auto 2.5rem auto;
+}
+
+@media screen and (min-width: 980px) {
+  div.group-buttons {
+    width: 40rem;
+  }
 }
 
 div.observers-title {
