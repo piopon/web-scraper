@@ -367,17 +367,17 @@ export class GroupsController {
       const columnIndex = Array.from(this.#groupColumns).indexOf(column);
       if (window.innerWidth > 650) {
         column.parentNode.style.width = `${columnSize}%`;
+        column.parentNode.style.left = `${columnSize * columnIndex}vh`;
       } else {
         column.parentNode.style.height = `${columnSize}%`;
       }
-      column.parentNode.style.left = `${columnWidth * columnIndex}vh`;
     } else {
       if (window.innerWidth > 650) {
         column.parentNode.style.width = 45;
+        column.parentNode.style.left = `${100 - NEW_GROUP_COLUMN_WIDTH}vh`;
       } else {
         column.parentNode.style.height = 45;
       }
-      column.parentNode.style.left = `${100 - NEW_GROUP_COLUMN_WIDTH}vh`;
     }
   }
 
