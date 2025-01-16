@@ -126,14 +126,16 @@ export class GroupsController {
         this.#expand(column);
         event.stopPropagation();
       });
-      column.addEventListener("mouseover", (event) => {
-        this.#showHint(column);
-        event.stopPropagation();
-      });
-      column.addEventListener("mouseout", (event) => {
-        this.#hideHint(column);
-        event.stopPropagation();
-      });
+      if(window.matchMedia("(pointer: fine)").matches) {
+        column.addEventListener("mouseover", (event) => {
+          this.#showHint(column);
+          event.stopPropagation();
+        });
+        column.addEventListener("mouseout", (event) => {
+          this.#hideHint(column);
+          event.stopPropagation();
+        });
+      }
     });
     const groupCategoryButtons = groupContainer === undefined
         ? document.querySelectorAll("input.group-category")
