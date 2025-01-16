@@ -363,7 +363,11 @@ export class GroupsController {
     if ("update" === column.dataset.action) {
       const columnWidth = (100 - NEW_GROUP_COLUMN_WIDTH) / (this.#groupColumns.length - 1);
       const columnIndex = Array.from(this.#groupColumns).indexOf(column);
-      column.parentNode.style.width = `${window.innerWidth > 650 ? columnWidth : 100}%`;
+      if (window.innerWidth > 650) {
+        column.parentNode.style.width = `${columnWidth}%`;
+      } else {
+        column.parentNode.style.height = `${columnWidth}%`;
+      }
       column.parentNode.style.left = `${columnWidth * columnIndex}vh`;
     } else {
       column.parentNode.style.width = 45;
