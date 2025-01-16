@@ -146,6 +146,7 @@
 }
 
 .group-column.collapsed {
+  height: 0;
   width: 0;
 }
 
