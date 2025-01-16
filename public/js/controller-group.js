@@ -363,12 +363,12 @@ export class GroupsController {
   #setDimension(column) {
     const NEW_GROUP_COLUMN_WIDTH = this.#groupColumns.length >= 2 ? 4 : 100;
     if ("update" === column.dataset.action) {
-      const columnWidth = (100 - NEW_GROUP_COLUMN_WIDTH) / (this.#groupColumns.length - 1);
+      const columnSize = (100 - NEW_GROUP_COLUMN_WIDTH) / (this.#groupColumns.length - 1);
       const columnIndex = Array.from(this.#groupColumns).indexOf(column);
       if (window.innerWidth > 650) {
-        column.parentNode.style.width = `${columnWidth}%`;
+        column.parentNode.style.width = `${columnSize}%`;
       } else {
-        column.parentNode.style.height = `${columnWidth}%`;
+        column.parentNode.style.height = `${columnSize}%`;
       }
       column.parentNode.style.left = `${columnWidth * columnIndex}vh`;
     } else {
