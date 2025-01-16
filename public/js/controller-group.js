@@ -370,7 +370,11 @@ export class GroupsController {
       }
       column.parentNode.style.left = `${columnWidth * columnIndex}vh`;
     } else {
-      column.parentNode.style.width = 45;
+      if (window.innerWidth > 650) {
+        column.parentNode.style.width = 45;
+      } else {
+        column.parentNode.style.height = 45;
+      }
       column.parentNode.style.left = `${100 - NEW_GROUP_COLUMN_WIDTH}vh`;
     }
   }
