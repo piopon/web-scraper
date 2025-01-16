@@ -277,13 +277,14 @@ div.group-root-data {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 40rem;
+  width: calc(100% - 2rem);
   margin: 2.5rem auto 0rem auto;
 }
 
 @media screen and (min-width: 980px) {
   div.group-root-data {
     flex-direction: row;
+    width: 40rem;
   }
 }
 
