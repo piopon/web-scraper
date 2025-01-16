@@ -370,6 +370,7 @@ export class GroupsController {
         column.parentNode.style.left = `${columnSize * columnIndex}vh`;
       } else {
         column.parentNode.style.height = `${columnSize}%`;
+        column.parentNode.style.top = `${columnSize * columnIndex}vw`;
       }
     } else {
       if (window.innerWidth > 650) {
@@ -377,6 +378,7 @@ export class GroupsController {
         column.parentNode.style.left = `${100 - NEW_GROUP_COLUMN_WIDTH}vh`;
       } else {
         column.parentNode.style.height = 45;
+        column.parentNode.style.top = `${100 - NEW_GROUP_COLUMN_WIDTH}vw`;
       }
     }
   }
