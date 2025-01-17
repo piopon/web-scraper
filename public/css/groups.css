@@ -357,7 +357,7 @@ label.group-label {
 
 .group-category {
   cursor: pointer;
-  width: 4rem;
+  width: 100%;
   height: 2rem;
   font-size: 1rem;
   color: black;
@@ -365,6 +365,12 @@ label.group-label {
   border-radius: 5px;
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
+}
+
+@media screen and (min-width: 980px) {
+  .group-category {
+    width: 4rem;
+  }
 }
 
 .group-category:hover {
@@ -395,7 +401,7 @@ dialog.group-category-dialog button {
 }
 
 .group-domain {
-  width: 22rem;
+  width: 100%;
   height: 2rem;
   font-size: 1rem;
   color: black;
@@ -403,6 +409,12 @@ dialog.group-category-dialog button {
   border-radius: 5px;
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
+}
+
+@media screen and (min-width: 980px) {
+  .group-domain {
+    width: 22rem;
+  }
 }
 
 div.group-close-btn {
