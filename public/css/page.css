@@ -61,22 +61,22 @@ div.widget {
 }
 
 div.widget:has(.group-domain) {
-  width: 80%;
+  width: 100%;
 }
 
 @media screen and (min-width: 500px) {
   div.widget:has(.group-domain) {
-    width: 100%;
+    width: 80%;
   }
 }
 
 div.widget:has(.group-category) {
-  width: 20%;
+  width: 100%;
 }
 
 @media screen and (min-width: 500px) {
   div.widget:has(.group-category) {
-    width: 100%;
+    width: 20%;
   }
 }
 
