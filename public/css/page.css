@@ -60,6 +60,14 @@ div.widget {
   padding: 0.25rem;
 }
 
+div.widget:has(.group-domain) {
+  width: 100%;
+}
+
+div.widget:has(.group-category) {
+  width: 100%;
+}
+
 .fill {
   width: 100%;
 }

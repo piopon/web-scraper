@@ -291,6 +291,7 @@ div.group-root-data {
 
 div.group-root-bend {
   display: flex;
+  width: 100%;
   flex-direction: row;
 }
 
