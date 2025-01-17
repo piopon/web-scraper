@@ -293,6 +293,7 @@ div.group-root-bend {
   display: flex;
   width: 100%;
   flex-direction: row;
+  justify-content: center;
 }
 
 div.group-observers {
