@@ -292,8 +292,14 @@ div.group-root-data {
 div.group-root-bend {
   display: flex;
   width: 100%;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
+}
+
+@media screen and (min-width: 500px) {
+  div.group-root-bend {
+    flex-direction: row;
+  }
 }
 
 div.group-observers {
