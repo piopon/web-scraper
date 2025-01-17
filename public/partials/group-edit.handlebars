@@ -4,8 +4,10 @@
     <div class="group-content">
       <div class="group-root-data">
         {{> widget type="text" parent="group" label="name" value=group.name disable=true }}
-        {{> widget type="text" parent="group" label="domain" value=group.domain }}
-        {{> widget type="button" parent="group" label="category" value=group.category }}
+        <div class="group-root-bend">
+          {{> widget type="text" parent="group" label="domain" value=group.domain }}
+          {{> widget type="button" parent="group" label="category" value=group.category }}
+        </div>
       </div>
       <div class="group-observers">
         <div class="observers-title">

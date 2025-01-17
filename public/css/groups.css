@@ -289,6 +289,11 @@ div.group-root-data {
   }
 }
 
+div.group-root-bend {
+  display: flex;
+  flex-direction: row;
+}
+
 div.group-observers {
   display: flex;
   flex-direction: column;
