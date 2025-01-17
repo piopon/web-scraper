@@ -64,8 +64,20 @@ div.widget:has(.group-domain) {
   width: 80%;
 }
 
+@media screen and (min-width: 500px) {
+  div.widget:has(.group-domain) {
+    width: 100%;
+  }
+}
+
 div.widget:has(.group-category) {
   width: 20%;
+}
+
+@media screen and (min-width: 500px) {
+  div.widget:has(.group-category) {
+    width: 100%;
+  }
 }
 
 .fill {
