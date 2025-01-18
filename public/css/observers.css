@@ -92,7 +92,7 @@ label.observer-label {
 }
 
 .observer-target {
-  width: 10rem;
+  width: 7rem;
   height: 2rem;
   font-size: 1rem;
   color: black;
@@ -100,6 +100,12 @@ label.observer-label {
   border-radius: 5px;
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
+}
+
+@media screen and (min-width: 800px) {
+  .observer-target {
+    width: 10rem;
+  }
 }
 
 .observer-history {
