@@ -44,12 +44,18 @@ div.modal-dialog div.modal-content {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 35px;
+  padding: 10px;
   background: whitesmoke;
   border: 3px solid black;
   border-radius: 0.35rem;
   height: auto;
   width: 90%;
+}
+
+@media screen and (min-height: 1000px) {
+  div.modal-dialog div.modal-content {
+    padding: 35px;
+  }
 }
 
 div.modal-dialog.init-reveal div.modal-content {
