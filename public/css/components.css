@@ -15,8 +15,14 @@ div.component-card {
   height: 15rem;
   width: 3rem;
   padding: 0.25rem;
-  flex: 0 0 3rem;
+  flex: 0 0 2rem;
   overflow: hidden;
+}
+
+@media screen and (min-height: 1000px) {
+  div.component-card {
+    flex: 0 0 3rem;
+  }
 }
 
 div.component-card[active] {
