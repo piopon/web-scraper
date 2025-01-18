@@ -34,15 +34,27 @@ div.component-card:hover {
   transition: all 0.5s ease-in-out;
   transform: rotate(-90deg) translate(-0.5rem, -2.75rem);
   transform-origin: top right;
-  font-size: 1.6rem;
+  font-size: 1rem;
   white-space: nowrap;
   display: flex;
   justify-content: flex-end;
 }
 
+@media screen and (min-height: 1000px) {
+  .card-title {
+    font-size: 1.6rem;
+  }
+}
+
 div.component-card[active] .card-title {
-  font-size: 1.5rem;
+  font-size: 1rem;
   transform: rotate(0deg) translate(-0.5rem, 0rem);
+}
+
+@media screen and (min-height: 1000px) {
+  div.component-card[active] .card-title {
+    font-size: 1.5rem;
+  }
 }
 
 div.component-content {
