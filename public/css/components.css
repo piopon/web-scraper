@@ -220,6 +220,13 @@ label.component-image-label {
   display: block;
   width: 100%;
   text-align: left;
+  font-size: 0.75rem;
+}
+
+@media screen and (min-height: 1000px) {
+  label.component-image-label {
+    font-size: 1rem;
+  }
 }
 
 .component-image-selector {
@@ -302,6 +309,13 @@ label.component-price-label {
   display: block;
   width: 100%;
   text-align: left;
+  font-size: 0.75rem;
+}
+
+@media screen and (min-height: 1000px) {
+  label.component-price-label {
+    font-size: 1rem;
+  }
 }
 
 .component-price-selector {
