@@ -108,13 +108,15 @@ export class GroupsView {
               ${group === undefined ? `<div class="id"></div>` : ""}
               <input type="text" class="group-name" name="name" value="${name}" ${disabled}/>
             </div>
-            <div class="widget">
-              <label class="group-label">domain:</label>
-              <input type="text" class="group-domain" name="domain" value="${domain}"/>
-            </div>
-            <div class="widget">
-              <label class="group-label">category:</label>
-              <input type="button" class="group-category" name="category" value="${category}"/>
+            <div class="group-root-bend">
+              <div class="widget">
+                <label class="group-label">domain:</label>
+                <input type="text" class="group-domain" name="domain" value="${domain}"/>
+              </div>
+              <div class="widget">
+                <label class="group-label">category:</label>
+                <input type="button" class="group-category" name="category" value="${category}"/>
+              </div>
             </div>`;
   }
 
