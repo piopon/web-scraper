@@ -22,8 +22,14 @@ div.modal-dialog div.modal-background {
   justify-content: center;
   height: auto;
   width: 100%;
-  padding: 1.5rem;
+  padding: 0.25rem;
   z-index: 5;
+}
+
+@media screen and (min-height: 1000px) {
+  div.modal-dialog div.modal-background {
+    padding: 1.5rem;
+  }
 }
 
 div.modal-dialog.init-reveal div.modal-background {
