@@ -12,7 +12,7 @@ div.component-card {
   z-index: 1;
   transition: all 0.5s ease-in-out;
   cursor: pointer;
-  height: 15rem;
+  height: 13rem;
   width: 3rem;
   padding: 0.25rem;
   flex: 0 0 2rem;
@@ -22,6 +22,7 @@ div.component-card {
 @media screen and (min-height: 1000px) {
   div.component-card {
     flex: 0 0 3rem;
+    height: 15rem;
   }
 }
 
