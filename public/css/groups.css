@@ -434,7 +434,13 @@ dialog.group-category-dialog form {
 }
 
 dialog.group-category-dialog button {
-  font-size: 2rem;
+  font-size: 1.5rem;
+}
+
+@media screen and (min-width: 600px) {
+  dialog.group-category-dialog button {
+    font-size: 2rem;
+  }
 }
 
 .group-domain {
