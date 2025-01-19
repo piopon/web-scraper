@@ -422,8 +422,8 @@ dialog.group-category-dialog {
 
 dialog.group-category-dialog form {
   display: grid;
-  grid-template-columns: repeat(4, 4rem);
-  grid-template-rows: repeat(8, 4rem);
+  grid-template-columns: repeat(4, 3rem);
+  grid-template-rows: repeat(8, 3rem);
   grid-gap: 0.5rem;
 }
 
