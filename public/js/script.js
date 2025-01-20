@@ -32,11 +32,15 @@ function main() {
  * Lock screen orientation
  */
 function lockOrientation() {
-  const destOrientation = window.matchMedia("(pointer: fine)") ? "landscape-primary" : "portrait-secondary";
-  window.screen.orientation
-    .lock(destOrientation)
-    .then(() => console.log(`Locked '${destOrientation}' orientation.`))
-    .catch((error) => console.warn(`Cannot lock '${destOrientation}' orientation: ${error}`));
+  if (window.screen.orientation && window.screen.orientation.lock) {
+    const destOrientation = window.matchMedia("(pointer: fine)") ? "landscape-primary" : "portrait-secondary";
+    window.screen.orientation
+      .lock(destOrientation)
+      .then(() => console.log(`Locked '${destOrientation}' orientation.`))
+      .catch((error) => console.warn(`Cannot lock '${destOrientation}' orientation: ${error}`));
+  } else {
+    console.warn("Screen orientation lock is not supported on this device.");
+  }
 }
 
 /**
