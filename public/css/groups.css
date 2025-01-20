@@ -424,13 +424,14 @@ dialog.group-category-dialog form {
   display: grid;
   grid-template-columns: repeat(4, 3rem);
   grid-template-rows: repeat(8, 3rem);
-  grid-gap: 0.5rem;
+  grid-gap: 0.25rem;
 }
 
 @media screen and (min-width: 600px) {
   dialog.group-category-dialog form {
     grid-template-columns: repeat(6, 4rem);
     grid-template-rows: repeat(5, 4rem);
+    grid-gap: 0.5rem;
   }
 }
 
