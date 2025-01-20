@@ -31,7 +31,7 @@ function main() {
 }
 
 /**
- * Lock screen orientation
+ * Method used to lock screen orientation
  */
 function lockOrientation() {
   if (window.screen.orientation && window.screen.orientation.lock) {
@@ -71,6 +71,9 @@ function initializeScraperConfig() {
   mediator.register(groupsController);
 }
 
+/**
+ * Method used to initialize JWT and store it in local storage
+ */
 async function initializeJWT() {
   if (localStorage.getItem("JWT")) {
     return;
