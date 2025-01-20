@@ -31,9 +31,12 @@ function main() {
 /**
  * Lock screen orientation
  */
-async function lockOrientation() {
+function lockOrientation() {
   const destOrientation = window.matchMedia("(pointer: fine)") ? "landscape-primary" : "portrait-secondary";
-  await window.screen.orientation.lock(destOrientation);
+  window.screen.orientation
+    .lock(destOrientation)
+    .then(() => console.log(`Locked '${destOrientation}' orientation.`))
+    .catch((error) => console.warn(`Cannot lock '${destOrientation}' orientation: ${error}`));
 }
 
 /**
