@@ -32,7 +32,8 @@ function main() {
  * Lock screen orientation
  */
 async function lockOrientation() {
-  await window.screen.orientation.lock("natural");
+  const destOrientation = window.matchMedia("(pointer: fine)") ? "landscape-primary" : "portrait-secondary";
+  await window.screen.orientation.lock(destOrientation);
 }
 
 /**
