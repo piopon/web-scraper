@@ -29,6 +29,13 @@ function main() {
 }
 
 /**
+ * Lock screen orientation
+ */
+async function lockOrientation() {
+  await window.screen.orientation.lock("natural");
+}
+
+/**
  * Method used to check if scrap groups init is needed (happens only when user opened index page)
  * @returns true when root index is opened and initialization is needed, false otherwise
  */
