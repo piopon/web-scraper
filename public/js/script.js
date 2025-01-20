@@ -10,6 +10,8 @@ main();
  * Method used to initialize script
  */
 function main() {
+  // lock screen orientation before proceeding further
+  lockOrientation();
   // initialize scrap config and receive JWT only when main index page is opened and if needed
   if (isGroupsInitializationNeeded()) {
     initializeScraperConfig();
