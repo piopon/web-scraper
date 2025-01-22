@@ -156,12 +156,13 @@ header#content-header div.user-management {
   flex-direction: column;
   align-items: center;
   height: 100%;
-  margin: 0rem 1rem 0rem 0rem;
+  margin: 0rem 0.25rem 0.25rem 0rem;
 }
 
 @media screen and (min-width: 375px) {
   header#content-header div.user-management {
     flex-direction: row;
+    margin: 0rem 1rem 0rem 0rem;
   }
 }
 
