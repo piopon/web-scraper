@@ -175,10 +175,17 @@ dialog.delete-group-dialog {
 
 dialog.delete-group-dialog form {
   display: grid;
-  grid-template-columns: repeat(2, 10rem);
-  grid-template-rows: repeat(1, 2.5rem);
+  grid-template-columns: repeat(1, 10rem);
+  grid-template-rows: repeat(2, 2.5rem);
   grid-gap: 0.5rem;
   margin: 0rem;
+}
+
+@media screen and (min-width: 550px) {
+  dialog.delete-group-dialog form {
+    grid-template-columns: repeat(2, 10rem);
+    grid-template-rows: repeat(1, 2.5rem);
+  }
 }
 
 dialog.delete-group-dialog button {
