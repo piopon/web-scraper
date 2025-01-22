@@ -95,12 +95,19 @@ div.widget:has(.group-category) {
 }
 
 header#main-header {
-  height: 5rem;
+  height: 4.25rem;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: slateblue;
 }
+
+@media screen and (min-height: 800px) {
+  header#main-header {
+    height: 5rem;
+  }
+}
+
 
 header#main-header h1 {
   margin: 0;
