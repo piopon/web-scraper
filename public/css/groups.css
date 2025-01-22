@@ -71,12 +71,18 @@ div.modal-button {
   cursor: pointer;
   padding: 5px 10px;
   text-align: center;
-  font-size: 1rem;
+  font-size: 0.75rem;
   color: black;
   background-color: #efefef;
   border: 1px solid black;
   border-radius: 5px;
   box-shadow: 2px 2px 5px black;
+}
+
+@media screen and (min-height: 800px) {
+  div.modal-button {
+    font-size: 1rem;
+  }
 }
 
 div.modal-button[disabled] {
