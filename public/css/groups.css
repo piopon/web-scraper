@@ -374,6 +374,13 @@ label.group-label {
   display: block;
   width: 100%;
   text-align: left;
+  font-size: 0.8rem;
+}
+
+@media screen and (min-height: 1000px) {
+  label.group-label {
+    font-size: 1rem;
+  }
 }
 
 .group-name {
