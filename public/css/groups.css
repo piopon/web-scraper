@@ -337,14 +337,13 @@ div.group-observers {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: calc(100% - 2rem);
   height: 100%;
   margin: 0.5rem 1rem 0rem 1rem;
 }
 
 @media screen and (min-width: 980px) {
   div.group-observers {
-    width: 40rem;
+    width: 39.5rem;
     margin: 0.5rem auto 0rem auto;
   }
 }
