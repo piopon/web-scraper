@@ -33,9 +33,15 @@ div.component-card {
 }
 
 div.component-card[active] {
-  flex: 0 0 calc(100% - 2 * 3rem - 1.3rem);
+  flex: 0 0 calc(100% - 2 * 3rem - 0.2rem);
   background-color: darkgray;
   cursor: default;
+}
+
+@media screen and (min-width: 650px) {
+  div.component-card[active] {
+    flex: 0 0 calc(100% - 2 * 3rem - 1.3rem);
+  }
 }
 
 @media screen and (min-height: 1000px) {
