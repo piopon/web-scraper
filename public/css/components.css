@@ -300,7 +300,7 @@ label.component-image-label {
 
 .component-image-auxiliary-button {
   cursor: pointer;
-  width: 100%;
+  width: 50%;
   height: 2rem;
   font-size: 0.85rem;
   color: black;
@@ -308,6 +308,12 @@ label.component-image-label {
   border-radius: 5px;
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
+}
+
+@media screen and (min-width: 550px) {
+  .component-image-auxiliary-button {
+    width: 75%;
+  }
 }
 
 .component-image-auxiliary-button:hover {
@@ -322,7 +328,7 @@ label.component-image-label {
 
 .component-image-auxiliary-submit {
   cursor: pointer;
-  width: 25%;
+  width: calc(50% - 0.5rem);
   height: 2rem;
   font-size: 0.85rem;
   color: black;
@@ -331,6 +337,12 @@ label.component-image-label {
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
   margin-left: 0.5rem;
+}
+
+@media screen and (min-width: 550px) {
+  .component-image-auxiliary-submit {
+    width: calc(25% - 0.5rem);
+  }
 }
 
 .component-image-auxiliary-submit:hover {
