@@ -190,7 +190,13 @@ div.component-toggle input[type="checkbox"]:checked + label:after {
 
 div.component-toggle p {
   margin: 0rem auto;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
+}
+
+@media screen and (min-width: 550px) {
+  div.component-toggle p {
+    font-size: 0.8rem;
+  }
 }
 
 div.component-name {
