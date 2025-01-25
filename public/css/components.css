@@ -322,8 +322,8 @@ label.component-image-label {
 .component-image-auxiliary-button {
   cursor: pointer;
   width: 50%;
-  height: 2rem;
-  font-size: 0.85rem;
+  height: 1.5rem;
+  font-size: 0.8rem;
   color: black;
   background-color: white;
   border-radius: 5px;
@@ -334,6 +334,13 @@ label.component-image-label {
 @media screen and (min-width: 550px) {
   .component-image-auxiliary-button {
     width: 75%;
+  }
+}
+
+@media screen and (min-height: 860px) {
+  .component-image-auxiliary-button {
+    height: 2rem;
+    font-size: 1rem;
   }
 }
 
@@ -350,8 +357,8 @@ label.component-image-label {
 .component-image-auxiliary-submit {
   cursor: pointer;
   width: calc(50% - 0.5rem);
-  height: 2rem;
-  font-size: 0.85rem;
+  height: 1.5rem;
+  font-size: 0.8rem;
   color: black;
   background-color: white;
   border-radius: 5px;
@@ -363,6 +370,13 @@ label.component-image-label {
 @media screen and (min-width: 550px) {
   .component-image-auxiliary-submit {
     width: calc(25% - 0.5rem);
+  }
+}
+
+@media screen and (min-height: 860px) {
+  .component-image-auxiliary-submit {
+    height: 2rem;
+    font-size: 1rem;
   }
 }
 
