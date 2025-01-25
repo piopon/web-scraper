@@ -110,7 +110,13 @@ div.component-toggle {
   justify-content: space-evenly;
   position: relative;
   box-sizing: border-box;
-  margin-top: 1.5rem;
+  margin-top: 0.25rem;
+}
+
+@media screen and (min-height: 860px) {
+  div.component-toggle {
+    margin-top: 1.5rem;
+  }
 }
 
 div.component-toggle input[type="checkbox"] {
