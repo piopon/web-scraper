@@ -18,11 +18,17 @@ div.component-card {
   z-index: 1;
   transition: all 0.5s ease-in-out;
   cursor: pointer;
-  height: 13rem;
+  height: 10.5rem;
   width: 3rem;
   padding: 0.25rem;
   flex: 0 0 2rem;
   overflow: hidden;
+}
+
+@media screen and (min-height: 860px) {
+  div.component-card {
+    height: 13rem;
+  }
 }
 
 @media screen and (min-height: 1000px) {
