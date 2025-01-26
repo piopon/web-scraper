@@ -24,7 +24,7 @@
   border-radius: 0.5rem;
   align-items: center;
   transform: translateX(100%);
-  font-size: 0.8rem;
+  font-size: 0.6rem;
   opacity: 1;
   animation: toast-move-left 0.2s linear forwards;
 }
@@ -33,6 +33,7 @@
   .toast {
     width: 15rem;
     height: 4rem;
+    font-size: 0.7rem;
   }
 }
 
@@ -40,6 +41,7 @@
   .toast {
     width: 25rem;
     height: 4rem;
+    font-size: 0.8rem;
   }
 }
 
