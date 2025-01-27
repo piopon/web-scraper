@@ -47,19 +47,19 @@ div#page {
   box-shadow: 0px 0px 50px 10px black;
 }
 
-@media screen and (min-width: 350px) {
+@media screen and (min-width: 350px) and (min-height: 750px) {
   div#page {
     margin: 0.5rem 0.5rem;
   }
 }
 
-@media screen and (min-width: 500px) {
+@media screen and (min-width: 500px) and (min-height: 750px) {
   div#page {
     margin: 2rem 2rem;
   }
 }
 
-@media screen and (min-width: 650px) {
+@media screen and (min-width: 650px) and (min-height: 750px) {
   div#page {
     margin: 3rem 3rem;
   }
