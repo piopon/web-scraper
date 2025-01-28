@@ -46,12 +46,13 @@ select.filter-component {
   border-radius: 5px;
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
-  margin-right: 0.5rem;
+  margin-right: 0.2rem;
 }
 
 @media screen and (min-width: 1150px) {
   select.filter-component {
     width: 12rem;
+    margin-right: 0.5rem;
   }
 }
 
@@ -64,12 +65,13 @@ select.filter-type {
   border-radius: 5px;
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
-  margin-right: 0.5rem;
+  margin-right: 0.2rem;
 }
 
 @media screen and (min-width: 1150px) {
   select.filter-component {
     width: 8rem;
+    margin-right: 0.5rem;
   }
 }
 
@@ -83,7 +85,14 @@ input.date-to {
   border-radius: 5px;
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
-  margin-right: 0.5rem;
+  margin-right: 0.2rem;
+}
+
+@media screen and (min-width: 1150px) {
+  input.date-from,
+  input.date-to {
+    margin-right: 0.5rem;
+  }
 }
 
 input.btn-refresh {
