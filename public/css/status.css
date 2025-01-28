@@ -87,7 +87,7 @@ input.date-to {
 }
 
 input.btn-refresh {
-  width: 10rem;
+  width: 7rem;
   height: 2rem;
   cursor: pointer;
   font-size: 1rem;
@@ -96,6 +96,12 @@ input.btn-refresh {
   border-radius: 5px;
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
+}
+
+@media screen and (min-width: 1150px) {
+  input.btn-refresh {
+    width: 10rem;
+  }
 }
 
 input.btn-refresh:hover {
