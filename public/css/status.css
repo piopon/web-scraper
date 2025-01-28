@@ -18,7 +18,7 @@ div.status-settings {
   width: 100%;
   display: none;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   flex-wrap: wrap;
   margin-bottom: 0.5rem;
 }
@@ -27,6 +27,12 @@ div.status-settings {
   div.status-settings {
     display: flex;
     flex-wrap: wrap;
+  }
+}
+
+@media screen and (min-width: 980px) {
+  div.status-settings {
+    justify-content: space-between;
   }
 }
 
