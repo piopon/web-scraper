@@ -56,7 +56,7 @@ select.filter-component {
 }
 
 select.filter-type {
-  width: 8rem;
+  width: 6rem;
   height: 2rem;
   font-size: 1rem;
   font-family: Arial, Helvetica, sans-serif;
@@ -65,6 +65,12 @@ select.filter-type {
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
   margin-right: 0.5rem;
+}
+
+@media screen and (min-width: 1150px) {
+  select.filter-component {
+    width: 8rem;
+  }
 }
 
 input.date-from,
