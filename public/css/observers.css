@@ -191,13 +191,19 @@ div.id::after {
   content: "\f071";
   color: orange;
   font-family: FontAwesome;
-  font-size: 1.5rem;
+  font-size: 1rem;
+}
+
+@media screen and (min-height: 860px) {
+  div.id::after {
+    font-size: 1.5rem;
+  }
 }
 
 div.id::before {
   content: "Immutable identifier!";
   position: absolute;
-  bottom: 0.55rem;
+  bottom: 0.1rem;
   right: 2.5rem;
   left: 0.5rem;
   display: none;
@@ -205,6 +211,12 @@ div.id::before {
   background-color: orange;
   color: white;
   border-radius: 0.25rem;
+}
+
+@media screen and (min-height: 860px) {
+  div.id::before {
+    bottom: 0.55rem;
+  }
 }
 
 div.id:hover:before {
