@@ -5,8 +5,10 @@
     <div class="group-content">
       <div class="group-root-data">
         {{> widget type="text" parent="group" label="name" id=true }}
-        {{> widget type="text" parent="group" label="domain" }}
-        {{> widget type="button" parent="group" label="category" }}
+        <div class="group-root-bend">
+          {{> widget type="text" parent="group" label="domain" }}
+          {{> widget type="button" parent="group" label="category" }}
+        </div>
       </div>
       <div class="group-observers">
         <div class="observers-title">
