@@ -38,15 +38,22 @@ div.status-settings {
 }
 
 select.filter-component {
-  width: 8rem;
+  width: 6rem;
   height: 2rem;
-  font-size: 1rem;
+  font-size: 0.8rem;
   font-family: Arial, Helvetica, sans-serif;
   background-color: white;
   border-radius: 5px;
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
   margin-right: 0.2rem;
+}
+
+@media screen and (min-width: 980px) {
+  select.filter-component {
+    width: 8rem;
+    font-size: 1rem;
+  }
 }
 
 @media screen and (min-width: 1150px) {
