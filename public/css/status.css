@@ -199,9 +199,15 @@ label.logs-label {
   display: flex;
   height: 2.5rem;
   padding: 0.25rem 0;
-  font-size: 1.25rem;
+  font-size: 0.8rem;
   background-color: gray;
   border-radius: 0.25rem 0.25rem 0 0;
+}
+
+@media screen and (min-width: 860px) {
+  #table-logs thead {
+    font-size: 1.25rem;
+  }
 }
 
 #table-logs tbody {
@@ -209,7 +215,13 @@ label.logs-label {
   flex-direction: column;
   max-height: 45vh;
   overflow-y: auto;
-  font-size: 0.75rem;
+  font-size: 0.5rem;
+}
+
+@media screen and (min-width: 860px) {
+  #table-logs tbody {
+    font-size: 0.75rem;
+  }
 }
 
 #table-logs td:nth-child(1),
