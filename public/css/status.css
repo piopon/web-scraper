@@ -69,7 +69,7 @@ select.filter-type {
 }
 
 @media screen and (min-width: 1150px) {
-  select.filter-component {
+  select.filter-type {
     width: 8rem;
     margin-right: 0.5rem;
   }
