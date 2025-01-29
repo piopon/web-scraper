@@ -63,7 +63,7 @@ select.filter-component {
 
 @media screen and (min-width: 980px) {
   select.filter-component {
-    width: 8rem;
+    width: 7rem;
     font-size: 1rem;
   }
 }
@@ -89,7 +89,7 @@ select.filter-type {
 
 @media screen and (min-width: 980px) {
   select.filter-type {
-    width: 6rem;
+    width: 5rem;
     font-size: 1rem;
   }
 }
