@@ -194,7 +194,7 @@ div.id::after {
   font-size: 1rem;
 }
 
-@media screen and (min-height: 860px) {
+@media screen and (min-height: 800px) {
   div.id::after {
     font-size: 1.5rem;
   }
@@ -213,7 +213,7 @@ div.id::before {
   border-radius: 0.25rem;
 }
 
-@media screen and (min-height: 860px) {
+@media screen and (min-height: 800px) {
   div.id::before {
     bottom: 0.55rem;
   }
