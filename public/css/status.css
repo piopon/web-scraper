@@ -117,7 +117,7 @@ input.date-to {
 @media screen and (min-width: 980px) {
   input.date-from,
   input.date-to {
-    width: 11rem;
+    width: 10rem;
     font-size: 1rem;
   }
 }
