@@ -211,7 +211,7 @@ label.logs-label {
   border-radius: 0.25rem 0.25rem 0 0;
 }
 
-@media screen and (min-width: 860px) {
+@media screen and (min-width: 980px) {
   #table-logs thead {
     font-size: 1.25rem;
   }
@@ -225,7 +225,7 @@ label.logs-label {
   font-size: 0.5rem;
 }
 
-@media screen and (min-width: 860px) {
+@media screen and (min-width: 980px) {
   #table-logs tbody {
     font-size: 0.75rem;
   }
