@@ -169,7 +169,14 @@ div#table-container {
 }
 
 label.logs-label {
+  font-size: 0.8rem;
   padding-left: 0.25rem;
+}
+
+@media screen and (min-height: 750px) {
+  label.logs-label {
+    font-size: 1rem;
+  }
 }
 
 #table-logs {
