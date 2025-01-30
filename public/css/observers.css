@@ -196,6 +196,14 @@ div.id::after {
 
 @media screen and (min-height: 800px) {
   div.id::after {
+    bottom: -0.1rem;
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (min-height: 860px) {
+  div.id::after {
+    bottom: 0.1rem;
     font-size: 1.5rem;
   }
 }
