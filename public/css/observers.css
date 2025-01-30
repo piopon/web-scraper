@@ -223,6 +223,12 @@ div.id::before {
 
 @media screen and (min-height: 800px) {
   div.id::before {
+    bottom: 0.4rem;
+  }
+}
+
+@media screen and (min-height: 860px) {
+  div.id::before {
     bottom: 0.55rem;
   }
 }
