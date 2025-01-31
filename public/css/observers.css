@@ -1,6 +1,12 @@
 div.observer-content {
-  min-width: 12rem;
+  min-width: 1rem;
   flex-grow: 1;
+}
+
+@media screen and (min-width: 375px) {
+  div.observer-content {
+    min-width: 12rem;
+  }
 }
 
 div.observer-root-data {
@@ -10,8 +16,14 @@ div.observer-root-data {
   background: darkgray;
   border: 1px solid black;
   border-radius: 0.25rem;
-  margin: 0rem 0rem 0.75rem 0rem;
+  margin: 0rem 0rem 0.25rem 0rem;
   padding: 0.5rem 0.25rem;
+}
+
+@media screen and (min-height: 1000px) {
+  div.observer-root-data {
+    margin: 0rem 0rem 0.75rem 0rem;
+  }
 }
 
 h3.observer-data-title {
@@ -19,7 +31,13 @@ h3.observer-data-title {
   justify-content: flex-end;
   margin: 0rem;
   translate: -0.5rem;
-  font-size: 1.5rem;
+  font-size: 1rem;
+}
+
+@media screen and (min-height: 1000px) {
+  h3.observer-data-title {
+    font-size: 1.5rem;
+  }
 }
 
 div.observer-data-row1 {
@@ -37,17 +55,31 @@ label.observer-label {
   display: block;
   width: 100%;
   text-align: left;
+  font-size: 0.75rem;
+}
+
+@media screen and (min-height: 1000px) {
+  label.observer-label {
+    font-size: 1rem;
+  }
 }
 
 .observer-name {
   width: 100%;
-  height: 2rem;
-  font-size: 1rem;
+  height: 1.5rem;
+  font-size: 0.8rem;
   color: black;
   background-color: white;
   border-radius: 5px;
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
+}
+
+@media screen and (min-height: 860px) {
+  .observer-name {
+    height: 2rem;
+    font-size: 1rem;
+  }
 }
 
 .observer-name:disabled {
@@ -58,30 +90,44 @@ label.observer-label {
 
 .observer-path {
   width: 100%;
-  height: 2rem;
-  font-size: 1rem;
+  height: 1.5rem;
+  font-size: 0.8rem;
   color: black;
   background-color: white;
   border-radius: 5px;
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
+}
+
+@media screen and (min-height: 860px) {
+  .observer-path {
+    height: 2rem;
+    font-size: 1rem;
+  }
 }
 
 .observer-container {
   width: 100%;
-  height: 2rem;
-  font-size: 1rem;
+  height: 1.5rem;
+  font-size: 0.8rem;
   color: black;
   background-color: white;
   border-radius: 5px;
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
+}
+
+@media screen and (min-height: 860px) {
+  .observer-container {
+    height: 2rem;
+    font-size: 1rem;
+  }
 }
 
 .observer-target {
-  width: 10rem;
-  height: 2rem;
-  font-size: 1rem;
+  width: 4rem;
+  height: 1.5rem;
+  font-size: 0.8rem;
   color: black;
   background-color: white;
   border-radius: 5px;
@@ -89,31 +135,83 @@ label.observer-label {
   box-shadow: 2px 2px 5px black;
 }
 
+@media screen and (min-width: 380px) {
+  .observer-target {
+    width: 7rem;
+  }
+}
+
+@media screen and (min-width: 800px) {
+  .observer-target {
+    width: 10rem;
+  }
+}
+
+@media screen and (min-height: 860px) {
+  .observer-target {
+    height: 2rem;
+    font-size: 1rem;
+  }
+}
+
 .observer-history {
-  width: 7rem;
-  height: 2rem;
-  font-size: 1rem;
+  width: 3rem;
+  height: 1.5rem;
+  font-size: 0.8rem;
   color: black;
   background-color: white;
   border-radius: 5px;
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
+}
+
+@media screen and (min-width: 320px) {
+  .observer-history {
+    width: 4rem;
+  }
+}
+
+@media screen and (min-width: 800px) {
+  .observer-history {
+    width: 7rem;
+  }
+}
+
+@media screen and (min-height: 860px) {
+  .observer-history {
+    height: 2rem;
+    font-size: 1rem;
+  }
 }
 
 div.id::after {
   position: absolute;
   bottom: 0.1rem;
   right: 0.6rem;
-  content: '\f071';
+  content: "\f071";
   color: orange;
   font-family: FontAwesome;
-  font-size: 1.5rem;
+  font-size: 1rem;
+}
+
+@media screen and (min-height: 800px) {
+  div.id::after {
+    bottom: -0.1rem;
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (min-height: 860px) {
+  div.id::after {
+    bottom: 0.1rem;
+    font-size: 1.5rem;
+  }
 }
 
 div.id::before {
   content: "Immutable identifier!";
   position: absolute;
-  bottom: 0.55rem;
+  bottom: 0.1rem;
   right: 2.5rem;
   left: 0.5rem;
   display: none;
@@ -121,6 +219,18 @@ div.id::before {
   background-color: orange;
   color: white;
   border-radius: 0.25rem;
+}
+
+@media screen and (min-height: 800px) {
+  div.id::before {
+    bottom: 0.4rem;
+  }
+}
+
+@media screen and (min-height: 860px) {
+  div.id::before {
+    bottom: 0.55rem;
+  }
 }
 
 div.id:hover:before {
@@ -141,10 +251,17 @@ dialog.delete-observer-dialog {
 
 dialog.delete-observer-dialog form {
   display: grid;
-  grid-template-columns: repeat(2, 10rem);
-  grid-template-rows: repeat(1, 2.5rem);
+  grid-template-columns: repeat(1, 100%);
+  grid-template-rows: repeat(2, 2.5rem);
   grid-gap: 0.5rem;
   margin: 0rem;
+}
+
+@media screen and (min-width: 550px) {
+  dialog.delete-observer-dialog form {
+    grid-template-columns: repeat(2, 10rem);
+    grid-template-rows: repeat(1, 2.5rem);
+  }
 }
 
 dialog.delete-observer-dialog button {

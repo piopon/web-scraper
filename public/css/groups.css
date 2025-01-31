@@ -22,8 +22,14 @@ div.modal-dialog div.modal-background {
   justify-content: center;
   height: auto;
   width: 100%;
-  padding: 1.5rem;
+  padding: 0.25rem;
   z-index: 5;
+}
+
+@media screen and (min-height: 1000px) {
+  div.modal-dialog div.modal-background {
+    padding: 1.5rem;
+  }
 }
 
 div.modal-dialog.init-reveal div.modal-background {
@@ -38,12 +44,18 @@ div.modal-dialog div.modal-content {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 35px;
+  padding: 10px;
   background: whitesmoke;
   border: 3px solid black;
   border-radius: 0.35rem;
   height: auto;
   width: 90%;
+}
+
+@media screen and (min-height: 1000px) {
+  div.modal-dialog div.modal-content {
+    padding: 35px;
+  }
 }
 
 div.modal-dialog.init-reveal div.modal-content {
@@ -59,12 +71,18 @@ div.modal-button {
   cursor: pointer;
   padding: 5px 10px;
   text-align: center;
-  font-size: 1rem;
+  font-size: 0.75rem;
   color: black;
   background-color: #efefef;
   border: 1px solid black;
   border-radius: 5px;
   box-shadow: 2px 2px 5px black;
+}
+
+@media screen and (min-height: 800px) {
+  div.modal-button {
+    font-size: 1rem;
+  }
 }
 
 div.modal-button[disabled] {
@@ -94,7 +112,13 @@ div.modal-dialog.hidden + div.modal-button {
 div.observer-buttons {
   display: flex;
   width: 100%;
-  margin: 0.75rem 0rem 0rem 0rem;
+  margin: 0.25rem 0rem 0rem 0rem;
+}
+
+@media screen and (min-height: 1000px) {
+  div.observer-buttons {
+    margin: 0.75rem 0rem 0rem 0rem;
+  }
 }
 
 div.modal-close-btn {
@@ -102,11 +126,17 @@ div.modal-close-btn {
   width: 50%;
   padding: 7px 0px;
   text-align: center;
-  font-size: 1rem;
+  font-size: 0.75rem;
   color: black;
   border: 1px solid black;
   border-radius: 5px;
   box-shadow: 2px 2px 5px black;
+}
+
+@media screen and (min-height: 860px) {
+  div.modal-close-btn {
+    font-size: 1rem;
+  }
 }
 
 div.modal-close-btn[disabled] {
@@ -157,10 +187,17 @@ dialog.delete-group-dialog {
 
 dialog.delete-group-dialog form {
   display: grid;
-  grid-template-columns: repeat(2, 10rem);
-  grid-template-rows: repeat(1, 2.5rem);
+  grid-template-columns: repeat(1, 100%);
+  grid-template-rows: repeat(2, 2.5rem);
   grid-gap: 0.5rem;
   margin: 0rem;
+}
+
+@media screen and (min-width: 550px) {
+  dialog.delete-group-dialog form {
+    grid-template-columns: repeat(2, 10rem);
+    grid-template-rows: repeat(1, 2.5rem);
+  }
 }
 
 dialog.delete-group-dialog button {
@@ -179,8 +216,14 @@ dialog.delete-group-dialog button:hover {
 }
 
 div.modal-close-btn.view {
-  width: 5rem;
-  min-width: 5rem;
+  width: 50%;
+}
+
+@media screen and (min-width: 650px) {
+  div.modal-close-btn.view {
+    width: 5rem;
+    min-width: 5rem;
+  }
 }
 
 .cancel {
@@ -275,26 +318,59 @@ div.modal-close-btn.view {
 
 div.group-root-data {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
-  width: 40rem;
-  margin: 2.5rem auto 0rem auto;
+  width: calc(100% - 2rem);
+  margin: 0.5rem 1rem 0rem 1rem;
+}
+
+@media screen and (min-width: 980px) {
+  div.group-root-data {
+    flex-direction: row;
+    width: 40rem;
+    margin: 2.5rem auto 0rem auto;
+  }
+}
+
+div.group-root-bend {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@media screen and (min-width: 500px) {
+  div.group-root-bend {
+    flex-direction: row;
+  }
 }
 
 div.group-observers {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 40rem;
   height: 100%;
-  margin: 0.5rem auto 0rem auto;
+  margin: 0.25rem 1.3rem 0rem 1.3rem;
+}
+
+@media screen and (min-width: 980px) {
+  div.group-observers {
+    width: 39.5rem;
+    margin: 0.5rem auto 0rem auto;
+  }
 }
 
 div.group-buttons {
   display: flex;
   align-items: center;
-  width: 40rem;
+  width: calc(100% - 2rem);
   margin: 0.5rem auto 2.5rem auto;
+}
+
+@media screen and (min-width: 980px) {
+  div.group-buttons {
+    width: 40rem;
+  }
 }
 
 div.observers-title {
@@ -315,29 +391,62 @@ label.group-label {
   display: block;
   width: 100%;
   text-align: left;
+  font-size: 0.8rem;
+}
+
+@media screen and (min-height: 1000px) {
+  label.group-label {
+    font-size: 1rem;
+  }
 }
 
 .group-name {
-  width: 13rem;
-  height: 2rem;
-  font-size: 1rem;
+  width: 100%;
+  height: 1.5rem;
+  font-size: 0.8rem;
   color: black;
   background-color: #efefef;
   border-radius: 5px;
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
+}
+
+@media screen and (min-width: 980px) {
+  .group-name {
+    width: 13rem;
+  }
+}
+
+@media screen and (min-height: 800px) {
+  .group-name {
+    height: 2rem;
+    font-size: 1rem;
+  }
 }
 
 .group-category {
   cursor: pointer;
-  width: 4rem;
-  height: 2rem;
-  font-size: 1rem;
+  width: 100%;
+  height: 1.5rem;
+  font-size: 0.8rem;
   color: black;
   background-color: #efefef;
   border-radius: 5px;
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
+}
+
+@media screen and (min-width: 980px) {
+  .group-category {
+    width: 4rem;
+  }
+}
+
+@media screen and (min-height: 800px) {
+  .group-category {
+    height: 2rem;
+    font-size: 1rem;
+  }
 }
 
 .group-category:hover {
@@ -358,19 +467,33 @@ dialog.group-category-dialog {
 
 dialog.group-category-dialog form {
   display: grid;
-  grid-template-columns: repeat(6, 4rem);
-  grid-template-rows: repeat(5, 4rem);
-  grid-gap: 0.5rem;
+  grid-template-columns: repeat(4, 3rem);
+  grid-template-rows: repeat(8, 3rem);
+  grid-gap: 0.25rem;
+}
+
+@media screen and (min-width: 600px) {
+  dialog.group-category-dialog form {
+    grid-template-columns: repeat(6, 4rem);
+    grid-template-rows: repeat(5, 4rem);
+    grid-gap: 0.5rem;
+  }
 }
 
 dialog.group-category-dialog button {
-  font-size: 2rem;
+  font-size: 1.5rem;
+}
+
+@media screen and (min-width: 600px) {
+  dialog.group-category-dialog button {
+    font-size: 2rem;
+  }
 }
 
 .group-domain {
-  width: 22rem;
-  height: 2rem;
-  font-size: 1rem;
+  width: 100%;
+  height: 1.5rem;
+  font-size: 0.8rem;
   color: black;
   background-color: #efefef;
   border-radius: 5px;
@@ -378,14 +501,33 @@ dialog.group-category-dialog button {
   box-shadow: 2px 2px 5px black;
 }
 
+@media screen and (min-width: 980px) {
+  .group-domain {
+    width: 21rem;
+  }
+}
+
+@media screen and (min-height: 800px) {
+  .group-domain {
+    height: 2rem;
+    font-size: 1rem;
+  }
+}
+
 div.group-close-btn {
   cursor: pointer;
   width: 50%;
   padding: 7px 0px;
   text-align: center;
-  font-size: 1rem;
+  font-size: 0.75rem;
   color: black;
   border: 1px solid black;
   border-radius: 5px;
   box-shadow: 2px 2px 5px black;
+}
+
+@media screen and (min-height: 800px) {
+  div.group-close-btn {
+    font-size: 1rem;
+  }
 }

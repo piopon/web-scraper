@@ -10,6 +10,8 @@ main();
  * Method used to initialize script
  */
 function main() {
+  // lock screen orientation before proceeding further
+  lockOrientation();
   // initialize scrap config and receive JWT only when main index page is opened and if needed
   if (isGroupsInitializationNeeded()) {
     initializeScraperConfig();
@@ -25,6 +27,21 @@ function main() {
       localStorage.removeItem("JWT");
       return true;
     });
+  }
+}
+
+/**
+ * Method used to lock screen orientation
+ */
+function lockOrientation() {
+  if (window.screen.orientation && window.screen.orientation.lock) {
+    const destOrientation = window.matchMedia("(pointer: fine)") ? "landscape-primary" : "portrait-secondary";
+    window.screen.orientation
+      .lock(destOrientation)
+      .then(() => console.log(`Locked '${destOrientation}' orientation.`))
+      .catch((error) => console.warn(`Cannot lock '${destOrientation}' orientation: ${error}`));
+  } else {
+    console.warn("Screen orientation lock is not supported on this device.");
   }
 }
 
@@ -54,6 +71,9 @@ function initializeScraperConfig() {
   mediator.register(groupsController);
 }
 
+/**
+ * Method used to initialize JWT and store it in local storage
+ */
 async function initializeJWT() {
   if (localStorage.getItem("JWT")) {
     return;

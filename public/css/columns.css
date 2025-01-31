@@ -7,12 +7,12 @@
 
 .group-status.hide {
   height: 0px;
-  transition: height 1.0s;
+  transition: height 1s;
 }
 
 .group-status.show {
   height: calc(100% - 2.5rem);
-  transition: height 1.0s;
+  transition: height 1s;
 }
 
 .group-status .group-loader {
@@ -30,18 +30,24 @@
 
 .group-columns {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   text-align: center;
+}
+
+@media screen and (min-width: 650px) {
+  .group-columns {
+    flex-direction: row;
+  }
 }
 
 .group-columns.hide {
   height: 0px;
-  transition: height 1.0s;
+  transition: height 1s;
 }
 
 .group-columns.show {
   height: calc(100% - 2.5rem);
-  transition: height 1.0s;
+  transition: height 1s;
 }
 
 .group-column {
@@ -140,6 +146,7 @@
 }
 
 .group-column.collapsed {
+  height: 0;
   width: 0;
 }
 
@@ -148,9 +155,21 @@
   margin: 0;
   position: relative;
   z-index: 2;
-  font-size: 3.5vw;
+  font-size: 10vw;
   background: transparent;
   transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@media screen and (min-width: 400px) {
+  .group-title {
+    font-size: 6.5vw;
+  }
+}
+
+@media screen and (min-width: 900px) {
+  .group-title {
+    font-size: 3.5vw;
+  }
 }
 
 .group-title.horizontal {

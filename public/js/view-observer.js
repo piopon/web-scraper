@@ -91,7 +91,7 @@ export class ObserversView {
                     ${ComponentsView.toHtml(ComponentsView.COMPONENT_PRICE, priceComponent)}
                   </div>
                   <div class="observer-buttons">
-                    ${ObserversView.#getObserverModalButtonsHtml(groupId, observer)};
+                    ${ObserversView.#getObserverModalButtonsHtml(groupId, observer)}
                   </div>
                 </div>
               </div>

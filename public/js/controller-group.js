@@ -126,14 +126,16 @@ export class GroupsController {
         this.#expand(column);
         event.stopPropagation();
       });
-      column.addEventListener("mouseover", (event) => {
-        this.#showHint(column);
-        event.stopPropagation();
-      });
-      column.addEventListener("mouseout", (event) => {
-        this.#hideHint(column);
-        event.stopPropagation();
-      });
+      if(window.matchMedia("(pointer: fine)").matches) {
+        column.addEventListener("mouseover", (event) => {
+          this.#showHint(column);
+          event.stopPropagation();
+        });
+        column.addEventListener("mouseout", (event) => {
+          this.#hideHint(column);
+          event.stopPropagation();
+        });
+      }
     });
     const groupCategoryButtons = groupContainer === undefined
         ? document.querySelectorAll("input.group-category")
@@ -361,13 +363,23 @@ export class GroupsController {
   #setDimension(column) {
     const NEW_GROUP_COLUMN_WIDTH = this.#groupColumns.length >= 2 ? 4 : 100;
     if ("update" === column.dataset.action) {
-      const columnWidth = (100 - NEW_GROUP_COLUMN_WIDTH) / (this.#groupColumns.length - 1);
+      const columnSize = (100 - NEW_GROUP_COLUMN_WIDTH) / (this.#groupColumns.length - 1);
       const columnIndex = Array.from(this.#groupColumns).indexOf(column);
-      column.parentNode.style.width = `${columnWidth}%`;
-      column.parentNode.style.left = `${columnWidth * columnIndex}vh`;
+      if (window.innerWidth > 650) {
+        column.parentNode.style.width = `${columnSize}%`;
+        column.parentNode.style.left = `${columnSize * columnIndex}vh`;
+      } else {
+        column.parentNode.style.height = `${columnSize}%`;
+        column.parentNode.style.top = `${columnSize * columnIndex}vw`;
+      }
     } else {
-      column.parentNode.style.width = `${NEW_GROUP_COLUMN_WIDTH}%`;
-      column.parentNode.style.left = `${100 - NEW_GROUP_COLUMN_WIDTH}vh`;
+      if (window.innerWidth > 650) {
+        column.parentNode.style.width = 45;
+        column.parentNode.style.left = `${100 - NEW_GROUP_COLUMN_WIDTH}vh`;
+      } else {
+        column.parentNode.style.height = 45;
+        column.parentNode.style.top = `${100 - NEW_GROUP_COLUMN_WIDTH}vw`;
+      }
     }
   }
 

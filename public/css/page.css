@@ -14,6 +14,13 @@ body {
   justify-content: center;
   background-color: darkgrey;
   background-image: url("../img/background/background.png");
+  margin: 0;
+}
+
+@media screen and (min-width: 350px) {
+  body {
+    margin: 0.4rem;
+  }
 }
 
 header {
@@ -27,16 +34,35 @@ header {
   display: block;
   transform: rotate(45deg);
   margin-right: 0.65rem;
+  margin-top: 0.25rem;
 }
 
 div#page {
   display: flex;
   flex-direction: column;
   width: 60rem;
-  margin: 3rem 3rem;
+  margin: 0;
   background-color: white;
   border: 2px solid black;
   box-shadow: 0px 0px 50px 10px black;
+}
+
+@media screen and (min-width: 350px) and (min-height: 750px) {
+  div#page {
+    margin: 0.5rem 0.5rem;
+  }
+}
+
+@media screen and (min-width: 500px) and (min-height: 750px) {
+  div#page {
+    margin: 2rem 2rem;
+  }
+}
+
+@media screen and (min-width: 650px) and (min-height: 750px) {
+  div#page {
+    margin: 3rem 3rem;
+  }
 }
 
 div.widget {
@@ -45,7 +71,25 @@ div.widget {
   align-items: flex-start;
   justify-content: center;
   position: relative;
-  padding: 0.25rem;
+  padding: 0.1rem 0.25rem;
+}
+
+@media screen and (min-height: 860px) {
+  div.widget {
+    padding: 0.25rem;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  div.widget:has(.group-domain) {
+    width: 80%;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  div.widget:has(.group-category) {
+    width: 20%;
+  }
 }
 
 .fill {
@@ -63,15 +107,29 @@ div.widget {
 }
 
 header#main-header {
-  height: 5rem;
+  height: 4.25rem;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
   background-color: slateblue;
+}
+
+@media screen and (min-height: 800px) {
+  header#main-header {
+    height: 5rem;
+    align-items: center;
+  }
 }
 
 header#main-header h1 {
   margin: 0;
+  font-size: 1.35rem;
+}
+
+@media screen and (min-width: 650px) {
+  header#main-header h1 {
+    font-size: 2rem;
+  }
 }
 
 header#main-header a {
@@ -94,20 +152,49 @@ header#content-header {
 }
 
 header#content-header h3 {
-  margin: 0rem 0rem 0rem 1rem;
+  margin: 0rem 0rem 0rem 0.3rem;
+  font-size: 0.85rem;
+}
+
+@media screen and (min-width: 650px) {
+  header#content-header h3 {
+    margin: 0rem 0rem 0rem 1rem;
+    font-size: 1.17rem;
+  }
 }
 
 header#content-header div.user-management {
   display: flex;
+  flex-direction: column;
   align-items: center;
   height: 100%;
-  margin: 0rem 1rem 0rem 0rem;
+  margin: 0rem 0.25rem 0.25rem 0rem;
+}
+
+@media screen and (min-width: 375px) {
+  header#content-header div.user-management {
+    flex-direction: row;
+    margin: 0rem 0.3rem 0rem 0rem;
+  }
+}
+
+@media screen and (min-width: 650px) {
+  header#content-header div.user-management {
+    flex-direction: row;
+    margin: 0rem 1rem 0rem 0rem;
+  }
 }
 
 div.user-management h5 {
   display: block;
   font-weight: 100;
-  margin: 0.15rem 0 0 0;
+  margin: 0 0 0 0;
+}
+
+@media screen and (min-width: 375px) {
+  div.user-management h5 {
+    margin: 0.15rem 0 0 0;
+  }
 }
 
 div.user-management form {
@@ -118,8 +205,7 @@ div.user-management form {
 }
 
 div.user-management button#user-logout {
-  height: 60%;
-  width: 4rem;
+  height: 100%;
   margin: 0rem 0rem 0rem 0.5rem;
   border: 1px solid black;
   border-radius: 0.25rem;
@@ -128,6 +214,13 @@ div.user-management button#user-logout {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+
+@media screen and (min-width: 375px) {
+  div.user-management button#user-logout {
+    height: 60%;
+    width: 4rem;
+  }
 }
 
 button#user-logout i {
@@ -151,16 +244,29 @@ div#main-content {
 footer#main-footer {
   height: 2rem;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   position: relative;
   color: black;
   background-color: mediumslateblue;
 }
 
+@media screen and (min-width: 500px) {
+  footer#main-footer {
+    justify-content: center;
+  }
+}
+
 footer#main-footer h3 {
-  margin: 0;
-  font-size: 15px;
+  margin: 0px 0px 0px 10px;
+  font-size: 11px;
+}
+
+@media screen and (min-width: 500px) {
+  footer#main-footer h3 {
+    margin: 0;
+    font-size: 15px;
+  }
 }
 
 footer#main-footer div#footer-links {
