@@ -25,10 +25,7 @@ jobs:
       run: npm ci
     - name: Build project
       run: npm run build --if-present
-    - name: Allow creation of user namespaces (e.g. to the unshare command)
+    - name: Disable Ubuntu's security feature
       run: |
-        # .. so that we don't get error:
-        # unshare: write failed /proc/self/uid_map: Operation not permitted
-        # Idea from https://github.com/YoYoGames/GameMaker-Bugs/issues/6015#issuecomment-2135552784 .
         sudo sysctl kernel.apparmor_restrict_unprivileged_userns=0
     - run: npm test
