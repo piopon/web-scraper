@@ -28,4 +28,5 @@ jobs:
     - name: Disable Ubuntu's security feature
       run: |
         sudo sysctl kernel.apparmor_restrict_unprivileged_userns=0
-    - run: npm test
+    - name: Run CI tests for project
+      run: npm test
