@@ -30,7 +30,7 @@ jobs:
     - name: Build project
       run: npm run build --if-present
     - name: Setting Chromium sandbox file mode to be executed as root
-      if: runner.os != 'Windows'
+      if: runner.os == 'Linux'
       run: sudo chmod 4755 /opt/google/chrome/chrome-sandbox
     - name: Run CI tests for project
       run: npm test
