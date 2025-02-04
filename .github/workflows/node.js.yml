@@ -27,7 +27,7 @@ jobs:
         cache: 'npm'
     - name: Clean install project and get needed packages
       run: npm ci
-    - name: Build project to browser executable code 
+    - name: Build project to browser executable code
       run: npm run build --if-present
     - name: Set Chromium sandbox mode to be executed as root
       if: runner.os == 'Linux'
