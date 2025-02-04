@@ -89,7 +89,7 @@ describe("start() method", () => {
     const result = await testScraper.start({ name: "test", email: "mail", config: userConfig });
     expect(result).toBe(true);
     await testScraper.stop("mail");
-  });
+  }, 10_000);
 });
 
 describe("stop() method", () => {

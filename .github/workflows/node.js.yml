@@ -12,23 +12,25 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-24.04
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
         node-version: ['18.x', '20.x', '22.x']
     steps:
-    - name: Checkout the repository
+    - name: Checkout the project repository
       uses: actions/checkout@v4
     - name: Setup Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - name: Clean install project and all packages that it depends on
+    - name: Clean install project and get needed packages
       run: npm ci
-    - name: Build project
+    - name: Build project to browser executable code
       run: npm run build --if-present
-    - name: Setting Chromium sandbox file mode to be executed as root
+    - name: Set Chromium sandbox mode to be executed as root
+      if: runner.os == 'Linux'
       run: sudo chmod 4755 /opt/google/chrome/chrome-sandbox
     - name: Run CI tests for project
       run: npm test
