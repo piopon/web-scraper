@@ -8,6 +8,7 @@ export class CommonController {
     if (enabled) {
       element.classList.add("loading");
       element.innerHTML = "";
+      element.appendChild(CommonController.htmlToElement(`<div class="button-loader loading"></div>`));
     } else {
       element.classList.remove("loading");
       element.innerHTML = element.getAttribute('data-action');
