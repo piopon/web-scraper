@@ -133,14 +133,17 @@ export class ObserversController {
    * @param {String} parentGroup The observer parent group name
    */
   #addObserver(closeButton, parentGroupId) {
+    CommonController.loadingState(closeButton, true);
     ObserversService.addObserver(parentGroupId)
       .then((data) => {
+        CommonController.loadingState(closeButton, false);
         this.#reloadObservers(parentGroupId);
         this.#hideDialog(closeButton);
         this.#clearObserverData();
         CommonController.showToastSuccess(data);
       })
       .catch((error) => {
+        CommonController.loadingState(closeButton, false);
         closeButton.classList.add("shake");
         setTimeout(() => closeButton.classList.remove("shake"), 500);
         CommonController.showToastError(error);
