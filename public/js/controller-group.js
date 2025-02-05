@@ -253,6 +253,7 @@ export class GroupsController {
    * Method used to reload observers for the specified parent group
    */
   #reloadGroups() {
+    CommonController.updateColumnsContainer(false);
     GroupsService.getGroups()
       .then((data) => {
         let html = "";
