@@ -156,13 +156,16 @@ export class ObserversController {
    * @param {String} editedObserverId The identifier of the observer to be edited
    */
   #updateObserver(closeButton, editedObserverId) {
+    CommonController.loadingState(closeButton, true);
     ObserversService.updateObserver(editedObserverId)
       .then((data) => {
+        CommonController.loadingState(closeButton, false);
         this.#hideDialog(closeButton);
         this.#clearObserverData();
         CommonController.showToastSuccess(data);
       })
       .catch((error) => {
+        CommonController.loadingState(closeButton, false);
         closeButton.classList.add("shake");
         setTimeout(() => closeButton.classList.remove("shake"), 500);
         CommonController.showToastError(error);
@@ -175,14 +178,17 @@ export class ObserversController {
    * @param {String} deletedObserverId The identifier of the observer to be removed
    */
   #deleteObserver(closeButton, deletedObserverId) {
+    CommonController.loadingState(closeButton, true);
     ObserversService.deleteObserver(deletedObserverId)
       .then((data) => {
+        CommonController.loadingState(closeButton, false);
         this.#reloadObservers(this.#expandedGroup.name);
         this.#hideDialog(closeButton);
         this.#clearObserverData();
         CommonController.showToastSuccess(data);
       })
       .catch((error) => {
+        CommonController.loadingState(closeButton, false);
         closeButton.classList.add("shake");
         setTimeout(() => closeButton.classList.remove("shake"), 500);
         CommonController.showToastError(error);
