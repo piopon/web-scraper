@@ -4,6 +4,16 @@ export class CommonController {
   static #TYPE_SUCCESS = 0;
   static #TYPE_WARNING = 1;
 
+  static loadingState(element, enabled) {
+    if (enabled) {
+      element.classList.add("loading");
+      element.innerHTML = "";
+    } else {
+      element.classList.remove("loading");
+      element.innerHTML = element.getAttribute('data-action');
+    }
+  }
+
   /**
    * Method used to find a specific group column container which has title equal to specified group name
    * @param {String} groupName The name of the group column which we want to find
