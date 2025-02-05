@@ -193,14 +193,17 @@ export class GroupsController {
    * @param {Object} closeButton The close button of added group used for collapsing UI
    */
   #addGroup(closeButton) {
+    CommonController.loadingState(closeButton, true);
     GroupsService.addGroup()
       .then((data) => {
+        CommonController.loadingState(closeButton, false);
         this.#reloadGroups();
         this.#collapse(closeButton);
         this.#cleanGroupData();
         CommonController.showToastSuccess(data);
       })
       .catch((error) => {
+        CommonController.loadingState(closeButton, false);
         closeButton.classList.add("shake");
         setTimeout(() => closeButton.classList.remove("shake"), 500);
         CommonController.showToastError(error);
