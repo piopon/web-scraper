@@ -216,13 +216,16 @@ export class GroupsController {
    * @param {String} editedGroupId The edited group identifier
    */
   #updateGroup(closeButton, editedGroupId) {
+    CommonController.loadingState(closeButton, true);
     GroupsService.updateGroup(editedGroupId)
       .then((data) => {
+        CommonController.loadingState(closeButton, false);
         this.#collapse(closeButton);
         this.#cleanGroupData();
         CommonController.showToastSuccess(data);
       })
       .catch((error) => {
+        CommonController.loadingState(closeButton, false);
         closeButton.classList.add("shake");
         setTimeout(() => closeButton.classList.remove("shake"), 500);
         CommonController.showToastError(error);
@@ -235,14 +238,17 @@ export class GroupsController {
    * @param {String} deletedGroupId The deleted group identifier
    */
   #deleteGroup(closeButton, deletedGroupId) {
+    CommonController.loadingState(closeButton, true);
     GroupsService.deleteGroup(deletedGroupId)
       .then((data) => {
+        CommonController.loadingState(closeButton, false);
         this.#reloadGroups();
         this.#collapse(closeButton);
         this.#cleanGroupData();
         CommonController.showToastSuccess(data);
       })
       .catch((error) => {
+        CommonController.loadingState(closeButton, false);
         closeButton.classList.add("shake");
         setTimeout(() => closeButton.classList.remove("shake"), 500);
         CommonController.showToastError(error);
