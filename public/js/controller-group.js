@@ -88,7 +88,7 @@ export class GroupsController {
       }
     });
     // when all styles are ready we can now show columns
-    this.#showColumnsContainer();
+    CommonController.updateColumnsContainer();
   }
 
   /**
@@ -263,18 +263,6 @@ export class GroupsController {
         this.emitEvent("groups-reloaded", undefined);
       })
       .catch((error) => CommonController.showToastError(error));
-  }
-
-  /**
-   * Method used to show whole group columns container
-   */
-  #showColumnsContainer() {
-    const columnsStatus = document.querySelector("section.group-status");
-    columnsStatus.classList.remove("show");
-    columnsStatus.classList.add("hide");
-    const columnsContainer = document.querySelector("section.group-columns");
-    columnsContainer.classList.remove("hide");
-    columnsContainer.classList.add("show");
   }
 
   /**

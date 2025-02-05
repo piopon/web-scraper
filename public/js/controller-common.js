@@ -15,6 +15,18 @@ export class CommonController {
   }
 
   /**
+   * Method used to show whole group columns container
+   */
+  static updateColumnsContainer() {
+    const columnsStatus = document.querySelector("section.group-status");
+    columnsStatus.classList.remove("show");
+    columnsStatus.classList.add("hide");
+    const columnsContainer = document.querySelector("section.group-columns");
+    columnsContainer.classList.remove("hide");
+    columnsContainer.classList.add("show");
+  }
+
+  /**
    * Method used to find a specific group column container which has title equal to specified group name
    * @param {String} groupName The name of the group column which we want to find
    * @returns Group column container with title matching the name, or undefined if no container found
