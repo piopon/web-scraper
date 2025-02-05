@@ -88,7 +88,7 @@ export class GroupsController {
       }
     });
     // when all styles are ready we can now show columns
-    CommonController.updateColumnsContainer();
+    CommonController.updateColumnsContainer(true);
   }
 
   /**

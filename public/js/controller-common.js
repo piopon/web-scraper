@@ -17,13 +17,22 @@ export class CommonController {
   /**
    * Method used to show whole group columns container
    */
-  static updateColumnsContainer() {
-    const columnsStatus = document.querySelector("section.group-status");
-    columnsStatus.classList.remove("show");
-    columnsStatus.classList.add("hide");
-    const columnsContainer = document.querySelector("section.group-columns");
-    columnsContainer.classList.remove("hide");
-    columnsContainer.classList.add("show");
+  static updateColumnsContainer(show) {
+    if (show) {
+      const columnsStatus = document.querySelector("section.group-status");
+      columnsStatus.classList.remove("show");
+      columnsStatus.classList.add("hide");
+      const columnsContainer = document.querySelector("section.group-columns");
+      columnsContainer.classList.remove("hide");
+      columnsContainer.classList.add("show");
+    } else {
+      const columnsStatus = document.querySelector("section.group-status");
+      columnsStatus.classList.remove("hide");
+      columnsStatus.classList.add("show");
+      const columnsContainer = document.querySelector("section.group-columns");
+      columnsContainer.classList.remove("show");
+      columnsContainer.classList.add("hide");
+    }
   }
 
   /**
