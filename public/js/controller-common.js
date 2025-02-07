@@ -9,7 +9,7 @@ export class CommonController {
    * @param {Element} element the HTML component which we want to update
    * @param {Boolean} enabled true if selected component should have loading state, false otherwise
    */
-  static loadingState(element, enabled) {
+  static updateElementLoadingState(element, enabled) {
     if (enabled) {
       element.innerHTML = "";
       element.appendChild(CommonController.htmlToElement(`<div class="button-loader loading"></div>`));
