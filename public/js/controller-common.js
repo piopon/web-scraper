@@ -45,7 +45,7 @@ export class CommonController {
    * @param {Element} parentGroupId the parent of the observer container which we want to update
    * @param {Boolean} enabled true if selected observer containeer should be enabled, false otherwise
    */
-  static updateObserverContainer(parentGroupId, enabled) {
+  static updateObserverContainerState(parentGroupId, enabled) {
     const group = parentGroupId ? CommonController.getGroupColumnWithName(parentGroupId) : document;
     const observerContainer = group.querySelectorAll("div.observers-container");
     observerContainer.disabled = !enabled;

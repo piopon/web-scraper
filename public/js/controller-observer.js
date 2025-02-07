@@ -204,7 +204,7 @@ export class ObserversController {
       CommonController.showToastWarning(`Cannot reload observers for ${parentGroupId} parent.`);
       return;
     }
-    CommonController.updateObserverContainer(parentGroupId, false);
+    CommonController.updateObserverContainerState(parentGroupId, false);
     ObserversService.getObservers(parentGroupId)
       .then((data) => {
         let html = "";
@@ -212,7 +212,7 @@ export class ObserversController {
         document.querySelector(".group-column.expanded")
                 .querySelector(".observers-container")
                 .innerHTML = html + ObserversView.toHtml(data[0].name);
-        CommonController.updateObserverContainer(parentGroupId, true);
+        CommonController.updateObserverContainerState(parentGroupId, true);
         this.#bindListeners(parentGroupId);
         // notify other controllers that observers were reloaded
         this.emitEvent("observers-reloaded", parentGroupId);
