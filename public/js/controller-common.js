@@ -40,6 +40,12 @@ export class CommonController {
     }
   }
 
+  static updateObserverContainer(parentGroupId, enabled) {
+    const group = parentGroupId ? CommonController.getGroupColumnWithName(parentGroupId) : document;
+    const observerContainer = group.querySelectorAll("div.observers-container");
+    observerContainer.disabled = !enabled;
+  }
+
   /**
    * Method used to find a specific group column container which has title equal to specified group name
    * @param {String} groupName The name of the group column which we want to find
