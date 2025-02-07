@@ -4,6 +4,11 @@ export class CommonController {
   static #TYPE_SUCCESS = 0;
   static #TYPE_WARNING = 1;
 
+  /**
+   * Method used to update element's loading state
+   * @param {Element} element the HTML component which we want to update
+   * @param {Boolean} enabled true if selected component should have loading state, false otherwise
+   */
   static loadingState(element, enabled) {
     if (enabled) {
       element.innerHTML = "";
@@ -15,6 +20,7 @@ export class CommonController {
 
   /**
    * Method used to show whole group columns container
+   * @param {Boolean} show true if columns container should be displayed, false otherwise
    */
   static updateColumnsContainer(show) {
     if (show) {
