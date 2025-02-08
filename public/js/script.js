@@ -96,9 +96,9 @@ function storeInitialBackendValues() {
   sessionStorage.setItem("currencies", currenciesValues);
 }
 
-document.querySelectorAll("form.user-credentials").forEach(function (form) {
+document.querySelectorAll("form.user-loader").forEach(function (form) {
   form.addEventListener("submit", function () {
-    const spinnerHtml = '<div class="button-loader loading"></div>';
+    const spinnerHtml = '<div class="user-spinner loading"></div>';
     const button = form.querySelector('[type="submit"],button:not([type="button"])');
     if (button == null) {
       return;
