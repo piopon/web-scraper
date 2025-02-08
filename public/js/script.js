@@ -95,3 +95,15 @@ function storeInitialBackendValues() {
   const currenciesValues = Array.from(currenciesOptions).map((element) => element.value);
   sessionStorage.setItem("currencies", currenciesValues);
 }
+
+document.querySelectorAll("form.user-credentials").forEach(function (form) {
+  form.addEventListener("submit", function () {
+    const spinnerHtml = '<div class="button-loader loading"></div>';
+    const button = form.querySelector('[type="submit"],button:not([type="button"])');
+    if (button == null) {
+      return;
+    }
+    button.disabled = true;
+    button.innerHTML = spinnerHtml;
+  });
+});
