@@ -47,8 +47,8 @@ export class CommonController {
    */
   static updateObserverContainerState(parentGroupId, enabled) {
     const group = parentGroupId ? CommonController.getGroupColumnWithName(parentGroupId) : document;
-    const observerContainer = group.querySelectorAll("div.observers-container");
-    observerContainer.disabled = !enabled;
+    const observerButtons = group.querySelectorAll("div.observers-container div.modal-button");
+    observerButtons.forEach(button => CommonController.enableElement(button,enabled));
   }
 
   /**
