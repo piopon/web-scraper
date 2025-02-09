@@ -28,6 +28,8 @@ function main() {
       return true;
     });
   }
+  // setup user actions forms (login, register, logout) spinner
+  initalizeUserFormsLoaders();
 }
 
 /**
@@ -94,4 +96,21 @@ function storeInitialBackendValues() {
   const currenciesOptions = priceAuxComponent.querySelectorAll("option:not([disabled])");
   const currenciesValues = Array.from(currenciesOptions).map((element) => element.value);
   sessionStorage.setItem("currencies", currenciesValues);
+}
+
+/**
+ * Method used to initialize ALL user-loader forms spinners (visible after submitting data)
+ */
+function initalizeUserFormsLoaders() {
+  document.querySelectorAll("form.user-loader").forEach(function (form) {
+    form.addEventListener("submit", function () {
+      const spinnerHtml = '<div class="user-spinner loading"></div>';
+      const button = form.querySelector('[type="submit"],button:not([type="button"])');
+      if (button == null) {
+        return;
+      }
+      button.disabled = true;
+      button.innerHTML = spinnerHtml;
+    });
+  });
 }

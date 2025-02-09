@@ -88,7 +88,7 @@ export class GroupsController {
       }
     });
     // when all styles are ready we can now show columns
-    this.#showColumnsContainer();
+    CommonController.updateColumnsContainer(true);
   }
 
   /**
@@ -193,14 +193,17 @@ export class GroupsController {
    * @param {Object} closeButton The close button of added group used for collapsing UI
    */
   #addGroup(closeButton) {
+    CommonController.updateElementLoadingState(closeButton, true);
     GroupsService.addGroup()
       .then((data) => {
+        CommonController.updateElementLoadingState(closeButton, false);
         this.#reloadGroups();
         this.#collapse(closeButton);
         this.#cleanGroupData();
         CommonController.showToastSuccess(data);
       })
       .catch((error) => {
+        CommonController.updateElementLoadingState(closeButton, false);
         closeButton.classList.add("shake");
         setTimeout(() => closeButton.classList.remove("shake"), 500);
         CommonController.showToastError(error);
@@ -213,13 +216,16 @@ export class GroupsController {
    * @param {String} editedGroupId The edited group identifier
    */
   #updateGroup(closeButton, editedGroupId) {
+    CommonController.updateElementLoadingState(closeButton, true);
     GroupsService.updateGroup(editedGroupId)
       .then((data) => {
+        CommonController.updateElementLoadingState(closeButton, false);
         this.#collapse(closeButton);
         this.#cleanGroupData();
         CommonController.showToastSuccess(data);
       })
       .catch((error) => {
+        CommonController.updateElementLoadingState(closeButton, false);
         closeButton.classList.add("shake");
         setTimeout(() => closeButton.classList.remove("shake"), 500);
         CommonController.showToastError(error);
@@ -232,14 +238,17 @@ export class GroupsController {
    * @param {String} deletedGroupId The deleted group identifier
    */
   #deleteGroup(closeButton, deletedGroupId) {
+    CommonController.updateElementLoadingState(closeButton, true);
     GroupsService.deleteGroup(deletedGroupId)
       .then((data) => {
+        CommonController.updateElementLoadingState(closeButton, false);
         this.#reloadGroups();
         this.#collapse(closeButton);
         this.#cleanGroupData();
         CommonController.showToastSuccess(data);
       })
       .catch((error) => {
+        CommonController.updateElementLoadingState(closeButton, false);
         closeButton.classList.add("shake");
         setTimeout(() => closeButton.classList.remove("shake"), 500);
         CommonController.showToastError(error);
@@ -250,6 +259,7 @@ export class GroupsController {
    * Method used to reload observers for the specified parent group
    */
   #reloadGroups() {
+    CommonController.updateColumnsContainer(false);
     GroupsService.getGroups()
       .then((data) => {
         let html = "";
@@ -260,18 +270,6 @@ export class GroupsController {
         this.emitEvent("groups-reloaded", undefined);
       })
       .catch((error) => CommonController.showToastError(error));
-  }
-
-  /**
-   * Method used to show whole group columns container
-   */
-  #showColumnsContainer() {
-    const columnsStatus = document.querySelector("section.group-status");
-    columnsStatus.classList.remove("show");
-    columnsStatus.classList.add("hide");
-    const columnsContainer = document.querySelector("section.group-columns");
-    columnsContainer.classList.remove("hide");
-    columnsContainer.classList.add("show");
   }
 
   /**

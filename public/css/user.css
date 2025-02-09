@@ -89,6 +89,14 @@ button.user-action i {
   margin-right: 0.35rem;
 }
 
+.user-spinner {
+  height: 14px;
+  width: 14px;
+  border: 4px solid black;
+  border-top: 4px solid transparent;
+  border-radius: 100%;
+}
+
 div.user-switch {
   margin: 0 auto;
   color: black;

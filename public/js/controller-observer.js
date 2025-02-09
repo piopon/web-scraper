@@ -133,14 +133,17 @@ export class ObserversController {
    * @param {String} parentGroup The observer parent group name
    */
   #addObserver(closeButton, parentGroupId) {
+    CommonController.updateElementLoadingState(closeButton, true);
     ObserversService.addObserver(parentGroupId)
       .then((data) => {
+        CommonController.updateElementLoadingState(closeButton, false);
         this.#reloadObservers(parentGroupId);
         this.#hideDialog(closeButton);
         this.#clearObserverData();
         CommonController.showToastSuccess(data);
       })
       .catch((error) => {
+        CommonController.updateElementLoadingState(closeButton, false);
         closeButton.classList.add("shake");
         setTimeout(() => closeButton.classList.remove("shake"), 500);
         CommonController.showToastError(error);
@@ -153,13 +156,16 @@ export class ObserversController {
    * @param {String} editedObserverId The identifier of the observer to be edited
    */
   #updateObserver(closeButton, editedObserverId) {
+    CommonController.updateElementLoadingState(closeButton, true);
     ObserversService.updateObserver(editedObserverId)
       .then((data) => {
+        CommonController.updateElementLoadingState(closeButton, false);
         this.#hideDialog(closeButton);
         this.#clearObserverData();
         CommonController.showToastSuccess(data);
       })
       .catch((error) => {
+        CommonController.updateElementLoadingState(closeButton, false);
         closeButton.classList.add("shake");
         setTimeout(() => closeButton.classList.remove("shake"), 500);
         CommonController.showToastError(error);
@@ -172,14 +178,17 @@ export class ObserversController {
    * @param {String} deletedObserverId The identifier of the observer to be removed
    */
   #deleteObserver(closeButton, deletedObserverId) {
+    CommonController.updateElementLoadingState(closeButton, true);
     ObserversService.deleteObserver(deletedObserverId)
       .then((data) => {
+        CommonController.updateElementLoadingState(closeButton, false);
         this.#reloadObservers(this.#expandedGroup.name);
         this.#hideDialog(closeButton);
         this.#clearObserverData();
         CommonController.showToastSuccess(data);
       })
       .catch((error) => {
+        CommonController.updateElementLoadingState(closeButton, false);
         closeButton.classList.add("shake");
         setTimeout(() => closeButton.classList.remove("shake"), 500);
         CommonController.showToastError(error);
@@ -195,6 +204,7 @@ export class ObserversController {
       CommonController.showToastWarning(`Cannot reload observers for ${parentGroupId} parent.`);
       return;
     }
+    CommonController.updateObserverContainerState(parentGroupId, false);
     ObserversService.getObservers(parentGroupId)
       .then((data) => {
         let html = "";
@@ -202,6 +212,7 @@ export class ObserversController {
         document.querySelector(".group-column.expanded")
                 .querySelector(".observers-container")
                 .innerHTML = html + ObserversView.toHtml(data[0].name);
+        CommonController.updateObserverContainerState(parentGroupId, true);
         this.#bindListeners(parentGroupId);
         // notify other controllers that observers were reloaded
         this.emitEvent("observers-reloaded", parentGroupId);

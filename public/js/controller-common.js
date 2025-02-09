@@ -5,6 +5,53 @@ export class CommonController {
   static #TYPE_WARNING = 1;
 
   /**
+   * Method used to update element's loading state
+   * @param {Element} element the HTML component which we want to update
+   * @param {Boolean} enabled true if selected component should have loading state, false otherwise
+   */
+  static updateElementLoadingState(element, enabled) {
+    if (enabled) {
+      element.innerHTML = "";
+      element.appendChild(CommonController.htmlToElement(`<div class="button-loader loading"></div>`));
+    } else {
+      element.innerHTML = element.getAttribute('data-action');
+    }
+  }
+
+  /**
+   * Method used to show whole group columns container
+   * @param {Boolean} show true if columns container should be displayed, false otherwise
+   */
+  static updateColumnsContainer(show) {
+    if (show) {
+      const columnsStatus = document.querySelector("section.group-status");
+      columnsStatus.classList.remove("show");
+      columnsStatus.classList.add("hide");
+      const columnsContainer = document.querySelector("section.group-columns");
+      columnsContainer.classList.remove("hide");
+      columnsContainer.classList.add("show");
+    } else {
+      const columnsStatus = document.querySelector("section.group-status");
+      columnsStatus.classList.remove("hide");
+      columnsStatus.classList.add("show");
+      const columnsContainer = document.querySelector("section.group-columns");
+      columnsContainer.classList.remove("show");
+      columnsContainer.classList.add("hide");
+    }
+  }
+
+  /**
+   * Method used to change observer container enabled state
+   * @param {Element} parentGroupId the parent of the observer container which we want to update
+   * @param {Boolean} enabled true if selected observer containeer should be enabled, false otherwise
+   */
+  static updateObserverContainerState(parentGroupId, enabled) {
+    const group = parentGroupId ? CommonController.getGroupColumnWithName(parentGroupId) : document;
+    const observerButtons = group.querySelectorAll("div.observers-container div.modal-button");
+    observerButtons.forEach(button => CommonController.enableElement(button,enabled));
+  }
+
+  /**
    * Method used to find a specific group column container which has title equal to specified group name
    * @param {String} groupName The name of the group column which we want to find
    * @returns Group column container with title matching the name, or undefined if no container found
