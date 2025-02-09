@@ -28,6 +28,8 @@ function main() {
       return true;
     });
   }
+  // setup user actions forms (login, register, logout) spinner
+  initalizeUserFormsLoaders();
 }
 
 /**
@@ -96,14 +98,16 @@ function storeInitialBackendValues() {
   sessionStorage.setItem("currencies", currenciesValues);
 }
 
-document.querySelectorAll("form.user-loader").forEach(function (form) {
-  form.addEventListener("submit", function () {
-    const spinnerHtml = '<div class="user-spinner loading"></div>';
-    const button = form.querySelector('[type="submit"],button:not([type="button"])');
-    if (button == null) {
-      return;
-    }
-    button.disabled = true;
-    button.innerHTML = spinnerHtml;
+function initalizeUserFormsLoaders() {
+  document.querySelectorAll("form.user-loader").forEach(function (form) {
+    form.addEventListener("submit", function () {
+      const spinnerHtml = '<div class="user-spinner loading"></div>';
+      const button = form.querySelector('[type="submit"],button:not([type="button"])');
+      if (button == null) {
+        return;
+      }
+      button.disabled = true;
+      button.innerHTML = spinnerHtml;
+    });
   });
-});
+}
