@@ -372,10 +372,10 @@ export class GroupsController {
       }
     } else {
       if (window.innerWidth > 650) {
-        column.parentNode.style.width = 45;
+        column.parentNode.style.width = this.#groupColumns.length >= 2 ? 45 : "100%";
         column.parentNode.style.left = `${100 - NEW_GROUP_COLUMN_WIDTH}vh`;
       } else {
-        column.parentNode.style.height = 45;
+        column.parentNode.style.height = this.#groupColumns.length >= 2 ? 45 : "100%";
         column.parentNode.style.top = `${100 - NEW_GROUP_COLUMN_WIDTH}vw`;
       }
     }
