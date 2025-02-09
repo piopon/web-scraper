@@ -98,6 +98,9 @@ function storeInitialBackendValues() {
   sessionStorage.setItem("currencies", currenciesValues);
 }
 
+/**
+ * Method used to initialize ALL user-loader forms spinners (visible after submitting data)
+ */
 function initalizeUserFormsLoaders() {
   document.querySelectorAll("form.user-loader").forEach(function (form) {
     form.addEventListener("submit", function () {
