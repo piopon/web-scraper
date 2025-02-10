@@ -1,7 +1,7 @@
 meta {
-  name: get_data-invalid
+  name: get_data-unauthorized
   type: http
-  seq: 2
+  seq: 1
 }
 
 get {
@@ -16,15 +16,7 @@ params:query {
 
 tests {
   test("data is correctly received", function() {
-    expect(res.getStatus()).to.equal(400);
-  });
-
-  test("data received JSON data", function() {
-    expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
-  });
-
-  test("data has correct content length", function() {
-    expect(res.getHeader("content-length")).to.equal("29");
+    expect(res.getStatus()).to.equal(401);
   });
 
   test("data has correct top-level structure", function() {
@@ -34,6 +26,6 @@ tests {
 
   test("data has correct top-level value", function() {
     const data = res.getBody();
-    expect(data).to.equal("Invalid data owner provided");
+    expect(data).to.equal("Unauthorized");
   });
 }

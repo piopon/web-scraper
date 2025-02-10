@@ -1,13 +1,21 @@
 meta {
   name: get_data-error
   type: http
-  seq: 1
+  seq: 2
 }
 
 get {
-  url: http://localhost:5000/api/v1/data
+  url: http://localhost:5000/api/v1/data?owner=unknown
   body: none
-  auth: none
+  auth: bearer
+}
+
+params:query {
+  owner: unknown
+}
+
+auth:bearer {
+  token: {{demo-token}}
 }
 
 tests {
@@ -20,7 +28,7 @@ tests {
   });
 
   test("data has correct content length", function() {
-    expect(res.getHeader("content-length")).to.equal("153");
+    expect(res.getHeader("content-length")).to.equal("180");
   });
 
   test("data has correct top-level structure", function() {
@@ -53,9 +61,9 @@ tests {
   test("data has correct element values", function() {
     const data = res.getBody();
     expect(data[0].instancePath).to.equal("");
-    expect(data[0].schemaPath).to.equal("#/required");
-    expect(data[0].keyword).to.equal("required");
-    expect(data[0].params).to.deep.equal({missingProperty: "owner"});
-    expect(data[0].message).to.equal("must have required property 'owner'");
+    expect(data[0].schemaPath).to.equal("#/additionalProperties");
+    expect(data[0].keyword).to.equal("additionalProperties");
+    expect(data[0].params).to.deep.equal({additionalProperty: "owner"});
+    expect(data[0].message).to.equal("must NOT have additional properties");
   });
 }
