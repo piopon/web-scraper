@@ -5,14 +5,17 @@ meta {
 }
 
 get {
-  url: http://localhost:5000/api/v1/data?owner=bruno@test.ci&category=📈
+  url: http://localhost:5000/api/v1/data?category=📈
   body: none
-  auth: none
+  auth: bearer
 }
 
 params:query {
-  owner: bruno@test.ci
   category: 📈
+}
+
+auth:bearer {
+  token: {{demo-token}}
 }
 
 tests {
