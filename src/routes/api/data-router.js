@@ -1,3 +1,5 @@
+import { AccessChecker } from "../../middleware/access-checker.js";
+
 import Ajv from "ajv";
 import express from "express";
 import fs from "fs";
@@ -21,7 +23,7 @@ export class DataRouter {
   createRoutes() {
     const router = express.Router();
     // create endpoint for receiving data according specified query param filters
-    router.get("/", (request, response) => {
+    router.get("/", AccessChecker.canReceiveData, (request, response) => {
       const validationResult = this.#validateQueryParams(request.query);
       if (!validationResult.valid) {
         response.status(400).json(validationResult.cause);
