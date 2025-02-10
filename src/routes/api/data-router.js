@@ -4,6 +4,7 @@ import Ajv from "ajv";
 import express from "express";
 import fs from "fs";
 import path from "path";
+import jwt from "jsonwebtoken";
 
 export class DataRouter {
   #dataFileConfig = undefined;
@@ -29,7 +30,9 @@ export class DataRouter {
         response.status(400).json(validationResult.cause);
         return;
       }
-      const userPath = path.join(this.#dataFileConfig.path, request.query.owner, this.#dataFileConfig.file);
+      const token = request.headers["authorization"].split(" ")[1];
+      const user = jwt.verify(token, process.env.JWT_SECRET);
+      const userPath = path.join(this.#dataFileConfig.path, user.email, this.#dataFileConfig.file);
       if (!fs.existsSync(userPath)) {
         response.status(400).json(`Invalid data owner provided`);
         return;
