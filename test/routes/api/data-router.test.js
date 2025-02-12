@@ -11,7 +11,8 @@ import fs from "fs";
 import { jest } from "@jest/globals";
 import { Strategy } from "passport-local";
 
-const testDataPath = "./owner@test.com/data.json";
+const testOwner = "owner@test.com";
+const testDataPath = `./${testOwner}/data.json`;
 
 jest.mock("jsonwebtoken");
 
@@ -45,7 +46,7 @@ describe("createRoutes() method", () => {
 
 describe("created data GET routes", () => {
   const testConfig = { path: path.parse(testDataPath).root, file: "data.json" };
-  jest.spyOn(jsonwebtoken, "verify").mockReturnValue({ email: "owner@test.com" });
+  jest.spyOn(jsonwebtoken, "verify").mockReturnValue({ email: testOwner });
   // configue test express app server
   const testApp = express();
   testApp.use(express.json());
@@ -58,7 +59,7 @@ describe("created data GET routes", () => {
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
   beforeAll(async () => {
-    const mockAuth = { mail: "owner@test.com", pass: "test-secret" };
+    const mockAuth = { mail: testOwner, pass: "test-secret" };
     await testAgent.post("/auth/login").send(mockAuth);
   });
   test("returns correct result for unknown path", async () => {
