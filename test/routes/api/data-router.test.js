@@ -46,7 +46,6 @@ describe("createRoutes() method", () => {
 
 describe("created data GET routes", () => {
   const testConfig = { path: path.parse(testDataPath).root, file: "data.json" };
-  jest.spyOn(jsonwebtoken, "verify").mockReturnValue({ email: testOwner });
   // configue test express app server
   const testApp = express();
   testApp.use(express.json());
@@ -70,6 +69,7 @@ describe("created data GET routes", () => {
     it.each([
       [
         "query has invalid structure",
+        testOwner,
         { unknown: "status" },
         {
           status: 400,
@@ -86,6 +86,7 @@ describe("created data GET routes", () => {
       ],
       [
         "query is empty",
+        testOwner,
         {},
         {
           status: 200,
@@ -276,8 +277,11 @@ describe("created data GET routes", () => {
       //     response: [],
       //   },
       // ],
-    ])("%s", async (_, inputQuery, expected) => {
+    ])("%s", async (_, mockOwner, inputQuery, expected) => {
+      // prepare JWT authentication mock
       testAgent.set({ Authorization: `Token JWT-MOCKED-TOKEN` });
+      jest.spyOn(jsonwebtoken, "verify").mockReturnValue({ email: mockOwner });
+      // send request and check response
       const response = await testAgent.get("/data").query(inputQuery);
       expect(response.statusCode).toBe(expected.status);
       expect(response.body).toStrictEqual(expected.response);
