@@ -4,12 +4,16 @@ import supertest from "supertest";
 import passport from "passport";
 import express from "express";
 import session from "express-session";
+import jsonwebtoken from "jsonwebtoken";
 import path from "path";
 import fs from "fs";
 
+import { jest } from "@jest/globals";
 import { Strategy } from "passport-local";
 
 const testDataPath = "./owner@test.com/data.json";
+
+jest.mock("jsonwebtoken");
 
 beforeAll(() => {
   createDataFile(testDataPath);
@@ -41,6 +45,7 @@ describe("createRoutes() method", () => {
 
 describe("created data GET routes", () => {
   const testConfig = { path: path.parse(testDataPath).root, file: "data.json" };
+  jest.spyOn(jsonwebtoken, "verify").mockReturnValue({ email: "owner@test.com" });
   // configue test express app server
   const testApp = express();
   testApp.use(express.json());
