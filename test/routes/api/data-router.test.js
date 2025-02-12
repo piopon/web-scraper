@@ -39,9 +39,15 @@ describe("created data GET routes", () => {
   const testConfig = { path: path.parse(testDataPath).root, file: "data.json" };
   // configue test express app server
   const testApp = express();
+  testApp.use(express.json());
+  testApp.use(express.urlencoded({ extended: false }));
+  testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
+  testApp.use(passport.initialize());
+  testApp.use(passport.session());
   testApp.use("/data", new DataRouter(testConfig).createRoutes());
-  // create test client to call server requests
-  const testClient = supertest(testApp);
+  testApp.use("/auth", createMockAuthRouter());
+  // retrieve underlying superagent to correctly persist sessions
+  const testAgent = supertest.agent(testApp);
   test("returns correct result for unknown path", async () => {
     const response = await testClient.get("/data/unknown");
     expect(response.statusCode).toBe(404);
@@ -244,6 +250,20 @@ describe("created data GET routes", () => {
     });
   });
 });
+
+function createMockAuthRouter() {
+  const router = express.Router();
+  const configId = 123;
+  // configure mocked login logic
+  const options = { usernameField: "mail", passwordField: "pass" };
+  const verify = (_user, _pass, done) => done(null, { id: 1, config: configId });
+  passport.use("mock-login", new Strategy(options, verify));
+  passport.serializeUser((user, done) => done(null, user.id));
+  passport.deserializeUser((userId, done) => done(null, { id: userId, config: configId }));
+  // use passport mock login in tests
+  router.post("/login", passport.authenticate("mock-login"));
+  return router;
+}
 
 function createDataFile(filePath) {
   try {
