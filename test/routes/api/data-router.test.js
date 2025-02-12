@@ -57,7 +57,7 @@ describe("created data GET routes", () => {
     await testAgent.post("/auth/login").send(mockAuth);
   });
   test("returns correct result for unknown path", async () => {
-    const response = await testClient.get("/data/unknown");
+    const response = await testAgent.get("/data/unknown");
     expect(response.statusCode).toBe(404);
   });
   describe("returns correct result using /data endpoint when", () => {
@@ -252,7 +252,7 @@ describe("created data GET routes", () => {
       //   },
       // ],
     ])("%s", async (_, inputQuery, expected) => {
-      const response = await testClient.get("/data").query(inputQuery);
+      const response = await testAgent.get("/data").query(inputQuery);
       expect(response.statusCode).toBe(expected.status);
       expect(response.body).toStrictEqual(expected.response);
     });
