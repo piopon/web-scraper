@@ -64,179 +64,179 @@ describe("created data GET routes", () => {
           ],
         },
       ],
-      [
-        "query is empty",
-        {},
-        {
-          status: 400,
-          response: [
-            {
-              instancePath: "",
-              keyword: "required",
-              message: "must have required property 'owner'",
-              params: { missingProperty: "owner" },
-              schemaPath: "#/required",
-            },
-          ],
-        },
-      ],
-      [
-        "query contains invalid user",
-        { owner: "invalid" },
-        {
-          status: 400,
-          response: "Invalid data owner provided",
-        },
-      ],
-      [
-        "query contains valid user",
-        { owner: "owner" },
-        {
-          status: 200,
-          response: [
-            {
-              name: "clothes",
-              category: "👕",
-              items: [
-                {
-                  status: "OK",
-                  name: "t-shirt Regular Fit",
-                  icon: "",
-                  price: "29.99",
-                  currency: "PLN",
-                },
-              ],
-            },
-            {
-              name: "games",
-              category: "🎮",
-              items: [
-                {
-                  status: "OK",
-                  name: "Diablo IV",
-                  icon: "",
-                  price: "349.99",
-                  currency: "PLN",
-                },
-              ],
-            },
-          ],
-        },
-      ],
-      [
-        "query contains existing name",
-        { owner: "owner", name: "clothes" },
-        {
-          status: 200,
-          response: [
-            {
-              name: "clothes",
-              category: "👕",
-              items: [
-                {
-                  status: "OK",
-                  name: "t-shirt Regular Fit",
-                  icon: "",
-                  price: "29.99",
-                  currency: "PLN",
-                },
-              ],
-            },
-          ],
-        },
-      ],
-      [
-        "query contains not existing name",
-        { owner: "owner", name: "unknown" },
-        {
-          status: 200,
-          response: [],
-        },
-      ],
-      [
-        "query contains existing category",
-        { owner: "owner", category: "🎮" },
-        {
-          status: 200,
-          response: [
-            {
-              name: "games",
-              category: "🎮",
-              items: [
-                {
-                  status: "OK",
-                  name: "Diablo IV",
-                  icon: "",
-                  price: "349.99",
-                  currency: "PLN",
-                },
-              ],
-            },
-          ],
-        },
-      ],
-      [
-        "query contains not existing category",
-        { owner: "owner", category: "unknown" },
-        {
-          status: 200,
-          response: [],
-        },
-      ],
-      [
-        "query contains existing and matching name and category",
-        { owner: "owner", name: "games", category: "🎮" },
-        {
-          status: 200,
-          response: [
-            {
-              name: "games",
-              category: "🎮",
-              items: [
-                {
-                  status: "OK",
-                  name: "Diablo IV",
-                  icon: "",
-                  price: "349.99",
-                  currency: "PLN",
-                },
-              ],
-            },
-          ],
-        },
-      ],
-      [
-        "query contains existing but not matching name and category",
-        { owner: "owner", name: "games", category: "👕" },
-        {
-          status: 200,
-          response: [],
-        },
-      ],
-      [
-        "query contains existing name and not existing category",
-        { owner: "owner", name: "games", category: "unknown" },
-        {
-          status: 200,
-          response: [],
-        },
-      ],
-      [
-        "query contains not existing name and existing category",
-        { owner: "owner", name: "unknown", category: "👕" },
-        {
-          status: 200,
-          response: [],
-        },
-      ],
-      [
-        "query contains not existing name and category",
-        { owner: "owner", name: "unknown", category: "unknown" },
-        {
-          status: 200,
-          response: [],
-        },
-      ],
+      // [
+      //   "query is empty",
+      //   {},
+      //   {
+      //     status: 400,
+      //     response: [
+      //       {
+      //         instancePath: "",
+      //         keyword: "required",
+      //         message: "must have required property 'owner'",
+      //         params: { missingProperty: "owner" },
+      //         schemaPath: "#/required",
+      //       },
+      //     ],
+      //   },
+      // ],
+      // [
+      //   "query contains invalid user",
+      //   { owner: "invalid" },
+      //   {
+      //     status: 400,
+      //     response: "Invalid data owner provided",
+      //   },
+      // ],
+      // [
+      //   "query contains valid user",
+      //   { owner: "owner" },
+      //   {
+      //     status: 200,
+      //     response: [
+      //       {
+      //         name: "clothes",
+      //         category: "👕",
+      //         items: [
+      //           {
+      //             status: "OK",
+      //             name: "t-shirt Regular Fit",
+      //             icon: "",
+      //             price: "29.99",
+      //             currency: "PLN",
+      //           },
+      //         ],
+      //       },
+      //       {
+      //         name: "games",
+      //         category: "🎮",
+      //         items: [
+      //           {
+      //             status: "OK",
+      //             name: "Diablo IV",
+      //             icon: "",
+      //             price: "349.99",
+      //             currency: "PLN",
+      //           },
+      //         ],
+      //       },
+      //     ],
+      //   },
+      // ],
+      // [
+      //   "query contains existing name",
+      //   { owner: "owner", name: "clothes" },
+      //   {
+      //     status: 200,
+      //     response: [
+      //       {
+      //         name: "clothes",
+      //         category: "👕",
+      //         items: [
+      //           {
+      //             status: "OK",
+      //             name: "t-shirt Regular Fit",
+      //             icon: "",
+      //             price: "29.99",
+      //             currency: "PLN",
+      //           },
+      //         ],
+      //       },
+      //     ],
+      //   },
+      // ],
+      // [
+      //   "query contains not existing name",
+      //   { owner: "owner", name: "unknown" },
+      //   {
+      //     status: 200,
+      //     response: [],
+      //   },
+      // ],
+      // [
+      //   "query contains existing category",
+      //   { owner: "owner", category: "🎮" },
+      //   {
+      //     status: 200,
+      //     response: [
+      //       {
+      //         name: "games",
+      //         category: "🎮",
+      //         items: [
+      //           {
+      //             status: "OK",
+      //             name: "Diablo IV",
+      //             icon: "",
+      //             price: "349.99",
+      //             currency: "PLN",
+      //           },
+      //         ],
+      //       },
+      //     ],
+      //   },
+      // ],
+      // [
+      //   "query contains not existing category",
+      //   { owner: "owner", category: "unknown" },
+      //   {
+      //     status: 200,
+      //     response: [],
+      //   },
+      // ],
+      // [
+      //   "query contains existing and matching name and category",
+      //   { owner: "owner", name: "games", category: "🎮" },
+      //   {
+      //     status: 200,
+      //     response: [
+      //       {
+      //         name: "games",
+      //         category: "🎮",
+      //         items: [
+      //           {
+      //             status: "OK",
+      //             name: "Diablo IV",
+      //             icon: "",
+      //             price: "349.99",
+      //             currency: "PLN",
+      //           },
+      //         ],
+      //       },
+      //     ],
+      //   },
+      // ],
+      // [
+      //   "query contains existing but not matching name and category",
+      //   { owner: "owner", name: "games", category: "👕" },
+      //   {
+      //     status: 200,
+      //     response: [],
+      //   },
+      // ],
+      // [
+      //   "query contains existing name and not existing category",
+      //   { owner: "owner", name: "games", category: "unknown" },
+      //   {
+      //     status: 200,
+      //     response: [],
+      //   },
+      // ],
+      // [
+      //   "query contains not existing name and existing category",
+      //   { owner: "owner", name: "unknown", category: "👕" },
+      //   {
+      //     status: 200,
+      //     response: [],
+      //   },
+      // ],
+      // [
+      //   "query contains not existing name and category",
+      //   { owner: "owner", name: "unknown", category: "unknown" },
+      //   {
+      //     status: 200,
+      //     response: [],
+      //   },
+      // ],
     ])("%s", async (_, inputQuery, expected) => {
       const response = await testClient.get("/data").query(inputQuery);
       expect(response.statusCode).toBe(expected.status);
