@@ -9,7 +9,7 @@ import fs from "fs";
 
 import { Strategy } from "passport-local";
 
-const testDataPath = "./owner/data.json";
+const testDataPath = "./owner@test.com/data.json";
 
 beforeAll(() => {
   createDataFile(testDataPath);
@@ -53,7 +53,7 @@ describe("created data GET routes", () => {
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
   beforeAll(async () => {
-    const mockAuth = { mail: "owner", pass: "test-secret" };
+    const mockAuth = { mail: "owner@test.com", pass: "test-secret" };
     await testAgent.post("/auth/login").send(mockAuth);
   });
   test("returns correct result for unknown path", async () => {
