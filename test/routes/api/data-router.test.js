@@ -48,6 +48,10 @@ describe("created data GET routes", () => {
   testApp.use("/auth", createMockAuthRouter());
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
+  beforeAll(async () => {
+    const mockAuth = { mail: "owner", pass: "test-secret" };
+    await testAgent.post("/auth/login").send(mockAuth);
+  });
   test("returns correct result for unknown path", async () => {
     const response = await testClient.get("/data/unknown");
     expect(response.statusCode).toBe(404);
