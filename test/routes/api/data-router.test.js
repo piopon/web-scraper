@@ -70,10 +70,10 @@ describe("created data GET routes", () => {
           response: [
             {
               instancePath: "",
-              keyword: "required",
-              message: "must have required property 'owner'",
-              params: { missingProperty: "owner" },
-              schemaPath: "#/required",
+              keyword: "additionalProperties",
+              message: "must NOT have additional properties",
+              params: { additionalProperty: "unknown" },
+              schemaPath: "#/additionalProperties",
             },
           ],
         },
