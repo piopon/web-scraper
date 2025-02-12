@@ -271,6 +271,7 @@ describe("created data GET routes", () => {
       //   },
       // ],
     ])("%s", async (_, inputQuery, expected) => {
+      testAgent.set({ Authorization: `Token JWT-MOCKED-TOKEN` });
       const response = await testAgent.get("/data").query(inputQuery);
       expect(response.statusCode).toBe(expected.status);
       expect(response.body).toStrictEqual(expected.response);
