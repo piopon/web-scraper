@@ -1,9 +1,13 @@
 import { DataRouter } from "../../../src/routes/api/data-router.js";
 
 import supertest from "supertest";
+import passport from "passport";
 import express from "express";
+import session from "express-session";
 import path from "path";
 import fs from "fs";
+
+import { Strategy } from "passport-local";
 
 const testDataPath = "./owner/data.json";
 
