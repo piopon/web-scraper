@@ -129,28 +129,29 @@ describe("created data GET routes", () => {
           ],
         },
       ],
-      // [
-      //   "query contains existing name",
-      //   { owner: "owner", name: "clothes" },
-      //   {
-      //     status: 200,
-      //     response: [
-      //       {
-      //         name: "clothes",
-      //         category: "👕",
-      //         items: [
-      //           {
-      //             status: "OK",
-      //             name: "t-shirt Regular Fit",
-      //             icon: "",
-      //             price: "29.99",
-      //             currency: "PLN",
-      //           },
-      //         ],
-      //       },
-      //     ],
-      //   },
-      // ],
+      [
+        "query contains existing name",
+        testOwner,
+        { name: "clothes" },
+        {
+          status: 200,
+          response: [
+            {
+              name: "clothes",
+              category: "👕",
+              items: [
+                {
+                  status: "OK",
+                  name: "t-shirt Regular Fit",
+                  icon: "",
+                  price: "29.99",
+                  currency: "PLN",
+                },
+              ],
+            },
+          ],
+        },
+      ],
       // [
       //   "query contains not existing name",
       //   { owner: "owner", name: "unknown" },
