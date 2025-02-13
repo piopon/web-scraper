@@ -184,14 +184,15 @@ describe("created data GET routes", () => {
           ],
         },
       ],
-      // [
-      //   "query contains not existing category",
-      //   { owner: "owner", category: "unknown" },
-      //   {
-      //     status: 200,
-      //     response: [],
-      //   },
-      // ],
+      [
+        "query contains not existing category for valid user",
+        testOwner,
+        { category: "unknown" },
+        {
+          status: 200,
+          response: [],
+        },
+      ],
       // [
       //   "query contains existing and matching name and category",
       //   { owner: "owner", name: "games", category: "🎮" },
