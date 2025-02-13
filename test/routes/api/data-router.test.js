@@ -161,28 +161,29 @@ describe("created data GET routes", () => {
           response: [],
         },
       ],
-      // [
-      //   "query contains existing category",
-      //   { owner: "owner", category: "🎮" },
-      //   {
-      //     status: 200,
-      //     response: [
-      //       {
-      //         name: "games",
-      //         category: "🎮",
-      //         items: [
-      //           {
-      //             status: "OK",
-      //             name: "Diablo IV",
-      //             icon: "",
-      //             price: "349.99",
-      //             currency: "PLN",
-      //           },
-      //         ],
-      //       },
-      //     ],
-      //   },
-      // ],
+      [
+        "query contains existing category for valid user",
+        testOwner,
+        { category: "🎮" },
+        {
+          status: 200,
+          response: [
+            {
+              name: "games",
+              category: "🎮",
+              items: [
+                {
+                  status: "OK",
+                  name: "Diablo IV",
+                  icon: "",
+                  price: "349.99",
+                  currency: "PLN",
+                },
+              ],
+            },
+          ],
+        },
+      ],
       // [
       //   "query contains not existing category",
       //   { owner: "owner", category: "unknown" },
