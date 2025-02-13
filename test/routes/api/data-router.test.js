@@ -85,7 +85,16 @@ describe("created data GET routes", () => {
         },
       ],
       [
-        "query is empty",
+        "query is empty with invalid user",
+        "jwt-mock@owner.com",
+        {},
+        {
+          status: 400,
+          response: "Invalid data owner provided",
+        },
+      ],
+      [
+        "query is empty with valid user",
         testOwner,
         {},
         {
@@ -120,50 +129,6 @@ describe("created data GET routes", () => {
           ],
         },
       ],
-      [
-        "query contains invalid user",
-        "jwt-mock@owner.com",
-        {},
-        {
-          status: 400,
-          response: "Invalid data owner provided",
-        },
-      ],
-      // [
-      //   "query contains valid user",
-      //   { owner: "owner" },
-      //   {
-      //     status: 200,
-      //     response: [
-      //       {
-      //         name: "clothes",
-      //         category: "👕",
-      //         items: [
-      //           {
-      //             status: "OK",
-      //             name: "t-shirt Regular Fit",
-      //             icon: "",
-      //             price: "29.99",
-      //             currency: "PLN",
-      //           },
-      //         ],
-      //       },
-      //       {
-      //         name: "games",
-      //         category: "🎮",
-      //         items: [
-      //           {
-      //             status: "OK",
-      //             name: "Diablo IV",
-      //             icon: "",
-      //             price: "349.99",
-      //             currency: "PLN",
-      //           },
-      //         ],
-      //       },
-      //     ],
-      //   },
-      // ],
       // [
       //   "query contains existing name",
       //   { owner: "owner", name: "clothes" },
