@@ -120,14 +120,15 @@ describe("created data GET routes", () => {
           ],
         },
       ],
-      // [
-      //   "query contains invalid user",
-      //   { owner: "invalid" },
-      //   {
-      //     status: 400,
-      //     response: "Invalid data owner provided",
-      //   },
-      // ],
+      [
+        "query contains invalid user",
+        "jwt-mock@owner.com",
+        {},
+        {
+          status: 400,
+          response: "Invalid data owner provided",
+        },
+      ],
       // [
       //   "query contains valid user",
       //   { owner: "owner" },
