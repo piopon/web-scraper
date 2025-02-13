@@ -85,7 +85,7 @@ describe("created data GET routes", () => {
         },
       ],
       [
-        "query is empty with invalid user",
+        "query is empty for invalid user",
         "jwt-mock@owner.com",
         {},
         {
@@ -94,7 +94,7 @@ describe("created data GET routes", () => {
         },
       ],
       [
-        "query is empty with valid user",
+        "query is empty for valid user",
         testOwner,
         {},
         {
@@ -130,7 +130,7 @@ describe("created data GET routes", () => {
         },
       ],
       [
-        "query contains existing name",
+        "query contains existing name for valid user",
         testOwner,
         { name: "clothes" },
         {
