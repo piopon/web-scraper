@@ -1,11 +1,20 @@
 import { DataRouter } from "../../../src/routes/api/data-router.js";
 
 import supertest from "supertest";
+import passport from "passport";
 import express from "express";
+import session from "express-session";
+import jsonwebtoken from "jsonwebtoken";
 import path from "path";
 import fs from "fs";
 
-const testDataPath = "./owner/data.json";
+import { jest } from "@jest/globals";
+import { Strategy } from "passport-local";
+
+const testOwner = "owner@test.com";
+const testDataPath = `./${testOwner}/data.json`;
+
+jest.mock("jsonwebtoken");
 
 beforeAll(() => {
   createDataFile(testDataPath);
@@ -39,58 +48,55 @@ describe("created data GET routes", () => {
   const testConfig = { path: path.parse(testDataPath).root, file: "data.json" };
   // configue test express app server
   const testApp = express();
+  testApp.use(express.json());
+  testApp.use(express.urlencoded({ extended: false }));
+  testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
+  testApp.use(passport.initialize());
+  testApp.use(passport.session());
   testApp.use("/data", new DataRouter(testConfig).createRoutes());
-  // create test client to call server requests
-  const testClient = supertest(testApp);
+  testApp.use("/auth", createMockAuthRouter());
+  // retrieve underlying superagent to correctly persist sessions
+  const testAgent = supertest.agent(testApp);
+  beforeAll(async () => {
+    const mockAuth = { mail: testOwner, pass: "test-secret" };
+    await testAgent.post("/auth/login").send(mockAuth);
+  });
   test("returns correct result for unknown path", async () => {
-    const response = await testClient.get("/data/unknown");
+    const response = await testAgent.get("/data/unknown");
     expect(response.statusCode).toBe(404);
   });
   describe("returns correct result using /data endpoint when", () => {
     it.each([
       [
         "query has invalid structure",
+        testOwner,
         { unknown: "status" },
         {
           status: 400,
           response: [
             {
               instancePath: "",
-              keyword: "required",
-              message: "must have required property 'owner'",
-              params: { missingProperty: "owner" },
-              schemaPath: "#/required",
+              keyword: "additionalProperties",
+              message: "must NOT have additional properties",
+              params: { additionalProperty: "unknown" },
+              schemaPath: "#/additionalProperties",
             },
           ],
         },
       ],
       [
-        "query is empty",
+        "query is empty for invalid user",
+        "jwt-mock@owner.com",
         {},
-        {
-          status: 400,
-          response: [
-            {
-              instancePath: "",
-              keyword: "required",
-              message: "must have required property 'owner'",
-              params: { missingProperty: "owner" },
-              schemaPath: "#/required",
-            },
-          ],
-        },
-      ],
-      [
-        "query contains invalid user",
-        { owner: "invalid" },
         {
           status: 400,
           response: "Invalid data owner provided",
         },
       ],
       [
-        "query contains valid user",
-        { owner: "owner" },
+        "query is empty for valid user",
+        testOwner,
+        {},
         {
           status: 200,
           response: [
@@ -124,8 +130,9 @@ describe("created data GET routes", () => {
         },
       ],
       [
-        "query contains existing name",
-        { owner: "owner", name: "clothes" },
+        "query contains existing name for valid user",
+        testOwner,
+        { name: "clothes" },
         {
           status: 200,
           response: [
@@ -146,16 +153,18 @@ describe("created data GET routes", () => {
         },
       ],
       [
-        "query contains not existing name",
-        { owner: "owner", name: "unknown" },
+        "query contains not existing name for valid user",
+        testOwner,
+        { name: "unknown" },
         {
           status: 200,
           response: [],
         },
       ],
       [
-        "query contains existing category",
-        { owner: "owner", category: "🎮" },
+        "query contains existing category for valid user",
+        testOwner,
+        { category: "🎮" },
         {
           status: 200,
           response: [
@@ -176,16 +185,18 @@ describe("created data GET routes", () => {
         },
       ],
       [
-        "query contains not existing category",
-        { owner: "owner", category: "unknown" },
+        "query contains not existing category for valid user",
+        testOwner,
+        { category: "unknown" },
         {
           status: 200,
           response: [],
         },
       ],
       [
-        "query contains existing and matching name and category",
-        { owner: "owner", name: "games", category: "🎮" },
+        "query contains existing and matching name and category for valid user",
+        testOwner,
+        { name: "games", category: "🎮" },
         {
           status: 200,
           response: [
@@ -206,8 +217,9 @@ describe("created data GET routes", () => {
         },
       ],
       [
-        "query contains existing but not matching name and category",
-        { owner: "owner", name: "games", category: "👕" },
+        "query contains existing but not matching name and category for valid user",
+        testOwner,
+        { name: "games", category: "👕" },
         {
           status: 200,
           response: [],
@@ -215,7 +227,8 @@ describe("created data GET routes", () => {
       ],
       [
         "query contains existing name and not existing category",
-        { owner: "owner", name: "games", category: "unknown" },
+        testOwner,
+        { name: "games", category: "unknown" },
         {
           status: 200,
           response: [],
@@ -223,7 +236,8 @@ describe("created data GET routes", () => {
       ],
       [
         "query contains not existing name and existing category",
-        { owner: "owner", name: "unknown", category: "👕" },
+        testOwner,
+        { name: "unknown", category: "👕" },
         {
           status: 200,
           response: [],
@@ -231,19 +245,38 @@ describe("created data GET routes", () => {
       ],
       [
         "query contains not existing name and category",
-        { owner: "owner", name: "unknown", category: "unknown" },
+        testOwner,
+        { name: "unknown", category: "unknown" },
         {
           status: 200,
           response: [],
         },
       ],
-    ])("%s", async (_, inputQuery, expected) => {
-      const response = await testClient.get("/data").query(inputQuery);
+    ])("%s", async (_, mockOwner, inputQuery, expected) => {
+      // prepare JWT authentication mock
+      testAgent.set({ Authorization: `Token JWT-MOCKED-TOKEN` });
+      jest.spyOn(jsonwebtoken, "verify").mockReturnValue({ email: mockOwner });
+      // send request and check response
+      const response = await testAgent.get("/data").query(inputQuery);
       expect(response.statusCode).toBe(expected.status);
       expect(response.body).toStrictEqual(expected.response);
     });
   });
 });
+
+function createMockAuthRouter() {
+  const router = express.Router();
+  const configId = 123;
+  // configure mocked login logic
+  const options = { usernameField: "mail", passwordField: "pass" };
+  const verify = (_user, _pass, done) => done(null, { id: 1, config: configId });
+  passport.use("mock-login", new Strategy(options, verify));
+  passport.serializeUser((user, done) => done(null, user.id));
+  passport.deserializeUser((userId, done) => done(null, { id: userId, config: configId }));
+  // use passport mock login in tests
+  router.post("/login", passport.authenticate("mock-login"));
+  return router;
+}
 
 function createDataFile(filePath) {
   try {
