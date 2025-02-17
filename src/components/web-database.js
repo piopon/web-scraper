@@ -95,16 +95,21 @@ export class WebDatabase {
    * Method used to perform database maintenance operations after successfull connect
    */
   async #doMaintenance() {
-    if (!await this.#hasBaseDemoUser()) {
-      console.log("No base demo user. Creating new one...")
+    if (!await this.#hasUserWithEmail(process.env.DEMO_BASE)) {
+      // create base demo user (uses demo config from docs/json)
+      console.log("No base demo user. Creating new one...");
+    }
+    if (!await this.#hasUserWithEmail(process.env.CI_USER)) {
+      // create CI user (uses demo config, adds data dir from docs/json)
+      console.log("No CI user. Creating new one...");
     }
     const usersCleaned = await this.#cleanDemoUsers();
     const configsCleaned = await this.#cleanUnusedConfigs();
     this.#status.info(`Maintenance summary: ${configsCleaned} configs, ${usersCleaned} demos`);
   }
 
-  async #hasBaseDemoUser() {
-    return await ScrapUser.getDatabaseModel().findOne({ email: process.env.DEMO_BASE }) != null;
+  async #hasUserWithEmail(email) {
+    return await ScrapUser.getDatabaseModel().findOne({ email: email }) != null;
   }
 
   /**
