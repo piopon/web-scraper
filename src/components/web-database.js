@@ -38,7 +38,7 @@ export class WebDatabase {
       };
       await mongoose.connect(dbUrl, dbOptions);
       this.#status.info("Connected to database");
-      if (false === await this.#hasBaseDemoUser()) {
+      if (!await this.#hasBaseDemoUser()) {
         console.log("No base demo user. Creating new one...")
       }
       await this.#doMaintenance();
@@ -95,7 +95,7 @@ export class WebDatabase {
   }
 
   async #hasBaseDemoUser() {
-    return await ScrapUser.getDatabaseModel().findOne({ email: "base@demo.com" }) != null;
+    return await ScrapUser.getDatabaseModel().findOne({ email: process.env.DEMO_BASE }) != null;
   }
 
   /**
