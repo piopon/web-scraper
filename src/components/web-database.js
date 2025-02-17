@@ -38,9 +38,6 @@ export class WebDatabase {
       };
       await mongoose.connect(dbUrl, dbOptions);
       this.#status.info("Connected to database");
-      if (!await this.#hasBaseDemoUser()) {
-        console.log("No base demo user. Creating new one...")
-      }
       await this.#doMaintenance();
       return true;
     } catch (error) {
@@ -94,17 +91,29 @@ export class WebDatabase {
     return this.#status.getHistory();
   }
 
+  /**
+   * Method used to perform database maintenance operations after successfull connect
+   */
+  async #doMaintenance() {
+    if (!await this.#hasBaseDemoUser()) {
+      console.log("No base demo user. Creating new one...")
+    }
+    const usersCleaned = await this.#cleanDemoUsers();
+    const configsCleaned = await this.#cleanUnusedConfigs();
+    this.#status.info(`Maintenance summary: ${configsCleaned} configs, ${usersCleaned} demos`);
+  }
+
   async #hasBaseDemoUser() {
     return await ScrapUser.getDatabaseModel().findOne({ email: process.env.DEMO_BASE }) != null;
   }
 
   /**
-   * Method used to perform database maintenance operations after successfull connect
+   * Method used to cleanup all demo users (which are just temporary)
+   * @returns number of demo session users removed
    */
-  async #doMaintenance() {
-    const usersCleaned = await this.#cleanDemoUsers();
-    const configsCleaned = await this.#cleanUnusedConfigs();
-    this.#status.info(`Maintenance summary: ${configsCleaned} configs, ${usersCleaned} demos`);
+  async #cleanDemoUsers() {
+    const result = await ScrapUser.getDatabaseModel().deleteMany({ hostUser: { $ne: null } });
+    return result.deletedCount;
   }
 
   /**
@@ -127,14 +136,5 @@ export class WebDatabase {
       }
     }
     return toDelete;
-  }
-
-  /**
-   * Method used to cleanup all demo users (which are just temporary)
-   * @returns number of demo session users removed
-   */
-  async #cleanDemoUsers() {
-    const result = await ScrapUser.getDatabaseModel().deleteMany({ hostUser: { $ne: null } });
-    return result.deletedCount;
   }
 }
