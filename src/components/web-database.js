@@ -38,6 +38,10 @@ export class WebDatabase {
       };
       await mongoose.connect(dbUrl, dbOptions);
       this.#status.info("Connected to database");
+      const demoUser = await ScrapUser.getDatabaseModel().findOne({ email: "base@demo.com" });
+      if (demoUser == null) {
+        console.log("No base demo user. Creating new one...")
+      }
       await this.#doMaintenance();
       return true;
     } catch (error) {
