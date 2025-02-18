@@ -113,8 +113,12 @@ export class WebDatabase {
   }
 
   async #createUserWithConfig(user, config) {
-    await ScrapUser.getDatabaseModel().create(user);
-    await ScrapConfig.getDatabaseModel().create(config);
+    const createdUser = await ScrapUser.getDatabaseModel().create(user);
+    const createdConfig = await ScrapConfig.getDatabaseModel().create(config);
+    createdUser.config = createdConfig._id;
+    await createdUser.save();
+    createdConfig.user = createdUser._id;
+    await createdConfig.save();
   }
 
   /**
