@@ -112,6 +112,11 @@ export class WebDatabase {
     return await ScrapUser.getDatabaseModel().findOne({ email: email }) != null;
   }
 
+  async #createUserWithConfig(user, config) {
+    await ScrapUser.getDatabaseModel().create(user);
+    await ScrapConfig.getDatabaseModel().create(config);
+  }
+
   /**
    * Method used to cleanup all demo users (which are just temporary)
    * @returns number of demo session users removed
