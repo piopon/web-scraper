@@ -97,11 +97,17 @@ export class WebDatabase {
   async #doMaintenance() {
     if (!await this.#hasUserWithEmail(process.env.DEMO_BASE)) {
       // create base demo user (uses demo config from docs/json)
-      console.log("No base demo user. Creating new one...");
+      const demoUser = {};
+      const demoConfig = {};
+      await this.#createUserWithConfig(demoUser, demoConfig);
+      console.log("Base demo user not found... Created new one!");
     }
     if (!await this.#hasUserWithEmail(process.env.CI_USER)) {
       // create CI user (uses demo config, adds data dir from docs/json)
-      console.log("No CI user. Creating new one...");
+      const ciUser = {};
+      const ciConfig = {};
+      await this.#createUserWithConfig(ciUser, ciConfig);
+      console.log("CI user not found... Created new one!");
     }
     const usersCleaned = await this.#cleanDemoUsers();
     const configsCleaned = await this.#cleanUnusedConfigs();
