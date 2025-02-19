@@ -7,10 +7,10 @@ import mongoose from "mongoose";
 
 export class WebDatabase {
   static #COMPONENT_NAME = "web-database  ";
-  static #ENCRYPT_SALT = parseInt(process.env.ENCRYPT_SALT) || 10;
 
   #status = undefined;
   #dbConfig = undefined;
+  #authConfig = undefined;
 
   /**
    * Creates a new web database from the specified configuration
@@ -18,6 +18,7 @@ export class WebDatabase {
    */
   constructor(config) {
     this.#dbConfig = config.databaseConfig;
+    this.#authConfig = config.authConfig;
     this.#status = new StatusLogger(WebDatabase.#COMPONENT_NAME, config.minLogLevel);
     this.#status.info("Created");
   }
@@ -101,7 +102,7 @@ export class WebDatabase {
       const demoUser = {
         name: "demo",
         email: process.env.DEMO_BASE,
-        password: await bcrypt.hash(process.env.DEMO_PASS, WebDatabase.#ENCRYPT_SALT),
+        password: await bcrypt.hash(process.env.DEMO_PASS, this.#authConfig.hashSalt),
       };
       const demoConfig = {};
       await this.#createUserWithConfig(demoUser, demoConfig);
@@ -112,7 +113,7 @@ export class WebDatabase {
       const ciUser = {
         name: "bruno",
         email: process.env.CI_USER,
-        password: await bcrypt.hash(process.env.CI_PASS, WebDatabase.#ENCRYPT_SALT),
+        password: await bcrypt.hash(process.env.CI_PASS, this.#authConfig.hashSalt),
       };
       const ciConfig = {};
       await this.#createUserWithConfig(ciUser, ciConfig);
