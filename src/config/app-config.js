@@ -25,6 +25,11 @@ export class AppConfig {
    */
   getConfig() {
     return {
+      jsonDataConfig: {
+        path: path.join(this.#rootDir, "docs", "json"),
+        config: "config.json",
+        data: "data.json",
+      },
       usersDataConfig: {
         path: path.join(this.#rootDir, "users"),
         file: "data.json",
