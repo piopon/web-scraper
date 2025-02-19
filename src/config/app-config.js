@@ -43,6 +43,7 @@ export class AppConfig {
       },
       authConfig: {
         demoMode: new DemoMode(process.env.DEMO_MODE) || DemoMode.DUPLICATE,
+        hashSalt: parseInt(process.env.ENCRYPT_SALT) || 10,
       },
       scraperConfig: {
         loginInterval: 30,
