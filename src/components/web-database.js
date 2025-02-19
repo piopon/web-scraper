@@ -3,6 +3,7 @@ import { ScrapConfig } from "../model/scrap-config.js";
 import { ScrapUser } from "../model/scrap-user.js";
 import { StatusLogger } from "./status-logger.js";
 
+import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 
 export class WebDatabase {
