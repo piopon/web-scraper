@@ -97,7 +97,11 @@ export class WebDatabase {
   async #doMaintenance() {
     if (!await this.#hasUserWithEmail(process.env.DEMO_BASE)) {
       // create base demo user (uses demo config from docs/json)
-      const demoUser = {};
+      const demoUser = {
+        name: "demo",
+        email: process.env.DEMO_BASE,
+        password: await bcrypt.hash(process.env.DEMO_PASS, 10),
+      };
       const demoConfig = {};
       await this.#createUserWithConfig(demoUser, demoConfig);
       console.log("Base demo user not found... Created new one!");
