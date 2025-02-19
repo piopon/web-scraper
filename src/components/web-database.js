@@ -7,6 +7,7 @@ import mongoose from "mongoose";
 
 export class WebDatabase {
   static #COMPONENT_NAME = "web-database  ";
+  static #ENCRYPT_SALT = parseInt(process.env.ENCRYPT_SALT) || 10;
 
   #status = undefined;
   #dbConfig = undefined;
@@ -100,7 +101,7 @@ export class WebDatabase {
       const demoUser = {
         name: "demo",
         email: process.env.DEMO_BASE,
-        password: await bcrypt.hash(process.env.DEMO_PASS, 10),
+        password: await bcrypt.hash(process.env.DEMO_PASS, WebDatabase.#ENCRYPT_SALT),
       };
       const demoConfig = {};
       await this.#createUserWithConfig(demoUser, demoConfig);
@@ -111,7 +112,7 @@ export class WebDatabase {
       const ciUser = {
         name: "bruno",
         email: process.env.CI_USER,
-        password: await bcrypt.hash(process.env.CI_PASS, 10),
+        password: await bcrypt.hash(process.env.CI_PASS, WebDatabase.#ENCRYPT_SALT),
       };
       const ciConfig = {};
       await this.#createUserWithConfig(ciUser, ciConfig);

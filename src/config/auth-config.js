@@ -9,7 +9,7 @@ import { Strategy as LocalStategy } from "passport-local";
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 
 export class AuthConfig {
-  static #ENCRYPT_SALT = 10;
+  static #ENCRYPT_SALT = parseInt(process.env.ENCRYPT_SALT) || 10;
 
   #components = undefined;
   #passport = undefined;
