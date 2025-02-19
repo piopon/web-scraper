@@ -108,7 +108,11 @@ export class WebDatabase {
     }
     if (!await this.#hasUserWithEmail(process.env.CI_USER)) {
       // create CI user (uses demo config, adds data dir from docs/json)
-      const ciUser = {};
+      const ciUser = {
+        name: "bruno",
+        email: process.env.CI_USER,
+        password: await bcrypt.hash(process.env.CI_PASS, 10),
+      };
       const ciConfig = {};
       await this.#createUserWithConfig(ciUser, ciConfig);
       console.log("CI user not found... Created new one!");
