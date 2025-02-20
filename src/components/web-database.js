@@ -120,6 +120,12 @@ export class WebDatabase {
       };
       const configFile = path.join(this.#config.jsonDataConfig.path, this.#config.jsonDataConfig.config);
       const ciConfig = JSON.parse(fs.readFileSync(configFile));
+      const ciDataPath = path.join(this.#config.usersDataConfig.path, process.env.CI_USER);
+      if (!fs.existsSync(ciDataPath)) {
+        fs.mkdirSync(ciDataPath, { recursive: true });
+        const src = path.join(this.#config.jsonDataConfig.path, this.#config.jsonDataConfig.data);
+        fs.copyFileSync(src, path.join(ciDataPath));
+      }
       await this.#createUserWithConfig(ciUser, ciConfig);
       console.log("CI user not found... Created new one!");
     }
