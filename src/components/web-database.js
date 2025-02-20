@@ -118,7 +118,8 @@ export class WebDatabase {
         email: process.env.CI_USER,
         password: await bcrypt.hash(process.env.CI_PASS, this.#config.authConfig.hashSalt),
       };
-      const ciConfig = {};
+      const configFile = path.join(this.#config.jsonDataConfig.path, this.#config.jsonDataConfig.config);
+      const ciConfig = JSON.parse(fs.readFileSync(configFile));
       await this.#createUserWithConfig(ciUser, ciConfig);
       console.log("CI user not found... Created new one!");
     }
