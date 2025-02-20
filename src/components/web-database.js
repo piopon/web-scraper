@@ -3,6 +3,7 @@ import { ScrapConfig } from "../model/scrap-config.js";
 import { ScrapUser } from "../model/scrap-user.js";
 import { StatusLogger } from "./status-logger.js";
 
+import path from "path";
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 
@@ -104,7 +105,8 @@ export class WebDatabase {
         email: process.env.DEMO_BASE,
         password: await bcrypt.hash(process.env.DEMO_PASS, this.#config.authConfig.hashSalt),
       };
-      const demoConfig = {};
+      const configFile = path.join(this.#config.jsonDataConfig.path, this.#config.jsonDataConfig.config);
+      const demoConfig = JSON.parse(fs.readFileSync(configFile));
       await this.#createUserWithConfig(demoUser, demoConfig);
       console.log("Base demo user not found... Created new one!");
     }
