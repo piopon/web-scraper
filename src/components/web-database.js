@@ -10,16 +10,14 @@ export class WebDatabase {
   static #COMPONENT_NAME = "web-database  ";
 
   #status = undefined;
-  #dbConfig = undefined;
-  #authConfig = undefined;
+  #config = undefined;
 
   /**
    * Creates a new web database from the specified configuration
    * @param {Object} config The object containing database configuration values
    */
   constructor(config) {
-    this.#dbConfig = config.databaseConfig;
-    this.#authConfig = config.authConfig;
+    this.#config = config;
     this.#status = new StatusLogger(WebDatabase.#COMPONENT_NAME, config.minLogLevel);
     this.#status.info("Created");
   }
@@ -29,14 +27,15 @@ export class WebDatabase {
    */
   async start() {
     try {
-      const dbUrl = `mongodb://${this.#dbConfig.url}:${this.#dbConfig.port}`;
+      const dbConfig = this.#config.databaseConfig;
+      const dbUrl = `mongodb://${dbConfig.url}:${dbConfig.port}`;
       const dbOptions = {
-        appName: this.#dbConfig.name,
-        dbName: this.#dbConfig.name,
-        user: this.#dbConfig.user,
-        pass: this.#dbConfig.password,
-        serverSelectionTimeoutMS: this.#dbConfig.timeout,
-        connectTimeoutMS: this.#dbConfig.timeout,
+        appName: dbConfig.name,
+        dbName: dbConfig.name,
+        user: dbConfig.user,
+        pass: dbConfig.password,
+        serverSelectionTimeoutMS: dbConfig.timeout,
+        connectTimeoutMS: dbConfig.timeout,
         family: 4,
       };
       await mongoose.connect(dbUrl, dbOptions);
@@ -103,7 +102,7 @@ export class WebDatabase {
       const demoUser = {
         name: "demo",
         email: process.env.DEMO_BASE,
-        password: await bcrypt.hash(process.env.DEMO_PASS, this.#authConfig.hashSalt),
+        password: await bcrypt.hash(process.env.DEMO_PASS, this.#config.authConfig.hashSalt),
       };
       const demoConfig = {};
       await this.#createUserWithConfig(demoUser, demoConfig);
@@ -114,7 +113,7 @@ export class WebDatabase {
       const ciUser = {
         name: "bruno",
         email: process.env.CI_USER,
-        password: await bcrypt.hash(process.env.CI_PASS, this.#authConfig.hashSalt),
+        password: await bcrypt.hash(process.env.CI_PASS, this.#config.authConfig.hashSalt),
       };
       const ciConfig = {};
       await this.#createUserWithConfig(ciUser, ciConfig);
