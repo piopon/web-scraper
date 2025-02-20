@@ -104,7 +104,7 @@ export class WebDatabase {
       const demoUser = {
         name: "demo",
         email: process.env.DEMO_BASE,
-        password: await bcrypt.hash(process.env.DEMO_PASS, this.#config.authConfig.hashSalt),
+        password: bcrypt.hashSync(process.env.DEMO_PASS, this.#config.authConfig.hashSalt),
       };
       const configFile = path.join(this.#config.jsonDataConfig.path, this.#config.jsonDataConfig.config);
       const demoConfig = JSON.parse(fs.readFileSync(configFile));
@@ -116,7 +116,7 @@ export class WebDatabase {
       const ciUser = {
         name: "bruno",
         email: process.env.CI_USER,
-        password: await bcrypt.hash(process.env.CI_PASS, this.#config.authConfig.hashSalt),
+        password: bcrypt.hashSync(process.env.CI_PASS, this.#config.authConfig.hashSalt),
       };
       const configFile = path.join(this.#config.jsonDataConfig.path, this.#config.jsonDataConfig.config);
       const ciConfig = JSON.parse(fs.readFileSync(configFile));
