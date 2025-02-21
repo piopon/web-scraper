@@ -1,0 +1,93 @@
+{
+  "groups": [
+    {
+      "name": "stocks",
+      "category": "📈",
+      "domain": "https://www.tradingview.com",
+      "observers": [
+        {
+          "name": "McDonald's",
+          "path": "symbols/NYSE-MCD/",
+          "target": "domcontentloaded",
+          "history": "off",
+          "container": "div[class^=symbolRow]",
+          "title": {
+            "interval": "",
+            "selector": "h1",
+            "attribute": "innerHTML",
+            "auxiliary": ""
+          },
+          "image": {
+            "interval": "",
+            "selector": "img[class*=medium]",
+            "attribute": "src",
+            "auxiliary": ""
+          },
+          "price": {
+            "interval": "",
+            "selector": "span[class^=last] span",
+            "attribute": "innerHTML",
+            "auxiliary": "USD"
+          }
+        },
+        {
+          "name": "NVIDIA",
+          "path": "symbols/NASDAQ-NVDA/",
+          "target": "domcontentloaded",
+          "history": "off",
+          "container": "div[class^=symbolRow]",
+          "title": {
+            "interval": "",
+            "selector": "h1",
+            "attribute": "innerHTML",
+            "auxiliary": ""
+          },
+          "image": {
+            "interval": "",
+            "selector": "img[class*=medium]",
+            "attribute": "src",
+            "auxiliary": ""
+          },
+          "price": {
+            "interval": "",
+            "selector": "span[class^=last] span",
+            "attribute": "innerHTML",
+            "auxiliary": "USD"
+          }
+        }
+      ]
+    },
+    {
+      "name": "games",
+      "category": "🎮",
+      "domain": "https://store.steampowered.com/",
+      "observers": [
+        {
+          "name": "Prince of Persia",
+          "path": "app/19980/Prince_of_Persia/",
+          "target": "domcontentloaded",
+          "history": "off",
+          "container": "div.page_content_ctn",
+          "title": {
+            "interval": "",
+            "selector": "div#appHubAppName",
+            "attribute": "innerHTML",
+            "auxiliary": ""
+          },
+          "image": {
+            "interval": "",
+            "selector": "img.game_header_image_full",
+            "attribute": "src",
+            "auxiliary": ""
+          },
+          "price": {
+            "interval": "",
+            "selector": "div.game_purchase_price,div.discount_final_price",
+            "attribute": "innerHTML",
+            "auxiliary": "PLN"
+          }
+        }
+      ]
+    }
+  ]
+}

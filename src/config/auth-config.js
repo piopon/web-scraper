@@ -9,8 +9,6 @@ import { Strategy as LocalStategy } from "passport-local";
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 
 export class AuthConfig {
-  static #ENCRYPT_SALT = 10;
-
   #components = undefined;
   #passport = undefined;
   #config = undefined;
@@ -58,7 +56,10 @@ export class AuthConfig {
     };
     const verify = async (jwtPayload, done) => {
       try {
-        const user = await ScrapUser.getDatabaseModel().findById(jwtPayload._id);
+        const user = await ScrapUser.getDatabaseModel().findOne({
+          name: jwtPayload.name,
+          email: jwtPayload.email,
+        });
         if (user) {
           return done(null, user);
         }
@@ -131,7 +132,7 @@ export class AuthConfig {
         const newUser = await ScrapUser.getDatabaseModel().create({
           name: request.body.name,
           email: username,
-          password: await bcrypt.hash(password, AuthConfig.#ENCRYPT_SALT),
+          password: await bcrypt.hash(password, this.#config.hashSalt),
         });
         // user at this point has no config - we must create and link it
         const userConfig = await ScrapConfig.getDatabaseModel().create({ user: newUser._id });

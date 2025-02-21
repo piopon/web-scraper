@@ -3,20 +3,23 @@ import { ScrapConfig } from "../model/scrap-config.js";
 import { ScrapUser } from "../model/scrap-user.js";
 import { StatusLogger } from "./status-logger.js";
 
+import fs from "fs";
+import path from "path";
+import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 
 export class WebDatabase {
   static #COMPONENT_NAME = "web-database  ";
 
   #status = undefined;
-  #dbConfig = undefined;
+  #config = undefined;
 
   /**
    * Creates a new web database from the specified configuration
    * @param {Object} config The object containing database configuration values
    */
   constructor(config) {
-    this.#dbConfig = config.databaseConfig;
+    this.#config = config;
     this.#status = new StatusLogger(WebDatabase.#COMPONENT_NAME, config.minLogLevel);
     this.#status.info("Created");
   }
@@ -26,14 +29,15 @@ export class WebDatabase {
    */
   async start() {
     try {
-      const dbUrl = `mongodb://${this.#dbConfig.url}:${this.#dbConfig.port}`;
+      const dbConfig = this.#config.databaseConfig;
+      const dbUrl = `mongodb://${dbConfig.url}:${dbConfig.port}`;
       const dbOptions = {
-        appName: this.#dbConfig.name,
-        dbName: this.#dbConfig.name,
-        user: this.#dbConfig.user,
-        pass: this.#dbConfig.password,
-        serverSelectionTimeoutMS: this.#dbConfig.timeout,
-        connectTimeoutMS: this.#dbConfig.timeout,
+        appName: dbConfig.name,
+        dbName: dbConfig.name,
+        user: dbConfig.user,
+        pass: dbConfig.password,
+        serverSelectionTimeoutMS: dbConfig.timeout,
+        connectTimeoutMS: dbConfig.timeout,
         family: 4,
       };
       await mongoose.connect(dbUrl, dbOptions);
@@ -95,9 +99,86 @@ export class WebDatabase {
    * Method used to perform database maintenance operations after successfull connect
    */
   async #doMaintenance() {
+    if (!await this.#hasUserWithEmail(process.env.DEMO_BASE)) {
+      await this.#createBaseDemoUser();
+    }
+    if (!await this.#hasUserWithEmail(process.env.CI_USER)) {
+      await this.#createCiUser();
+    }
     const usersCleaned = await this.#cleanDemoUsers();
     const configsCleaned = await this.#cleanUnusedConfigs();
     this.#status.info(`Maintenance summary: ${configsCleaned} configs, ${usersCleaned} demos`);
+  }
+
+  /**
+   * Method used to check if a specified email is present in database
+   * @param {String} email The e-mail which presence we want to check
+   * @returns true if specified email is present in database, false otherwise
+   */
+  async #hasUserWithEmail(email) {
+    return await ScrapUser.getDatabaseModel().findOne({ email: email }) != null;
+  }
+
+  /**
+   * Method used to create a new base demo user with config from docs/json
+   */
+  async #createBaseDemoUser() {
+      const demoUser = {
+        name: "demo",
+        email: process.env.DEMO_BASE,
+        password: bcrypt.hashSync(process.env.DEMO_PASS, this.#config.authConfig.hashSalt),
+      };
+      const configFile = path.join(this.#config.jsonDataConfig.path, this.#config.jsonDataConfig.config);
+      const demoConfig = JSON.parse(fs.readFileSync(configFile));
+      await this.#createUserWithConfig(demoUser, demoConfig);
+      this.#status.info(`Base demo user not found... Created new one!`);
+  }
+
+  /**
+   * Method used to create a new CI user with base demo user config from docs/json
+   * Additionally a reference JSON data file is copied from docs/json
+   */
+  async #createCiUser() {
+      const ciUser = {
+        name: "bruno",
+        email: process.env.CI_USER,
+        password: bcrypt.hashSync(process.env.CI_PASS, this.#config.authConfig.hashSalt),
+      };
+      const configFile = path.join(this.#config.jsonDataConfig.path, this.#config.jsonDataConfig.config);
+      const ciConfig = JSON.parse(fs.readFileSync(configFile));
+      await this.#createUserWithConfig(ciUser, ciConfig);
+      // copy the reference JSON data file to user directory
+      const ciDataPath = path.join(this.#config.usersDataConfig.path, process.env.CI_USER);
+      if (!fs.existsSync(ciDataPath)) {
+        fs.mkdirSync(ciDataPath, { recursive: true });
+        const dataSrc = path.join(this.#config.jsonDataConfig.path, this.#config.jsonDataConfig.data);
+        const dataDst = path.join(ciDataPath, this.#config.jsonDataConfig.data);
+        fs.copyFileSync(dataSrc, dataDst);
+      }
+      this.#status.info(`CI user not found... Created one and copied data file!`);
+  }
+
+  /**
+   * Method use to create a new user and config entries in database
+   * @param {Object} user An object representing user which we want to save in database
+   * @param {Object} config An object representing config which we want to save in database
+   */
+  async #createUserWithConfig(user, config) {
+    const createdUser = await ScrapUser.getDatabaseModel().create(user);
+    const createdConfig = await ScrapConfig.getDatabaseModel().create(config);
+    createdUser.config = createdConfig._id;
+    await createdUser.save();
+    createdConfig.user = createdUser._id;
+    await createdConfig.save();
+  }
+
+  /**
+   * Method used to cleanup all demo users (which are just temporary)
+   * @returns number of demo session users removed
+   */
+  async #cleanDemoUsers() {
+    const result = await ScrapUser.getDatabaseModel().deleteMany({ hostUser: { $ne: null } });
+    return result.deletedCount;
   }
 
   /**
@@ -120,14 +201,5 @@ export class WebDatabase {
       }
     }
     return toDelete;
-  }
-
-  /**
-   * Method used to cleanup all demo users (which are just temporary)
-   * @returns number of demo session users removed
-   */
-  async #cleanDemoUsers() {
-    const result = await ScrapUser.getDatabaseModel().deleteMany({ hostUser: { $ne: null } });
-    return result.deletedCount;
   }
 }
