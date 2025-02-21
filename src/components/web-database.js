@@ -119,6 +119,9 @@ export class WebDatabase {
     return await ScrapUser.getDatabaseModel().findOne({ email: email }) != null;
   }
 
+  /**
+   * Method used to create a new base demo user with config from docs/json
+   */
   async #createBaseDemoUser() {
       const demoUser = {
         name: "demo",
@@ -131,6 +134,10 @@ export class WebDatabase {
       this.#status.info(`Base demo user not found... Created new one!`);
   }
 
+  /**
+   * Method used to create a new CI user with base demo user config from docs/json
+   * Additionally a reference JSON data file is copied from docs/json
+   */
   async #createCiUser() {
       const ciUser = {
         name: "bruno",
