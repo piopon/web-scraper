@@ -56,7 +56,10 @@ export class AuthConfig {
     };
     const verify = async (jwtPayload, done) => {
       try {
-        const user = await ScrapUser.getDatabaseModel().findById(jwtPayload._id);
+        const user = await ScrapUser.getDatabaseModel().findOne({
+          name: jwtPayload.name,
+          email: jwtPayload.email,
+        });
         if (user) {
           return done(null, user);
         }
