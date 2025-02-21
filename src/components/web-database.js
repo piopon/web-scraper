@@ -135,10 +135,20 @@ export class WebDatabase {
     this.#status.info(`Maintenance summary: ${configsCleaned} configs, ${usersCleaned} demos`);
   }
 
+  /**
+   * Method used to check if a specified email is present in database
+   * @param {String} email The e-mail which presence we want to check
+   * @returns true if specified email is present in database, false otherwise
+   */
   async #hasUserWithEmail(email) {
     return await ScrapUser.getDatabaseModel().findOne({ email: email }) != null;
   }
 
+  /**
+   * Method use to create a new user and config entries in database
+   * @param {Object} user An object representing user which we want to save in database
+   * @param {Object} config An object representing config which we want to save in database
+   */
   async #createUserWithConfig(user, config) {
     const createdUser = await ScrapUser.getDatabaseModel().create(user);
     const createdConfig = await ScrapConfig.getDatabaseModel().create(config);
