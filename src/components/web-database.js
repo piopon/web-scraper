@@ -109,7 +109,7 @@ export class WebDatabase {
       const configFile = path.join(this.#config.jsonDataConfig.path, this.#config.jsonDataConfig.config);
       const demoConfig = JSON.parse(fs.readFileSync(configFile));
       await this.#createUserWithConfig(demoUser, demoConfig);
-      console.log("Base demo user not found... Created new one!");
+      this.#status.info(`Base demo user not found... Created new one!`);
     }
     if (!await this.#hasUserWithEmail(process.env.CI_USER)) {
       // create CI user (uses demo config, adds data dir from docs/json)
@@ -128,7 +128,7 @@ export class WebDatabase {
         fs.copyFileSync(dataSrc, dataDst);
       }
       await this.#createUserWithConfig(ciUser, ciConfig);
-      console.log("CI user not found... Created new one!");
+      this.#status.info(`CI user not found... Created new one!`);
     }
     const usersCleaned = await this.#cleanDemoUsers();
     const configsCleaned = await this.#cleanUnusedConfigs();
