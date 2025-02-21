@@ -100,35 +100,10 @@ export class WebDatabase {
    */
   async #doMaintenance() {
     if (!await this.#hasUserWithEmail(process.env.DEMO_BASE)) {
-      // create base demo user (uses demo config from docs/json)
-      const demoUser = {
-        name: "demo",
-        email: process.env.DEMO_BASE,
-        password: bcrypt.hashSync(process.env.DEMO_PASS, this.#config.authConfig.hashSalt),
-      };
-      const configFile = path.join(this.#config.jsonDataConfig.path, this.#config.jsonDataConfig.config);
-      const demoConfig = JSON.parse(fs.readFileSync(configFile));
-      await this.#createUserWithConfig(demoUser, demoConfig);
-      this.#status.info(`Base demo user not found... Created new one!`);
+      await this.#createBaseDemoUser();
     }
     if (!await this.#hasUserWithEmail(process.env.CI_USER)) {
-      // create CI user (uses demo config, adds data dir from docs/json)
-      const ciUser = {
-        name: "bruno",
-        email: process.env.CI_USER,
-        password: bcrypt.hashSync(process.env.CI_PASS, this.#config.authConfig.hashSalt),
-      };
-      const configFile = path.join(this.#config.jsonDataConfig.path, this.#config.jsonDataConfig.config);
-      const ciConfig = JSON.parse(fs.readFileSync(configFile));
-      const ciDataPath = path.join(this.#config.usersDataConfig.path, process.env.CI_USER);
-      if (!fs.existsSync(ciDataPath)) {
-        fs.mkdirSync(ciDataPath, { recursive: true });
-        const dataSrc = path.join(this.#config.jsonDataConfig.path, this.#config.jsonDataConfig.data);
-        const dataDst = path.join(ciDataPath, this.#config.jsonDataConfig.data);
-        fs.copyFileSync(dataSrc, dataDst);
-      }
-      await this.#createUserWithConfig(ciUser, ciConfig);
-      this.#status.info(`CI user not found... Created new one!`);
+      await this.#createCiUser();
     }
     const usersCleaned = await this.#cleanDemoUsers();
     const configsCleaned = await this.#cleanUnusedConfigs();
@@ -142,6 +117,37 @@ export class WebDatabase {
    */
   async #hasUserWithEmail(email) {
     return await ScrapUser.getDatabaseModel().findOne({ email: email }) != null;
+  }
+
+  async #createBaseDemoUser() {
+      const demoUser = {
+        name: "demo",
+        email: process.env.DEMO_BASE,
+        password: bcrypt.hashSync(process.env.DEMO_PASS, this.#config.authConfig.hashSalt),
+      };
+      const configFile = path.join(this.#config.jsonDataConfig.path, this.#config.jsonDataConfig.config);
+      const demoConfig = JSON.parse(fs.readFileSync(configFile));
+      await this.#createUserWithConfig(demoUser, demoConfig);
+      this.#status.info(`Base demo user not found... Created new one!`);
+  }
+
+  async #createCiUser() {
+      const ciUser = {
+        name: "bruno",
+        email: process.env.CI_USER,
+        password: bcrypt.hashSync(process.env.CI_PASS, this.#config.authConfig.hashSalt),
+      };
+      const configFile = path.join(this.#config.jsonDataConfig.path, this.#config.jsonDataConfig.config);
+      const ciConfig = JSON.parse(fs.readFileSync(configFile));
+      const ciDataPath = path.join(this.#config.usersDataConfig.path, process.env.CI_USER);
+      if (!fs.existsSync(ciDataPath)) {
+        fs.mkdirSync(ciDataPath, { recursive: true });
+        const dataSrc = path.join(this.#config.jsonDataConfig.path, this.#config.jsonDataConfig.data);
+        const dataDst = path.join(ciDataPath, this.#config.jsonDataConfig.data);
+        fs.copyFileSync(dataSrc, dataDst);
+        await this.#createUserWithConfig(ciUser, ciConfig);
+      }
+      this.#status.info(`CI user not found... Created new one!`);
   }
 
   /**
