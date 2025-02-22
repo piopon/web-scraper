@@ -1,7 +1,6 @@
 ### Project-specific ###
 user
 users/*
-!users/bruno@test.ci
 
 ### Node ###
 # Logs
