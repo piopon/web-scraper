@@ -105,6 +105,7 @@ export class WebDatabase {
     if (!await this.#hasUserWithEmail(process.env.CI_USER)) {
       await this.#createCiUser();
     }
+    this.#createCiData();
     const usersCleaned = await this.#cleanDemoUsers();
     const configsCleaned = await this.#cleanUnusedConfigs();
     this.#status.info(`Maintenance summary: ${configsCleaned} configs, ${usersCleaned} demos`);
