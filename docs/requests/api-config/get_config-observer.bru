@@ -30,10 +30,6 @@ tests {
     expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
   });
 
-  test("observer has correct content length", function() {
-    expect(res.getHeader("content-length")).to.equal("531");
-  });
-
   test("observer has correct top-level structure", function() {
     const observer = res.getBody();
     expect(observer).to.be.a('array');

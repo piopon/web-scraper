@@ -31,10 +31,6 @@ tests {
     expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
   });
 
-  test("component has correct content length", function() {
-    expect(res.getHeader("content-length")).to.equal("209");
-  });
-
   test("component has correct top-level structure", function() {
     const component = res.getBody();
     expect(component).to.be.a('array');

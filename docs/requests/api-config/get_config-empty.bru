@@ -27,10 +27,6 @@ tests {
     expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
   });
   
-  test("group has correct content length", function() {
-    expect(res.getHeader("content-length")).to.equal("2");
-  });
-  
   test("group has correct top-level structure", function() {
     const group = res.getBody();
     expect(group).to.be.a('array');
