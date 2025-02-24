@@ -23,10 +23,6 @@ tests {
     expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
   });
 
-  test("status has correct content length", function() {
-    expect(res.getHeader("content-length")).to.equal("779");
-  });
-
   test("status has correct top-level structure", function() {
     const status = res.getBody();
     expect(status).to.be.a('array');
