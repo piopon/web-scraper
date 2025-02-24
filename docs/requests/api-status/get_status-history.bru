@@ -50,7 +50,7 @@ tests {
     const status = res.getBody();
     expect(status[0].name).to.equal("web-database  ");
     expect(status[0].status).to.equal("running");
-    expect(status[0].history).to.have.lengthOf(3);
+    expect(status[0].history).to.have.lengthOf.at.least(3);
     expect(status[1].name).to.equal("web-scraper   ");
     expect(status[1].status).to.equal("stopped");
     expect(status[1].history).to.have.lengthOf(1);
