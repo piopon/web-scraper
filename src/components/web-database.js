@@ -151,6 +151,9 @@ export class WebDatabase {
       this.#status.info(`CI user not found... Created new one!`);
   }
 
+  /**
+   * Method used to check CI user data file presence and create it when needed
+   */
   #createCiData() {
     // copy the reference JSON data file to user directory
     const ciDataPath = path.join(this.#config.usersDataConfig.path, process.env.CI_USER);
