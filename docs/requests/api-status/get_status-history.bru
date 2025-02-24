@@ -103,4 +103,15 @@ tests {
     expect(status[3].history[1].type).to.equal("info");
     expect(status[3].history[1].message).to.equal("Started on port: 5000");
   });
+
+  function verifyStatusMessage(statusObject, expectedStatuses) {
+    const dateTimeRegex = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
+    expectedStatuses.forEach(expectedStatus => {
+      const index = statusObject.history.findIndex(h => h.message === expectedStatus);
+      expect(index).to.be.at.least(0);
+      expect(statusObject.history[index].timestamp).to.match(dateTimeRegex);
+      expect(statusObject.history[index].type).to.equal("info");
+      expect(statusObject.history[index].message).to.equal(expectedStatus);
+    });
+  }
 }
