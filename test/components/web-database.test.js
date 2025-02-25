@@ -59,7 +59,11 @@ describe("start() method", () => {
       password: "pass",
       timeout: 1_000,
     };
-    const testDatabase = new WebDatabase({ minLogLevel: LogLevel.INFO, databaseConfig: configObject });
+    const testDatabase = new WebDatabase({
+      minLogLevel: LogLevel.INFO,
+      databaseConfig: configObject,
+      usersDataConfig: { path: "" },
+    });
     const result = await testDatabase.start();
     expect(result).toBe(true);
     const expectedUrl = "mongodb://test-url:1234";
@@ -131,7 +135,11 @@ describe("getHistory() returns correct result", () => {
   });
   test("after correct object start", async () => {
     const configObject = { url: "test-url", port: 1234 };
-    const testDatabase = new WebDatabase({ minLogLevel: LogLevel.INFO, databaseConfig: configObject });
+    const testDatabase = new WebDatabase({
+      minLogLevel: LogLevel.INFO,
+      databaseConfig: configObject,
+      usersDataConfig: { path: "" },
+    });
     jest.spyOn(mongoose, "connect").mockImplementationOnce(() => Promise.resolve(mongoose));
     await testDatabase.start();
     const result = testDatabase.getHistory();
