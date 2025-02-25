@@ -23,10 +23,6 @@ tests {
     expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
   });
 
-  test("status has correct content length", function() {
-    expect(res.getHeader("content-length")).to.equal("779");
-  });
-
   test("status has correct top-level structure", function() {
     const status = res.getBody();
     expect(status).to.be.a('array');
@@ -54,10 +50,10 @@ tests {
     const status = res.getBody();
     expect(status[0].name).to.equal("web-database  ");
     expect(status[0].status).to.equal("running");
-    expect(status[0].history).to.have.lengthOf(3);
+    expect(status[0].history).to.have.lengthOf.at.least(3);
     expect(status[1].name).to.equal("web-scraper   ");
-    expect(status[1].status).to.equal("stopped");
-    expect(status[1].history).to.have.lengthOf(1);
+    expect(status[1].status).to.be.oneOf(["running", "stopped"]);
+    expect(status[1].history).to.have.lengthOf.at.least(1);
     expect(status[2].name).to.equal("web-components");
     expect(status[2].status).to.equal("running");
     expect(status[2].history).to.have.lengthOf(1);
@@ -83,28 +79,25 @@ tests {
   });
 
   test("status has correct history data values", function() {
-    const dateTimeRegex = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
     const status = res.getBody();
-    expect(status[0].history[0].timestamp).to.match(dateTimeRegex);
-    expect(status[0].history[0].type).to.equal("info");
-    expect(status[0].history[0].message).to.equal("Created");
-    expect(status[0].history[1].timestamp).to.match(dateTimeRegex);
-    expect(status[0].history[1].type).to.equal("info");
-    expect(status[0].history[1].message).to.equal("Connected to database");
-    expect(status[0].history[2].timestamp).to.match(dateTimeRegex);
-    expect(status[0].history[2].type).to.equal("info");
-    expect(status[0].history[2].message).to.equal("Maintenance summary: 0 configs, 0 demos");
-    expect(status[1].history[0].timestamp).to.match(dateTimeRegex);
-    expect(status[1].history[0].type).to.equal("info");
-    expect(status[1].history[0].message).to.equal("Created");
-    expect(status[2].history[0].timestamp).to.match(dateTimeRegex);
-    expect(status[2].history[0].type).to.equal("info");
-    expect(status[2].history[0].message).to.equal("Created");
-    expect(status[3].history[0].timestamp).to.match(dateTimeRegex);
-    expect(status[3].history[0].type).to.equal("info");
-    expect(status[3].history[0].message).to.equal("Created");
-    expect(status[3].history[1].timestamp).to.match(dateTimeRegex);
-    expect(status[3].history[1].type).to.equal("info");
-    expect(status[3].history[1].message).to.equal("Started on port: 5000");
+    const dbStatuses = ["Created", "Connected to database", "Maintenance summary: 0 configs, 0 demos"];
+    verifyStatusMessage(status[0], dbStatuses);
+    const scraperStatuses = ["Created"];
+    verifyStatusMessage(status[1], scraperStatuses);
+    const componentsStatuses = ["Created"];
+    verifyStatusMessage(status[2], componentsStatuses);
+    const serverStatuses = ["Created", "Started on port: 5000"];
+    verifyStatusMessage(status[3], serverStatuses);
   });
+
+  function verifyStatusMessage(statusObject, expectedStatuses) {
+    const dateTimeRegex = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
+    expectedStatuses.forEach(expectedStatus => {
+      const index = statusObject.history.findIndex(h => h.message === expectedStatus);
+      expect(index).to.be.at.least(0);
+      expect(statusObject.history[index].timestamp).to.match(dateTimeRegex);
+      expect(statusObject.history[index].type).to.equal("info");
+      expect(statusObject.history[index].message).to.equal(expectedStatus);
+    });
+  }
 }

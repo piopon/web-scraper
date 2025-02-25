@@ -105,6 +105,7 @@ export class WebDatabase {
     if (!await this.#hasUserWithEmail(process.env.CI_USER)) {
       await this.#createCiUser();
     }
+    this.#createCiData();
     const usersCleaned = await this.#cleanDemoUsers();
     const configsCleaned = await this.#cleanUnusedConfigs();
     this.#status.info(`Maintenance summary: ${configsCleaned} configs, ${usersCleaned} demos`);
@@ -147,15 +148,22 @@ export class WebDatabase {
       const configFile = path.join(this.#config.jsonDataConfig.path, this.#config.jsonDataConfig.config);
       const ciConfig = JSON.parse(fs.readFileSync(configFile));
       await this.#createUserWithConfig(ciUser, ciConfig);
-      // copy the reference JSON data file to user directory
-      const ciDataPath = path.join(this.#config.usersDataConfig.path, process.env.CI_USER);
-      if (!fs.existsSync(ciDataPath)) {
-        fs.mkdirSync(ciDataPath, { recursive: true });
-        const dataSrc = path.join(this.#config.jsonDataConfig.path, this.#config.jsonDataConfig.data);
-        const dataDst = path.join(ciDataPath, this.#config.jsonDataConfig.data);
-        fs.copyFileSync(dataSrc, dataDst);
-      }
-      this.#status.info(`CI user not found... Created one and copied data file!`);
+      this.#status.info(`CI user not found... Created new one!`);
+  }
+
+  /**
+   * Method used to check CI user data file presence and create it when needed
+   */
+  #createCiData() {
+    // copy the reference JSON data file to user directory
+    const ciDataPath = path.join(this.#config.usersDataConfig.path, process.env.CI_USER);
+    if (!fs.existsSync(ciDataPath)) {
+      fs.mkdirSync(ciDataPath, { recursive: true });
+      const dataSrc = path.join(this.#config.jsonDataConfig.path, this.#config.jsonDataConfig.data);
+      const dataDst = path.join(ciDataPath, this.#config.jsonDataConfig.data);
+      fs.copyFileSync(dataSrc, dataDst);
+      this.#status.info(`CI user data missing... Copied reference file!`);
+    }
   }
 
   /**

@@ -4,8 +4,12 @@ import { ScrapConfig } from "../../src/model/scrap-config.js";
 import { ScrapUser } from "../../src/model/scrap-user.js";
 
 import { jest } from "@jest/globals";
+import fs from "fs";
+import path from "path";
 import mongoose from "mongoose";
 
+jest.mock("fs");
+jest.mock("path");
 jest.mock("mongoose");
 jest.mock("../../src/model/scrap-config.js");
 jest.mock("../../src/model/scrap-user.js");
@@ -44,6 +48,8 @@ test("getInfo() returns correct result", () => {
 
 describe("start() method", () => {
   test("succeeds with valid input data", async () => {
+    jest.spyOn(fs, "existsSync").mockImplementation((_) => true);
+    jest.spyOn(path, "join").mockImplementation((_) => "");
     const mockConfigResult = { countDocuments: () => 1 };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockConfigResult);
     const mockUserResult = { findOne: (_) => true, countDocuments: () => 1, deleteMany: (_) => ({ deletedCount: 0 }) };
@@ -59,7 +65,11 @@ describe("start() method", () => {
       password: "pass",
       timeout: 1_000,
     };
-    const testDatabase = new WebDatabase({ minLogLevel: LogLevel.INFO, databaseConfig: configObject });
+    const testDatabase = new WebDatabase({
+      minLogLevel: LogLevel.INFO,
+      databaseConfig: configObject,
+      usersDataConfig: { path: "" },
+    });
     const result = await testDatabase.start();
     expect(result).toBe(true);
     const expectedUrl = "mongodb://test-url:1234";
@@ -131,7 +141,11 @@ describe("getHistory() returns correct result", () => {
   });
   test("after correct object start", async () => {
     const configObject = { url: "test-url", port: 1234 };
-    const testDatabase = new WebDatabase({ minLogLevel: LogLevel.INFO, databaseConfig: configObject });
+    const testDatabase = new WebDatabase({
+      minLogLevel: LogLevel.INFO,
+      databaseConfig: configObject,
+      usersDataConfig: { path: "" },
+    });
     jest.spyOn(mongoose, "connect").mockImplementationOnce(() => Promise.resolve(mongoose));
     await testDatabase.start();
     const result = testDatabase.getHistory();
