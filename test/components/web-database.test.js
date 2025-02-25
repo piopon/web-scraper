@@ -4,8 +4,10 @@ import { ScrapConfig } from "../../src/model/scrap-config.js";
 import { ScrapUser } from "../../src/model/scrap-user.js";
 
 import { jest } from "@jest/globals";
+import fs from "fs";
 import mongoose from "mongoose";
 
+jest.mock("fs");
 jest.mock("mongoose");
 jest.mock("../../src/model/scrap-config.js");
 jest.mock("../../src/model/scrap-user.js");
@@ -44,6 +46,7 @@ test("getInfo() returns correct result", () => {
 
 describe("start() method", () => {
   test("succeeds with valid input data", async () => {
+    jest.spyOn(fs, "existsSync").mockImplementation((_) => true);
     const mockConfigResult = { countDocuments: () => 1 };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockConfigResult);
     const mockUserResult = { findOne: (_) => true, countDocuments: () => 1, deleteMany: (_) => ({ deletedCount: 0 }) };
