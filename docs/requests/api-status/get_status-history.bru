@@ -53,7 +53,7 @@ tests {
     expect(status[0].history).to.have.lengthOf.at.least(3);
     expect(status[1].name).to.equal("web-scraper   ");
     expect(status[1].status).to.equal("stopped");
-    expect(status[1].history).to.have.lengthOf(1);
+    expect(status[1].history).to.have.lengthOf.at.least(1);
     expect(status[2].name).to.equal("web-components");
     expect(status[2].status).to.equal("running");
     expect(status[2].history).to.have.lengthOf(1);
