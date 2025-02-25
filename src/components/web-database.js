@@ -156,7 +156,7 @@ export class WebDatabase {
    */
   #createCiData() {
     // copy the reference JSON data file to user directory
-    const ciDataPath = path.join(this.#config.usersDataConfig.path, process.env.CI_USER || "");
+    const ciDataPath = path.join(this.#config.usersDataConfig.path, process.env.CI_USER);
     if (!fs.existsSync(ciDataPath)) {
       fs.mkdirSync(ciDataPath, { recursive: true });
       const dataSrc = path.join(this.#config.jsonDataConfig.path, this.#config.jsonDataConfig.data);
