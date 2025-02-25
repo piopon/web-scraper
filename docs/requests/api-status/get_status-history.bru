@@ -79,22 +79,15 @@ tests {
   });
 
   test("status has correct history data values", function() {
-    const dateTimeRegex = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
     const status = res.getBody();
     const dbStatuses = ["Created", "Connected to database", "Maintenance summary: 0 configs, 0 demos"];
     verifyStatusMessage(status[0], dbStatuses);
-    expect(status[1].history[0].timestamp).to.match(dateTimeRegex);
-    expect(status[1].history[0].type).to.equal("info");
-    expect(status[1].history[0].message).to.equal("Created");
-    expect(status[2].history[0].timestamp).to.match(dateTimeRegex);
-    expect(status[2].history[0].type).to.equal("info");
-    expect(status[2].history[0].message).to.equal("Created");
-    expect(status[3].history[0].timestamp).to.match(dateTimeRegex);
-    expect(status[3].history[0].type).to.equal("info");
-    expect(status[3].history[0].message).to.equal("Created");
-    expect(status[3].history[1].timestamp).to.match(dateTimeRegex);
-    expect(status[3].history[1].type).to.equal("info");
-    expect(status[3].history[1].message).to.equal("Started on port: 5000");
+    const scraperStatuses = ["Created"];
+    verifyStatusMessage(status[1], scraperStatuses);
+    const componentsStatuses = ["Created"];
+    verifyStatusMessage(status[2], componentsStatuses);
+    const serverStatuses = ["Created", "Started on port: 5000"];
+    verifyStatusMessage(status[3], serverStatuses);
   });
 
   function verifyStatusMessage(statusObject, expectedStatuses) {
