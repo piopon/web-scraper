@@ -1,0 +1,12 @@
+name: "web-scraper"
+
+services:
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+  app:
+    context: .
+    dockerfile: Dockerfile
+    depends_on:
+      - mongodb
