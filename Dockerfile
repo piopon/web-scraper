@@ -4,5 +4,6 @@ WORKDIR /home/node/app
 COPY package*.json ./
 USER node
 RUN npm install
-COPY . /app
+COPY --chown=node:node . .
+EXPOSE 5000
 CMD ["npm", "run", "start"]
