@@ -1,0 +1,8 @@
+# dont copy build, test directories to container
+coverage
+node_modules
+users
+# dont copy NPM and docker related files to container
+npm-debug.log
+Dockerfile
+.dockerignore
