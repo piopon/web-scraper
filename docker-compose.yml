@@ -3,6 +3,8 @@ name: "web-scraper"
 services:
   mongodb:
     image: mongo
+    container_name: mongodb
+    restart: unless-stopped
     env_file: ./.env
     ports:
       - $DB_PORT:$DB_PORT
@@ -10,6 +12,8 @@ services:
       - mongodb_data:/data/db
   scraper:
     context: .
+    container_name: web-scraper
+    restart: unless-stopped
     env_file: ./.env
     dockerfile: Dockerfile
     ports:
