@@ -3,10 +3,14 @@ name: "web-scraper"
 services:
   mongodb:
     image: mongo
+    env_file: ./.env
     ports:
-      - "27017:27017"
-  app:
+      - $DB_PORT:$DB_PORT
+  scraper:
     context: .
+    env_file: ./.env
     dockerfile: Dockerfile
+    ports:
+      - $SERVER_PORT:$SERVER_PORT
     depends_on:
       - mongodb
