@@ -6,6 +6,8 @@ services:
     env_file: ./.env
     ports:
       - $DB_PORT:$DB_PORT
+    volumes:
+      - mongodb_data:/data/db
   scraper:
     context: .
     env_file: ./.env
@@ -14,3 +16,6 @@ services:
       - $SERVER_PORT:$SERVER_PORT
     depends_on:
       - mongodb
+
+volumes:
+  mongodb_data:
