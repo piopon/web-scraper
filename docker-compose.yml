@@ -16,6 +16,8 @@ services:
     restart: unless-stopped
     env_file: ./.env
     dockerfile: Dockerfile
+    args:
+      - SERVER_PORT=$SERVER_PORT
     ports:
       - $SERVER_PORT:$SERVER_PORT
     depends_on:
