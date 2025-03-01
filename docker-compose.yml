@@ -20,8 +20,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    args:
-      - SERVER_PORT=$SERVER_PORT
+      args:
+        - SERVER_PORT=$SERVER_PORT
     ports:
       - $SERVER_PORT:$SERVER_PORT
     depends_on:
