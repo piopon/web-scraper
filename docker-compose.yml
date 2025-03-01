@@ -14,11 +14,12 @@ services:
     volumes:
       - mongodb_data:/data/db
   scraper:
-    context: .
     container_name: web-scraper
     restart: unless-stopped
     env_file: ./.env
-    dockerfile: Dockerfile
+    build:
+      context: .
+      dockerfile: Dockerfile
     args:
       - SERVER_PORT=$SERVER_PORT
     ports:
