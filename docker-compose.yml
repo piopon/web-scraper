@@ -13,8 +13,8 @@ services:
       - $DB_PORT:$DB_PORT
     volumes:
       - mongodb_data:/data/db
-  scraper:
-    container_name: web-scraper
+  app:
+    container_name: scraper
     restart: unless-stopped
     env_file: ./.env
     build:
