@@ -1,4 +1,4 @@
-FROM node:22-alpine
+FROM node:22-slim
 ARG SERVER_PORT=5000
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 RUN apt-get update && apt-get install gnupg wget -y && \
