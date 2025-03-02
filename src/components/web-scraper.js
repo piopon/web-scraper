@@ -7,6 +7,7 @@ import { ScrapUser } from "../model/scrap-user.js";
 import { StatusLogger } from "./status-logger.js";
 import { TimeoutError } from "puppeteer";
 
+import locateChrome from "locate-chrome";
 import puppeteer from "puppeteer";
 import path from "path";
 import fs from "fs";
@@ -40,6 +41,11 @@ export class WebScraper {
    * @returns true if scraper started successfully, false otherwise
    */
   async start(sessionUser) {
+    const browserPath = await locateChrome() || '';
+    if ('' === browserPath) {
+      this.#status.error(`Cannot find browser`);
+      return false;
+    }
     if (!(sessionUser instanceof Object)) {
       this.#status.error(`Invalid scrap user type`);
       return false;
@@ -81,7 +87,7 @@ export class WebScraper {
     }
     this.#status.debug("Initializing virtual browser");
     // open new Puppeteer virtual browser and an initial web page
-    session.browser = await puppeteer.launch({ headless: "new" });
+    session.browser = await puppeteer.launch({ executablePath: browserPath, headless: "new" });
     session.page = await session.browser.newPage();
     session.page.setDefaultTimeout(this.#scrapConfig.defaultTimeout);
     // set custom user agent in order to make things work in headless mode
