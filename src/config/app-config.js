@@ -55,6 +55,7 @@ export class AppConfig {
         scrapInterval: 30_000,
         defaultTimeout: 15_000,
         timeoutAttempts: 10,
+        embeddedBrowser: false,
       },
     };
   }
