@@ -41,6 +41,7 @@ export class WebScraper {
    * @returns true if scraper started successfully, false otherwise
    */
   async start(sessionUser) {
+    let browserPath = undefined;
     if (!this.#scrapConfig.embeddedBrowser) {
       browserPath = (await locateChrome()) || "";
       if ("" === browserPath) {
