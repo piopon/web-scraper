@@ -41,10 +41,12 @@ export class WebScraper {
    * @returns true if scraper started successfully, false otherwise
    */
   async start(sessionUser) {
-    const browserPath = await locateChrome() || '';
-    if ('' === browserPath) {
-      this.#status.error(`Cannot find browser`);
-      return false;
+    if (!this.#scrapConfig.embeddedBrowser) {
+      browserPath = (await locateChrome()) || "";
+      if ("" === browserPath) {
+        this.#status.error(`Cannot find browser`);
+        return false;
+      }
     }
     if (!(sessionUser instanceof Object)) {
       this.#status.error(`Invalid scrap user type`);
@@ -87,7 +89,11 @@ export class WebScraper {
     }
     this.#status.debug("Initializing virtual browser");
     // open new Puppeteer virtual browser and an initial web page
-    session.browser = await puppeteer.launch({ executablePath: browserPath, headless: "new" });
+    const testcfg = {
+      ...(browserPath ? { executablePath: browserPath } : {}),
+      headless: "new",
+    }
+    session.browser = await puppeteer.launch(testcfg);
     session.page = await session.browser.newPage();
     session.page.setDefaultTimeout(this.#scrapConfig.defaultTimeout);
     // set custom user agent in order to make things work in headless mode
