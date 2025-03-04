@@ -34,10 +34,10 @@ test("getMaster() returns correct result", () => {
 });
 
 describe("start() method", () => {
-  jest.mock('locate-chrome', () => ({
-    locateChrome: jest.fn(() => Promise.resolve('testowa/sciezka')),
-  }));
-  const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO, scraperConfig: { defaultTimeout: 10 } });
+  const testScraper = new WebScraper({
+    minLogLevel: LogLevel.INFO,
+    scraperConfig: { defaultTimeout: 10, embeddedBrowser: true },
+  });
   test("fails when no session user is provided", async () => {
     const result = await testScraper.start();
     expect(result).toBe(false);
@@ -96,9 +96,6 @@ describe("start() method", () => {
 });
 
 describe("stop() method", () => {
-  jest.mock('locate-chrome', () => ({
-    locateChrome: jest.fn(() => Promise.resolve('testowa/sciezka')),
-  }));
   const userConfig = {
     user: "ID",
     groups: [
@@ -114,7 +111,10 @@ describe("stop() method", () => {
     ],
   };
   const sessionUser = { name: "test", email: "mail", config: userConfig };
-  const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO, scraperConfig: { defaultTimeout: 10 } });
+  const testScraper = new WebScraper({
+    minLogLevel: LogLevel.INFO,
+    scraperConfig: { defaultTimeout: 10, embeddedBrowser: true },
+  });
   test("does not do anything when session was not started", async () => {
     await testScraper.stop();
     const result = testScraper.getHistory(sessionUser);
@@ -144,7 +144,10 @@ describe("stop() method", () => {
 
 describe("getHistory() returns correct result", () => {
   const sessionUser = { name: "test", email: "mail" };
-  const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO, scraperConfig: { defaultTimeout: 10 } });
+  const testScraper = new WebScraper({
+    minLogLevel: LogLevel.INFO,
+    scraperConfig: { defaultTimeout: 10, embeddedBrowser: true },
+  });
   test("after creating object", async () => {
     const result = testScraper.getHistory(sessionUser);
     expect(result.length).toBe(1);
@@ -169,7 +172,10 @@ describe("getStatus() returns correct result", () => {
     ],
   };
   const sessionUser = { name: "test", email: "mail", config: userConfig };
-  const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO, scraperConfig: { defaultTimeout: 10 } });
+  const testScraper = new WebScraper({
+    minLogLevel: LogLevel.INFO,
+    scraperConfig: { defaultTimeout: 10, embeddedBrowser: true },
+  });
   test("when session is not provided nor started then STOPPED", async () => {
     expect(testScraper.getStatus()).toBe(ComponentStatus.STOPPED);
   });
@@ -197,7 +203,10 @@ describe("getStatus() returns correct result", () => {
 });
 
 describe("update() method", () => {
-  const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO, scraperConfig: { defaultTimeout: 10 } });
+  const testScraper = new WebScraper({
+    minLogLevel: LogLevel.INFO,
+    scraperConfig: { defaultTimeout: 10, embeddedBrowser: true },
+  });
   test("returns errors when session is not existing", async () => {
     const sessionUser = { name: "test", email: "mail" };
     testScraper.update(sessionUser, { config: "name" });
