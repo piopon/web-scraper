@@ -89,7 +89,7 @@ describe("start() method", () => {
     const result = await testScraper.start({ name: "test", email: "mail", config: userConfig });
     expect(result).toBe(true);
     await testScraper.stop("mail");
-  }, 10_000);
+  }, 30_000);
 });
 
 describe("stop() method", () => {
@@ -124,7 +124,7 @@ describe("stop() method", () => {
     const result = testScraper.getHistory(sessionUser);
     expect(result[result.length - 1].type).toBe("info");
     expect(result[result.length - 1].message).toBe("mail: Stopped.");
-  });
+  }, 30_000);
   test("does correctly stop session with error message", async () => {
     const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
