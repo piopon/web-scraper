@@ -90,11 +90,10 @@ export class WebScraper {
     }
     this.#status.debug("Initializing virtual browser");
     // open new Puppeteer virtual browser and an initial web page
-    const testcfg = {
+    session.browser = await puppeteer.launch({
       ...(browserPath ? { executablePath: browserPath } : {}),
       headless: "new",
-    }
-    session.browser = await puppeteer.launch(testcfg);
+    });
     session.page = await session.browser.newPage();
     session.page.setDefaultTimeout(this.#scrapConfig.defaultTimeout);
     // set custom user agent in order to make things work in headless mode
