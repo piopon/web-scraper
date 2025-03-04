@@ -34,6 +34,9 @@ test("getMaster() returns correct result", () => {
 });
 
 describe("start() method", () => {
+  jest.mock('locate-chrome', () => ({
+    locateChrome: jest.fn(() => Promise.resolve('testowa/sciezka')),
+  }));
   const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO, scraperConfig: { defaultTimeout: 10 } });
   test("fails when no session user is provided", async () => {
     const result = await testScraper.start();
@@ -93,6 +96,9 @@ describe("start() method", () => {
 });
 
 describe("stop() method", () => {
+  jest.mock('locate-chrome', () => ({
+    locateChrome: jest.fn(() => Promise.resolve('testowa/sciezka')),
+  }));
   const userConfig = {
     user: "ID",
     groups: [
