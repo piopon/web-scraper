@@ -41,13 +41,10 @@ export class WebScraper {
    * @returns true if scraper started successfully, false otherwise
    */
   async start(sessionUser) {
-    let browserPath = undefined;
-    if (!this.#scrapConfig.embeddedBrowser) {
-      browserPath = (await locateChrome()) || "";
-      if ("" === browserPath) {
-        this.#status.error(`Cannot find browser`);
-        return false;
-      }
+    const browserPath = await this.#getExternalBrowserPath();
+    if ("" === browserPath) {
+      this.#status.error(`Cannot find browser`);
+      return false;
     }
     if (!(sessionUser instanceof Object)) {
       this.#status.error(`Invalid scrap user type`);
@@ -467,5 +464,12 @@ export class WebScraper {
     const utcRef = Date.UTC(dateRef.getFullYear(), dateRef.getMonth(), dateRef.getDate());
     const utcCurr = Date.UTC(dateCurr.getFullYear(), dateCurr.getMonth(), dateCurr.getDate());
     return Math.floor((utcCurr - utcRef) / milisecondsInDay);
+  }
+
+  async #getExternalBrowserPath() {
+    if (!this.#scrapConfig.embeddedBrowser) {
+      return (await locateChrome()) || "";
+    }
+    return undefined;
   }
 }
