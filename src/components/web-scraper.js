@@ -466,6 +466,10 @@ export class WebScraper {
     return Math.floor((utcCurr - utcRef) / milisecondsInDay);
   }
 
+  /**
+   * Method used to receive the external browser path (if needed, undefined otherwise)
+   * @returns string with external browser path, empty string if error, or undefined if embedded browser usage
+   */
   async #getExternalBrowserPath() {
     if (!this.#scrapConfig.embeddedBrowser) {
       return (await locateChrome()) || "";
