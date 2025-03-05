@@ -34,41 +34,44 @@ test("getMaster() returns correct result", () => {
 });
 
 describe("start() method", () => {
-  const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO, scraperConfig: { defaultTimeout: 10 } });
+  const testScraper = new WebScraper({
+    minLogLevel: LogLevel.INFO,
+    scraperConfig: { defaultTimeout: 10, embeddedBrowser: true },
+  });
   test("fails when no session user is provided", async () => {
     const result = await testScraper.start();
     expect(result).toBe(false);
-  });
+  }, 15_000);
   test("fails when session user has invalid type", async () => {
     const result = await testScraper.start("user");
     expect(result).toBe(false);
-  });
+  }, 15_000);
   test("fails when session user has no name property", async () => {
     const userConfig = { user: "ID", groups: [] };
     const result = await testScraper.start({ email: "mail", config: userConfig });
     expect(result).toBe(false);
-  });
+  }, 15_000);
   test("fails when session user has no email property", async () => {
     const userConfig = { user: "ID", groups: [] };
     const result = await testScraper.start({ email: "mail", config: userConfig });
     expect(result).toBe(false);
-  });
+  }, 10_000);
   test("fails when session user has no config property", async () => {
     const result = await testScraper.start({ name: "test", email: "mail" });
     expect(result).toBe(false);
-  });
+  }, 15_000);
   test("fails when specified user configuration is invalid", async () => {
     const userConfig = { user: "ID", groups: [] };
     const result = await testScraper.start({ name: "test", email: "mail", config: userConfig });
     expect(result).toBe(false);
-  });
+  }, 15_000);
   test("fails when specified user configuration is missing", async () => {
     const userConfig = { user: "ID", groups: [] };
     const mockResult = null;
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
     const result = await testScraper.start({ name: "test", email: "mail", config: userConfig });
     expect(result).toBe(false);
-  });
+  }, 15_000);
   test("succeeds when specified user configuration is found", async () => {
     const userConfig = {
       user: "ID",
@@ -89,7 +92,7 @@ describe("start() method", () => {
     const result = await testScraper.start({ name: "test", email: "mail", config: userConfig });
     expect(result).toBe(true);
     await testScraper.stop("mail");
-  }, 10_000);
+  }, 15_000);
 });
 
 describe("stop() method", () => {
@@ -108,14 +111,17 @@ describe("stop() method", () => {
     ],
   };
   const sessionUser = { name: "test", email: "mail", config: userConfig };
-  const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO, scraperConfig: { defaultTimeout: 10 } });
+  const testScraper = new WebScraper({
+    minLogLevel: LogLevel.INFO,
+    scraperConfig: { defaultTimeout: 10, embeddedBrowser: true },
+  });
   test("does not do anything when session was not started", async () => {
     await testScraper.stop();
     const result = testScraper.getHistory(sessionUser);
     expect(result.length).toBe(2);
     expect(result[1].type).toBe("error");
     expect(result[1].message).toBe("Invalid internal state: session not started");
-  });
+  }, 15_000);
   test("does correctly stop session with info message", async () => {
     const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
@@ -124,7 +130,7 @@ describe("stop() method", () => {
     const result = testScraper.getHistory(sessionUser);
     expect(result[result.length - 1].type).toBe("info");
     expect(result[result.length - 1].message).toBe("mail: Stopped.");
-  });
+  }, 15_000);
   test("does correctly stop session with error message", async () => {
     const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
@@ -133,12 +139,15 @@ describe("stop() method", () => {
     const result = testScraper.getHistory(sessionUser);
     expect(result[result.length - 1].type).toBe("info");
     expect(result[result.length - 1].message).toBe("mail: Error message");
-  });
+  }, 15_000);
 });
 
 describe("getHistory() returns correct result", () => {
   const sessionUser = { name: "test", email: "mail" };
-  const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO, scraperConfig: { defaultTimeout: 10 } });
+  const testScraper = new WebScraper({
+    minLogLevel: LogLevel.INFO,
+    scraperConfig: { defaultTimeout: 10, embeddedBrowser: true },
+  });
   test("after creating object", async () => {
     const result = testScraper.getHistory(sessionUser);
     expect(result.length).toBe(1);
@@ -163,7 +172,10 @@ describe("getStatus() returns correct result", () => {
     ],
   };
   const sessionUser = { name: "test", email: "mail", config: userConfig };
-  const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO, scraperConfig: { defaultTimeout: 10 } });
+  const testScraper = new WebScraper({
+    minLogLevel: LogLevel.INFO,
+    scraperConfig: { defaultTimeout: 10, embeddedBrowser: true },
+  });
   test("when session is not provided nor started then STOPPED", async () => {
     expect(testScraper.getStatus()).toBe(ComponentStatus.STOPPED);
   });
@@ -191,7 +203,10 @@ describe("getStatus() returns correct result", () => {
 });
 
 describe("update() method", () => {
-  const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO, scraperConfig: { defaultTimeout: 10 } });
+  const testScraper = new WebScraper({
+    minLogLevel: LogLevel.INFO,
+    scraperConfig: { defaultTimeout: 10, embeddedBrowser: true },
+  });
   test("returns errors when session is not existing", async () => {
     const sessionUser = { name: "test", email: "mail" };
     testScraper.update(sessionUser, { config: "name" });

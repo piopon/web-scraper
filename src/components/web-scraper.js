@@ -7,6 +7,7 @@ import { ScrapUser } from "../model/scrap-user.js";
 import { StatusLogger } from "./status-logger.js";
 import { TimeoutError } from "puppeteer";
 
+import locateChrome from "locate-chrome";
 import puppeteer from "puppeteer";
 import path from "path";
 import fs from "fs";
@@ -40,6 +41,11 @@ export class WebScraper {
    * @returns true if scraper started successfully, false otherwise
    */
   async start(sessionUser) {
+    const browserPath = await this.#getExternalBrowserPath();
+    if ("" === browserPath) {
+      this.#status.error(`Cannot find browser`);
+      return false;
+    }
     if (!(sessionUser instanceof Object)) {
       this.#status.error(`Invalid scrap user type`);
       return false;
@@ -81,7 +87,10 @@ export class WebScraper {
     }
     this.#status.debug("Initializing virtual browser");
     // open new Puppeteer virtual browser and an initial web page
-    session.browser = await puppeteer.launch({ headless: "new" });
+    session.browser = await puppeteer.launch({
+      ...(browserPath ? { executablePath: browserPath } : {}),
+      headless: "new",
+    });
     session.page = await session.browser.newPage();
     session.page.setDefaultTimeout(this.#scrapConfig.defaultTimeout);
     // set custom user agent in order to make things work in headless mode
@@ -455,5 +464,16 @@ export class WebScraper {
     const utcRef = Date.UTC(dateRef.getFullYear(), dateRef.getMonth(), dateRef.getDate());
     const utcCurr = Date.UTC(dateCurr.getFullYear(), dateCurr.getMonth(), dateCurr.getDate());
     return Math.floor((utcCurr - utcRef) / milisecondsInDay);
+  }
+
+  /**
+   * Method used to receive the external browser path (if needed, undefined otherwise)
+   * @returns string with external browser path, empty string if error, or undefined if embedded browser usage
+   */
+  async #getExternalBrowserPath() {
+    if (!this.#scrapConfig.embeddedBrowser) {
+      return (await locateChrome()) || "";
+    }
+    return undefined;
   }
 }
