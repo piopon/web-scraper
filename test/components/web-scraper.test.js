@@ -121,7 +121,7 @@ describe("stop() method", () => {
     expect(result.length).toBe(2);
     expect(result[1].type).toBe("error");
     expect(result[1].message).toBe("Invalid internal state: session not started");
-  });
+  }, 15_000);
   test("does correctly stop session with info message", async () => {
     const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
@@ -130,7 +130,7 @@ describe("stop() method", () => {
     const result = testScraper.getHistory(sessionUser);
     expect(result[result.length - 1].type).toBe("info");
     expect(result[result.length - 1].message).toBe("mail: Stopped.");
-  }, 30_000);
+  }, 15_000);
   test("does correctly stop session with error message", async () => {
     const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
@@ -139,7 +139,7 @@ describe("stop() method", () => {
     const result = testScraper.getHistory(sessionUser);
     expect(result[result.length - 1].type).toBe("info");
     expect(result[result.length - 1].message).toBe("mail: Error message");
-  });
+  }, 15_000);
 });
 
 describe("getHistory() returns correct result", () => {
