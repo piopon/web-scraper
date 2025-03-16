@@ -7,6 +7,7 @@ import mongoose from "mongoose";
 import { MongooseError } from "mongoose";
 import { Strategy as LocalStategy } from "passport-local";
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20"
 
 export class AuthConfig {
   #components = undefined;
@@ -33,6 +34,8 @@ export class AuthConfig {
     this.#configJwtStategy();
     this.#configLoginStategy();
     this.#configRegisterStategy();
+    // configure external auth providers
+    this.#configGoogleStategy();
     // configure demo session
     this.#configDemoStategy();
     // configure common serialize and deserialize user logic
@@ -157,6 +160,19 @@ export class AuthConfig {
       }
     };
     this.#passport.use("local-register", new LocalStategy(options, verify));
+  }
+
+  #configGoogleStategy() {
+    const options = {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: "/",
+      passReqToCallback: true
+    };
+    const verify = async (request, accessToken, refreshToken, profile, done) => {
+      return done(null, profile);
+    };
+    this.#passport.use("google", new GoogleStrategy(options, verify));
   }
 
   /**
