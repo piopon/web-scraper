@@ -51,8 +51,8 @@ export class AppConfig {
         hashSalt: parseInt(process.env.ENCRYPT_SALT) || 10,
       },
       scraperConfig: {
-        loginInterval: 30,
-        scrapInterval: 30_000,
+        loginInterval: parseInt(process.env.SCRAP_INACTIVE_DAYS) || 30,
+        scrapInterval: parseInt(process.env.SCRAP_INTERVAL_SEC) * 1_000 || 30_000,
         defaultTimeout: 15_000,
         timeoutAttempts: 10,
         embeddedBrowser: false,
