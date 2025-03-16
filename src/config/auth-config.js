@@ -166,7 +166,7 @@ export class AuthConfig {
     const options = {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "/",
+      callbackURL: "/auth/google/verify",
       passReqToCallback: true
     };
     const verify = async (request, accessToken, refreshToken, profile, done) => {

@@ -62,6 +62,12 @@ export class AuthRouter {
       scope: ["email", "profile"],
     });
     router.get("/google", AccessChecker.canViewSessionUser, googleCallback);
+    const googleVerification = this.#passport.authenticate("google", {
+      failureRedirect: "/auth/login",
+    });
+    router.get("/google/verify", AccessChecker.canViewSessionUser, googleVerification, (_, response) => {
+      response.redirect("/");
+    });
   }
 
   /**
