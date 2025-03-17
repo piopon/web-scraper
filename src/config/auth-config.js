@@ -170,6 +170,12 @@ export class AuthConfig {
       passReqToCallback: true
     };
     const verify = async (request, accessToken, refreshToken, profile, done) => {
+      const googleEmail = profile.emails[0].value;
+      // verify if user authenticated via Google is already in the system
+      const user = await ScrapUser.getDatabaseModel().findOne({ email: googleEmail });
+      if (user) {
+        return done(null, user);
+      }
       // create a new user with hashed password and add it to database
       const googleUser = await ScrapUser.getDatabaseModel().create({
         name: profile.displayName,
