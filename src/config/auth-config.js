@@ -181,7 +181,7 @@ export class AuthConfig {
       // create a new user with hashed password and add it to database
       const googleUser = await ScrapUser.getDatabaseModel().create({
         name: profile.displayName,
-        email: profile.emails[0].value,
+        email: googleEmail,
         password: AuthConfig.#EXTERNAL_PROVIDER_PASS,
       });
       // user at this point has no config - we must create and link it
