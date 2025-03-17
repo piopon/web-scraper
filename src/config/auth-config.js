@@ -170,7 +170,17 @@ export class AuthConfig {
       passReqToCallback: true
     };
     const verify = async (request, accessToken, refreshToken, profile, done) => {
-      return done(null, profile);
+      // create a new user with hashed password and add it to database
+      const googleUser = await ScrapUser.getDatabaseModel().create({
+        name: profile.displayName,
+        email: profile.emails[0].value,
+        password: "external",
+      });
+      // user at this point has no config - we must create and link it
+      const googleConfig = await ScrapConfig.getDatabaseModel().create({ user: googleUser._id });
+      googleUser.config = googleConfig._id;
+      await googleUser.save()
+      return done(null, googleUser);
     };
     this.#passport.use("google", new GoogleStrategy(options, verify));
   }
