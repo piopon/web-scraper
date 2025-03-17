@@ -10,6 +10,8 @@ import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20"
 
 export class AuthConfig {
+  static #EXTERNAL_PROVIDER_PASS = "external";
+
   #components = undefined;
   #passport = undefined;
   #config = undefined;
@@ -180,7 +182,7 @@ export class AuthConfig {
       const googleUser = await ScrapUser.getDatabaseModel().create({
         name: profile.displayName,
         email: profile.emails[0].value,
-        password: "external",
+        password: AuthConfig.#EXTERNAL_PROVIDER_PASS,
       });
       // user at this point has no config - we must create and link it
       const googleConfig = await ScrapConfig.getDatabaseModel().create({ user: googleUser._id });
