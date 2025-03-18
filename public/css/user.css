@@ -28,6 +28,11 @@ p.user-error {
 
 section.user-management form.user-credentials,
 section.user-management form.user-external {
+  margin-bottom: 0.5rem;
+}
+
+section.user-management form.user-credentials,
+section.user-management form.user-external {
   width: 90%;
 }
 
