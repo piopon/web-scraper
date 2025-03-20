@@ -7,8 +7,11 @@ import mongoose from "mongoose";
 import { MongooseError } from "mongoose";
 import { Strategy as LocalStategy } from "passport-local";
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20"
 
 export class AuthConfig {
+  static #EXTERNAL_PROVIDER_PASS = "external";
+
   #components = undefined;
   #passport = undefined;
   #config = undefined;
@@ -33,6 +36,8 @@ export class AuthConfig {
     this.#configJwtStategy();
     this.#configLoginStategy();
     this.#configRegisterStategy();
+    // configure external auth providers
+    this.#configGoogleStategy();
     // configure demo session
     this.#configDemoStategy();
     // configure common serialize and deserialize user logic
@@ -157,6 +162,38 @@ export class AuthConfig {
       }
     };
     this.#passport.use("local-register", new LocalStategy(options, verify));
+  }
+
+  /**
+   * Method used to configurate login strategy via Google
+   */
+  #configGoogleStategy() {
+    const options = {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: "/auth/google/callback",
+      passReqToCallback: true
+    };
+    const verify = async (request, accessToken, refreshToken, profile, done) => {
+      const googleEmail = profile.emails[0].value;
+      // verify if user authenticated via Google is already in the system
+      const user = await ScrapUser.getDatabaseModel().findOne({ email: googleEmail });
+      if (user) {
+        return done(null, user);
+      }
+      // create a new user with hashed password and add it to database
+      const googleUser = await ScrapUser.getDatabaseModel().create({
+        name: profile.displayName,
+        email: googleEmail,
+        password: AuthConfig.#EXTERNAL_PROVIDER_PASS,
+      });
+      // user at this point has no config - we must create and link it
+      const googleConfig = await ScrapConfig.getDatabaseModel().create({ user: googleUser._id });
+      googleUser.config = googleConfig._id;
+      await googleUser.save()
+      return done(null, googleUser);
+    };
+    this.#passport.use("google", new GoogleStrategy(options, verify));
   }
 
   /**

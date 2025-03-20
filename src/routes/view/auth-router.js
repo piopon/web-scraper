@@ -58,6 +58,12 @@ export class AuthRouter {
       const token = jwt.sign(signedData, process.env.JWT_SECRET);
       return response.status(200).json({ token });
     });
+    const googleLogin = this.#passport.authenticate("google", { scope: ["email", "profile"] });
+    router.get("/google", AccessChecker.canViewSessionUser, googleLogin);
+    const googleCallback = this.#passport.authenticate("google", { failureRedirect: "/auth/login" });
+    router.get("/google/callback", AccessChecker.canViewSessionUser, googleCallback, (_, response) => {
+      response.redirect("/");
+    });
   }
 
   /**

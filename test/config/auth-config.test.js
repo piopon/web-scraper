@@ -5,6 +5,7 @@ import { AuthConfig } from "../../src/config/auth-config";
 import passport from "passport";
 
 process.env.JWT_SECRET = "test_secret";
+process.env.GOOGLE_CLIENT_ID = "test_id";
 
 test("configure returns correct result", () => {
     const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
