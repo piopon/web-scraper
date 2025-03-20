@@ -164,6 +164,9 @@ export class AuthConfig {
     this.#passport.use("local-register", new LocalStategy(options, verify));
   }
 
+  /**
+   * Method used to configurate login strategy via Google
+   */
   #configGoogleStategy() {
     const options = {
       clientID: process.env.GOOGLE_CLIENT_ID,
