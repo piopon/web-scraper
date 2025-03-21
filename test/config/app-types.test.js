@@ -112,4 +112,8 @@ describe("DemoMode", () => {
       expect(DemoMode.DUPLICATE.mode).toBe("duplicate");
     });
   });
+  test("returns correct values for custom type", () => {
+    const testDemoMode = new DemoMode("test-mode");
+    expect(testDemoMode.mode).toBe("test-mode");
+  });
 });
