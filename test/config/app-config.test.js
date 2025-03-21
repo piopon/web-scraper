@@ -8,6 +8,7 @@ describe("getConfig", () => {
     const testConfig = new AppConfig().getConfig();
     expect(testConfig.usersDataConfig).not.toBe(null);
     expect(testConfig.usersDataConfig.path).toMatch("web-scraper" + path.sep + "users");
+    expect(testConfig.usersDataConfig.file).toMatch("data.json");
     expect(testConfig.minLogLevel).toBe(LogLevel.INFO);
     expect(testConfig.serverConfig).not.toBe(null);
     expect(testConfig.serverConfig.port).toBe(5000);
