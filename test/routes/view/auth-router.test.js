@@ -86,6 +86,11 @@ describe("created auth GET routes", () => {
     expect(response.statusCode).toBe(302);
     expect(response.text).toBe("Found. Redirecting to /auth/login");
   });
+  test("returns correct result using /google endpoint", async () => {
+    const response = await testAgent.get("/auth/google");
+    expect(response.statusCode).toBe(302);
+    expect(response.text).toBe("");
+  });
 });
 
 describe("created auth POST routes", () => {
