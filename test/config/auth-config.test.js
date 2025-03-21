@@ -21,15 +21,28 @@ describe("auth object serializes user", () => {
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
   const authConfig = new AuthConfig(passport, components);
   const authObj = authConfig.configure();
-  let resultErr = "initial-err";
-  let resultUsr = "initial-usr";
-  const expectedId = 1;
-  authObj.serializeUser({ _id: expectedId }, (err, usr) => {
-    resultErr = err;
-    resultUsr = usr;
+  test("configure returns correct result when user is valid", () => {
+    let resultErr = "initial-err";
+    let resultUsr = "initial-usr";
+    const expectedId = 1;
+    authObj.serializeUser({ _id: expectedId }, (err, usr) => {
+      resultErr = err;
+      resultUsr = usr;
+    });
+    expect(resultErr).toBe(null);
+    expect(resultUsr).toBe(expectedId);
   });
-  expect(resultErr).toBe(null);
-  expect(resultUsr).toBe(expectedId);
+  test("configure returns correct result when user is invalid", () => {
+    let resultErr = "initial-err";
+    let resultUsr = "initial-usr";
+    authObj.serializeUser({ name: "invalid" }, (err, usr) => {
+      resultErr = err;
+      resultUsr = usr;
+    });
+    expect(resultErr).not.toBe(null);
+    expect(resultErr.message).toBe("Failed to serialize user into session");
+    expect(resultUsr).toBe(undefined);
+  });
 });
 
 describe("auth object correctly authenticates user", () => {
