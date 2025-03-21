@@ -6,6 +6,10 @@ import path from "path";
 describe("getConfig", () => {
   test("returns correct result", () => {
     const testConfig = new AppConfig().getConfig();
+    expect(testConfig.jsonDataConfig).not.toBe(null);
+    expect(testConfig.jsonDataConfig.path).toMatch("web-scraper" + path.sep + "docs" + path.sep + "json");
+    expect(testConfig.jsonDataConfig.config).toMatch("config.json");
+    expect(testConfig.jsonDataConfig.data).toMatch("data.json");
     expect(testConfig.usersDataConfig).not.toBe(null);
     expect(testConfig.usersDataConfig.path).toMatch("web-scraper" + path.sep + "users");
     expect(testConfig.usersDataConfig.file).toMatch("data.json");
