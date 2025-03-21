@@ -16,3 +16,16 @@ test("configure returns correct result", () => {
     expect(Object.hasOwn(result._strategies, "local-login")).toBe(true);
     expect(Object.hasOwn(result._strategies, "local-register")).toBe(true);
 });
+
+describe("auth object correctly authenticates user", () => {
+  const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+  const authConfig = new AuthConfig(passport, components);
+  const authObj = authConfig.configure();
+  test("configure returns correct result", () => {
+    const jwtOpts = { successRedirect: "/success", failureRedirect: "/failure" };
+    let redirectRes = "";
+    let res = { redirect: (to) => redirectRes = to };
+    authObj.authenticate("local-login", jwtOpts)({}, res, () => {});
+    expect(redirectRes).toBe("/failure");
+  });
+});
