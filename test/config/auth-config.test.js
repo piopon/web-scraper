@@ -12,6 +12,7 @@ test("configure returns correct result", () => {
     const authConfig = new AuthConfig(passport, components);
     const result = authConfig.configure();
     expect(Object.hasOwn(result._strategies, "jwt")).toBe(true);
+    expect(Object.hasOwn(result._strategies, "google")).toBe(true);
     expect(Object.hasOwn(result._strategies, "local-login")).toBe(true);
     expect(Object.hasOwn(result._strategies, "local-register")).toBe(true);
 });
