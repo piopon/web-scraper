@@ -116,4 +116,16 @@ describe("DemoMode", () => {
     const testDemoMode = new DemoMode("test-mode");
     expect(testDemoMode.mode).toBe("test-mode");
   });
+  describe("equals method", () => {
+    test("returns true for identical elements", () => {
+      const testMode1 = new DemoMode("test-mode");
+      const testMode2 = new DemoMode("test-mode");
+      expect(testMode1.equals(testMode2)).toBe(true);
+    });
+    test("returns false for different elements", () => {
+      const testMode1 = new DemoMode("test-mode1");
+      const testMode2 = new DemoMode("test-mode2");
+      expect(testMode1.equals(testMode2)).toBe(false);
+    });
+  });
 });
