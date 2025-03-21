@@ -17,6 +17,21 @@ test("configure returns correct result", () => {
   expect(Object.hasOwn(result._strategies, "local-register")).toBe(true);
 });
 
+describe("auth object serializes user", () => {
+  const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+  const authConfig = new AuthConfig(passport, components);
+  const authObj = authConfig.configure();
+  let resultErr = "initial-err";
+  let resultUsr = "initial-usr";
+  const expectedId = 1;
+  authObj.serializeUser({ _id: expectedId }, (err, usr) => {
+    resultErr = err;
+    resultUsr = usr;
+  });
+  expect(resultErr).toBe(null);
+  expect(resultUsr).toBe(expectedId);
+});
+
 describe("auth object correctly authenticates user", () => {
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
   const authConfig = new AuthConfig(passport, components);
