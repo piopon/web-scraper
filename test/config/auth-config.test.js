@@ -1,8 +1,12 @@
 import { WebComponents } from "../../src/components/web-components";
 import { LogLevel } from "../../src/config/app-types";
 import { AuthConfig } from "../../src/config/auth-config";
+import { ScrapUser } from "../../src/model/scrap-user.js";
 
 import passport from "passport";
+import { jest } from "@jest/globals";
+
+jest.mock("../../src/model/scrap-user.js");
 
 process.env.JWT_SECRET = "test_secret";
 process.env.GOOGLE_CLIENT_ID = "test_id";
@@ -42,6 +46,25 @@ describe("auth object serializes user", () => {
     expect(resultErr).not.toBe(null);
     expect(resultErr.message).toBe("Failed to serialize user into session");
     expect(resultUsr).toBe(undefined);
+  });
+});
+
+describe("auth object deserializes user", () => {
+  const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+  const authConfig = new AuthConfig(passport, components);
+  const authObj = authConfig.configure();
+  test("with correct result when ID is valid", async () => {
+    let resultErr = "initial-err";
+    let resultUsr = "initial-usr";
+    const expectedUser = { _id: 1, name: "test" };
+    const mock = () => ({ findById: (_) => expectedUser });
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
+    authObj.deserializeUser(1, (err, usr) => {
+      resultErr = err;
+      resultUsr = usr;
+    });
+    expect(resultErr).toBe(null);
+    expect(resultUsr).toBe(expectedUser);
   });
 });
 
