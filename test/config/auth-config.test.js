@@ -54,17 +54,16 @@ describe("auth object deserializes user", () => {
   const authConfig = new AuthConfig(passport, components);
   const authObj = authConfig.configure();
   test("with correct result when ID is valid", async () => {
-    let resultErr = "initial-err";
-    let resultUsr = "initial-usr";
     const expectedUser = { _id: 1, name: "test" };
     const mock = () => ({ findById: (_) => expectedUser });
     jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
-    authObj.deserializeUser(1, (err, usr) => {
-      resultErr = err;
-      resultUsr = usr;
+    const result = await new Promise((resolve, reject) => {
+      authObj.deserializeUser(1, (err, usr) => {
+        if (err) reject(err);
+        else resolve(usr);
+      });
     });
-    expect(resultErr).toBe(null);
-    expect(resultUsr).toBe(expectedUser);
+    expect(result).toEqual(expectedUser);
   });
 });
 
