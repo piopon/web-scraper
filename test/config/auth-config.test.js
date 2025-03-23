@@ -74,7 +74,7 @@ describe("auth object correctly authenticates user", () => {
   test("configure returns correct result", () => {
     const jwtOpts = { successRedirect: "/success", failureRedirect: "/failure" };
     let redirectRes = "";
-    let res = { redirect: (to) => redirectRes = to };
+    let res = { redirect: (to) => (redirectRes = to) };
     authObj.authenticate("local-login", jwtOpts)({}, res, () => {});
     expect(redirectRes).toBe("/failure");
   });
