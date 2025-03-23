@@ -68,16 +68,19 @@ describe("auth object deserializes user", () => {
   test("with error when ID is invalid", async () => {
     const mock = () => ({ findById: (_) => null });
     jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
-    const result = await new Promise((resolve, reject) => {
-      authObj.deserializeUser(1, (err, usr) => {
-        if (err || !usr) {
-          reject("User not found");
-        } else {
-          resolve(usr);
-        }
+    try {
+      await new Promise((resolve, reject) => {
+        authObj.deserializeUser(1, (err, usr) => {
+          if (err || !usr) {
+            reject("User not found");
+          } else {
+            resolve(usr);
+          }
+        });
       });
-    });
-    expect(result).rejects.toThrow("User not found");
+    } catch (error) {
+      expect(error).toBe("User not found");
+    }
   });
 });
 
