@@ -94,7 +94,7 @@ describe("auth object correctly authenticates user", () => {
     const mockUsers = [{ name: "name", email: "name@te.st", password: "pass@test", save: () => true }];
     const mock = () => ({ find: (_) => mockUsers });
     jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
-    jest.mock("bcrypt", () => (compare: jest.fn().mockResolvedValue(true)) );
+    jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
     await testVerify("name@te.st", "pass@test", doneMock);
     expect(doneMock).toHaveBeenCalledWith(null, mockUsers[0]);
   });
