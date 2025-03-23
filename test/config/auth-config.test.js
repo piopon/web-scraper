@@ -84,12 +84,12 @@ describe("auth object deserializes user", () => {
   });
 });
 
-describe("auth object correctly authenticates user", () => {
+describe("auth object with local-login strategy", () => {
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
   const authConfig = new AuthConfig(passport, components);
   const authObj = authConfig.configure();
   const testVerify = authObj._strategies["local-login"]._verify;
-  test("configure returns correct result", async () => {
+  test("correctly authenticates user when data is correct", async () => {
     doneMock = jest.fn();
     const mockUsers = [{ name: "name", email: "name@te.st", password: "pass@test", save: () => true }];
     const mock = () => ({ find: (_) => mockUsers });
