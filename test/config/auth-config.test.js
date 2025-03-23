@@ -3,9 +3,11 @@ import { LogLevel } from "../../src/config/app-types";
 import { AuthConfig } from "../../src/config/auth-config";
 import { ScrapUser } from "../../src/model/scrap-user.js";
 
+import bcrypt from "bcrypt";
 import passport from "passport";
 import { jest } from "@jest/globals";
 
+jest.mock("bcrypt");
 jest.mock("../../src/model/scrap-user.js");
 
 process.env.JWT_SECRET = "test_secret";
@@ -86,11 +88,14 @@ describe("auth object correctly authenticates user", () => {
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
   const authConfig = new AuthConfig(passport, components);
   const authObj = authConfig.configure();
-  test("configure returns correct result", () => {
-    const jwtOpts = { successRedirect: "/success", failureRedirect: "/failure" };
-    let redirectRes = "";
-    let res = { redirect: (to) => (redirectRes = to) };
-    authObj.authenticate("local-login", jwtOpts)({}, res, () => {});
-    expect(redirectRes).toBe("/failure");
+  const testVerify = authObj._strategies["local-login"]._verify;
+  test("configure returns correct result", async () => {
+    doneMock = jest.fn();
+    const mockUsers = [{ name: "name", email: "name@te.st", password: "pass@test", save: () => true }];
+    const mock = () => ({ find: (_) => mockUsers });
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
+    jest.mock("bcrypt", () => (compare: jest.fn().mockResolvedValue(true)) );
+    await testVerify("name@te.st", "pass@test", doneMock);
+    expect(doneMock).toHaveBeenCalledWith(null, mockUsers[0]);
   });
 });
