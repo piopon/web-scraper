@@ -98,12 +98,12 @@ describe("auth object with local-login strategy", () => {
     await testVerify("name@te.st", "pass@test", doneMock);
     expect(doneMock).toHaveBeenCalledWith(null, mockUsers[0]);
   });
-  describe("auth object with local-login strategy", () => {
+  describe("fails to authenticate user when", () => {
     const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
     const authConfig = new AuthConfig(passport, null);
     const authObj = authConfig.configure();
     const testVerify = authObj._strategies["local-login"]._verify;
-    test("fails to authenticate user when multiple users found", async () => {
+    test("multiple users found", async () => {
       const mockUsers = [{ name: "name1" }, { name: "name2" }];
       const mock = () => ({ find: (_) => mockUsers });
       jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
@@ -111,7 +111,7 @@ describe("auth object with local-login strategy", () => {
       await testVerify("name@te.st", "pass@test", doneMock);
       expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Incorrect login data. Please try again." });
     });
-    test("fails to authenticate user when password is incorrect", async () => {
+    test("password is incorrect", async () => {
       const mockUsers = [{ name: "name", email: "name@te.st", password: "pass@test", save: () => true }];
       const mock = () => ({ find: (_) => mockUsers });
       jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
