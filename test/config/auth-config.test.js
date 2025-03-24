@@ -100,7 +100,7 @@ describe("auth object with local-login strategy", () => {
   });
   describe("auth object with local-login strategy", () => {
     const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-    const authConfig = new AuthConfig(passport, components);
+    const authConfig = new AuthConfig(passport, null);
     const authObj = authConfig.configure();
     const testVerify = authObj._strategies["local-login"]._verify;
     test("fails to authenticate user when multiple users found", async () => {
@@ -118,6 +118,16 @@ describe("auth object with local-login strategy", () => {
       jest.spyOn(bcrypt, "compare").mockResolvedValue(false);
       await testVerify("name@te.st", "pass@test", doneMock);
       expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Incorrect login data. Please try again." });
+    });
+    test("components cannot be initialized", async () => {
+      const mockUsers = [{ name: "name", email: "name@te.st", password: "pass@test" }];
+      const mock = () => ({ find: (_) => mockUsers });
+      jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
+      jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
+      await testVerify("name@te.st", "pass@test", doneMock);
+      expect(doneMock).toHaveBeenCalledWith(null, false, {
+        message: "Cannot start authenticate components. Please try again.",
+      });
     });
   });
 });
