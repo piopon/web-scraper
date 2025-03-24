@@ -85,7 +85,7 @@ describe("auth object deserializes user", () => {
 });
 
 describe("auth object with local-login strategy", () => {
-  test("correctly authenticates user when data is correct", async () => {
+  test("correctly authenticates user when config and data are correct", async () => {
     const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
     const authConfig = new AuthConfig(passport, components);
     const authObj = authConfig.configure();
@@ -98,7 +98,7 @@ describe("auth object with local-login strategy", () => {
     await testVerify("name@te.st", "pass@test", doneMock);
     expect(doneMock).toHaveBeenCalledWith(null, mockUsers[0]);
   });
-  describe("fails to authenticate user when", () => {
+  describe("fails to authenticate user when config is correct but", () => {
     const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
     components.addComponent({
       getInfo: () => ({ types: [ComponentType.AUTH], initWait: true }),
@@ -109,7 +109,7 @@ describe("auth object with local-login strategy", () => {
     const authConfig = new AuthConfig(passport, components);
     const authObj = authConfig.configure();
     const testVerify = authObj._strategies["local-login"]._verify;
-    test("multiple users found", async () => {
+    test("multiple users were found", async () => {
       doneMock = jest.fn();
       const mockUsers = [{ name: "name1" }, { name: "name2" }];
       const mock = () => ({ find: (_) => mockUsers });
