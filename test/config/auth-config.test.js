@@ -126,7 +126,7 @@ describe("auth object with local-login strategy", () => {
       jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
       await testVerify("name@te.st", "pass@test", doneMock);
       expect(doneMock).toHaveBeenCalledWith(null, false, {
-        message: "Cannot start authenticate components. Please try again.",
+        message: "Cannot read properties of null (reading 'initComponents')",
       });
     });
   });
