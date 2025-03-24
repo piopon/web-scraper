@@ -98,4 +98,13 @@ describe("auth object with local-login strategy", () => {
     await testVerify("name@te.st", "pass@test", doneMock);
     expect(doneMock).toHaveBeenCalledWith(null, mockUsers[0]);
   });
+  test("fails to authenticate user when multiple users found", async () => {
+    doneMock = jest.fn();
+    const mockUsers = [{ name: "name1" }, { name: "name2" }];
+    const mock = () => ({ find: (_) => mockUsers });
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
+    jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
+    await testVerify("name@te.st", "pass@test", doneMock);
+    expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Incorrect login data. Please try again." });
+  });
 });
