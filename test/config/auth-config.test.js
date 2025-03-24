@@ -139,4 +139,18 @@ describe("auth object with local-login strategy", () => {
       });
     });
   });
+  test("fails to authenticate user when config is incorrect", async () => {
+    const authConfig = new AuthConfig(passport, null);
+    const authObj = authConfig.configure();
+    const testVerify = authObj._strategies["local-login"]._verify;
+    doneMock = jest.fn();
+    const mockUsers = [{ name: "name", email: "name@te.st", password: "pass@test", save: () => true }];
+    const mock = () => ({ find: (_) => mockUsers });
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
+    jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
+    await testVerify("name@te.st", "pass@test", doneMock);
+    expect(doneMock).toHaveBeenCalledWith(null, false, {
+      message: "Cannot read properties of null (reading 'initComponents')",
+    });
+  });
 });
