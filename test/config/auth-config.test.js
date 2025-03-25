@@ -97,19 +97,21 @@ describe("auth object with jwt strategy", () => {
     await testVerify({}, doneMock);
     expect(doneMock).toHaveBeenCalledWith(null, mockUser);
   });
-  test("fails to authenticate user when data is incorrect", async () => {
-    doneMock = jest.fn();
-    const mock = () => ({ findOne: (_) => undefined });
-    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
-    await testVerify({}, doneMock);
-    expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Incorrect token." });
-  });
-  test("fails to authenticate user when internal issues are present", async () => {
-    doneMock = jest.fn();
-    const mock = () => ({ findOne: (_) => { throw Error("Mocked DB error!") } });
-    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
-    await testVerify({}, doneMock);
-    expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Mocked DB error!" });
+  describe("fails to authenticate user when", () => {
+    test("data is incorrect", async () => {
+      doneMock = jest.fn();
+      const mock = () => ({ findOne: (_) => undefined });
+      jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
+      await testVerify({}, doneMock);
+      expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Incorrect token." });
+    });
+    test("internal issues are present", async () => {
+      doneMock = jest.fn();
+      const mock = () => ({ findOne: (_) => { throw Error("Mocked DB error!") } });
+      jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
+      await testVerify({}, doneMock);
+      expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Mocked DB error!" });
+    });
   });
 });
 
