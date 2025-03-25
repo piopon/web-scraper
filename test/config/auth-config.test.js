@@ -107,15 +107,16 @@ describe("auth object with jwt strategy", () => {
       expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Incorrect token." });
     });
     test("internal issues are present", async () => {
+      const expectedErr = "Mocked DB error!";
       doneMock = jest.fn();
       const mock = () => ({
         findOne: (_) => {
-          throw Error("Mocked DB error!");
+          throw Error(expectedErr);
         },
       });
       jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
       await testVerify({}, doneMock);
-      expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Mocked DB error!" });
+      expect(doneMock).toHaveBeenCalledWith(null, false, { message: expectedErr });
     });
   });
 });
@@ -189,15 +190,16 @@ describe("auth object with local-login strategy", () => {
       });
       test("due to failed validation", async () => {
         doneMock = jest.fn();
+        const expectedErr = "Validation failed.";
         jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
           find: (_) => {
             const mockError = new MongooseNamespace.ValidationError(new MongooseError("ERR"));
-            mockError.addError("test-path", new MongooseNamespace.ValidatorError({ message: "Validation failed." }));
+            mockError.addError("test-path", new MongooseNamespace.ValidatorError({ message: expectedErr }));
             throw mockError;
           },
         }));
         await testVerify("name@te.st", "pass@test", doneMock);
-        expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Validation failed." });
+        expect(doneMock).toHaveBeenCalledWith(null, false, { message: expectedErr });
       });
     });
   });
