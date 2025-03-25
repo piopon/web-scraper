@@ -169,6 +169,17 @@ describe("auth object with local-login strategy", () => {
         message: "Cannot start authenticate components. Please try again.",
       });
     });
+    test("database connection is broken", async () => {
+      doneMock = jest.fn();
+      const mockUsers = [{ name: "name", email: "name@te.st", password: "pass@test" }];
+      const mock = () => ({ find: (_) => { throw Error("ECONNREFUSED") } });
+      jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
+      jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
+      await testVerify("name@te.st", "pass@test", doneMock);
+      expect(doneMock).toHaveBeenCalledWith(null, false, {
+        message: "Database connection has been broken. Check connection status and please try again.",
+      });
+    });
   });
   test("fails to authenticate user when config is incorrect", async () => {
     const authConfig = new AuthConfig(passport, null);
