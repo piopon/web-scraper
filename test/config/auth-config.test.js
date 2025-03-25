@@ -6,6 +6,7 @@ import { ScrapUser } from "../../src/model/scrap-user.js";
 import bcrypt from "bcrypt";
 import passport from "passport";
 import { jest } from "@jest/globals";
+import { MongooseError, Error } from "mongoose";
 
 jest.mock("bcrypt");
 jest.mock("../../src/model/scrap-user.js");
@@ -179,6 +180,19 @@ describe("auth object with local-login strategy", () => {
       expect(doneMock).toHaveBeenCalledWith(null, false, {
         message: "Database connection has been broken. Check connection status and please try again.",
       });
+    });
+    test("database validation has failed", async () => {
+      doneMock = jest.fn();
+      const mockUsers = [{ name: "name", email: "name@te.st", password: "pass@test" }];
+      const mock = () => ({ find: (_) => {
+        const mockError = new Error.ValidationError(new MongooseError("ERR"));
+        mockError.addError("test-path", new Error.ValidatorError({ message: "Validation failed." }));
+        throw mockError;
+      } });
+      jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
+      jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
+      await testVerify("name@te.st", "pass@test", doneMock);
+      expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Validation failed." });
     });
   });
   test("fails to authenticate user when config is incorrect", async () => {
