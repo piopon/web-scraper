@@ -6,7 +6,7 @@ import { ScrapUser } from "../../src/model/scrap-user.js";
 import bcrypt from "bcrypt";
 import passport from "passport";
 import { jest } from "@jest/globals";
-import { MongooseError, Error } from "mongoose";
+import { MongooseError, Error as MongooseNamespace } from "mongoose";
 
 jest.mock("bcrypt");
 jest.mock("../../src/model/scrap-user.js");
@@ -185,8 +185,8 @@ describe("auth object with local-login strategy", () => {
       doneMock = jest.fn();
       const mockUsers = [{ name: "name", email: "name@te.st", password: "pass@test" }];
       const mock = () => ({ find: (_) => {
-        const mockError = new Error.ValidationError(new MongooseError("ERR"));
-        mockError.addError("test-path", new Error.ValidatorError({ message: "Validation failed." }));
+        const mockError = new MongooseNamespace.ValidationError(new MongooseError("ERR"));
+        mockError.addError("test-path", new MongooseNamespace.ValidatorError({ message: "Validation failed." }));
         throw mockError;
       } });
       jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
