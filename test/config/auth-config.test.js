@@ -97,7 +97,7 @@ describe("auth object with jwt strategy", () => {
     await testVerify({}, doneMock);
     expect(doneMock).toHaveBeenCalledWith(null, mockUser);
   });
-  test("correctly authenticates user when data are correct", async () => {
+  test("fails to authenticate user when data is incorrect", async () => {
     const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
     const authConfig = new AuthConfig(passport, components);
     const authObj = authConfig.configure();
