@@ -108,7 +108,11 @@ describe("auth object with jwt strategy", () => {
     });
     test("internal issues are present", async () => {
       doneMock = jest.fn();
-      const mock = () => ({ findOne: (_) => { throw Error("Mocked DB error!") } });
+      const mock = () => ({
+        findOne: (_) => {
+          throw Error("Mocked DB error!");
+        },
+      });
       jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
       await testVerify({}, doneMock);
       expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Mocked DB error!" });
@@ -136,7 +140,7 @@ describe("auth object with local-login strategy", () => {
       getInfo: () => ({ types: [ComponentType.AUTH], initWait: true }),
       getName: () => "test-component",
       start: () => false,
-      stop: () => true
+      stop: () => true,
     });
     const authConfig = new AuthConfig(passport, components);
     const authObj = authConfig.configure();
@@ -173,7 +177,11 @@ describe("auth object with local-login strategy", () => {
     test("database connection is broken", async () => {
       doneMock = jest.fn();
       const mockUsers = [{ name: "name", email: "name@te.st", password: "pass@test" }];
-      const mock = () => ({ find: (_) => { throw Error("ECONNREFUSED") } });
+      const mock = () => ({
+        find: (_) => {
+          throw Error("ECONNREFUSED");
+        },
+      });
       jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
       jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
       await testVerify("name@te.st", "pass@test", doneMock);
@@ -184,11 +192,13 @@ describe("auth object with local-login strategy", () => {
     test("database validation has failed", async () => {
       doneMock = jest.fn();
       const mockUsers = [{ name: "name", email: "name@te.st", password: "pass@test" }];
-      const mock = () => ({ find: (_) => {
-        const mockError = new MongooseNamespace.ValidationError(new MongooseError("ERR"));
-        mockError.addError("test-path", new MongooseNamespace.ValidatorError({ message: "Validation failed." }));
-        throw mockError;
-      } });
+      const mock = () => ({
+        find: (_) => {
+          const mockError = new MongooseNamespace.ValidationError(new MongooseError("ERR"));
+          mockError.addError("test-path", new MongooseNamespace.ValidatorError({ message: "Validation failed." }));
+          throw mockError;
+        },
+      });
       jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
       jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
       await testVerify("name@te.st", "pass@test", doneMock);
