@@ -177,13 +177,11 @@ describe("auth object with local-login strategy", () => {
     describe("database error occurs", () => {
       test("due to broken connection", async () => {
         doneMock = jest.fn();
-        const mock = () => ({
+        jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
           find: (_) => {
             throw Error("ECONNREFUSED");
           },
-        });
-        jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
-        jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
+        }));
         await testVerify("name@te.st", "pass@test", doneMock);
         expect(doneMock).toHaveBeenCalledWith(null, false, {
           message: "Database connection has been broken. Check connection status and please try again.",
@@ -191,15 +189,13 @@ describe("auth object with local-login strategy", () => {
       });
       test("due to failed validation", async () => {
         doneMock = jest.fn();
-        const mock = () => ({
+        jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
           find: (_) => {
             const mockError = new MongooseNamespace.ValidationError(new MongooseError("ERR"));
             mockError.addError("test-path", new MongooseNamespace.ValidatorError({ message: "Validation failed." }));
             throw mockError;
           },
-        });
-        jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
-        jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
+        }));
         await testVerify("name@te.st", "pass@test", doneMock);
         expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Validation failed." });
       });
