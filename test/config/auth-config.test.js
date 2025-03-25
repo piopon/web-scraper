@@ -85,11 +85,11 @@ describe("auth object deserializes user", () => {
 });
 
 describe("auth object with jwt strategy", () => {
+  const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+  const authConfig = new AuthConfig(passport, components);
+  const authObj = authConfig.configure();
+  const testVerify = authObj._strategies["jwt"]._verify;
   test("correctly authenticates user when data are correct", async () => {
-    const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-    const authConfig = new AuthConfig(passport, components);
-    const authObj = authConfig.configure();
-    const testVerify = authObj._strategies["jwt"]._verify;
     doneMock = jest.fn();
     const mockUser = { name: "name", email: "name@te.st", password: "pass@test", save: () => true };
     const mock = () => ({ findOne: (_) => mockUser });
@@ -98,10 +98,6 @@ describe("auth object with jwt strategy", () => {
     expect(doneMock).toHaveBeenCalledWith(null, mockUser);
   });
   test("fails to authenticate user when data is incorrect", async () => {
-    const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-    const authConfig = new AuthConfig(passport, components);
-    const authObj = authConfig.configure();
-    const testVerify = authObj._strategies["jwt"]._verify;
     doneMock = jest.fn();
     const mock = () => ({ findOne: (_) => undefined });
     jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
@@ -109,10 +105,6 @@ describe("auth object with jwt strategy", () => {
     expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Incorrect token." });
   });
   test("fails to authenticate user when internal issues are present", async () => {
-    const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-    const authConfig = new AuthConfig(passport, components);
-    const authObj = authConfig.configure();
-    const testVerify = authObj._strategies["jwt"]._verify;
     doneMock = jest.fn();
     const mock = () => ({ findOne: (_) => { throw Error("Mocked DB error!") } });
     jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
