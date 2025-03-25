@@ -103,7 +103,6 @@ describe("auth object with jwt strategy", () => {
     const authObj = authConfig.configure();
     const testVerify = authObj._strategies["jwt"]._verify;
     doneMock = jest.fn();
-    const mockUser = { name: "name", email: "name@te.st", password: "pass@test", save: () => true };
     const mock = () => ({ findOne: (_) => undefined });
     jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
     await testVerify({}, doneMock);
