@@ -176,7 +176,6 @@ describe("auth object with local-login strategy", () => {
     });
     test("database connection is broken", async () => {
       doneMock = jest.fn();
-      const mockUsers = [{ name: "name", email: "name@te.st", password: "pass@test" }];
       const mock = () => ({
         find: (_) => {
           throw Error("ECONNREFUSED");
@@ -191,7 +190,6 @@ describe("auth object with local-login strategy", () => {
     });
     test("database validation has failed", async () => {
       doneMock = jest.fn();
-      const mockUsers = [{ name: "name", email: "name@te.st", password: "pass@test" }];
       const mock = () => ({
         find: (_) => {
           const mockError = new MongooseNamespace.ValidationError(new MongooseError("ERR"));
