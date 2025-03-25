@@ -97,6 +97,18 @@ describe("auth object with jwt strategy", () => {
     await testVerify({}, doneMock);
     expect(doneMock).toHaveBeenCalledWith(null, mockUser);
   });
+  test("correctly authenticates user when data are correct", async () => {
+    const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+    const authConfig = new AuthConfig(passport, components);
+    const authObj = authConfig.configure();
+    const testVerify = authObj._strategies["jwt"]._verify;
+    doneMock = jest.fn();
+    const mockUser = { name: "name", email: "name@te.st", password: "pass@test", save: () => true };
+    const mock = () => ({ findOne: (_) => undefined });
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
+    await testVerify({}, doneMock);
+    expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Incorrect token." });
+  });
 });
 
 describe("auth object with local-login strategy", () => {
