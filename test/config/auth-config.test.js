@@ -243,7 +243,7 @@ describe("auth object with local-register strategy", () => {
     const expectedUser = { _id: 1, name: "name", email: "name@te.st", password: "pass@test", save: () => true };
     const mockRequest = { body: { name: "name"} };
     const mockUser = () => ({ find: (_) => [], create: (_) => expectedUser });
-    const mockConfig = () => ({ create: () => { _id: 100 } });
+    const mockConfig = () => ({ create: () => ({ _id: 100 }) });
     jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mockUser);
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(mockConfig);
     jest.spyOn(bcrypt, "hash").mockResolvedValue("pass@test");
