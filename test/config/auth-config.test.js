@@ -2,6 +2,7 @@ import { WebComponents } from "../../src/components/web-components";
 import { ComponentType, LogLevel } from "../../src/config/app-types";
 import { AuthConfig } from "../../src/config/auth-config";
 import { ScrapUser } from "../../src/model/scrap-user.js";
+import { ScrapConfig } from "../../src/model/scrap-config.js";
 
 import bcrypt from "bcrypt";
 import passport from "passport";
@@ -10,6 +11,7 @@ import { MongooseError, Error as MongooseNamespace } from "mongoose";
 
 jest.mock("bcrypt");
 jest.mock("../../src/model/scrap-user.js");
+jest.mock("../../src/model/scrap-config.js");
 
 process.env.JWT_SECRET = "test_secret";
 process.env.GOOGLE_CLIENT_ID = "test_id";
@@ -228,5 +230,22 @@ describe("auth object with local-login strategy", () => {
     expect(doneMock).toHaveBeenCalledWith(null, false, {
       message: "Cannot read properties of null (reading 'initComponents')",
     });
+  });
+});
+
+describe("auth object with local-register strategy", () => {
+  test("correctly registers new user when config and data are correct", async () => {
+    const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+    const authConfig = new AuthConfig(passport, components);
+    const authObj = authConfig.configure();
+    const testVerify = authObj._strategies["local-register"]._verify;
+    doneMock = jest.fn();
+    const expectedUser = { _id: 1, name: "name", email: "name@te.st", password: "pass@test", save: () => true };
+    const mockUser = () => ({ find: (_) => [], create: (_) => expectedUser });
+    const mockConfig = () => ({ create: () => { _id: 100 } });
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mockUser);
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(mockConfig);
+    await testVerify(_, "new@usr.tst", "pass4new", doneMock);
+    expect(doneMock).toHaveBeenCalledWith(null, expectedUser);
   });
 });
