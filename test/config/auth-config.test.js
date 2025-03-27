@@ -188,6 +188,18 @@ describe("auth object with local-login strategy", () => {
           message: "Database connection has been broken. Check connection status and please try again.",
         });
       });
+      test("due to timed out connection", async () => {
+        doneMock = jest.fn();
+        jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
+          find: (_) => {
+            throw new MongooseError("ERR: MongoDB.find() take too long to complete");
+          },
+        }));
+        await testVerify("name@te.st", "pass@test", doneMock);
+        expect(doneMock).toHaveBeenCalledWith(null, false, {
+          message: "Database connection has timed out. Check connection status and please try again.",
+        });
+      });
       test("due to failed validation", async () => {
         doneMock = jest.fn();
         const expectedErr = "Validation failed.";
