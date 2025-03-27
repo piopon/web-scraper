@@ -236,16 +236,18 @@ describe("auth object with local-login strategy", () => {
 describe("auth object with local-register strategy", () => {
   test("correctly registers new user when config and data are correct", async () => {
     const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-    const authConfig = new AuthConfig(passport, components);
+    const authConfig = new AuthConfig(passport, components, { hashSalt: 10 });
     const authObj = authConfig.configure();
     const testVerify = authObj._strategies["local-register"]._verify;
     doneMock = jest.fn();
     const expectedUser = { _id: 1, name: "name", email: "name@te.st", password: "pass@test", save: () => true };
+    const mockRequest = { body: { name: "name"} };
     const mockUser = () => ({ find: (_) => [], create: (_) => expectedUser });
     const mockConfig = () => ({ create: () => { _id: 100 } });
     jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mockUser);
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(mockConfig);
-    await testVerify(_, "new@usr.tst", "pass4new", doneMock);
+    jest.spyOn(bcrypt, "hash").mockResolvedValue("pass@test");
+    await testVerify(mockRequest, "new@usr.tst", "pass4new", doneMock);
     expect(doneMock).toHaveBeenCalledWith(null, expectedUser);
   });
 });
