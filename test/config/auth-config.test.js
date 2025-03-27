@@ -278,4 +278,20 @@ describe("auth object with local-register strategy", () => {
       message: "Database connection has been broken. Check connection status and please try again.",
     });
   });
+  test("fails when database connection times out", async () => {
+    const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+    const authConfig = new AuthConfig(passport, components, { hashSalt: 10 });
+    const authObj = authConfig.configure();
+    const testVerify = authObj._strategies["local-register"]._verify;
+    doneMock = jest.fn();
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
+      find: (_) => {
+        throw new MongooseError("ERR: MongoDB.find() take too long to complete");
+      },
+    }));
+    await testVerify(undefined, "new@usr.tst", "pass4new", doneMock);
+    expect(doneMock).toHaveBeenCalledWith(null, false, {
+      message: "Database connection has timed out. Check connection status and please try again.",
+    });
+  });
 });
