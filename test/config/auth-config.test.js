@@ -250,4 +250,16 @@ describe("auth object with local-register strategy", () => {
     await testVerify(mockRequest, "new@usr.tst", "pass4new", doneMock);
     expect(doneMock).toHaveBeenCalledWith(null, expectedUser);
   });
+  test("doesn't register user already existing", async () => {
+    const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+    const authConfig = new AuthConfig(passport, components, { hashSalt: 10 });
+    const authObj = authConfig.configure();
+    const testVerify = authObj._strategies["local-register"]._verify;
+    doneMock = jest.fn();
+    const mockUsers = [{ _id: 1, name: "name", email: "name@te.st", password: "pass@test", save: () => true }];
+    const mockUser = () => ({ find: (_) => mockUsers });
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(mockUser);
+    await testVerify(undefined, "new@usr.tst", "pass4new", doneMock);
+    expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Provided email is already in use. Please try again." });
+  });
 });
