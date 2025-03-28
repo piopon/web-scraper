@@ -299,3 +299,18 @@ describe("auth object with local-register strategy", () => {
     });
   });
 });
+
+describe("auth object with google strategy", () => {
+  test("correctly logins new user when config and data are correct", async () => {
+    const authConfig = new AuthConfig(passport, undefined, { hashSalt: 10 });
+    const authObj = authConfig.configure();
+    const testVerify = authObj._strategies["google"]._verify;
+    const expectedUser = { _id: 1, name: "name", email: "name@te.st", password: "pass@test", save: () => true };
+    doneMock = jest.fn();
+    const mockGoogleProfile = { emails: [{ value: "name@te.st" }] };
+    const mockUser = () => ({ findOne: (_) => expectedUser });
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(mockUser);
+    await testVerify(undefined, undefined, undefined, mockGoogleProfile, doneMock);
+    expect(doneMock).toHaveBeenCalledWith(null, expectedUser);
+  });
+});
