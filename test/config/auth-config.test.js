@@ -234,8 +234,7 @@ describe("auth object with local-login strategy", () => {
 });
 
 describe("auth object with local-register strategy", () => {
-  const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-  const authConfig = new AuthConfig(passport, components, { hashSalt: 10 });
+  const authConfig = new AuthConfig(passport, undefined, { hashSalt: 10 });
   const authObj = authConfig.configure();
   const testVerify = authObj._strategies["local-register"]._verify;
   test("correctly registers new user when config and data are correct", async () => {
