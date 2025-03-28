@@ -305,7 +305,7 @@ describe("auth object with google strategy", () => {
     const authConfig = new AuthConfig(passport, undefined, { hashSalt: 10 });
     const authObj = authConfig.configure();
     const testVerify = authObj._strategies["google"]._verify;
-    const expectedUser = { _id: 1, name: "name", email: "name@te.st", password: "pass@test", save: () => true };
+    const expectedUser = { _id: 1, name: "name", email: "name@te.st", password: "pass@test" };
     doneMock = jest.fn();
     const mockGoogleProfile = { emails: [{ value: "name@te.st" }] };
     const mockUser = () => ({ findOne: (_) => expectedUser });
