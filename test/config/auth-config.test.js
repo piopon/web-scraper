@@ -234,11 +234,11 @@ describe("auth object with local-login strategy", () => {
 });
 
 describe("auth object with local-register strategy", () => {
+  const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+  const authConfig = new AuthConfig(passport, components, { hashSalt: 10 });
+  const authObj = authConfig.configure();
+  const testVerify = authObj._strategies["local-register"]._verify;
   test("correctly registers new user when config and data are correct", async () => {
-    const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-    const authConfig = new AuthConfig(passport, components, { hashSalt: 10 });
-    const authObj = authConfig.configure();
-    const testVerify = authObj._strategies["local-register"]._verify;
     doneMock = jest.fn();
     const expectedUser = { _id: 1, name: "name", email: "name@te.st", password: "pass@test", save: () => true };
     const mockRequest = { body: { name: "name"} };
@@ -251,10 +251,6 @@ describe("auth object with local-register strategy", () => {
     expect(doneMock).toHaveBeenCalledWith(null, expectedUser);
   });
   test("doesn't register user already existing", async () => {
-    const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-    const authConfig = new AuthConfig(passport, components, { hashSalt: 10 });
-    const authObj = authConfig.configure();
-    const testVerify = authObj._strategies["local-register"]._verify;
     doneMock = jest.fn();
     const mockUsers = [{ _id: 1, name: "name", email: "name@te.st", password: "pass@test", save: () => true }];
     const mockUser = () => ({ find: (_) => mockUsers });
@@ -263,10 +259,6 @@ describe("auth object with local-register strategy", () => {
     expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Provided email is already in use. Please try again." });
   });
   test("fails when database connection breaks", async () => {
-    const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-    const authConfig = new AuthConfig(passport, components, { hashSalt: 10 });
-    const authObj = authConfig.configure();
-    const testVerify = authObj._strategies["local-register"]._verify;
     doneMock = jest.fn();
     jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
       find: (_) => {
@@ -279,10 +271,6 @@ describe("auth object with local-register strategy", () => {
     });
   });
   test("fails when database connection times out", async () => {
-    const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-    const authConfig = new AuthConfig(passport, components, { hashSalt: 10 });
-    const authObj = authConfig.configure();
-    const testVerify = authObj._strategies["local-register"]._verify;
     doneMock = jest.fn();
     jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
       find: (_) => {
@@ -295,10 +283,6 @@ describe("auth object with local-register strategy", () => {
     });
   });
   test("fails when database validation is not correct", async () => {
-    const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-    const authConfig = new AuthConfig(passport, components, { hashSalt: 10 });
-    const authObj = authConfig.configure();
-    const testVerify = authObj._strategies["local-register"]._verify;
     doneMock = jest.fn();
     const expectedErr = "Validation failed.";
     jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
