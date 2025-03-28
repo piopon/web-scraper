@@ -240,7 +240,7 @@ describe("auth object with local-register strategy", () => {
   test("correctly registers new user when config and data are correct", async () => {
     doneMock = jest.fn();
     const expectedUser = { _id: 1, name: "name", email: "name@te.st", password: "pass@test", save: () => true };
-    const mockRequest = { body: { name: "name"} };
+    const mockRequest = { body: { name: "name" } };
     const mockUser = () => ({ find: (_) => [], create: (_) => expectedUser });
     const mockConfig = () => ({ create: () => ({ _id: 100 }) });
     jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(mockUser);
@@ -255,7 +255,9 @@ describe("auth object with local-register strategy", () => {
     const mockUser = () => ({ find: (_) => mockUsers });
     jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(mockUser);
     await testVerify(undefined, "new@usr.tst", "pass4new", doneMock);
-    expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Provided email is already in use. Please try again." });
+    expect(doneMock).toHaveBeenCalledWith(null, false, {
+      message: "Provided email is already in use. Please try again.",
+    });
   });
   describe("fails when database error occurs", () => {
     test("due to connection break", async () => {
