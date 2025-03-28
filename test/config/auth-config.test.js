@@ -294,4 +294,21 @@ describe("auth object with local-register strategy", () => {
       message: "Database connection has timed out. Check connection status and please try again.",
     });
   });
+  test("fails when database validation is not correct", async () => {
+    const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+    const authConfig = new AuthConfig(passport, components, { hashSalt: 10 });
+    const authObj = authConfig.configure();
+    const testVerify = authObj._strategies["local-register"]._verify;
+    doneMock = jest.fn();
+    const expectedErr = "Validation failed.";
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
+      find: (_) => {
+        const mockError = new MongooseNamespace.ValidationError(new MongooseError("ERR"));
+        mockError.addError("test-path", new MongooseNamespace.ValidatorError({ message: expectedErr }));
+        throw mockError;
+      },
+    }));
+    await testVerify(undefined, "new@usr.tst", "pass4new", doneMock);
+    expect(doneMock).toHaveBeenCalledWith(null, false, { message: expectedErr });
+  });
 });
