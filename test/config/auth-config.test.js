@@ -313,4 +313,18 @@ describe("auth object with google strategy", () => {
     await testVerify(undefined, undefined, undefined, mockGoogleProfile, doneMock);
     expect(doneMock).toHaveBeenCalledWith(null, expectedUser);
   });
+  test("correctly creates new user when not existing in database", async () => {
+    const authConfig = new AuthConfig(passport, undefined, { hashSalt: 10 });
+    const authObj = authConfig.configure();
+    const testVerify = authObj._strategies["google"]._verify;
+    const expectedUser = { _id: 1, name: "name", email: "name@te.st", password: "pass@test", save: () => true };
+    doneMock = jest.fn();
+    const mockGoogleProfile = { displayName: "name", emails: [{ value: "name@te.st" }] };
+    const mockUser = () => ({ findOne: (_) => undefined, create: (_) => expectedUser });
+    const mockConfig = () => ({ create: () => ({ _id: 100 }) });
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(mockUser);
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(mockConfig);
+    await testVerify(undefined, undefined, undefined, mockGoogleProfile, doneMock);
+    expect(doneMock).toHaveBeenCalledWith(null, expectedUser);
+  });
 });
