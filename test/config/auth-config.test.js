@@ -257,41 +257,43 @@ describe("auth object with local-register strategy", () => {
     await testVerify(undefined, "new@usr.tst", "pass4new", doneMock);
     expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Provided email is already in use. Please try again." });
   });
-  test("fails when database connection breaks", async () => {
-    doneMock = jest.fn();
-    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
-      find: (_) => {
-        throw Error("ECONNREFUSED");
-      },
-    }));
-    await testVerify(undefined, "new@usr.tst", "pass4new", doneMock);
-    expect(doneMock).toHaveBeenCalledWith(null, false, {
-      message: "Database connection has been broken. Check connection status and please try again.",
+  describe("fails when database error occurs", () => {
+    test("due to connection break", async () => {
+      doneMock = jest.fn();
+      jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
+        find: (_) => {
+          throw Error("ECONNREFUSED");
+        },
+      }));
+      await testVerify(undefined, "new@usr.tst", "pass4new", doneMock);
+      expect(doneMock).toHaveBeenCalledWith(null, false, {
+        message: "Database connection has been broken. Check connection status and please try again.",
+      });
     });
-  });
-  test("fails when database connection times out", async () => {
-    doneMock = jest.fn();
-    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
-      find: (_) => {
-        throw new MongooseError("ERR: MongoDB.find() take too long to complete");
-      },
-    }));
-    await testVerify(undefined, "new@usr.tst", "pass4new", doneMock);
-    expect(doneMock).toHaveBeenCalledWith(null, false, {
-      message: "Database connection has timed out. Check connection status and please try again.",
+    test("due to connection timeout", async () => {
+      doneMock = jest.fn();
+      jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
+        find: (_) => {
+          throw new MongooseError("ERR: MongoDB.find() take too long to complete");
+        },
+      }));
+      await testVerify(undefined, "new@usr.tst", "pass4new", doneMock);
+      expect(doneMock).toHaveBeenCalledWith(null, false, {
+        message: "Database connection has timed out. Check connection status and please try again.",
+      });
     });
-  });
-  test("fails when database validation is not correct", async () => {
-    doneMock = jest.fn();
-    const expectedErr = "Validation failed.";
-    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
-      find: (_) => {
-        const mockError = new MongooseNamespace.ValidationError(new MongooseError("ERR"));
-        mockError.addError("test-path", new MongooseNamespace.ValidatorError({ message: expectedErr }));
-        throw mockError;
-      },
-    }));
-    await testVerify(undefined, "new@usr.tst", "pass4new", doneMock);
-    expect(doneMock).toHaveBeenCalledWith(null, false, { message: expectedErr });
+    test("due to incorrect validation", async () => {
+      doneMock = jest.fn();
+      const expectedErr = "Validation failed.";
+      jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
+        find: (_) => {
+          const mockError = new MongooseNamespace.ValidationError(new MongooseError("ERR"));
+          mockError.addError("test-path", new MongooseNamespace.ValidatorError({ message: expectedErr }));
+          throw mockError;
+        },
+      }));
+      await testVerify(undefined, "new@usr.tst", "pass4new", doneMock);
+      expect(doneMock).toHaveBeenCalledWith(null, false, { message: expectedErr });
+    });
   });
 });
