@@ -338,6 +338,22 @@ describe("auth object with local-demo strategy", () => {
     await testVerify("email", "pass", doneMock);
     expect(doneMock).toHaveBeenCalledWith(null, expectedUser);
   });
+  test("correctly initializes demo feature with duplicate mode", async () => {
+    process.env.DEMO_USER = "demo@test.com";
+    const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+    const authConfig = new AuthConfig(passport, components, { hashSalt: 10, demoMode: DemoMode.DUPLICATE });
+    const authObj = authConfig.configure();
+    const testVerify = authObj._strategies["local-demo"]._verify;
+    const expectedUser = { _id: 1, name: "name", email: "name@te.st", password: "pass@test", save: () => true };
+    doneMock = jest.fn();
+    const mockUser = () => ({ find: (_) => [expectedUser] });
+    const mockConfig = () => ({ findOne: () => ({ save: () => true }) });
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(mockUser);
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(mockConfig);
+    jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
+    await testVerify(process.env.DEMO_USER, "pass", doneMock);
+    expect(doneMock).toHaveBeenCalledWith(null, expectedUser);
+  });
   test("correctly detects that demo feature is not enabled", async () => {
     const authConfig = new AuthConfig(passport, undefined, { hashSalt: 10 });
     const authObj = authConfig.configure();
