@@ -1,5 +1,5 @@
 import { WebComponents } from "../../src/components/web-components";
-import { ComponentType, LogLevel } from "../../src/config/app-types";
+import { ComponentType, DemoMode, LogLevel } from "../../src/config/app-types";
 import { AuthConfig } from "../../src/config/auth-config";
 import { ScrapUser } from "../../src/model/scrap-user.js";
 import { ScrapConfig } from "../../src/model/scrap-config.js";
