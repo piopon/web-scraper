@@ -347,4 +347,23 @@ describe("auth object with local-demo strategy", () => {
     await testVerify("email", "pass", doneMock);
     expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Demo functionality cannot be started." });
   });
+  test("correctly detects that web components cannot be initialized", async () => {
+    const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+    components.addComponent({
+      getInfo: () => ({ types: [ComponentType.AUTH], initWait: true }),
+      getName: () => "test-component",
+      start: () => false,
+      stop: () => true,
+    });
+    const authConfig = new AuthConfig(passport, components, { hashSalt: 10 });
+    const authObj = authConfig.configure();
+    const testVerify = authObj._strategies["local-demo"]._verify;
+    const expectedUser = { _id: 1, name: "name", email: "name@te.st", password: "pass@test", save: () => true };
+    doneMock = jest.fn();
+    const mockUser = () => ({ find: (_) => [expectedUser] });
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(mockUser);
+    jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
+    await testVerify("email", "pass", doneMock);
+    expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Cannot start authenticate components. Please try again." });
+  });
 });
