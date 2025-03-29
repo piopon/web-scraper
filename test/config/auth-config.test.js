@@ -325,7 +325,7 @@ describe("auth object with google strategy", () => {
 });
 
 describe("auth object with local-demo strategy", () => {
-  test("correctly detects that demo features is not enabled", async () => {
+  test("correctly detects that demo feature is not enabled", async () => {
     const authConfig = new AuthConfig(passport, undefined, { hashSalt: 10 });
     const authObj = authConfig.configure();
     const testVerify = authObj._strategies["local-demo"]._verify;
