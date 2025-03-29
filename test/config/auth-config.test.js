@@ -323,3 +323,16 @@ describe("auth object with google strategy", () => {
     expect(doneMock).toHaveBeenCalledWith(null, expectedUser);
   });
 });
+
+describe("auth object with local-demo strategy", () => {
+  test("correctly detects that demo features is not enabled", async () => {
+    const authConfig = new AuthConfig(passport, undefined, { hashSalt: 10 });
+    const authObj = authConfig.configure();
+    const testVerify = authObj._strategies["local-demo"]._verify;
+    doneMock = jest.fn();
+    const mockUser = () => ({ findOne: (_) => [] });
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(mockUser);
+    await testVerify("email", "pass", doneMock);
+    expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Demo functionality is not enabled." });
+  });
+});
