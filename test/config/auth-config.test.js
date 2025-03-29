@@ -335,4 +335,16 @@ describe("auth object with local-demo strategy", () => {
     await testVerify("email", "pass", doneMock);
     expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Demo functionality is not enabled." });
   });
+  test("correctly detects that demo feature cannot be started", async () => {
+    const authConfig = new AuthConfig(passport, undefined, { hashSalt: 10 });
+    const authObj = authConfig.configure();
+    const testVerify = authObj._strategies["local-demo"]._verify;
+    const expectedUser = { _id: 1, name: "name", email: "name@te.st", password: "pass@test", save: () => true };
+    doneMock = jest.fn();
+    const mockUser = () => ({ find: (_) => [expectedUser] });
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(mockUser);
+    jest.spyOn(bcrypt, "compare").mockResolvedValue(false);
+    await testVerify("email", "pass", doneMock);
+    expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Demo functionality cannot be started." });
+  });
 });
