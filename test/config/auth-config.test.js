@@ -330,7 +330,7 @@ describe("auth object with local-demo strategy", () => {
     const authObj = authConfig.configure();
     const testVerify = authObj._strategies["local-demo"]._verify;
     doneMock = jest.fn();
-    const mockUser = () => ({ findOne: (_) => [] });
+    const mockUser = () => ({ find: (_) => [] });
     jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(mockUser);
     await testVerify("email", "pass", doneMock);
     expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Demo functionality is not enabled." });
