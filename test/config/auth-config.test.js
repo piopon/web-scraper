@@ -325,7 +325,7 @@ describe("auth object with google strategy", () => {
 });
 
 describe("auth object with local-demo strategy", () => {
-  describe("correctly initializes demo feature ", () => {
+  describe("detects that demo feature can be initialized", () => {
     process.env.DEMO_USER = "demo@test.com";
     const expectedUser = { _id: 1, name: "name", email: "name@te.st", password: "pass@test", save: () => true };
     const mockUser = () => ({ find: (_) => [expectedUser] });
