@@ -325,34 +325,34 @@ describe("auth object with google strategy", () => {
 });
 
 describe("auth object with local-demo strategy", () => {
-  test("correctly initializes demo feature with overwrite mode", async () => {
-    const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-    const authConfig = new AuthConfig(passport, components, { hashSalt: 10, demoMode: DemoMode.OVERWRITE });
-    const authObj = authConfig.configure();
-    const testVerify = authObj._strategies["local-demo"]._verify;
-    const expectedUser = { _id: 1, name: "name", email: "name@te.st", password: "pass@test", save: () => true };
-    doneMock = jest.fn();
-    const mockUser = () => ({ find: (_) => [expectedUser] });
-    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(mockUser);
-    jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
-    await testVerify("email", "pass", doneMock);
-    expect(doneMock).toHaveBeenCalledWith(null, expectedUser);
-  });
-  test("correctly initializes demo feature with duplicate mode", async () => {
+  describe("correctly initializes demo feature ", () => {
     process.env.DEMO_USER = "demo@test.com";
-    const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-    const authConfig = new AuthConfig(passport, components, { hashSalt: 10, demoMode: DemoMode.DUPLICATE });
-    const authObj = authConfig.configure();
-    const testVerify = authObj._strategies["local-demo"]._verify;
     const expectedUser = { _id: 1, name: "name", email: "name@te.st", password: "pass@test", save: () => true };
-    doneMock = jest.fn();
     const mockUser = () => ({ find: (_) => [expectedUser] });
     const mockConfig = () => ({ findOne: () => ({ save: () => true }) });
-    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(mockUser);
-    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(mockConfig);
-    jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
-    await testVerify(process.env.DEMO_USER, "pass", doneMock);
-    expect(doneMock).toHaveBeenCalledWith(null, expectedUser);
+    test("with overwrite mode", async () => {
+      const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+      const authConfig = new AuthConfig(passport, components, { hashSalt: 10, demoMode: DemoMode.OVERWRITE });
+      const authObj = authConfig.configure();
+      const testVerify = authObj._strategies["local-demo"]._verify;
+      doneMock = jest.fn();
+      jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(mockUser);
+      jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
+      await testVerify(process.env.DEMO_USER, "pass", doneMock);
+      expect(doneMock).toHaveBeenCalledWith(null, expectedUser);
+    });
+    test("with duplicate mode", async () => {
+      const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+      const authConfig = new AuthConfig(passport, components, { hashSalt: 10, demoMode: DemoMode.DUPLICATE });
+      const authObj = authConfig.configure();
+      const testVerify = authObj._strategies["local-demo"]._verify;
+      doneMock = jest.fn();
+      jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(mockUser);
+      jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(mockConfig);
+      jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
+      await testVerify(process.env.DEMO_USER, "pass", doneMock);
+      expect(doneMock).toHaveBeenCalledWith(null, expectedUser);
+    });
   });
   test("correctly detects that demo feature is not enabled", async () => {
     const authConfig = new AuthConfig(passport, undefined, { hashSalt: 10 });
