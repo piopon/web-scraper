@@ -355,10 +355,18 @@ describe("auth object with local-demo strategy", () => {
     });
   });
   describe("detects that demo feature cannot be initialized", () => {
+    const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+    components.addComponent({
+      getInfo: () => ({ types: [ComponentType.AUTH], initWait: true }),
+      getName: () => "test-component",
+      start: () => false,
+      stop: () => true,
+    });
+    const authConfig = new AuthConfig(passport, components, { hashSalt: 10 });
+    const authObj = authConfig.configure();
+    const testVerify = authObj._strategies["local-demo"]._verify;
+    const expectedUser = { _id: 1, name: "name", email: "name@te.st", password: "pass@test", save: () => true };
     test("due to invalid user (not enabled)", async () => {
-      const authConfig = new AuthConfig(passport, undefined, { hashSalt: 10 });
-      const authObj = authConfig.configure();
-      const testVerify = authObj._strategies["local-demo"]._verify;
       doneMock = jest.fn();
       const mockUser = () => ({ find: (_) => [] });
       jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(mockUser);
@@ -366,10 +374,6 @@ describe("auth object with local-demo strategy", () => {
       expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Demo functionality is not enabled." });
     });
     test("due to invalid password (not started)", async () => {
-      const authConfig = new AuthConfig(passport, undefined, { hashSalt: 10 });
-      const authObj = authConfig.configure();
-      const testVerify = authObj._strategies["local-demo"]._verify;
-      const expectedUser = { _id: 1, name: "name", email: "name@te.st", password: "pass@test", save: () => true };
       doneMock = jest.fn();
       const mockUser = () => ({ find: (_) => [expectedUser] });
       jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(mockUser);
@@ -378,17 +382,6 @@ describe("auth object with local-demo strategy", () => {
       expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Demo functionality cannot be started." });
     });
     test("due to web components init fail", async () => {
-      const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-      components.addComponent({
-        getInfo: () => ({ types: [ComponentType.AUTH], initWait: true }),
-        getName: () => "test-component",
-        start: () => false,
-        stop: () => true,
-      });
-      const authConfig = new AuthConfig(passport, components, { hashSalt: 10 });
-      const authObj = authConfig.configure();
-      const testVerify = authObj._strategies["local-demo"]._verify;
-      const expectedUser = { _id: 1, name: "name", email: "name@te.st", password: "pass@test", save: () => true };
       doneMock = jest.fn();
       const mockUser = () => ({ find: (_) => [expectedUser] });
       jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(mockUser);
