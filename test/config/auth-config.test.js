@@ -387,7 +387,9 @@ describe("auth object with local-demo strategy", () => {
       jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(mockUser);
       jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
       await testVerify("email", "pass", doneMock);
-      expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Cannot start authenticate components. Please try again." });
+      expect(doneMock).toHaveBeenCalledWith(null, false, {
+        message: "Cannot start authenticate components. Please try again.",
+      });
     });
   });
 });
