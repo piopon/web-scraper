@@ -423,5 +423,21 @@ describe("auth object with local-demo strategy", () => {
         message: "Database connection has timed out. Check connection status and please try again.",
       });
     });
+    test("due to incorrect validation", async () => {
+      const authConfig = new AuthConfig(passport, undefined, { hashSalt: 10 });
+      const authObj = authConfig.configure();
+      const testVerify = authObj._strategies["local-demo"]._verify;
+      doneMock = jest.fn();
+      const expectedErr = "Validation failed.";
+      jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
+        find: (_) => {
+          const mockError = new MongooseNamespace.ValidationError(new MongooseError("ERR"));
+          mockError.addError("test-path", new MongooseNamespace.ValidatorError({ message: expectedErr }));
+          throw mockError;
+        },
+      }));
+      await testVerify("email", "pass", doneMock);
+      expect(doneMock).toHaveBeenCalledWith(null, false, { message: expectedErr });
+    });
   });
 });
