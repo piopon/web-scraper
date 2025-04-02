@@ -393,10 +393,10 @@ describe("auth object with local-demo strategy", () => {
     });
   });
   describe("fails when database error occurs", () => {
+    const authConfig = new AuthConfig(passport, undefined, { hashSalt: 10 });
+    const authObj = authConfig.configure();
+    const testVerify = authObj._strategies["local-demo"]._verify;
     test("due to connection break", async () => {
-      const authConfig = new AuthConfig(passport, undefined, { hashSalt: 10 });
-      const authObj = authConfig.configure();
-      const testVerify = authObj._strategies["local-demo"]._verify;
       doneMock = jest.fn();
       jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
         find: (_) => {
@@ -409,9 +409,6 @@ describe("auth object with local-demo strategy", () => {
       });
     });
     test("due to connection timeout", async () => {
-      const authConfig = new AuthConfig(passport, undefined, { hashSalt: 10 });
-      const authObj = authConfig.configure();
-      const testVerify = authObj._strategies["local-demo"]._verify;
       doneMock = jest.fn();
       jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
         find: (_) => {
@@ -424,9 +421,6 @@ describe("auth object with local-demo strategy", () => {
       });
     });
     test("due to incorrect validation", async () => {
-      const authConfig = new AuthConfig(passport, undefined, { hashSalt: 10 });
-      const authObj = authConfig.configure();
-      const testVerify = authObj._strategies["local-demo"]._verify;
       doneMock = jest.fn();
       const expectedErr = "Validation failed.";
       jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
