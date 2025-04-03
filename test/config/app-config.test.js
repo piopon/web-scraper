@@ -4,7 +4,7 @@ import { LogLevel } from "../../src/config/app-types.js";
 import path from "path";
 
 describe("getConfig", () => {
-  test("returns correct result", () => {
+  test("returns correct result with default values", () => {
     const testConfig = new AppConfig().getConfig();
     expect(testConfig.jsonDataConfig).not.toBe(null);
     expect(testConfig.jsonDataConfig.path).toMatch("web-scraper" + path.sep + "docs" + path.sep + "json");
