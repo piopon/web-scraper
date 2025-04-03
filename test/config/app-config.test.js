@@ -1,4 +1,5 @@
 import { AppConfig } from "../../src/config/app-config.js";
+import { DemoMode } from "../../src/config/app-types.js";
 import { LogLevel } from "../../src/config/app-types.js";
 
 import path from "path";
@@ -23,6 +24,9 @@ describe("getConfig", () => {
     expect(testConfig.databaseConfig.user).toBe("");
     expect(testConfig.databaseConfig.password).toBe("");
     expect(testConfig.databaseConfig.timeout).toBe(15_000);
+    expect(testConfig.authConfig).not.toBe(null);
+    expect(testConfig.authConfig.demoMode).toStrictEqual(DemoMode.DUPLICATE);
+    expect(testConfig.authConfig.hashSalt).toBe(10);
     expect(testConfig.scraperConfig).not.toBe(null);
     expect(testConfig.scraperConfig.loginInterval).toBe(30);
     expect(testConfig.scraperConfig.scrapInterval).toBe(30_000);
