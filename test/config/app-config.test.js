@@ -64,5 +64,15 @@ describe("getConfig", () => {
       expect(testConfig.authConfig.demoMode).toStrictEqual(DemoMode.OVERWRITE);
       expect(testConfig.authConfig.hashSalt).toBe(123);
     });
+    test("for scraper config", () => {
+      process.env.SCRAP_INACTIVE_DAYS = 365;
+      process.env.SCRAP_INTERVAL_SEC = 37;
+      const testConfig = new AppConfig().getConfig();
+      expect(testConfig.scraperConfig).not.toBe(null);
+      expect(testConfig.scraperConfig.loginInterval).toBe(365);
+      expect(testConfig.scraperConfig.scrapInterval).toBe(37_000);
+      expect(testConfig.scraperConfig.defaultTimeout).toBe(15_000);
+      expect(testConfig.scraperConfig.timeoutAttempts).toBe(10);
+    });
   });
 });
