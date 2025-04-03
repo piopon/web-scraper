@@ -56,5 +56,13 @@ describe("getConfig", () => {
       expect(testConfig.databaseConfig.password).toBe("test-password");
       expect(testConfig.databaseConfig.timeout).toBe(66_123);
     });
+    test("for auth config", () => {
+      process.env.DEMO_MODE = "overwrite";
+      process.env.ENCRYPT_SALT = 123;
+      const testConfig = new AppConfig().getConfig();
+      expect(testConfig.authConfig).not.toBe(null);
+      expect(testConfig.authConfig.demoMode).toStrictEqual(DemoMode.OVERWRITE);
+      expect(testConfig.authConfig.hashSalt).toBe(123);
+    });
   });
 });
