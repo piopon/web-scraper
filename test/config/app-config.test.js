@@ -29,4 +29,10 @@ describe("getConfig", () => {
     expect(testConfig.scraperConfig.defaultTimeout).toBe(15_000);
     expect(testConfig.scraperConfig.timeoutAttempts).toBe(10);
   });
+  test("returns correct result using environment variables", () => {
+    process.env.SERVER_PORT = 1234;
+    const testConfig = new AppConfig().getConfig();
+    expect(testConfig.serverConfig).not.toBe(null);
+    expect(testConfig.serverConfig.port).toBe(1234);
+  });
 });
