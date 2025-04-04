@@ -96,6 +96,32 @@ describe("created view GET routes", () => {
   });
 });
 
+describe("created view POST routes", () => {
+  // configue test express app server
+  const testApp = express();
+  testApp.engine("handlebars", engine({ helpers: helpers() }));
+  testApp.set("view engine", "handlebars");
+  testApp.set("views", "./public");
+  testApp.use(express.static("./public"));
+  testApp.use(express.json());
+  testApp.use(express.urlencoded({ extended: false }));
+  testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
+  testApp.use(passport.initialize());
+  testApp.use(passport.session());
+  testApp.use("/view", new ViewRouter().createRoutes());
+  testApp.use("/auth", createMockAuthRouter());
+  // retrieve underlying superagent to correctly persist sessions
+  const testAgent = supertest.agent(testApp);
+  beforeAll(async () => {
+    const mockAuth = { mail: "test@mail.com", pass: "test-secret" };
+    await testAgent.post("/auth/login").send(mockAuth);
+  });
+  test("returns correct result for unknown path", async () => {
+    const response = await testAgent.post("/view/unknown");
+    expect(response.statusCode).toBe(404);
+  });
+});
+
 function createMockAuthRouter() {
   const router = express.Router();
   const configId = 123;
