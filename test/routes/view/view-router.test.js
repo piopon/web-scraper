@@ -120,6 +120,13 @@ describe("created view POST routes", () => {
     const response = await testAgent.post("/view/unknown");
     expect(response.statusCode).toBe(404);
   });
+  describe("returns correct result using /view/image endpoint", () => {
+    test("without any file provided", async () => {
+      const response = await testAgent.post("/view/image");
+      expect(response.statusCode).toBe(400);
+      expect(response.body).toBe("No file provided");
+    });
+  });
 });
 
 function createMockAuthRouter() {
