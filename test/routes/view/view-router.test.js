@@ -131,7 +131,7 @@ describe("created view POST routes", () => {
       expect(response.body).toBe("No file provided");
     });
     test("with a non-image file provided", async () => {
-      const testDataPath = "testfile.json";
+      const testDataPath = path.join('.', 'testfile.json');
       createDataFile(testDataPath);
       const fileName = 'testfile.json';
       const fileMock = Buffer.from('file content', 'utf-8');
