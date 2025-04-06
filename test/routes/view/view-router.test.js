@@ -9,6 +9,7 @@ import helpers from "handlebars-helpers";
 import { jest } from "@jest/globals";
 import { engine } from "express-handlebars";
 import { Strategy } from "passport-local";
+import fileUpload from "express-fileupload";
 import path from "path";
 import fs from "fs";
 
@@ -108,6 +109,7 @@ describe("created view POST routes", () => {
   testApp.use(express.json());
   testApp.use(express.urlencoded({ extended: false }));
   testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
+  testApp.use(fileUpload({ abortOnLimit: true, limits: { fileSize: 10_000_000 } }));
   testApp.use(passport.initialize());
   testApp.use(passport.session());
   testApp.use("/view", new ViewRouter().createRoutes());
