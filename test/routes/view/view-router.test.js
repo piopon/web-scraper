@@ -133,7 +133,13 @@ describe("created view POST routes", () => {
     test("with a non-image file provided", async () => {
       const testDataPath = "testfile.json";
       createDataFile(testDataPath);
-      const response = await testAgent.post("/view/image").attach("file", ".", testDataPath);
+      const fileName = 'testfile.json';
+      const fileMock = Buffer.from('file content', 'utf-8');
+      const response = await testAgent.post("/view/image")
+        .field('auxiliary-file', fileMock)
+        .attach('auxiliary-file', fileMock, {
+          fileName, contentType: 'application/json',
+        });
       expect(response.statusCode).toBe(400);
       expect(response.body).toBe("Provided file is NOT an image file");
       removeDataFile(testDataPath);
