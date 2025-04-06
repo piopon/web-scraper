@@ -126,6 +126,12 @@ describe("created view POST routes", () => {
       expect(response.statusCode).toBe(400);
       expect(response.body).toBe("No file provided");
     });
+    test("with a non-image file provided", async () => {
+      const testDataPath = "testfile.json";
+      const response = await testAgent.post("/view/image").attach("file", ".", testDataPath);
+      expect(response.statusCode).toBe(400);
+      expect(response.body).toBe("Provided file is NOT an image file");
+    });
   });
 });
 
