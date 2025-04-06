@@ -128,9 +128,11 @@ describe("created view POST routes", () => {
     });
     test("with a non-image file provided", async () => {
       const testDataPath = "testfile.json";
+      createDataFile(testDataPath);
       const response = await testAgent.post("/view/image").attach("file", ".", testDataPath);
       expect(response.statusCode).toBe(400);
       expect(response.body).toBe("Provided file is NOT an image file");
+      removeDataFile(testDataPath);
     });
   });
 });
@@ -205,4 +207,24 @@ function getInitConfig(db, configId, name) {
       }),
     }),
   };
+}
+
+function createDataFile(filePath) {
+  try {
+    const fileDir = path.dirname(filePath);
+    if (!fs.existsSync(fileDir)) {
+      fs.mkdirSync(fileDir, { recursive: true });
+    }
+    fs.writeFileSync(filePath, JSON.stringify({ test: "test" }));
+  } catch (err) {
+    console.error(`Could not create data file: ${err}`);
+  }
+}
+
+function removeDataFile(filePath) {
+  fs.rmSync(filePath, { force: true });
+  const fileDir = path.dirname(filePath);
+  if (fileDir !== ".") {
+    fs.rmdirSync(fileDir);
+  }
 }
