@@ -9,6 +9,8 @@ import helpers from "handlebars-helpers";
 import { jest } from "@jest/globals";
 import { engine } from "express-handlebars";
 import { Strategy } from "passport-local";
+import path from "path";
+import fs from "fs";
 
 jest.mock("../../../src/model/scrap-config.js");
 
