@@ -112,7 +112,7 @@ describe("created view POST routes", () => {
   testApp.use(fileUpload({ abortOnLimit: true, limits: { fileSize: 10_000_000 } }));
   testApp.use(passport.initialize());
   testApp.use(passport.session());
-  testApp.use("/view", new ViewRouter().createRoutes());
+  testApp.use("/view", new ViewRouter("./users/").createRoutes());
   testApp.use("/auth", createMockAuthRouter());
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
