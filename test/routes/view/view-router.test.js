@@ -139,12 +139,12 @@ describe("created view POST routes", () => {
       removeDataFile(testDataPath);
     });
     test("with an image file provided", async () => {
-      const testImagePath  = path.join('.', 'testfile.png');
-      createDataFile(testImagePath );
+      const testImagePath = path.join('.', 'testfile.png');
+      createDataFile(testImagePath);
       const response = await testAgent.post("/view/image").attach('auxiliary-file', testImagePath);
       expect(response.statusCode).toBe(200);
       expect(response.body).toBe("Successfully uploaded image: testfile.png");
-      removeDataFile(testImagePath );
+      removeDataFile(testImagePath);
     });
   });
 });
