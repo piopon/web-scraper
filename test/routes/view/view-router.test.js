@@ -159,12 +159,13 @@ function createMockAuthRouter() {
   const router = express.Router();
   const configId = 123;
   const userName = "test-name";
+  const userMail = "test@mail.c"
   // configure mocked login logic
   const options = { usernameField: "mail", passwordField: "pass" };
   const verify = (_user, _pass, done) => done(null, { id: 1, config: configId, name: userName });
   passport.use("mock-login", new Strategy(options, verify));
   passport.serializeUser((user, done) => done(null, user.id));
-  passport.deserializeUser((userId, done) => done(null, { id: userId, config: configId, name: userName }));
+  passport.deserializeUser((userId, done) => done(null, { id: userId, config: configId, name: userName, email: userMail }));
   // use passport mock login in tests
   router.post("/login", passport.authenticate("mock-login"));
   return router;
