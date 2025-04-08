@@ -13,6 +13,7 @@ import fileUpload from "express-fileupload";
 import path from "path";
 import fs from "fs";
 
+jest.mock("fs");
 jest.mock("../../../src/model/scrap-config.js");
 
 describe("createRoutes() method", () => {
@@ -141,6 +142,8 @@ describe("created view POST routes", () => {
     test("with an image file provided", async () => {
       const testImagePath = path.join('.', 'testfile.png');
       createDataFile(testImagePath);
+      jest.spyOn(fs, "mkdirSync").mockImplementation((_) => {});
+      jest.spyOn(fs, "existsSync").mockImplementation((_) => false);
       const response = await testAgent.post("/view/image").attach('auxiliary-file', testImagePath);
       expect(response.statusCode).toBe(200);
       expect(response.body).toBe("Successfully uploaded image: testfile.png");
