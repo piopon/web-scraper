@@ -14,6 +14,7 @@ import path from "path";
 import fs from "fs";
 
 jest.mock("fs");
+jest.mock("path");
 jest.mock("../../../src/model/scrap-config.js");
 
 describe("createRoutes() method", () => {
@@ -142,6 +143,7 @@ describe("created view POST routes", () => {
     test("with an image file provided", async () => {
       const testImagePath = path.join('.', 'testfile.png');
       createDataFile(testImagePath);
+      jest.spyOn(path, "join").mockImplementation((_) => testImagePath);
       jest.spyOn(fs, "mkdirSync").mockImplementation((_) => {});
       jest.spyOn(fs, "existsSync").mockImplementation((_) => false);
       const response = await testAgent.post("/view/image").attach('auxiliary-file', testImagePath);
