@@ -1,17 +1,17 @@
 import { ViewRouter } from "../../../src/routes/view/view-router.js";
 import { ScrapConfig } from "../../../src/model/scrap-config.js";
 
+import { Strategy } from "passport-local";
+import { engine } from "express-handlebars";
+import { jest } from "@jest/globals";
+import fs from "fs";
+import path from "path";
 import supertest from "supertest";
 import passport from "passport";
 import express from "express";
 import session from "express-session";
-import helpers from "handlebars-helpers";
-import { jest } from "@jest/globals";
-import { engine } from "express-handlebars";
-import { Strategy } from "passport-local";
 import fileUpload from "express-fileupload";
-import path from "path";
-import fs from "fs";
+import helpers from "handlebars-helpers";
 
 jest.mock("fs");
 jest.mock("path");
