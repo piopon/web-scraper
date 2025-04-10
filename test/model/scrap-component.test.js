@@ -100,9 +100,10 @@ describe("getRequestParamsSchema", () => {
 });
 
 describe("getDatabaseSchema", () => {
-  test("returns correct value", () => {
+  test("returns value of correct type", () => {
     const schema = ScrapComponent.getDatabaseSchema();
     expect(schema).not.toBe(null);
+    expect(schema).toBeInstanceOf(mongoose.Schema);
   });
   describe("gets schema used for create component", () => {
     const TestModel = mongoose.model("test-component", ScrapComponent.getDatabaseSchema());
