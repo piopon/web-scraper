@@ -105,6 +105,17 @@ describe("getDatabaseSchema", () => {
     expect(schema).not.toBe(null);
     expect(schema).toBeInstanceOf(mongoose.Schema);
   });
+  test("returns value with correct structure", () => {
+    const schema = ScrapComponent.getDatabaseSchema();
+    expect(schema.paths).toHaveProperty("interval");
+    expect(schema.paths).toHaveProperty("selector");
+    expect(schema.paths).toHaveProperty("attribute");
+    expect(schema.paths).toHaveProperty("auxiliary");
+    expect(schema.paths.interval.instance).toBe("String");
+    expect(schema.paths.selector.instance).toBe("String");
+    expect(schema.paths.attribute.instance).toBe("String");
+    expect(schema.paths.auxiliary.instance).toBe("String");
+  });
   describe("gets schema used for create component", () => {
     const TestModel = mongoose.model("test-component", ScrapComponent.getDatabaseSchema());
     const component = new TestModel({
