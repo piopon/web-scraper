@@ -116,29 +116,32 @@ describe("getDatabaseSchema", () => {
     expect(schema.paths.attribute.instance).toBe("String");
     expect(schema.paths.auxiliary.instance).toBe("String");
   });
-  test("returns value with correct logic", () => {
+  describe("returns value with correct logic", () => {
     const schema = ScrapComponent.getDatabaseSchema();
-    // check selector required logic
-    const requiredSelector = schema.paths.selector.options.required;
-    expect(typeof requiredSelector).toBe("function");
-    const contextWithSelector = { selector: "abc" };
-    const contextWithoutSelector = { selector: undefined };
-    expect(requiredSelector.call(contextWithSelector)).toBe(false);
-    expect(requiredSelector.call(contextWithoutSelector)).toBe(true);
-    // check attribute required logic
-    const requiredAttribute = schema.paths.attribute.options.required;
-    expect(typeof requiredAttribute).toBe("function");
-    const contextWithAttribute = { attribute: "abc" };
-    const contextWithoutAttribute = { attribute: undefined };
-    expect(requiredAttribute.call(contextWithAttribute)).toBe(false);
-    expect(requiredAttribute.call(contextWithoutAttribute)).toBe(true);
-    // check auxiliary required logic
-    const requiredAuxiliary = schema.paths.auxiliary.options.required;
-    expect(typeof requiredAuxiliary).toBe("function");
-    const contextWithAuxiliary = { auxiliary: "abc" };
-    const contextWithoutAuxiliary = { auxiliary: undefined };
-    expect(requiredAuxiliary.call(contextWithAuxiliary)).toBe(false);
-    expect(requiredAuxiliary.call(contextWithoutAuxiliary)).toBe(true);
+    test("for selector field", () => {
+      const requiredSelector = schema.paths.selector.options.required;
+      expect(typeof requiredSelector).toBe("function");
+      const contextWithSelector = { selector: "abc" };
+      const contextWithoutSelector = { selector: undefined };
+      expect(requiredSelector.call(contextWithSelector)).toBe(false);
+      expect(requiredSelector.call(contextWithoutSelector)).toBe(true);
+    });
+    test("for attribute field", () => {
+      const requiredAttribute = schema.paths.attribute.options.required;
+      expect(typeof requiredAttribute).toBe("function");
+      const contextWithAttribute = { attribute: "abc" };
+      const contextWithoutAttribute = { attribute: undefined };
+      expect(requiredAttribute.call(contextWithAttribute)).toBe(false);
+      expect(requiredAttribute.call(contextWithoutAttribute)).toBe(true);
+    });
+    test("for auxiliary field", () => {
+      const requiredAuxiliary = schema.paths.auxiliary.options.required;
+      expect(typeof requiredAuxiliary).toBe("function");
+      const contextWithAuxiliary = { auxiliary: "abc" };
+      const contextWithoutAuxiliary = { auxiliary: undefined };
+      expect(requiredAuxiliary.call(contextWithAuxiliary)).toBe(false);
+      expect(requiredAuxiliary.call(contextWithoutAuxiliary)).toBe(true);
+    });
   });
   describe("gets schema used for create component", () => {
     const TestModel = mongoose.model("test-component", ScrapComponent.getDatabaseSchema());
