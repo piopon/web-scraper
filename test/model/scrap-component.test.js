@@ -100,47 +100,48 @@ describe("getRequestParamsSchema", () => {
 });
 
 describe("getDatabaseSchema", () => {
-  test("returns value of correct type", () => {
+  describe("returns correct value", () => {
     const schema = ScrapComponent.getDatabaseSchema();
-    expect(schema).not.toBe(null);
-    expect(schema).toBeInstanceOf(mongoose.Schema);
-  });
-  test("returns value with correct structure", () => {
-    const schema = ScrapComponent.getDatabaseSchema();
-    expect(schema.paths).toHaveProperty("interval");
-    expect(schema.paths).toHaveProperty("selector");
-    expect(schema.paths).toHaveProperty("attribute");
-    expect(schema.paths).toHaveProperty("auxiliary");
-    expect(schema.paths.interval.instance).toBe("String");
-    expect(schema.paths.selector.instance).toBe("String");
-    expect(schema.paths.attribute.instance).toBe("String");
-    expect(schema.paths.auxiliary.instance).toBe("String");
-  });
-  describe("returns value with correct logic", () => {
-    const schema = ScrapComponent.getDatabaseSchema();
-    test("for selector field", () => {
-      const requiredSelector = schema.paths.selector.options.required;
-      expect(typeof requiredSelector).toBe("function");
-      const contextWithSelector = { selector: "abc" };
-      const contextWithoutSelector = { selector: undefined };
-      expect(requiredSelector.call(contextWithSelector)).toBe(false);
-      expect(requiredSelector.call(contextWithoutSelector)).toBe(true);
+    const paths = schema.paths;
+    test("with correct type", () => {
+      expect(schema).not.toBe(null);
+      expect(schema).toBeInstanceOf(mongoose.Schema);
     });
-    test("for attribute field", () => {
-      const requiredAttribute = schema.paths.attribute.options.required;
-      expect(typeof requiredAttribute).toBe("function");
-      const contextWithAttribute = { attribute: "abc" };
-      const contextWithoutAttribute = { attribute: undefined };
-      expect(requiredAttribute.call(contextWithAttribute)).toBe(false);
-      expect(requiredAttribute.call(contextWithoutAttribute)).toBe(true);
+    test("with correct structure", () => {
+      expect(paths).toHaveProperty("interval");
+      expect(paths).toHaveProperty("selector");
+      expect(paths).toHaveProperty("attribute");
+      expect(paths).toHaveProperty("auxiliary");
+      expect(paths.interval.instance).toBe("String");
+      expect(paths.selector.instance).toBe("String");
+      expect(paths.attribute.instance).toBe("String");
+      expect(paths.auxiliary.instance).toBe("String");
     });
-    test("for auxiliary field", () => {
-      const requiredAuxiliary = schema.paths.auxiliary.options.required;
-      expect(typeof requiredAuxiliary).toBe("function");
-      const contextWithAuxiliary = { auxiliary: "abc" };
-      const contextWithoutAuxiliary = { auxiliary: undefined };
-      expect(requiredAuxiliary.call(contextWithAuxiliary)).toBe(false);
-      expect(requiredAuxiliary.call(contextWithoutAuxiliary)).toBe(true);
+    describe("with correct logic", () => {
+      test("for selector field", () => {
+        const requiredSelector = paths.selector.options.required;
+        expect(typeof requiredSelector).toBe("function");
+        const contextWithSelector = { selector: "abc" };
+        const contextWithoutSelector = { selector: undefined };
+        expect(requiredSelector.call(contextWithSelector)).toBe(false);
+        expect(requiredSelector.call(contextWithoutSelector)).toBe(true);
+      });
+      test("for attribute field", () => {
+        const requiredAttribute = paths.attribute.options.required;
+        expect(typeof requiredAttribute).toBe("function");
+        const contextWithAttribute = { attribute: "abc" };
+        const contextWithoutAttribute = { attribute: undefined };
+        expect(requiredAttribute.call(contextWithAttribute)).toBe(false);
+        expect(requiredAttribute.call(contextWithoutAttribute)).toBe(true);
+      });
+      test("for auxiliary field", () => {
+        const requiredAuxiliary = paths.auxiliary.options.required;
+        expect(typeof requiredAuxiliary).toBe("function");
+        const contextWithAuxiliary = { auxiliary: "abc" };
+        const contextWithoutAuxiliary = { auxiliary: undefined };
+        expect(requiredAuxiliary.call(contextWithAuxiliary)).toBe(false);
+        expect(requiredAuxiliary.call(contextWithoutAuxiliary)).toBe(true);
+      });
     });
   });
   describe("gets schema used for create component", () => {
