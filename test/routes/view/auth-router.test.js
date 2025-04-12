@@ -85,6 +85,7 @@ describe("created auth GET routes", () => {
   });
   test("returns correct result using /token endpoint", async () => {
     testApp.use((req, res, next) => {
+      req.isAuthenticated = () => true;
       req.user = {
         toJSON: () => ({
           name: "Test User",
