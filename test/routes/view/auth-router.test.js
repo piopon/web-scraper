@@ -84,17 +84,6 @@ describe("created auth GET routes", () => {
     expect(response.text).toContain('<p>not registered? go to <a href="/auth/register">register</a> page.</p>');
   });
   test("returns correct result using /token endpoint", async () => {
-    testApp.use((req, res, next) => {
-      req.isAuthenticated = () => true;
-      req.user = {
-        toJSON: () => ({
-          name: "Test User",
-          email: "test@example.com",
-          password: "supersecret",
-        }),
-      };
-      next();
-    });
     jest.spyOn(jsonwebtoken, "sign").mockReturnValue("mocked.jwt.token");
     const response = await testAgent.get("/auth/token");
     expect(response.statusCode).toBe(302);
@@ -163,6 +152,18 @@ function configureTestSever(testRouter) {
   testApp.use(passport.initialize());
   testApp.use(passport.session());
   testApp.locals.passport = authConfig.configure();
+  // mock request user and authenticated logic
+  testApp.use((req, res, next) => {
+    req.isAuthenticated = () => true;
+    req.user = {
+      toJSON: () => ({
+        name: "Test User",
+        email: "test@example.com",
+        password: "supersecret",
+      }),
+    };
+    next();
+  });
   // connect test router to auth endpoint
   testApp.use("/auth", testRouter.createRoutes());
   return testApp;
