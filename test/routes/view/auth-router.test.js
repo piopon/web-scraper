@@ -61,6 +61,7 @@ describe("created auth GET routes", () => {
     expect(response.statusCode).toBe(404);
   });
   test("returns correct result using /register endpoint", async () => {
+    isAuthenticatedResult = false;
     const response = await testAgent.get("/auth/register");
     expect(response.statusCode).toBe(200);
     expect(response.type).toBe("text/html");
@@ -74,6 +75,7 @@ describe("created auth GET routes", () => {
     expect(response.text).toContain('<p>already registered? go to <a href="/auth/login">login</a> page</p>');
   });
   test("returns correct result using /login endpoint", async () => {
+    isAuthenticatedResult = false;
     const response = await testAgent.get("/auth/login");
     expect(response.statusCode).toBe(200);
     expect(response.type).toBe("text/html");
@@ -86,12 +88,14 @@ describe("created auth GET routes", () => {
     expect(response.text).toContain('<p>not registered? go to <a href="/auth/register">register</a> page.</p>');
   });
   test("returns correct result using /token endpoint", async () => {
+    isAuthenticatedResult = true;
     jest.spyOn(jsonwebtoken, "sign").mockReturnValue("mocked.jwt.token");
     const response = await testAgent.get("/auth/token");
     expect(response.statusCode).toBe(302);
     expect(response.text).toBe("Found. Redirecting to /auth/login");
   });
   test("returns correct result using /google endpoint", async () => {
+    isAuthenticatedResult = false;
     const response = await testAgent.get("/auth/google");
     expect(response.statusCode).toBe(302);
     expect(response.text).toBe("");
@@ -99,6 +103,7 @@ describe("created auth GET routes", () => {
 });
 
 describe("created auth POST routes", () => {
+  isAuthenticatedResult = false;
   const testRouter = new AuthRouter(passport);
   const testApp = configureTestSever(testRouter);
   // retrieve underlying superagent to correctly persist sessions
