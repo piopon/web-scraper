@@ -91,8 +91,8 @@ describe("created auth GET routes", () => {
     isAuthenticatedResult = true;
     jest.spyOn(jsonwebtoken, "sign").mockReturnValue("mocked.jwt.token");
     const response = await testAgent.get("/auth/token");
-    expect(response.statusCode).toBe(302);
-    expect(response.text).toBe("Found. Redirecting to /auth/login");
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toStrictEqual({ token: "mocked.jwt.token" });
   });
   test("returns correct result using /google endpoint", async () => {
     isAuthenticatedResult = false;
