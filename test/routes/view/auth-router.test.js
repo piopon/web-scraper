@@ -100,6 +100,12 @@ describe("created auth GET routes", () => {
     expect(response.statusCode).toBe(302);
     expect(response.text).toBe("");
   });
+  test("returns correct result using /google/callback endpoint", async () => {
+    isAuthenticatedResult = false;
+    const response = await testAgent.get("/auth/google/callback");
+    expect(response.statusCode).toBe(302);
+    expect(response.text).toBe("");
+  });
 });
 
 describe("created auth POST routes", () => {
