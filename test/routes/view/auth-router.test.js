@@ -17,6 +17,8 @@ import { engine } from "express-handlebars";
 jest.mock("../../../src/model/scrap-config.js");
 jest.mock("jsonwebtoken");
 
+let isAuthenticatedResult = false;
+
 process.env.JWT_SECRET = "test_secret";
 process.env.GOOGLE_CLIENT_ID = "test_id";
 
@@ -154,7 +156,7 @@ function configureTestSever(testRouter) {
   testApp.locals.passport = authConfig.configure();
   // mock request user and authenticated logic
   testApp.use((req, res, next) => {
-    req.isAuthenticated = () => true;
+    req.isAuthenticated = () => isAuthenticatedResult;
     req.user = {
       toJSON: () => ({
         name: "Test User",
