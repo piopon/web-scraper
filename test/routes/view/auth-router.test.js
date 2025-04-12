@@ -123,24 +123,28 @@ describe("created auth POST routes", () => {
     const response = await testAgent.post("/auth/register");
     expect(response.statusCode).toBe(302);
     expect(response.text).toBe("Found. Redirecting to /auth/register");
+    expect(response.headers.location).toBe("/auth/register");
   });
   test("returns correct result using /login endpoint", async () => {
     isAuthenticatedResult = false;
     const response = await testAgent.post("/auth/login");
     expect(response.statusCode).toBe(302);
     expect(response.text).toBe("Found. Redirecting to /auth/login");
+    expect(response.headers.location).toBe("/auth/login");
   });
   test("returns correct result using /demo endpoint", async () => {
     isAuthenticatedResult = false;
     const response = await testAgent.post("/auth/demo");
     expect(response.statusCode).toBe(302);
     expect(response.text).toBe("Found. Redirecting to /auth/login");
+    expect(response.headers.location).toBe("/auth/login");
   });
   test("returns correct result using /logout endpoint", async () => {
     isAuthenticatedResult = false;
     const response = await testAgent.post("/auth/logout");
     expect(response.statusCode).toBe(302);
     expect(response.text).toBe("Found. Redirecting to /auth/login");
+    expect(response.headers.location).toBe("/auth/login");
   });
 });
 
