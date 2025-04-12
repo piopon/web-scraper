@@ -10,10 +10,12 @@ import express from "express";
 import flash from "express-flash";
 import session from "express-session";
 import helpers from "handlebars-helpers";
+import jsonwebtoken from "jsonwebtoken";
 import { jest } from "@jest/globals";
 import { engine } from "express-handlebars";
 
 jest.mock("../../../src/model/scrap-config.js");
+jest.mock("jsonwebtoken");
 
 process.env.JWT_SECRET = "test_secret";
 process.env.GOOGLE_CLIENT_ID = "test_id";
@@ -92,6 +94,7 @@ describe("created auth GET routes", () => {
       };
       next();
     });
+    jest.spyOn(jsonwebtoken, "sign").mockReturnValue("mocked.jwt.token");
     const response = await testAgent.get("/auth/token");
     expect(response.statusCode).toBe(302);
     expect(response.text).toBe("Found. Redirecting to /auth/login");
