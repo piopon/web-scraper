@@ -140,7 +140,7 @@ describe("created auth POST routes", () => {
     expect(response.headers.location).toBe("/auth/login");
   });
   test("returns correct result using /logout endpoint", async () => {
-    isAuthenticatedResult = false;
+    isAuthenticatedResult = true;
     const response = await testAgent.post("/auth/logout");
     expect(response.statusCode).toBe(302);
     expect(response.text).toBe("Found. Redirecting to /auth/login");
