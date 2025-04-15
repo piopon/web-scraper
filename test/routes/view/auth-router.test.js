@@ -1,6 +1,7 @@
 import { AuthConfig } from "../../../src/config/auth-config.js";
 import { AuthRouter } from "../../../src/routes/view/auth-router.js";
 import { ScrapConfig } from "../../../src/model/scrap-config.js";
+import { ScrapUser } from "../../../src/model/scrap-user.js";
 import { WebComponents } from "../../../src/components/web-components.js";
 import { LogLevel } from "../../../src/config/app-types.js";
 
@@ -15,6 +16,7 @@ import { jest } from "@jest/globals";
 import { engine } from "express-handlebars";
 
 jest.mock("../../../src/model/scrap-config.js");
+jest.mock("../../../src/model/scrap-user.js");
 jest.mock("jsonwebtoken");
 
 let isAuthenticatedResult = false;
@@ -150,6 +152,10 @@ describe("created auth POST routes", () => {
 
 function configureTestSever(testRouter) {
   // configure mock result (needed by POST requests)
+  const userMockResult = {
+    deleteOne: (_) => false,
+  };
+  jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => userMockResult);
   const mockResult = {
     find: (user) => {
       [{ email: user.email, password: "pass", save: () => {} }];
