@@ -177,6 +177,7 @@ function configureTestSever(testRouter) {
   testApp.use((req, res, next) => {
     req.isAuthenticated = () => isAuthenticatedResult;
     req.user = {
+      hostUser: 1,
       toJSON: () => ({
         name: "Test User",
         email: "test@example.com",
