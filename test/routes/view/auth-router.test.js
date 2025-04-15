@@ -157,6 +157,7 @@ function configureTestSever(testRouter) {
   };
   jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => userMockResult);
   const mockResult = {
+    deleteOne: (_) => false,
     find: (user) => {
       [{ email: user.email, password: "pass", save: () => {} }];
     },
