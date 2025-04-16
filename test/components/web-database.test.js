@@ -74,6 +74,8 @@ describe("start() method", () => {
     minLogLevel: LogLevel.INFO,
     databaseConfig: configObject,
     usersDataConfig: { path: "" },
+    authConfig: { hashSalt: 10 },
+    jsonDataConfig: { path: "", config: "" }
   });
   const mongooseConnectSpyOn = jest.spyOn(mongoose, "connect").mockImplementationOnce(() => Promise.resolve(mongoose));
   test("succeeds with valid input data", async () => {
