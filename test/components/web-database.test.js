@@ -14,6 +14,9 @@ jest.mock("mongoose");
 jest.mock("../../src/model/scrap-config.js");
 jest.mock("../../src/model/scrap-user.js");
 
+process.env.DEMO_BASE = "demo@user.com";
+process.env.DEMO_PASS = "demo_pass";
+
 describe("creating an object", () => {
   test("instantiates a new object when input object is correct", () => {
     const inputObject = { minLogLevel: LogLevel.INFO };
