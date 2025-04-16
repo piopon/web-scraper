@@ -97,9 +97,10 @@ describe("start() method", () => {
     jest.spyOn(path, "join").mockImplementation((_) => "");
     jest.spyOn(fs, "existsSync").mockImplementation((_) => true);
     jest.spyOn(fs, "readFileSync").mockImplementation((_) => `{ "test": "value" }`);
-    const mockConfigResult = { countDocuments: () => 1 };
+    const mockConfigResult = { create: (_) => ({ _id: 1, save: () => true }), countDocuments: () => 1 };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockConfigResult);
     const mockUserResult = {
+      create: (_) => ({ _id: 100, save: () => true }),
       findOne: (user) => (process.env.DEMO_BASE === user.email ? null : true),
       countDocuments: () => 1,
       deleteMany: (_) => ({ deletedCount: 0 }),
