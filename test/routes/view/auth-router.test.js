@@ -18,6 +18,7 @@ import { engine } from "express-handlebars";
 jest.mock("../../../src/model/scrap-config.js");
 jest.mock("../../../src/model/scrap-user.js");
 jest.mock("jsonwebtoken");
+jest.mock("passport");
 
 let isAuthenticatedResult = false;
 
@@ -103,10 +104,16 @@ describe("created auth GET routes", () => {
     expect(response.text).toBe("");
   });
   test("returns correct result using /google/callback endpoint", async () => {
-    isAuthenticatedResult = false;
+    jest.spyOn(passport, "authenticate").mockImplementation((strategy, options) => {
+      return (req, res, next) => {
+        next();
+      };
+    });
+    isAuthenticatedResult = true;
     const response = await testAgent.get("/auth/google/callback");
     expect(response.statusCode).toBe(302);
     expect(response.text).toBe("");
+    expect(response.headers.location).toBe("/");
   });
 });
 
