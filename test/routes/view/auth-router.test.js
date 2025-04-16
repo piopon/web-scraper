@@ -104,15 +104,18 @@ describe("created auth GET routes", () => {
     expect(response.text).toBe("");
   });
   test("returns correct result using /google/callback endpoint", async () => {
+    isAuthenticatedResult = true;
     jest.spyOn(passport, "authenticate").mockImplementation((strategy, options) => {
       return (req, res, next) => {
         next();
       };
     });
-    isAuthenticatedResult = true;
-    const response = await testAgent.get("/auth/google/callback");
+    // we need to create a LOCAL agent in order for the passport mockup to be applied correctly
+    // also we aren't moving this mockup, because other tests should use the real implementation
+    const localAgent = supertest.agent(configureTestSever(testRouter));
+    const response = await localAgent.get("/auth/google/callback");
     expect(response.statusCode).toBe(302);
-    expect(response.text).toBe("");
+    expect(response.text).toBe("Found. Redirecting to /");
     expect(response.headers.location).toBe("/");
   });
 });
