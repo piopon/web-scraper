@@ -96,6 +96,7 @@ describe("start() method", () => {
     jest.spyOn(bcrypt, "hashSync").mockResolvedValue("pass@test");
     jest.spyOn(path, "join").mockImplementation((_) => "");
     jest.spyOn(fs, "existsSync").mockImplementation((_) => true);
+    jest.spyOn(fs, "readFileSync").mockImplementation((_) => `{ "test": "value" }`);
     const mockConfigResult = { countDocuments: () => 1 };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockConfigResult);
     const mockUserResult = {
