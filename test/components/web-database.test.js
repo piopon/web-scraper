@@ -84,6 +84,23 @@ describe("start() method", () => {
     expect(result).toBe(true);
     expect(mongooseConnectSpyOn).toBeCalledWith(expectedUrl, expectedObj);
   });
+  test("creates base demo user when not found", async () => {
+    // prepare post-start maintenance logic to semi-impactless (go through demo user logic)
+    jest.spyOn(path, "join").mockImplementation((_) => "");
+    jest.spyOn(fs, "existsSync").mockImplementation((_) => true);
+    const mockConfigResult = { countDocuments: () => 1 };
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockConfigResult);
+    const mockUserResult = {
+      findOne: (user) => (process.env.DEMO_BASE === user.email ? null : true),
+      countDocuments: () => 1,
+      deleteMany: (_) => ({ deletedCount: 0 }),
+    };
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => mockUserResult);
+    // invoke the core test logic
+    const result = await testDatabase.start();
+    expect(result).toBe(true);
+    expect(mongooseConnectSpyOn).toBeCalledWith(expectedUrl, expectedObj);
+  });
   test("fails with invalid input data", async () => {
     const testDatabase = new WebDatabase({ minLogLevel: LogLevel.INFO });
     const result = await testDatabase.start();
