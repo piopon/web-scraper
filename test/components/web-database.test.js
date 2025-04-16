@@ -6,10 +6,12 @@ import { ScrapUser } from "../../src/model/scrap-user.js";
 import { jest } from "@jest/globals";
 import fs from "fs";
 import path from "path";
+import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 
 jest.mock("fs");
 jest.mock("path");
+jest.mock("bcrypt");
 jest.mock("mongoose");
 jest.mock("../../src/model/scrap-config.js");
 jest.mock("../../src/model/scrap-user.js");
@@ -89,6 +91,7 @@ describe("start() method", () => {
   });
   test("creates base demo user when not found", async () => {
     // prepare post-start maintenance logic to semi-impactless (go through demo user logic)
+    jest.spyOn(bcrypt, "hashSync").mockResolvedValue("pass@test");
     jest.spyOn(path, "join").mockImplementation((_) => "");
     jest.spyOn(fs, "existsSync").mockImplementation((_) => true);
     const mockConfigResult = { countDocuments: () => 1 };
