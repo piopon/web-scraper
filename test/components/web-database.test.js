@@ -77,7 +77,7 @@ describe("start() method", () => {
     authConfig: { hashSalt: 10 },
     jsonDataConfig: { path: "", config: "" }
   });
-  const mongooseConnectSpyOn = jest.spyOn(mongoose, "connect").mockImplementationOnce(() => Promise.resolve(mongoose));
+  const mongooseConnectSpyOn = jest.spyOn(mongoose, "connect").mockImplementation(() => Promise.resolve(mongoose));
   test("succeeds with valid input data", async () => {
     // prepare post-start maintenance logic to be as impactless as possible
     jest.spyOn(fs, "existsSync").mockImplementation((_) => true);
