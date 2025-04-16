@@ -47,41 +47,41 @@ test("getInfo() returns correct result", () => {
 });
 
 describe("start() method", () => {
+  const configObject = {
+    url: "test-url",
+    port: 1234,
+    name: "test-name",
+    user: "user-name",
+    password: "pass",
+    timeout: 1_000,
+  };
+  const expectedUrl = "mongodb://test-url:1234";
+  const expectedObj = {
+    appName: configObject.name,
+    dbName: configObject.name,
+    user: configObject.user,
+    pass: configObject.password,
+    serverSelectionTimeoutMS: configObject.timeout,
+    connectTimeoutMS: configObject.timeout,
+    family: 4,
+  };
+  const testDatabase = new WebDatabase({
+    minLogLevel: LogLevel.INFO,
+    databaseConfig: configObject,
+    usersDataConfig: { path: "" },
+  });
+  const mongooseConnectSpyOn = jest.spyOn(mongoose, "connect").mockImplementationOnce(() => Promise.resolve(mongoose));
   test("succeeds with valid input data", async () => {
+    // prepare post-start maintenance logic to be as impactless as possible
     jest.spyOn(fs, "existsSync").mockImplementation((_) => true);
     jest.spyOn(path, "join").mockImplementation((_) => "");
     const mockConfigResult = { countDocuments: () => 1 };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockConfigResult);
     const mockUserResult = { findOne: (_) => true, countDocuments: () => 1, deleteMany: (_) => ({ deletedCount: 0 }) };
     jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => mockUserResult);
-    const mongooseConnectSpyOn = jest
-      .spyOn(mongoose, "connect")
-      .mockImplementationOnce(() => Promise.resolve(mongoose));
-    const configObject = {
-      url: "test-url",
-      port: 1234,
-      name: "test-name",
-      user: "user-name",
-      password: "pass",
-      timeout: 1_000,
-    };
-    const testDatabase = new WebDatabase({
-      minLogLevel: LogLevel.INFO,
-      databaseConfig: configObject,
-      usersDataConfig: { path: "" },
-    });
+    // invoke the core test logic
     const result = await testDatabase.start();
     expect(result).toBe(true);
-    const expectedUrl = "mongodb://test-url:1234";
-    const expectedObj = {
-      appName: configObject.name,
-      dbName: configObject.name,
-      user: configObject.user,
-      pass: configObject.password,
-      serverSelectionTimeoutMS: configObject.timeout,
-      connectTimeoutMS: configObject.timeout,
-      family: 4,
-    };
     expect(mongooseConnectSpyOn).toBeCalledWith(expectedUrl, expectedObj);
   });
   test("fails with invalid input data", async () => {
