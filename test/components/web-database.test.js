@@ -167,13 +167,21 @@ describe("getHistory() returns correct result", () => {
     expect(result[1].message).toBe("Cannot read properties of undefined (reading 'url')");
   });
   test("after correct object start", async () => {
+    // prepare post-start maintenance logic to be as impactless as possible
+    jest.spyOn(fs, "existsSync").mockImplementation((_) => true);
+    jest.spyOn(path, "join").mockImplementation((_) => "");
+    jest.spyOn(mongoose, "connect").mockImplementation(() => Promise.resolve(mongoose));
+    const mockConfigResult = { countDocuments: () => 1 };
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockConfigResult);
+    const mockUserResult = { findOne: (_) => true, countDocuments: () => 1, deleteMany: (_) => ({ deletedCount: 0 }) };
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => mockUserResult);
+    // invoke the core test logic
     const configObject = { url: "test-url", port: 1234 };
     const testDatabase = new WebDatabase({
       minLogLevel: LogLevel.INFO,
       databaseConfig: configObject,
       usersDataConfig: { path: "" },
     });
-    jest.spyOn(mongoose, "connect").mockImplementationOnce(() => Promise.resolve(mongoose));
     await testDatabase.start();
     const result = testDatabase.getHistory();
     expect(result.length).toBe(3);
