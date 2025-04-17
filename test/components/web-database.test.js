@@ -18,6 +18,8 @@ jest.mock("../../src/model/scrap-user.js");
 
 process.env.DEMO_BASE = "demo@user.com";
 process.env.DEMO_PASS = "demo_pass";
+process.env.CI_USER = "ci@user.com";
+process.env.CI_PASS = "ci_pass";
 
 describe("creating an object", () => {
   test("instantiates a new object when input object is correct", () => {
