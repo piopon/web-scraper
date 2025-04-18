@@ -136,7 +136,9 @@ describe("start() method", () => {
   test("creates CI data when not present", async () => {
     // prepare post-start maintenance logic to be as impactless as possible
     jest.spyOn(path, "join").mockImplementation((_) => "");
+    jest.spyOn(fs, "mkdirSync").mockImplementation((_) => false);
     jest.spyOn(fs, "existsSync").mockImplementation((_) => false);
+    jest.spyOn(fs, "copyFileSync").mockImplementation((_) => true);
     const mockConfigResult = { countDocuments: () => 1 };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockConfigResult);
     const mockUserResult = { findOne: (_) => true, countDocuments: () => 1, deleteMany: (_) => ({ deletedCount: 0 }) };
