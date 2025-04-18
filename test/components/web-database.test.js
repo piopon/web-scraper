@@ -169,9 +169,7 @@ describe("start() method", () => {
   test("fails when user without config exists", async () => {
     // prepare post-start maintenance logic to be as impactless as possible
     jest.spyOn(path, "join").mockImplementation((_) => "");
-    jest.spyOn(fs, "mkdirSync").mockImplementation((_) => false);
-    jest.spyOn(fs, "existsSync").mockImplementation((_) => false);
-    jest.spyOn(fs, "copyFileSync").mockImplementation((_) => true);
+    jest.spyOn(fs, "existsSync").mockImplementation((_) => true);
     const mockConfigResult = { countDocuments: () => 1 };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockConfigResult);
     const mockUserResult = { findOne: (_) => true, countDocuments: () => 2, deleteMany: (_) => ({ deletedCount: 0 }) };
