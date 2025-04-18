@@ -133,6 +133,19 @@ describe("start() method", () => {
     expect(result).toBe(true);
     expect(mongooseConnectSpyOn).toBeCalledWith(expectedUrl, expectedObj);
   });
+  test("creates CI data when not present", async () => {
+    // prepare post-start maintenance logic to be as impactless as possible
+    jest.spyOn(path, "join").mockImplementation((_) => "");
+    jest.spyOn(fs, "existsSync").mockImplementation((_) => false);
+    const mockConfigResult = { countDocuments: () => 1 };
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockConfigResult);
+    const mockUserResult = { findOne: (_) => true, countDocuments: () => 1, deleteMany: (_) => ({ deletedCount: 0 }) };
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => mockUserResult);
+    // invoke the core test logic
+    const result = await testDatabase.start();
+    expect(result).toBe(true);
+    expect(mongooseConnectSpyOn).toBeCalledWith(expectedUrl, expectedObj);
+  });
   test("fails with invalid input data", async () => {
     const testDatabase = new WebDatabase({ minLogLevel: LogLevel.INFO });
     const result = await testDatabase.start();
