@@ -77,7 +77,7 @@ describe("start() method", () => {
     databaseConfig: configObject,
     usersDataConfig: { path: "" },
     authConfig: { hashSalt: 10 },
-    jsonDataConfig: { path: "", config: "" }
+    jsonDataConfig: { path: "", config: "" },
   });
   const mongooseConnectSpyOn = jest.spyOn(mongoose, "connect").mockImplementation(() => Promise.resolve(mongoose));
   test("succeeds with valid input data", async () => {
@@ -152,9 +152,14 @@ describe("start() method", () => {
     // prepare post-start maintenance logic to be as impactless as possible
     jest.spyOn(path, "join").mockImplementation((_) => "");
     jest.spyOn(fs, "existsSync").mockImplementation((_) => true);
-    const mockConfigResult = { countDocuments: () => 2, deleteMany: (_) => ({deletedCount: 1}) };
+    const mockConfigResult = { countDocuments: () => 2, deleteMany: (_) => ({ deletedCount: 1 }) };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockConfigResult);
-    const mockUserResult = { find: () => [], findOne: (_) => true, countDocuments: () => 1, deleteMany: (_) => ({ deletedCount: 0 }) };
+    const mockUserResult = {
+      find: () => [],
+      findOne: (_) => true,
+      countDocuments: () => 1,
+      deleteMany: (_) => ({ deletedCount: 0 }),
+    };
     jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => mockUserResult);
     // invoke the core test logic
     const result = await testDatabase.start();
@@ -182,9 +187,14 @@ describe("start() method", () => {
     // prepare post-start maintenance logic to be as impactless as possible
     jest.spyOn(path, "join").mockImplementation((_) => "");
     jest.spyOn(fs, "existsSync").mockImplementation((_) => true);
-    const mockConfigResult = { countDocuments: () => 2, deleteMany: (_) => ({deletedCount: 2}) };
+    const mockConfigResult = { countDocuments: () => 2, deleteMany: (_) => ({ deletedCount: 2 }) };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockConfigResult);
-    const mockUserResult = { find: () => [], findOne: (_) => true, countDocuments: () => 1, deleteMany: (_) => ({ deletedCount: 0 }) };
+    const mockUserResult = {
+      find: () => [],
+      findOne: (_) => true,
+      countDocuments: () => 1,
+      deleteMany: (_) => ({ deletedCount: 0 }),
+    };
     jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => mockUserResult);
     // invoke the core test logic
     const result = await testDatabase.start();
