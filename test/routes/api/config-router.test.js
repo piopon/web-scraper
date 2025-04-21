@@ -425,6 +425,17 @@ describe("created config PUT routes", () => {
       expect(response.body).toStrictEqual(expected.response);
     });
   });
+  test("parent element cannot be found", async () => {
+    const mockResult = { findById: (configId) => ({ id: configId, user: "uname", groups: undefined }) };
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
+    const inQuery = { name: "test1" };
+    const price = createComponent("1D", "title", "innerText", "CAD");
+    const observer = createObserver(false, "logo", "info", "load", "off", price);
+    const inBody = createGroup(false, "test1", "%%%", "new.com", observer);
+    const response = await testAgent.put("/config/groups").query(inQuery).send(inBody);
+    expect(response.statusCode).toBe(400);
+    expect(response.body).toStrictEqual("Undefined parent of new element");
+  });
 });
 
 describe("created config POST routes", () => {
