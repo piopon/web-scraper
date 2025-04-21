@@ -508,6 +508,8 @@ describe("created config POST routes", () => {
         },
       ],
     ])("%s", async (_, requestBody, expected) => {
+      const mockResult = { findById: (configId) => getInitConfig(true, configId, "uname") };
+      jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
       const response = await testAgent.post("/config/groups").send(requestBody);
       expect(response.statusCode).toBe(expected.status);
       expect(response.body).toStrictEqual(expected.response);
