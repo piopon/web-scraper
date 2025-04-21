@@ -439,10 +439,8 @@ describe("created config PUT routes", () => {
 });
 
 describe("created config POST routes", () => {
-  const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-  const mockResult = { findById: (configId) => getInitConfig(true, configId, "uname") };
-  jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
   // configue test express app server
+  const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
   const testApp = express();
   testApp.use(express.json());
   testApp.use(express.urlencoded({ extended: false }));
@@ -604,10 +602,8 @@ describe("created config POST routes", () => {
 });
 
 describe("created config DELETE routes", () => {
-  const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-  const mockResult = { findById: (configId) => getInitConfig(true, configId, "uname") };
-  jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
   // configue test express app server
+  const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
   const testApp = express();
   testApp.use(express.json());
   testApp.use(express.urlencoded({ extended: false }));
