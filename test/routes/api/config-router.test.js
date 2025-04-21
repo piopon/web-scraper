@@ -667,6 +667,8 @@ describe("created config DELETE routes", () => {
       ],
       ["query ID does not exist", { name: "test123" }, { status: 400, response: "Could not find item to delete" }],
     ])("%s", async (_, requestQuery, expected) => {
+      const mockResult = { findById: (configId) => getInitConfig(true, configId, "uname") };
+      jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
       const response = await testAgent.delete("/config/groups").query(requestQuery);
       expect(response.statusCode).toBe(expected.status);
       expect(response.body).toStrictEqual(expected.response);
@@ -713,6 +715,8 @@ describe("created config DELETE routes", () => {
       ],
       ["query ID does not exist", { name: "test" }, { status: 400, response: "Could not find item to delete" }],
     ])("%s", async (_, requestQuery, expected) => {
+      const mockResult = { findById: (configId) => getInitConfig(true, configId, "uname") };
+      jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
       const response = await testAgent.delete("/config/groups/observers").query(requestQuery);
       expect(response.statusCode).toBe(expected.status);
       expect(response.body).toStrictEqual(expected.response);
