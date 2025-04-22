@@ -425,6 +425,8 @@ describe("created config PUT routes", () => {
         },
       ],
     ])("%s", async (_, input, expected) => {
+      const mockResult = { findById: (configId) => getInitConfig(true, configId, "uname") };
+      jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
       const response = await testAgent.put("/config/groups/observers").query(input.query).send(input.body);
       expect(response.statusCode).toBe(expected.status);
       expect(response.body).toStrictEqual(expected.response);
