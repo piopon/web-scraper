@@ -224,10 +224,8 @@ describe("created config GET routes", () => {
 });
 
 describe("created config PUT routes", () => {
-  const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-  const mockResult = { findById: (configId) => getInitConfig(true, configId, "uname") };
-  jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
   // configue test express app server
+  const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
   const testApp = express();
   testApp.use(express.json());
   testApp.use(express.urlencoded({ extended: false }));
@@ -331,6 +329,8 @@ describe("created config PUT routes", () => {
         },
       ],
     ])("%s", async (_, input, expected) => {
+      const mockResult = { findById: (configId) => getInitConfig(true, configId, "uname") };
+      jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
       const response = await testAgent.put("/config/groups").query(input.query).send(input.body);
       expect(response.statusCode).toBe(expected.status);
       expect(response.body).toStrictEqual(expected.response);
