@@ -425,7 +425,7 @@ describe("created config PUT routes", () => {
       expect(response.body).toStrictEqual(expected.response);
     });
   });
-  test("parent element cannot be found", async () => {
+  test("returns error response when parent element cannot be found", async () => {
     const mockResult = { findById: (configId) => ({ id: configId, user: "uname", groups: undefined }) };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
     const inQuery = { name: "test1" };
