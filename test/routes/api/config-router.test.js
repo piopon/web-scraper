@@ -328,6 +328,11 @@ describe("created config PUT routes", () => {
           ],
         },
       ],
+      [
+        "parent element cannot be found",
+        { query: { name: "test1" }, body: inputObject },
+        { status: 400, response: "Undefined parent of new element" },
+      ],
     ])("%s", async (_, input, expected) => {
       const mockResult = { findById: (configId) => getInitConfig(true, configId, "uname") };
       jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
