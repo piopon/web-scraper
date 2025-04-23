@@ -100,7 +100,11 @@ export class ConfigRouter {
       await this.#handlePutRequest(
         request,
         response,
-        (configContent) => configContent.groups.flatMap((item) => item.observers),
+        (configContent) => {
+          const elements = configContent.groups.flatMap((item) => item.observers);
+          const filtered = elements.filter((item) => item != null);
+          return filtered.length > 0 ? filtered : undefined;
+        },
         (parent) => {
           return parent.findIndex((item) => (request.query.name ? item.name === request.query.name : false));
         }
