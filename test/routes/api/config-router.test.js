@@ -428,12 +428,22 @@ describe("created config PUT routes", () => {
       ],
       [
         "parent element cannot be found",
-        { query: { name: "logo" }, body: inputObject, config: { id: 1, user: "uname", groups: [{
-          name: "group1",
-          category: "category",
-          domain: "domain",
-          observers: undefined
-        }] }},
+        {
+          query: { name: "logo" },
+          body: inputObject,
+          config: {
+            id: 1,
+            user: "uname",
+            groups: [
+              {
+                name: "group1",
+                category: "category",
+                domain: "domain",
+                observers: undefined,
+              },
+            ],
+          },
+        },
         { status: 400, response: "Undefined parent of new element" },
       ],
     ])("%s", async (_, input, expected) => {
