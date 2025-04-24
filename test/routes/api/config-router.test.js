@@ -333,6 +333,30 @@ describe("created config PUT routes", () => {
         { query: { name: "test1" }, body: inputObject, config: { id: 999, user: "faulty", groups: undefined } },
         { status: 400, response: "Undefined parent of new element" },
       ],
+      [
+        "source values cannot be copied to updated element",
+        {
+          query: { name: "test1" },
+          body: inputObject,
+          config: {
+            id: 1,
+            user: "uname",
+            groups: [
+              {
+                name: "test1",
+                category: "category",
+                domain: "domain",
+                observers: [],
+                getIdentifier: () => `name = test1`,
+                copyValues: (_) => {
+                  throw Error("Error test message");
+                },
+              },
+            ],
+          },
+        },
+        { status: 400, response: "Error test message" },
+      ],
     ])("%s", async (_, input, expected) => {
       const mockResult = {
         findById: (configId) => (input.config == null ? getInitConfig(true, configId, "uname") : input.config),
