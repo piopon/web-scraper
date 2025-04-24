@@ -426,29 +426,25 @@ describe("created config PUT routes", () => {
           ],
         },
       ],
+      [
+        "parent element cannot be found",
+        { query: { name: "logo" }, body: inputObject, config: { id: 1, user: "uname", groups: [{
+          name: "group1",
+          category: "category",
+          domain: "domain",
+          observers: undefined
+        }] }},
+        { status: 400, response: "Undefined parent of new element" },
+      ],
     ])("%s", async (_, input, expected) => {
-      const mockResult = { findById: (configId) => getInitConfig(true, configId, "uname") };
+      const mockResult = {
+        findById: (configId) => (input.config == null ? getInitConfig(true, configId, "uname") : input.config),
+      };
       jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
       const response = await testAgent.put("/config/groups/observers").query(input.query).send(input.body);
       expect(response.statusCode).toBe(expected.status);
       expect(response.body).toStrictEqual(expected.response);
     });
-  });
-  test("returns error response when parent element cannot be found", async () => {
-    const invalidGroup = {
-      name: "group1",
-      category: "category",
-      domain: "domain",
-      observers: undefined
-    };
-    const mockResult = { findById: (configId) => ({ id: configId, user: "uname", groups: [invalidGroup] }) };
-    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
-    const inQuery = { name: "logo" };
-    const price = createComponent("1D", "title", "innerText", "CAD");
-    const inputObject = createObserver(false, "logo", "info", "load", "off", price);
-    const response = await testAgent.put("/config/groups/observers").query(inQuery).send(inputObject);
-    expect(response.statusCode).toBe(400);
-    expect(response.body).toStrictEqual("Undefined parent of new element");
   });
 });
 
