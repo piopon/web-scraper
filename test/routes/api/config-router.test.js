@@ -507,6 +507,14 @@ describe("created config PUT routes", () => {
         },
         { status: 400, response: "Error test message" },
       ],
+      [
+        "body has invalid structure",
+        {
+          query: { name: "test1" },
+          body: { name: "111", path: "path", price: { selector: "body", attribute: "innerHTML", auxiliary: "PLN" } },
+        },
+        { status: 400, response: "Observer name must have at least one letter" },
+      ],
     ])("%s", async (_, input, expected) => {
       const mockResult = {
         findById: (configId) => (input.config == null ? getInitConfig(true, configId, "uname") : input.config),
