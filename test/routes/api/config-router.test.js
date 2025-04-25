@@ -48,14 +48,15 @@ describe("created config GET routes", () => {
   const mockResult = { findById: (configId) => getInitConfig(false, configId, "uname") };
   jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
   // configue test express app server
+  const localPassport = new passport.Passport();
   const testApp = express();
   testApp.use(express.json());
   testApp.use(express.urlencoded({ extended: false }));
   testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
-  testApp.use(passport.initialize());
-  testApp.use(passport.session());
+  testApp.use(localPassport.initialize());
+  testApp.use(localPassport.session());
   testApp.use("/config", new ConfigRouter(components).createRoutes());
-  testApp.use("/auth", createMockAuthRouter(new passport.Passport()));
+  testApp.use("/auth", createMockAuthRouter(localPassport));
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
   beforeAll(async () => {
@@ -531,14 +532,15 @@ describe("created config PUT routes", () => {
 describe("created config POST routes", () => {
   // configue test express app server
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+  const localPassport = new passport.Passport();
   const testApp = express();
   testApp.use(express.json());
   testApp.use(express.urlencoded({ extended: false }));
   testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
-  testApp.use(passport.initialize());
-  testApp.use(passport.session());
+  testApp.use(localPassport.initialize());
+  testApp.use(localPassport.session());
   testApp.use("/config", new ConfigRouter(components).createRoutes());
-  testApp.use("/auth", createMockAuthRouter(new passport.Passport()));
+  testApp.use("/auth", createMockAuthRouter(localPassport));
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
   beforeAll(async () => {
@@ -694,14 +696,15 @@ describe("created config POST routes", () => {
 describe("created config DELETE routes", () => {
   // configue test express app server
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+  const localPassport = new passport.Passport();
   const testApp = express();
   testApp.use(express.json());
   testApp.use(express.urlencoded({ extended: false }));
   testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
-  testApp.use(passport.initialize());
-  testApp.use(passport.session());
+  testApp.use(localPassport.initialize());
+  testApp.use(localPassport.session());
   testApp.use("/config", new ConfigRouter(components).createRoutes());
-  testApp.use("/auth", createMockAuthRouter(new passport.Passport()));
+  testApp.use("/auth", createMockAuthRouter(localPassport));
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
   beforeAll(async () => {
