@@ -811,14 +811,15 @@ describe("created config DELETE routes", () => {
 
 function createMockAuthRouter(configId = 123) {
   const router = express.Router();
+  const strategyName = `mock-login-${configId}`;
   // configure mocked login logic
   const options = { usernameField: "mail", passwordField: "pass" };
   const verify = (_user, _pass, done) => done(null, { id: 1, config: configId, save: (_) => true });
-  passport.use("mock-login", new Strategy(options, verify));
+  passport.use(strategyName, new Strategy(options, verify));
   passport.serializeUser((user, done) => done(null, user.id));
   passport.deserializeUser((userId, done) => done(null, { id: userId, config: configId, save: (_) => true }));
   // use passport mock login in tests
-  router.post("/login", passport.authenticate("mock-login"));
+  router.post("/login", passport.authenticate(strategyName));
   return router;
 }
 
