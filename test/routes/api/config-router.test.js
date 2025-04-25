@@ -234,7 +234,7 @@ describe("created config PUT routes", () => {
   testApp.use(localPassport.initialize());
   testApp.use(localPassport.session());
   testApp.use("/config", new ConfigRouter(components).createRoutes());
-  testApp.use("/auth", createMockAuthRouter(localPassport, undefined));
+  testApp.use("/auth", createMockAuthRouter(localPassport, null));
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
   beforeAll(async () => {
