@@ -233,7 +233,7 @@ describe("created config PUT routes", () => {
   testApp.use(passport.initialize());
   testApp.use(passport.session());
   testApp.use("/config", new ConfigRouter(components).createRoutes());
-  testApp.use("/auth", createMockAuthRouter());
+  testApp.use("/auth", createMockAuthRouter(undefined));
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
   beforeAll(async () => {
@@ -537,7 +537,7 @@ describe("created config POST routes", () => {
   testApp.use(passport.initialize());
   testApp.use(passport.session());
   testApp.use("/config", new ConfigRouter(components).createRoutes());
-  testApp.use("/auth", createMockAuthRouter());
+  testApp.use("/auth", createMockAuthRouter(undefined));
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
   beforeAll(async () => {
@@ -700,7 +700,7 @@ describe("created config DELETE routes", () => {
   testApp.use(passport.initialize());
   testApp.use(passport.session());
   testApp.use("/config", new ConfigRouter(components).createRoutes());
-  testApp.use("/auth", createMockAuthRouter());
+  testApp.use("/auth", createMockAuthRouter(undefined));
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
   beforeAll(async () => {
