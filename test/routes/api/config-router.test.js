@@ -55,7 +55,7 @@ describe("created config GET routes", () => {
   testApp.use(passport.initialize());
   testApp.use(passport.session());
   testApp.use("/config", new ConfigRouter(components).createRoutes());
-  testApp.use("/auth", createMockAuthRouter());
+  testApp.use("/auth", createMockAuthRouter(new passport.Passport()));
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
   beforeAll(async () => {
@@ -226,14 +226,15 @@ describe("created config GET routes", () => {
 describe("created config PUT routes", () => {
   // configue test express app server
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+  const localPassport = new passport.Passport();
   const testApp = express();
   testApp.use(express.json());
   testApp.use(express.urlencoded({ extended: false }));
   testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
-  testApp.use(passport.initialize());
-  testApp.use(passport.session());
+  testApp.use(localPassport.initialize());
+  testApp.use(localPassport.session());
   testApp.use("/config", new ConfigRouter(components).createRoutes());
-  testApp.use("/auth", createMockAuthRouter(undefined));
+  testApp.use("/auth", createMockAuthRouter(localPassport, undefined));
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
   beforeAll(async () => {
@@ -537,7 +538,7 @@ describe("created config POST routes", () => {
   testApp.use(passport.initialize());
   testApp.use(passport.session());
   testApp.use("/config", new ConfigRouter(components).createRoutes());
-  testApp.use("/auth", createMockAuthRouter(undefined));
+  testApp.use("/auth", createMockAuthRouter(new passport.Passport()));
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
   beforeAll(async () => {
@@ -700,7 +701,7 @@ describe("created config DELETE routes", () => {
   testApp.use(passport.initialize());
   testApp.use(passport.session());
   testApp.use("/config", new ConfigRouter(components).createRoutes());
-  testApp.use("/auth", createMockAuthRouter(undefined));
+  testApp.use("/auth", createMockAuthRouter(new passport.Passport()));
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
   beforeAll(async () => {
@@ -809,18 +810,17 @@ describe("created config DELETE routes", () => {
   });
 });
 
-function createMockAuthRouter(configId = 123) {
+function createMockAuthRouter(passport, configId = 123) {
   const router = express.Router();
   const strategyName = `mock-login-${configId}`;
   // configure mocked login logic
   const options = { usernameField: "mail", passwordField: "pass" };
   const verify = (_user, _pass, done) => done(null, { id: 1, config: configId, save: (_) => true });
-  const localPassport = new passport.Passport();
-  localPassport.use(strategyName, new Strategy(options, verify));
-  localPassport.serializeUser((user, done) => done(null, user.id));
-  localPassport.deserializeUser((userId, done) => done(null, { id: userId, config: configId, save: (_) => true }));
+  passport.use(strategyName, new Strategy(options, verify));
+  passport.serializeUser((user, done) => done(null, user.id));
+  passport.deserializeUser((userId, done) => done(null, { id: userId, config: configId, save: (_) => true }));
   // use passport mock login in tests
-  router.post("/login", localPassport.authenticate(strategyName));
+  router.post("/login", passport.authenticate(strategyName));
   return router;
 }
 
