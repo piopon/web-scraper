@@ -815,11 +815,12 @@ function createMockAuthRouter(configId = 123) {
   // configure mocked login logic
   const options = { usernameField: "mail", passwordField: "pass" };
   const verify = (_user, _pass, done) => done(null, { id: 1, config: configId, save: (_) => true });
-  passport.use(strategyName, new Strategy(options, verify));
-  passport.serializeUser((user, done) => done(null, user.id));
-  passport.deserializeUser((userId, done) => done(null, { id: userId, config: configId, save: (_) => true }));
+  const localPassport = new passport.Passport();
+  localPassport.use(strategyName, new Strategy(options, verify));
+  localPassport.serializeUser((user, done) => done(null, user.id));
+  localPassport.deserializeUser((userId, done) => done(null, { id: userId, config: configId, save: (_) => true }));
   // use passport mock login in tests
-  router.post("/login", passport.authenticate(strategyName));
+  router.post("/login", localPassport.authenticate(strategyName));
   return router;
 }
 
