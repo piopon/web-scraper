@@ -522,7 +522,9 @@ describe("created config PUT routes", () => {
         {
           query: { name: "logo" },
           body: inputObject,
-          config: { throw Error("Unexpected config error") },
+          config: (_) => {
+            throw Error("Unexpected config error");
+          },
         },
         { status: 500, response: "Unexpected config error" },
       ],
