@@ -529,9 +529,8 @@ describe("created config PUT routes", () => {
         { status: 500, response: "Unexpected config error" },
       ],
     ])("%s", async (_, input, expected) => {
-      const mockResult = {
-        findById: (configId) => (input.config == null ? getInitConfig(true, configId, "uname") : input.config(configId)),
-      };
+      const getConfig = input.config == null ? getInitConfig : input.config;
+      const mockResult = { findById: (configId) => getConfig(true, configId, "uname") };
       jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
       const response = await testAgent.put("/config/groups/observers").query(input.query).send(input.body);
       expect(response.statusCode).toBe(expected.status);
