@@ -462,9 +462,9 @@ describe("created config PUT routes", () => {
         {
           query: { name: "logo" },
           body: inputObject,
-          config: (_) => ({
-            id: 1,
-            user: "uname",
+          config: (_, configId, userName) => ({
+            id: configId,
+            user: userName,
             groups: [
               {
                 name: "group1",
@@ -482,9 +482,9 @@ describe("created config PUT routes", () => {
         {
           query: { name: "logo" },
           body: inputObject,
-          config: (_) => ({
-            id: 1,
-            user: "uname",
+          config: (_, configId, userName) => ({
+            id: configId,
+            user: userName,
             groups: [
               {
                 name: "test1",
