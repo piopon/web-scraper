@@ -518,7 +518,7 @@ describe("created config PUT routes", () => {
         { status: 400, response: "Observer name must have at least one letter" },
       ],
       [
-        "source values cannot be copied to updated element",
+        "unexpected errors occurs when updating config",
         {
           query: { name: "logo" },
           body: inputObject,
