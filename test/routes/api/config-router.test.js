@@ -462,7 +462,7 @@ describe("created config PUT routes", () => {
         {
           query: { name: "logo" },
           body: inputObject,
-          config: {
+          config: (_) => ({
             id: 1,
             user: "uname",
             groups: [
@@ -473,7 +473,7 @@ describe("created config PUT routes", () => {
                 observers: undefined,
               },
             ],
-          },
+          }),
         },
         { status: 400, response: "Undefined parent of new element" },
       ],
@@ -482,7 +482,7 @@ describe("created config PUT routes", () => {
         {
           query: { name: "logo" },
           body: inputObject,
-          config: {
+          config: (_) => ({
             id: 1,
             user: "uname",
             groups: [
@@ -505,7 +505,7 @@ describe("created config PUT routes", () => {
                 ],
               },
             ],
-          },
+          }),
         },
         { status: 400, response: "Error test message" },
       ],
