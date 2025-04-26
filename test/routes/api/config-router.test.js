@@ -517,6 +517,15 @@ describe("created config PUT routes", () => {
         },
         { status: 400, response: "Observer name must have at least one letter" },
       ],
+      [
+        "source values cannot be copied to updated element",
+        {
+          query: { name: "logo" },
+          body: inputObject,
+          config: { throw Error("Unexpected config error") },
+        },
+        { status: 500, response: "Unexpected config error" },
+      ],
     ])("%s", async (_, input, expected) => {
       const mockResult = {
         findById: (configId) => (input.config == null ? getInitConfig(true, configId, "uname") : input.config),
