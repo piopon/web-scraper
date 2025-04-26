@@ -12,13 +12,9 @@ describe("run() method", () => {
     const config = { usersDataConfig: {}, minLogLevel: LogLevel.INFO, serverConfig: { port: TEST_PORT } };
     const components = new WebComponents(config);
     const testServer = new WebServer(config, components);
-    try {
-      const result = await testServer.run();
-      testServer.shutdown();
-      expect(result).toBe(true);
-    } catch (error) {
-      fail("Run should NOT throw");
-    }
+    const result = await testServer.run();
+    testServer.shutdown();
+    expect(result).toBe(true);
   });
   test("should start server and not throw when INIT components start", async () => {
     const config = { usersDataConfig: {}, minLogLevel: LogLevel.INFO, serverConfig: { port: TEST_PORT } };
@@ -30,13 +26,9 @@ describe("run() method", () => {
       stop: () => true,
     });
     const testServer = new WebServer(config, components);
-    try {
-      const result = await testServer.run();
-      testServer.shutdown();
-      expect(result).toBe(true);
-    } catch (error) {
-      fail("Run should NOT throw");
-    }
+    const result = await testServer.run();
+    testServer.shutdown();
+    expect(result).toBe(true);
   });
   test("should fail to start server when INIT components does not start", async () => {
     const config = { usersDataConfig: {}, minLogLevel: LogLevel.INFO, serverConfig: { port: TEST_PORT } };
@@ -48,13 +40,9 @@ describe("run() method", () => {
       stop: () => false,
     });
     const testServer = new WebServer(config, components);
-    try {
-      const result = await testServer.run();
-      testServer.shutdown();
-      expect(result).toBe(false);
-    } catch (error) {
-      fail("Run should NOT throw");
-    }
+    const result = await testServer.run();
+    testServer.shutdown();
+    expect(result).toBe(false);
   });
 });
 
@@ -64,20 +52,12 @@ describe("shutdown() method", () => {
     const components = new WebComponents(config);
     const testServer = new WebServer(config, components);
     await testServer.run();
-    try {
-      testServer.shutdown();
-    } catch (error) {
-      fail("Shutdown should NOT throw when session was started");
-    }
+    testServer.shutdown();
   });
   test("does not throw when session not started", async () => {
     const config = { usersDataConfig: {}, minLogLevel: LogLevel.INFO, serverConfig: { port: TEST_PORT } };
     const components = new WebComponents(config);
     const testServer = new WebServer(config, components);
-    try {
-      testServer.shutdown();
-    } catch (error) {
-      fail("Shutdown should NOT throw when session was not started");
-    }
+    testServer.shutdown();
   });
 });
