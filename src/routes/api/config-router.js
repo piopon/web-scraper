@@ -43,13 +43,12 @@ export class ConfigRouter {
     });
     router.get("/groups", AccessChecker.canReceiveData, async (request, response) => {
       await this.#handleGetRequest(request, response, (configContent) =>
-        configContent.groups
-          .filter((group) => {
-            const nameOk = request.query.name ? group.name === request.query.name : true;
-            const categoryOk = request.query.category ? group.category === request.query.category : true;
-            const domainOk = request.query.domain ? group.domain === request.query.domain : true;
-            return nameOk && categoryOk && domainOk;
-          })
+        configContent.groups.filter((group) => {
+          const nameOk = request.query.name ? group.name === request.query.name : true;
+          const categoryOk = request.query.category ? group.category === request.query.category : true;
+          const domainOk = request.query.domain ? group.domain === request.query.domain : true;
+          return nameOk && categoryOk && domainOk;
+        })
       );
     });
     router.get("/groups/observers", AccessChecker.canReceiveData, async (request, response) => {
@@ -100,7 +99,11 @@ export class ConfigRouter {
       await this.#handlePutRequest(
         request,
         response,
-        (configContent) => configContent.groups.flatMap((item) => item.observers),
+        (configContent) => {
+          const elements = configContent.groups.flatMap((item) => item.observers);
+          const filtered = elements.filter((item) => item != null);
+          return filtered.length > 0 ? filtered : undefined;
+        },
         (parent) => {
           return parent.findIndex((item) => (request.query.name ? item.name === request.query.name : false));
         }

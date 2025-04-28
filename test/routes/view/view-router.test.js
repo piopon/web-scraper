@@ -1,15 +1,20 @@
 import { ViewRouter } from "../../../src/routes/view/view-router.js";
 import { ScrapConfig } from "../../../src/model/scrap-config.js";
 
+import { Strategy } from "passport-local";
+import { engine } from "express-handlebars";
+import { jest } from "@jest/globals";
+import fs from "fs";
+import path from "path";
 import supertest from "supertest";
 import passport from "passport";
 import express from "express";
 import session from "express-session";
+import fileUpload from "express-fileupload";
 import helpers from "handlebars-helpers";
-import { jest } from "@jest/globals";
-import { engine } from "express-handlebars";
-import { Strategy } from "passport-local";
 
+jest.mock("fs");
+jest.mock("path");
 jest.mock("../../../src/model/scrap-config.js");
 
 describe("createRoutes() method", () => {
@@ -96,16 +101,70 @@ describe("created view GET routes", () => {
   });
 });
 
+describe("created view POST routes", () => {
+  // configue test express app server
+  const testApp = express();
+  testApp.engine("handlebars", engine({ helpers: helpers() }));
+  testApp.set("view engine", "handlebars");
+  testApp.set("views", "./public");
+  testApp.use(express.static("./public"));
+  testApp.use(express.json());
+  testApp.use(express.urlencoded({ extended: false }));
+  testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
+  testApp.use(fileUpload({ abortOnLimit: true, limits: { fileSize: 10_000_000 } }));
+  testApp.use(passport.initialize());
+  testApp.use(passport.session());
+  testApp.use("/view", new ViewRouter("./users/").createRoutes());
+  testApp.use("/auth", createMockAuthRouter());
+  // retrieve underlying superagent to correctly persist sessions
+  const testAgent = supertest.agent(testApp);
+  beforeAll(async () => {
+    const mockAuth = { mail: "test@mail.com", pass: "test-secret" };
+    await testAgent.post("/auth/login").send(mockAuth);
+  });
+  test("returns correct result for unknown path", async () => {
+    const response = await testAgent.post("/view/unknown");
+    expect(response.statusCode).toBe(404);
+  });
+  describe("returns correct result using /view/image endpoint", () => {
+    test("without any file provided", async () => {
+      const response = await testAgent.post("/view/image");
+      expect(response.statusCode).toBe(400);
+      expect(response.body).toBe("No file provided");
+    });
+    test("with a non-image file provided", async () => {
+      const testDataPath = path.join('.', 'testfile.json');
+      createDataFile(testDataPath);
+      const response = await testAgent.post("/view/image").attach('auxiliary-file', testDataPath);
+      expect(response.statusCode).toBe(400);
+      expect(response.body).toBe("Provided file is NOT an image file");
+      removeDataFile(testDataPath);
+    });
+    test("with an image file provided", async () => {
+      const testImagePath = path.join('.', 'testfile.png');
+      createDataFile(testImagePath);
+      jest.spyOn(path, "join").mockImplementation((_) => testImagePath);
+      jest.spyOn(fs, "mkdirSync").mockImplementation((_) => {});
+      jest.spyOn(fs, "existsSync").mockImplementation((_) => false);
+      const response = await testAgent.post("/view/image").attach('auxiliary-file', testImagePath);
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toBe("Successfully uploaded image: testfile.png");
+      removeDataFile(testImagePath);
+    });
+  });
+});
+
 function createMockAuthRouter() {
   const router = express.Router();
   const configId = 123;
   const userName = "test-name";
+  const userMail = "test@mail.c"
   // configure mocked login logic
   const options = { usernameField: "mail", passwordField: "pass" };
   const verify = (_user, _pass, done) => done(null, { id: 1, config: configId, name: userName });
   passport.use("mock-login", new Strategy(options, verify));
   passport.serializeUser((user, done) => done(null, user.id));
-  passport.deserializeUser((userId, done) => done(null, { id: userId, config: configId, name: userName }));
+  passport.deserializeUser((userId, done) => done(null, { id: userId, config: configId, name: userName, email: userMail }));
   // use passport mock login in tests
   router.post("/login", passport.authenticate("mock-login"));
   return router;
@@ -166,4 +225,24 @@ function getInitConfig(db, configId, name) {
       }),
     }),
   };
+}
+
+function createDataFile(filePath) {
+  try {
+    const fileDir = path.dirname(filePath);
+    if (!fs.existsSync(fileDir)) {
+      fs.mkdirSync(fileDir, { recursive: true });
+    }
+    fs.writeFileSync(filePath, JSON.stringify({ test: "test" }));
+  } catch (err) {
+    console.error(`Could not create data file: ${err}`);
+  }
+}
+
+function removeDataFile(filePath) {
+  fs.rmSync(filePath, { force: true });
+  const fileDir = path.dirname(filePath);
+  if (fileDir !== ".") {
+    fs.rmdirSync(fileDir);
+  }
 }

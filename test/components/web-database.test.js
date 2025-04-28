@@ -6,13 +6,20 @@ import { ScrapUser } from "../../src/model/scrap-user.js";
 import { jest } from "@jest/globals";
 import fs from "fs";
 import path from "path";
+import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 
 jest.mock("fs");
 jest.mock("path");
+jest.mock("bcrypt");
 jest.mock("mongoose");
 jest.mock("../../src/model/scrap-config.js");
 jest.mock("../../src/model/scrap-user.js");
+
+process.env.DEMO_BASE = "demo@user.com";
+process.env.DEMO_PASS = "demo_pass";
+process.env.CI_USER = "ci@user.com";
+process.env.CI_PASS = "ci_pass";
 
 describe("creating an object", () => {
   test("instantiates a new object when input object is correct", () => {
@@ -47,45 +54,149 @@ test("getInfo() returns correct result", () => {
 });
 
 describe("start() method", () => {
+  const configObject = {
+    url: "test-url",
+    port: 1234,
+    name: "test-name",
+    user: "user-name",
+    password: "pass",
+    timeout: 1_000,
+  };
+  const expectedUrl = "mongodb://test-url:1234";
+  const expectedObj = {
+    appName: configObject.name,
+    dbName: configObject.name,
+    user: configObject.user,
+    pass: configObject.password,
+    serverSelectionTimeoutMS: configObject.timeout,
+    connectTimeoutMS: configObject.timeout,
+    family: 4,
+  };
+  const testDatabase = new WebDatabase({
+    minLogLevel: LogLevel.INFO,
+    databaseConfig: configObject,
+    usersDataConfig: { path: "" },
+    authConfig: { hashSalt: 10 },
+    jsonDataConfig: { path: "", config: "" },
+  });
+  const mongooseConnectSpyOn = jest.spyOn(mongoose, "connect").mockImplementation(() => Promise.resolve(mongoose));
   test("succeeds with valid input data", async () => {
+    // prepare post-start maintenance logic to be as impactless as possible
     jest.spyOn(fs, "existsSync").mockImplementation((_) => true);
     jest.spyOn(path, "join").mockImplementation((_) => "");
     const mockConfigResult = { countDocuments: () => 1 };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockConfigResult);
     const mockUserResult = { findOne: (_) => true, countDocuments: () => 1, deleteMany: (_) => ({ deletedCount: 0 }) };
     jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => mockUserResult);
-    const mongooseConnectSpyOn = jest
-      .spyOn(mongoose, "connect")
-      .mockImplementationOnce(() => Promise.resolve(mongoose));
-    const configObject = {
-      url: "test-url",
-      port: 1234,
-      name: "test-name",
-      user: "user-name",
-      password: "pass",
-      timeout: 1_000,
-    };
-    const testDatabase = new WebDatabase({
-      minLogLevel: LogLevel.INFO,
-      databaseConfig: configObject,
-      usersDataConfig: { path: "" },
-    });
+    // invoke the core test logic
     const result = await testDatabase.start();
     expect(result).toBe(true);
-    const expectedUrl = "mongodb://test-url:1234";
-    const expectedObj = {
-      appName: configObject.name,
-      dbName: configObject.name,
-      user: configObject.user,
-      pass: configObject.password,
-      serverSelectionTimeoutMS: configObject.timeout,
-      connectTimeoutMS: configObject.timeout,
-      family: 4,
+    expect(mongooseConnectSpyOn).toBeCalledWith(expectedUrl, expectedObj);
+  });
+  test("creates base demo user when not found", async () => {
+    // prepare post-start maintenance logic to semi-impactless (go through demo user logic)
+    jest.spyOn(bcrypt, "hashSync").mockResolvedValue("pass@test");
+    jest.spyOn(path, "join").mockImplementation((_) => "");
+    jest.spyOn(fs, "existsSync").mockImplementation((_) => true);
+    jest.spyOn(fs, "readFileSync").mockImplementation((_) => `{ "test": "value" }`);
+    const mockConfigResult = { create: (_) => ({ _id: 1, save: () => true }), countDocuments: () => 1 };
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockConfigResult);
+    const mockUserResult = {
+      create: (_) => ({ _id: 100, save: () => true }),
+      findOne: (user) => (process.env.DEMO_BASE === user.email ? null : true),
+      countDocuments: () => 1,
+      deleteMany: (_) => ({ deletedCount: 0 }),
     };
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => mockUserResult);
+    // invoke the core test logic
+    const result = await testDatabase.start();
+    expect(result).toBe(true);
+    expect(mongooseConnectSpyOn).toBeCalledWith(expectedUrl, expectedObj);
+  });
+  test("creates CI user when not found", async () => {
+    // prepare post-start maintenance logic to semi-impactless (go through demo user logic)
+    jest.spyOn(bcrypt, "hashSync").mockResolvedValue("pass@test");
+    jest.spyOn(path, "join").mockImplementation((_) => "");
+    jest.spyOn(fs, "existsSync").mockImplementation((_) => true);
+    jest.spyOn(fs, "readFileSync").mockImplementation((_) => `{ "test": "value" }`);
+    const mockConfigResult = { create: (_) => ({ _id: 1, save: () => true }), countDocuments: () => 1 };
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockConfigResult);
+    const mockUserResult = {
+      create: (_) => ({ _id: 100, save: () => true }),
+      findOne: (user) => (process.env.CI_USER === user.email ? null : true),
+      countDocuments: () => 1,
+      deleteMany: (_) => ({ deletedCount: 0 }),
+    };
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => mockUserResult);
+    // invoke the core test logic
+    const result = await testDatabase.start();
+    expect(result).toBe(true);
+    expect(mongooseConnectSpyOn).toBeCalledWith(expectedUrl, expectedObj);
+  });
+  test("creates CI data when not present", async () => {
+    // prepare post-start maintenance logic to be as impactless as possible
+    jest.spyOn(path, "join").mockImplementation((_) => "");
+    jest.spyOn(fs, "mkdirSync").mockImplementation((_) => false);
+    jest.spyOn(fs, "existsSync").mockImplementation((_) => false);
+    jest.spyOn(fs, "copyFileSync").mockImplementation((_) => true);
+    const mockConfigResult = { countDocuments: () => 1 };
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockConfigResult);
+    const mockUserResult = { findOne: (_) => true, countDocuments: () => 1, deleteMany: (_) => ({ deletedCount: 0 }) };
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => mockUserResult);
+    // invoke the core test logic
+    const result = await testDatabase.start();
+    expect(result).toBe(true);
+    expect(mongooseConnectSpyOn).toBeCalledWith(expectedUrl, expectedObj);
+  });
+  test("performs configs maintenance when dangling", async () => {
+    // prepare post-start maintenance logic to be as impactless as possible
+    jest.spyOn(path, "join").mockImplementation((_) => "");
+    jest.spyOn(fs, "existsSync").mockImplementation((_) => true);
+    const mockConfigResult = { countDocuments: () => 2, deleteMany: (_) => ({ deletedCount: 1 }) };
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockConfigResult);
+    const mockUserResult = {
+      find: () => [],
+      findOne: (_) => true,
+      countDocuments: () => 1,
+      deleteMany: (_) => ({ deletedCount: 0 }),
+    };
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => mockUserResult);
+    // invoke the core test logic
+    const result = await testDatabase.start();
+    expect(result).toBe(true);
     expect(mongooseConnectSpyOn).toBeCalledWith(expectedUrl, expectedObj);
   });
   test("fails with invalid input data", async () => {
     const testDatabase = new WebDatabase({ minLogLevel: LogLevel.INFO });
+    const result = await testDatabase.start();
+    expect(result).toBe(false);
+  });
+  test("fails when user without config exists", async () => {
+    // prepare post-start maintenance logic to be as impactless as possible
+    jest.spyOn(path, "join").mockImplementation((_) => "");
+    jest.spyOn(fs, "existsSync").mockImplementation((_) => true);
+    const mockConfigResult = { countDocuments: () => 1 };
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockConfigResult);
+    const mockUserResult = { findOne: (_) => true, countDocuments: () => 2, deleteMany: (_) => ({ deletedCount: 0 }) };
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => mockUserResult);
+    // invoke the core test logic
+    const result = await testDatabase.start();
+    expect(result).toBe(false);
+  });
+  test("fails when deleted configs number is incosistent", async () => {
+    // prepare post-start maintenance logic to be as impactless as possible
+    jest.spyOn(path, "join").mockImplementation((_) => "");
+    jest.spyOn(fs, "existsSync").mockImplementation((_) => true);
+    const mockConfigResult = { countDocuments: () => 2, deleteMany: (_) => ({ deletedCount: 2 }) };
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockConfigResult);
+    const mockUserResult = {
+      find: () => [],
+      findOne: (_) => true,
+      countDocuments: () => 1,
+      deleteMany: (_) => ({ deletedCount: 0 }),
+    };
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => mockUserResult);
+    // invoke the core test logic
     const result = await testDatabase.start();
     expect(result).toBe(false);
   });
@@ -140,13 +251,21 @@ describe("getHistory() returns correct result", () => {
     expect(result[1].message).toBe("Cannot read properties of undefined (reading 'url')");
   });
   test("after correct object start", async () => {
+    // prepare post-start maintenance logic to be as impactless as possible
+    jest.spyOn(fs, "existsSync").mockImplementation((_) => true);
+    jest.spyOn(path, "join").mockImplementation((_) => "");
+    jest.spyOn(mongoose, "connect").mockImplementation(() => Promise.resolve(mongoose));
+    const mockConfigResult = { countDocuments: () => 1 };
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockConfigResult);
+    const mockUserResult = { findOne: (_) => true, countDocuments: () => 1, deleteMany: (_) => ({ deletedCount: 0 }) };
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => mockUserResult);
+    // invoke the core test logic
     const configObject = { url: "test-url", port: 1234 };
     const testDatabase = new WebDatabase({
       minLogLevel: LogLevel.INFO,
       databaseConfig: configObject,
       usersDataConfig: { path: "" },
     });
-    jest.spyOn(mongoose, "connect").mockImplementationOnce(() => Promise.resolve(mongoose));
     await testDatabase.start();
     const result = testDatabase.getHistory();
     expect(result.length).toBe(3);

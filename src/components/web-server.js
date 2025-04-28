@@ -52,7 +52,7 @@ export class WebServer {
     this.#handle = this.#server.listen(this.#setupConfig.serverConfig.port, () => {
       this.#status.info(`Started on port: ${this.#setupConfig.serverConfig.port}`);
     });
-    return true;
+    return this.#handle != null;
   }
 
   /**

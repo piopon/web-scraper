@@ -1,4 +1,4 @@
-import { LogLevel, ComponentType, ComponentStatus } from "../../src/config/app-types.js";
+import { LogLevel, ComponentType, ComponentStatus, DemoMode } from "../../src/config/app-types.js";
 
 describe("LogLevel", () => {
   describe("has correct values for", () => {
@@ -99,6 +99,33 @@ describe("ComponentStatus", () => {
       const testStatus1 = new ComponentStatus("test-status");
       const testStatus2 = new ComponentStatus("test-state");
       expect(testStatus1.equals(testStatus2)).toBe(false);
+    });
+  });
+});
+
+describe("DemoMode", () => {
+  describe("has correct values for", () => {
+    test("static type = OVERWRITE", () => {
+      expect(DemoMode.OVERWRITE.mode).toBe("overwrite");
+    });
+    test("static type = DUPLICATE", () => {
+      expect(DemoMode.DUPLICATE.mode).toBe("duplicate");
+    });
+  });
+  test("returns correct values for custom type", () => {
+    const testDemoMode = new DemoMode("test-mode");
+    expect(testDemoMode.mode).toBe("test-mode");
+  });
+  describe("equals method", () => {
+    test("returns true for identical elements", () => {
+      const testMode1 = new DemoMode("test-mode");
+      const testMode2 = new DemoMode("test-mode");
+      expect(testMode1.equals(testMode2)).toBe(true);
+    });
+    test("returns false for different elements", () => {
+      const testMode1 = new DemoMode("test-mode1");
+      const testMode2 = new DemoMode("test-mode2");
+      expect(testMode1.equals(testMode2)).toBe(false);
     });
   });
 });

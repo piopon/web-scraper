@@ -1,6 +1,7 @@
 import { AuthConfig } from "../../../src/config/auth-config.js";
 import { AuthRouter } from "../../../src/routes/view/auth-router.js";
 import { ScrapConfig } from "../../../src/model/scrap-config.js";
+import { ScrapUser } from "../../../src/model/scrap-user.js";
 import { WebComponents } from "../../../src/components/web-components.js";
 import { LogLevel } from "../../../src/config/app-types.js";
 
@@ -10,10 +11,16 @@ import express from "express";
 import flash from "express-flash";
 import session from "express-session";
 import helpers from "handlebars-helpers";
+import jsonwebtoken from "jsonwebtoken";
 import { jest } from "@jest/globals";
 import { engine } from "express-handlebars";
 
 jest.mock("../../../src/model/scrap-config.js");
+jest.mock("../../../src/model/scrap-user.js");
+jest.mock("jsonwebtoken");
+jest.mock("passport");
+
+let isAuthenticatedResult = false;
 
 process.env.JWT_SECRET = "test_secret";
 process.env.GOOGLE_CLIENT_ID = "test_id";
@@ -57,6 +64,7 @@ describe("created auth GET routes", () => {
     expect(response.statusCode).toBe(404);
   });
   test("returns correct result using /register endpoint", async () => {
+    isAuthenticatedResult = false;
     const response = await testAgent.get("/auth/register");
     expect(response.statusCode).toBe(200);
     expect(response.type).toBe("text/html");
@@ -70,6 +78,7 @@ describe("created auth GET routes", () => {
     expect(response.text).toContain('<p>already registered? go to <a href="/auth/login">login</a> page</p>');
   });
   test("returns correct result using /login endpoint", async () => {
+    isAuthenticatedResult = false;
     const response = await testAgent.get("/auth/login");
     expect(response.statusCode).toBe(200);
     expect(response.type).toBe("text/html");
@@ -82,46 +91,83 @@ describe("created auth GET routes", () => {
     expect(response.text).toContain('<p>not registered? go to <a href="/auth/register">register</a> page.</p>');
   });
   test("returns correct result using /token endpoint", async () => {
+    isAuthenticatedResult = true;
+    jest.spyOn(jsonwebtoken, "sign").mockReturnValue("mocked.jwt.token");
     const response = await testAgent.get("/auth/token");
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toStrictEqual({ token: "mocked.jwt.token" });
+  });
+  test("returns correct result using /google endpoint", async () => {
+    isAuthenticatedResult = false;
+    const response = await testAgent.get("/auth/google");
     expect(response.statusCode).toBe(302);
-    expect(response.text).toBe("Found. Redirecting to /auth/login");
+    expect(response.text).toBe("");
+  });
+  test("returns correct result using /google/callback endpoint", async () => {
+    isAuthenticatedResult = true;
+    jest.spyOn(passport, "authenticate").mockImplementation((strategy, options) => {
+      return (req, res, next) => {
+        next();
+      };
+    });
+    // we need to create a LOCAL agent in order for the passport mockup to be applied correctly
+    // also we aren't moving this mockup, because other tests should use the real implementation
+    const localAgent = supertest.agent(configureTestSever(testRouter));
+    const response = await localAgent.get("/auth/google/callback");
+    expect(response.statusCode).toBe(302);
+    expect(response.text).toBe("Found. Redirecting to /");
+    expect(response.headers.location).toBe("/");
   });
 });
 
 describe("created auth POST routes", () => {
-  const testRouter = new AuthRouter(passport);
+  const testRouter = new AuthRouter(passport, new WebComponents({ minLogLevel: LogLevel.DEBUG }));
   const testApp = configureTestSever(testRouter);
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
   test("returns correct result for unknown path", async () => {
+    isAuthenticatedResult = false;
     const response = await testAgent.post("/auth/unknown");
     expect(response.statusCode).toBe(404);
   });
   test("returns correct result using /register endpoint", async () => {
+    isAuthenticatedResult = false;
     const response = await testAgent.post("/auth/register");
     expect(response.statusCode).toBe(302);
     expect(response.text).toBe("Found. Redirecting to /auth/register");
+    expect(response.headers.location).toBe("/auth/register");
   });
   test("returns correct result using /login endpoint", async () => {
+    isAuthenticatedResult = false;
     const response = await testAgent.post("/auth/login");
     expect(response.statusCode).toBe(302);
     expect(response.text).toBe("Found. Redirecting to /auth/login");
+    expect(response.headers.location).toBe("/auth/login");
   });
   test("returns correct result using /demo endpoint", async () => {
+    isAuthenticatedResult = false;
     const response = await testAgent.post("/auth/demo");
     expect(response.statusCode).toBe(302);
     expect(response.text).toBe("Found. Redirecting to /auth/login");
+    expect(response.headers.location).toBe("/auth/login");
   });
   test("returns correct result using /logout endpoint", async () => {
+    isAuthenticatedResult = true;
     const response = await testAgent.post("/auth/logout");
     expect(response.statusCode).toBe(302);
     expect(response.text).toBe("Found. Redirecting to /auth/login");
+    expect(response.headers.location).toBe("/auth/login");
   });
 });
 
 function configureTestSever(testRouter) {
   // configure mock result (needed by POST requests)
+  const userMockResult = {
+    deleteOne: (_) => false,
+  };
+  jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => userMockResult);
   const mockResult = {
+    deleteOne: (_) => false,
     find: (user) => {
       [{ email: user.email, password: "pass", save: () => {} }];
     },
@@ -144,6 +190,19 @@ function configureTestSever(testRouter) {
   testApp.use(passport.initialize());
   testApp.use(passport.session());
   testApp.locals.passport = authConfig.configure();
+  // mock request user and authenticated logic
+  testApp.use((req, res, next) => {
+    req.isAuthenticated = () => isAuthenticatedResult;
+    req.user = {
+      hostUser: 1,
+      toJSON: () => ({
+        name: "Test User",
+        email: "test@example.com",
+        password: "supersecret",
+      }),
+    };
+    next();
+  });
   // connect test router to auth endpoint
   testApp.use("/auth", testRouter.createRoutes());
   return testApp;

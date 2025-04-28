@@ -48,14 +48,15 @@ describe("created config GET routes", () => {
   const mockResult = { findById: (configId) => getInitConfig(false, configId, "uname") };
   jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
   // configue test express app server
+  const localPassport = new passport.Passport();
   const testApp = express();
   testApp.use(express.json());
   testApp.use(express.urlencoded({ extended: false }));
   testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
-  testApp.use(passport.initialize());
-  testApp.use(passport.session());
+  testApp.use(localPassport.initialize());
+  testApp.use(localPassport.session());
   testApp.use("/config", new ConfigRouter(components).createRoutes());
-  testApp.use("/auth", createMockAuthRouter());
+  testApp.use("/auth", createMockAuthRouter(localPassport));
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
   beforeAll(async () => {
@@ -224,18 +225,17 @@ describe("created config GET routes", () => {
 });
 
 describe("created config PUT routes", () => {
-  const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-  const mockResult = { findById: (configId) => getInitConfig(true, configId, "uname") };
-  jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
   // configue test express app server
+  const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+  const localPassport = new passport.Passport();
   const testApp = express();
   testApp.use(express.json());
   testApp.use(express.urlencoded({ extended: false }));
   testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
-  testApp.use(passport.initialize());
-  testApp.use(passport.session());
+  testApp.use(localPassport.initialize());
+  testApp.use(localPassport.session());
   testApp.use("/config", new ConfigRouter(components).createRoutes());
-  testApp.use("/auth", createMockAuthRouter());
+  testApp.use("/auth", createMockAuthRouter(localPassport, null));
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
   beforeAll(async () => {
@@ -330,7 +330,45 @@ describe("created config PUT routes", () => {
           ],
         },
       ],
+      [
+        "parent element cannot be found",
+        { query: { name: "test1" }, body: inputObject, config: { id: 999, user: "faulty", groups: undefined } },
+        { status: 400, response: "Undefined parent of new element" },
+      ],
+      [
+        "source values cannot be copied to updated element",
+        {
+          query: { name: "test1" },
+          body: inputObject,
+          config: {
+            id: 1,
+            user: "uname",
+            groups: [
+              {
+                name: "test1",
+                category: "category",
+                domain: "domain",
+                observers: [],
+                getIdentifier: () => `name = test1`,
+                copyValues: (_) => {
+                  throw Error("Error test message");
+                },
+              },
+            ],
+          },
+        },
+        { status: 400, response: "Error test message" },
+      ],
+      [
+        "body has invalid structure",
+        { query: { name: "test1" }, body: { name: "111", domain: "domain", observers: [] } },
+        { status: 400, response: "Group name must have at least one letter" },
+      ],
     ])("%s", async (_, input, expected) => {
+      const mockResult = {
+        findById: (configId) => (input.config == null ? getInitConfig(true, configId, "uname") : input.config),
+      };
+      jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
       const response = await testAgent.put("/config/groups").query(input.query).send(input.body);
       expect(response.statusCode).toBe(expected.status);
       expect(response.body).toStrictEqual(expected.response);
@@ -419,7 +457,81 @@ describe("created config PUT routes", () => {
           ],
         },
       ],
+      [
+        "parent element cannot be found",
+        {
+          query: { name: "logo" },
+          body: inputObject,
+          config: (_, configId, userName) => ({
+            id: configId,
+            user: userName,
+            groups: [
+              {
+                name: "group1",
+                category: "category",
+                domain: "domain",
+                observers: undefined,
+              },
+            ],
+          }),
+        },
+        { status: 400, response: "Undefined parent of new element" },
+      ],
+      [
+        "source values cannot be copied to updated element",
+        {
+          query: { name: "logo" },
+          body: inputObject,
+          config: (_, configId, userName) => ({
+            id: configId,
+            user: userName,
+            groups: [
+              {
+                name: "test1",
+                category: "category",
+                domain: "domain",
+                observers: [
+                  {
+                    name: "logo",
+                    path: "info",
+                    target: "load",
+                    history: "off",
+                    price: {},
+                    getIdentifier: () => `name = logo`,
+                    copyValues: (_) => {
+                      throw Error("Error test message");
+                    },
+                  },
+                ],
+              },
+            ],
+          }),
+        },
+        { status: 400, response: "Error test message" },
+      ],
+      [
+        "body has invalid structure",
+        {
+          query: { name: "test1" },
+          body: { name: "111", path: "path", price: { selector: "body", attribute: "innerHTML", auxiliary: "PLN" } },
+        },
+        { status: 400, response: "Observer name must have at least one letter" },
+      ],
+      [
+        "unexpected errors occurs when updating config",
+        {
+          query: { name: "logo" },
+          body: inputObject,
+          config: (_) => {
+            throw Error("Unexpected config error");
+          },
+        },
+        { status: 500, response: "Unexpected config error" },
+      ],
     ])("%s", async (_, input, expected) => {
+      const getConfig = input.config == null ? getInitConfig : input.config;
+      const mockResult = { findById: (configId) => getConfig(true, configId, "uname") };
+      jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
       const response = await testAgent.put("/config/groups/observers").query(input.query).send(input.body);
       expect(response.statusCode).toBe(expected.status);
       expect(response.body).toStrictEqual(expected.response);
@@ -428,18 +540,17 @@ describe("created config PUT routes", () => {
 });
 
 describe("created config POST routes", () => {
-  const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-  const mockResult = { findById: (configId) => getInitConfig(true, configId, "uname") };
-  jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
   // configue test express app server
+  const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+  const localPassport = new passport.Passport();
   const testApp = express();
   testApp.use(express.json());
   testApp.use(express.urlencoded({ extended: false }));
   testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
-  testApp.use(passport.initialize());
-  testApp.use(passport.session());
+  testApp.use(localPassport.initialize());
+  testApp.use(localPassport.session());
   testApp.use("/config", new ConfigRouter(components).createRoutes());
-  testApp.use("/auth", createMockAuthRouter());
+  testApp.use("/auth", createMockAuthRouter(localPassport, null));
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
   beforeAll(async () => {
@@ -497,6 +608,8 @@ describe("created config POST routes", () => {
         },
       ],
     ])("%s", async (_, requestBody, expected) => {
+      const mockResult = { findById: (configId) => getInitConfig(true, configId, "uname") };
+      jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
       const response = await testAgent.post("/config/groups").send(requestBody);
       expect(response.statusCode).toBe(expected.status);
       expect(response.body).toStrictEqual(expected.response);
@@ -581,6 +694,8 @@ describe("created config POST routes", () => {
         },
       ],
     ])("%s", async (_, input, expected) => {
+      const mockResult = { findById: (configId) => getInitConfig(true, configId, "uname") };
+      jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
       const response = await testAgent.post("/config/groups/observers").query(input.query).send(input.body);
       expect(response.statusCode).toBe(expected.status);
       expect(response.body).toStrictEqual(expected.response);
@@ -589,18 +704,17 @@ describe("created config POST routes", () => {
 });
 
 describe("created config DELETE routes", () => {
-  const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
-  const mockResult = { findById: (configId) => getInitConfig(true, configId, "uname") };
-  jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
   // configue test express app server
+  const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+  const localPassport = new passport.Passport();
   const testApp = express();
   testApp.use(express.json());
   testApp.use(express.urlencoded({ extended: false }));
   testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
-  testApp.use(passport.initialize());
-  testApp.use(passport.session());
+  testApp.use(localPassport.initialize());
+  testApp.use(localPassport.session());
   testApp.use("/config", new ConfigRouter(components).createRoutes());
-  testApp.use("/auth", createMockAuthRouter());
+  testApp.use("/auth", createMockAuthRouter(localPassport, null));
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
   beforeAll(async () => {
@@ -652,6 +766,8 @@ describe("created config DELETE routes", () => {
       ],
       ["query ID does not exist", { name: "test123" }, { status: 400, response: "Could not find item to delete" }],
     ])("%s", async (_, requestQuery, expected) => {
+      const mockResult = { findById: (configId) => getInitConfig(true, configId, "uname") };
+      jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
       const response = await testAgent.delete("/config/groups").query(requestQuery);
       expect(response.statusCode).toBe(expected.status);
       expect(response.body).toStrictEqual(expected.response);
@@ -698,6 +814,8 @@ describe("created config DELETE routes", () => {
       ],
       ["query ID does not exist", { name: "test" }, { status: 400, response: "Could not find item to delete" }],
     ])("%s", async (_, requestQuery, expected) => {
+      const mockResult = { findById: (configId) => getInitConfig(true, configId, "uname") };
+      jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
       const response = await testAgent.delete("/config/groups/observers").query(requestQuery);
       expect(response.statusCode).toBe(expected.status);
       expect(response.body).toStrictEqual(expected.response);
@@ -705,17 +823,17 @@ describe("created config DELETE routes", () => {
   });
 });
 
-function createMockAuthRouter() {
+function createMockAuthRouter(passport, configId = 123) {
   const router = express.Router();
-  const configId = 123;
+  const strategyName = `mock-login-${configId}`;
   // configure mocked login logic
   const options = { usernameField: "mail", passwordField: "pass" };
-  const verify = (_user, _pass, done) => done(null, { id: 1, config: configId });
-  passport.use("mock-login", new Strategy(options, verify));
+  const verify = (_user, _pass, done) => done(null, { id: 1, config: configId, save: (_) => true });
+  passport.use(strategyName, new Strategy(options, verify));
   passport.serializeUser((user, done) => done(null, user.id));
-  passport.deserializeUser((userId, done) => done(null, { id: userId, config: configId }));
+  passport.deserializeUser((userId, done) => done(null, { id: userId, config: configId, save: (_) => true }));
   // use passport mock login in tests
-  router.post("/login", passport.authenticate("mock-login"));
+  router.post("/login", passport.authenticate(strategyName));
   return router;
 }
 
@@ -774,5 +892,6 @@ function getInitConfig(db, configId, name) {
     ...(db && { getIdentifier: () => `name = ${name}` }),
     ...(db && { copyValues: (_) => true }),
     ...(db && { save: () => true }),
+    ...(db && { _id: configId, }),
   };
 }
