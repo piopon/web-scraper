@@ -47,7 +47,7 @@ export class AppConfig {
         timeout: parseInt(process.env.DB_TIMEOUT) || 15_000,
       },
       authConfig: {
-        demoMode: new DemoMode(process.env.DEMO_MODE) || DemoMode.DUPLICATE,
+        demoMode: process.env.DEMO_MODE == null ? DemoMode.DUPLICATE : new DemoMode(process.env.DEMO_MODE),
         hashSalt: parseInt(process.env.ENCRYPT_SALT) || 10,
       },
       scraperConfig: {
