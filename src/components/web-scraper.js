@@ -254,8 +254,8 @@ export class WebScraper {
       }
     } else {
       // scraper is running in selected intervals
-      if (!currentStatus.startsWith(WebScraper.#RUNNING_STATUS)) {
-        // incorrect state - since it's running then we must stop it
+      if (currentStatus.type === "error") {
+        // incorrect state - since it's running and last message is an error, then we must stop it
         this.stop(sessionUser.email, invalidStateMessage);
       }
     }
