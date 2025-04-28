@@ -245,17 +245,17 @@ export class WebScraper {
     }
     // all input correct - perform additional checks and then return history
     const invalidStateMessage = "Invalid internal state";
-    const currentStatus = this.#status.getStatus().message;
+    const currentStatus = this.#status.getStatus();
     if (session.id == null) {
       // scraper is NOT running in selected intervals
-      if (currentStatus.startsWith(WebScraper.#RUNNING_STATUS)) {
+      if (currentStatus.message.startsWith(WebScraper.#RUNNING_STATUS)) {
         // incorrect state - update field
         this.#status.error(invalidStateMessage);
       }
     } else {
       // scraper is running in selected intervals
-      if (!currentStatus.startsWith(WebScraper.#RUNNING_STATUS)) {
-        // incorrect state - since it's running then we must stop it
+      if (currentStatus.type === "error") {
+        // incorrect state - since it's running and last message is an error, then we must stop it
         this.stop(sessionUser.email, invalidStateMessage);
       }
     }
