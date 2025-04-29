@@ -30,6 +30,8 @@ The tool is designed to handle a range of web scraping scenarios, from simple da
 
 ### Installation 📥
 
+It's strongly recommended to use the Docker containers approach for installing and running the web-scraper service.
+However if, for whatever reasons, it's not an option then a local installation is also possible and it requires the following steps to be performed:
 1. Clone the repository:
    ```
    git clone https://github.com/piopon/web-scraper.git
