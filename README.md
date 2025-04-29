@@ -85,10 +85,29 @@ CI_PASS=[STRING]                 # CI user password
 
 ### Usage 💻
 
-1. Start the MongoDB instance and run web-scraper using the command:
-   ```
-   npm run start
-   ```
+There are two supported ways to run web-scraper service:
+
+* LOCAL
+
+  * Start the MongoDB instance
+  * Go to web-scraper directory and use the command:
+    ```
+    npm run start
+    ```
+  This will invoke the web-scraper locally on your platform.
+
+* DOCKER
+
+  * Go to web-scraper directory and use the command:
+    ```
+    docker compose up -d
+    ```
+  This will invoke the web-scraper in the Docker container in the detached mode (argument `-d`).<br>
+  In order to display the logs of the service type the command:
+  ```
+  docker logs scraper
+  ```
+
 2. Open the web-browser and navigate to the configured `IP:PORT` address.<br>
    Login to your account, create a new one, or open a demo session
    ![login page](./docs/images/000_login.png "web-scraper login")
