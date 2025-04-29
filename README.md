@@ -108,10 +108,11 @@ There are two supported ways to run web-scraper service:
   docker logs scraper
   ```
 
-2. Open the web-browser and navigate to the configured `IP:PORT` address.<br>
+After the service is up and running the next steps are as follows:
+1. Open the web-browser and navigate to the configured `IP:PORT` address.<br>
    Login to your account, create a new one, or open a demo session
    ![login page](./docs/images/000_login.png "web-scraper login")
-3. Customize your scraping tasks by modifying configuration groups, observers and fill all components data
+2. Customize your scraping tasks by modifying configuration groups, observers and fill all components data
    ![config view](./docs/images/001_config-view.png "web-scraper config view")
    ![config edit](./docs/images/002_config-edit.png "web-scraper config edit")
 
