@@ -116,15 +116,16 @@ After the service is up and running the next steps are as follows:
    ![config view](./docs/images/001_config-view.png "web-scraper config view")
    ![config edit](./docs/images/002_config-edit.png "web-scraper config edit")
 
-   __<ins>After correctly adding first observer your data is now scraped!</ins>__
+__<ins>After correctly adding first observer your data is now being scraped from the specified location!</ins>__
+
+Check the created `users` directory for scraped data values or error details if configuration is incorrect.
+Also keep in mind that initially this directory may contain folders for CI and demo users, depending on the configuration.
 
 Current status of web-scraper's components can be quicky checked in the bottom right corner:
 ![status general](./docs/images/003_status-general.png "web-scraper status preview")
 
 After successfull login this panel contains also a link to detailed scraper running status with logs:
 ![status details](./docs/images/004_status-view.png "web-scraper status view")
-
-Check the `users` directory for scraped data values or error details if configuration is incorrect.
 
 ### Project Structure 📊
 
