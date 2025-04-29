@@ -49,16 +49,38 @@ However if, for whatever reasons, it's not an option then a local installation i
 
 Before running the application service create an `.env` file with the following data:
 ```
-SERVER_PORT=[APP_PORT:INTEGER]       # the web-server service port number
-SESSION_SHA=[SHA_SECRET:STRING]      # hash for session cookie
-JWT_SECRET=[JWT_SECRET:STRING]       # hash for JSON Web Token
-DB_ADDRESS=[ADDRESS:IP STRING]       # the IP address for DB (localhost for local DB)
-DB_NAME=[NAME:STRING]                # the name for the DB
-DB_PORT=[DB_PORT:INTEGER]            # the port for DB
-DEMO_MODE=[overwrite|duplicate]      # the demo session mode
-DEMO_BASE=[BASE_USER:EMAIL STRING]   # base demo email
-DEMO_USER=[DEMO_USER:EMAIL STRING]   # user template email
-DEMO_PASS=[DEMO_SECRET:STRING]       # base dome password
+# connection parameters
+SERVER_PORT=[INTEGER]            # service port number
+
+# database settings
+DB_PORT=[INTEGER]                # the port for database connection
+DB_NAME=[STRING]                 # the name of the database
+DB_ADDRESS=[STRING]              # the IP address for datavase
+DB_USER=[STRING]                 # database user (authentication)
+DB_PASSWORD=[STRING]             # database password (authentication)
+
+#scraper settings
+SCRAP_INACTIVE_DAYS=[INTEGER]    # number of days from last login to treat user as inative
+SCRAP_INTERVAL_SEC=[INTEGER]     # default seconds interval between each scrap operation
+
+# internal hash and secrets
+ENCRYPT_SALT=[STRING|INTEGER]    # randomize salt value
+SESSION_SHA=[STRING]             # hash for session cookie
+JWT_SECRET=[STRING]              # hash for JSON Web Token
+
+# external authentication
+GOOGLE_CLIENT_ID=[STRING]        # external Google login client ID
+GOOGLE_CLIENT_SECRET=[STRING]    # secret for external Google login client
+
+# demo functionality
+DEMO_MODE=[ENUM]                 # the demo session mode (duplicate OR overwrite)
+DEMO_BASE=[STRING]               # base demo email
+DEMO_USER=[STRING]               # user template email
+DEMO_PASS=[STRING]               # base demo user password
+
+# CI functionality
+CI_USER=[STRING]                 # CI user email
+CI_PASS=[STRING]                 # CI user password
 ```
 
 ### Usage 💻
