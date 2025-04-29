@@ -25,6 +25,7 @@ The tool is designed to handle a range of web scraping scenarios, from simple da
 
 - Node.js 18+ (service - [LINK](https://nodejs.org/en/download))
 - MongoDB (data storage - [LINK](https://www.mongodb.com/try/download/community))
+- Docker (all-in-one approach - [LINK](https://docs.docker.com/get-started/get-docker/))
 - Bruno (API testing - [LINK](https://github.com/usebruno/bruno))
 
 ### Installation 📥
