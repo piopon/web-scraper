@@ -136,13 +136,15 @@ web-scraper/
 ├── public                 # Frontend UI source files
 ├── src/                   # Backend UI source files
 ├── test/                  # Unit tests logic
-├── users/                 # Stored scraped data
+├── .dockerignore          # List of files ignored by Docker
 ├── .gitignore             # List of files ignored by GIT
 ├── CODEOWNERS             # List of code owners
+├── docker-compose.yml     # Docker compose file for this service and MongoDB
+├── Dockerfile             # Docker container recipe
 ├── LICENSE                # GPL-2.0 license description
 ├── package-lock.json      # Node.js snapshot of the dependency tree
 ├── package.json           # Node.js project metadata
-└── README.md              # Top-level project description
+└── README.md              # Top-level project description (this document)
 ```
 
 ### Contributing 🤝
