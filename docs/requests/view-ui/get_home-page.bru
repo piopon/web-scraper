@@ -20,7 +20,7 @@ tests {
   });
 
   test("home page has correct content length", function() {
-    expect(res.getHeader("content-length")).to.equal("3231");
+    expect(res.getHeader("content-length")).to.equal("3438");
   });
 
   test("home page has login data", function() {
@@ -30,6 +30,13 @@ tests {
     expect(body).to.include('<form class="user-credentials user-loader" action="/auth/login" method="POST">');
     expect(body).to.include('<input type="email" id="user-email" name="email" required>');
     expect(body).to.include('<input type="password" id="user-password" name="password" required>');
+  });
+
+  test("home page has google login data", function() {
+    const body = res.getBody();
+    expect(body).to.be.a('string');
+    expect(body).to.include('<form class="user-external user-loader" action="/auth/google" method="GET">');
+    expect(body).to.include('<i class="fa fa-google"></i> login with google');
   });
 
   test("home page has demo functionality", function() {
