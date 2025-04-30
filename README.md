@@ -121,6 +121,8 @@ __<ins>After correctly adding first observer your data is now being scraped from
 Check the created `users` directory for scraped data values or error details if configuration is incorrect.
 Also keep in mind that initially this directory may contain folders for CI and demo users, depending on the configuration.
 
+### Additional information ℹ️
+
 Current status of web-scraper's components can be quicky checked in the bottom right corner:
 ![status general](./docs/images/003_status-general.png "web-scraper status preview")
 
