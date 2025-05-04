@@ -17,6 +17,9 @@ services:
     container_name: scraper
     restart: unless-stopped
     env_file: ./.env
+    # specify ADMIN capabilities for enabling Chromium sandboxing features
+    cap_add:
+      - SYS_ADMIN
     build:
       context: .
       dockerfile: Dockerfile
