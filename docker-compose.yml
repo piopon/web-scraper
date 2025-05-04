@@ -2,6 +2,7 @@ name: "web-scraper"
 
 services:
   mongodb:
+    # use mongo:4.4.29-focal when CPU does not support AVX commands
     image: mongo
     container_name: mongodb
     restart: unless-stopped
