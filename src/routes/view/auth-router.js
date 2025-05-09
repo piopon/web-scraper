@@ -89,6 +89,9 @@ export class AuthRouter {
     router.post("/token", AccessChecker.canViewSessionUser, (request, response, next) => {
       this.#passport.authenticate("local-login", { session: false }, (err, user, info) => {
         if (err) return next(err);
+        if (!user) {
+          return response.status(400).json({ error: info.message || "Token retrieval error" });
+        }
         const signedData = { name: user.name, email: user.email, password: user.password };
         const token = jwt.sign(signedData, process.env.JWT_SECRET);
         return response.status(200).json({ token });
