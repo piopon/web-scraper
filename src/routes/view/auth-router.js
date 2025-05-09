@@ -85,6 +85,13 @@ export class AuthRouter {
       failureFlash: true,
     });
     router.post("/login", AccessChecker.canViewSessionUser, loginCallback);
+    // remote JWT token retrieval
+    router.post("/token", AccessChecker.canViewSessionUser, (request, response, next) => {
+      this.#passport.authenticate("local-login", { session: false }, (err, user, info) => {
+        if (err) return next(err);
+        return response.status(200).json({ message: "Login ok!" });
+      })(request, response, next);
+    });
     // demo functionality login
     const demoCallback = this.#passport.authenticate("local-demo", {
       successRedirect: "/",
