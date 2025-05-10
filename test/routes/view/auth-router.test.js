@@ -35,6 +35,7 @@ describe("createRoutes() method", () => {
       { path: "/google/callback", method: "get" },
       { path: "/register", method: "post" },
       { path: "/login", method: "post" },
+      { path: "/token", method: "post" },
       { path: "/demo", method: "post" },
       { path: "/logout", method: "post" },
     ];
