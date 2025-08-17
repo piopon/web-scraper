@@ -60,10 +60,10 @@ export class DataRouter {
       }
       var dataContent = JSON.parse(fs.readFileSync(userPath));
       var filteredData = dataContent.flatMap((data) => data.items);
-      if (request.query.item) {
+      if (request.query.name) {
         filteredData = filteredData.filter((item) => {
-          const directName = item.name === request.query.item;
-          const namedId = item.name.toLowerCase().replace(/\s+/g, "-") === request.query.item;
+          const directName = item.name === request.query.name;
+          const namedId = item.name.toLowerCase().replace(/\s+/g, "-") === request.query.name;
           return directName || namedId;
         });
       }
