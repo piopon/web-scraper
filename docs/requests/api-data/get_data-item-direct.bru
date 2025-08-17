@@ -1,0 +1,69 @@
+meta {
+  name: get_data-item-direct
+  type: http
+  seq: 6
+}
+
+get {
+  url: http://localhost:5000/api/v1/data?item=McDonald's Corporation
+  body: none
+  auth: bearer
+}
+
+params:query {
+  item: McDonald's Corporation
+}
+
+auth:bearer {
+  token: {{data-token}}
+}
+
+tests {
+  test("data is correctly received", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("data received JSON data", function() {
+    expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
+  });
+  
+  test("data has correct content length", function() {
+    expect(res.getHeader("content-length")).to.equal("106");
+  });
+  
+  test("data has correct top-level structure", function() {
+    const data = res.getBody();
+    expect(data).to.be.a('array');
+  });
+  
+  test("data has correct top-level values", function() {
+    const data = res.getBody();
+    expect(data).to.have.lengthOf(1);
+  });
+  
+  test("data has correct element structure", function() {
+    const data = res.getBody();
+    for(const dataIndex in data.length) {
+      const dataElement = data[dataIndex];
+      expect(dataElement).to.have.property('status');
+      expect(dataElement.status).to.be.a('string');
+      expect(dataElement).to.have.property('name');
+      expect(dataElement.name).to.be.a('string');
+      expect(dataElement).to.have.property('icon');
+      expect(dataElement.icon).to.be.a('string');
+      expect(dataElement).to.have.property('price');
+      expect(dataElement.price).to.be.a('string');
+      expect(dataElement).to.have.property('currency');
+      expect(dataElement.currency).to.be.a('string');
+    }
+  });
+  
+  test("data has correct element values", function() {
+    const data = res.getBody();
+    expect(data[0].status).to.equal("OK");
+    expect(data[0].name).to.equal("McDonald's Corporation");
+    expect(data[0].icon).to.equal("mcdonalds.svg");
+    expect(data[0].price).to.equal("292.68");
+    expect(data[0].currency).to.equal("USD");
+  });
+}
