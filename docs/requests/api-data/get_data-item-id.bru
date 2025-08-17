@@ -5,13 +5,13 @@ meta {
 }
 
 get {
-  url: http://localhost:5000/api/v1/data?item=mcdonald's-corporation
+  url: http://localhost:5000/api/v1/data/items?name=mcdonald's-corporation
   body: none
   auth: bearer
 }
 
 params:query {
-  item: mcdonald's-corporation
+  name: mcdonald's-corporation
 }
 
 auth:bearer {
