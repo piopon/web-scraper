@@ -43,6 +43,14 @@ export class DataRouter {
         const categoryOk = request.query.category ? data.category === request.query.category : true;
         return nameOk && categoryOk;
       });
+      // verify if user wants to retrieve particular item
+      if (request.query.item) {
+        filteredData = filteredData.flatMap(data => data.items).filter(item => {
+          const directName = item.name === request.query.item;
+          const namedId = item.name.toLowerCase().replace(/\s+/g, "-") === request.query.item;
+          return directName || namedId;
+        });
+      }
       response.status(200).json(filteredData);
     });
     return router;
