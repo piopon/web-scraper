@@ -61,6 +61,7 @@ export class DataRouter {
       properties: {
         name: { type: "string" },
         category: { type: "string" },
+        item: { type: "string" },
       },
     });
     return {
