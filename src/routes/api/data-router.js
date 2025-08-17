@@ -25,7 +25,7 @@ export class DataRouter {
     const router = express.Router();
     // create endpoint for receiving data according specified query param filters
     router.get("/", AccessChecker.canReceiveData, (request, response) => {
-      const validationResult = this.#validateQueryParams(request.query);
+      const validationResult = this.#validateQueryParams(request.url, request.query);
       if (!validationResult.valid) {
         response.status(400).json(validationResult.cause);
         return;
@@ -46,7 +46,7 @@ export class DataRouter {
       response.status(200).json(filteredData);
     });
     router.get("/items", AccessChecker.canReceiveData, (request, response) => {
-      const validationResult = this.#validateQueryParams(request.query);
+      const validationResult = this.#validateQueryParams(request.url, request.query);
       if (!validationResult.valid) {
         response.status(400).json(validationResult.cause);
         return;
@@ -77,16 +77,16 @@ export class DataRouter {
    * @param {Object} params The query parameters which should be validated
    * @returns an object with validation result (true/false) and an optional cause (if validation NOK)
    */
-  #validateQueryParams(params) {
+  #validateQueryParams(url, params) {
     const validator = new Ajv();
+    const urlProps = new Map([
+      ["/", { name: { type: "string" }, category: { type: "string" } }],
+      ["/items", { name: { type: "string" } }],
+    ]).get(url.indexOf("?") > 0 ? url.substring(0, url.indexOf("?")) : url);
     const validate = validator.compile({
       type: "object",
       additionalProperties: false,
-      properties: {
-        name: { type: "string" },
-        category: { type: "string" },
-        item: { type: "string" },
-      },
+      properties: urlProps,
     });
     return {
       valid: validate(params),
