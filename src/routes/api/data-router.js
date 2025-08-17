@@ -43,14 +43,29 @@ export class DataRouter {
         const categoryOk = request.query.category ? data.category === request.query.category : true;
         return nameOk && categoryOk;
       });
+      response.status(200).json(filteredData);
+    });
+    router.get("/items", AccessChecker.canReceiveData, (request, response) => {
+      const validationResult = this.#validateQueryParams(request.query);
+      if (!validationResult.valid) {
+        response.status(400).json(validationResult.cause);
+        return;
+      }
+      const token = request.headers["authorization"].split(" ")[1];
+      const user = jwt.verify(token, process.env.JWT_SECRET);
+      const userPath = path.join(this.#dataFileConfig.path, user.email, this.#dataFileConfig.file);
+      if (!fs.existsSync(userPath)) {
+        response.status(400).json(`Invalid data owner provided`);
+        return;
+      }
+      var dataContent = JSON.parse(fs.readFileSync(userPath));
+      var filteredData = dataContent.flatMap((data) => data.items);
       if (request.query.item) {
-        filteredData = filteredData
-          .flatMap((data) => data.items)
-          .filter((item) => {
-            const directName = item.name === request.query.item;
-            const namedId = item.name.toLowerCase().replace(/\s+/g, "-") === request.query.item;
-            return directName || namedId;
-          });
+        filteredData = filteredData.filter((item) => {
+          const directName = item.name === request.query.item;
+          const namedId = item.name.toLowerCase().replace(/\s+/g, "-") === request.query.item;
+          return directName || namedId;
+        });
       }
       response.status(200).json(filteredData);
     });
