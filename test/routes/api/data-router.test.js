@@ -266,6 +266,111 @@ describe("created data GET routes", () => {
         expect(response.body).toStrictEqual(expected.response);
       });
     });
+    describe("/data/items endpoint when", () => {
+      it.each([
+        [
+          "query has invalid structure",
+          testOwner,
+          { unknown: "status" },
+          {
+            status: 400,
+            response: [
+              {
+                instancePath: "",
+                keyword: "additionalProperties",
+                message: "must NOT have additional properties",
+                params: { additionalProperty: "unknown" },
+                schemaPath: "#/additionalProperties",
+              },
+            ],
+          },
+        ],
+        [
+          "query is empty for invalid user",
+          "jwt-mock@owner.com",
+          {},
+          {
+            status: 400,
+            response: "Invalid data owner provided",
+          },
+        ],
+        [
+          "query is empty for valid user",
+          testOwner,
+          {},
+          {
+            status: 200,
+            response: [
+              {
+                status: "OK",
+                name: "t-shirt Regular Fit",
+                icon: "",
+                price: "29.99",
+                currency: "PLN",
+              },
+              {
+                status: "OK",
+                name: "Diablo IV",
+                icon: "",
+                price: "349.99",
+                currency: "PLN",
+              },
+            ],
+          },
+        ],
+        [
+          "query contains existing name for valid user",
+          testOwner,
+          { name: "Diablo IV" },
+          {
+            status: 200,
+            response: [
+              {
+                status: "OK",
+                name: "Diablo IV",
+                icon: "",
+                price: "349.99",
+                currency: "PLN",
+              },
+            ],
+          },
+        ],
+        [
+          "query contains existing id for valid user",
+          testOwner,
+          { name: "diablo-iv" },
+          {
+            status: 200,
+            response: [
+              {
+                status: "OK",
+                name: "Diablo IV",
+                icon: "",
+                price: "349.99",
+                currency: "PLN",
+              },
+            ],
+          },
+        ],
+        [
+          "query contains not existing name for valid user",
+          testOwner,
+          { name: "unknown" },
+          {
+            status: 200,
+            response: [],
+          },
+        ],
+      ])("%s", async (_, mockOwner, inputQuery, expected) => {
+        // prepare JWT authentication mock
+        testAgent.set({ Authorization: `Token JWT-MOCKED-TOKEN` });
+        jest.spyOn(jsonwebtoken, "verify").mockReturnValue({ email: mockOwner });
+        // send request and check response
+        const response = await testAgent.get("/data/items").query(inputQuery);
+        expect(response.statusCode).toBe(expected.status);
+        expect(response.body).toStrictEqual(expected.response);
+      });
+    });
   });
 });
 
