@@ -1,17 +1,17 @@
 meta {
-  name: get_data-empty
+  name: get_data-item-empty
   type: http
-  seq: 6
+  seq: 10
 }
 
 get {
-  url: http://localhost:5000/api/v1/data?name=unknown
+  url: http://localhost:5000/api/v1/data/items?name=non-existing
   body: none
   auth: bearer
 }
 
 params:query {
-  name: unknown
+  name: non-existing
 }
 
 auth:bearer {
