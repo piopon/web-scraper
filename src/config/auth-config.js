@@ -168,6 +168,9 @@ export class AuthConfig {
    * Method used to configurate login strategy via Google
    */
   #configGoogleStategy() {
+    if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+      return;
+    }
     const options = {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
