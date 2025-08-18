@@ -1,0 +1,31 @@
+meta {
+  name: get_item-unauthorized
+  type: http
+  seq: 7
+}
+
+get {
+  url: http://localhost:5000/api/v1/data/items?owner=unknown
+  body: none
+  auth: none
+}
+
+params:query {
+  owner: unknown
+}
+
+tests {
+  test("data is correctly received", function() {
+    expect(res.getStatus()).to.equal(401);
+  });
+
+  test("data has correct top-level structure", function() {
+    const data = res.getBody();
+    expect(data).to.be.a('string');
+  });
+
+  test("data has correct top-level value", function() {
+    const data = res.getBody();
+    expect(data).to.equal("Unauthorized");
+  });
+}

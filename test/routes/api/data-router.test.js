@@ -26,7 +26,10 @@ afterAll(() => {
 
 describe("createRoutes() method", () => {
   test("returns correct number of routes", () => {
-    const expectedRoutes = [{ path: "/", method: "get" }];
+    const expectedRoutes = [
+      { path: "/", method: "get" },
+      { path: "/items", method: "get" },
+    ];
     const testConfig = { path: path.parse(testDataPath).root, file: "data.json" };
     const testRouter = new DataRouter(testConfig);
     const createdRoutes = testRouter.createRoutes();
@@ -65,201 +68,308 @@ describe("created data GET routes", () => {
     const response = await testAgent.get("/data/unknown");
     expect(response.statusCode).toBe(404);
   });
-  describe("returns correct result using /data endpoint when", () => {
-    it.each([
-      [
-        "query has invalid structure",
-        testOwner,
-        { unknown: "status" },
-        {
-          status: 400,
-          response: [
-            {
-              instancePath: "",
-              keyword: "additionalProperties",
-              message: "must NOT have additional properties",
-              params: { additionalProperty: "unknown" },
-              schemaPath: "#/additionalProperties",
-            },
-          ],
-        },
-      ],
-      [
-        "query is empty for invalid user",
-        "jwt-mock@owner.com",
-        {},
-        {
-          status: 400,
-          response: "Invalid data owner provided",
-        },
-      ],
-      [
-        "query is empty for valid user",
-        testOwner,
-        {},
-        {
-          status: 200,
-          response: [
-            {
-              name: "clothes",
-              category: "👕",
-              items: [
-                {
-                  status: "OK",
-                  name: "t-shirt Regular Fit",
-                  icon: "",
-                  price: "29.99",
-                  currency: "PLN",
-                },
-              ],
-            },
-            {
-              name: "games",
-              category: "🎮",
-              items: [
-                {
-                  status: "OK",
-                  name: "Diablo IV",
-                  icon: "",
-                  price: "349.99",
-                  currency: "PLN",
-                },
-              ],
-            },
-          ],
-        },
-      ],
-      [
-        "query contains existing name for valid user",
-        testOwner,
-        { name: "clothes" },
-        {
-          status: 200,
-          response: [
-            {
-              name: "clothes",
-              category: "👕",
-              items: [
-                {
-                  status: "OK",
-                  name: "t-shirt Regular Fit",
-                  icon: "",
-                  price: "29.99",
-                  currency: "PLN",
-                },
-              ],
-            },
-          ],
-        },
-      ],
-      [
-        "query contains not existing name for valid user",
-        testOwner,
-        { name: "unknown" },
-        {
-          status: 200,
-          response: [],
-        },
-      ],
-      [
-        "query contains existing category for valid user",
-        testOwner,
-        { category: "🎮" },
-        {
-          status: 200,
-          response: [
-            {
-              name: "games",
-              category: "🎮",
-              items: [
-                {
-                  status: "OK",
-                  name: "Diablo IV",
-                  icon: "",
-                  price: "349.99",
-                  currency: "PLN",
-                },
-              ],
-            },
-          ],
-        },
-      ],
-      [
-        "query contains not existing category for valid user",
-        testOwner,
-        { category: "unknown" },
-        {
-          status: 200,
-          response: [],
-        },
-      ],
-      [
-        "query contains existing and matching name and category for valid user",
-        testOwner,
-        { name: "games", category: "🎮" },
-        {
-          status: 200,
-          response: [
-            {
-              name: "games",
-              category: "🎮",
-              items: [
-                {
-                  status: "OK",
-                  name: "Diablo IV",
-                  icon: "",
-                  price: "349.99",
-                  currency: "PLN",
-                },
-              ],
-            },
-          ],
-        },
-      ],
-      [
-        "query contains existing but not matching name and category for valid user",
-        testOwner,
-        { name: "games", category: "👕" },
-        {
-          status: 200,
-          response: [],
-        },
-      ],
-      [
-        "query contains existing name and not existing category",
-        testOwner,
-        { name: "games", category: "unknown" },
-        {
-          status: 200,
-          response: [],
-        },
-      ],
-      [
-        "query contains not existing name and existing category",
-        testOwner,
-        { name: "unknown", category: "👕" },
-        {
-          status: 200,
-          response: [],
-        },
-      ],
-      [
-        "query contains not existing name and category",
-        testOwner,
-        { name: "unknown", category: "unknown" },
-        {
-          status: 200,
-          response: [],
-        },
-      ],
-    ])("%s", async (_, mockOwner, inputQuery, expected) => {
-      // prepare JWT authentication mock
-      testAgent.set({ Authorization: `Token JWT-MOCKED-TOKEN` });
-      jest.spyOn(jsonwebtoken, "verify").mockReturnValue({ email: mockOwner });
-      // send request and check response
-      const response = await testAgent.get("/data").query(inputQuery);
-      expect(response.statusCode).toBe(expected.status);
-      expect(response.body).toStrictEqual(expected.response);
+  describe("returns correct result using", () => {
+    describe("/data endpoint when", () => {
+      it.each([
+        [
+          "query has invalid structure",
+          testOwner,
+          { unknown: "status" },
+          {
+            status: 400,
+            response: [
+              {
+                instancePath: "",
+                keyword: "additionalProperties",
+                message: "must NOT have additional properties",
+                params: { additionalProperty: "unknown" },
+                schemaPath: "#/additionalProperties",
+              },
+            ],
+          },
+        ],
+        [
+          "query is empty for invalid user",
+          "jwt-mock@owner.com",
+          {},
+          {
+            status: 400,
+            response: "Invalid data owner provided",
+          },
+        ],
+        [
+          "query is empty for valid user",
+          testOwner,
+          {},
+          {
+            status: 200,
+            response: [
+              {
+                name: "clothes",
+                category: "👕",
+                items: [
+                  {
+                    status: "OK",
+                    name: "t-shirt Regular Fit",
+                    icon: "",
+                    price: "29.99",
+                    currency: "PLN",
+                  },
+                ],
+              },
+              {
+                name: "games",
+                category: "🎮",
+                items: [
+                  {
+                    status: "OK",
+                    name: "Diablo IV",
+                    icon: "",
+                    price: "349.99",
+                    currency: "PLN",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        [
+          "query contains existing name for valid user",
+          testOwner,
+          { name: "clothes" },
+          {
+            status: 200,
+            response: [
+              {
+                name: "clothes",
+                category: "👕",
+                items: [
+                  {
+                    status: "OK",
+                    name: "t-shirt Regular Fit",
+                    icon: "",
+                    price: "29.99",
+                    currency: "PLN",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        [
+          "query contains not existing name for valid user",
+          testOwner,
+          { name: "unknown" },
+          {
+            status: 200,
+            response: [],
+          },
+        ],
+        [
+          "query contains existing category for valid user",
+          testOwner,
+          { category: "🎮" },
+          {
+            status: 200,
+            response: [
+              {
+                name: "games",
+                category: "🎮",
+                items: [
+                  {
+                    status: "OK",
+                    name: "Diablo IV",
+                    icon: "",
+                    price: "349.99",
+                    currency: "PLN",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        [
+          "query contains not existing category for valid user",
+          testOwner,
+          { category: "unknown" },
+          {
+            status: 200,
+            response: [],
+          },
+        ],
+        [
+          "query contains existing and matching name and category for valid user",
+          testOwner,
+          { name: "games", category: "🎮" },
+          {
+            status: 200,
+            response: [
+              {
+                name: "games",
+                category: "🎮",
+                items: [
+                  {
+                    status: "OK",
+                    name: "Diablo IV",
+                    icon: "",
+                    price: "349.99",
+                    currency: "PLN",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        [
+          "query contains existing but not matching name and category for valid user",
+          testOwner,
+          { name: "games", category: "👕" },
+          {
+            status: 200,
+            response: [],
+          },
+        ],
+        [
+          "query contains existing name and not existing category",
+          testOwner,
+          { name: "games", category: "unknown" },
+          {
+            status: 200,
+            response: [],
+          },
+        ],
+        [
+          "query contains not existing name and existing category",
+          testOwner,
+          { name: "unknown", category: "👕" },
+          {
+            status: 200,
+            response: [],
+          },
+        ],
+        [
+          "query contains not existing name and category",
+          testOwner,
+          { name: "unknown", category: "unknown" },
+          {
+            status: 200,
+            response: [],
+          },
+        ],
+      ])("%s", async (_, mockOwner, inputQuery, expected) => {
+        // prepare JWT authentication mock
+        testAgent.set({ Authorization: `Token JWT-MOCKED-TOKEN` });
+        jest.spyOn(jsonwebtoken, "verify").mockReturnValue({ email: mockOwner });
+        // send request and check response
+        const response = await testAgent.get("/data").query(inputQuery);
+        expect(response.statusCode).toBe(expected.status);
+        expect(response.body).toStrictEqual(expected.response);
+      });
+    });
+    describe("/data/items endpoint when", () => {
+      it.each([
+        [
+          "query has invalid structure",
+          testOwner,
+          { unknown: "status" },
+          {
+            status: 400,
+            response: [
+              {
+                instancePath: "",
+                keyword: "additionalProperties",
+                message: "must NOT have additional properties",
+                params: { additionalProperty: "unknown" },
+                schemaPath: "#/additionalProperties",
+              },
+            ],
+          },
+        ],
+        [
+          "query is empty for invalid user",
+          "jwt-mock@owner.com",
+          {},
+          {
+            status: 400,
+            response: "Invalid data owner provided",
+          },
+        ],
+        [
+          "query is empty for valid user",
+          testOwner,
+          {},
+          {
+            status: 200,
+            response: [
+              {
+                status: "OK",
+                name: "t-shirt Regular Fit",
+                icon: "",
+                price: "29.99",
+                currency: "PLN",
+              },
+              {
+                status: "OK",
+                name: "Diablo IV",
+                icon: "",
+                price: "349.99",
+                currency: "PLN",
+              },
+            ],
+          },
+        ],
+        [
+          "query contains existing name for valid user",
+          testOwner,
+          { name: "Diablo IV" },
+          {
+            status: 200,
+            response: [
+              {
+                status: "OK",
+                name: "Diablo IV",
+                icon: "",
+                price: "349.99",
+                currency: "PLN",
+              },
+            ],
+          },
+        ],
+        [
+          "query contains existing id for valid user",
+          testOwner,
+          { name: "diablo-iv" },
+          {
+            status: 200,
+            response: [
+              {
+                status: "OK",
+                name: "Diablo IV",
+                icon: "",
+                price: "349.99",
+                currency: "PLN",
+              },
+            ],
+          },
+        ],
+        [
+          "query contains not existing name for valid user",
+          testOwner,
+          { name: "unknown" },
+          {
+            status: 200,
+            response: [],
+          },
+        ],
+      ])("%s", async (_, mockOwner, inputQuery, expected) => {
+        // prepare JWT authentication mock
+        testAgent.set({ Authorization: `Token JWT-MOCKED-TOKEN` });
+        jest.spyOn(jsonwebtoken, "verify").mockReturnValue({ email: mockOwner });
+        // send request and check response
+        const response = await testAgent.get("/data/items").query(inputQuery);
+        expect(response.statusCode).toBe(expected.status);
+        expect(response.body).toStrictEqual(expected.response);
+      });
     });
   });
 });
