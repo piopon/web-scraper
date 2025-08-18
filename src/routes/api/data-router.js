@@ -48,6 +48,12 @@ export class DataRouter {
     return router;
   }
 
+  /**
+   * Method containing common logic used to handle GET requests
+   * @param {Object} request The incoming request object
+   * @param {Object} response The outputted response object
+   * @param {Function} filter The function using file data values to return appropriate data
+   */
   #handleGetRequest(request, response, filter) {
     const validationResult = this.#validateQueryParams(request.url, request.query);
     if (!validationResult.valid) {
@@ -67,6 +73,7 @@ export class DataRouter {
 
   /**
    * Method used to validate the data router endpoint query parameters
+   * @param {String} url The endpoint URL address (containing only the path)
    * @param {Object} params The query parameters which should be validated
    * @returns an object with validation result (true/false) and an optional cause (if validation NOK)
    */
