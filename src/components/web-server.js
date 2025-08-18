@@ -140,7 +140,15 @@ export class WebServer {
       origin: true,
       credentials: true,
       methods: ["GET", "PUT", "POST", "DELETE", "OPTIONS"],
-      allowedHeaders: ["Origin", "X-Requested-With", "X-AUTHENTICATION", "X-IP", "Content-Type", "Accept"],
+      allowedHeaders: [
+        "Origin",
+        "X-Requested-With",
+        "X-AUTHENTICATION",
+        "X-IP",
+        "Content-Type",
+        "Accept",
+        "Authorization",
+      ],
     };
   }
 }
