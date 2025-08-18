@@ -26,7 +26,10 @@ afterAll(() => {
 
 describe("createRoutes() method", () => {
   test("returns correct number of routes", () => {
-    const expectedRoutes = [{ path: "/", method: "get" }];
+    const expectedRoutes = [
+      { path: "/", method: "get" },
+      { path: "/items", method: "get" },
+    ];
     const testConfig = { path: path.parse(testDataPath).root, file: "data.json" };
     const testRouter = new DataRouter(testConfig);
     const createdRoutes = testRouter.createRoutes();
