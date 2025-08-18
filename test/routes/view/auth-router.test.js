@@ -24,6 +24,7 @@ let isAuthenticatedResult = false;
 
 process.env.JWT_SECRET = "test_secret";
 process.env.GOOGLE_CLIENT_ID = "test_id";
+process.env.GOOGLE_CLIENT_SECRET = "test_secret";
 
 describe("createRoutes() method", () => {
   test("returns correct number of routes", () => {
