@@ -1,17 +1,17 @@
 meta {
-  name: get_data-item-direct
+  name: get_item-id
   type: http
-  seq: 8
+  seq: 9
 }
 
 get {
-  url: http://localhost:5000/api/v1/data/items?name=McDonald's Corporation
+  url: http://localhost:5000/api/v1/data/items?name=mcdonald's-corporation
   body: none
   auth: bearer
 }
 
 params:query {
-  name: McDonald's Corporation
+  name: mcdonald's-corporation
 }
 
 auth:bearer {
@@ -22,25 +22,25 @@ tests {
   test("data is correctly received", function() {
     expect(res.getStatus()).to.equal(200);
   });
-  
+
   test("data received JSON data", function() {
     expect(res.getHeader("content-type")).to.equal("application/json; charset=utf-8");
   });
-  
+
   test("data has correct content length", function() {
     expect(res.getHeader("content-length")).to.equal("106");
   });
-  
+
   test("data has correct top-level structure", function() {
     const data = res.getBody();
     expect(data).to.be.a('array');
   });
-  
+
   test("data has correct top-level values", function() {
     const data = res.getBody();
     expect(data).to.have.lengthOf(1);
   });
-  
+
   test("data has correct element structure", function() {
     const data = res.getBody();
     for(const dataIndex in data.length) {
@@ -57,7 +57,7 @@ tests {
       expect(dataElement.currency).to.be.a('string');
     }
   });
-  
+
   test("data has correct element values", function() {
     const data = res.getBody();
     expect(data[0].status).to.equal("OK");
