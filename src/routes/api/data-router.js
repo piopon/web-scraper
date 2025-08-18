@@ -23,53 +23,46 @@ export class DataRouter {
    */
   createRoutes() {
     const router = express.Router();
-    // create endpoint for receiving data according specified query param filters
     router.get("/", AccessChecker.canReceiveData, (request, response) => {
-      const validationResult = this.#validateQueryParams(request.url, request.query);
-      if (!validationResult.valid) {
-        response.status(400).json(validationResult.cause);
-        return;
-      }
-      const token = request.headers["authorization"].split(" ")[1];
-      const user = jwt.verify(token, process.env.JWT_SECRET);
-      const userPath = path.join(this.#dataFileConfig.path, user.email, this.#dataFileConfig.file);
-      if (!fs.existsSync(userPath)) {
-        response.status(400).json(`Invalid data owner provided`);
-        return;
-      }
-      var dataContent = JSON.parse(fs.readFileSync(userPath));
-      var filteredData = dataContent.filter((data) => {
-        const nameOk = request.query.name ? data.name === request.query.name : true;
-        const categoryOk = request.query.category ? data.category === request.query.category : true;
-        return nameOk && categoryOk;
-      });
-      response.status(200).json(filteredData);
+      this.#handleGetRequest(request, response, (dataContent) =>
+        dataContent.filter((data) => {
+          const nameOk = request.query.name ? data.name === request.query.name : true;
+          const categoryOk = request.query.category ? data.category === request.query.category : true;
+          return nameOk && categoryOk;
+        })
+      );
     });
     router.get("/items", AccessChecker.canReceiveData, (request, response) => {
-      const validationResult = this.#validateQueryParams(request.url, request.query);
-      if (!validationResult.valid) {
-        response.status(400).json(validationResult.cause);
-        return;
-      }
-      const token = request.headers["authorization"].split(" ")[1];
-      const user = jwt.verify(token, process.env.JWT_SECRET);
-      const userPath = path.join(this.#dataFileConfig.path, user.email, this.#dataFileConfig.file);
-      if (!fs.existsSync(userPath)) {
-        response.status(400).json(`Invalid data owner provided`);
-        return;
-      }
-      var dataContent = JSON.parse(fs.readFileSync(userPath));
-      var filteredData = dataContent.flatMap((data) => data.items);
-      if (request.query.name) {
-        filteredData = filteredData.filter((item) => {
-          const directName = item.name === request.query.name;
-          const namedId = item.name.toLowerCase().replace(/\s+/g, "-") === request.query.name;
-          return directName || namedId;
-        });
-      }
-      response.status(200).json(filteredData);
+      this.#handleGetRequest(request, response, (dataContent) => {
+        var filteredData = dataContent.flatMap((data) => data.items);
+        if (request.query.name) {
+          filteredData = filteredData.filter((item) => {
+            const directName = item.name === request.query.name;
+            const namedId = item.name.toLowerCase().replace(/\s+/g, "-") === request.query.name;
+            return directName || namedId;
+          });
+        }
+        return filteredData;
+      });
     });
     return router;
+  }
+
+  #handleGetRequest(request, response, filter) {
+    const validationResult = this.#validateQueryParams(request.url, request.query);
+    if (!validationResult.valid) {
+      response.status(400).json(validationResult.cause);
+      return;
+    }
+    const token = request.headers["authorization"].split(" ")[1];
+    const user = jwt.verify(token, process.env.JWT_SECRET);
+    const userPath = path.join(this.#dataFileConfig.path, user.email, this.#dataFileConfig.file);
+    if (!fs.existsSync(userPath)) {
+      response.status(400).json(`Invalid data owner provided`);
+      return;
+    }
+    var dataContent = JSON.parse(fs.readFileSync(userPath));
+    response.status(200).json(filter(dataContent));
   }
 
   /**
