@@ -13,11 +13,13 @@
       <i class="fa fa-sign-in"></i> login with email
     </button>
   </form>
+  {{#if options.google}}
   <form class="user-external user-loader" action="/auth/google" method="GET">
     <button class="user-action" type="submit">
       <i class="fa fa-google"></i> login with google
     </button>
   </form>
+  {{/if}}
   <div class="user-switch">
     <p>not registered? go to <a href="/auth/register">register</a> page.</p>
   </div>
