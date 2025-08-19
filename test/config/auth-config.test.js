@@ -14,6 +14,8 @@ jest.mock("../../src/model/scrap-user.js");
 jest.mock("../../src/model/scrap-config.js");
 
 process.env.JWT_SECRET = "test_secret";
+process.env.DEMO_USER = "test_user";
+process.env.DEMO_PASS = "test_pass";
 process.env.GOOGLE_CLIENT_ID = "test_id";
 process.env.GOOGLE_CLIENT_SECRET = "test_secret";
 
