@@ -15,6 +15,7 @@ jest.mock("../../src/model/scrap-config.js");
 
 process.env.JWT_SECRET = "test_secret";
 process.env.GOOGLE_CLIENT_ID = "test_id";
+process.env.GOOGLE_CLIENT_SECRET = "test_secret";
 
 test("configure returns correct result", () => {
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
