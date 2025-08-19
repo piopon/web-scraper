@@ -203,6 +203,9 @@ export class AuthConfig {
    * Method used to configurate demo login strategy
    */
   #configDemoStategy() {
+    if (!process.env.DEMO_USER || !process.env.DEMO_PASS) {
+      return;
+    }
     const options = { usernameField: "demo-user", passwordField: "demo-pass" };
     const verify = async (email, password, done) => {
       // since demo credentials are hardcoded in HTML then we need to verify and adjust its values
