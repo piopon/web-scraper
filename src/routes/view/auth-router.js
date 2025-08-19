@@ -46,7 +46,10 @@ export class AuthRouter {
       response.render("login", {
         title: "scraper user login",
         type: "login",
-        options: { google: process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET },
+        options: {
+          demo: process.env.DEMO_USER && process.env.DEMO_PASS,
+          google: process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET,
+        },
         demo: {
           user: process.env.DEMO_USER,
           pass: process.env.DEMO_PASS,

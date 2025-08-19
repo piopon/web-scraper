@@ -23,6 +23,7 @@
   <div class="user-switch">
     <p>not registered? go to <a href="/auth/register">register</a> page.</p>
   </div>
+  {{#if options.demo}}
   <form class="user-demo" action="/auth/demo" method="POST">
     <input type="email" name="demo-user" value={{demo.user}}>
     <input type="password" name="demo-pass" value={{demo.pass}}>
@@ -32,6 +33,7 @@
       how it works.
     </p>
   </form>
+  {{/if}}
   {{#if messages.error}}
   <div id="toastBox" class="auto-hide">
     <div class="toast auto-hide error">
