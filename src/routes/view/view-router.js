@@ -52,6 +52,7 @@ export class ViewRouter {
         title: "scraper running status",
         type: "status",
         user: request.user.name,
+        monitor: this.#getMonitorAddress(),
         date: moment().format("YYYY-MM-DD"),
         components: this.#getSupportedComponents(),
         statusTypes: this.#getSupportedStatusTypes(),
