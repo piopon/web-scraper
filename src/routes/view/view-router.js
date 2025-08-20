@@ -120,6 +120,10 @@ export class ViewRouter {
     return `all|${allLogLevels.map((level) => level.description).join("|")}`;
   }
 
+  /**
+   * Method used to retrieve data monitor URL address (URI + optional port)
+   * @returns string containing data monitor address or undefined (if no address provided)
+   */
   #getMonitorAddress() {
     if (!process.env.MONITOR_ADDRESS) {
       return undefined;
