@@ -41,7 +41,7 @@ export class ViewRouter {
         title: "scraper configuration",
         type: "home",
         user: request.user.name,
-        monitor: `${process.env.MONITOR_ADDRESS}:${process.env.MONITOR_PORT}`,
+        monitor: this.#getMonitorAddress(),
         content: scrapConfig.toJSON(),
         categories: this.#getSupportedCategories(),
         currencies: this.#getSupportedCurrencies(),
@@ -117,5 +117,13 @@ export class ViewRouter {
   #getSupportedStatusTypes() {
     const allLogLevels = [LogLevel.DEBUG, LogLevel.INFO, LogLevel.WARNING, LogLevel.ERROR];
     return `all|${allLogLevels.map((level) => level.description).join("|")}`;
+  }
+
+  #getMonitorAddress() {
+    if (!process.env.MONITOR_ADDRESS) {
+      return undefined;
+    }
+    const portString = process.env.MONITOR_PORT ? `:${process.env.MONITOR_PORT}`: ``;
+    return `${process.env.MONITOR_ADDRESS}${portString}`;
   }
 }
