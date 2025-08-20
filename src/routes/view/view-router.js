@@ -41,6 +41,7 @@ export class ViewRouter {
         title: "scraper configuration",
         type: "home",
         user: request.user.name,
+        monitor: `${process.env.MONITOR_ADDRESS}:${process.env.MONITOR_PORT}`,
         content: scrapConfig.toJSON(),
         categories: this.#getSupportedCategories(),
         currencies: this.#getSupportedCurrencies(),
