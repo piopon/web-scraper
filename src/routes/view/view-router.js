@@ -128,7 +128,7 @@ export class ViewRouter {
     if (!process.env.MONITOR_ADDRESS) {
       return undefined;
     }
-    const portString = process.env.MONITOR_PORT ? `:${process.env.MONITOR_PORT}`: ``;
+    const portString = process.env.MONITOR_PORT ? `:${process.env.MONITOR_PORT}` : ``;
     return `${process.env.MONITOR_ADDRESS}${portString}`;
   }
 }
