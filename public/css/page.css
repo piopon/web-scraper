@@ -204,7 +204,8 @@ div.user-management form {
   align-items: center;
 }
 
-div.user-management button#user-logout {
+div.user-management button#user-logout,
+div.user-management button#data-monitor {
   height: 100%;
   margin: 0rem 0rem 0rem 0.5rem;
   border: 1px solid black;
@@ -217,18 +218,21 @@ div.user-management button#user-logout {
 }
 
 @media screen and (min-width: 375px) {
-  div.user-management button#user-logout {
+  div.user-management button#user-logout,
+  div.user-management button#data-monitor {
     height: 60%;
     width: 4rem;
   }
 }
 
-button#user-logout i {
+button#user-logout i,
+button#data-monitor i {
   font-size: 1rem;
   margin-right: 0.25rem;
 }
 
-div.user-management button#user-logout:hover {
+div.user-management button#user-logout:hover,
+div.user-management button#data-monitor:hover {
   cursor: pointer;
   background-color: crimson;
   transition: background-color 0.25s ease;
