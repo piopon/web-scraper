@@ -41,6 +41,7 @@ export class ViewRouter {
         title: "scraper configuration",
         type: "home",
         user: request.user.name,
+        monitor: this.#getMonitorAddress(),
         content: scrapConfig.toJSON(),
         categories: this.#getSupportedCategories(),
         currencies: this.#getSupportedCurrencies(),
@@ -51,6 +52,7 @@ export class ViewRouter {
         title: "scraper running status",
         type: "status",
         user: request.user.name,
+        monitor: this.#getMonitorAddress(),
         date: moment().format("YYYY-MM-DD"),
         components: this.#getSupportedComponents(),
         statusTypes: this.#getSupportedStatusTypes(),
@@ -116,5 +118,17 @@ export class ViewRouter {
   #getSupportedStatusTypes() {
     const allLogLevels = [LogLevel.DEBUG, LogLevel.INFO, LogLevel.WARNING, LogLevel.ERROR];
     return `all|${allLogLevels.map((level) => level.description).join("|")}`;
+  }
+
+  /**
+   * Method used to retrieve data monitor URL address (URI + optional port)
+   * @returns string containing data monitor address or undefined (if no address provided)
+   */
+  #getMonitorAddress() {
+    if (!process.env.MONITOR_ADDRESS) {
+      return undefined;
+    }
+    const portString = process.env.MONITOR_PORT ? `:${process.env.MONITOR_PORT}` : ``;
+    return `${process.env.MONITOR_ADDRESS}${portString}`;
   }
 }
