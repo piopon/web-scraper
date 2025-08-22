@@ -83,12 +83,10 @@ export class ViewRouter {
         fs.mkdirSync(newImageRoot, { recursive: true });
       }
       fileObject.mv(newImagePath);
-      response
-        .status(200)
-        .json({
-          url: `${process.env.SERVER_ADDRESS}${request.user.email}/${fileObject.name}`,
-          message: `Successfully uploaded image: ${fileObject.name}`,
-        });
+      response.status(200).json({
+        url: `${this.#getServerAddress()}/${request.user.email}/${fileObject.name}`,
+        message: `Successfully uploaded image: ${fileObject.name}`,
+      });
     });
   }
 
@@ -123,6 +121,16 @@ export class ViewRouter {
   #getSupportedStatusTypes() {
     const allLogLevels = [LogLevel.DEBUG, LogLevel.INFO, LogLevel.WARNING, LogLevel.ERROR];
     return `all|${allLogLevels.map((level) => level.description).join("|")}`;
+  }
+
+  #getServerAddress() {
+    if (!process.env.SERVER_ADDRESS) {
+      return `http://localhost:${process.env.SERVER_PORT}`;
+    } else if (process.env.SERVER_ADDRESS.includes("localhost")) {
+      return `${process.env.SERVER_ADDRESS}:${process.env.SERVER_PORT}`;
+    } else {
+      return process.env.SERVER_ADDRESS;
+    }
   }
 
   /**
