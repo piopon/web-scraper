@@ -110,7 +110,12 @@ export class ComponentsView {
     const selector = component !== undefined ? component.selector : "";
     const attribute = component !== undefined ? component.attribute : "";
     const auxiliary = component !== undefined ? component.auxiliary : "";
-    const auxButton = "" === auxiliary ? ComponentsView.#EMPTY_IMAGE_ID : auxiliary;
+    let imageBtnTags = `value="${ComponentsView.#EMPTY_IMAGE_ID}"`;
+    if ("" !== auxiliary) {
+      imageBtnTags = this.#isUrl(auxiliary)
+        ? `value="${auxiliary.split("/").pop()}" url="${auxiliary}"`
+        : `value="${auxiliary}"`;
+    }
     return `<div class="component-card">
               <h3 class="card-title">image config</h3>
               <div class="component-content">
@@ -127,7 +132,7 @@ export class ComponentsView {
                     <label class="component-image-label">auxiliary:</label>
                     <div class="component-image-file-container">
                       <input type="file" name="auxiliary-file" class="component-image-auxiliary-file" accept="image/*"/>
-                      <input type="button" name="auxiliary-select" class="component-image-auxiliary-button" value="${auxButton}"/>
+                      <input type="button" name="auxiliary-select" class="component-image-auxiliary-button" ${imageBtnTags}/>
                       <input type="submit" name="auxiliary-upload" class="component-image-auxiliary-submit" value="upload"/>
                     </div>
                   </div>
