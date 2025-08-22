@@ -148,7 +148,10 @@ describe("created view POST routes", () => {
       jest.spyOn(fs, "existsSync").mockImplementation((_) => false);
       const response = await testAgent.post("/view/image").attach('auxiliary-file', testImagePath);
       expect(response.statusCode).toBe(200);
-      expect(response.body).toBe("Successfully uploaded image: testfile.png");
+      expect(response.body).toStrictEqual({
+        message: "Successfully uploaded image: testfile.png",
+        url: "http://localhost:undefined/test@mail.c/testfile.png",
+      });
       removeDataFile(testImagePath);
     });
   });
