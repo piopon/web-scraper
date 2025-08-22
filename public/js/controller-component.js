@@ -217,6 +217,9 @@ export class ComponentsController {
         const fileSelected = imgSelect.previousElementSibling.files.length > 0;
         const uploadEnable = !autoEnabled && fileSelected && imgSelect.value !== ComponentsController.#EMPTY_IMAGE_ID;
         this.#updateFieldEnableState([uploadButton], uploadEnable);
+        if (autoEnabled) {
+          imgSelect.value = ComponentsController.#EMPTY_IMAGE_ID;
+        }
       });
     } else {
       throw new Error(`Cannot update card auxiliary enable state`);
