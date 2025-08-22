@@ -1,6 +1,9 @@
 ### Project-specific ###
 user
+users
 users/*
+upload
+upload/*
 
 ### Node ###
 # Logs
