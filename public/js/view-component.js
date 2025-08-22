@@ -20,12 +20,16 @@ export class ComponentsView {
         };
       case ComponentsView.COMPONENT_IMAGE:
         // we need to check image auxiliary value to correctly determine if empty or not
-        const imageAux = componentHtml.querySelector("input.component-image-auxiliary-button").value;
+        const imageButton = componentHtml.querySelector("input.component-image-auxiliary-button");
+        let imagePath = imageButton.value;
+        if (imagePath !== "Select image" && !this.#isUrl(imagePath)) {
+          imagePath = imageButton.getAttribute("url");
+        }
         return {
           interval: "",
           selector: componentHtml.querySelector("input.component-image-selector").value,
           attribute: componentHtml.querySelector("input.component-image-attribute").value,
-          auxiliary: imageAux === "Select image" ? "" : imageAux,
+          auxiliary: imagePath === "Select image" ? "" : imagePath,
         };
       case ComponentsView.COMPONENT_PRICE:
         return {
