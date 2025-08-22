@@ -80,6 +80,7 @@ export class WebServer {
     server.set("view engine", "handlebars");
     server.set("views", "./public");
     server.use(express.static("./public"));
+    server.use(express.static("./upload"));
     // setup web server middleware
     server.use(ParamsParser.middleware);
     server.use(RequestLogger.middleware(this.#status));
