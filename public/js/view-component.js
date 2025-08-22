@@ -1,4 +1,5 @@
 export class ComponentsView {
+  static #EMPTY_IMAGE_ID = "Select image";
   static COMPONENT_TITLE = 0;
   static COMPONENT_IMAGE = 1;
   static COMPONENT_PRICE = 2;
@@ -22,14 +23,14 @@ export class ComponentsView {
         // we need to check image auxiliary value to correctly determine if empty or not
         const imageButton = componentHtml.querySelector("input.component-image-auxiliary-button");
         let imagePath = imageButton.value;
-        if (imagePath !== "Select image" && !this.#isUrl(imagePath)) {
+        if (imagePath !== ComponentsView.#EMPTY_IMAGE_ID && !this.#isUrl(imagePath)) {
           imagePath = imageButton.getAttribute("url");
         }
         return {
           interval: "",
           selector: componentHtml.querySelector("input.component-image-selector").value,
           attribute: componentHtml.querySelector("input.component-image-attribute").value,
-          auxiliary: imagePath === "Select image" ? "" : imagePath,
+          auxiliary: imagePath === ComponentsView.#EMPTY_IMAGE_ID ? "" : imagePath,
         };
       case ComponentsView.COMPONENT_PRICE:
         return {
@@ -109,7 +110,7 @@ export class ComponentsView {
     const selector = component !== undefined ? component.selector : "";
     const attribute = component !== undefined ? component.attribute : "";
     const auxiliary = component !== undefined ? component.auxiliary : "";
-    const auxButton = "" === auxiliary ? "Select image" : auxiliary;
+    const auxButton = "" === auxiliary ? ComponentsView.#EMPTY_IMAGE_ID : auxiliary;
     return `<div class="component-card">
               <h3 class="card-title">image config</h3>
               <div class="component-content">
