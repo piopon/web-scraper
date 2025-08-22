@@ -201,4 +201,13 @@ export class ComponentsView {
       });
     return result;
   }
+
+  static #isUrl(string) {
+    try {
+      new URL(url);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }
