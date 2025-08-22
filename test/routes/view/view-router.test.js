@@ -133,20 +133,20 @@ describe("created view POST routes", () => {
       expect(response.body).toBe("No file provided");
     });
     test("with a non-image file provided", async () => {
-      const testDataPath = path.join('.', 'testfile.json');
+      const testDataPath = path.join(".", "testfile.json");
       createDataFile(testDataPath);
-      const response = await testAgent.post("/view/image").attach('auxiliary-file', testDataPath);
+      const response = await testAgent.post("/view/image").attach("auxiliary-file", testDataPath);
       expect(response.statusCode).toBe(400);
       expect(response.body).toBe("Provided file is NOT an image file");
       removeDataFile(testDataPath);
     });
     test("with an image file provided", async () => {
-      const testImagePath = path.join('.', 'testfile.png');
+      const testImagePath = path.join(".", "testfile.png");
       createDataFile(testImagePath);
       jest.spyOn(path, "join").mockImplementation((_) => testImagePath);
       jest.spyOn(fs, "mkdirSync").mockImplementation((_) => {});
       jest.spyOn(fs, "existsSync").mockImplementation((_) => false);
-      const response = await testAgent.post("/view/image").attach('auxiliary-file', testImagePath);
+      const response = await testAgent.post("/view/image").attach("auxiliary-file", testImagePath);
       expect(response.statusCode).toBe(200);
       expect(response.body).toStrictEqual({
         message: "Successfully uploaded image: testfile.png",
@@ -161,13 +161,15 @@ function createMockAuthRouter() {
   const router = express.Router();
   const configId = 123;
   const userName = "test-name";
-  const userMail = "test@mail.c"
+  const userMail = "test@mail.c";
   // configure mocked login logic
   const options = { usernameField: "mail", passwordField: "pass" };
   const verify = (_user, _pass, done) => done(null, { id: 1, config: configId, name: userName });
   passport.use("mock-login", new Strategy(options, verify));
   passport.serializeUser((user, done) => done(null, user.id));
-  passport.deserializeUser((userId, done) => done(null, { id: userId, config: configId, name: userName, email: userMail }));
+  passport.deserializeUser((userId, done) =>
+    done(null, { id: userId, config: configId, name: userName, email: userMail })
+  );
   // use passport mock login in tests
   router.post("/login", passport.authenticate("mock-login"));
   return router;
