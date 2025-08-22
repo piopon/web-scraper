@@ -123,6 +123,10 @@ export class ViewRouter {
     return `all|${allLogLevels.map((level) => level.description).join("|")}`;
   }
 
+  /**
+   * Method used to retrieve scraper server URL address (URI + optional port)
+   * @returns string containing scraper address
+   */
   #getServerAddress() {
     if (!process.env.SERVER_ADDRESS) {
       return `http://localhost:${process.env.SERVER_PORT}`;
