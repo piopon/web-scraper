@@ -168,7 +168,8 @@ export class ComponentsController {
     const fileInput = event.target.previousElementSibling.previousElementSibling;
     ComponentService.addImage(fileInput)
       .then((data) => {
-        CommonController.showToastSuccess(data);
+        event.target.previousElementSibling.setAttribute("url", data.url);
+        CommonController.showToastSuccess(data.message);
       })
       .catch((error) => {
         CommonController.showToastError(error);
