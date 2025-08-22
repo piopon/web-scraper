@@ -207,9 +207,14 @@ export class ComponentsView {
     return result;
   }
 
-  static #isUrl(string) {
+  /**
+   * Method used to check if provided string is a valid URL address
+   * @param {String} input The string to be checked
+   * @returns true if input string is a valid URL address, false otherwise
+   */
+  static #isUrl(input) {
     try {
-      new URL(url);
+      new URL(input);
       return true;
     } catch (e) {
       return false;
