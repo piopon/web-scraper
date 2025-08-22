@@ -12,6 +12,7 @@ describe("getConfig", () => {
     expect(testConfig.jsonDataConfig.config).toMatch("config.json");
     expect(testConfig.jsonDataConfig.data).toMatch("data.json");
     expect(testConfig.usersDataConfig).not.toBe(null);
+    expect(testConfig.usersDataConfig.upload).toMatch("web-scraper" + path.sep + "upload");
     expect(testConfig.usersDataConfig.path).toMatch("web-scraper" + path.sep + "users");
     expect(testConfig.usersDataConfig.file).toMatch("data.json");
     expect(testConfig.minLogLevel).toBe(LogLevel.INFO);
