@@ -83,7 +83,7 @@ export class ViewRouter {
         fs.mkdirSync(newImageRoot, { recursive: true });
       }
       fileObject.mv(newImagePath);
-      response.status(200).json(`Successfully uploaded image: ${fileObject.name}`);
+      response.status(200).json({ url: `${process.env.SERVER_ADDRESS}${request.user.email}/${fileObject.name}`, message: `Successfully uploaded image: ${fileObject.name}` });
     });
   }
 
