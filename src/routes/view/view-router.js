@@ -8,14 +8,14 @@ import path from "path";
 import fs from "fs";
 
 export class ViewRouter {
-  #dataFilePath = undefined;
+  #uploadPath = undefined;
 
   /**
    * Creates a new view router for displaying scraper config settings
-   * @param {String} dataFile The path to the data file
+   * @param {String} uploadPath The path to the upload directory
    */
-  constructor(dataFile) {
-    this.#dataFilePath = dataFile;
+  constructor(uploadPath) {
+    this.#uploadPath = uploadPath;
   }
 
   /**
@@ -77,7 +77,7 @@ export class ViewRouter {
       if (!imageMimeRegex.test(fileObject.mimetype)) {
         return response.status(400).json("Provided file is NOT an image file");
       }
-      const newImagePath = path.join(this.#dataFilePath, request.user.email, "images", fileObject.name);
+      const newImagePath = path.join(this.#uploadPath, request.user.email, fileObject.name);
       const newImageRoot = path.dirname(newImagePath);
       if (!fs.existsSync(newImageRoot)) {
         fs.mkdirSync(newImageRoot, { recursive: true });

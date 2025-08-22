@@ -96,7 +96,7 @@ export class WebServer {
     server.locals.passport = this.#authConfig.configure();
     // setup web server routes
     const routes = new Map([
-      ["/", new ViewRouter(this.#setupConfig.usersDataConfig.path)],
+      ["/", new ViewRouter(this.#setupConfig.usersDataConfig.upload)],
       ["/auth", new AuthRouter(passport, this.#components)],
       ["/api/v1/data", new DataRouter(this.#setupConfig.usersDataConfig)],
       ["/api/v1/config", new ConfigRouter(this.#components)],
