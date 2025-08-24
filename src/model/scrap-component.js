@@ -83,24 +83,9 @@ export class ScrapComponent {
      */
     const schema = new mongoose.Schema({
       interval: String,
-      selector: {
-        type: String,
-        required: function () {
-          return typeof this.selector === "string" ? false : true;
-        },
-      },
-      attribute: {
-        type: String,
-        required: function () {
-          return typeof this.attribute === "string" ? false : true;
-        },
-      },
-      auxiliary: {
-        type: String,
-        required: function () {
-          return typeof this.auxiliary === "string" ? false : true;
-        },
-      },
+      selector: String,
+      attribute: String,
+      auxiliary: String,
     });
 
     /**

@@ -168,7 +168,8 @@ export class ComponentsController {
     const fileInput = event.target.previousElementSibling.previousElementSibling;
     ComponentService.addImage(fileInput)
       .then((data) => {
-        CommonController.showToastSuccess(data);
+        event.target.previousElementSibling.setAttribute("url", data.url);
+        CommonController.showToastSuccess(data.message);
       })
       .catch((error) => {
         CommonController.showToastError(error);
@@ -216,6 +217,9 @@ export class ComponentsController {
         const fileSelected = imgSelect.previousElementSibling.files.length > 0;
         const uploadEnable = !autoEnabled && fileSelected && imgSelect.value !== ComponentsController.#EMPTY_IMAGE_ID;
         this.#updateFieldEnableState([uploadButton], uploadEnable);
+        if (autoEnabled) {
+          imgSelect.value = ComponentsController.#EMPTY_IMAGE_ID;
+        }
       });
     } else {
       throw new Error(`Cannot update card auxiliary enable state`);

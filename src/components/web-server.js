@@ -80,6 +80,7 @@ export class WebServer {
     server.set("view engine", "handlebars");
     server.set("views", "./public");
     server.use(express.static("./public"));
+    server.use(express.static("./upload"));
     // setup web server middleware
     server.use(ParamsParser.middleware);
     server.use(RequestLogger.middleware(this.#status));
@@ -95,7 +96,7 @@ export class WebServer {
     server.locals.passport = this.#authConfig.configure();
     // setup web server routes
     const routes = new Map([
-      ["/", new ViewRouter(this.#setupConfig.usersDataConfig.path)],
+      ["/", new ViewRouter(this.#setupConfig.usersDataConfig.upload)],
       ["/auth", new AuthRouter(passport, this.#components)],
       ["/api/v1/data", new DataRouter(this.#setupConfig.usersDataConfig)],
       ["/api/v1/config", new ConfigRouter(this.#components)],

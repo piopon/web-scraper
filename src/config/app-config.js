@@ -31,6 +31,7 @@ export class AppConfig {
         data: "data.json",
       },
       usersDataConfig: {
+        upload: path.join(this.#rootDir, "upload"),
         path: path.join(this.#rootDir, "users"),
         file: "data.json",
       },

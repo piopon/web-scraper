@@ -157,8 +157,14 @@ export class ScrapObserver {
         },
       },
       container: String,
-      title: ScrapComponent.getDatabaseSchema(),
-      image: ScrapComponent.getDatabaseSchema(),
+      title: {
+        type: ScrapComponent.getDatabaseSchema(),
+        required: false,
+      },
+      image: {
+        type: ScrapComponent.getDatabaseSchema(),
+        required: false,
+      },
       price: {
         type: ScrapComponent.getDatabaseSchema(),
         required: true,

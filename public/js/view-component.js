@@ -1,4 +1,5 @@
 export class ComponentsView {
+  static #EMPTY_IMAGE_ID = "Select image";
   static COMPONENT_TITLE = 0;
   static COMPONENT_IMAGE = 1;
   static COMPONENT_PRICE = 2;
@@ -20,12 +21,16 @@ export class ComponentsView {
         };
       case ComponentsView.COMPONENT_IMAGE:
         // we need to check image auxiliary value to correctly determine if empty or not
-        const imageAux = componentHtml.querySelector("input.component-image-auxiliary-button").value;
+        const imageButton = componentHtml.querySelector("input.component-image-auxiliary-button");
+        let imagePath = imageButton.value;
+        if (imagePath !== ComponentsView.#EMPTY_IMAGE_ID && !this.#isUrl(imagePath)) {
+          imagePath = imageButton.getAttribute("url");
+        }
         return {
           interval: "",
           selector: componentHtml.querySelector("input.component-image-selector").value,
           attribute: componentHtml.querySelector("input.component-image-attribute").value,
-          auxiliary: imageAux === "Select image" ? "" : imageAux,
+          auxiliary: imagePath === ComponentsView.#EMPTY_IMAGE_ID ? "" : imagePath,
         };
       case ComponentsView.COMPONENT_PRICE:
         return {
@@ -105,7 +110,12 @@ export class ComponentsView {
     const selector = component !== undefined ? component.selector : "";
     const attribute = component !== undefined ? component.attribute : "";
     const auxiliary = component !== undefined ? component.auxiliary : "";
-    const auxButton = "" === auxiliary ? "Select image" : auxiliary;
+    let imageBtnTags = `value="${ComponentsView.#EMPTY_IMAGE_ID}"`;
+    if ("" !== auxiliary) {
+      imageBtnTags = this.#isUrl(auxiliary)
+        ? `value="${auxiliary.split("/").pop()}" url="${auxiliary}"`
+        : `value="${auxiliary}"`;
+    }
     return `<div class="component-card">
               <h3 class="card-title">image config</h3>
               <div class="component-content">
@@ -122,7 +132,7 @@ export class ComponentsView {
                     <label class="component-image-label">auxiliary:</label>
                     <div class="component-image-file-container">
                       <input type="file" name="auxiliary-file" class="component-image-auxiliary-file" accept="image/*"/>
-                      <input type="button" name="auxiliary-select" class="component-image-auxiliary-button" value="${auxButton}"/>
+                      <input type="button" name="auxiliary-select" class="component-image-auxiliary-button" ${imageBtnTags}/>
                       <input type="submit" name="auxiliary-upload" class="component-image-auxiliary-submit" value="upload"/>
                     </div>
                   </div>
@@ -200,5 +210,19 @@ export class ComponentsView {
         result += `<option value=${currency} ${selectedAttribute}>${currency}</option>`;
       });
     return result;
+  }
+
+  /**
+   * Method used to check if provided string is a valid URL address
+   * @param {String} input The string to be checked
+   * @returns true if input string is a valid URL address, false otherwise
+   */
+  static #isUrl(input) {
+    try {
+      new URL(input);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }
