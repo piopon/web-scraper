@@ -10,14 +10,16 @@ import bcrypt from "bcrypt";
 export class AuthRouter {
   #components = undefined;
   #passport = undefined;
+  #config = undefined;
 
   /**
    * Creates a new auth router for managing user authentication and authorization
    * @param {Object} passport The object controlling user sing-up and sing-in process
    */
-  constructor(passport, components) {
+  constructor(passport, components, config) {
     this.#components = components;
     this.#passport = passport;
+    this.#config = config;
   }
 
   /**
@@ -99,7 +101,7 @@ export class AuthRouter {
         }
         const signedData = { name: user.name, email: user.email, password: user.password };
         const token = jwt.sign(signedData, process.env.JWT_SECRET);
-        const challenge = bcrypt.hashSync(request.connection.remoteAddress, 10);
+        const challenge = bcrypt.hashSync(request.connection.remoteAddress, this.#config.hashSalt);
         return response.status(200).json({ token, challenge });
       })(request, response, next);
     });
