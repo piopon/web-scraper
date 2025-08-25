@@ -94,14 +94,20 @@ export class AuthRouter {
     router.post("/login", AccessChecker.canViewSessionUser, loginCallback);
     // remote JWT token retrieval
     router.post("/token", AccessChecker.canViewSessionUser, (request, response, next) => {
-      this.#passport.authenticate("local-login", { session: false }, (err, user, info) => {
+      this.#passport.authenticate("local-login", { session: false }, async (err, user, info) => {
         if (err) return next(err);
         if (!user) {
           return response.status(400).json({ error: info.message || "Token retrieval error" });
         }
         const signedData = { name: user.name, email: user.email, password: user.password };
         const token = jwt.sign(signedData, process.env.JWT_SECRET);
+        const dbUser = await ScrapUser.getDatabaseModel().findOne({ name: user.name, email: user.email });
+        if (!dbUser) {
+          return response.status(400).json({ error: "Token retrieval error" });
+        }
         const challenge = bcrypt.hashSync(request.connection.remoteAddress, this.#config.hashSalt);
+        dbUser.challenge = challenge;
+        await dbUser.save();
         return response.status(200).json({ token, challenge });
       })(request, response, next);
     });
