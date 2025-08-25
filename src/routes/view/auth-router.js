@@ -5,6 +5,7 @@ import { ScrapUser } from "../../model/scrap-user.js";
 
 import jwt from "jsonwebtoken";
 import express from "express";
+import bcrypt from "bcrypt";
 
 export class AuthRouter {
   #components = undefined;
@@ -98,7 +99,8 @@ export class AuthRouter {
         }
         const signedData = { name: user.name, email: user.email, password: user.password };
         const token = jwt.sign(signedData, process.env.JWT_SECRET);
-        return response.status(200).json({ token });
+        const challenge = bcrypt.hashSync(request.connection.remoteAddress, 10);
+        return response.status(200).json({ token, challenge });
       })(request, response, next);
     });
     // demo functionality login
