@@ -15,6 +15,8 @@ export class AuthRouter {
   /**
    * Creates a new auth router for managing user authentication and authorization
    * @param {Object} passport The object controlling user sing-up and sing-in process
+   * @param {Array} components An array with web components to be used in logout action
+   * @param {Object} config Authentication configuration for hashing secret values
    */
   constructor(passport, components, config) {
     this.#components = components;
