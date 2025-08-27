@@ -6,6 +6,7 @@ import { ScrapUser } from "../../model/scrap-user.js";
 import jwt from "jsonwebtoken";
 import express from "express";
 import bcrypt from "bcrypt";
+import { ChallengeUtils } from "../../utils/challenge-utils.js";
 
 export class AuthRouter {
   #components = undefined;
@@ -107,7 +108,10 @@ export class AuthRouter {
         if (!dbUser) {
           return response.status(400).json({ error: "Token retrieval error" });
         }
-        const challenge = bcrypt.hashSync(request.connection.remoteAddress, this.#config.hashSalt);
+        const challenge = bcrypt.hashSync(
+          ChallengeUtils.generate(user.name, request.connection.remoteAddress, user.email),
+          this.#config.hashSalt
+        );
         dbUser.challenge = challenge;
         await dbUser.save();
         return response.status(200).json({ token, challenge });
