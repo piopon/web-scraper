@@ -5,18 +5,24 @@ import { ScrapUser } from "../../model/scrap-user.js";
 
 import jwt from "jsonwebtoken";
 import express from "express";
+import bcrypt from "bcrypt";
+import { ChallengeUtils } from "../../utils/challenge-utils.js";
 
 export class AuthRouter {
   #components = undefined;
   #passport = undefined;
+  #config = undefined;
 
   /**
    * Creates a new auth router for managing user authentication and authorization
    * @param {Object} passport The object controlling user sing-up and sing-in process
+   * @param {Array} components An array with web components to be used in logout action
+   * @param {Object} config Authentication configuration for hashing secret values
    */
-  constructor(passport, components) {
+  constructor(passport, components, config) {
     this.#components = components;
     this.#passport = passport;
+    this.#config = config;
   }
 
   /**
@@ -91,14 +97,24 @@ export class AuthRouter {
     router.post("/login", AccessChecker.canViewSessionUser, loginCallback);
     // remote JWT token retrieval
     router.post("/token", AccessChecker.canViewSessionUser, (request, response, next) => {
-      this.#passport.authenticate("local-login", { session: false }, (err, user, info) => {
+      this.#passport.authenticate("local-login", { session: false }, async (err, user, info) => {
         if (err) return next(err);
         if (!user) {
           return response.status(400).json({ error: info.message || "Token retrieval error" });
         }
         const signedData = { name: user.name, email: user.email, password: user.password };
         const token = jwt.sign(signedData, process.env.JWT_SECRET);
-        return response.status(200).json({ token });
+        const dbUser = await ScrapUser.getDatabaseModel().findOne({ name: user.name, email: user.email });
+        if (!dbUser) {
+          return response.status(400).json({ error: "Token retrieval error" });
+        }
+        const challenge = bcrypt.hashSync(
+          ChallengeUtils.generate(user.name, request.connection.remoteAddress, user.email),
+          this.#config.hashSalt
+        );
+        dbUser.challenge = challenge;
+        await dbUser.save();
+        return response.status(200).json({ token, challenge });
       })(request, response, next);
     });
     // demo functionality login

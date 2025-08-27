@@ -37,6 +37,7 @@ export class ScrapUser {
         type: String,
         required: true,
       },
+      challenge: String,
       lastLogin: Date,
       hostUser: mongoose.Types.ObjectId,
       config: {
