@@ -26,12 +26,8 @@ export class AccessChecker {
       return next();
     }
     if (request.query.challenge) {
-      const user = await ScrapUser.getDatabaseModel().find({ challenge: request.query.challenge });
-      if (user.length !== 1) {
-        return response.status(400).json("Provided challenge phrase is not valid");
-      }
-      // we should perform login here so request contains user property...
-      return next();
+      const remoteOpts = { session: true, failureRedirect: "/auth/login" };
+      return request.app.locals.passport.authenticate("remote-login", remoteOpts)(request, response, next);
     }
     const jwtOpts = { session: false, failureRedirect: "/auth/login" };
     return request.app.locals.passport.authenticate("jwt", jwtOpts)(request, response, next);
