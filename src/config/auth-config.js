@@ -8,7 +8,7 @@ import { MongooseError } from "mongoose";
 import { Strategy as LocalStategy } from "passport-local";
 import { Strategy as RemoteStrategy } from "passport-custom";
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
-import { Strategy as GoogleStrategy } from "passport-google-oauth20"
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 
 export class AuthConfig {
   static #EXTERNAL_PROVIDER_PASS = "external";
@@ -209,7 +209,7 @@ export class AuthConfig {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: "/auth/google/callback",
-      passReqToCallback: true
+      passReqToCallback: true,
     };
     const verify = async (request, accessToken, refreshToken, profile, done) => {
       const googleEmail = profile.emails[0].value;
@@ -227,7 +227,7 @@ export class AuthConfig {
       // user at this point has no config - we must create and link it
       const googleConfig = await ScrapConfig.getDatabaseModel().create({ user: googleUser._id });
       googleUser.config = googleConfig._id;
-      await googleUser.save()
+      await googleUser.save();
       return done(null, googleUser);
     };
     this.#passport.use("google", new GoogleStrategy(options, verify));
