@@ -6,6 +6,7 @@ import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 import { MongooseError } from "mongoose";
 import { Strategy as LocalStategy } from "passport-local";
+import { Strategy as RemoteStrategy } from "passport-custom";
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20"
 
@@ -35,6 +36,7 @@ export class AuthConfig {
     // configure authenticate logic for specific endpoints
     this.#configJwtStategy();
     this.#configLoginStategy();
+    this.#configRemoteStategy();
     this.#configRegisterStategy();
     // configure external auth providers
     this.#configGoogleStategy();
@@ -118,6 +120,26 @@ export class AuthConfig {
       }
     };
     this.#passport.use("local-login", new LocalStategy(options, verify));
+  }
+
+  #configRemoteStategy() {
+    const verify = async (request, done) => {
+      try {
+        // check if there is an user with provided email
+        const user = await ScrapUser.getDatabaseModel().find({ challenge: request.query.challenge });
+        if (user.length !== 1) {
+          // did not find user with provided challenge - incorrect login data
+          return done(null, false, { message: "Incorrect challenge data. Please try again." });
+        }
+        // updated user login date
+        user[0].lastLogin = Date.now();
+        await user[0].save();
+        return done(null, user[0]);
+      } catch (error) {
+        return done(null, false, { message: "ERROR!!!" });
+      }
+    };
+    this.#passport.use("remote-login", new RemoteStrategy(verify));
   }
 
   /**
