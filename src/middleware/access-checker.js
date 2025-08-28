@@ -1,3 +1,5 @@
+import { ScrapUser } from "../model/scrap-user.js";
+
 export class AccessChecker {
   /**
    * Method used to check if the current request is eligible to access content data
@@ -24,7 +26,11 @@ export class AccessChecker {
       return next();
     }
     if (request.query.challenge) {
-      // perform remote login when challenge is present so request has user property...
+      const user = await ScrapUser.getDatabaseModel().find({ challenge: request.query.challenge });
+      if (user.length !== 1) {
+        return response.status(400).json("Provided challenge phrase is not valid");
+      }
+      // we should perform login here so request contains user property...
       return next();
     }
     const jwtOpts = { session: false, failureRedirect: "/auth/login" };
