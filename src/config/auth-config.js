@@ -122,6 +122,9 @@ export class AuthConfig {
     this.#passport.use("local-login", new LocalStategy(options, verify));
   }
 
+  /**
+   * Method used to configurate user remote login strategy
+   */
   #configRemoteStategy() {
     const verify = async (request, done) => {
       try {
