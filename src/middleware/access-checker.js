@@ -19,8 +19,12 @@ export class AccessChecker {
    * @param {Object} response The outputted response object
    * @param {Function} next The next middleware function in the cycle
    */
-  static canViewContent(request, response, next) {
+  static async canViewContent(request, response, next) {
     if (request.isAuthenticated()) {
+      return next();
+    }
+    if (request.query.challenge) {
+      // perform remote login when challenge is present so request has user property...
       return next();
     }
     const jwtOpts = { session: false, failureRedirect: "/auth/login" };
