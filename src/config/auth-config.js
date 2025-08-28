@@ -136,7 +136,19 @@ export class AuthConfig {
         await user[0].save();
         return done(null, user[0]);
       } catch (error) {
-        return done(null, false, { message: "ERROR!!!" });
+        let message = error.message;
+        if (error instanceof MongooseError) {
+          if (error.name === "MongooseError" && message.includes(".find()")) {
+            message = "Database connection has timed out. Check connection status and please try again.";
+          } else if (error.name === "ValidationError") {
+            const invalidPath = Object.keys(error.errors);
+            message = error.errors[invalidPath[0]].properties.message;
+          }
+        }
+        if (message.includes("ECONNREFUSED")) {
+          message = "Database connection has been broken. Check connection status and please try again.";
+        }
+        return done(null, false, { message: message });
       }
     };
     this.#passport.use("remote-login", new RemoteStrategy(verify));
