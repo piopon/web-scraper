@@ -5,7 +5,7 @@ import { ScrapUser } from "../model/scrap-user.js";
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 import { MongooseError } from "mongoose";
-import { Strategy as LocalStategy } from "passport-local";
+import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as RemoteStrategy } from "passport-custom";
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
@@ -119,7 +119,7 @@ export class AuthConfig {
         return done(null, false, { message: message });
       }
     };
-    this.#passport.use("local-login", new LocalStategy(options, verify));
+    this.#passport.use("local-login", new LocalStrategy(options, verify));
   }
 
   /**
@@ -198,7 +198,7 @@ export class AuthConfig {
         return done(null, false, { message: message });
       }
     };
-    this.#passport.use("local-register", new LocalStategy(options, verify));
+    this.#passport.use("local-register", new LocalStrategy(options, verify));
   }
 
   /**
@@ -298,7 +298,7 @@ export class AuthConfig {
         return done(null, false, { message: message });
       }
     };
-    this.#passport.use("local-demo", new LocalStategy(options, verify));
+    this.#passport.use("local-demo", new LocalStrategy(options, verify));
   }
 
   /**
