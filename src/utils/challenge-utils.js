@@ -18,7 +18,7 @@ export class ChallengeUtils {
    * @returns true if reference phrase is equal to current one, false otherwise
    */
   static compare(referenceData, currentData) {
-    return referenceData === generate(currentData);
+    return referenceData === ChallengeUtils.generate(currentData);
   }
 
   /**
