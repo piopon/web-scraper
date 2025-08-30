@@ -133,7 +133,7 @@ export class AuthConfig {
         const user = await ScrapUser.getDatabaseModel().find({ challenge: request.query.challenge });
         if (user.length !== 1) {
           // did not find user with provided challenge - incorrect login data
-          return done(null, false, { message: "Incorrect challenge data. Please try again." });
+          return done(null, false, { message: "Unknown challenge data. Please try again." });
         }
         // check provided challenge with current data
         const dataCorrect = ChallengeUtils.compare(request.query.challenge, {
@@ -143,7 +143,7 @@ export class AuthConfig {
         });
         if (!dataCorrect) {
           // provided challenge does not match reference one - incorrect login data
-          return done(null, false, { message: "Incorrect challenge data. Please try again." });
+          return done(null, false, { message: "Invalid challenge data. Please try again." });
         }
         // updated user login date
         user[0].lastLogin = Date.now();
