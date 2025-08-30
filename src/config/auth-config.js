@@ -136,12 +136,12 @@ export class AuthConfig {
           return done(null, false, { message: "Unknown challenge data. Please try again." });
         }
         // check provided challenge with current data
-        const dataCorrect = ChallengeUtils.compare(request.query.challenge, {
+        const challengeValid = ChallengeUtils.compare(request.query.challenge, {
           name: user[0].name,
           mail: user[0].email,
           address: request.connection.remoteAddress,
         });
-        if (!dataCorrect) {
+        if (!challengeValid) {
           // provided challenge does not match reference one - incorrect login data
           return done(null, false, { message: "Invalid challenge data. Please try again." });
         }
