@@ -9,6 +9,7 @@ import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as RemoteStrategy } from "passport-custom";
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import { ChallengeUtils } from "../utils/challenge-utils.js";
 
 export class AuthConfig {
   static #EXTERNAL_PROVIDER_PASS = "external";
@@ -132,6 +133,16 @@ export class AuthConfig {
         const user = await ScrapUser.getDatabaseModel().find({ challenge: request.query.challenge });
         if (user.length !== 1) {
           // did not find user with provided challenge - incorrect login data
+          return done(null, false, { message: "Incorrect challenge data. Please try again." });
+        }
+        // check provided challenge with current data
+        const dataCorrect = ChallengeUtils.compare(request.query.challenge, {
+          name: user[0].name,
+          mail: user[0].email,
+          address: request.connection.remoteAddress,
+        });
+        if (!dataCorrect) {
+          // provided challenge does not match reference one - incorrect login data
           return done(null, false, { message: "Incorrect challenge data. Please try again." });
         }
         // updated user login date
