@@ -11,6 +11,10 @@ export class ChallengeUtils {
     return process.env.CHALLENGE_PREFIX + shuffled;
   }
 
+  static compare(referenceData, currentData) {
+    return referenceData === generate(currentData);
+  }
+
   /**
    * Method used to shuffle input string
    * @param {String} input The string which contents we want to shuffle
