@@ -11,6 +11,12 @@ export class ChallengeUtils {
     return process.env.CHALLENGE_PREFIX + shuffled;
   }
 
+  /**
+   * Method used to compare reference phrase with the one generated with current data
+   * @param {String} referenceData The reference challenge phrase
+   * @param {Object} currentData The data to generate current challenge phrase
+   * @returns true if reference phrase is equal to current one, false otherwise
+   */
   static compare(referenceData, currentData) {
     return referenceData === generate(currentData);
   }
