@@ -1,11 +1,13 @@
 export class ChallengeUtils {
   /**
    * Method used to generate challenge phrase
-   * @param {Array} inputs Array of inputs which form challenge
+   * @param {Object} connectionData Object which values will form the challenge phrase
    * @returns String containing generated challenge phrase
    */
-  static generate(...inputs) {
-    const shuffled = inputs.map((input) => this.#shuffle(input)).join(process.env.CHALLENGE_JOIN);
+  static generate(connectionData) {
+    const shuffled = Object.values(connectionData)
+      .map((input) => this.#shuffle(input))
+      .join(process.env.CHALLENGE_JOIN);
     return process.env.CHALLENGE_PREFIX + shuffled;
   }
 
