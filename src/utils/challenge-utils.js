@@ -5,7 +5,7 @@ export class ChallengeUtils {
    * @returns String containing generated challenge phrase
    */
   static generate(connectionData) {
-    const shuffled = Object.values(connectionData)
+    const shuffled = [connectionData["name"], connectionData["mail"], connectionData["address"]]
       .map((input) => this.#shuffle(input))
       .join(process.env.CHALLENGE_JOIN);
     return process.env.CHALLENGE_PREFIX + shuffled;
