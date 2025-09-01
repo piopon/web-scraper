@@ -147,6 +147,11 @@ export class AuthConfig {
           // provided challenge does not match the reference one - incorrect login data
           return done(null, false, { message: "Invalid challenge data. Please try again." });
         }
+        // check challenge end-of-life date
+        if (Date.now() > ChallengeUtils.parseDeadline(user[0].challenge)) {
+          // provided challenge is out-of-date - incorrect login data
+          return done(null, false, { message: "Outdated challenge data. Please refresh it and try again." });
+        }
         // updated user login date
         user[0].lastLogin = Date.now();
         await user[0].save();
