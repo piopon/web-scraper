@@ -1,4 +1,8 @@
 export class RegexUtils {
+  static escape(input) {
+    return input.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
   /**
    * Method used to parse the input string and receive price values
    * @param {String} string The input string from which we want to retrieve prices

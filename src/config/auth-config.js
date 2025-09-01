@@ -10,6 +10,7 @@ import { Strategy as RemoteStrategy } from "passport-custom";
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { ChallengeUtils } from "../utils/challenge-utils.js";
+import { RegexUtils } from "../utils/regex-utils.js";
 
 export class AuthConfig {
   static #EXTERNAL_PROVIDER_PASS = "external";
@@ -130,9 +131,8 @@ export class AuthConfig {
     const verify = async (request, done) => {
       try {
         // check if there is an user with provided email
-        const escape = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
         const user = await ScrapUser.getDatabaseModel().find({
-          challenge: { $regex: new RegExp("^" + escape(request.query.challenge)) },
+          challenge: { $regex: new RegExp("^" + RegexUtils.escape(request.query.challenge)) },
         });
         if (user.length !== 1) {
           // did not find user with provided challenge - incorrect login data
