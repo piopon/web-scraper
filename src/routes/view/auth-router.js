@@ -108,11 +108,9 @@ export class AuthRouter {
         if (!dbUser) {
           return response.status(400).json({ error: "Token retrieval error" });
         }
-        const challenge = bcrypt.hashSync(
-          ChallengeUtils.generate(user.name, request.connection.remoteAddress, user.email),
-          this.#config.hashSalt
-        );
-        dbUser.challenge = challenge;
+        const challengeData = { name: user.name, mail: user.email, address: request.connection.remoteAddress };
+        const challenge = bcrypt.hashSync(ChallengeUtils.generate(challengeData), this.#config.hashSalt);
+        dbUser.challenge = challenge + ChallengeUtils.serializeDeadline();
         await dbUser.save();
         return response.status(200).json({ token, challenge });
       })(request, response, next);
@@ -126,10 +124,15 @@ export class AuthRouter {
     router.post("/demo", AccessChecker.canViewSessionUser, demoCallback);
     // user content endpoints (log-out)
     const logoutCallback = (request, response, next) => {
+      const userWithChallenge = request.user.challenge ? request.user : undefined;
       const temporaryUser = request.user.hostUser ? request.user : undefined;
       request.logout(async (err) => {
         if (err) return next(err);
         response.redirect("/auth/login");
+        if (userWithChallenge) {
+          userWithChallenge.challenge = undefined;
+          await userWithChallenge.save();
+        }
         if (temporaryUser) {
           await ScrapUser.getDatabaseModel().deleteOne({ email: temporaryUser.email });
           await ScrapConfig.getDatabaseModel().deleteOne({ user: temporaryUser._id });

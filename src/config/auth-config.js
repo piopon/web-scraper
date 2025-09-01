@@ -5,9 +5,12 @@ import { ScrapUser } from "../model/scrap-user.js";
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 import { MongooseError } from "mongoose";
-import { Strategy as LocalStategy } from "passport-local";
+import { Strategy as LocalStrategy } from "passport-local";
+import { Strategy as RemoteStrategy } from "passport-custom";
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
-import { Strategy as GoogleStrategy } from "passport-google-oauth20"
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import { ChallengeUtils } from "../utils/challenge-utils.js";
+import { RegexUtils } from "../utils/regex-utils.js";
 
 export class AuthConfig {
   static #EXTERNAL_PROVIDER_PASS = "external";
@@ -35,6 +38,7 @@ export class AuthConfig {
     // configure authenticate logic for specific endpoints
     this.#configJwtStategy();
     this.#configLoginStategy();
+    this.#configRemoteStategy();
     this.#configRegisterStategy();
     // configure external auth providers
     this.#configGoogleStategy();
@@ -117,7 +121,59 @@ export class AuthConfig {
         return done(null, false, { message: message });
       }
     };
-    this.#passport.use("local-login", new LocalStategy(options, verify));
+    this.#passport.use("local-login", new LocalStrategy(options, verify));
+  }
+
+  /**
+   * Method used to configurate user remote login strategy
+   */
+  #configRemoteStategy() {
+    const verify = async (request, done) => {
+      try {
+        // check if there is an user with provided email
+        const user = await ScrapUser.getDatabaseModel().find({
+          challenge: { $regex: new RegExp("^" + RegexUtils.escape(request.query.challenge)) },
+        });
+        if (user.length !== 1) {
+          // did not find user with provided challenge - incorrect login data
+          return done(null, false, { message: "Unknown challenge data. Please try again." });
+        }
+        // generate challenge phrase with current user and connectiondata
+        const currentChallenge = ChallengeUtils.generate({
+          name: user[0].name,
+          mail: user[0].email,
+          address: request.connection.remoteAddress,
+        });
+        if (!(await bcrypt.compare(currentChallenge, request.query.challenge))) {
+          // provided challenge does not match the reference one - incorrect login data
+          return done(null, false, { message: "Invalid challenge data. Please try again." });
+        }
+        // check challenge end-of-life date
+        if (Date.now() > ChallengeUtils.parseDeadline(user[0].challenge)) {
+          // provided challenge is out-of-date - incorrect login data
+          return done(null, false, { message: "Outdated challenge data. Please refresh it and try again." });
+        }
+        // updated user login date
+        user[0].lastLogin = Date.now();
+        await user[0].save();
+        return done(null, user[0]);
+      } catch (error) {
+        let message = error.message;
+        if (error instanceof MongooseError) {
+          if (error.name === "MongooseError" && message.includes(".find()")) {
+            message = "Database connection has timed out. Check connection status and please try again.";
+          } else if (error.name === "ValidationError") {
+            const invalidPath = Object.keys(error.errors);
+            message = error.errors[invalidPath[0]].properties.message;
+          }
+        }
+        if (message.includes("ECONNREFUSED")) {
+          message = "Database connection has been broken. Check connection status and please try again.";
+        }
+        return done(null, false, { message: message });
+      }
+    };
+    this.#passport.use("remote-login", new RemoteStrategy(verify));
   }
 
   /**
@@ -161,7 +217,7 @@ export class AuthConfig {
         return done(null, false, { message: message });
       }
     };
-    this.#passport.use("local-register", new LocalStategy(options, verify));
+    this.#passport.use("local-register", new LocalStrategy(options, verify));
   }
 
   /**
@@ -175,7 +231,7 @@ export class AuthConfig {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: "/auth/google/callback",
-      passReqToCallback: true
+      passReqToCallback: true,
     };
     const verify = async (request, accessToken, refreshToken, profile, done) => {
       const googleEmail = profile.emails[0].value;
@@ -193,7 +249,7 @@ export class AuthConfig {
       // user at this point has no config - we must create and link it
       const googleConfig = await ScrapConfig.getDatabaseModel().create({ user: googleUser._id });
       googleUser.config = googleConfig._id;
-      await googleUser.save()
+      await googleUser.save();
       return done(null, googleUser);
     };
     this.#passport.use("google", new GoogleStrategy(options, verify));
@@ -261,7 +317,7 @@ export class AuthConfig {
         return done(null, false, { message: message });
       }
     };
-    this.#passport.use("local-demo", new LocalStategy(options, verify));
+    this.#passport.use("local-demo", new LocalStrategy(options, verify));
   }
 
   /**

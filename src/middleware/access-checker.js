@@ -1,3 +1,5 @@
+import { ScrapUser } from "../model/scrap-user.js";
+
 export class AccessChecker {
   /**
    * Method used to check if the current request is eligible to access content data
@@ -19,9 +21,13 @@ export class AccessChecker {
    * @param {Object} response The outputted response object
    * @param {Function} next The next middleware function in the cycle
    */
-  static canViewContent(request, response, next) {
+  static async canViewContent(request, response, next) {
     if (request.isAuthenticated()) {
       return next();
+    }
+    if (request.query.challenge) {
+      const remoteOpts = { session: true, failureRedirect: "/auth/login", failureFlash: true };
+      return request.app.locals.passport.authenticate("remote-login", remoteOpts)(request, response, next);
     }
     const jwtOpts = { session: false, failureRedirect: "/auth/login" };
     return request.app.locals.passport.authenticate("jwt", jwtOpts)(request, response, next);

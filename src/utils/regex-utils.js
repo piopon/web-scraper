@@ -1,5 +1,14 @@
 export class RegexUtils {
   /**
+   * Method used to escape input string characters to be useful for regex
+   * @param {String} input The string which chars we want to escape
+   * @returns string with escaped characters
+   */
+  static escape(input) {
+    return input.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  /**
    * Method used to parse the input string and receive price values
    * @param {String} string The input string from which we want to retrieve prices
    * @returns an array of strings containig price values, or empty array if none found
