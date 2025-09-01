@@ -27,6 +27,9 @@ export class ChallengeUtils {
    */
   static parseDeadline(challengeString) {
     const challengeParts = challengeString.split(process.env.CHALLENGE_EOL_SEPARATOR);
+    if (challengeParts.length !== 2) {
+      throw Error("Provided string does not contain challenge");
+    }
     return parseInt(challengeParts[1]);
   }
 
