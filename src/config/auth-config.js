@@ -130,7 +130,9 @@ export class AuthConfig {
     const verify = async (request, done) => {
       try {
         // check if there is an user with provided email
-        const user = await ScrapUser.getDatabaseModel().find({ challenge: request.query.challenge });
+        const user = await ScrapUser.getDatabaseModel().find({
+          challenge: { $regex: new RegExp("^" + request.query.challenge) },
+        });
         if (user.length !== 1) {
           // did not find user with provided challenge - incorrect login data
           return done(null, false, { message: "Unknown challenge data. Please try again." });
