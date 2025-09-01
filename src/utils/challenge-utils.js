@@ -12,7 +12,8 @@ export class ChallengeUtils {
   }
 
   static serializeDeadline() {
-    return process.env.CHALLENGE_EOL_SEPARATOR + Date.now() + process.env.CHALLENGE_EOL_MINS * 60 * 1000;
+    const deadline = Date.now() + process.env.CHALLENGE_EOL_MINS * 60 * 1000;
+    return process.env.CHALLENGE_EOL_SEPARATOR + deadline;
   }
 
   static parseDeadline(challengeString) {
