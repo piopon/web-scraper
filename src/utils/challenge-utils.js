@@ -11,11 +11,20 @@ export class ChallengeUtils {
     return process.env.CHALLENGE_PREFIX + shuffled;
   }
 
+  /**
+   * Method used to serialize challenge deadline
+   * @returns deadline serialized into string
+   */
   static serializeDeadline() {
     const deadline = Date.now() + process.env.CHALLENGE_EOL_MINS * 60 * 1000;
     return process.env.CHALLENGE_EOL_SEPARATOR + deadline;
   }
 
+  /**
+   * Method used to parse deadline from provided challenge string
+   * @param {String} challengeString The input string containing the deadline
+   * @returns challenge deadline value
+   */
   static parseDeadline(challengeString) {
     const challengeParts = challengeString.split(process.env.CHALLENGE_EOL_SEPARATOR);
     return parseInt(challengeParts[1]);
