@@ -26,7 +26,7 @@ export class AccessChecker {
       return next();
     }
     if (request.query.challenge) {
-      const remoteOpts = { session: true, failureRedirect: "/auth/login" };
+      const remoteOpts = { session: true, failureRedirect: "/auth/login", failureFlash: true };
       return request.app.locals.passport.authenticate("remote-login", remoteOpts)(request, response, next);
     }
     const jwtOpts = { session: false, failureRedirect: "/auth/login" };
