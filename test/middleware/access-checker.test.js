@@ -80,6 +80,9 @@ describe("canViewContent() method", () => {
           },
         },
       },
+      query: {
+        challenge: "mocked-challenge",
+      },
     };
     const mockedRes = { redirect: (input) => (invokeState.redirect = input) };
     const mockedNext = () => (invokeState.next = true);
@@ -102,6 +105,9 @@ describe("canViewContent() method", () => {
             },
           },
         },
+      },
+      query: {
+        challenge: "mocked-challenge",
       },
     };
     const mockedRes = { redirect: (input) => (invokeState.redirect = input) };
