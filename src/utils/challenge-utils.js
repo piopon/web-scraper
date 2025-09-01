@@ -11,6 +11,15 @@ export class ChallengeUtils {
     return process.env.CHALLENGE_PREFIX + shuffled;
   }
 
+  static serializeDeadline() {
+    return process.env.CHALLENGE_EOL_SEPARATOR + Date.now() + process.env.CHALLENGE_EOL_MINS * 60 * 1000;
+  }
+
+  static parseDeadline(challengeString) {
+    const challengeParts = challengeString.split(process.env.CHALLENGE_EOL_SEPARATOR);
+    return parseInt(challengeParts[1]);
+  }
+
   /**
    * Method used to shuffle input string
    * @param {String} input The string which contents we want to shuffle
