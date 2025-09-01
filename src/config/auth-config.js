@@ -135,14 +135,14 @@ export class AuthConfig {
           // did not find user with provided challenge - incorrect login data
           return done(null, false, { message: "Unknown challenge data. Please try again." });
         }
-        // check provided challenge with current data
-        const challengeValid = ChallengeUtils.compare(request.query.challenge, {
+        // generate challenge phrase with current user and connectiondata
+        const currentChallenge = ChallengeUtils.generate({
           name: user[0].name,
           mail: user[0].email,
           address: request.connection.remoteAddress,
         });
-        if (!challengeValid) {
-          // provided challenge does not match reference one - incorrect login data
+        if (!(await bcrypt.compare(currentChallenge, request.query.challenge))) {
+          // provided challenge does not match the reference one - incorrect login data
           return done(null, false, { message: "Invalid challenge data. Please try again." });
         }
         // updated user login date

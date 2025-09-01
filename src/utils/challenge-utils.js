@@ -12,16 +12,6 @@ export class ChallengeUtils {
   }
 
   /**
-   * Method used to compare reference phrase with the one generated with current data
-   * @param {String} referenceData The reference challenge phrase
-   * @param {Object} currentData The data to generate current challenge phrase
-   * @returns true if reference phrase is equal to current one, false otherwise
-   */
-  static compare(referenceData, currentData) {
-    return referenceData === ChallengeUtils.generate(currentData);
-  }
-
-  /**
    * Method used to shuffle input string
    * @param {String} input The string which contents we want to shuffle
    * @returns shuffled string
