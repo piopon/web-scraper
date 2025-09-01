@@ -108,11 +108,9 @@ export class AuthRouter {
         if (!dbUser) {
           return response.status(400).json({ error: "Token retrieval error" });
         }
-        const challenge = bcrypt.hashSync(
-          ChallengeUtils.generate({ name: user.name, mail: user.email, address: request.connection.remoteAddress }),
-          this.#config.hashSalt
-        );
-        dbUser.challenge = challenge;
+        const challengeData = { name: user.name, mail: user.email, address: request.connection.remoteAddress };
+        const challenge = bcrypt.hashSync(ChallengeUtils.generate(challengeData), this.#config.hashSalt);
+        dbUser.challenge = challenge + ChallengeUtils.serializeDeadline();
         await dbUser.save();
         return response.status(200).json({ token, challenge });
       })(request, response, next);
