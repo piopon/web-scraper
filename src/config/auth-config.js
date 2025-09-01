@@ -130,8 +130,9 @@ export class AuthConfig {
     const verify = async (request, done) => {
       try {
         // check if there is an user with provided email
+        const escape = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
         const user = await ScrapUser.getDatabaseModel().find({
-          challenge: { $regex: new RegExp("^" + request.query.challenge) },
+          challenge: { $regex: new RegExp("^" + escape(request.query.challenge)) },
         });
         if (user.length !== 1) {
           // did not find user with provided challenge - incorrect login data
