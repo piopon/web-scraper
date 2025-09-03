@@ -22,7 +22,7 @@ export class ScrapObserver {
     this.container = ModelUtils.getValueOrDefault(input.container, "");
     this.title = new ScrapComponent(input.title);
     this.image = new ScrapComponent(input.image);
-    this.price = new ScrapComponent(input.price);
+    this.data = new ScrapComponent(input.data);
   }
 
   /**
@@ -47,14 +47,14 @@ export class ScrapObserver {
     if (!this.path) {
       checkResult.errors.push(`Missing required observer path`);
     }
-    if (!this.price.selector) {
-      checkResult.errors.push(`Missing required 'price.selector' in observer ${this.path}`);
+    if (!this.data.selector) {
+      checkResult.errors.push(`Missing required 'data.selector' in observer ${this.path}`);
     }
-    if (!this.price.attribute) {
-      checkResult.errors.push(`Missing required 'price.attribute' in observer ${this.path}`);
+    if (!this.data.attribute) {
+      checkResult.errors.push(`Missing required 'data.attribute' in observer ${this.path}`);
     }
-    if (!this.price.auxiliary) {
-      checkResult.errors.push(`Missing required 'price.auxiliary' in observer ${this.path}`);
+    if (!this.data.auxiliary) {
+      checkResult.errors.push(`Missing required 'data.auxiliary' in observer ${this.path}`);
     }
     if ((!this.title.selector || !this.title.attribute) && !this.title.auxiliary) {
       checkResult.warnings.push(`Empty title 'selector'/'attribute' and 'auxiliary' in observer ${this.path}`);
@@ -81,9 +81,9 @@ export class ScrapObserver {
         container: { type: "string" },
         title: ScrapComponent.getRequestBodySchema(),
         image: ScrapComponent.getRequestBodySchema(),
-        price: ScrapComponent.getRequestBodySchema(),
+        data: ScrapComponent.getRequestBodySchema(),
       },
-      required: ["name", "path", "price"],
+      required: ["name", "path", "data"],
     };
   }
 
@@ -165,7 +165,7 @@ export class ScrapObserver {
         type: ScrapComponent.getDatabaseSchema(),
         required: false,
       },
-      price: {
+      data: {
         type: ScrapComponent.getDatabaseSchema(),
         required: true,
       },
@@ -194,7 +194,7 @@ export class ScrapObserver {
       this.container = otherObserver.container;
       this.title.copyValues(otherObserver.title);
       this.image.copyValues(otherObserver.image);
-      this.price.copyValues(otherObserver.price);
+      this.data.copyValues(otherObserver.data);
     };
 
     return schema;
