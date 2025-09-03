@@ -93,9 +93,11 @@ async function initializeJWT() {
  */
 function storeInitialBackendValues() {
   const dataAuxComponent = document.querySelector("select.component-data-auxiliary");
-  const extrasOptions = dataAuxComponent.querySelectorAll("option:not([disabled])");
-  const extrasValues = Array.from(extrasOptions).map((element) => element.value);
-  sessionStorage.setItem("extras", extrasValues);
+  if (dataAuxComponent) {
+    const extrasOptions = dataAuxComponent.querySelectorAll("option:not([disabled])");
+    const extrasValues = Array.from(extrasOptions).map((element) => element.value);
+    sessionStorage.setItem("extras", extrasValues);
+  }
 }
 
 /**
