@@ -93,9 +93,9 @@ async function initializeJWT() {
  */
 function storeInitialBackendValues() {
   const dataAuxComponent = document.querySelector("select.component-data-auxiliary");
-  const currenciesOptions = dataAuxComponent.querySelectorAll("option:not([disabled])");
-  const currenciesValues = Array.from(currenciesOptions).map((element) => element.value);
-  sessionStorage.setItem("currencies", currenciesValues);
+  const extrasOptions = dataAuxComponent.querySelectorAll("option:not([disabled])");
+  const extrasValues = Array.from(extrasOptions).map((element) => element.value);
+  sessionStorage.setItem("extras", extrasValues);
 }
 
 /**

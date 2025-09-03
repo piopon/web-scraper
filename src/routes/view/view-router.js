@@ -44,7 +44,7 @@ export class ViewRouter {
         monitor: this.#getMonitorAddress(),
         content: scrapConfig.toJSON(),
         categories: this.#getSupportedCategories(),
-        currencies: this.#getSupportedCurrencies(),
+        extras: this.#getSupportedCurrencies(),
       });
     });
     router.get("/status", AccessChecker.canViewContent, (request, response) =>

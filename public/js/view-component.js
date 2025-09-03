@@ -203,11 +203,11 @@ export class ComponentsView {
   static #getCurrenciesOptionsHtml(selectedCurrency) {
     let result = `<option value="" disabled hidden ${selectedCurrency === "" ? "selected" : ""}>Select value</option>`;
     sessionStorage
-      .getItem("currencies")
+      .getItem("extras")
       .split(",")
-      .forEach((currency) => {
-        const selectedAttribute = selectedCurrency === currency ? "selected" : "";
-        result += `<option value=${currency} ${selectedAttribute}>${currency}</option>`;
+      .forEach((extra) => {
+        const selectedAttribute = selectedCurrency === extra ? "selected" : "";
+        result += `<option value=${extra} ${selectedAttribute}>${extra}</option>`;
       });
     return result;
   }
