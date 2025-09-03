@@ -4,7 +4,7 @@
     <div class="component-fields">
       {{> widget type="text" parent=(append "component-" name) label="selector" value=component.selector }}
       {{> widget type="text" parent=(append "component-" name) label="attribute" value=component.attribute }}
-      {{#if (eq name "data")}}
+      {{#if (and (eq name "data") (gt (length @root.extras) 0))}}
         {{> widget type="combo" parent=(append "component-" name) label="auxiliary" options=@root.extras value=component.auxiliary }}
       {{else if (eq name "image")}}
         {{> widget type="file" parent=(append "component-" name) label="auxiliary" value=component.auxiliary }}
