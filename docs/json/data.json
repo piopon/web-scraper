@@ -7,14 +7,14 @@
         "status": "OK",
         "name": "McDonald's Corporation",
         "icon": "mcdonalds.svg",
-        "price": "292.68",
+        "data": "292.68",
         "currency": "USD"
       },
       {
         "status": "OK",
         "name": "NVIDIA",
         "icon": "nvidia.svg",
-        "price": "134.70",
+        "data": "134.70",
         "currency": "USD"
       }
     ]
@@ -27,7 +27,7 @@
         "status": "OK",
         "name": "Prince of Persia®",
         "icon": "logo.jpg",
-        "price": "7.98",
+        "data": "7.98",
         "currency": "PLN"
       }
     ]

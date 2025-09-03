@@ -23,7 +23,7 @@
             "attribute": "src",
             "auxiliary": ""
           },
-          "price": {
+          "data": {
             "interval": "",
             "selector": "span[class^=last] span",
             "attribute": "innerHTML",
@@ -48,7 +48,7 @@
             "attribute": "src",
             "auxiliary": ""
           },
-          "price": {
+          "data": {
             "interval": "",
             "selector": "span[class^=last] span",
             "attribute": "innerHTML",
@@ -80,7 +80,7 @@
             "attribute": "src",
             "auxiliary": ""
           },
-          "price": {
+          "data": {
             "interval": "",
             "selector": "div.game_purchase_price,div.discount_final_price",
             "attribute": "innerHTML",
