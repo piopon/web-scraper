@@ -15,7 +15,7 @@ export class ObserversView {
       container: observerHtml.querySelector("input.observer-container").value,
       title: ComponentsView.fromHtml(ComponentsView.COMPONENT_TITLE, observerHtml),
       image: ComponentsView.fromHtml(ComponentsView.COMPONENT_IMAGE, observerHtml),
-      data: ComponentsView.fromHtml(ComponentsView.COMPONENT_PRICE, observerHtml),
+      data: ComponentsView.fromHtml(ComponentsView.COMPONENT_DATA, observerHtml),
     };
   }
 
@@ -88,7 +88,7 @@ export class ObserversView {
                   <div class="component-cards">
                     ${ComponentsView.toHtml(ComponentsView.COMPONENT_TITLE, titleComponent)}
                     ${ComponentsView.toHtml(ComponentsView.COMPONENT_IMAGE, imageComponent)}
-                    ${ComponentsView.toHtml(ComponentsView.COMPONENT_PRICE, dataComponent)}
+                    ${ComponentsView.toHtml(ComponentsView.COMPONENT_DATA, dataComponent)}
                   </div>
                   <div class="observer-buttons">
                     ${ObserversView.#getObserverModalButtonsHtml(groupId, observer)}

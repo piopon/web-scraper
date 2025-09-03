@@ -2,7 +2,7 @@ export class ComponentsView {
   static #EMPTY_IMAGE_ID = "Select image";
   static COMPONENT_TITLE = 0;
   static COMPONENT_IMAGE = 1;
-  static COMPONENT_PRICE = 2;
+  static COMPONENT_DATA = 2;
 
   /**
    * Creates a component object from the provided HTML element
@@ -32,7 +32,7 @@ export class ComponentsView {
           attribute: componentHtml.querySelector("input.component-image-attribute").value,
           auxiliary: imagePath === ComponentsView.#EMPTY_IMAGE_ID ? "" : imagePath,
         };
-      case ComponentsView.COMPONENT_PRICE:
+      case ComponentsView.COMPONENT_DATA:
         return {
           interval: "",
           selector: componentHtml.querySelector("input.component-price-selector").value,
@@ -57,8 +57,8 @@ export class ComponentsView {
         return ComponentsView.#getTitleComponentHtml(componentData);
       case ComponentsView.COMPONENT_IMAGE:
         return ComponentsView.#getImageComponentHtml(componentData);
-      case ComponentsView.COMPONENT_PRICE:
-        return ComponentsView.#getPriceComponentHtml(componentData);
+      case ComponentsView.COMPONENT_DATA:
+        return ComponentsView.#getDataComponentHtml(componentData);
       default:
         console.error(`Internal error! Unknown component type: ${type}`);
         return ComponentsView.#getUnknownTypeErrorHtml(type);
@@ -148,16 +148,16 @@ export class ComponentsView {
   }
 
   /**
-   * Method used to return price component contents
-   * @param {Object} component The price component which data to receive
-   * @returns HTML with price component contetns
+   * Method used to return data component contents
+   * @param {Object} component The data component which data to receive
+   * @returns HTML with data component contetns
    */
-  static #getPriceComponentHtml(component) {
+  static #getDataComponentHtml(component) {
     const selector = component !== undefined ? component.selector : "";
     const attribute = component !== undefined ? component.attribute : "";
     const auxiliary = component !== undefined ? component.auxiliary : "";
     return `<div class="component-card">
-              <h3 class="card-title">price config</h3>
+              <h3 class="card-title">data config</h3>
               <div class="component-content">
                 <div class="component-fields">
                   <div class="widget">
