@@ -58,7 +58,7 @@ function createTestConfig(variant) {
             path: "test-path",
             title: "WARN2" === variant ? undefined : createTestComponent("title"),
             image: createTestComponent("image"),
-            price: createTestComponent("price"),
+            data: createTestComponent("data"),
           }),
         ],
       }),

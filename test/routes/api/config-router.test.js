@@ -165,48 +165,48 @@ describe("created config GET routes", () => {
     it.each([
       ["source: title, filter: NONE", "title", undefined],
       ["source: image, filter: NONE", "image", undefined],
-      ["source: price, filter: NONE", "price", undefined],
-      ["source: price, filter: ?interval=5m", "price", { interval: "5m" }],
-      ["source: price, filter: ?selector=body", "price", { selector: "body" }],
-      ["source: price, filter: ?attribute=innerHTML", "price", { attribute: "innerHTML" }],
-      ["source: price, filter: ?auxiliary=PLN", "price", { auxiliary: "PLN" }],
-      ["source: price, filter: ?interval=1h&selector=body", "price", { interval: "1h", selector: "body" }],
-      ["source: price, filter: ?interval=1h&attribute=innerHTML", "price", { interval: "1h", attribute: "innerHTML" }],
-      ["source: price, filter: ?interval=1h&auxiliary=USD", "price", { interval: "1h", auxiliary: "USD" }],
-      ["source: price, filter: ?selector=body&auxiliary=USD", "price", { selector: "body", auxiliary: "USD" }],
+      ["source: data, filter: NONE", "data", undefined],
+      ["source: data, filter: ?interval=5m", "data", { interval: "5m" }],
+      ["source: data, filter: ?selector=body", "data", { selector: "body" }],
+      ["source: data, filter: ?attribute=innerHTML", "data", { attribute: "innerHTML" }],
+      ["source: data, filter: ?auxiliary=PLN", "data", { auxiliary: "PLN" }],
+      ["source: data, filter: ?interval=1h&selector=body", "data", { interval: "1h", selector: "body" }],
+      ["source: data, filter: ?interval=1h&attribute=innerHTML", "data", { interval: "1h", attribute: "innerHTML" }],
+      ["source: data, filter: ?interval=1h&auxiliary=USD", "data", { interval: "1h", auxiliary: "USD" }],
+      ["source: data, filter: ?selector=body&auxiliary=USD", "data", { selector: "body", auxiliary: "USD" }],
       [
-        "source: price, filter: ?selector=body&attribute=innerHTML",
-        "price",
+        "source: data, filter: ?selector=body&attribute=innerHTML",
+        "data",
         { selector: "body", attribute: "innerHTML" },
       ],
       [
-        "source: price, filter: ?attribute=innerHTML&auxiliary=USD",
-        "price",
+        "source: data, filter: ?attribute=innerHTML&auxiliary=USD",
+        "data",
         { attribute: "innerHTML", auxiliary: "USD" },
       ],
       [
-        "source: price, filter: ?interval=5m&selector=body&attribute=innerHTML",
-        "price",
+        "source: data, filter: ?interval=5m&selector=body&attribute=innerHTML",
+        "data",
         { interval: "5m", selector: "body", attribute: "innerHTML" },
       ],
       [
-        "source: price, filter: ?interval=5m&selector=body&auxiliary=USD",
-        "price",
+        "source: data, filter: ?interval=5m&selector=body&auxiliary=USD",
+        "data",
         { interval: "5m", selector: "body", auxiliary: "USD" },
       ],
       [
-        "source: price, filter: ?interval=5m&attribute=innerHTML&auxiliary=PLN",
-        "price",
+        "source: data, filter: ?interval=5m&attribute=innerHTML&auxiliary=PLN",
+        "data",
         { interval: "5m", attribute: "innerHTML", auxiliary: "PLN" },
       ],
       [
-        "source: price, filter: ?selector=body&attribute=innerHTML&auxiliary=USD",
-        "price",
+        "source: data, filter: ?selector=body&attribute=innerHTML&auxiliary=USD",
+        "data",
         { selector: "body", attribute: "innerHTML", auxiliary: "USD" },
       ],
       [
-        "source: price, filter: ?interval=1h&selector=body&attribute=innerHTML&auxiliary=USD",
-        "price",
+        "source: data, filter: ?interval=1h&selector=body&attribute=innerHTML&auxiliary=USD",
+        "data",
         { interval: "1h", selector: "body", attribute: "innerHTML", auxiliary: "USD" },
       ],
     ])("%s", async (_, source, filterObj) => {
@@ -247,8 +247,8 @@ describe("created config PUT routes", () => {
     expect(response.statusCode).toBe(404);
   });
   describe("returns correct result using /config/groups endpoint when", () => {
-    const price = createComponent("1D", "title", "innerText", "CAD");
-    const observer = createObserver(false, "logo", "info", "load", "off", price);
+    const data = createComponent("1D", "title", "innerText", "CAD");
+    const observer = createObserver(false, "logo", "info", "load", "off", data);
     const inputObject = createGroup(false, "test1", "%%%", "new.com", observer);
     it.each([
       [
@@ -375,8 +375,8 @@ describe("created config PUT routes", () => {
     });
   });
   describe("returns correct result using /config/groups/observers endpoint when", () => {
-    const price = createComponent("1D", "title", "innerText", "CAD");
-    const inputObject = createObserver(false, "logo", "info", "load", "off", price);
+    const data = createComponent("1D", "title", "innerText", "CAD");
+    const inputObject = createObserver(false, "logo", "info", "load", "off", data);
     it.each([
       [
         "query is empty",
@@ -443,7 +443,7 @@ describe("created config PUT routes", () => {
       ],
       [
         "body has invalid structure",
-        price,
+        data,
         {
           status: 400,
           response: [
@@ -496,7 +496,7 @@ describe("created config PUT routes", () => {
                     path: "info",
                     target: "load",
                     history: "off",
-                    price: {},
+                    data: {},
                     getIdentifier: () => `name = logo`,
                     copyValues: (_) => {
                       throw Error("Error test message");
@@ -513,7 +513,7 @@ describe("created config PUT routes", () => {
         "body has invalid structure",
         {
           query: { name: "test1" },
-          body: { name: "111", path: "path", price: { selector: "body", attribute: "innerHTML", auxiliary: "PLN" } },
+          body: { name: "111", path: "path", data: { selector: "body", attribute: "innerHTML", auxiliary: "PLN" } },
         },
         { status: 400, response: "Observer name must have at least one letter" },
       ],
@@ -562,8 +562,8 @@ describe("created config POST routes", () => {
     expect(response.statusCode).toBe(404);
   });
   describe("returns correct result using /config/groups endpoint when", () => {
-    const price = createComponent("1D", "title", "innerText", "CAD");
-    const observer = createObserver(false, "new-observer", "info", "load", "off", price);
+    const data = createComponent("1D", "title", "innerText", "CAD");
+    const observer = createObserver(false, "new-observer", "info", "load", "off", data);
     it.each([
       [
         "query ID does not exist",
@@ -616,8 +616,8 @@ describe("created config POST routes", () => {
     });
   });
   describe("returns correct result using /config/groups/observers endpoint when", () => {
-    const price = createComponent("1D", "title", "innerText", "CAD");
-    const inputObserver = createObserver(false, "new-observer", "info", "load", "off", price);
+    const data = createComponent("1D", "title", "innerText", "CAD");
+    const inputObserver = createObserver(false, "new-observer", "info", "load", "off", data);
     it.each([
       [
         "query is empty",
@@ -679,7 +679,7 @@ describe("created config POST routes", () => {
       ],
       [
         "body has invalid structure",
-        price,
+        data,
         {
           status: 400,
           response: [
@@ -865,7 +865,7 @@ function createObserver(db, name, path, target, history, ...components) {
     path: path,
     target: target,
     history: history,
-    ...(components[0] && { price: components[0] }),
+    ...(components[0] && { data: components[0] }),
     ...(components[1] && { title: components[1] }),
     ...(components[2] && { image: components[2] }),
     ...(db && { getIdentifier: () => `name = ${name}` }),

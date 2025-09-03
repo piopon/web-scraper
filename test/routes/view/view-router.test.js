@@ -192,7 +192,7 @@ function createObserver(db, name, path, target, history, ...components) {
     path: path,
     target: target,
     history: history,
-    ...(components[0] && { price: components[0] }),
+    ...(components[0] && { data: components[0] }),
     ...(components[1] && { title: components[1] }),
     ...(components[2] && { image: components[2] }),
     ...(db && { getIdentifier: () => `name = ${name}` }),

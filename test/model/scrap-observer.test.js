@@ -30,7 +30,7 @@ describe("checkValues", () => {
       path: "test-path",
       title: { selector: "title-selector", attribute: "title-attribute", auxiliary: "title-auxiliary" },
       image: { selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
-      price: { selector: "price-selector", attribute: "price-attribute", auxiliary: "price-attribute" },
+      data: { selector: "data-selector", attribute: "data-attribute", auxiliary: "data-attribute" },
     };
     const expected = {
       errors: [],
@@ -43,7 +43,7 @@ describe("checkValues", () => {
       path: "test-path",
       title: { selector: "title-selector", attribute: "title-attribute", auxiliary: "title-auxiliary" },
       image: { selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
-      price: { selector: "price-selector", attribute: "price-attribute", auxiliary: "price-attribute" },
+      data: { selector: "data-selector", attribute: "data-attribute", auxiliary: "data-attribute" },
     };
     const expected = {
       errors: ["Missing required observer name"],
@@ -57,7 +57,7 @@ describe("checkValues", () => {
       path: "test-path",
       title: { selector: "title-selector", attribute: "title-attribute", auxiliary: "title-auxiliary" },
       image: { selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
-      price: { selector: "price-selector", attribute: "price-attribute", auxiliary: "price-attribute" },
+      data: { selector: "data-selector", attribute: "data-attribute", auxiliary: "data-attribute" },
     };
     const expected = {
       errors: ["Observer name must have at least one letter"],
@@ -70,7 +70,7 @@ describe("checkValues", () => {
       name: "test-name",
       title: { selector: "title-selector", attribute: "title-attribute", auxiliary: "title-auxiliary" },
       image: { selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
-      price: { selector: "price-selector", attribute: "price-attribute", auxiliary: "price-attribute" },
+      data: { selector: "data-selector", attribute: "data-attribute", auxiliary: "data-attribute" },
     };
     const expected = {
       errors: ["Missing required observer path"],
@@ -83,7 +83,7 @@ describe("checkValues", () => {
       name: "test-name",
       path: "test-path",
       image: { selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
-      price: { selector: "price-selector", attribute: "price-attribute", auxiliary: "price-attribute" },
+      data: { selector: "data-selector", attribute: "data-attribute", auxiliary: "data-attribute" },
     };
     const expected = {
       errors: [],
@@ -96,7 +96,7 @@ describe("checkValues", () => {
       name: "test-name",
       path: "test-path",
       title: { selector: "title-selector", attribute: "title-attribute", auxiliary: "title-auxiliary" },
-      price: { selector: "price-selector", attribute: "price-attribute", auxiliary: "price-attribute" },
+      data: { selector: "data-selector", attribute: "data-attribute", auxiliary: "data-attribute" },
     };
     const expected = {
       errors: [],
@@ -104,7 +104,7 @@ describe("checkValues", () => {
     };
     expect(new ScrapObserver(inputObj).checkValues()).toStrictEqual(expected);
   });
-  test("returns correct errors for missing whole price component", () => {
+  test("returns correct errors for missing whole data component", () => {
     const inputObj = {
       name: "test-name",
       path: "test-path",
@@ -113,52 +113,52 @@ describe("checkValues", () => {
     };
     const expected = {
       errors: [
-        "Missing required 'price.selector' in observer test-path",
-        "Missing required 'price.attribute' in observer test-path",
-        "Missing required 'price.auxiliary' in observer test-path",
+        "Missing required 'data.selector' in observer test-path",
+        "Missing required 'data.attribute' in observer test-path",
+        "Missing required 'data.auxiliary' in observer test-path",
       ],
       warnings: [],
     };
     expect(new ScrapObserver(inputObj).checkValues()).toStrictEqual(expected);
   });
-  test("returns correct error for missing price.selector component", () => {
+  test("returns correct error for missing data.selector component", () => {
     const inputObj = {
       name: "test-name",
       path: "test-path",
-      price: { attribute: "price-attribute", auxiliary: "price-auxiliary" },
+      data: { attribute: "data-attribute", auxiliary: "data-auxiliary" },
       title: { selector: "title-selector", attribute: "title-attribute", auxiliary: "title-auxiliary" },
       image: { selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
     };
     const expected = {
-      errors: ["Missing required 'price.selector' in observer test-path"],
+      errors: ["Missing required 'data.selector' in observer test-path"],
       warnings: [],
     };
     expect(new ScrapObserver(inputObj).checkValues()).toStrictEqual(expected);
   });
-  test("returns correct error for missing price.attribute component", () => {
+  test("returns correct error for missing data.attribute component", () => {
     const inputObj = {
       name: "test-name",
       path: "test-path",
-      price: { selector: "price-selector", auxiliary: "price-auxiliary" },
+      data: { selector: "data-selector", auxiliary: "data-auxiliary" },
       title: { selector: "title-selector", attribute: "title-attribute", auxiliary: "title-auxiliary" },
       image: { selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
     };
     const expected = {
-      errors: ["Missing required 'price.attribute' in observer test-path"],
+      errors: ["Missing required 'data.attribute' in observer test-path"],
       warnings: [],
     };
     expect(new ScrapObserver(inputObj).checkValues()).toStrictEqual(expected);
   });
-  test("returns correct error for missing price.auxiliary component", () => {
+  test("returns correct error for missing data.auxiliary component", () => {
     const inputObj = {
       name: "test-name",
       path: "test-path",
-      price: { selector: "price-selector", attribute: "price-attribute" },
+      data: { selector: "data-selector", attribute: "data-attribute" },
       title: { selector: "title-selector", attribute: "title-attribute", auxiliary: "title-auxiliary" },
       image: { selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
     };
     const expected = {
-      errors: ["Missing required 'price.auxiliary' in observer test-path"],
+      errors: ["Missing required 'data.auxiliary' in observer test-path"],
       warnings: [],
     };
     expect(new ScrapObserver(inputObj).checkValues()).toStrictEqual(expected);
@@ -180,8 +180,8 @@ describe("getRequestBodySchema", () => {
     expect(schema.properties.container).toStrictEqual({ type: "string" });
     expect(schema.properties.title).not.toBe(null);
     expect(schema.properties.image).not.toBe(null);
-    expect(schema.properties.price).not.toBe(null);
-    expect(schema.required).toStrictEqual(["name", "path", "price"]);
+    expect(schema.properties.data).not.toBe(null);
+    expect(schema.required).toStrictEqual(["name", "path", "data"]);
   });
 });
 
@@ -251,11 +251,11 @@ describe("getDatabaseSchema", () => {
         attribute: "test-image-attribute",
         auxiliary: "test-image-auxiliary",
       },
-      price: {
+      data: {
         interval: "1m",
-        selector: "test-price-selector",
-        attribute: "test-price-attribute",
-        auxiliary: "test-price-auxiliary",
+        selector: "test-data-selector",
+        attribute: "test-data-attribute",
+        auxiliary: "test-data-auxiliary",
       },
       extra: "test-extra",
     });
@@ -277,10 +277,10 @@ describe("getDatabaseSchema", () => {
       expect(observer.image.selector).toBe("test-image-selector");
       expect(observer.image.attribute).toBe("test-image-attribute");
       expect(observer.image.auxiliary).toBe("test-image-auxiliary");
-      expect(observer.price.interval).toBe("1m");
-      expect(observer.price.selector).toBe("test-price-selector");
-      expect(observer.price.attribute).toBe("test-price-attribute");
-      expect(observer.price.auxiliary).toBe("test-price-auxiliary");
+      expect(observer.data.interval).toBe("1m");
+      expect(observer.data.selector).toBe("test-data-selector");
+      expect(observer.data.attribute).toBe("test-data-attribute");
+      expect(observer.data.auxiliary).toBe("test-data-auxiliary");
       expect(observer.extra).toBe(undefined);
     });
     test("which has getIdentifier method returning correct result", () => {
@@ -310,11 +310,11 @@ describe("getDatabaseSchema", () => {
           attribute: "new-image-attribute",
           auxiliary: "new-image-auxiliary",
         },
-        price: {
+        data: {
           interval: "10y",
-          selector: "new-price-selector",
-          attribute: "new-price-attribute",
-          auxiliary: "new-price-auxiliary",
+          selector: "new-data-selector",
+          attribute: "new-data-attribute",
+          auxiliary: "new-data-auxiliary",
         },
       };
       expect(() => observer.copyValues(sourceObject)).not.toThrow();
@@ -333,11 +333,11 @@ describe("getDatabaseSchema", () => {
       expect(observer.image.selector).toBe("new-image-selector");
       expect(observer.image.attribute).toBe("new-image-attribute");
       expect(observer.image.auxiliary).toBe("new-image-auxiliary");
-      expect(observer.price).not.toBe(undefined);
-      expect(observer.price.interval).toBe("10y");
-      expect(observer.price.selector).toBe("new-price-selector");
-      expect(observer.price.attribute).toBe("new-price-attribute");
-      expect(observer.price.auxiliary).toBe("new-price-auxiliary");
+      expect(observer.data).not.toBe(undefined);
+      expect(observer.data.interval).toBe("10y");
+      expect(observer.data.selector).toBe("new-data-selector");
+      expect(observer.data.attribute).toBe("new-data-attribute");
+      expect(observer.data.auxiliary).toBe("new-data-auxiliary");
     });
   });
 });

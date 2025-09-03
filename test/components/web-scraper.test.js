@@ -82,7 +82,7 @@ describe("start() method", () => {
           observers: {
             name: "logo",
             path: "info",
-            price: { selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
+            data: { selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
           },
         },
       ],
@@ -105,7 +105,7 @@ describe("stop() method", () => {
         observers: {
           name: "logo",
           path: "info",
-          price: { selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
+          data: { selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
         },
       },
     ],
@@ -166,7 +166,7 @@ describe("getStatus() returns correct result", () => {
         observers: {
           name: "logo",
           path: "info",
-          price: { selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
+          data: { selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
         },
       },
     ],
@@ -225,7 +225,7 @@ describe("update() method", () => {
           observers: {
             name: "logo",
             path: "info",
-            price: { selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
+            data: { selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
           },
         },
       ],
