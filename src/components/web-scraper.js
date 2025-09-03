@@ -321,7 +321,7 @@ export class WebScraper {
                 name: getData(observer.title.selector, observer.title.attribute, observer.title.auxiliary),
                 icon: getData(observer.image.selector, observer.image.attribute, observer.image.auxiliary),
                 data: getData(observer.data.selector, observer.data.attribute),
-                currency: observer.data.auxiliary,
+                extra: observer.data.auxiliary,
               };
             } catch (error) {
               return { err: error.message };
