@@ -320,7 +320,7 @@ export class WebScraper {
                 status: "OK",
                 name: getData(observer.title.selector, observer.title.attribute, observer.title.auxiliary),
                 icon: getData(observer.image.selector, observer.image.attribute, observer.image.auxiliary),
-                price: getData(observer.data.selector, observer.data.attribute),
+                data: getData(observer.data.selector, observer.data.attribute),
                 currency: observer.data.auxiliary,
               };
             } catch (error) {
@@ -396,8 +396,8 @@ export class WebScraper {
    * @returns formatted object
    */
   #formatData(dataObj) {
-    // assure that price attribute contains only value with dot
-    dataObj.price = RegexUtils.getPrices(dataObj.price)[0];
+    // assure that data attribute contains only value with dot
+    dataObj.data = RegexUtils.getPrices(dataObj.data)[0];
     return dataObj;
   }
 
@@ -411,12 +411,12 @@ export class WebScraper {
       return `Incorrect scrap configuration: ${dataObj.err}`;
     }
     const objectName = dataObj.name ? dataObj.name : "[unnamed]";
-    if (dataObj.price == null || dataObj.price.length === 0) {
-      return `Invalid scraped data: Missing price value for ${objectName}`;
+    if (dataObj.data == null || dataObj.data.length === 0) {
+      return `Invalid scraped data: Missing data value for ${objectName}`;
     }
-    const priceParsed = RegexUtils.getPrices(dataObj.price);
-    if (priceParsed == null || priceParsed.length !== 1) {
-      return `Invalid scraped data: Incorrect price value for ${objectName}`;
+    const dataParsed = RegexUtils.getPrices(dataObj.data);
+    if (dataParsed == null || dataParsed.length !== 1) {
+      return `Invalid scraped data: Incorrect data value for ${objectName}`;
     }
     return "";
   }
