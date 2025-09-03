@@ -35,9 +35,9 @@ export class ComponentsView {
       case ComponentsView.COMPONENT_DATA:
         return {
           interval: "",
-          selector: componentHtml.querySelector("input.component-price-selector").value,
-          attribute: componentHtml.querySelector("input.component-price-attribute").value,
-          auxiliary: componentHtml.querySelector("select.component-price-auxiliary").value,
+          selector: componentHtml.querySelector("input.component-data-selector").value,
+          attribute: componentHtml.querySelector("input.component-data-attribute").value,
+          auxiliary: componentHtml.querySelector("select.component-data-auxiliary").value,
         };
       default:
         console.error(`Internal error! Unknown component type: ${type}`);
@@ -161,16 +161,16 @@ export class ComponentsView {
               <div class="component-content">
                 <div class="component-fields">
                   <div class="widget">
-                    <label class="component-price-label">selector:</label>
-                    <input type="text" class="component-price-selector" name="selector" value="${selector}" />
+                    <label class="component-data-label">selector:</label>
+                    <input type="text" class="component-data-selector" name="selector" value="${selector}" />
                   </div>
                   <div class="widget">
-                    <label class="component-price-label">attribute:</label>
-                    <input type="text" class="component-price-attribute" name="attribute" value="${attribute}" />
+                    <label class="component-data-label">attribute:</label>
+                    <input type="text" class="component-data-attribute" name="attribute" value="${attribute}" />
                   </div>
                   <div class="widget">
-                    <label class="component-price-label">auxiliary:</label>
-                    <select class="component-price-auxiliary" name="auxiliary" required>
+                    <label class="component-data-label">auxiliary:</label>
+                    <select class="component-data-auxiliary" name="auxiliary" required>
                     ${ComponentsView.#getCurrenciesOptionsHtml(auxiliary)}
                     </select>
                   </div>

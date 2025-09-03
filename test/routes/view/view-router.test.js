@@ -81,7 +81,7 @@ describe("created view GET routes", () => {
     expect(response.text).toContain('<input type="text" class="observer-name" name="name" value="logo" disabled/>');
     expect(response.text).toContain('<input type="text" class="observer-path" name="path" value="info" />');
     expect(response.text).toContain(
-      '<input type="text" class="component-price-selector" name="selector" value="body p b" />'
+      '<input type="text" class="component-data-selector" name="selector" value="body p b" />'
     );
     expect(response.text).toContain('<input type="text" class="group-name" name="name" value="test2" disabled/>');
     expect(response.text).toContain('<input type="button" class="group-category" name="category" value="@@@" />');

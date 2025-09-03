@@ -92,7 +92,7 @@ async function initializeJWT() {
  * Method used to store initial backend values to session storage
  */
 function storeInitialBackendValues() {
-  const dataAuxComponent = document.querySelector("select.component-price-auxiliary");
+  const dataAuxComponent = document.querySelector("select.component-data-auxiliary");
   const currenciesOptions = dataAuxComponent.querySelectorAll("option:not([disabled])");
   const currenciesValues = Array.from(currenciesOptions).map((element) => element.value);
   sessionStorage.setItem("currencies", currenciesValues);
