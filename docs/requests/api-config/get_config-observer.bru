@@ -59,8 +59,8 @@ tests {
     expect(observer[0].title).to.be.a('object');
     expect(observer[0]).to.have.property('image');
     expect(observer[0].image).to.be.a('object');
-    expect(observer[0]).to.have.property('price');
-    expect(observer[0].price).to.be.a('object');
+    expect(observer[0]).to.have.property('data');
+    expect(observer[0].data).to.be.a('object');
   });
 
   test("observer has correct element data values", function() {
@@ -119,26 +119,26 @@ tests {
     expect(observer[0].image.auxiliary).to.equal("");
   });
 
-  test("observer has correct price component data structure", function() {
+  test("observer has correct data component data structure", function() {
     const observer = res.getBody();
-    expect(observer[0].price).to.have.property('_id');
-    expect(observer[0].price._id).to.be.a('string');
-    expect(observer[0].price).to.have.property('interval');
-    expect(observer[0].price.interval).to.be.a('string');
-    expect(observer[0].price).to.have.property('selector');
-    expect(observer[0].price.selector).to.be.a('string');
-    expect(observer[0].price).to.have.property('attribute');
-    expect(observer[0].price.attribute).to.be.a('string');
-    expect(observer[0].price).to.have.property('auxiliary');
-    expect(observer[0].price.auxiliary).to.be.a('string');
+    expect(observer[0].data).to.have.property('_id');
+    expect(observer[0].data._id).to.be.a('string');
+    expect(observer[0].data).to.have.property('interval');
+    expect(observer[0].data.interval).to.be.a('string');
+    expect(observer[0].data).to.have.property('selector');
+    expect(observer[0].data.selector).to.be.a('string');
+    expect(observer[0].data).to.have.property('attribute');
+    expect(observer[0].data.attribute).to.be.a('string');
+    expect(observer[0].data).to.have.property('auxiliary');
+    expect(observer[0].data.auxiliary).to.be.a('string');
   });
 
-  test("observer has correct price component data values", function() {
+  test("observer has correct data component data values", function() {
     const observer = res.getBody();
-    expect(observer[0].price._id).to.match(/^[0-9a-fA-F]{24}$/);
-    expect(observer[0].price.interval).to.equal("");
-    expect(observer[0].price.selector).to.equal("span[class^=last] span");
-    expect(observer[0].price.attribute).to.equal("innerHTML");
-    expect(observer[0].price.auxiliary).to.equal("USD");
+    expect(observer[0].data._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(observer[0].data.interval).to.equal("");
+    expect(observer[0].data.selector).to.equal("span[class^=last] span");
+    expect(observer[0].data.attribute).to.equal("innerHTML");
+    expect(observer[0].data.auxiliary).to.equal("USD");
   });
 }

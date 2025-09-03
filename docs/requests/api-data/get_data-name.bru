@@ -71,8 +71,8 @@ tests {
       expect(item.name).to.be.a('string');
       expect(item).to.have.property('icon');
       expect(item.icon).to.be.a('array');
-      expect(item).to.have.property('price');
-      expect(item.price).to.be.a('string');
+      expect(item).to.have.property('data');
+      expect(item.data).to.be.a('string');
       expect(item).to.have.property('currency');
       expect(item.currency).to.be.a('array');
     }
@@ -83,7 +83,7 @@ tests {
     expect(data[0].items[0].status).to.equal("OK");
     expect(data[0].items[0].name).to.equal("Prince of Persia®");
     expect(data[0].items[0].icon).to.equal("logo.jpg");
-    expect(data[0].items[0].price).to.equal("7.98");
+    expect(data[0].items[0].data).to.equal("7.98");
     expect(data[0].items[0].currency).to.equal("PLN");
   });
 }

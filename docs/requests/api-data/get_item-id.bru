@@ -51,8 +51,8 @@ tests {
       expect(dataElement.name).to.be.a('string');
       expect(dataElement).to.have.property('icon');
       expect(dataElement.icon).to.be.a('string');
-      expect(dataElement).to.have.property('price');
-      expect(dataElement.price).to.be.a('string');
+      expect(dataElement).to.have.property('data');
+      expect(dataElement.data).to.be.a('string');
       expect(dataElement).to.have.property('currency');
       expect(dataElement.currency).to.be.a('string');
     }
@@ -63,7 +63,7 @@ tests {
     expect(data[0].status).to.equal("OK");
     expect(data[0].name).to.equal("McDonald's Corporation");
     expect(data[0].icon).to.equal("mcdonalds.svg");
-    expect(data[0].price).to.equal("292.68");
+    expect(data[0].data).to.equal("292.68");
     expect(data[0].currency).to.equal("USD");
   });
 }
