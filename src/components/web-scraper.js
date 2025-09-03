@@ -320,8 +320,8 @@ export class WebScraper {
                 status: "OK",
                 name: getData(observer.title.selector, observer.title.attribute, observer.title.auxiliary),
                 icon: getData(observer.image.selector, observer.image.attribute, observer.image.auxiliary),
-                price: getData(observer.price.selector, observer.price.attribute),
-                currency: observer.price.auxiliary,
+                price: getData(observer.data.selector, observer.data.attribute),
+                currency: observer.data.auxiliary,
               };
             } catch (error) {
               return { err: error.message };
@@ -361,17 +361,17 @@ export class WebScraper {
     while (!foundSelector) {
       try {
         await session.page.goto(newUrl, { waitUntil: observer.target });
-        await session.page.waitForSelector(observer.price.selector, { visible: true });
+        await session.page.waitForSelector(observer.data.selector, { visible: true });
         foundSelector = true;
       } catch (error) {
         if (attempt <= maxAttempts && error instanceof TimeoutError) {
-          this.#status.warning(`Timeout when waiting for: ${observer.price.selector} [${attempt}/${maxAttempts}]`);
+          this.#status.warning(`Timeout when waiting for: ${observer.data.selector} [${attempt}/${maxAttempts}]`);
           attempt++;
           continue;
         }
         this.#status.warning(`Exceeded the maximum number of retries: ${maxAttempts}`);
         await this.#createErrorScreenshot(session, this.#status.getStatus());
-        throw new Error(`Cannot find price element in page ${newUrl}`);
+        throw new Error(`Cannot find data element in page ${newUrl}`);
       }
     }
   }
