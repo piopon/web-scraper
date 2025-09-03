@@ -171,7 +171,7 @@ export class ComponentsView {
                   <div class="widget">
                     <label class="component-data-label">auxiliary:</label>
                     <select class="component-data-auxiliary" name="auxiliary" required>
-                    ${ComponentsView.#getCurrenciesOptionsHtml(auxiliary)}
+                    ${ComponentsView.#getAuxiliaryOptionsHtml(auxiliary)}
                     </select>
                   </div>
                 </div>
@@ -196,17 +196,17 @@ export class ComponentsView {
   }
 
   /**
-   * Method used to retrieve select options with all supported currencies
-   * @param {String} selectedCurrency The currently selected currency
+   * Method used to retrieve the select options with all supported values for auxiliary field in data component
+   * @param {String} selectedOption The currently selected option
    * @returns HTML code with all possible options for select tag
    */
-  static #getCurrenciesOptionsHtml(selectedCurrency) {
-    let result = `<option value="" disabled hidden ${selectedCurrency === "" ? "selected" : ""}>Select value</option>`;
+  static #getAuxiliaryOptionsHtml(selectedOption) {
+    let result = `<option value="" disabled hidden ${selectedOption === "" ? "selected" : ""}>Select value</option>`;
     sessionStorage
       .getItem("extras")
       .split(",")
       .forEach((extra) => {
-        const selectedAttribute = selectedCurrency === extra ? "selected" : "";
+        const selectedAttribute = selectedOption === extra ? "selected" : "";
         result += `<option value=${extra} ${selectedAttribute}>${extra}</option>`;
       });
     return result;
