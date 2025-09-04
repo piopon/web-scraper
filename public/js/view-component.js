@@ -197,6 +197,7 @@ export class ComponentsView {
 
   /**
    * Method used to retrieve the select options with all supported values for auxiliary field in data component
+   * @note The options are taken from 'extras' storage which represent the possible values for data.auxiliary field
    * @param {String} selectedOption The currently selected option
    * @returns HTML code with all possible options for select tag
    */

@@ -13,7 +13,7 @@ export class ViewRouter {
 
   /**
    * Creates a new view router for displaying scraper config settings
-   * @param {String} uploadPath The path to the upload directory
+   * @param {Object} config The application config with needed settings
    */
   constructor(config) {
     this.#uploadPath = config.usersDataConfig.upload;
