@@ -200,15 +200,18 @@ export class ComponentsView {
    * @returns HTML code with all possible options for select tag
    */
   static #getDataAuxiliaryHtml(selectedOption) {
-    let options = `<option value="" disabled hidden ${selectedOption === "" ? "selected" : ""}>Select value</option>`;
-    sessionStorage
-      .getItem("extras")
-      .split(",")
-      .forEach((extra) => {
-        const selectedAttribute = selectedOption === extra ? "selected" : "";
-        options += `<option value=${extra} ${selectedAttribute}>${extra}</option>`;
-      });
-    return `<select class="component-data-auxiliary" name="auxiliary" required>${options}</select>`;
+    if (sessionStorage.getItem("extras")) {
+      let options = `<option value="" disabled hidden ${selectedOption === "" ? "selected" : ""}>Select value</option>`;
+      sessionStorage
+        .getItem("extras")
+        .split(",")
+        .forEach((extra) => {
+          const selectedAttribute = selectedOption === extra ? "selected" : "";
+          options += `<option value=${extra} ${selectedAttribute}>${extra}</option>`;
+        });
+      return `<select class="component-data-auxiliary" name="auxiliary" required>${options}</select>`;
+    }
+    return `<input type="text" class="component-data-auxiliary" name="auxiliary" value="${selectedOption}" />`;
   }
 
   /**
