@@ -195,17 +195,22 @@ export class ComponentsView {
   }
 
   /**
-   * Method used to retrieve the select options with all supported values for auxiliary field in data component
-   * @note The options are taken from 'extras' storage which represent the possible values for data.auxiliary field
-   * @param {String} selectedOption The currently selected option
-   * @returns HTML code with all possible options for select tag
+   * Method used to retrieve data component auxiliary field HTML source code
+   * @param {String} value The value to be displayed in the auxiliary field
+   * @returns HTML code with data auxiliary component
    */
-  static #getDataAuxiliaryHtml(selectedOption) {
+  static #getDataAuxiliaryHtml(value) {
     return sessionStorage.getItem("extras")
-      ? this.#getPredefinedDataAuxiliaryHtml(selectedOption)
-      : this.#getDefaultDataAuxiliaryHtml(selectedOption);
+      ? this.#getPredefinedDataAuxiliaryHtml(value)
+      : this.#getDefaultDataAuxiliaryHtml(value);
   }
 
+  /**
+   * Method used to retrieve the data auxiliary in form of a select widget with all predefined values
+   * @note The options are taken from 'extras' storage which have the prefefined values for data.auxiliary field
+   * @param {String} selectedOption The selected option to be displayed in the component code
+   * @returns HTML code with data auxiliary component in form of a select widget
+   */
   static #getPredefinedDataAuxiliaryHtml(selectedOption) {
     let options = `<option value="" disabled hidden ${selectedOption === "" ? "selected" : ""}>Select value</option>`;
     sessionStorage
@@ -218,8 +223,13 @@ export class ComponentsView {
     return `<select class="component-data-auxiliary" name="auxiliary" required>${options}</select>`;
   }
 
-  static #getDefaultDataAuxiliaryHtml(selectedOption) {
-    return `<input type="text" class="component-data-auxiliary" name="auxiliary" value="${selectedOption}" />`;
+  /**
+   * Method used to retrieve the data auxiliary in form of a text widget capable of using all types of values
+   * @param {String} initialValue The value to be initially displayed in the component code
+   * @returns HTML code with data auxiliary component in form of a text input widget
+   */
+  static #getDefaultDataAuxiliaryHtml(initialValue) {
+    return `<input type="text" class="component-data-auxiliary" name="auxiliary" value="${initialValue}" />`;
   }
 
   /**
