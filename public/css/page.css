@@ -319,7 +319,12 @@ footer#main-footer i#show-github {
 
 div#status-preview i#show-dashboard {
   color: white;
-  margin-left: 5px;
+  margin-left: 3px;
+}
+
+div#status-preview i#show-settings {
+  color: white;
+  margin-left: 0px;
 }
 
 div#status-preview i#status-web-database {
