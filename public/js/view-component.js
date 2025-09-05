@@ -170,9 +170,7 @@ export class ComponentsView {
                   </div>
                   <div class="widget">
                     <label class="component-data-label">auxiliary:</label>
-                    <select class="component-data-auxiliary" name="auxiliary" required>
-                    ${ComponentsView.#getAuxiliaryOptionsHtml(auxiliary)}
-                    </select>
+                    ${ComponentsView.#getDataAuxiliaryHtml(auxiliary)}
                   </div>
                 </div>
               </div>
@@ -201,16 +199,16 @@ export class ComponentsView {
    * @param {String} selectedOption The currently selected option
    * @returns HTML code with all possible options for select tag
    */
-  static #getAuxiliaryOptionsHtml(selectedOption) {
-    let result = `<option value="" disabled hidden ${selectedOption === "" ? "selected" : ""}>Select value</option>`;
+  static #getDataAuxiliaryHtml(selectedOption) {
+    let options = `<option value="" disabled hidden ${selectedOption === "" ? "selected" : ""}>Select value</option>`;
     sessionStorage
       .getItem("extras")
       .split(",")
       .forEach((extra) => {
         const selectedAttribute = selectedOption === extra ? "selected" : "";
-        result += `<option value=${extra} ${selectedAttribute}>${extra}</option>`;
+        options += `<option value=${extra} ${selectedAttribute}>${extra}</option>`;
       });
-    return result;
+    return `<select class="component-data-auxiliary" name="auxiliary" required>${options}</select>`;
   }
 
   /**
