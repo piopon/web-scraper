@@ -310,7 +310,7 @@ footer#main-footer div#status-preview.preview {
 
 footer#main-footer div#status-preview.expanded {
   transition: width 0.5s ease;
-  width: 115px;
+  width: 140px;
 }
 
 footer#main-footer i#show-github {
