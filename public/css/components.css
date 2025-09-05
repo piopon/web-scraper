@@ -466,16 +466,24 @@ label.component-data-label {
 }
 
 .component-data-auxiliary {
-  cursor: pointer;
   width: 100%;
   height: 1.5rem;
   font-size: 0.8rem;
   color: black;
-  text-align: center;
   background-color: white;
   border-radius: 5px;
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
+}
+
+select.component-data-auxiliary {
+  cursor: pointer;
+  text-align: center;
+}
+
+input.component-data-auxiliary {
+  cursor: text;
+  text-align: start;
 }
 
 @media screen and (min-height: 860px) {
