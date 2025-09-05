@@ -15,7 +15,7 @@ export class ObserversView {
       container: observerHtml.querySelector("input.observer-container").value,
       title: ComponentsView.fromHtml(ComponentsView.COMPONENT_TITLE, observerHtml),
       image: ComponentsView.fromHtml(ComponentsView.COMPONENT_IMAGE, observerHtml),
-      price: ComponentsView.fromHtml(ComponentsView.COMPONENT_PRICE, observerHtml),
+      data: ComponentsView.fromHtml(ComponentsView.COMPONENT_DATA, observerHtml),
     };
   }
 
@@ -76,7 +76,7 @@ export class ObserversView {
   static #getObserverModalHtml(groupId, observer) {
     const titleComponent = observer !== undefined ? observer.title : undefined;
     const imageComponent = observer !== undefined ? observer.image : undefined;
-    const priceComponent = observer !== undefined ? observer.price : undefined;
+    const dataComponent = observer !== undefined ? observer.data : undefined;
     return `<div class="modal-dialog hidden">
               <div class="modal-background">
                 <div class="modal-content">
@@ -88,7 +88,7 @@ export class ObserversView {
                   <div class="component-cards">
                     ${ComponentsView.toHtml(ComponentsView.COMPONENT_TITLE, titleComponent)}
                     ${ComponentsView.toHtml(ComponentsView.COMPONENT_IMAGE, imageComponent)}
-                    ${ComponentsView.toHtml(ComponentsView.COMPONENT_PRICE, priceComponent)}
+                    ${ComponentsView.toHtml(ComponentsView.COMPONENT_DATA, dataComponent)}
                   </div>
                   <div class="observer-buttons">
                     ${ObserversView.#getObserverModalButtonsHtml(groupId, observer)}

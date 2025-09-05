@@ -19,12 +19,15 @@ jest.mock("../../../src/model/scrap-config.js");
 
 describe("createRoutes() method", () => {
   test("returns correct number of routes", () => {
+    const testRouter = new ViewRouter({
+      usersDataConfig: { upload: "./users/" },
+      scraperConfig: { dataExtrasType: "CURRENCIES" },
+    });
     const expectedRoutes = [
       { path: "/", method: "get" },
       { path: "/status", method: "get" },
       { path: "/image", method: "post" },
     ];
-    const testRouter = new ViewRouter();
     const createdRoutes = testRouter.createRoutes();
     expect(createdRoutes.stack.length).toBe(expectedRoutes.length);
     createdRoutes.stack
@@ -41,6 +44,10 @@ describe("createRoutes() method", () => {
 });
 
 describe("created view GET routes", () => {
+  const testRouter = new ViewRouter({
+    usersDataConfig: { upload: "./users/" },
+    scraperConfig: { dataExtrasType: "CURRENCIES" },
+  });
   const mockResult = { findById: (configId) => getInitConfig(true, configId, "uname") };
   jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
   // configue test express app server
@@ -54,7 +61,7 @@ describe("created view GET routes", () => {
   testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
   testApp.use(passport.initialize());
   testApp.use(passport.session());
-  testApp.use("/view", new ViewRouter().createRoutes());
+  testApp.use("/view", testRouter.createRoutes());
   testApp.use("/auth", createMockAuthRouter());
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
@@ -81,7 +88,7 @@ describe("created view GET routes", () => {
     expect(response.text).toContain('<input type="text" class="observer-name" name="name" value="logo" disabled/>');
     expect(response.text).toContain('<input type="text" class="observer-path" name="path" value="info" />');
     expect(response.text).toContain(
-      '<input type="text" class="component-price-selector" name="selector" value="body p b" />'
+      '<input type="text" class="component-data-selector" name="selector" value="body p b" />'
     );
     expect(response.text).toContain('<input type="text" class="group-name" name="name" value="test2" disabled/>');
     expect(response.text).toContain('<input type="button" class="group-category" name="category" value="@@@" />');
@@ -102,6 +109,10 @@ describe("created view GET routes", () => {
 });
 
 describe("created view POST routes", () => {
+  const testRouter = new ViewRouter({
+    usersDataConfig: { upload: "./users/" },
+    scraperConfig: { dataExtrasType: "CURRENCIES" },
+  });
   // configue test express app server
   const testApp = express();
   testApp.engine("handlebars", engine({ helpers: helpers() }));
@@ -114,7 +125,7 @@ describe("created view POST routes", () => {
   testApp.use(fileUpload({ abortOnLimit: true, limits: { fileSize: 10_000_000 } }));
   testApp.use(passport.initialize());
   testApp.use(passport.session());
-  testApp.use("/view", new ViewRouter("./users/").createRoutes());
+  testApp.use("/view", testRouter.createRoutes());
   testApp.use("/auth", createMockAuthRouter());
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
@@ -192,7 +203,7 @@ function createObserver(db, name, path, target, history, ...components) {
     path: path,
     target: target,
     history: history,
-    ...(components[0] && { price: components[0] }),
+    ...(components[0] && { data: components[0] }),
     ...(components[1] && { title: components[1] }),
     ...(components[2] && { image: components[2] }),
     ...(db && { getIdentifier: () => `name = ${name}` }),

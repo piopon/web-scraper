@@ -54,6 +54,7 @@ export class AppConfig {
       scraperConfig: {
         loginInterval: parseInt(process.env.SCRAP_INACTIVE_DAYS) || 30,
         scrapInterval: parseInt(process.env.SCRAP_INTERVAL_SEC) * 1_000 || 30_000,
+        dataExtrasType: process.env.SCRAP_EXTRAS_TYPE || "",
         defaultTimeout: 15_000,
         timeoutAttempts: 10,
         embeddedBrowser: false,

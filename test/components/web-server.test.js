@@ -9,7 +9,12 @@ process.env.GOOGLE_CLIENT_ID = "test_id";
 
 describe("run() method", () => {
   test("should start server and not throw when no INIT components", async () => {
-    const config = { usersDataConfig: {}, minLogLevel: LogLevel.INFO, serverConfig: { port: TEST_PORT } };
+    const config = {
+      usersDataConfig: { upload: "" },
+      minLogLevel: LogLevel.INFO,
+      serverConfig: { port: TEST_PORT },
+      scraperConfig: { dataExtrasType: "CURRENCIES" },
+    };
     const components = new WebComponents(config);
     const testServer = new WebServer(config, components);
     const result = await testServer.run();
@@ -17,7 +22,12 @@ describe("run() method", () => {
     expect(result).toBe(true);
   });
   test("should start server and not throw when INIT components start", async () => {
-    const config = { usersDataConfig: {}, minLogLevel: LogLevel.INFO, serverConfig: { port: TEST_PORT } };
+    const config = {
+      usersDataConfig: { upload: "" },
+      minLogLevel: LogLevel.INFO,
+      serverConfig: { port: TEST_PORT },
+      scraperConfig: { dataExtrasType: "CURRENCIES" },
+    };
     const components = new WebComponents(config);
     components.addComponent({
       getName: () => "init-component",
@@ -31,7 +41,12 @@ describe("run() method", () => {
     expect(result).toBe(true);
   });
   test("should fail to start server when INIT components does not start", async () => {
-    const config = { usersDataConfig: {}, minLogLevel: LogLevel.INFO, serverConfig: { port: TEST_PORT } };
+    const config = {
+      usersDataConfig: { upload: "" },
+      minLogLevel: LogLevel.INFO,
+      serverConfig: { port: TEST_PORT },
+      scraperConfig: { dataExtrasType: "CURRENCIES" },
+    };
     const components = new WebComponents(config);
     components.addComponent({
       getName: () => "init-component",
@@ -48,14 +63,24 @@ describe("run() method", () => {
 
 describe("shutdown() method", () => {
   test("does not throw when session started", async () => {
-    const config = { usersDataConfig: {}, minLogLevel: LogLevel.INFO, serverConfig: { port: TEST_PORT } };
+    const config = {
+      usersDataConfig: { upload: "" },
+      minLogLevel: LogLevel.INFO,
+      serverConfig: { port: TEST_PORT },
+      scraperConfig: { dataExtrasType: "CURRENCIES" },
+    };
     const components = new WebComponents(config);
     const testServer = new WebServer(config, components);
     await testServer.run();
     testServer.shutdown();
   });
   test("does not throw when session not started", async () => {
-    const config = { usersDataConfig: {}, minLogLevel: LogLevel.INFO, serverConfig: { port: TEST_PORT } };
+    const config = {
+      usersDataConfig: { upload: "" },
+      minLogLevel: LogLevel.INFO,
+      serverConfig: { port: TEST_PORT },
+      scraperConfig: { dataExtrasType: "CURRENCIES" },
+    };
     const components = new WebComponents(config);
     const testServer = new WebServer(config, components);
     testServer.shutdown();

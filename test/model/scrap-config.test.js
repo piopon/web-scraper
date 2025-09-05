@@ -179,6 +179,6 @@ function createTestObserver(name, path) {
     container: "test-container",
     title: { interval: "", selector: "title-selector", attribute: "title-attribute", auxiliary: "title-auxiliary" },
     image: { interval: "", selector: "image-selector", attribute: "image-attribute", auxiliary: "image-attribute" },
-    price: { interval: "", selector: "price-selector", attribute: "price-attribute", auxiliary: "price-attribute" },
+    data: { interval: "", selector: "data-selector", attribute: "data-attribute", auxiliary: "data-attribute" },
   };
 }

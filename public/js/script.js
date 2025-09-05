@@ -92,10 +92,14 @@ async function initializeJWT() {
  * Method used to store initial backend values to session storage
  */
 function storeInitialBackendValues() {
-  const priceAuxComponent = document.querySelector("select.component-price-auxiliary");
-  const currenciesOptions = priceAuxComponent.querySelectorAll("option:not([disabled])");
-  const currenciesValues = Array.from(currenciesOptions).map((element) => element.value);
-  sessionStorage.setItem("currencies", currenciesValues);
+  const dataAuxComponent = document.querySelector("select.component-data-auxiliary");
+  if (dataAuxComponent) {
+    const extrasOptions = dataAuxComponent.querySelectorAll("option:not([disabled])");
+    const extrasValues = Array.from(extrasOptions).map((element) => element.value);
+    sessionStorage.setItem("extras", extrasValues);
+  } else {
+    sessionStorage.removeItem("extras");
+  }
 }
 
 /**

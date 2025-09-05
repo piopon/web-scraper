@@ -9,13 +9,15 @@ import fs from "fs";
 
 export class ViewRouter {
   #uploadPath = undefined;
+  #extrasType = undefined;
 
   /**
    * Creates a new view router for displaying scraper config settings
-   * @param {String} uploadPath The path to the upload directory
+   * @param {Object} config The application config with needed settings
    */
-  constructor(uploadPath) {
-    this.#uploadPath = uploadPath;
+  constructor(config) {
+    this.#uploadPath = config.usersDataConfig.upload;
+    this.#extrasType = config.scraperConfig.dataExtrasType;
   }
 
   /**
@@ -44,7 +46,7 @@ export class ViewRouter {
         monitor: this.#getMonitorAddress(),
         content: scrapConfig.toJSON(),
         categories: this.#getSupportedCategories(),
-        currencies: this.#getSupportedCurrencies(),
+        extras: new Map([["CURRENCIES", this.#getSupportedCurrencies()]]).get(this.#extrasType),
       });
     });
     router.get("/status", AccessChecker.canViewContent, (request, response) =>

@@ -2,7 +2,7 @@ export class ComponentsView {
   static #EMPTY_IMAGE_ID = "Select image";
   static COMPONENT_TITLE = 0;
   static COMPONENT_IMAGE = 1;
-  static COMPONENT_PRICE = 2;
+  static COMPONENT_DATA = 2;
 
   /**
    * Creates a component object from the provided HTML element
@@ -32,12 +32,13 @@ export class ComponentsView {
           attribute: componentHtml.querySelector("input.component-image-attribute").value,
           auxiliary: imagePath === ComponentsView.#EMPTY_IMAGE_ID ? "" : imagePath,
         };
-      case ComponentsView.COMPONENT_PRICE:
+      case ComponentsView.COMPONENT_DATA:
+        const auxElement = sessionStorage.getItem("extras") ? "select" : "input";
         return {
           interval: "",
-          selector: componentHtml.querySelector("input.component-price-selector").value,
-          attribute: componentHtml.querySelector("input.component-price-attribute").value,
-          auxiliary: componentHtml.querySelector("select.component-price-auxiliary").value,
+          selector: componentHtml.querySelector("input.component-data-selector").value,
+          attribute: componentHtml.querySelector("input.component-data-attribute").value,
+          auxiliary: componentHtml.querySelector(`${auxElement}.component-data-auxiliary`).value,
         };
       default:
         console.error(`Internal error! Unknown component type: ${type}`);
@@ -57,8 +58,8 @@ export class ComponentsView {
         return ComponentsView.#getTitleComponentHtml(componentData);
       case ComponentsView.COMPONENT_IMAGE:
         return ComponentsView.#getImageComponentHtml(componentData);
-      case ComponentsView.COMPONENT_PRICE:
-        return ComponentsView.#getPriceComponentHtml(componentData);
+      case ComponentsView.COMPONENT_DATA:
+        return ComponentsView.#getDataComponentHtml(componentData);
       default:
         console.error(`Internal error! Unknown component type: ${type}`);
         return ComponentsView.#getUnknownTypeErrorHtml(type);
@@ -148,31 +149,29 @@ export class ComponentsView {
   }
 
   /**
-   * Method used to return price component contents
-   * @param {Object} component The price component which data to receive
-   * @returns HTML with price component contetns
+   * Method used to return data component contents
+   * @param {Object} component The data component which data to receive
+   * @returns HTML with data component contetns
    */
-  static #getPriceComponentHtml(component) {
+  static #getDataComponentHtml(component) {
     const selector = component !== undefined ? component.selector : "";
     const attribute = component !== undefined ? component.attribute : "";
     const auxiliary = component !== undefined ? component.auxiliary : "";
     return `<div class="component-card">
-              <h3 class="card-title">price config</h3>
+              <h3 class="card-title">data config</h3>
               <div class="component-content">
                 <div class="component-fields">
                   <div class="widget">
-                    <label class="component-price-label">selector:</label>
-                    <input type="text" class="component-price-selector" name="selector" value="${selector}" />
+                    <label class="component-data-label">selector:</label>
+                    <input type="text" class="component-data-selector" name="selector" value="${selector}" />
                   </div>
                   <div class="widget">
-                    <label class="component-price-label">attribute:</label>
-                    <input type="text" class="component-price-attribute" name="attribute" value="${attribute}" />
+                    <label class="component-data-label">attribute:</label>
+                    <input type="text" class="component-data-attribute" name="attribute" value="${attribute}" />
                   </div>
                   <div class="widget">
-                    <label class="component-price-label">auxiliary:</label>
-                    <select class="component-price-auxiliary" name="auxiliary" required>
-                    ${ComponentsView.#getCurrenciesOptionsHtml(auxiliary)}
-                    </select>
+                    <label class="component-data-label">auxiliary:</label>
+                    ${ComponentsView.#getDataAuxiliaryHtml(auxiliary)}
                   </div>
                 </div>
               </div>
@@ -196,20 +195,41 @@ export class ComponentsView {
   }
 
   /**
-   * Method used to retrieve select options with all supported currencies
-   * @param {String} selectedCurrency The currently selected currency
-   * @returns HTML code with all possible options for select tag
+   * Method used to retrieve data component auxiliary field HTML source code
+   * @param {String} value The value to be displayed in the auxiliary field
+   * @returns HTML code with data auxiliary component
    */
-  static #getCurrenciesOptionsHtml(selectedCurrency) {
-    let result = `<option value="" disabled hidden ${selectedCurrency === "" ? "selected" : ""}>Select value</option>`;
+  static #getDataAuxiliaryHtml(value) {
+    return sessionStorage.getItem("extras")
+      ? this.#getPredefinedDataAuxiliaryHtml(value)
+      : this.#getDefaultDataAuxiliaryHtml(value);
+  }
+
+  /**
+   * Method used to retrieve the data auxiliary in form of a select widget with all predefined values
+   * @note The options are taken from 'extras' storage which have the prefefined values for data.auxiliary field
+   * @param {String} selectedOption The selected option to be displayed in the component code
+   * @returns HTML code with data auxiliary component in form of a select widget
+   */
+  static #getPredefinedDataAuxiliaryHtml(selectedOption) {
+    let options = `<option value="" disabled hidden ${selectedOption === "" ? "selected" : ""}>Select value</option>`;
     sessionStorage
-      .getItem("currencies")
+      .getItem("extras")
       .split(",")
-      .forEach((currency) => {
-        const selectedAttribute = selectedCurrency === currency ? "selected" : "";
-        result += `<option value=${currency} ${selectedAttribute}>${currency}</option>`;
+      .forEach((extra) => {
+        const selectedAttribute = selectedOption === extra ? "selected" : "";
+        options += `<option value=${extra} ${selectedAttribute}>${extra}</option>`;
       });
-    return result;
+    return `<select class="component-data-auxiliary" name="auxiliary" required>${options}</select>`;
+  }
+
+  /**
+   * Method used to retrieve the data auxiliary in form of a text widget capable of using all types of values
+   * @param {String} initialValue The value to be initially displayed in the component code
+   * @returns HTML code with data auxiliary component in form of a text input widget
+   */
+  static #getDefaultDataAuxiliaryHtml(initialValue) {
+    return `<input type="text" class="component-data-auxiliary" name="auxiliary" value="${initialValue}" />`;
   }
 
   /**

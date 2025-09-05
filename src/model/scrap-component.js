@@ -64,7 +64,7 @@ export class ScrapComponent {
       type: "object",
       additionalProperties: false,
       properties: {
-        source: { enum: ["title", "image", "price"] },
+        source: { enum: ["title", "image", "data"] },
         interval: { type: "string", minLength: 1 },
         selector: { type: "string", minLength: 1 },
         attribute: { type: "string", minLength: 1 },

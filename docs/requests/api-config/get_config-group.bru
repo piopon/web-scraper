@@ -84,8 +84,8 @@ tests {
       expect(observer.title).to.be.a('object');
       expect(observer).to.have.property('image');
       expect(observer.image).to.be.a('object');
-      expect(observer).to.have.property('price');
-      expect(observer.price).to.be.a('object');
+      expect(observer).to.have.property('data');
+      expect(observer.data).to.be.a('object');
     }
   });
 
@@ -151,29 +151,29 @@ tests {
     expect(group[0].observers[0].image.auxiliary).to.equal("");
   });
 
-  test("group has correct price component data structure", function() {
+  test("group has correct data component data structure", function() {
     const group = res.getBody();
     for(const observerIndex in group[0].observers.length) {
       const observer = group[0].observers[observerIndex];
-      expect(observer.price).to.have.property('_id');
-      expect(observer.price._id).to.be.a('string');
-      expect(observer.price).to.have.property('interval');
-      expect(observer.price.interval).to.be.a('string');
-      expect(observer.price).to.have.property('selector');
-      expect(observer.price.selector).to.be.a('string');
-      expect(observer.price).to.have.property('attribute');
-      expect(observer.price.attribute).to.be.a('string');
-      expect(observer.price).to.have.property('auxiliary');
-      expect(observer.price.auxiliary).to.be.a('string');
+      expect(observer.data).to.have.property('_id');
+      expect(observer.data._id).to.be.a('string');
+      expect(observer.data).to.have.property('interval');
+      expect(observer.data.interval).to.be.a('string');
+      expect(observer.data).to.have.property('selector');
+      expect(observer.data.selector).to.be.a('string');
+      expect(observer.data).to.have.property('attribute');
+      expect(observer.data.attribute).to.be.a('string');
+      expect(observer.data).to.have.property('auxiliary');
+      expect(observer.data.auxiliary).to.be.a('string');
     }
   });
 
-  test("group has correct price component data values", function() {
+  test("group has correct data component data values", function() {
     const group = res.getBody();
-    expect(group[0].observers[0].price._id).to.match(/^[0-9a-fA-F]{24}$/);
-    expect(group[0].observers[0].price.interval).to.equal("");
-    expect(group[0].observers[0].price.selector).to.equal("div.game_purchase_price,div.discount_final_price");
-    expect(group[0].observers[0].price.attribute).to.equal("innerHTML");
-    expect(group[0].observers[0].price.auxiliary).to.equal("PLN");
+    expect(group[0].observers[0].data._id).to.match(/^[0-9a-fA-F]{24}$/);
+    expect(group[0].observers[0].data.interval).to.equal("");
+    expect(group[0].observers[0].data.selector).to.equal("div.game_purchase_price,div.discount_final_price");
+    expect(group[0].observers[0].data.attribute).to.equal("innerHTML");
+    expect(group[0].observers[0].data.auxiliary).to.equal("PLN");
   });
 }
