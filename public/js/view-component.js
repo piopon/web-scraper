@@ -201,17 +201,24 @@ export class ComponentsView {
    * @returns HTML code with all possible options for select tag
    */
   static #getDataAuxiliaryHtml(selectedOption) {
-    if (sessionStorage.getItem("extras")) {
-      let options = `<option value="" disabled hidden ${selectedOption === "" ? "selected" : ""}>Select value</option>`;
-      sessionStorage
-        .getItem("extras")
-        .split(",")
-        .forEach((extra) => {
-          const selectedAttribute = selectedOption === extra ? "selected" : "";
-          options += `<option value=${extra} ${selectedAttribute}>${extra}</option>`;
-        });
-      return `<select class="component-data-auxiliary" name="auxiliary" required>${options}</select>`;
-    }
+    return sessionStorage.getItem("extras")
+      ? this.#getPredefinedDataAuxiliaryHtml(selectedOption)
+      : this.#getDefaultDataAuxiliaryHtml(selectedOption);
+  }
+
+  static #getPredefinedDataAuxiliaryHtml(selectedOption) {
+    let options = `<option value="" disabled hidden ${selectedOption === "" ? "selected" : ""}>Select value</option>`;
+    sessionStorage
+      .getItem("extras")
+      .split(",")
+      .forEach((extra) => {
+        const selectedAttribute = selectedOption === extra ? "selected" : "";
+        options += `<option value=${extra} ${selectedAttribute}>${extra}</option>`;
+      });
+    return `<select class="component-data-auxiliary" name="auxiliary" required>${options}</select>`;
+  }
+
+  static #getDefaultDataAuxiliaryHtml(selectedOption) {
     return `<input type="text" class="component-data-auxiliary" name="auxiliary" value="${selectedOption}" />`;
   }
 
