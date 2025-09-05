@@ -97,6 +97,8 @@ function storeInitialBackendValues() {
     const extrasOptions = dataAuxComponent.querySelectorAll("option:not([disabled])");
     const extrasValues = Array.from(extrasOptions).map((element) => element.value);
     sessionStorage.setItem("extras", extrasValues);
+  } else {
+    sessionStorage.removeItem("extras");
   }
 }
 
