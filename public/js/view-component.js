@@ -33,11 +33,12 @@ export class ComponentsView {
           auxiliary: imagePath === ComponentsView.#EMPTY_IMAGE_ID ? "" : imagePath,
         };
       case ComponentsView.COMPONENT_DATA:
+        const auxElement = sessionStorage.getItem("extras") ? "select" : "input";
         return {
           interval: "",
           selector: componentHtml.querySelector("input.component-data-selector").value,
           attribute: componentHtml.querySelector("input.component-data-attribute").value,
-          auxiliary: componentHtml.querySelector("select.component-data-auxiliary").value,
+          auxiliary: componentHtml.querySelector(`${auxElement}.component-data-auxiliary`).value,
         };
       default:
         console.error(`Internal error! Unknown component type: ${type}`);
