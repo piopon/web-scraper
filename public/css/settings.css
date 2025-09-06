@@ -20,6 +20,7 @@ div.settings-options {
   align-items: center;
   justify-content: flex-start;
   flex-wrap: wrap;
+  gap: 1rem;
   margin-bottom: 0.5rem;
 }
 
@@ -27,6 +28,7 @@ div.settings-options {
   div.settings-options {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
   }
 }
 
