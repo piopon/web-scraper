@@ -92,6 +92,10 @@ div.widget {
   }
 }
 
+.half {
+  width: 50%;
+}
+
 .fill {
   width: 100%;
 }
