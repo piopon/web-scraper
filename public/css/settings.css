@@ -48,9 +48,14 @@ div.settings-options {
   font-size: 0.8rem;
   color: black;
   background-color: white;
+  transition: background-color 0.25s ease;
   border-radius: 5px;
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
+}
+
+.config-import-button:hover {
+  background-color: rgb(190, 180, 255);
 }
 
 .config-import-apply {
@@ -60,10 +65,21 @@ div.settings-options {
   font-size: 0.8rem;
   color: black;
   background-color: white;
+  transition: background-color 0.25s ease;
   border-radius: 5px;
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
-  margin-left: 5px;
+  margin-left: 0.75rem;
+}
+
+.config-import-apply:hover {
+  background-color: limegreen;
+}
+
+.config-import-apply[disabled] {
+  cursor: default;
+  pointer-events: none;
+  opacity: 75%;
 }
 
 .config-export-apply {
@@ -73,7 +89,12 @@ div.settings-options {
   font-size: 0.8rem;
   color: black;
   background-color: white;
+  transition: background-color 0.25s ease;
   border-radius: 5px;
   border: 1px solid black;
   box-shadow: 2px 2px 5px black;
+}
+
+.config-export-apply:hover {
+  background-color: rgb(190, 180, 255);
 }
