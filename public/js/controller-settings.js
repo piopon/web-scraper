@@ -1,5 +1,13 @@
 export class SettingsController {
   constructor() {
+    this.#initController();
+  }
+
+  #initController() {
+    const importApply = document.querySelector("input.config-import-apply");
+    if (importApply) {
+      importApply.disabled = true;
+    }
     this.#bindListeners();
   }
 
