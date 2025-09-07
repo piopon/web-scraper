@@ -17,7 +17,8 @@ export class SettingsRouter {
         response.status(400).json(bodyValidation.cause);
         return;
       }
-      response.status(200).json("OK");
+      const importResult = await this.#importConfig(request.user, bodyValidation.content);
+      response.status(importResult.status).json(importResult.message);
     });
     return router;
   }
@@ -43,5 +44,21 @@ export class SettingsRouter {
       return { content: undefined, cause: valueValidate[0] };
     }
     return { content: parsedBody, cause: undefined };
+  }
+
+  async #importConfig(user, config) {
+    try {
+      // get inital config content from user object (every registered user will have one)
+      const configContent = await ScrapConfig.getDatabaseModel().findById(user.config);
+      try {
+        // try to copy all values to config object
+        configContent.copyValues(config);
+        return { status: 200 , message: `Imported configuration for user ${user.name}` };
+      } catch (error) {
+        return { status: 400, message: error.message };
+      }
+    } catch (error) {
+      return { status: 500, message: error.message };
+    }
   }
 }
