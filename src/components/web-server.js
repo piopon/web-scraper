@@ -4,10 +4,11 @@ import { ComponentType } from "../config/app-types.js";
 import { ConfigRouter } from "../routes/api/config-router.js";
 import { DataRouter } from "../routes/api/data-router.js";
 import { ParamsParser } from "../middleware/params-parser.js";
-import { RequestLogger } from "../middleware/request-logger.js";
-import { StatusRouter } from "../routes/api/status-router.js";
 import { StatusLogger } from "./status-logger.js";
+import { RequestLogger } from "../middleware/request-logger.js";
 import { ViewRouter } from "../routes/view/view-router.js";
+import { StatusRouter } from "../routes/api/status-router.js";
+import { SettingsRouter } from "../routes/api/settings-router.js";
 
 import cors from "cors";
 import express from "express";
@@ -101,6 +102,7 @@ export class WebServer {
       ["/api/v1/data", new DataRouter(this.#setupConfig.usersDataConfig)],
       ["/api/v1/config", new ConfigRouter(this.#components)],
       ["/api/v1/status", new StatusRouter(this.#status, this.#components)],
+      ["/api/v1/settings", new SettingsRouter()],
     ]);
     routes.forEach((router, url) => server.use(url, router.createRoutes()));
 
