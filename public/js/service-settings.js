@@ -3,7 +3,8 @@ import { CommonService } from "./service-common.js";
 export class SettingsService {
   static async importConfig(configFile) {
     const url = `/api/v1/settings/import`;
-    const requestOpts = CommonService.createRequestOptions("POST", configFile, CommonService.TYPE_JSON);
+    const requestBody = await configFile.files[0].text();
+    const requestOpts = CommonService.createRequestOptions("POST", requestBody, CommonService.TYPE_JSON);
     const response = await fetch(url, requestOpts);
     if (response.status === 200) {
       return response.json();
