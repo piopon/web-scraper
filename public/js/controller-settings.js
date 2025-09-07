@@ -1,3 +1,6 @@
+import { CommonController } from "./controller-common.js";
+import { SettingsService } from "./service-settings.js";
+
 export class SettingsController {
   constructor() {
     this.#initController();
@@ -22,7 +25,7 @@ export class SettingsController {
       button.addEventListener("click", this.#selectImportConfigFileHandler);
     });
     document.querySelectorAll("input.config-import-apply").forEach((button) => {
-      button.addEventListener("click", console.log("IMPORT APPLIED"));
+      button.addEventListener("click", this.#applyImportConfigFileHandler);
     });
   }
 
@@ -37,5 +40,12 @@ export class SettingsController {
   #selectImportConfigFileHandler(event) {
     event.target.previousElementSibling.click();
     event.stopPropagation();
+  }
+
+  #applyImportConfigFileHandler(event) {
+    const fileInput = event.target.previousElementSibling.previousElementSibling;
+    SettingsService.importConfig(fileInput)
+      .then((data) => CommonController.showToastSuccess(data))
+      .catch((error) => CommonController.showToastError(error));
   }
 }
