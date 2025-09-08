@@ -53,6 +53,8 @@ export class SettingsRouter {
       try {
         // try to copy all values to config object
         configContent.copyValues(config);
+        configContent.user = user._id;
+        await configContent.save();
         return { status: 200 , message: `Imported configuration for user ${user.name}` };
       } catch (error) {
         return { status: 400, message: error.message };
