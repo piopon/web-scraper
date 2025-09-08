@@ -16,7 +16,7 @@ export class SettingsController {
 
   #bindListeners() {
     document.querySelectorAll("input.config-export-apply").forEach((button) => {
-      button.addEventListener("click", console.log("EXPORT APPLIED"));
+      button.addEventListener("click", this.#exportConfigToFileHandler);
     });
     document.querySelectorAll("input.config-import-file").forEach((selector) => {
       selector.addEventListener("change", this.#changeImportConfigFileHandler);
@@ -27,6 +27,17 @@ export class SettingsController {
     document.querySelectorAll("input.config-import-apply").forEach((button) => {
       button.addEventListener("click", this.#applyImportConfigFileHandler);
     });
+  }
+
+  async #exportConfigToFileHandler() {
+    const config = await SettingsService.getConfig();
+    const configBlob = new Blob([config], { type: "application/json" });
+    const fileHandle = await window.showSaveFilePicker({
+      types: [{ accept: { "application/json": [".json"] } }],
+    });
+    const writeFileStream = await fileHandle.createWritable();
+    await writeFileStream.write(configBlob);
+    await writeFileStream.close();
   }
 
   #changeImportConfigFileHandler(event) {
