@@ -30,8 +30,7 @@ export class SettingsController {
   }
 
   async #exportConfigToFileHandler() {
-    const config = await SettingsService.getConfig();
-    const configBlob = new Blob([config], { type: "application/json" });
+    const configBlob = await this.#getConfigFileBlob();
     const fileHandle = await window.showSaveFilePicker({
       types: [{ accept: { "application/json": [".json"] } }],
     });
@@ -58,5 +57,10 @@ export class SettingsController {
     SettingsService.importConfig(fileInput)
       .then((data) => CommonController.showToastSuccess(data))
       .catch((error) => CommonController.showToastError(error));
+  }
+
+  async #getConfigFileBlob() {
+    const config = await SettingsService.getConfig();
+    return new Blob([config], { type: "application/json" });
   }
 }
