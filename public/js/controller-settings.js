@@ -16,7 +16,7 @@ export class SettingsController {
 
   #bindListeners() {
     document.querySelectorAll("input.config-export-apply").forEach((button) => {
-      button.addEventListener("click", this.#exportConfigToFileHandler);
+      button.addEventListener("click", (_) => this.#exportConfigToFileHandler());
     });
     document.querySelectorAll("input.config-import-file").forEach((selector) => {
       selector.addEventListener("change", this.#changeImportConfigFileHandler);
