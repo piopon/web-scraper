@@ -26,6 +26,7 @@ describe("createRoutes() method", () => {
     const expectedRoutes = [
       { path: "/", method: "get" },
       { path: "/status", method: "get" },
+      { path: "/settings", method: "get" },
       { path: "/image", method: "post" },
     ];
     const createdRoutes = testRouter.createRoutes();
