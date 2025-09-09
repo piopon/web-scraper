@@ -4,6 +4,12 @@ import Ajv from "ajv";
 import express from "express";
 
 export class SettingsRouter {
+  #components = undefined;
+
+  constructor(components) {
+    this.#components = components;
+  }
+
   createRoutes() {
     const router = express.Router();
     router.post("/import", async (request, response) => {
@@ -55,6 +61,7 @@ export class SettingsRouter {
         config.groups.forEach(group => configContent.groups.push(group));
         configContent.user = user._id;
         await configContent.save();
+        this.#components.runComponents(ComponentType.CONFIG, "update", user, configContent);
         return { status: 200 , message: `Imported configuration for user ${user.name}` };
       } catch (error) {
         return { status: 400, message: error.message };
