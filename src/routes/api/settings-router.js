@@ -1,3 +1,4 @@
+import { ComponentType } from "../../config/app-types.js";
 import { ScrapConfig } from "../../model/scrap-config.js";
 
 import Ajv from "ajv";
