@@ -61,6 +61,22 @@ export class SettingsController {
 
   async #getConfigFileBlob() {
     const config = await SettingsService.getConfig();
-    return new Blob([config], { type: "application/json" });
+    // remove unwanted DB properties (_id, __v, etc.)
+    const raw = this.#propsOmitter(config, ["_id", "__v"]);
+    return new Blob([raw], { type: "application/json" });
+  }
+
+  #propsOmitter(obj, keysToOmit) {
+    if (Array.isArray(obj)) {
+      return obj.map((item) => this.#propsOmitter(item, keysToOmit));
+    } else if (obj !== null && typeof obj === "object") {
+      return Object.keys(obj).reduce((acc, key) => {
+        if (!keysToOmit.includes(key)) {
+          acc[key] = this.#propsOmitter(obj[key], keysToOmit);
+        }
+        return acc;
+      }, {});
+    }
+    return obj;
   }
 }
