@@ -1,6 +1,10 @@
 import { CommonService } from "./service-common.js";
 
 export class SettingsService {
+  /**
+   * Method used to retrieve current scraper configuration from backend
+   * @returns promise containing the operation response text or error
+   */
   static async getConfig() {
     const url = `/api/v1/config`;
     const requestOpts = CommonService.createRequestOptions("GET");
@@ -13,6 +17,11 @@ export class SettingsService {
     throw new Error(`Cannot get current configuration: ${errorDetails}`);
   }
 
+  /**
+   * Method used to invoke the import configuration action from backend
+   * @param {File} configFile The configuration file which contents should be imported
+   * @returns promise containing the operation response text or error
+   */
   static async importConfig(configFile) {
     const url = `/api/v1/settings/import`;
     const requestBody = await configFile.files[0].text();

@@ -7,10 +7,18 @@ import express from "express";
 export class SettingsRouter {
   #components = undefined;
 
+  /**
+   * Creates a new settings router for managing scraper application settings
+   * @param {Object} components The web components object used in settings router
+   */
   constructor(components) {
     this.#components = components;
   }
 
+  /**
+   * Method used to create routes for settings adjustment values
+   * @returns router object for handling settings requests
+   */
   createRoutes() {
     const router = express.Router();
     router.post("/import", async (request, response) => {
@@ -30,6 +38,11 @@ export class SettingsRouter {
     return router;
   }
 
+  /**
+   * Method used to validate the settings router endpoint query parameters
+   * @param {Object} params The query parameters which should be validated
+   * @returns an object with validation result (true/false) and an optional cause (if validation NOK)
+   */
   #validateQueryParams(params) {
     const queryValidation = new Ajv().compile({
       type: "object",
@@ -38,6 +51,11 @@ export class SettingsRouter {
     return { valid: queryValidation(params), cause: queryValidation.errors };
   }
 
+  /**
+   * Method used to validate request body for correct settings object
+   * @param {Object} requestBody The object which shoulde be validated
+   * @returns the parsed and validated config if ok, error cause otherwise
+   */
   #validateBody(requestBody) {
     // validate JSON structure of the request body content
     const schemaValidate = new Ajv().compile(ScrapConfig.getRequestBodySchema());
@@ -53,6 +71,12 @@ export class SettingsRouter {
     return { content: parsedBody, cause: undefined };
   }
 
+  /**
+   * Method handling the core import configuration action
+   * @param {Object} user The user for which we want to import configuration
+   * @param {Object} config The configuration to be imported for specified user
+   * @returns the import action status and message with in-depth details
+   */
   async #importConfig(user, config) {
     try {
       // get inital config content from user object (every registered user will have one)
