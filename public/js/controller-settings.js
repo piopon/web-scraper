@@ -63,7 +63,7 @@ export class SettingsController {
     const config = await SettingsService.getConfig();
     // remove unwanted DB properties (_id, __v, etc.)
     const raw = this.#propsOmitter(config, ["_id", "__v"]);
-    return new Blob([raw], { type: "application/json" });
+    return new Blob([JSON.stringify(raw)], { type: "application/json" });
   }
 
   #propsOmitter(obj, keysToOmit) {
