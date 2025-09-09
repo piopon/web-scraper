@@ -51,8 +51,8 @@ export class SettingsRouter {
       // get inital config content from user object (every registered user will have one)
       const configContent = await ScrapConfig.getDatabaseModel().findById(user.config);
       try {
-        // try to copy all values to config object
-        configContent.copyValues(config);
+        configContent.groups = [];
+        config.groups.forEach(group => configContent.groups.push(group));
         configContent.user = user._id;
         await configContent.save();
         return { status: 200 , message: `Imported configuration for user ${user.name}` };
