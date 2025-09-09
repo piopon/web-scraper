@@ -3,6 +3,7 @@ import { ComponentsController } from "./controller-component.js";
 import { ObserversController } from "./controller-observer.js";
 import { GroupsController } from "./controller-group.js";
 import { StatusController } from "./controller-status.js";
+import { SettingsController } from "./controller-settings.js";
 
 main();
 
@@ -20,6 +21,11 @@ function main() {
   // start current status controller and monitor components
   const statusController = new StatusController();
   statusController.start();
+  // initialize settings controller if needed
+  const settingsDashboard = document.getElementsByClassName("settings-dashboard");
+  if (settingsDashboard) {
+    new SettingsController();
+  }
   // add user logout button handler cleaning JWT
   const logoutButton = document.getElementById("user-logout");
   if (logoutButton) {

@@ -1,0 +1,101 @@
+section.settings-dashboard {
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  margin: 0.1rem;
+  height: calc(100% - 4.5rem);
+}
+
+@media screen and (min-width: 980px) {
+  section.settings-dashboard {
+    margin: 1rem 0.75rem;
+  }
+}
+
+div.settings-options {
+  width: 100%;
+  display: none;
+  align-items: center;
+  align-content: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 5rem;
+}
+
+@media screen and (min-width: 500px) {
+  div.settings-options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+.config-file-container {
+  display: flex;
+  width: 100%;
+}
+
+.config-import-file {
+  display: none;
+}
+
+.config-import-button {
+  cursor: pointer;
+  width: 100%;
+  height: 1.8rem;
+  font-size: 0.8rem;
+  color: black;
+  background-color: white;
+  transition: background-color 0.25s ease;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: 2px 2px 5px black;
+}
+
+.config-import-button:hover {
+  background-color: rgb(190, 180, 255);
+}
+
+.config-import-apply {
+  cursor: pointer;
+  width: 25%;
+  height: 1.8rem;
+  font-size: 0.8rem;
+  color: black;
+  background-color: white;
+  transition: background-color 0.25s ease;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: 2px 2px 5px black;
+  margin-left: 0.75rem;
+}
+
+.config-import-apply:hover {
+  background-color: limegreen;
+}
+
+.config-import-apply[disabled] {
+  cursor: default;
+  pointer-events: none;
+  opacity: 75%;
+}
+
+.config-export-apply {
+  cursor: pointer;
+  width: 100%;
+  height: 1.8rem;
+  font-size: 0.8rem;
+  color: black;
+  background-color: white;
+  transition: background-color 0.25s ease;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: 2px 2px 5px black;
+}
+
+.config-export-apply:hover {
+  background-color: rgb(190, 180, 255);
+}

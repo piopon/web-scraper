@@ -92,6 +92,10 @@ div.widget {
   }
 }
 
+.half {
+  width: 50%;
+}
+
 .fill {
   width: 100%;
 }
@@ -310,7 +314,7 @@ footer#main-footer div#status-preview.preview {
 
 footer#main-footer div#status-preview.expanded {
   transition: width 0.5s ease;
-  width: 115px;
+  width: 140px;
 }
 
 footer#main-footer i#show-github {
@@ -319,7 +323,12 @@ footer#main-footer i#show-github {
 
 div#status-preview i#show-dashboard {
   color: white;
-  margin-left: 5px;
+  margin-left: 3px;
+}
+
+div#status-preview i#show-settings {
+  color: white;
+  margin-left: 0px;
 }
 
 div#status-preview i#status-web-database {

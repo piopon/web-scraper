@@ -60,6 +60,13 @@ export class ViewRouter {
         statusTypes: this.#getSupportedStatusTypes(),
       })
     );
+    router.get("/settings", AccessChecker.canViewContent, (request, response) =>
+      response.render("settings", {
+        title: "scraper settings",
+        type: "settings",
+        user: request.user.name,
+      })
+    );
   }
 
   /**
