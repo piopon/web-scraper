@@ -83,11 +83,11 @@ export class SettingsRouter {
       const configContent = await ScrapConfig.getDatabaseModel().findById(user.config);
       try {
         configContent.groups = [];
-        config.groups.forEach(group => configContent.groups.push(group));
+        config.groups.forEach((group) => configContent.groups.push(group));
         configContent.user = user._id;
         await configContent.save();
         this.#components.runComponents(ComponentType.CONFIG, "update", user, configContent);
-        return { status: 200 , message: `Imported configuration for user ${user.name}` };
+        return { status: 200, message: `Imported configuration for user ${user.name}` };
       } catch (error) {
         return { status: 400, message: error.message };
       }
