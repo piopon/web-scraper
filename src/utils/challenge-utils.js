@@ -39,6 +39,9 @@ export class ChallengeUtils {
    * @returns shuffled string
    */
   static #shuffle(input) {
+    if (!input) {
+      return "";
+    }
     let chars = input.split("");
     for (let i = 0; i < chars.length - 1; i += 2) {
       [chars[i], chars[i + 1]] = [chars[i + 1], chars[i]];
