@@ -1,5 +1,7 @@
 import { ChallengeUtils } from "../../src/utils/challenge-utils.js";
 
+import { jest } from "@jest/globals";
+
 process.env.CHALLENGE_JOIN = "+>";
 process.env.CHALLENGE_PREFIX = "(:";
 process.env.CHALLENGE_EOL_MINS = 10;
@@ -45,5 +47,13 @@ describe("generate", () => {
     const inputObj = {};
     const expected = "(:+>+>";
     expect(ChallengeUtils.generate(inputObj)).toStrictEqual(expected);
+  });
+});
+
+describe("serializeDeadline", () => {
+  test("returns correct result", () => {
+    jest.useFakeTimers().setSystemTime(new Date("2025-09-12"));
+    const expected = "@1757635800000";
+    expect(ChallengeUtils.serializeDeadline()).toStrictEqual(expected);
   });
 });
