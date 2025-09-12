@@ -118,6 +118,23 @@ describe("created view GET routes", () => {
     expect(response.text).toContain('<div class="config-file-container">');
     expect(response.text).toContain('<label class="config-label">import:</label>');
   });
+  describe("returns correct monitor href with /view endpoint", () => {
+    test("and defined monitor address but no port", async () => {
+      process.env.MONITOR_ADDRESS = "https://test.monitor";
+      const response = await testAgent.get("/view");
+      expect(response.statusCode).toBe(200);
+      expect(response.type).toBe("text/html");
+      expect(response.text).toContain("<form action=https://test.monitor>");
+    });
+    test("and defined monitor address and port", async () => {
+      process.env.MONITOR_ADDRESS = "http://localhost";
+      process.env.MONITOR_PORT = "4321";
+      const response = await testAgent.get("/view");
+      expect(response.statusCode).toBe(200);
+      expect(response.type).toBe("text/html");
+      expect(response.text).toContain("<form action=http://localhost:4321>");
+    });
+  });
 });
 
 describe("created view POST routes", () => {
