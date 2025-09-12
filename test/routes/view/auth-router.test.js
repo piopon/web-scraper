@@ -155,6 +155,18 @@ describe("created auth POST routes", () => {
     expect(response.text).toBe("Found. Redirecting to /auth/login");
     expect(response.headers.location).toBe("/auth/login");
   });
+  test("returns correct result using /token endpoint", async () => {
+    isAuthenticatedResult = false;
+    const tokenObj = { token: "TEST_TOKEN", challenge: "TEST_CHALLENGE" };
+    jest.spyOn(passport, "authenticate").mockImplementation((strategy, options) => {
+      return (req, res, next) => {
+        return res.status(200).json(tokenObj);
+      };
+    });
+    const response = await testAgent.post("/auth/token");
+    expect(response.statusCode).toBe(200);
+    expect(response.text).toBe(JSON.stringify(tokenObj));
+  });
   test("returns correct result using /logout endpoint", async () => {
     isAuthenticatedResult = true;
     const response = await testAgent.post("/auth/logout");
