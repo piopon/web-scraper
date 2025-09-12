@@ -222,7 +222,7 @@ describe("created view POST routes", () => {
         createDataFile(testImagePath);
         jest.spyOn(path, "join").mockImplementation((_) => testImagePath);
         jest.spyOn(fs, "mkdirSync").mockImplementation((_) => {});
-        jest.spyOn(fs, "existsSync").mockImplementation((_) => false);
+        jest.spyOn(fs, "existsSync").mockImplementation((_) => true);
         const response = await testAgent.post("/view/image").attach("auxiliary-file", testImagePath);
         expect(response.statusCode).toBe(200);
         expect(response.body).toStrictEqual({
