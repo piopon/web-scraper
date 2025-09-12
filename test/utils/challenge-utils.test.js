@@ -41,4 +41,9 @@ describe("generate", () => {
     const expected = "(:+>+>00.2108.162.19";
     expect(ChallengeUtils.generate(inputObj)).toStrictEqual(expected);
   });
+  test("returns correct string for empty input object", () => {
+    const inputObj = {};
+    const expected = "(:+>+>";
+    expect(ChallengeUtils.generate(inputObj)).toStrictEqual(expected);
+  });
 });
