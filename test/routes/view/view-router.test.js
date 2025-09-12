@@ -168,50 +168,52 @@ describe("created view POST routes", () => {
       expect(response.body).toBe("Provided file is NOT an image file");
       removeDataFile(testDataPath);
     });
-    test("with an image file provided and no server nor port defined", async () => {
-      const testImagePath = path.join(".", "testfile.png");
-      createDataFile(testImagePath);
-      jest.spyOn(path, "join").mockImplementation((_) => testImagePath);
-      jest.spyOn(fs, "mkdirSync").mockImplementation((_) => {});
-      jest.spyOn(fs, "existsSync").mockImplementation((_) => false);
-      const response = await testAgent.post("/view/image").attach("auxiliary-file", testImagePath);
-      expect(response.statusCode).toBe(200);
-      expect(response.body).toStrictEqual({
-        message: "Successfully uploaded image: testfile.png",
-        url: "http://localhost:undefined/test@mail.c/testfile.png",
+    describe("with an image file provided", () => {
+      test("and no server nor port defined", async () => {
+        const testImagePath = path.join(".", "testfile1.png");
+        createDataFile(testImagePath);
+        jest.spyOn(path, "join").mockImplementation((_) => testImagePath);
+        jest.spyOn(fs, "mkdirSync").mockImplementation((_) => {});
+        jest.spyOn(fs, "existsSync").mockImplementation((_) => false);
+        const response = await testAgent.post("/view/image").attach("auxiliary-file", testImagePath);
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toStrictEqual({
+          message: "Successfully uploaded image: testfile1.png",
+          url: "http://localhost:undefined/test@mail.c/testfile1.png",
+        });
+        removeDataFile(testImagePath);
       });
-      removeDataFile(testImagePath);
-    });
-    test("with an image file provided and external server defined", async () => {
-      const testImagePath = path.join(".", "testfile2.png");
-      createDataFile(testImagePath);
-      jest.spyOn(path, "join").mockImplementation((_) => testImagePath);
-      jest.spyOn(fs, "mkdirSync").mockImplementation((_) => {});
-      jest.spyOn(fs, "existsSync").mockImplementation((_) => false);
-      process.env.SERVER_ADDRESS = "test://1.2.3.4";
-      const response = await testAgent.post("/view/image").attach("auxiliary-file", testImagePath);
-      expect(response.statusCode).toBe(200);
-      expect(response.body).toStrictEqual({
-        message: "Successfully uploaded image: testfile2.png",
-        url: "test://1.2.3.4/test@mail.c/testfile2.png",
+      test("and external server defined", async () => {
+        process.env.SERVER_ADDRESS = "test://1.2.3.4";
+        const testImagePath = path.join(".", "testfile2.png");
+        createDataFile(testImagePath);
+        jest.spyOn(path, "join").mockImplementation((_) => testImagePath);
+        jest.spyOn(fs, "mkdirSync").mockImplementation((_) => {});
+        jest.spyOn(fs, "existsSync").mockImplementation((_) => false);
+        const response = await testAgent.post("/view/image").attach("auxiliary-file", testImagePath);
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toStrictEqual({
+          message: "Successfully uploaded image: testfile2.png",
+          url: "test://1.2.3.4/test@mail.c/testfile2.png",
+        });
+        removeDataFile(testImagePath);
       });
-      removeDataFile(testImagePath);
-    });
-    test("with an image file provided and internal server and port defined", async () => {
-      const testImagePath = path.join(".", "testfile3.png");
-      createDataFile(testImagePath);
-      jest.spyOn(path, "join").mockImplementation((_) => testImagePath);
-      jest.spyOn(fs, "mkdirSync").mockImplementation((_) => {});
-      jest.spyOn(fs, "existsSync").mockImplementation((_) => false);
-      process.env.SERVER_ADDRESS = "test://localhost";
-      process.env.SERVER_PORT = "1234";
-      const response = await testAgent.post("/view/image").attach("auxiliary-file", testImagePath);
-      expect(response.statusCode).toBe(200);
-      expect(response.body).toStrictEqual({
-        message: "Successfully uploaded image: testfile3.png",
-        url: "test://localhost:1234/test@mail.c/testfile3.png",
+      test("and internal server and port defined", async () => {
+        process.env.SERVER_ADDRESS = "test://localhost";
+        process.env.SERVER_PORT = "1234";
+        const testImagePath = path.join(".", "testfile3.png");
+        createDataFile(testImagePath);
+        jest.spyOn(path, "join").mockImplementation((_) => testImagePath);
+        jest.spyOn(fs, "mkdirSync").mockImplementation((_) => {});
+        jest.spyOn(fs, "existsSync").mockImplementation((_) => false);
+        const response = await testAgent.post("/view/image").attach("auxiliary-file", testImagePath);
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toStrictEqual({
+          message: "Successfully uploaded image: testfile3.png",
+          url: "test://localhost:1234/test@mail.c/testfile3.png",
+        });
+        removeDataFile(testImagePath);
       });
-      removeDataFile(testImagePath);
     });
   });
 });
