@@ -57,3 +57,20 @@ describe("serializeDeadline", () => {
     expect(ChallengeUtils.serializeDeadline()).toStrictEqual(expected);
   });
 });
+
+describe("parseDeadline", () => {
+  test("returns correct result when challenge is correct", () => {
+    const challenge = "(:meNastte+>ilMastte+>10.0.7.12@1757635812345";
+    const expected = 1757635812345;
+    expect(ChallengeUtils.parseDeadline(challenge)).toEqual(expected);
+  });
+  test("throws an error when challenge is not correct", () => {
+    const metodUnderTest = () => {
+      const challenge = "(:meNastte+>ilMastte+>1757635812345";
+      const expected = 1757635812345;
+      expect(ChallengeUtils.parseDeadline(challenge)).toEqual(expected);
+    };
+    expect(metodUnderTest).toThrow(Error);
+    expect(metodUnderTest).toThrow("Provided string does not contain challenge");
+  });
+});
