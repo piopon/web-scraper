@@ -26,4 +26,19 @@ describe("generate", () => {
     const expected = "(:+>tes.tilmar@us+>5112.111..910";
     expect(ChallengeUtils.generate(inputObj)).toStrictEqual(expected);
   });
+  test("returns correct string for input object with name only", () => {
+    const inputObj = { name: "usrTestName" };
+    const expected = "(:eamtNesrTus+>+>";
+    expect(ChallengeUtils.generate(inputObj)).toStrictEqual(expected);
+  });
+  test("returns correct string for input object with mail only", () => {
+    const inputObj = { mail: "mail@test.com" };
+    const expected = "(:+>mcot.es@tilma+>";
+    expect(ChallengeUtils.generate(inputObj)).toStrictEqual(expected);
+  });
+  test("returns correct string for input object with address only", () => {
+    const inputObj = { address: "192.168.10.200" };
+    const expected = "(:+>+>00.2108.162.19";
+    expect(ChallengeUtils.generate(inputObj)).toStrictEqual(expected);
+  });
 });
