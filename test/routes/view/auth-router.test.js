@@ -204,6 +204,8 @@ function configureTestSever(testRouter) {
         email: "test@example.com",
         password: "supersecret",
       }),
+      challenge: "testchallenge",
+      save: () => {},
     };
     next();
   });
