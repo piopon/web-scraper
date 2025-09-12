@@ -107,6 +107,17 @@ describe("created view GET routes", () => {
     expect(response.text).toContain('<label class="date-label">to:</label>');
     expect(response.text).toContain('<label class="btn-label">refresh:</label>');
   });
+  test("returns correct result using /view/settings endpoint", async () => {
+    const response = await testAgent.get("/view/settings");
+    expect(response.statusCode).toBe(200);
+    expect(response.type).toBe("text/html");
+    expect(response.text).toEqual(expect.not.arrayContaining(["", null, undefined]));
+    expect(response.text).toContain('<section class="settings-dashboard">');
+    expect(response.text).toContain('<div class="settings-options">');
+    expect(response.text).toContain('<label class="config-label">export:</label>');
+    expect(response.text).toContain('<div class="config-file-container">');
+    expect(response.text).toContain('<label class="config-label">import:</label>');
+  });
 });
 
 describe("created view POST routes", () => {
