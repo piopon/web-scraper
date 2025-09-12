@@ -145,6 +145,11 @@ describe("created view POST routes", () => {
     const mockAuth = { mail: "test@mail.com", pass: "test-secret" };
     await testAgent.post("/auth/login").send(mockAuth);
   });
+  afterEach(() => {
+    jest.clearAllMocks();
+    jest.resetAllMocks();
+    jest.restoreAllMocks();
+  });
   test("returns correct result for unknown path", async () => {
     const response = await testAgent.post("/view/unknown");
     expect(response.statusCode).toBe(404);
