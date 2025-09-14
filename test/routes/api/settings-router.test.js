@@ -36,4 +36,28 @@ describe("created settings POST routes", () => {
     const response = await testClient.get("/status/unknown");
     expect(response.statusCode).toBe(404);
   });
+  describe("returns correct result using /status endpoint when", () => {
+    it.each([
+      [
+        "query has invalid structure",
+        { unknown: "status" },
+        {
+          status: 400,
+          response: [
+            {
+              instancePath: "",
+              keyword: "additionalProperties",
+              message: "must NOT have additional properties",
+              params: { additionalProperty: "unknown" },
+              schemaPath: "#/additionalProperties",
+            },
+          ],
+        },
+      ],
+    ])("%s", async (_, inputQuery, expected) => {
+      const response = await testClient.post("/settings/import").query(inputQuery);
+      expect(response.statusCode).toBe(expected.status);
+      expect(response.body).toStrictEqual(expected.response);
+    });
+  });
 });
