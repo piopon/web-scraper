@@ -36,10 +36,10 @@ describe("created settings POST routes", () => {
     const response = await testClient.post("/status/unknown");
     expect(response.statusCode).toBe(404);
   });
-  describe("returns correct result using /status endpoint when", () => {
+  describe("returns correct result using /settings endpoint when", () => {
     it.each([
       [
-        "query has invalid structure",
+        "query is NOT empty",
         { query: {property: "value"}, body: {} },
         {
           status: 400,
