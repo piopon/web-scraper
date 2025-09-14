@@ -2,6 +2,9 @@ import { SettingsRouter } from "../../../src/routes/api/settings-router.js";
 import { WebComponents } from "../../../src/components/web-components.js";
 import { LogLevel } from "../../../src/config/app-types.js";
 
+import supertest from "supertest";
+import express from "express";
+
 describe("createRoutes() method", () => {
   test("returns correct number of routes", () => {
     const expectedRoutes = [{ path: "/import", method: "post" }];
@@ -22,3 +25,15 @@ describe("createRoutes() method", () => {
   });
 });
 
+describe("created settings POST routes", () => {
+  const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+  // configue test express app server
+  const testApp = express();
+  testApp.use("/settings", new SettingsRouter(components).createRoutes());
+  // create test client to call server requests
+  const testClient = supertest(testApp);
+  test("returns correct result for unknown path", async () => {
+    const response = await testClient.get("/status/unknown");
+    expect(response.statusCode).toBe(404);
+  });
+});
