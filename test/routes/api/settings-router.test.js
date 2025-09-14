@@ -54,6 +54,22 @@ describe("created settings POST routes", () => {
           ],
         },
       ],
+      [
+        "body is empty",
+        { query: {}, body: {} },
+        {
+          status: 400,
+          response: [
+            {
+              instancePath: "",
+              keyword: "type",
+              message: "must be object",
+              params: { type: "object" },
+              schemaPath: "#/type",
+            },
+          ],
+        },
+      ],
     ])("%s", async (_, input, expected) => {
       const response = await testClient.post("/settings/import").query(input.query).send(input.body);
       expect(response.statusCode).toBe(expected.status);
