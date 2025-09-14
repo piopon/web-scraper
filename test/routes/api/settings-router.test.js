@@ -103,3 +103,50 @@ describe("created settings POST routes", () => {
     });
   });
 });
+
+function createConfig(db, configId, name) {
+  const component1 = createComponent("5m", "body p b", "innerHTML", "PLN");
+  const component2 = createComponent("1h", "body p b", "innerHTML", "USD");
+  const observer1 = createObserver(db, "logo", "info", "load", "off", component1);
+  const observer2 = createObserver(db, "text", "status", "domcontentloaded", "onChange", component2);
+  return {
+    user: name,
+    groups: [
+      createGroup(db, "test1", "$$$", "test.com", observer1),
+      createGroup(db, "test2", "@@@", "test.com", observer2),
+    ],
+    ...(db && { getIdentifier: () => `name = ${name}` }),
+    ...(db && { copyValues: (_) => true }),
+    ...(db && { save: () => true }),
+    ...(db && { _id: configId, }),
+  };
+}
+
+function createGroup(db, name, category, domain, ...observers) {
+  return {
+    name: name,
+    category: category,
+    domain: domain,
+    observers: observers,
+    ...(db && { getIdentifier: () => `name = ${name}` }),
+    ...(db && { copyValues: (_) => true }),
+  };
+}
+
+function createObserver(db, name, path, target, history, ...components) {
+  return {
+    name: name,
+    path: path,
+    target: target,
+    history: history,
+    ...(components[0] && { data: components[0] }),
+    ...(components[1] && { title: components[1] }),
+    ...(components[2] && { image: components[2] }),
+    ...(db && { getIdentifier: () => `name = ${name}` }),
+    ...(db && { copyValues: (_) => true }),
+  };
+}
+
+function createComponent(interval, selector, attribute, auxiliary) {
+  return { interval: interval, selector: selector, attribute: attribute, auxiliary: auxiliary };
+}
