@@ -1,10 +1,14 @@
 import { SettingsRouter } from "../../../src/routes/api/settings-router.js";
+import { ScrapConfig } from "../../../src/model/scrap-config.js";
 import { WebComponents } from "../../../src/components/web-components.js";
 import { LogLevel } from "../../../src/config/app-types.js";
 
 import supertest from "supertest";
 import express from "express";
 import session from "express-session";
+import { jest } from "@jest/globals";
+
+jest.mock("../../../src/model/scrap-config.js");
 
 describe("createRoutes() method", () => {
   test("returns correct number of routes", () => {
@@ -91,6 +95,8 @@ describe("created settings POST routes", () => {
         },
       ],
     ])("%s", async (_, input, expected) => {
+      const mockResult = { findById: (_) => ({ user: "", groups: [], save: () => {} }) };
+      jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
       const response = await testClient.post("/settings/import").query(input.query).send(input.body);
       expect(response.statusCode).toBe(expected.status);
       expect(response.body).toStrictEqual(expected.response);
