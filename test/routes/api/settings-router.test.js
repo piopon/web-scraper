@@ -33,7 +33,7 @@ describe("created settings POST routes", () => {
   // create test client to call server requests
   const testClient = supertest(testApp);
   test("returns correct result for unknown path", async () => {
-    const response = await testClient.get("/status/unknown");
+    const response = await testClient.post("/status/unknown");
     expect(response.statusCode).toBe(404);
   });
   describe("returns correct result using /status endpoint when", () => {
