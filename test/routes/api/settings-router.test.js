@@ -40,7 +40,7 @@ describe("created settings POST routes", () => {
     it.each([
       [
         "query has invalid structure",
-        { unknown: "status" },
+        { query: {property: "value"}, body: {} },
         {
           status: 400,
           response: [
@@ -48,14 +48,14 @@ describe("created settings POST routes", () => {
               instancePath: "",
               keyword: "additionalProperties",
               message: "must NOT have additional properties",
-              params: { additionalProperty: "unknown" },
+              params: { additionalProperty: "property" },
               schemaPath: "#/additionalProperties",
             },
           ],
         },
       ],
-    ])("%s", async (_, inputQuery, expected) => {
-      const response = await testClient.post("/settings/import").query(inputQuery);
+    ])("%s", async (_, input, expected) => {
+      const response = await testClient.post("/settings/import").query(input.query).send(input.body);
       expect(response.statusCode).toBe(expected.status);
       expect(response.body).toStrictEqual(expected.response);
     });
