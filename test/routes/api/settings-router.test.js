@@ -4,6 +4,7 @@ import { LogLevel } from "../../../src/config/app-types.js";
 
 import supertest from "supertest";
 import express from "express";
+import session from "express-session";
 
 describe("createRoutes() method", () => {
   test("returns correct number of routes", () => {
@@ -29,6 +30,9 @@ describe("created settings POST routes", () => {
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
   // configue test express app server
   const testApp = express();
+  testApp.use(express.json());
+  testApp.use(express.urlencoded({ extended: false }));
+  testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
   testApp.use("/settings", new SettingsRouter(components).createRoutes());
   // create test client to call server requests
   const testClient = supertest(testApp);
@@ -62,10 +66,10 @@ describe("created settings POST routes", () => {
           response: [
             {
               instancePath: "",
-              keyword: "type",
-              message: "must be object",
-              params: { type: "object" },
-              schemaPath: "#/type",
+              keyword: "required",
+              message: "must have required property 'user'",
+              params: { missingProperty: "user" },
+              schemaPath: "#/required",
             },
           ],
         },
@@ -78,10 +82,10 @@ describe("created settings POST routes", () => {
           response: [
             {
               instancePath: "",
-              keyword: "type",
-              message: "must be object",
-              params: { type: "object" },
-              schemaPath: "#/type",
+              keyword: "required",
+              message: "must have required property 'user'",
+              params: { missingProperty: "user" },
+              schemaPath: "#/required",
             },
           ],
         },
