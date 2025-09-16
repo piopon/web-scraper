@@ -32,12 +32,14 @@ describe("createRoutes() method", () => {
 
 describe("created settings POST routes", () => {
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+  const localPassport = new passport.Passport();
   // configue test express app server
   const testApp = express();
   testApp.use(express.json());
   testApp.use(express.urlencoded({ extended: false }));
   testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
   testApp.use("/settings", new SettingsRouter(components).createRoutes());
+  testApp.use("/auth", createMockAuthRouter(localPassport, null));
   // create test client to call server requests
   const testClient = supertest(testApp);
   test("returns correct result for unknown path", async () => {
@@ -103,6 +105,20 @@ describe("created settings POST routes", () => {
     });
   });
 });
+
+function createMockAuthRouter(passport, configId = 123) {
+  const router = express.Router();
+  const strategyName = `mock-login-${configId}`;
+  // configure mocked login logic
+  const options = { usernameField: "mail", passwordField: "pass" };
+  const verify = (_user, _pass, done) => done(null, { id: 1, config: configId, save: (_) => true });
+  passport.use(strategyName, new Strategy(options, verify));
+  passport.serializeUser((user, done) => done(null, user.id));
+  passport.deserializeUser((userId, done) => done(null, { id: userId, config: configId, save: (_) => true }));
+  // use passport mock login in tests
+  router.post("/login", passport.authenticate(strategyName));
+  return router;
+}
 
 function createConfig(db, configId, name) {
   const component1 = createComponent("5m", "body p b", "innerHTML", "PLN");
