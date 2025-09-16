@@ -113,7 +113,14 @@ describe("created settings POST routes", () => {
         },
       ],
     ])("%s", async (_, input, expected) => {
-      const mockResult = { findById: (_) => ({ user: "", groups: [], save: () => {} }) };
+      const mockResult = {
+        findById: (_) =>
+          returnObjOrThrow(expected.error.server, {
+            user: "",
+            groups: [],
+            save: () => returnObjOrThrow(expected.error.client, {}),
+          }),
+      };
       jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
       const response = await testAgent.post("/settings/import").query(input.query).send(input.body);
       expect(response.statusCode).toBe(expected.status);
@@ -136,6 +143,13 @@ function createMockAuthRouter(passport, configId = 123) {
   // use passport mock login in tests
   router.post("/login", passport.authenticate(strategyName));
   return router;
+}
+
+function returnObjOrThrow(errorMessage, obj) {
+  if (errorMessage) {
+    throw Error(errorMessage);
+  }
+  return obj;
 }
 
 function createConfig(db, configId, name) {
