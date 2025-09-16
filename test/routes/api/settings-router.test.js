@@ -44,14 +44,14 @@ describe("created settings POST routes", () => {
   testApp.use(localPassport.session());
   testApp.use("/settings", new SettingsRouter(components).createRoutes());
   testApp.use("/auth", createMockAuthRouter(localPassport, null));
-  // create test client to call server requests
-  const testClient = supertest(testApp);
+  // retrieve underlying superagent to correctly persist sessions
+  const testAgent = supertest.agent(testApp);
   beforeAll(async () => {
     const mockAuth = { mail: "test@mail.com", pass: "test-secret" };
     await testAgent.post("/auth/login").send(mockAuth);
   });
   test("returns correct result for unknown path", async () => {
-    const response = await testClient.post("/status/unknown");
+    const response = await testAgent.post("/status/unknown");
     expect(response.statusCode).toBe(404);
   });
   describe("returns correct result using /settings endpoint when", () => {
@@ -115,7 +115,7 @@ describe("created settings POST routes", () => {
     ])("%s", async (_, input, expected) => {
       const mockResult = { findById: (_) => ({ user: "", groups: [], save: () => {} }) };
       jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
-      const response = await testClient.post("/settings/import").query(input.query).send(input.body);
+      const response = await testAgent.post("/settings/import").query(input.query).send(input.body);
       expect(response.statusCode).toBe(expected.status);
       expect(response.body).toStrictEqual(expected.response);
     });
