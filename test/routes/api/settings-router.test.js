@@ -40,6 +40,8 @@ describe("created settings POST routes", () => {
   testApp.use(express.json());
   testApp.use(express.urlencoded({ extended: false }));
   testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
+  testApp.use(localPassport.initialize());
+  testApp.use(localPassport.session());
   testApp.use("/settings", new SettingsRouter(components).createRoutes());
   testApp.use("/auth", createMockAuthRouter(localPassport, null));
   // create test client to call server requests
