@@ -107,6 +107,14 @@ describe("created settings POST routes", () => {
         },
       ],
       [
+        "body has invalid values",
+        { query: {}, body: createConfig(false) },
+        {
+          status: 400,
+          response: "Group name must have at least one letter",
+        },
+      ],
+      [
         "database throws an error",
         { query: {}, body: createConfig(true) },
         {
