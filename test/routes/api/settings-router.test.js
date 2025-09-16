@@ -114,6 +114,15 @@ describe("created settings POST routes", () => {
         },
       ],
       [
+        "import config logic throws an error",
+        { query: {}, body: createConfig(false, 123, "inConfig") },
+        {
+          error: { client: "Mockup client error" },
+          status: 400,
+          response: "Mockup client error",
+        },
+      ],
+      [
         "body has valid values",
         { query: {}, body: createConfig(false, 123, "inConfig") },
         {
