@@ -58,7 +58,7 @@ describe("created settings POST routes", () => {
     it.each([
       [
         "query is NOT empty",
-        { query: {property: "value"}, body: {} },
+        { query: { property: "value" }, body: {} },
         {
           status: 400,
           response: [
@@ -90,7 +90,7 @@ describe("created settings POST routes", () => {
       ],
       [
         "body has invalid structure",
-        { query: {}, body: {invalid: "struct"} },
+        { query: {}, body: { invalid: "struct" } },
         {
           status: 400,
           response: [
@@ -130,7 +130,9 @@ function createMockAuthRouter(passport, configId = 123) {
   const verify = (_user, _pass, done) => done(null, { id: 1, config: configId, save: (_) => true });
   passport.use(strategyName, new Strategy(options, verify));
   passport.serializeUser((user, done) => done(null, user.id));
-  passport.deserializeUser((userId, done) => done(null, { id: userId, name: "test", config: configId, save: (_) => true }));
+  passport.deserializeUser((userId, done) =>
+    done(null, { id: userId, name: "test", config: configId, save: (_) => true })
+  );
   // use passport mock login in tests
   router.post("/login", passport.authenticate(strategyName));
   return router;
@@ -150,7 +152,7 @@ function createConfig(db, configId, name) {
     ...(db && { getIdentifier: () => `name = ${name}` }),
     ...(db && { copyValues: (_) => true }),
     ...(db && { save: () => true }),
-    ...(db && { _id: configId, }),
+    ...(db && { _id: configId }),
   };
 }
 
