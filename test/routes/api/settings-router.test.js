@@ -117,6 +117,7 @@ describe("created settings POST routes", () => {
         "body has valid values",
         { query: {}, body: createConfig(false, 123, "inConfig") },
         {
+          error: { server: "", client: "" },
           status: 200,
           response: "Imported configuration for user test",
         },
