@@ -42,6 +42,10 @@ describe("created settings POST routes", () => {
   testApp.use("/auth", createMockAuthRouter(localPassport, null));
   // create test client to call server requests
   const testClient = supertest(testApp);
+  beforeAll(async () => {
+    const mockAuth = { mail: "test@mail.com", pass: "test-secret" };
+    await testAgent.post("/auth/login").send(mockAuth);
+  });
   test("returns correct result for unknown path", async () => {
     const response = await testClient.post("/status/unknown");
     expect(response.statusCode).toBe(404);
