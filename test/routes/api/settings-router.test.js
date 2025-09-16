@@ -108,7 +108,7 @@ describe("created settings POST routes", () => {
       ],
       [
         "database throws an error",
-        { query: {}, body: createConfig(false, "inConfig") },
+        { query: {}, body: createConfig(true) },
         {
           error: { server: "Mockup server error" },
           status: 500,
@@ -117,7 +117,7 @@ describe("created settings POST routes", () => {
       ],
       [
         "import config logic throws an error",
-        { query: {}, body: createConfig(false, "inConfig") },
+        { query: {}, body: createConfig(true) },
         {
           error: { client: "Mockup client error" },
           status: 400,
@@ -126,7 +126,7 @@ describe("created settings POST routes", () => {
       ],
       [
         "body has valid values",
-        { query: {}, body: createConfig(false, "inConfig") },
+        { query: {}, body: createConfig(true) },
         {
           error: { server: "", client: "" },
           status: 200,
@@ -173,36 +173,30 @@ function returnObjOrThrow(errorMessage, obj) {
   return obj;
 }
 
-function createConfig(db, name) {
+function createConfig(valid) {
   const component1 = createComponent("5m", "body p b", "innerHTML", "PLN");
   const component2 = createComponent("1h", "body p b", "innerHTML", "USD");
-  const observer1 = createObserver(db, "logo", "info", "load", "off", component1);
-  const observer2 = createObserver(db, "text", "status", "domcontentloaded", "onChange", component2);
+  const observer1 = createObserver("logo", "info", "load", "off", component1);
+  const observer2 = createObserver("text", "status", "domcontentloaded", "onChange", component2);
   return {
-    user: name,
+    user: "test",
     groups: [
-      createGroup(db, "test1", "$$$", "test.com", observer1),
-      createGroup(db, "test2", "@@@", "test.com", observer2),
+      createGroup(valid ? "test1" : "1", "$$$", "test.com", observer1),
+      createGroup(valid ? "test2" : "2", "@@@", "test.com", observer2),
     ],
-    ...(db && { getIdentifier: () => `name = ${name}` }),
-    ...(db && { copyValues: (_) => true }),
-    ...(db && { save: () => true }),
-    ...(db && { _id: configId }),
   };
 }
 
-function createGroup(db, name, category, domain, ...observers) {
+function createGroup(name, category, domain, ...observers) {
   return {
     name: name,
     category: category,
     domain: domain,
     observers: observers,
-    ...(db && { getIdentifier: () => `name = ${name}` }),
-    ...(db && { copyValues: (_) => true }),
   };
 }
 
-function createObserver(db, name, path, target, history, ...components) {
+function createObserver(name, path, target, history, ...components) {
   return {
     name: name,
     path: path,
@@ -211,8 +205,6 @@ function createObserver(db, name, path, target, history, ...components) {
     ...(components[0] && { data: components[0] }),
     ...(components[1] && { title: components[1] }),
     ...(components[2] && { image: components[2] }),
-    ...(db && { getIdentifier: () => `name = ${name}` }),
-    ...(db && { copyValues: (_) => true }),
   };
 }
 
