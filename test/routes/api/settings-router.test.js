@@ -4,9 +4,11 @@ import { WebComponents } from "../../../src/components/web-components.js";
 import { LogLevel } from "../../../src/config/app-types.js";
 
 import supertest from "supertest";
+import passport from "passport";
 import express from "express";
 import session from "express-session";
 import { jest } from "@jest/globals";
+import { Strategy } from "passport-local";
 
 jest.mock("../../../src/model/scrap-config.js");
 
