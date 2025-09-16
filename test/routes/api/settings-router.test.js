@@ -12,6 +12,8 @@ import { Strategy } from "passport-local";
 
 jest.mock("../../../src/model/scrap-config.js");
 
+const configId = 123;
+
 describe("createRoutes() method", () => {
   test("returns correct number of routes", () => {
     const expectedRoutes = [{ path: "/import", method: "post" }];
@@ -43,7 +45,7 @@ describe("created settings POST routes", () => {
   testApp.use(localPassport.initialize());
   testApp.use(localPassport.session());
   testApp.use("/settings", new SettingsRouter(components).createRoutes());
-  testApp.use("/auth", createMockAuthRouter(localPassport, null));
+  testApp.use("/auth", createMockAuthRouter(localPassport));
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
   beforeAll(async () => {
@@ -106,7 +108,7 @@ describe("created settings POST routes", () => {
       ],
       [
         "database throws an error",
-        { query: {}, body: createConfig(false, 123, "inConfig") },
+        { query: {}, body: createConfig(false, "inConfig") },
         {
           error: { server: "Mockup server error" },
           status: 500,
@@ -115,7 +117,7 @@ describe("created settings POST routes", () => {
       ],
       [
         "import config logic throws an error",
-        { query: {}, body: createConfig(false, 123, "inConfig") },
+        { query: {}, body: createConfig(false, "inConfig") },
         {
           error: { client: "Mockup client error" },
           status: 400,
@@ -124,7 +126,7 @@ describe("created settings POST routes", () => {
       ],
       [
         "body has valid values",
-        { query: {}, body: createConfig(false, 123, "inConfig") },
+        { query: {}, body: createConfig(false, "inConfig") },
         {
           error: { server: "", client: "" },
           status: 200,
@@ -148,7 +150,7 @@ describe("created settings POST routes", () => {
   });
 });
 
-function createMockAuthRouter(passport, configId = 123) {
+function createMockAuthRouter(passport) {
   const router = express.Router();
   const strategyName = `mock-login-${configId}`;
   // configure mocked login logic
@@ -171,7 +173,7 @@ function returnObjOrThrow(errorMessage, obj) {
   return obj;
 }
 
-function createConfig(db, configId, name) {
+function createConfig(db, name) {
   const component1 = createComponent("5m", "body p b", "innerHTML", "PLN");
   const component2 = createComponent("1h", "body p b", "innerHTML", "USD");
   const observer1 = createObserver(db, "logo", "info", "load", "off", component1);
