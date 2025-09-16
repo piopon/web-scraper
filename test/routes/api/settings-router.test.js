@@ -96,6 +96,14 @@ describe("created settings POST routes", () => {
           ],
         },
       ],
+      [
+        "body has valid values",
+        { query: {}, body: createConfig(false, 123, "inConfig") },
+        {
+          status: 200,
+          response: "Imported configuration for user test",
+        },
+      ],
     ])("%s", async (_, input, expected) => {
       const mockResult = { findById: (_) => ({ user: "", groups: [], save: () => {} }) };
       jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
