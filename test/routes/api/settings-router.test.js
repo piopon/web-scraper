@@ -105,6 +105,15 @@ describe("created settings POST routes", () => {
         },
       ],
       [
+        "database throws an error",
+        { query: {}, body: createConfig(false, 123, "inConfig") },
+        {
+          error: { server: "Mockup server error" },
+          status: 500,
+          response: "Mockup server error",
+        },
+      ],
+      [
         "body has valid values",
         { query: {}, body: createConfig(false, 123, "inConfig") },
         {
