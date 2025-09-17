@@ -307,12 +307,12 @@ describe("auth object with remote-login strategy", () => {
       expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Outdated challenge data. Please refresh it and try again." });
     });
     describe("database error occurs", () => {
+      const mockRequest = {
+        query: { challenge: "does,not,matter" },
+        connection: { remoteAddress: "127.0.0.1" },
+      };
       test("due to broken connection", async () => {
         doneMock = jest.fn();
-        const mockRequest = {
-          query: { challenge: "does,not,matter" },
-          connection: { remoteAddress: "127.0.0.1" },
-        };
         jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
           find: (_) => {
             throw Error("ECONNREFUSED");
@@ -325,10 +325,6 @@ describe("auth object with remote-login strategy", () => {
       });
       test("due to timed out connection", async () => {
         doneMock = jest.fn();
-        const mockRequest = {
-          query: { challenge: "does,not,matter" },
-          connection: { remoteAddress: "127.0.0.1" },
-        };
         jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
           find: (_) => {
             throw new MongooseError("ERR: MongoDB.find() take too long to complete");
@@ -341,10 +337,6 @@ describe("auth object with remote-login strategy", () => {
       });
       test("due to failed validation", async () => {
         doneMock = jest.fn();
-        const mockRequest = {
-          query: { challenge: "does,not,matter" },
-          connection: { remoteAddress: "127.0.0.1" },
-        };
         const expectedErr = "Validation failed.";
         jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
           find: (_) => {
