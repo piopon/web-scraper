@@ -18,6 +18,10 @@ process.env.DEMO_USER = "test_user";
 process.env.DEMO_PASS = "test_pass";
 process.env.GOOGLE_CLIENT_ID = "test_id";
 process.env.GOOGLE_CLIENT_SECRET = "test_secret";
+process.env.CHALLENGE_PREFIX = ">";
+process.env.CHALLENGE_JOIN = ",";
+process.env.CHALLENGE_EOL_SEPARATOR = "%";
+process.env.CHALLENGE_EOL_MINS = 5;
 
 test("configure returns correct result", () => {
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
