@@ -278,6 +278,19 @@ describe("auth object with remote-login strategy", () => {
       await testVerify(mockRequest, doneMock);
       expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Unknown challenge data. Please try again." });
     });
+    test("challenge base does not match", async () => {
+      doneMock = jest.fn();
+      const mockRequest = {
+        query: { challenge: "does,not,matter" },
+        connection: { remoteAddress: "127.0.0.1" },
+      };
+      const mockUsers = [{ name: "name", email: "name@test", challenge: "does,not,matter", save: () => true }];
+      const mock = () => ({ find: (_) => mockUsers });
+      jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
+      jest.spyOn(bcrypt, "compare").mockResolvedValue(false);
+      await testVerify(mockRequest, doneMock);
+      expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Invalid challenge data. Please try again." });
+    });
   });
 });
 
