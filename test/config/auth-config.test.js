@@ -306,6 +306,40 @@ describe("auth object with remote-login strategy", () => {
       await testVerify(mockRequest, doneMock);
       expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Outdated challenge data. Please refresh it and try again." });
     });
+    describe("database error occurs", () => {
+      test("due to broken connection", async () => {
+        doneMock = jest.fn();
+        const mockRequest = {
+          query: { challenge: "does,not,matter" },
+          connection: { remoteAddress: "127.0.0.1" },
+        };
+        jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
+          find: (_) => {
+            throw Error("ECONNREFUSED");
+          },
+        }));
+        await testVerify(mockRequest, doneMock);
+        expect(doneMock).toHaveBeenCalledWith(null, false, {
+          message: "Database connection has been broken. Check connection status and please try again.",
+        });
+      });
+      test("due to timed out connection", async () => {
+        doneMock = jest.fn();
+        const mockRequest = {
+          query: { challenge: "does,not,matter" },
+          connection: { remoteAddress: "127.0.0.1" },
+        };
+        jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
+          find: (_) => {
+            throw new MongooseError("ERR: MongoDB.find() take too long to complete");
+          },
+        }));
+        await testVerify(mockRequest, doneMock);
+        expect(doneMock).toHaveBeenCalledWith(null, false, {
+          message: "Database connection has timed out. Check connection status and please try again.",
+        });
+      });
+    });
   });
 });
 
