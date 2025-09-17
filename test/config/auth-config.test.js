@@ -236,6 +236,28 @@ describe("auth object with local-login strategy", () => {
   });
 });
 
+describe("auth object with remote-login strategy", () => {
+  test("correctly authenticates user when challenge data is correct", async () => {
+    const challengeString = ">mena,tes@tmena,10.0.7.12%1757635812345";
+    const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+    const authConfig = new AuthConfig(passport, components);
+    const authObj = authConfig.configure();
+    const testVerify = authObj._strategies["remote-login"]._verify;
+    doneMock = jest.fn();
+    const mockRequest = {
+      query: { challenge: challengeString },
+      connection: { remoteAddress: "127.0.0.1" },
+    };
+    const mockUsers = [{ name: "name", email: "name@test", challenge: challengeString, save: () => true }];
+    const mock = () => ({ find: (_) => mockUsers });
+    jest.useFakeTimers().setSystemTime(new Date("2025-09-12"));
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
+    jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
+    await testVerify(mockRequest, doneMock);
+    expect(doneMock).toHaveBeenCalledWith(null, mockUsers[0]);
+  });
+});
+
 describe("auth object with local-register strategy", () => {
   const authConfig = new AuthConfig(passport, undefined, { hashSalt: 10 });
   const authObj = authConfig.configure();
