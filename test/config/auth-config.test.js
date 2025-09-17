@@ -256,6 +256,25 @@ describe("auth object with remote-login strategy", () => {
     await testVerify(mockRequest, doneMock);
     expect(doneMock).toHaveBeenCalledWith(null, mockUsers[0]);
   });
+  describe("fails to authenticate user when", () => {
+    const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+    const authConfig = new AuthConfig(passport, components);
+    const authObj = authConfig.configure();
+    const testVerify = authObj._strategies["remote-login"]._verify;
+    test("multiple users were found", async () => {
+      doneMock = jest.fn();
+      const mockRequest = {
+        query: { challenge: "does,not,matter,in,this,test" },
+        connection: { remoteAddress: "127.0.0.1" },
+      };
+      const mockUsers = [{ name: "name1" }, { name: "name2" }];
+      const mock = () => ({ find: (_) => mockUsers });
+      jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
+      jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
+      await testVerify(mockRequest, doneMock);
+      expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Unknown challenge data. Please try again." });
+    });
+  });
 });
 
 describe("auth object with local-register strategy", () => {
