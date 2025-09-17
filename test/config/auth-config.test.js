@@ -291,6 +291,21 @@ describe("auth object with remote-login strategy", () => {
       await testVerify(mockRequest, doneMock);
       expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Invalid challenge data. Please try again." });
     });
+    test("challenge deadline is outdated", async () => {
+      const challengeString = ">mena,tes@tmena,10.0.7.12%1";
+      doneMock = jest.fn();
+      const mockRequest = {
+        query: { challenge: challengeString },
+        connection: { remoteAddress: "127.0.0.1" },
+      };
+      const mockUsers = [{ name: "name", email: "name@test", challenge: challengeString, save: () => true }];
+      const mock = () => ({ find: (_) => mockUsers });
+      jest.useFakeTimers().setSystemTime(new Date("2025-09-12"));
+      jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
+      jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
+      await testVerify(mockRequest, doneMock);
+      expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Outdated challenge data. Please refresh it and try again." });
+    });
   });
 });
 
