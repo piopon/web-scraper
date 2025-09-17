@@ -339,6 +339,23 @@ describe("auth object with remote-login strategy", () => {
           message: "Database connection has timed out. Check connection status and please try again.",
         });
       });
+      test("due to failed validation", async () => {
+        doneMock = jest.fn();
+        const mockRequest = {
+          query: { challenge: "does,not,matter" },
+          connection: { remoteAddress: "127.0.0.1" },
+        };
+        const expectedErr = "Validation failed.";
+        jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
+          find: (_) => {
+            const mockError = new MongooseNamespace.ValidationError(new MongooseError("ERR"));
+            mockError.addError("test-path", new MongooseNamespace.ValidatorError({ message: expectedErr }));
+            throw mockError;
+          },
+        }));
+        await testVerify(mockRequest, doneMock);
+        expect(doneMock).toHaveBeenCalledWith(null, false, { message: expectedErr });
+      });
     });
   });
 });
