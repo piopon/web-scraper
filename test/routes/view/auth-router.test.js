@@ -5,6 +5,7 @@ import { ScrapUser } from "../../../src/model/scrap-user.js";
 import { WebComponents } from "../../../src/components/web-components.js";
 import { LogLevel } from "../../../src/config/app-types.js";
 
+import bcrypt from "bcrypt";
 import supertest from "supertest";
 import passport from "passport";
 import express from "express";
@@ -19,6 +20,7 @@ jest.mock("../../../src/model/scrap-config.js");
 jest.mock("../../../src/model/scrap-user.js");
 jest.mock("jsonwebtoken");
 jest.mock("passport");
+jest.mock("bcrypt");
 
 let isAuthenticatedResult = false;
 
@@ -191,6 +193,7 @@ function configureTestSever(testRouter) {
     },
   };
   jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
+  jest.spyOn(bcrypt, "hashSync").mockResolvedValue("challenge-mocked");
   // create auth config object
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
   const authConfig = new AuthConfig(passport, components);
