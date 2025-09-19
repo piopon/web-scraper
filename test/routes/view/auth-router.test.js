@@ -159,7 +159,6 @@ describe("created auth POST routes", () => {
   });
   test("returns correct result using /token endpoint", async () => {
     isAuthenticatedResult = false;
-    const tokenObj = { token: "TEST_TOKEN", challenge: "TEST_CHALLENGE" };
     jest.spyOn(passport, "authenticate").mockImplementation((strategy, options, callback) => {
       return (req, res, next) => {
         return callback(undefined, { name: "test", email: "mail", password: "pass" }, {});
@@ -167,7 +166,7 @@ describe("created auth POST routes", () => {
     });
     const response = await testAgent.post("/auth/token");
     expect(response.statusCode).toBe(200);
-    expect(response.text).toBe(JSON.stringify(tokenObj));
+    expect(response.text).toBe(JSON.stringify({ token: "mocked.jwt.token", challenge: {} }));
   });
   test("returns correct result using /logout endpoint", async () => {
     isAuthenticatedResult = true;
