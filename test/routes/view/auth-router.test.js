@@ -181,6 +181,7 @@ function configureTestSever(testRouter) {
   // configure mock result (needed by POST requests)
   const userMockResult = {
     deleteOne: (_) => false,
+    findOne: (_) => ({ save: () => {} }),
   };
   jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => userMockResult);
   const mockResult = {
