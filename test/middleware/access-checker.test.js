@@ -90,7 +90,7 @@ describe("canViewContent() method", () => {
     expect(invokeState.redirect).toBe("");
     expect(invokeState.next).toBe(true);
   });
-  test("should redirect when not authorized", async () => {
+  test("should redirect when not authorized via remote-login", async () => {
     const invokeState = { name: "", redirect: "", next: false };
     const requestObj = {
       isAuthenticated: () => false,
