@@ -127,7 +127,7 @@ describe("created auth GET routes", () => {
 });
 
 describe("created auth POST routes", () => {
-  const testRouter = new AuthRouter(passport, new WebComponents({ minLogLevel: LogLevel.DEBUG }));
+  const testRouter = new AuthRouter(passport, new WebComponents({ minLogLevel: LogLevel.DEBUG }), { hashSalt: 10 });
   const testApp = configureTestSever(testRouter);
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
