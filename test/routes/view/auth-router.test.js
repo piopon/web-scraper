@@ -180,6 +180,19 @@ describe("created auth POST routes", () => {
     expect(response.statusCode).toBe(400);
     expect(response.text).toBe(JSON.stringify({ error: expectedErrorMsg }));
   });
+  test("returns token retrieval error using /token endpoint", async () => {
+    isAuthenticatedResult = false;
+    const userMock = { deleteOne: (_) => false, findOne: (_) => undefined };
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => userMock);
+    jest.spyOn(passport, "authenticate").mockImplementation((strategy, options, callback) => {
+      return (req, res, next) => {
+        return callback(undefined, { name: "test", email: "mail", password: "pass" }, {});
+      };
+    });
+    const response = await testAgent.post("/auth/token");
+    expect(response.statusCode).toBe(400);
+    expect(response.text).toBe(JSON.stringify({ error: "Token retrieval error" }));
+  });
   test("returns correct result using /logout endpoint", async () => {
     isAuthenticatedResult = true;
     const response = await testAgent.post("/auth/logout");
