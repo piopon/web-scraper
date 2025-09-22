@@ -18,6 +18,10 @@ process.env.DEMO_USER = "test_user";
 process.env.DEMO_PASS = "test_pass";
 process.env.GOOGLE_CLIENT_ID = "test_id";
 process.env.GOOGLE_CLIENT_SECRET = "test_secret";
+process.env.CHALLENGE_PREFIX = ">";
+process.env.CHALLENGE_JOIN = ",";
+process.env.CHALLENGE_EOL_SEPARATOR = "%";
+process.env.CHALLENGE_EOL_MINS = 5;
 
 test("configure returns correct result", () => {
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
@@ -232,6 +236,118 @@ describe("auth object with local-login strategy", () => {
     await testVerify("name@te.st", "pass@test", doneMock);
     expect(doneMock).toHaveBeenCalledWith(null, false, {
       message: "Cannot read properties of null (reading 'initComponents')",
+    });
+  });
+});
+
+describe("auth object with remote-login strategy", () => {
+  test("correctly authenticates user when challenge data is correct", async () => {
+    const challengeString = ">mena,tes@tmena,10.0.7.12%1757635812345";
+    const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+    const authConfig = new AuthConfig(passport, components);
+    const authObj = authConfig.configure();
+    const testVerify = authObj._strategies["remote-login"]._verify;
+    doneMock = jest.fn();
+    const mockRequest = {
+      query: { challenge: challengeString },
+      connection: { remoteAddress: "127.0.0.1" },
+    };
+    const mockUsers = [{ name: "name", email: "name@test", challenge: challengeString, save: () => true }];
+    const mock = () => ({ find: (_) => mockUsers });
+    jest.useFakeTimers().setSystemTime(new Date("2025-09-12"));
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
+    jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
+    await testVerify(mockRequest, doneMock);
+    expect(doneMock).toHaveBeenCalledWith(null, mockUsers[0]);
+  });
+  describe("fails to authenticate user when", () => {
+    const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+    const authConfig = new AuthConfig(passport, components);
+    const authObj = authConfig.configure();
+    const testVerify = authObj._strategies["remote-login"]._verify;
+    test("multiple users were found", async () => {
+      doneMock = jest.fn();
+      const mockRequest = {
+        query: { challenge: "does,not,matter,in,this,test" },
+        connection: { remoteAddress: "127.0.0.1" },
+      };
+      const mockUsers = [{ name: "name1" }, { name: "name2" }];
+      const mock = () => ({ find: (_) => mockUsers });
+      jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
+      jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
+      await testVerify(mockRequest, doneMock);
+      expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Unknown challenge data. Please try again." });
+    });
+    test("challenge base does not match", async () => {
+      doneMock = jest.fn();
+      const mockRequest = {
+        query: { challenge: "does,not,matter" },
+        connection: { remoteAddress: "127.0.0.1" },
+      };
+      const mockUsers = [{ name: "name", email: "name@test", challenge: "does,not,matter", save: () => true }];
+      const mock = () => ({ find: (_) => mockUsers });
+      jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
+      jest.spyOn(bcrypt, "compare").mockResolvedValue(false);
+      await testVerify(mockRequest, doneMock);
+      expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Invalid challenge data. Please try again." });
+    });
+    test("challenge deadline is outdated", async () => {
+      const challengeString = ">mena,tes@tmena,10.0.7.12%1";
+      doneMock = jest.fn();
+      const mockRequest = {
+        query: { challenge: challengeString },
+        connection: { remoteAddress: "127.0.0.1" },
+      };
+      const mockUsers = [{ name: "name", email: "name@test", challenge: challengeString, save: () => true }];
+      const mock = () => ({ find: (_) => mockUsers });
+      jest.useFakeTimers().setSystemTime(new Date("2025-09-12"));
+      jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
+      jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
+      await testVerify(mockRequest, doneMock);
+      expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Outdated challenge data. Please refresh it and try again." });
+    });
+    describe("database error occurs", () => {
+      const mockRequest = {
+        query: { challenge: "does,not,matter" },
+        connection: { remoteAddress: "127.0.0.1" },
+      };
+      test("due to broken connection", async () => {
+        doneMock = jest.fn();
+        jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
+          find: (_) => {
+            throw Error("ECONNREFUSED");
+          },
+        }));
+        await testVerify(mockRequest, doneMock);
+        expect(doneMock).toHaveBeenCalledWith(null, false, {
+          message: "Database connection has been broken. Check connection status and please try again.",
+        });
+      });
+      test("due to timed out connection", async () => {
+        doneMock = jest.fn();
+        jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
+          find: (_) => {
+            throw new MongooseError("ERR: MongoDB.find() take too long to complete");
+          },
+        }));
+        await testVerify(mockRequest, doneMock);
+        expect(doneMock).toHaveBeenCalledWith(null, false, {
+          message: "Database connection has timed out. Check connection status and please try again.",
+        });
+      });
+      test("due to failed validation", async () => {
+        doneMock = jest.fn();
+        const expectedErr = "Validation failed.";
+        jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
+          find: (_) => {
+            const mockError = new MongooseNamespace.ValidationError(new MongooseError("ERR"));
+            mockError.addError("test-path", new MongooseNamespace.ValidatorError({ message: expectedErr }));
+            throw mockError;
+          },
+        }));
+        await testVerify(mockRequest, doneMock);
+        expect(doneMock).toHaveBeenCalledWith(null, false, { message: expectedErr });
+      });
     });
   });
 });

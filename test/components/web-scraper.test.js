@@ -38,6 +38,13 @@ describe("start() method", () => {
     minLogLevel: LogLevel.INFO,
     scraperConfig: { defaultTimeout: 10, embeddedBrowser: true },
   });
+  test("fails when external browser cannot be found", async () => {
+    const result = await new WebScraper({
+      minLogLevel: LogLevel.INFO,
+      scraperConfig: { defaultTimeout: 10, embeddedBrowser: false },
+    }).start();
+    expect(result).toBe(false);
+  }, 15_000);
   test("fails when no session user is provided", async () => {
     const result = await testScraper.start();
     expect(result).toBe(false);

@@ -1,5 +1,23 @@
 import { RegexUtils } from "../../src/utils/regex-utils.js";
 
+describe("escape", () => {
+  test("returns correct string with no escape characters", () => {
+    const input = "test string";
+    const result = "test string";
+    expect(RegexUtils.escape(input)).toStrictEqual(result);
+  });
+  test("returns correct string with different characters", () => {
+    const input = "i$ t*st s{}ring?";
+    const result = "i\\$ t\\*st s\\{\\}ring\\?";
+    expect(RegexUtils.escape(input)).toStrictEqual(result);
+  });
+  test("returns correct string with all escape characters", () => {
+    const input = "[.*+?^${}()|[]\\]";
+    const result = "\\[\\.\\*\\+\\?\\^\\$\\{\\}\\(\\)\\|\\[\\]\\\\\\]";
+    expect(RegexUtils.escape(input)).toStrictEqual(result);
+  });
+});
+
 describe("getPrices", () => {
   test("returns correct price with extra suffix", () => {
     const input = "12.33 PLN";

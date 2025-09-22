@@ -107,6 +107,34 @@ describe("created view GET routes", () => {
     expect(response.text).toContain('<label class="date-label">to:</label>');
     expect(response.text).toContain('<label class="btn-label">refresh:</label>');
   });
+  test("returns correct result using /view/settings endpoint", async () => {
+    const response = await testAgent.get("/view/settings");
+    expect(response.statusCode).toBe(200);
+    expect(response.type).toBe("text/html");
+    expect(response.text).toEqual(expect.not.arrayContaining(["", null, undefined]));
+    expect(response.text).toContain('<section class="settings-dashboard">');
+    expect(response.text).toContain('<div class="settings-options">');
+    expect(response.text).toContain('<label class="config-label">export:</label>');
+    expect(response.text).toContain('<div class="config-file-container">');
+    expect(response.text).toContain('<label class="config-label">import:</label>');
+  });
+  describe("returns correct monitor href with /view endpoint", () => {
+    test("and defined monitor address but no port", async () => {
+      process.env.MONITOR_ADDRESS = "https://test.monitor";
+      const response = await testAgent.get("/view");
+      expect(response.statusCode).toBe(200);
+      expect(response.type).toBe("text/html");
+      expect(response.text).toContain("<form action=https://test.monitor>");
+    });
+    test("and defined monitor address and port", async () => {
+      process.env.MONITOR_ADDRESS = "http://localhost";
+      process.env.MONITOR_PORT = "4321";
+      const response = await testAgent.get("/view");
+      expect(response.statusCode).toBe(200);
+      expect(response.type).toBe("text/html");
+      expect(response.text).toContain("<form action=http://localhost:4321>");
+    });
+  });
 });
 
 describe("created view POST routes", () => {
@@ -134,6 +162,11 @@ describe("created view POST routes", () => {
     const mockAuth = { mail: "test@mail.com", pass: "test-secret" };
     await testAgent.post("/auth/login").send(mockAuth);
   });
+  afterEach(() => {
+    jest.clearAllMocks();
+    jest.resetAllMocks();
+    jest.restoreAllMocks();
+  });
   test("returns correct result for unknown path", async () => {
     const response = await testAgent.post("/view/unknown");
     expect(response.statusCode).toBe(404);
@@ -152,19 +185,52 @@ describe("created view POST routes", () => {
       expect(response.body).toBe("Provided file is NOT an image file");
       removeDataFile(testDataPath);
     });
-    test("with an image file provided", async () => {
-      const testImagePath = path.join(".", "testfile.png");
-      createDataFile(testImagePath);
-      jest.spyOn(path, "join").mockImplementation((_) => testImagePath);
-      jest.spyOn(fs, "mkdirSync").mockImplementation((_) => {});
-      jest.spyOn(fs, "existsSync").mockImplementation((_) => false);
-      const response = await testAgent.post("/view/image").attach("auxiliary-file", testImagePath);
-      expect(response.statusCode).toBe(200);
-      expect(response.body).toStrictEqual({
-        message: "Successfully uploaded image: testfile.png",
-        url: "http://localhost:undefined/test@mail.c/testfile.png",
+    describe("with an image file provided", () => {
+      test("and no server nor port defined", async () => {
+        const testImagePath = path.join(".", "testfile1.png");
+        createDataFile(testImagePath);
+        jest.spyOn(path, "join").mockImplementation((_) => testImagePath);
+        jest.spyOn(fs, "mkdirSync").mockImplementation((_) => {});
+        jest.spyOn(fs, "existsSync").mockImplementation((_) => false);
+        const response = await testAgent.post("/view/image").attach("auxiliary-file", testImagePath);
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toStrictEqual({
+          message: "Successfully uploaded image: testfile1.png",
+          url: "http://localhost:undefined/test@mail.c/testfile1.png",
+        });
+        removeDataFile(testImagePath);
       });
-      removeDataFile(testImagePath);
+      test("and external server defined", async () => {
+        process.env.SERVER_ADDRESS = "test://1.2.3.4";
+        const testImagePath = path.join(".", "testfile2.png");
+        createDataFile(testImagePath);
+        jest.spyOn(path, "join").mockImplementation((_) => testImagePath);
+        jest.spyOn(fs, "mkdirSync").mockImplementation((_) => {});
+        jest.spyOn(fs, "existsSync").mockImplementation((_) => false);
+        const response = await testAgent.post("/view/image").attach("auxiliary-file", testImagePath);
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toStrictEqual({
+          message: "Successfully uploaded image: testfile2.png",
+          url: "test://1.2.3.4/test@mail.c/testfile2.png",
+        });
+        removeDataFile(testImagePath);
+      });
+      test("and internal server and port defined", async () => {
+        process.env.SERVER_ADDRESS = "test://localhost";
+        process.env.SERVER_PORT = "1234";
+        const testImagePath = path.join(".", "testfile3.png");
+        createDataFile(testImagePath);
+        jest.spyOn(path, "join").mockImplementation((_) => testImagePath);
+        jest.spyOn(fs, "mkdirSync").mockImplementation((_) => {});
+        jest.spyOn(fs, "existsSync").mockImplementation((_) => true);
+        const response = await testAgent.post("/view/image").attach("auxiliary-file", testImagePath);
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toStrictEqual({
+          message: "Successfully uploaded image: testfile3.png",
+          url: "test://localhost:1234/test@mail.c/testfile3.png",
+        });
+        removeDataFile(testImagePath);
+      });
     });
   });
 });

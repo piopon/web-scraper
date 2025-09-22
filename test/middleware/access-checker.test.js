@@ -90,8 +90,8 @@ describe("canViewContent() method", () => {
     expect(invokeState.redirect).toBe("");
     expect(invokeState.next).toBe(true);
   });
-  test("should redirect when not authorized", async () => {
-    const invokeState = { redirect: "", next: false };
+  test("should redirect when not authorized via remote-login", async () => {
+    const invokeState = { name: "", redirect: "", next: false };
     const requestObj = {
       isAuthenticated: () => false,
       app: {
@@ -99,6 +99,7 @@ describe("canViewContent() method", () => {
           passport: {
             authenticate: (name, options) => {
               return (req, res, next) => {
+                invokeState.name = name;
                 invokeState.redirect = "/auth/login";
                 invokeState.next = false;
               };
@@ -113,6 +114,33 @@ describe("canViewContent() method", () => {
     const mockedRes = { redirect: (input) => (invokeState.redirect = input) };
     const mockedNext = () => (invokeState.next = true);
     AccessChecker.canViewContent(requestObj, mockedRes, mockedNext);
+    expect(invokeState.name).toBe("remote-login");
+    expect(invokeState.redirect).toBe("/auth/login");
+    expect(invokeState.next).toBe(false);
+  });
+  test("should redirect when not authorized via jwt", async () => {
+    const invokeState = { name: "", redirect: "", next: false };
+    const requestObj = {
+      isAuthenticated: () => false,
+      app: {
+        locals: {
+          passport: {
+            authenticate: (name, options) => {
+              return (req, res, next) => {
+                invokeState.name = name;
+                invokeState.redirect = "/auth/login";
+                invokeState.next = false;
+              };
+            },
+          },
+        },
+      },
+      query: {},
+    };
+    const mockedRes = { redirect: (input) => (invokeState.redirect = input) };
+    const mockedNext = () => (invokeState.next = true);
+    AccessChecker.canViewContent(requestObj, mockedRes, mockedNext);
+    expect(invokeState.name).toBe("jwt");
     expect(invokeState.redirect).toBe("/auth/login");
     expect(invokeState.next).toBe(false);
   });

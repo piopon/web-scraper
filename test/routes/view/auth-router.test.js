@@ -5,6 +5,7 @@ import { ScrapUser } from "../../../src/model/scrap-user.js";
 import { WebComponents } from "../../../src/components/web-components.js";
 import { LogLevel } from "../../../src/config/app-types.js";
 
+import bcrypt from "bcrypt";
 import supertest from "supertest";
 import passport from "passport";
 import express from "express";
@@ -19,6 +20,7 @@ jest.mock("../../../src/model/scrap-config.js");
 jest.mock("../../../src/model/scrap-user.js");
 jest.mock("jsonwebtoken");
 jest.mock("passport");
+jest.mock("bcrypt");
 
 let isAuthenticatedResult = false;
 
@@ -125,7 +127,7 @@ describe("created auth GET routes", () => {
 });
 
 describe("created auth POST routes", () => {
-  const testRouter = new AuthRouter(passport, new WebComponents({ minLogLevel: LogLevel.DEBUG }));
+  const testRouter = new AuthRouter(passport, new WebComponents({ minLogLevel: LogLevel.DEBUG }), { hashSalt: 10 });
   const testApp = configureTestSever(testRouter);
   // retrieve underlying superagent to correctly persist sessions
   const testAgent = supertest.agent(testApp);
@@ -155,6 +157,42 @@ describe("created auth POST routes", () => {
     expect(response.text).toBe("Found. Redirecting to /auth/login");
     expect(response.headers.location).toBe("/auth/login");
   });
+  test("returns correct result using /token endpoint", async () => {
+    isAuthenticatedResult = false;
+    jest.spyOn(passport, "authenticate").mockImplementation((strategy, options, callback) => {
+      return (req, res, next) => {
+        return callback(undefined, { name: "test", email: "mail", password: "pass" }, {});
+      };
+    });
+    const response = await testAgent.post("/auth/token");
+    expect(response.statusCode).toBe(200);
+    expect(response.text).toBe(JSON.stringify({ token: "mocked.jwt.token", challenge: {} }));
+  });
+  test("returns info message error using /token endpoint", async () => {
+    isAuthenticatedResult = false;
+    const expectedErrorMsg = "Cannot find user with challenge";
+    jest.spyOn(passport, "authenticate").mockImplementation((strategy, options, callback) => {
+      return (req, res, next) => {
+        return callback(undefined, undefined, { message: expectedErrorMsg });
+      };
+    });
+    const response = await testAgent.post("/auth/token");
+    expect(response.statusCode).toBe(400);
+    expect(response.text).toBe(JSON.stringify({ error: expectedErrorMsg }));
+  });
+  test("returns token retrieval error using /token endpoint", async () => {
+    isAuthenticatedResult = false;
+    const userMock = { deleteOne: (_) => false, findOne: (_) => undefined };
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => userMock);
+    jest.spyOn(passport, "authenticate").mockImplementation((strategy, options, callback) => {
+      return (req, res, next) => {
+        return callback(undefined, { name: "test", email: "mail", password: "pass" }, {});
+      };
+    });
+    const response = await testAgent.post("/auth/token");
+    expect(response.statusCode).toBe(400);
+    expect(response.text).toBe(JSON.stringify({ error: "Token retrieval error" }));
+  });
   test("returns correct result using /logout endpoint", async () => {
     isAuthenticatedResult = true;
     const response = await testAgent.post("/auth/logout");
@@ -168,6 +206,7 @@ function configureTestSever(testRouter) {
   // configure mock result (needed by POST requests)
   const userMockResult = {
     deleteOne: (_) => false,
+    findOne: (_) => ({ save: () => {} }),
   };
   jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => userMockResult);
   const mockResult = {
@@ -177,6 +216,7 @@ function configureTestSever(testRouter) {
     },
   };
   jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
+  jest.spyOn(bcrypt, "hashSync").mockResolvedValue("challenge-mocked");
   // create auth config object
   const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
   const authConfig = new AuthConfig(passport, components);
@@ -204,6 +244,8 @@ function configureTestSever(testRouter) {
         email: "test@example.com",
         password: "supersecret",
       }),
+      challenge: "testchallenge",
+      save: () => {},
     };
     next();
   });
