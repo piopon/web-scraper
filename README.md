@@ -51,6 +51,7 @@ However if, for whatever reasons, it's not an option then a local installation i
 Before running the application service create an `.env` file with the following data:
 ```
 # connection parameters
+SERVER_ADDRESS=[STRING]          # service address
 SERVER_PORT=[INTEGER]            # service port number
 
 # database settings
