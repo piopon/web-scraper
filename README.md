@@ -73,6 +73,10 @@ SCRAP_INTERVAL_SEC=[INTEGER]     # default seconds interval between each scrap o
 ENCRYPT_SALT=[STRING|INTEGER]    # randomize salt value
 SESSION_SHA=[STRING]             # hash for session cookie
 JWT_SECRET=[STRING]              # hash for JSON Web Token
+CHALLENGE_PREFIX=[STRING]        # challenge token prefix
+CHALLENGE_JOIN=[STRING]          # challenge token separator
+CHALLENGE_EOL_MINS=[INTEGER]     # challenge deadline minutes
+CHALLENGE_EOL_SEPARATOR=[STRING] # challenge deadline separator
 
 # external authentication
 GOOGLE_CLIENT_ID=[STRING]        # external Google login client ID
