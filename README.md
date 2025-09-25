@@ -61,6 +61,10 @@ DB_ADDRESS=[STRING]              # the IP address for datavase
 DB_USER=[STRING]                 # database user (authentication)
 DB_PASSWORD=[STRING]             # database password (authentication)
 
+# data monitor settings
+MONITOR_ADDRESS=[STRING]         # monitor service address
+MONITOR_PORT=[INTEGER]           # monitor service port number
+
 #scraper settings
 SCRAP_INACTIVE_DAYS=[INTEGER]    # number of days from last login to treat user as inative
 SCRAP_INTERVAL_SEC=[INTEGER]     # default seconds interval between each scrap operation
