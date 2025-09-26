@@ -68,6 +68,7 @@ MONITOR_PORT=[INTEGER]           # monitor service port number
 #scraper settings
 SCRAP_INACTIVE_DAYS=[INTEGER]    # number of days from last login to treat user as inative
 SCRAP_INTERVAL_SEC=[INTEGER]     # default seconds interval between each scrap operation
+SCRAP_EXTRAS_TYPE=[ENUM]         # the type of extra value in data output
 
 # internal hash and secrets
 ENCRYPT_SALT=[STRING|INTEGER]    # randomize salt value
