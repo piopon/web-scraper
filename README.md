@@ -138,8 +138,11 @@ Also keep in mind that initially this directory may contain folders for CI and d
 Current status of web-scraper's components can be quicky checked in the bottom right corner:
 ![status general](./docs/images/003_status-general.png "web-scraper status preview")
 
-After successfull login this panel contains also a link to detailed scraper running status with logs:
-![status details](./docs/images/004_status-view.png "web-scraper status view")
+After successfull login this panel contains also additional links to:
+* detailed scraper running status with logs:
+  ![status details](./docs/images/004_status-view.png "web-scraper status view")
+* scraper service configuration
+  ![configuration details](./docs/images/005_config-view.png "web-scraper configuration view")
 
 ### Project Structure 📊
 
