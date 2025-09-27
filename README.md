@@ -129,6 +129,8 @@ After the service is up and running the next steps are as follows:
 2. Customize your scraping tasks by modifying configuration groups, observers and fill all components data
    ![config view](./docs/images/001_config-view.png "web-scraper config view")
    ![config edit](./docs/images/002_config-edit.png "web-scraper config edit")
+3. Go to data monitor service and define thresholds and notifiers to make use of scraped values
+   ![monitor link](./docs/images/006_monitor-link.png "link to data monitor service")
 
 __<ins>After correctly adding first observer your data is now being scraped from the specified location!</ins>__
 
