@@ -16,6 +16,8 @@ The tool is designed to handle a range of web scraping scenarios, from simple da
   Users can specify target elements using CSS selectors
 - <ins>**Multiple users support**</ins><br>
   Run scraper tasks for several users at once
+- <ins>**Direct link to data monitor service**</ins><br>
+  Configure scraped data thresholds and notifiers in supplementary monitor
 - <ins>**REST API**</ins><br>
   Output data can be retrieved remotely by sending a request to appropriate REST API endpoint
 - <ins>**Error handling**</ins><br>
