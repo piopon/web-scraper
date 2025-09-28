@@ -131,6 +131,7 @@ After the service is up and running the next steps are as follows:
    ![config edit](./docs/images/002_config-edit.png "web-scraper config edit")
 3. Go to data monitor service and define thresholds and notifiers to make use of scraped values
    ![monitor link](./docs/images/006_monitor-link.png "link to data monitor service")
+   This button is available only when MONITOR_ADDRESS (and optionally MONITOR_PORT) environment variable is defined.
 
 __<ins>After correctly adding first observer your data is now being scraped from the specified location!</ins>__
 
