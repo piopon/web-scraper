@@ -16,6 +16,8 @@ The tool is designed to handle a range of web scraping scenarios, from simple da
   Users can specify target elements using CSS selectors
 - <ins>**Multiple users support**</ins><br>
   Run scraper tasks for several users at once
+- <ins>**Direct link to data monitor service**</ins><br>
+  Configure scraped data thresholds and notifiers in supplementary monitor
 - <ins>**REST API**</ins><br>
   Output data can be retrieved remotely by sending a request to appropriate REST API endpoint
 - <ins>**Error handling**</ins><br>
@@ -51,6 +53,7 @@ However if, for whatever reasons, it's not an option then a local installation i
 Before running the application service create an `.env` file with the following data:
 ```
 # connection parameters
+SERVER_ADDRESS=[STRING]          # service address
 SERVER_PORT=[INTEGER]            # service port number
 
 # database settings
@@ -60,14 +63,23 @@ DB_ADDRESS=[STRING]              # the IP address for datavase
 DB_USER=[STRING]                 # database user (authentication)
 DB_PASSWORD=[STRING]             # database password (authentication)
 
+# data monitor settings
+MONITOR_ADDRESS=[STRING]         # monitor service address
+MONITOR_PORT=[INTEGER]           # monitor service port number
+
 #scraper settings
 SCRAP_INACTIVE_DAYS=[INTEGER]    # number of days from last login to treat user as inative
 SCRAP_INTERVAL_SEC=[INTEGER]     # default seconds interval between each scrap operation
+SCRAP_EXTRAS_TYPE=[ENUM]         # the type of extra value in data output
 
 # internal hash and secrets
 ENCRYPT_SALT=[STRING|INTEGER]    # randomize salt value
 SESSION_SHA=[STRING]             # hash for session cookie
 JWT_SECRET=[STRING]              # hash for JSON Web Token
+CHALLENGE_PREFIX=[STRING]        # challenge token prefix
+CHALLENGE_JOIN=[STRING]          # challenge token separator
+CHALLENGE_EOL_MINS=[INTEGER]     # challenge deadline minutes
+CHALLENGE_EOL_SEPARATOR=[STRING] # challenge deadline separator
 
 # external authentication
 GOOGLE_CLIENT_ID=[STRING]        # external Google login client ID
@@ -117,6 +129,9 @@ After the service is up and running the next steps are as follows:
 2. Customize your scraping tasks by modifying configuration groups, observers and fill all components data
    ![config view](./docs/images/001_config-view.png "web-scraper config view")
    ![config edit](./docs/images/002_config-edit.png "web-scraper config edit")
+3. Go to data monitor service and define thresholds and notifiers to make use of scraped values
+   ![monitor link](./docs/images/006_monitor-link.png "link to data monitor service")
+   This button is available only when MONITOR_ADDRESS (and optionally MONITOR_PORT) environment variable is defined.
 
 __<ins>After correctly adding first observer your data is now being scraped from the specified location!</ins>__
 
@@ -128,8 +143,11 @@ Also keep in mind that initially this directory may contain folders for CI and d
 Current status of web-scraper's components can be quicky checked in the bottom right corner:
 ![status general](./docs/images/003_status-general.png "web-scraper status preview")
 
-After successfull login this panel contains also a link to detailed scraper running status with logs:
-![status details](./docs/images/004_status-view.png "web-scraper status view")
+After successfull login this panel contains also additional links to:
+* detailed scraper running status with logs:
+  ![status details](./docs/images/004_status-view.png "web-scraper status view")
+* scraper service configuration
+  ![configuration details](./docs/images/005_config-view.png "web-scraper configuration view")
 
 ### Project Structure 📊
 
