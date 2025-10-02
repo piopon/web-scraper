@@ -308,7 +308,9 @@ describe("auth object with remote-login strategy", () => {
       jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
       jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
       await testVerify(mockRequest, doneMock);
-      expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Outdated challenge data. Please refresh it and try again." });
+      expect(doneMock).toHaveBeenCalledWith(null, false, {
+        message: "Outdated challenge data. Please refresh it and try again.",
+      });
     });
     describe("database error occurs", () => {
       const mockRequest = {
