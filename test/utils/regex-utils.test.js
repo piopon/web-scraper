@@ -52,6 +52,35 @@ describe("getPrices", () => {
   });
 });
 
+describe("getIpAddress", () => {
+  test("returns correct IP with extra suffix", () => {
+    const input = "192.16.23.112<-IP ;)";
+    const result = ["192.16.23.112"];
+    expect(RegexUtils.getIpAddress(input)).toStrictEqual(result);
+  });
+  test("returns correct IP with extra prefix", () => {
+    const input = "::ffff:192.168.0.29";
+    const result = ["192.168.0.29"];
+    expect(RegexUtils.getIpAddress(input)).toStrictEqual(result);
+  });
+  test("returns correct price with extra suffix and prefix", () => {
+    const input = "::ffff:10.91.112.115<-IP 2;)";
+    const result = ["10.91.112.115"];
+    expect(RegexUtils.getIpAddress(input)).toStrictEqual(result);
+  });
+  test("returns correct price with multiple values", () => {
+    const input = "IPs: 192.16.23.112<-IP | ::ffff:10.91.112.115";
+    const result = ["192.16.23.112", "10.91.112.115"];
+    expect(RegexUtils.getIpAddress(input)).toStrictEqual(result);
+  });
+  test("throws if input object is null", () => {
+    expect(() => RegexUtils.getIpAddress(null)).toThrow(TypeError);
+  });
+  test("throws if input object is undefined", () => {
+    expect(() => RegexUtils.getIpAddress(undefined)).toThrow(TypeError);
+  });
+});
+
 describe("isUnsignedInteger", () => {
   test("returns true when unsigned integer is used", () => {
     expect(RegexUtils.isUnsignedInteger("1234")).toBe(true);
