@@ -18,7 +18,8 @@ export class RegexUtils {
   }
 
   static getIpAddress(input) {
-    return input.match(/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/g);
+    const match = input.match(/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/g);
+    return match ? match[0] : null;
   }
 
   /**
