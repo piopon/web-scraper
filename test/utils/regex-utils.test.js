@@ -53,17 +53,17 @@ describe("getPrices", () => {
 });
 
 describe("getIpAddress", () => {
-  test("returns correct IP with extra suffix", () => {
+  test("returns correct IP when extra suffix is present", () => {
     const input = "192.16.23.112<-IP ;)";
     const result = "192.16.23.112";
     expect(RegexUtils.getIpAddress(input)).toStrictEqual(result);
   });
-  test("returns correct IP with extra prefix", () => {
+  test("returns correct IP when extra prefix is present", () => {
     const input = "::ffff:192.168.0.29";
     const result = "192.168.0.29";
     expect(RegexUtils.getIpAddress(input)).toStrictEqual(result);
   });
-  test("returns correct price with extra suffix and prefix", () => {
+  test("returns correct IP when extra suffix and prefix are present", () => {
     const input = "::ffff:10.91.112.115<-IP 2;)";
     const result = "10.91.112.115";
     expect(RegexUtils.getIpAddress(input)).toStrictEqual(result);
