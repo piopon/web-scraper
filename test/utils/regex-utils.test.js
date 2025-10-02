@@ -53,6 +53,11 @@ describe("getPrices", () => {
 });
 
 describe("getIpAddress", () => {
+  test("returns correct IP when only IP is present", () => {
+    const input = "1.2.3.4";
+    const result = "1.2.3.4";
+    expect(RegexUtils.getIpAddress(input)).toStrictEqual(result);
+  });
   test("returns correct IP when extra suffix is present", () => {
     const input = "192.16.23.112<-IP ;)";
     const result = "192.16.23.112";
