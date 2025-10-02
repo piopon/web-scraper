@@ -17,6 +17,10 @@ export class RegexUtils {
     return string.replace(",", ".").match(/\d+(?:\.\d+)?/g);
   }
 
+  static getIpAddress(input) {
+    return input.match(/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/g);
+  }
+
   /**
    * Method used to check if the provided string value is an unsigned integer
    * @param {String} string The input string value to be checked

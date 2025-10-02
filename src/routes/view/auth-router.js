@@ -111,7 +111,7 @@ export class AuthRouter {
         const challengeData = {
           name: user.name,
           mail: user.email,
-          address: request.headers["x-forwarded-for"] || request.connection.remoteAddress,
+          address: RegexUtils.getIpAddress(request.headers["x-forwarded-for"] || request.connection.remoteAddress),
         };
         const challenge = bcrypt.hashSync(ChallengeUtils.generate(challengeData), this.#config.hashSalt);
         dbUser.challenge = challenge + ChallengeUtils.serializeDeadline();
