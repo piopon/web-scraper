@@ -2,11 +2,12 @@ import { AccessChecker } from "../../middleware/access-checker.js";
 import { ComponentType } from "../../config/app-types.js";
 import { ScrapConfig } from "../../model/scrap-config.js";
 import { ScrapUser } from "../../model/scrap-user.js";
+import { ChallengeUtils } from "../../utils/challenge-utils.js";
+import { RegexUtils } from "../../utils/regex-utils.js";
 
 import jwt from "jsonwebtoken";
 import express from "express";
 import bcrypt from "bcrypt";
-import { ChallengeUtils } from "../../utils/challenge-utils.js";
 
 export class AuthRouter {
   #components = undefined;
