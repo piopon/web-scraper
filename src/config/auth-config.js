@@ -142,7 +142,7 @@ export class AuthConfig {
         const currentChallenge = ChallengeUtils.generate({
           name: user[0].name,
           mail: user[0].email,
-          address: request.connection.remoteAddress,
+          address: RegexUtils.getIpAddress(request.headers["x-forwarded-for"] || request.connection.remoteAddress),
         });
         if (!(await bcrypt.compare(currentChallenge, request.query.challenge))) {
           // provided challenge does not match the reference one - incorrect login data

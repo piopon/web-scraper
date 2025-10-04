@@ -249,6 +249,7 @@ describe("auth object with remote-login strategy", () => {
     const testVerify = authObj._strategies["remote-login"]._verify;
     doneMock = jest.fn();
     const mockRequest = {
+      headers: [],
       query: { challenge: challengeString },
       connection: { remoteAddress: "127.0.0.1" },
     };
@@ -268,6 +269,7 @@ describe("auth object with remote-login strategy", () => {
     test("multiple users were found", async () => {
       doneMock = jest.fn();
       const mockRequest = {
+        headers: [],
         query: { challenge: "does,not,matter,in,this,test" },
         connection: { remoteAddress: "127.0.0.1" },
       };
@@ -281,6 +283,7 @@ describe("auth object with remote-login strategy", () => {
     test("challenge base does not match", async () => {
       doneMock = jest.fn();
       const mockRequest = {
+        headers: [],
         query: { challenge: "does,not,matter" },
         connection: { remoteAddress: "127.0.0.1" },
       };
@@ -295,6 +298,7 @@ describe("auth object with remote-login strategy", () => {
       const challengeString = ">mena,tes@tmena,10.0.7.12%1";
       doneMock = jest.fn();
       const mockRequest = {
+        headers: [],
         query: { challenge: challengeString },
         connection: { remoteAddress: "127.0.0.1" },
       };
@@ -304,10 +308,13 @@ describe("auth object with remote-login strategy", () => {
       jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(mock);
       jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
       await testVerify(mockRequest, doneMock);
-      expect(doneMock).toHaveBeenCalledWith(null, false, { message: "Outdated challenge data. Please refresh it and try again." });
+      expect(doneMock).toHaveBeenCalledWith(null, false, {
+        message: "Outdated challenge data. Please refresh it and try again.",
+      });
     });
     describe("database error occurs", () => {
       const mockRequest = {
+        headers: [],
         query: { challenge: "does,not,matter" },
         connection: { remoteAddress: "127.0.0.1" },
       };

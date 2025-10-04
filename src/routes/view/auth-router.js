@@ -2,11 +2,12 @@ import { AccessChecker } from "../../middleware/access-checker.js";
 import { ComponentType } from "../../config/app-types.js";
 import { ScrapConfig } from "../../model/scrap-config.js";
 import { ScrapUser } from "../../model/scrap-user.js";
+import { ChallengeUtils } from "../../utils/challenge-utils.js";
+import { RegexUtils } from "../../utils/regex-utils.js";
 
 import jwt from "jsonwebtoken";
 import express from "express";
 import bcrypt from "bcrypt";
-import { ChallengeUtils } from "../../utils/challenge-utils.js";
 
 export class AuthRouter {
   #components = undefined;
@@ -108,7 +109,11 @@ export class AuthRouter {
         if (!dbUser) {
           return response.status(400).json({ error: "Token retrieval error" });
         }
-        const challengeData = { name: user.name, mail: user.email, address: request.connection.remoteAddress };
+        const challengeData = {
+          name: user.name,
+          mail: user.email,
+          address: RegexUtils.getIpAddress(request.headers["x-forwarded-for"] || request.connection.remoteAddress),
+        };
         const challenge = bcrypt.hashSync(ChallengeUtils.generate(challengeData), this.#config.hashSalt);
         dbUser.challenge = challenge + ChallengeUtils.serializeDeadline();
         await dbUser.save();
