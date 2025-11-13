@@ -4,6 +4,7 @@ import { ScrapConfig } from "../../model/scrap-config.js";
 import { ScrapUser } from "../../model/scrap-user.js";
 import { ChallengeUtils } from "../../utils/challenge-utils.js";
 import { RegexUtils } from "../../utils/regex-utils.js";
+import { ModelUtils } from "../../utils/model-utils.js";
 
 import jwt from "jsonwebtoken";
 import express from "express";
@@ -148,5 +149,14 @@ export class AuthRouter {
       });
     };
     router.post("/logout", AccessChecker.canViewContent, logoutCallback);
+  }
+
+  #getTokenStrategy(fields) {
+    if (ModelUtils.hasExactKeys(fields, ["email", "password"])) {
+      return "local-login";
+    } else if (ModelUtils.hasExactKeys(fields, ["demo-user", "demo-pass"])) {
+      return "local-demo";
+    }
+    return "";
   }
 }
