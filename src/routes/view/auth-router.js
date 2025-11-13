@@ -155,6 +155,11 @@ export class AuthRouter {
     router.post("/logout", AccessChecker.canViewContent, logoutCallback);
   }
 
+  /**
+   * Method used to retrieve the token retrieval strategy name
+   * @param {Object} fields The token access fields
+   * @returns strategy name base on the token access fields
+   */
   #getTokenStrategy(fields) {
     if (ModelUtils.hasExactKeys(fields, ["email", "password"])) {
       return "local-login";
