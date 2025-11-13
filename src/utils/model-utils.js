@@ -56,6 +56,10 @@ export class ModelUtils {
     return true;
   }
 
+  static hasExactKeys(obj, req) {
+    return Object.keys(obj).length === req.length && req.every(k => Object.hasOwn(obj, k));
+  }
+
   /**
    * Method used to receive a array from specified source
    * @param {any} items The array of items
