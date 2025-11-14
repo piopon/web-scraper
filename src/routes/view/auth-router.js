@@ -134,8 +134,8 @@ export class AuthRouter {
     router.post("/demo", AccessChecker.canViewSessionUser, demoCallback);
     // user content endpoints (log-out)
     const logoutCallback = (request, response, next) => {
-      const userWithChallenge = request.user.challenge ? request.user : undefined;
-      const temporaryUser = request.user.hostUser ? request.user : undefined;
+      const userWithChallenge = request.user?.challenge ? request.user : undefined;
+      const temporaryUser = request.user?.hostUser ? request.user : undefined;
       request.logout(async (err) => {
         if (err) return next(err);
         response.redirect("/auth/login");
