@@ -1,4 +1,5 @@
 import { ScrapUser } from "../model/scrap-user.js";
+import { ModelUtils } from "../utils/model-utils.js";
 
 export class AccessChecker {
   /**
@@ -25,9 +26,14 @@ export class AccessChecker {
     if (request.isAuthenticated()) {
       return next();
     }
+    // challenge query parameter will be present only when remote login
     if (request.query.challenge) {
       const remoteOpts = { session: true, failureRedirect: "/auth/login", failureFlash: true };
       return request.app.locals.passport.authenticate("remote-login", remoteOpts)(request, response, next);
+    }
+    // logout endpoint with demo user name and pass in body means remote logout
+    if ("/logout" === request.url && ModelUtils.hasExactKeys(request.body, ["demo-user", "demo-pass"])) {
+      next();
     }
     const jwtOpts = { session: false, failureRedirect: "/auth/login" };
     return request.app.locals.passport.authenticate("jwt", jwtOpts)(request, response, next);
