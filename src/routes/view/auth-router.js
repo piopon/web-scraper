@@ -138,7 +138,9 @@ export class AuthRouter {
       const temporaryUser = request.user?.hostUser ? request.user : undefined;
       request.logout(async (err) => {
         if (err) return next(err);
-        response.redirect("/auth/login");
+        if (!request.remoteLogout) {
+          response.redirect("/auth/login");
+        }
         if (userWithChallenge) {
           userWithChallenge.challenge = undefined;
           await userWithChallenge.save();

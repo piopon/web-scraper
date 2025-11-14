@@ -33,6 +33,7 @@ export class AccessChecker {
     }
     // logout endpoint with demo user name and pass in body means remote logout
     if ("/logout" === request.url && ModelUtils.hasExactKeys(request.body, ["demo-user", "demo-pass"])) {
+      request.remoteLogout = true;
       const demoUser = await ScrapUser.getDatabaseModel().findOne({ hostUser: { $ne: null } });
       if (demoUser) {
         request.user = demoUser;
