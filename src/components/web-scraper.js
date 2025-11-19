@@ -396,19 +396,16 @@ export class WebScraper {
   #createDataPlaceholder(sessionUser, config) {
     const dataObject = [];
     config.groups.forEach((group) => {
-      const groupName = group.name;
-      const groupCategory = group.category;
-      const groupItems = group.observers.map((observer) => ({
-        status: "NOK",
-        name: observer.name,
-        icon: "-",
-        data: "-",
-        extra: observer.data.auxiliary
-      }));
       dataObject.push({
-        name: groupName,
-        category: groupCategory,
-        items: groupItems,
+        name: group.name,
+        category: group.category,
+        items: group.observers.map((observer) => ({
+          status: "NOK",
+          name: observer.name,
+          icon: "-",
+          data: "-",
+          extra: observer.data.auxiliary,
+        })),
       });
     });
     this.#saveData(sessionUser, dataObject);
