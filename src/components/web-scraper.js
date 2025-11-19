@@ -400,7 +400,7 @@ export class WebScraper {
         name: group.name,
         category: group.category,
         items: group.observers.map((observer) => ({
-          status: "NOK",
+          status: "ERROR",
           name: observer.name,
           icon: "-",
           data: "-",
