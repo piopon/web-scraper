@@ -394,6 +394,11 @@ export class WebScraper {
   }
 
   #createDataPlaceholder(sessionUser, config) {
+    const userDataFile = path.join(this.#userConfig.path, sessionUser, this.#userConfig.file);
+    if (fs.existsSync(userDataFile)) {
+      // if user data already exists then there's no need to create a placeholder
+      return;
+    }
     const dataObject = [];
     config.groups.forEach((group) => {
       dataObject.push({
