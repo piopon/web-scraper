@@ -101,6 +101,9 @@ export class WebScraper {
     session.id = setInterval(() => this.#scrapData(session), intervalTime);
     // store this session into active sessions map
     this.#sessions.set(sessionUser.email, session);
+    // create a blank data file with information about waiting for results
+    this.#createDataPlaceholder(sessionUser.email, session.config);
+    // show status summary
     const runDetails = `user: ${sessionUser.name}, interval: ${intervalTime / 1000} seconds`;
     this.#status.info(`${WebScraper.#RUNNING_STATUS} (${runDetails})`);
     return true;
@@ -388,6 +391,27 @@ export class WebScraper {
       fs.mkdirSync(dataDirectory, { recursive: true });
     }
     fs.writeFileSync(dataFile, JSON.stringify(dataToSave, null, 2));
+  }
+
+  #createDataPlaceholder(sessionUser, config) {
+    const dataObject = [];
+    config.groups.forEach((group) => {
+      const groupName = group.name;
+      const groupCategory = group.category;
+      const groupItems = group.observers.map((observer) => ({
+        status: "NOK",
+        name: observer.name,
+        icon: "-",
+        data: "-",
+        extra: observer.data.auxiliary
+      }));
+      dataObject.push({
+        name: groupName,
+        category: groupCategory,
+        items: groupItems,
+      });
+    });
+    this.#saveData(sessionUser, dataObject);
   }
 
   /**
