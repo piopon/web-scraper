@@ -393,6 +393,11 @@ export class WebScraper {
     fs.writeFileSync(dataFile, JSON.stringify(dataToSave, null, 2));
   }
 
+  /**
+   * Method used to create data file placeholder while waiting for the actual data to be scraped
+   * @param {String} sessionUser The email string of the user which data we want to save
+   * @param {Object} config The user's scraper configuration to create placeholder structure
+   */
   #createDataPlaceholder(sessionUser, config) {
     const userDataFile = path.join(this.#userConfig.path, sessionUser, this.#userConfig.file);
     if (fs.existsSync(userDataFile)) {
