@@ -101,7 +101,7 @@ export class AuthRouter {
     router.post("/token", AccessChecker.canViewSessionUser, (request, response, next) => {
       const tokenStrategy = this.#getTokenStrategy(request.body);
       if (!tokenStrategy) {
-        return response.status(400).json("Invalid token access fields");
+        return response.status(400).json({ error: "Invalid token access fields" });
       }
       this.#passport.authenticate(tokenStrategy, { session: false }, async (err, user, info) => {
         if (err) return next(err);
