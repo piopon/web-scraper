@@ -164,7 +164,8 @@ describe("created auth POST routes", () => {
         return callback(undefined, { name: "test", email: "mail", password: "pass" }, {});
       };
     });
-    const response = await testAgent.post("/auth/token");
+    const payload = {email: "email", password: "pass"};
+    const response = await testAgent.post("/auth/token").send(payload);
     expect(response.statusCode).toBe(200);
     expect(response.text).toBe(JSON.stringify({ token: "mocked.jwt.token", challenge: {} }));
   });
@@ -176,7 +177,8 @@ describe("created auth POST routes", () => {
         return callback(undefined, undefined, { message: expectedErrorMsg });
       };
     });
-    const response = await testAgent.post("/auth/token");
+    const payload = {email: "email", password: "pass"};
+    const response = await testAgent.post("/auth/token").send(payload);
     expect(response.statusCode).toBe(400);
     expect(response.text).toBe(JSON.stringify({ error: expectedErrorMsg }));
   });
@@ -189,7 +191,8 @@ describe("created auth POST routes", () => {
         return callback(undefined, { name: "test", email: "mail", password: "pass" }, {});
       };
     });
-    const response = await testAgent.post("/auth/token");
+    const payload = {email: "email", password: "pass"};
+    const response = await testAgent.post("/auth/token").send(payload);
     expect(response.statusCode).toBe(400);
     expect(response.text).toBe(JSON.stringify({ error: "Token retrieval error" }));
   });
