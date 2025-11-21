@@ -6,6 +6,16 @@ import { jest } from "@jest/globals";
 
 jest.mock("../../src/model/scrap-config.js");
 
+const testOwnerPath = `./mail/data.json`;
+
+beforeAll(() => {
+  createDataFile(testOwnerPath);
+});
+
+afterAll(() => {
+  removeDataFile(testOwnerPath);
+});
+
 test("getName() returns correct result", () => {
   const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO });
   expect(testScraper.getName()).toBe("web-scraper   ");
@@ -248,3 +258,27 @@ describe("update() method", () => {
     await testScraper.stop(sessionUser.email);
   });
 });
+
+function createDataFile(filePath) {
+  try {
+    // create parent directory (if needed)
+    const fileDir = path.dirname(filePath);
+    if (!fs.existsSync(fileDir)) {
+      fs.mkdirSync(fileDir, { recursive: true });
+    }
+    // create the test data file
+    fs.writeFileSync(filePath, JSON.stringify({dummy: "content"}));
+  } catch (err) {
+    console.error(`Could not create data file: ${err}`);
+  }
+}
+
+function removeDataFile(filePath) {
+  // remove the test data file
+  fs.rmSync(filePath, { force: true });
+  // remove parent directory (if present)
+  const fileDir = path.dirname(filePath);
+  if (fileDir !== ".") {
+    fs.rmdirSync(fileDir);
+  }
+}
