@@ -2,6 +2,9 @@ import { WebScraper } from "../../src/components/web-scraper.js";
 import { ComponentStatus, ComponentType, LogLevel } from "../../src/config/app-types.js";
 import { ScrapConfig } from "../../src/model/scrap-config.js";
 
+import path from "path";
+import fs from "fs";
+
 import { jest } from "@jest/globals";
 
 jest.mock("../../src/model/scrap-config.js");
