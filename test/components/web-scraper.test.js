@@ -49,6 +49,7 @@ describe("start() method", () => {
   const testScraper = new WebScraper({
     minLogLevel: LogLevel.INFO,
     scraperConfig: { defaultTimeout: 10, embeddedBrowser: true },
+    usersDataConfig: { path: ".", file: "data.json"},
   });
   test("fails when external browser cannot be found", async () => {
     const result = await new WebScraper({
@@ -133,6 +134,7 @@ describe("stop() method", () => {
   const testScraper = new WebScraper({
     minLogLevel: LogLevel.INFO,
     scraperConfig: { defaultTimeout: 10, embeddedBrowser: true },
+    usersDataConfig: { path: ".", file: "data.json"},
   });
   test("does not do anything when session was not started", async () => {
     await testScraper.stop();
@@ -166,6 +168,7 @@ describe("getHistory() returns correct result", () => {
   const testScraper = new WebScraper({
     minLogLevel: LogLevel.INFO,
     scraperConfig: { defaultTimeout: 10, embeddedBrowser: true },
+    usersDataConfig: { path: ".", file: "data.json"},
   });
   test("after creating object", async () => {
     const result = testScraper.getHistory(sessionUser);
@@ -194,6 +197,7 @@ describe("getStatus() returns correct result", () => {
   const testScraper = new WebScraper({
     minLogLevel: LogLevel.INFO,
     scraperConfig: { defaultTimeout: 10, embeddedBrowser: true },
+    usersDataConfig: { path: ".", file: "data.json"},
   });
   test("when session is not provided nor started then STOPPED", async () => {
     expect(testScraper.getStatus()).toBe(ComponentStatus.STOPPED);
@@ -225,6 +229,7 @@ describe("update() method", () => {
   const testScraper = new WebScraper({
     minLogLevel: LogLevel.INFO,
     scraperConfig: { defaultTimeout: 10, embeddedBrowser: true },
+    usersDataConfig: { path: ".", file: "data.json"},
   });
   test("returns errors when session is not existing", async () => {
     const sessionUser = { name: testOwnerName, email: testOwnerMail };
