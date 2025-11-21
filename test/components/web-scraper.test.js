@@ -4,14 +4,14 @@ import { ScrapConfig } from "../../src/model/scrap-config.js";
 
 import path from "path";
 import fs from "fs";
-
 import { jest } from "@jest/globals";
 
 jest.mock("../../src/model/scrap-config.js");
 
 const testOwnerName = "owner";
+const testOwnerRoot = ".";
 const testOwnerMail = "owner@test.com";
-const testOwnerPath = `./${testOwnerMail}/data.json`;
+const testOwnerPath = `${testOwnerRoot}/${testOwnerMail}/data.json`;
 
 beforeAll(() => {
   createDataFile(testOwnerPath);
@@ -52,7 +52,7 @@ describe("start() method", () => {
   const testScraper = new WebScraper({
     minLogLevel: LogLevel.INFO,
     scraperConfig: { defaultTimeout: 10, embeddedBrowser: true },
-    usersDataConfig: { path: ".", file: "data.json"},
+    usersDataConfig: { path: testOwnerRoot, file: path.basename(testOwnerPath)},
   });
   test("fails when external browser cannot be found", async () => {
     const result = await new WebScraper({
@@ -137,7 +137,7 @@ describe("stop() method", () => {
   const testScraper = new WebScraper({
     minLogLevel: LogLevel.INFO,
     scraperConfig: { defaultTimeout: 10, embeddedBrowser: true },
-    usersDataConfig: { path: ".", file: "data.json"},
+    usersDataConfig: { path: testOwnerRoot, file: path.basename(testOwnerPath)},
   });
   test("does not do anything when session was not started", async () => {
     await testScraper.stop();
@@ -171,7 +171,7 @@ describe("getHistory() returns correct result", () => {
   const testScraper = new WebScraper({
     minLogLevel: LogLevel.INFO,
     scraperConfig: { defaultTimeout: 10, embeddedBrowser: true },
-    usersDataConfig: { path: ".", file: "data.json"},
+    usersDataConfig: { path: testOwnerRoot, file: path.basename(testOwnerPath)},
   });
   test("after creating object", async () => {
     const result = testScraper.getHistory(sessionUser);
@@ -200,7 +200,7 @@ describe("getStatus() returns correct result", () => {
   const testScraper = new WebScraper({
     minLogLevel: LogLevel.INFO,
     scraperConfig: { defaultTimeout: 10, embeddedBrowser: true },
-    usersDataConfig: { path: ".", file: "data.json"},
+    usersDataConfig: { path: testOwnerRoot, file: path.basename(testOwnerPath)},
   });
   test("when session is not provided nor started then STOPPED", async () => {
     expect(testScraper.getStatus()).toBe(ComponentStatus.STOPPED);
@@ -232,7 +232,7 @@ describe("update() method", () => {
   const testScraper = new WebScraper({
     minLogLevel: LogLevel.INFO,
     scraperConfig: { defaultTimeout: 10, embeddedBrowser: true },
-    usersDataConfig: { path: ".", file: "data.json"},
+    usersDataConfig: { path: testOwnerRoot, file: path.basename(testOwnerPath)},
   });
   test("returns errors when session is not existing", async () => {
     const sessionUser = { name: testOwnerName, email: testOwnerMail };
@@ -288,7 +288,7 @@ function removeDataFile(filePath) {
   fs.rmSync(filePath, { force: true });
   // remove parent directory (if present)
   const fileDir = path.dirname(filePath);
-  if (fileDir !== ".") {
+  if (fileDir !== testOwnerRoot) {
     fs.rmdirSync(fileDir);
   }
 }
