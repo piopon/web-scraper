@@ -16,7 +16,10 @@ const configId = 123;
 
 describe("createRoutes() method", () => {
   test("returns correct number of routes", () => {
-    const expectedRoutes = [{ path: "/import", method: "post" }];
+    const expectedRoutes = [
+      { path: "/import", method: "post" },
+      { path: "/features", method: "get" },
+    ];
     const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
     const testRouter = new SettingsRouter(components);
     const createdRoutes = testRouter.createRoutes();
