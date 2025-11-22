@@ -21,6 +21,21 @@ export class SettingsRouter {
    */
   createRoutes() {
     const router = express.Router();
+    router.get("/features", (request, response) => {
+      const validationResult = this.#validateQueryParams(request.query);
+      if (!validationResult.valid) {
+        response.status(400).json(validationResult.cause);
+        return;
+      }
+      const outputData = {
+        demo: process.env.DEMO_USER && process.env.DEMO_PASS ? true : false,
+        google: process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET ? true : false,
+        monitor: process.env.MONITOR_ADDRESS ? true : false,
+        database: process.env.DB_ADDRESS,
+        challenge: process.env.CHALLENGE_JOIN && process.env.CHALLENGE_EOL_MINS ? true : false,
+      };
+      response.status(200).json(outputData);
+    });
     router.post("/import", async (request, response) => {
       const validationResult = this.#validateQueryParams(request.query);
       if (!validationResult.valid) {

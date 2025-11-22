@@ -4,6 +4,7 @@ import { ScrapConfig } from "../../model/scrap-config.js";
 import { ScrapUser } from "../../model/scrap-user.js";
 import { ChallengeUtils } from "../../utils/challenge-utils.js";
 import { RegexUtils } from "../../utils/regex-utils.js";
+import { ModelUtils } from "../../utils/model-utils.js";
 
 import jwt from "jsonwebtoken";
 import express from "express";
@@ -98,7 +99,11 @@ export class AuthRouter {
     router.post("/login", AccessChecker.canViewSessionUser, loginCallback);
     // remote JWT token retrieval
     router.post("/token", AccessChecker.canViewSessionUser, (request, response, next) => {
-      this.#passport.authenticate("local-login", { session: false }, async (err, user, info) => {
+      const tokenStrategy = this.#getTokenStrategy(request.body);
+      if (!tokenStrategy) {
+        return response.status(400).json({ error: "Invalid token access fields" });
+      }
+      this.#passport.authenticate(tokenStrategy, { session: false }, async (err, user, info) => {
         if (err) return next(err);
         if (!user) {
           return response.status(400).json({ error: info.message || "Token retrieval error" });
@@ -129,11 +134,13 @@ export class AuthRouter {
     router.post("/demo", AccessChecker.canViewSessionUser, demoCallback);
     // user content endpoints (log-out)
     const logoutCallback = (request, response, next) => {
-      const userWithChallenge = request.user.challenge ? request.user : undefined;
-      const temporaryUser = request.user.hostUser ? request.user : undefined;
+      const userWithChallenge = request.user?.challenge ? request.user : undefined;
+      const temporaryUser = request.user?.hostUser ? request.user : undefined;
       request.logout(async (err) => {
         if (err) return next(err);
-        response.redirect("/auth/login");
+        if (!request.remoteLogout) {
+          response.redirect("/auth/login");
+        }
         if (userWithChallenge) {
           userWithChallenge.challenge = undefined;
           await userWithChallenge.save();
@@ -148,5 +155,19 @@ export class AuthRouter {
       });
     };
     router.post("/logout", AccessChecker.canViewContent, logoutCallback);
+  }
+
+  /**
+   * Method used to retrieve the token retrieval strategy name
+   * @param {Object} fields The token access fields
+   * @returns strategy name base on the token access fields
+   */
+  #getTokenStrategy(fields) {
+    if (ModelUtils.hasExactKeys(fields, ["email", "password"])) {
+      return "local-login";
+    } else if (ModelUtils.hasExactKeys(fields, ["demo-user", "demo-pass"])) {
+      return "local-demo";
+    }
+    return "";
   }
 }

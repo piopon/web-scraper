@@ -2,9 +2,24 @@ import { WebScraper } from "../../src/components/web-scraper.js";
 import { ComponentStatus, ComponentType, LogLevel } from "../../src/config/app-types.js";
 import { ScrapConfig } from "../../src/model/scrap-config.js";
 
+import path from "path";
+import fs from "fs";
 import { jest } from "@jest/globals";
 
 jest.mock("../../src/model/scrap-config.js");
+
+const testOwnerName = "owner";
+const testOwnerRoot = ".";
+const testOwnerMail = "owner@test.com";
+const testOwnerPath = `${testOwnerRoot}/${testOwnerMail}/data.json`;
+
+beforeAll(() => {
+  createDataFile(testOwnerPath);
+});
+
+afterAll(() => {
+  removeDataFile(testOwnerPath);
+});
 
 test("getName() returns correct result", () => {
   const testScraper = new WebScraper({ minLogLevel: LogLevel.INFO });
@@ -37,6 +52,7 @@ describe("start() method", () => {
   const testScraper = new WebScraper({
     minLogLevel: LogLevel.INFO,
     scraperConfig: { defaultTimeout: 10, embeddedBrowser: true },
+    usersDataConfig: { path: testOwnerRoot, file: path.basename(testOwnerPath) },
   });
   test("fails when external browser cannot be found", async () => {
     const result = await new WebScraper({
@@ -55,28 +71,28 @@ describe("start() method", () => {
   }, 15_000);
   test("fails when session user has no name property", async () => {
     const userConfig = { user: "ID", groups: [] };
-    const result = await testScraper.start({ email: "mail", config: userConfig });
+    const result = await testScraper.start({ email: testOwnerMail, config: userConfig });
     expect(result).toBe(false);
   }, 15_000);
   test("fails when session user has no email property", async () => {
     const userConfig = { user: "ID", groups: [] };
-    const result = await testScraper.start({ email: "mail", config: userConfig });
+    const result = await testScraper.start({ email: testOwnerMail, config: userConfig });
     expect(result).toBe(false);
   }, 10_000);
   test("fails when session user has no config property", async () => {
-    const result = await testScraper.start({ name: "test", email: "mail" });
+    const result = await testScraper.start({ name: testOwnerName, email: testOwnerMail });
     expect(result).toBe(false);
   }, 15_000);
   test("fails when specified user configuration is invalid", async () => {
     const userConfig = { user: "ID", groups: [] };
-    const result = await testScraper.start({ name: "test", email: "mail", config: userConfig });
+    const result = await testScraper.start({ name: testOwnerName, email: testOwnerMail, config: userConfig });
     expect(result).toBe(false);
   }, 15_000);
   test("fails when specified user configuration is missing", async () => {
     const userConfig = { user: "ID", groups: [] };
     const mockResult = null;
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
-    const result = await testScraper.start({ name: "test", email: "mail", config: userConfig });
+    const result = await testScraper.start({ name: testOwnerName, email: testOwnerMail, config: userConfig });
     expect(result).toBe(false);
   }, 15_000);
   test("succeeds when specified user configuration is found", async () => {
@@ -96,9 +112,9 @@ describe("start() method", () => {
     };
     const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
-    const result = await testScraper.start({ name: "test", email: "mail", config: userConfig });
+    const result = await testScraper.start({ name: testOwnerName, email: testOwnerMail, config: userConfig });
     expect(result).toBe(true);
-    await testScraper.stop("mail");
+    await testScraper.stop(testOwnerMail);
   }, 15_000);
 });
 
@@ -117,10 +133,11 @@ describe("stop() method", () => {
       },
     ],
   };
-  const sessionUser = { name: "test", email: "mail", config: userConfig };
+  const sessionUser = { name: testOwnerName, email: testOwnerMail, config: userConfig };
   const testScraper = new WebScraper({
     minLogLevel: LogLevel.INFO,
     scraperConfig: { defaultTimeout: 10, embeddedBrowser: true },
+    usersDataConfig: { path: testOwnerRoot, file: path.basename(testOwnerPath) },
   });
   test("does not do anything when session was not started", async () => {
     await testScraper.stop();
@@ -136,7 +153,7 @@ describe("stop() method", () => {
     await testScraper.stop(sessionUser.email);
     const result = testScraper.getHistory(sessionUser);
     expect(result[result.length - 1].type).toBe("info");
-    expect(result[result.length - 1].message).toBe("mail: Stopped.");
+    expect(result[result.length - 1].message).toBe(`${testOwnerMail}: Stopped.`);
   }, 15_000);
   test("does correctly stop session with error message", async () => {
     const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
@@ -145,15 +162,16 @@ describe("stop() method", () => {
     await testScraper.stop(sessionUser.email, "Error message");
     const result = testScraper.getHistory(sessionUser);
     expect(result[result.length - 1].type).toBe("info");
-    expect(result[result.length - 1].message).toBe("mail: Error message");
+    expect(result[result.length - 1].message).toBe(`${testOwnerMail}: Error message`);
   }, 15_000);
 });
 
 describe("getHistory() returns correct result", () => {
-  const sessionUser = { name: "test", email: "mail" };
+  const sessionUser = { name: testOwnerName, email: testOwnerMail };
   const testScraper = new WebScraper({
     minLogLevel: LogLevel.INFO,
     scraperConfig: { defaultTimeout: 10, embeddedBrowser: true },
+    usersDataConfig: { path: testOwnerRoot, file: path.basename(testOwnerPath) },
   });
   test("after creating object", async () => {
     const result = testScraper.getHistory(sessionUser);
@@ -178,10 +196,11 @@ describe("getStatus() returns correct result", () => {
       },
     ],
   };
-  const sessionUser = { name: "test", email: "mail", config: userConfig };
+  const sessionUser = { name: testOwnerName, email: testOwnerMail, config: userConfig };
   const testScraper = new WebScraper({
     minLogLevel: LogLevel.INFO,
     scraperConfig: { defaultTimeout: 10, embeddedBrowser: true },
+    usersDataConfig: { path: testOwnerRoot, file: path.basename(testOwnerPath) },
   });
   test("when session is not provided nor started then STOPPED", async () => {
     expect(testScraper.getStatus()).toBe(ComponentStatus.STOPPED);
@@ -213,9 +232,10 @@ describe("update() method", () => {
   const testScraper = new WebScraper({
     minLogLevel: LogLevel.INFO,
     scraperConfig: { defaultTimeout: 10, embeddedBrowser: true },
+    usersDataConfig: { path: testOwnerRoot, file: path.basename(testOwnerPath) },
   });
   test("returns errors when session is not existing", async () => {
-    const sessionUser = { name: "test", email: "mail" };
+    const sessionUser = { name: testOwnerName, email: testOwnerMail };
     testScraper.update(sessionUser, { config: "name" });
     const result = testScraper.getHistory(sessionUser);
     expect(result.length).toBe(2);
@@ -237,7 +257,7 @@ describe("update() method", () => {
         },
       ],
     };
-    const sessionUser = { name: "test", email: "mail", config: userConfig };
+    const sessionUser = { name: testOwnerName, email: testOwnerMail, config: userConfig };
     const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
     await testScraper.start(sessionUser);
@@ -248,3 +268,27 @@ describe("update() method", () => {
     await testScraper.stop(sessionUser.email);
   });
 });
+
+function createDataFile(filePath) {
+  try {
+    // create parent directory (if needed)
+    const fileDir = path.dirname(filePath);
+    if (!fs.existsSync(fileDir)) {
+      fs.mkdirSync(fileDir, { recursive: true });
+    }
+    // create the test data file
+    fs.writeFileSync(filePath, JSON.stringify({ dummy: "content" }));
+  } catch (err) {
+    console.error(`Could not create data file: ${err}`);
+  }
+}
+
+function removeDataFile(filePath) {
+  // remove the test data file
+  fs.rmSync(filePath, { force: true });
+  // remove parent directory (if present)
+  const fileDir = path.dirname(filePath);
+  if (fileDir !== testOwnerRoot) {
+    fs.rmdirSync(fileDir);
+  }
+}

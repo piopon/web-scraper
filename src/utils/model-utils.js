@@ -57,6 +57,16 @@ export class ModelUtils {
   }
 
   /**
+   * Metod used to check if specified object has exactly those properties that are required
+   * @param {Object} obj The object which properties we want to check
+   * @param {Array} props The property names array that are required to be present in object
+   * @returns true of the object has only the specified properties, false otherwise
+   */
+  static hasExactKeys(obj, req) {
+    return Object.keys(obj).length === req.length && req.every(k => Object.hasOwn(obj, k));
+  }
+
+  /**
    * Method used to receive a array from specified source
    * @param {any} items The array of items
    * @returns an array of items, or a single item array if input was a single item

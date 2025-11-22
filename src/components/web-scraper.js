@@ -101,6 +101,9 @@ export class WebScraper {
     session.id = setInterval(() => this.#scrapData(session), intervalTime);
     // store this session into active sessions map
     this.#sessions.set(sessionUser.email, session);
+    // create a blank data file with information about waiting for results
+    this.#createDataPlaceholder(sessionUser.email, session.config);
+    // show status summary
     const runDetails = `user: ${sessionUser.name}, interval: ${intervalTime / 1000} seconds`;
     this.#status.info(`${WebScraper.#RUNNING_STATUS} (${runDetails})`);
     return true;
@@ -388,6 +391,34 @@ export class WebScraper {
       fs.mkdirSync(dataDirectory, { recursive: true });
     }
     fs.writeFileSync(dataFile, JSON.stringify(dataToSave, null, 2));
+  }
+
+  /**
+   * Method used to create data file placeholder while waiting for the actual data to be scraped
+   * @param {String} sessionUser The email string of the user which data we want to save
+   * @param {Object} config The user's scraper configuration to create placeholder structure
+   */
+  #createDataPlaceholder(sessionUser, config) {
+    const userDataFile = path.join(this.#userConfig.path, sessionUser, this.#userConfig.file);
+    if (fs.existsSync(userDataFile)) {
+      // if user data already exists then there's no need to create a placeholder
+      return;
+    }
+    const dataObject = [];
+    config.groups.forEach((group) => {
+      dataObject.push({
+        name: group.name,
+        category: group.category,
+        items: group.observers.map((observer) => ({
+          status: "ERROR",
+          name: observer.name,
+          icon: "-",
+          data: "-",
+          extra: observer.data.auxiliary,
+        })),
+      });
+    });
+    this.#saveData(sessionUser, dataObject);
   }
 
   /**
