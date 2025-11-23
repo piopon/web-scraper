@@ -180,7 +180,7 @@ describe("created auth POST routes", () => {
     const payload = { email: "email", password: "pass" };
     const response = await testAgent.post("/auth/token").send(payload);
     expect(response.statusCode).toBe(400);
-    expect(response.text).toBe(JSON.stringify({ error: expectedErrorMsg }));
+    expect(response.text).toBe(JSON.stringify(expectedErrorMsg));
   });
   test("returns invalid token access fields error using /token endpoint", async () => {
     isAuthenticatedResult = false;
@@ -192,7 +192,7 @@ describe("created auth POST routes", () => {
     const payload = { unknown: "email", field: "pass" };
     const response = await testAgent.post("/auth/token").send(payload);
     expect(response.statusCode).toBe(400);
-    expect(response.text).toBe(JSON.stringify({ error: "Invalid token access fields" }));
+    expect(response.text).toBe(JSON.stringify("Invalid token access fields"));
   });
   test("returns token retrieval error using /token endpoint", async () => {
     isAuthenticatedResult = false;
@@ -206,7 +206,7 @@ describe("created auth POST routes", () => {
     const payload = { email: "email", password: "pass" };
     const response = await testAgent.post("/auth/token").send(payload);
     expect(response.statusCode).toBe(400);
-    expect(response.text).toBe(JSON.stringify({ error: "Token retrieval error" }));
+    expect(response.text).toBe(JSON.stringify("Token retrieval error"));
   });
   test("returns correct result using /logout endpoint", async () => {
     isAuthenticatedResult = true;
