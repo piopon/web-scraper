@@ -101,18 +101,18 @@ export class AuthRouter {
     router.post("/token", AccessChecker.canViewSessionUser, (request, response, next) => {
       const tokenStrategy = this.#getTokenStrategy(request.body);
       if (!tokenStrategy) {
-        return response.status(400).json({ error: "Invalid token access fields" });
+        return response.status(400).json("Invalid token access fields");
       }
       this.#passport.authenticate(tokenStrategy, { session: false }, async (err, user, info) => {
         if (err) return next(err);
         if (!user) {
-          return response.status(400).json({ error: info.message || "Token retrieval error" });
+          return response.status(400).json(info.message || "Token retrieval error");
         }
         const signedData = { name: user.name, email: user.email, password: user.password };
         const token = jwt.sign(signedData, process.env.JWT_SECRET);
         const dbUser = await ScrapUser.getDatabaseModel().findOne({ name: user.name, email: user.email });
         if (!dbUser) {
-          return response.status(400).json({ error: "Token retrieval error" });
+          return response.status(400).json("Token retrieval error");
         }
         const challengeData = {
           name: user.name,
