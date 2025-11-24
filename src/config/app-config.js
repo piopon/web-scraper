@@ -57,7 +57,11 @@ export class AppConfig {
         dataExtrasType: process.env.SCRAP_EXTRAS_TYPE || "",
         defaultTimeout: 15_000,
         timeoutAttempts: 10,
-        embeddedBrowser: false,
+        browser: {
+          useEmbedded: false,
+          useSandbox: process.env.SCRAP_BROWSER_SANDBOX || true,
+          profilePath: process.env.SCRAP_BROWSER_PROFILE || "./chrome-profile",
+        }
       },
     };
   }
