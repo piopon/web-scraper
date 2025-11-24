@@ -14,7 +14,8 @@ export class AppConfig {
   constructor() {
     this.#currDir = path.dirname(url.fileURLToPath(import.meta.url));
     this.#rootDir = path.normalize(path.join(this.#currDir, "..", ".."));
-    if (process.env.NODE_ENV !== "production") {
+    // explicitly config environment variables when mode is NOT production and NOT test
+    if (process.env.NODE_ENV !== "production" && process.env.NODE_ENV !== "test") {
       dotenv.config();
     }
   }
