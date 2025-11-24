@@ -85,18 +85,20 @@ export class WebScraper {
         return false;
       }
     }
-    this.#status.debug("Initializing virtual browser");
-    // correctly fill additional command line arguments passed to browser instance
+    // create a blank data file with information about waiting for results
+    const userScrapPath = await this.#createDataPlaceholder(sessionUser.email, session.config);
+    // fill additional command line arguments passed to browser instance
     const browserArguments = [];
     if (!this.#scrapConfig.browser.useSandbox) {
       browserArguments.push("--no-sandbox");
       browserArguments.push("--disable-setuid-sandbox");
     }
     // open new Puppeteer virtual browser and an initial web page
+    this.#status.debug("Initializing virtual browser");
     session.browser = await puppeteer.launch({
       ...(browserPath ? { executablePath: browserPath } : {}),
       headless: "new",
-      userDataDir: this.#scrapConfig.browser.profilePath,
+      userDataDir: path.join(path.dirname(userScrapPath), this.#scrapConfig.browser.profileDir),
       args: browserArguments,
     });
     session.page = await session.browser.newPage();
@@ -109,8 +111,6 @@ export class WebScraper {
     session.id = setInterval(() => this.#scrapData(session), intervalTime);
     // store this session into active sessions map
     this.#sessions.set(sessionUser.email, session);
-    // create a blank data file with information about waiting for results
-    this.#createDataPlaceholder(sessionUser.email, session.config);
     // show status summary
     const runDetails = `user: ${sessionUser.name}, interval: ${intervalTime / 1000} seconds`;
     this.#status.info(`${WebScraper.#RUNNING_STATUS} (${runDetails})`);
