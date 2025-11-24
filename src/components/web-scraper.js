@@ -86,12 +86,18 @@ export class WebScraper {
       }
     }
     this.#status.debug("Initializing virtual browser");
+    // correctly fill additional command line arguments passed to browser instance
+    const browserArguments = [];
+    if (!this.#scrapConfig.browser.useSandbox) {
+      browserArguments.push("--no-sandbox");
+      browserArguments.push("--disable-setuid-sandbox");
+    }
     // open new Puppeteer virtual browser and an initial web page
     session.browser = await puppeteer.launch({
       ...(browserPath ? { executablePath: browserPath } : {}),
       headless: "new",
       userDataDir: this.#scrapConfig.browser.profilePath,
-      args: this.#scrapConfig.browser.useSandbox ? [] : ["--no-sandbox", "--disable-setuid-sandbox"],
+      args: browserArguments,
     });
     session.page = await session.browser.newPage();
     session.page.setDefaultTimeout(this.#scrapConfig.defaultTimeout);
