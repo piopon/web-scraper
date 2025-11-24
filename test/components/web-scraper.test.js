@@ -51,7 +51,7 @@ test("getMaster() returns correct result", () => {
 describe("start() method", () => {
   const testScraper = new WebScraper({
     minLogLevel: LogLevel.INFO,
-    scraperConfig: { defaultTimeout: 10, browser: { useEmbedded: true } },
+    scraperConfig: { defaultTimeout: 10, browser: { useEmbedded: true, profileDir: "_profile" } },
     usersDataConfig: { path: testOwnerRoot, file: path.basename(testOwnerPath) },
   });
   test("fails when external browser cannot be found", async () => {
@@ -136,7 +136,7 @@ describe("stop() method", () => {
   const sessionUser = { name: testOwnerName, email: testOwnerMail, config: userConfig };
   const testScraper = new WebScraper({
     minLogLevel: LogLevel.INFO,
-    scraperConfig: { defaultTimeout: 10, browser: { useEmbedded: true } },
+    scraperConfig: { defaultTimeout: 10, browser: { useEmbedded: true, profileDir: "_profile" } },
     usersDataConfig: { path: testOwnerRoot, file: path.basename(testOwnerPath) },
   });
   test("does not do anything when session was not started", async () => {
@@ -170,7 +170,7 @@ describe("getHistory() returns correct result", () => {
   const sessionUser = { name: testOwnerName, email: testOwnerMail };
   const testScraper = new WebScraper({
     minLogLevel: LogLevel.INFO,
-    scraperConfig: { defaultTimeout: 10, browser: { useEmbedded: true } },
+    scraperConfig: { defaultTimeout: 10, browser: { useEmbedded: true, profileDir: "_profile" } },
     usersDataConfig: { path: testOwnerRoot, file: path.basename(testOwnerPath) },
   });
   test("after creating object", async () => {
@@ -199,7 +199,7 @@ describe("getStatus() returns correct result", () => {
   const sessionUser = { name: testOwnerName, email: testOwnerMail, config: userConfig };
   const testScraper = new WebScraper({
     minLogLevel: LogLevel.INFO,
-    scraperConfig: { defaultTimeout: 10, browser: { useEmbedded: true } },
+    scraperConfig: { defaultTimeout: 10, browser: { useEmbedded: true, profileDir: "_profile" } },
     usersDataConfig: { path: testOwnerRoot, file: path.basename(testOwnerPath) },
   });
   test("when session is not provided nor started then STOPPED", async () => {
@@ -231,7 +231,7 @@ describe("getStatus() returns correct result", () => {
 describe("update() method", () => {
   const testScraper = new WebScraper({
     minLogLevel: LogLevel.INFO,
-    scraperConfig: { defaultTimeout: 10, browser: { useEmbedded: true } },
+    scraperConfig: { defaultTimeout: 10, browser: { useEmbedded: true, profileDir: "_profile" } },
     usersDataConfig: { path: testOwnerRoot, file: path.basename(testOwnerPath) },
   });
   test("returns errors when session is not existing", async () => {
