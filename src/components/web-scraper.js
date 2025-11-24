@@ -399,6 +399,7 @@ export class WebScraper {
       fs.mkdirSync(dataDirectory, { recursive: true });
     }
     fs.writeFileSync(dataFile, JSON.stringify(dataToSave, null, 2));
+    return dataFile;
   }
 
   /**
@@ -410,7 +411,7 @@ export class WebScraper {
     const userDataFile = path.join(this.#userConfig.path, sessionUser, this.#userConfig.file);
     if (fs.existsSync(userDataFile)) {
       // if user data already exists then there's no need to create a placeholder
-      return;
+      return userDataFile;
     }
     const dataObject = [];
     config.groups.forEach((group) => {
@@ -426,7 +427,7 @@ export class WebScraper {
         })),
       });
     });
-    this.#saveData(sessionUser, dataObject);
+    return this.#saveData(sessionUser, dataObject);
   }
 
   /**
