@@ -90,6 +90,8 @@ export class WebScraper {
     session.browser = await puppeteer.launch({
       ...(browserPath ? { executablePath: browserPath } : {}),
       headless: "new",
+      userDataDir: this.#scrapConfig.browser.profilePath,
+      args: this.#scrapConfig.browser.useSandbox ? [] : ["--no-sandbox", "--disable-setuid-sandbox"],
     });
     session.page = await session.browser.newPage();
     session.page.setDefaultTimeout(this.#scrapConfig.defaultTimeout);
