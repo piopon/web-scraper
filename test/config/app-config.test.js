@@ -36,7 +36,7 @@ describe("getConfig", () => {
     expect(testConfig.scraperConfig.browser).not.toBe(null);
     expect(testConfig.scraperConfig.browser.useEmbedded).toBe(false);
     expect(testConfig.scraperConfig.browser.useSandbox).toBe(true);
-    expect(testConfig.scraperConfig.browser.profilePath).toBe("./users/_puppeteer-profile");
+    expect(testConfig.scraperConfig.browser.profileDir).toBe("_puppeteer-profile");
   });
   describe("returns correct result using environment variables", () => {
     test("for server config", () => {
@@ -87,7 +87,7 @@ describe("getConfig", () => {
       expect(testConfig.scraperConfig.browser).not.toBe(null);
       expect(testConfig.scraperConfig.browser.useEmbedded).toBe(true);
       expect(testConfig.scraperConfig.browser.useSandbox).toBe(false);
-      expect(testConfig.scraperConfig.browser.profilePath).toBe("/test/path/to/chrome/profile");
+      expect(testConfig.scraperConfig.browser.profileDir).toBe("/test/path/to/chrome/profile");
     });
   });
 });
