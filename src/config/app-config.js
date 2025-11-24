@@ -58,6 +58,7 @@ export class AppConfig {
         dataExtrasType: process.env.SCRAP_EXTRAS_TYPE || "",
         defaultTimeout: 15_000,
         timeoutAttempts: 10,
+        cleanErrorWait: 5_000,
         browser: {
           useEmbedded: process.env.SCRAP_BROWSER_EMBEDDED == null ? false : process.env.SCRAP_BROWSER_EMBEDDED === "true",
           useSandbox: process.env.SCRAP_BROWSER_SANDBOX == null ? true : !(process.env.SCRAP_BROWSER_SANDBOX === "false"),
