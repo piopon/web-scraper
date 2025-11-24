@@ -60,7 +60,7 @@ export class AppConfig {
         browser: {
           useEmbedded: process.env.SCRAP_BROWSER_EMBEDDED == null ? false : process.env.SCRAP_BROWSER_EMBEDDED === "true",
           useSandbox: process.env.SCRAP_BROWSER_SANDBOX == null ? true : !(process.env.SCRAP_BROWSER_SANDBOX === "false"),
-          profilePath: process.env.SCRAP_BROWSER_PROFILE || "./users/puppeteer-profile",
+          profilePath: process.env.SCRAP_BROWSER_PROFILE || "./users/_puppeteer-profile",
         },
       },
     };
