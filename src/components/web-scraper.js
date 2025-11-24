@@ -163,8 +163,19 @@ export class WebScraper {
   clean(userEmail) {
     const userDataDir = path.join(this.#userConfig.path, userEmail);
     if (fs.existsSync(userDataDir)) {
-      fs.rmSync(userDataDir, { recursive: true, force: true });
-      this.#status.info(`${userEmail}: removed data.`);
+      try {
+        fs.rmSync(userDataDir, { recursive: true, force: true });
+        this.#status.info(`${userEmail}: removed data.`);
+      } catch (error) {
+        const session = this.#sessions.get(userEmail);
+        if (!session.cleaning) {
+          session.cleaning = setInterval(() => this.clean(userEmail), 5_000);
+          this.#status.warning(`${userEmail}: cannot remove data. Retrying in 5 seconds...`);
+        } else {
+          session.cleaning = undefined;
+          this.#status.warning(`${userEmail}: failed to remove data...`);
+        }
+      }
     }
   }
 
