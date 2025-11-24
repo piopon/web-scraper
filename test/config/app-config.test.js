@@ -33,6 +33,7 @@ describe("getConfig", () => {
     expect(testConfig.scraperConfig.scrapInterval).toBe(30_000);
     expect(testConfig.scraperConfig.defaultTimeout).toBe(15_000);
     expect(testConfig.scraperConfig.timeoutAttempts).toBe(10);
+    expect(testConfig.scraperConfig.cleanErrorWait).toBe(5_000);
     expect(testConfig.scraperConfig.browser).not.toBe(null);
     expect(testConfig.scraperConfig.browser.useEmbedded).toBe(false);
     expect(testConfig.scraperConfig.browser.useSandbox).toBe(true);
@@ -78,6 +79,7 @@ describe("getConfig", () => {
       expect(testConfig.scraperConfig.scrapInterval).toBe(37_000);
       expect(testConfig.scraperConfig.defaultTimeout).toBe(15_000);
       expect(testConfig.scraperConfig.timeoutAttempts).toBe(10);
+      expect(testConfig.scraperConfig.cleanErrorWait).toBe(5_000);
     });
     test("for scraper browser config", () => {
       process.env.SCRAP_BROWSER_PROFILE = "/test/path/to/chrome/profile";
