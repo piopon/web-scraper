@@ -502,7 +502,7 @@ export class WebScraper {
    * @returns string with external browser path, empty string if error, or undefined if embedded browser usage
    */
   async #getExternalBrowserPath() {
-    if (!this.#scrapConfig.embeddedBrowser) {
+    if (!this.#scrapConfig.browser.useEmbedded) {
       return (await locateChrome()) || "";
     }
     return undefined;
