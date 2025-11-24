@@ -8,9 +8,9 @@ import { jest } from "@jest/globals";
 
 jest.mock("../../src/model/scrap-config.js");
 
-const testOwnerName = "owner";
+const testOwnerName = "scraper";
 const testOwnerRoot = ".";
-const testOwnerMail = "owner@test.com";
+const testOwnerMail = "scraper@test.com";
 const testOwnerPath = `${testOwnerRoot}/${testOwnerMail}/data.json`;
 
 beforeAll(() => {
@@ -289,6 +289,6 @@ function removeDataFile(filePath) {
   // remove parent directory (if present)
   const fileDir = path.dirname(filePath);
   if (fileDir !== testOwnerRoot) {
-    fs.rmdirSync(fileDir);
+    fs.rmSync(fileDir, {maxRetries: 10, retryDelay: 500, recursive: true, force: true});
   }
 }
