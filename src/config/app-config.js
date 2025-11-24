@@ -59,9 +59,9 @@ export class AppConfig {
         timeoutAttempts: 10,
         browser: {
           useEmbedded: false,
-          useSandbox: process.env.SCRAP_BROWSER_SANDBOX || true,
-          profilePath: process.env.SCRAP_BROWSER_PROFILE || "./chrome-profile",
-        }
+          useSandbox: process.env.SCRAP_BROWSER_SANDBOX == null ? true : !(process.env.SCRAP_BROWSER_SANDBOX === "false"),
+          profilePath: process.env.SCRAP_BROWSER_PROFILE || "./users/puppeteer-profile",
+        },
       },
     };
   }
