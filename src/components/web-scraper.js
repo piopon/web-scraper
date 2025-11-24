@@ -165,6 +165,15 @@ export class WebScraper {
     if (fs.existsSync(userDataDir)) {
       try {
         fs.rmSync(userDataDir, { recursive: true, force: true });
+        // for some undefined reasons profile files are saved outside user directory
+        const usersContents = fs.readdirSync(this.#userConfig.path);
+        for (const item of usersContents) {
+          const fullPath = path.join(this.#userConfig.path, item);
+          const statObj = fs.statSync(fullPath);
+          if (statObj.isFile()) {
+            fs.unlinkSync(fullPath);
+          }
+        }
         this.#status.info(`${userEmail}: removed data.`);
       } catch (error) {
         const session = this.#sessions.get(userEmail);
