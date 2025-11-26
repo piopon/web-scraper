@@ -85,11 +85,21 @@ export class WebScraper {
         return false;
       }
     }
-    this.#status.debug("Initializing virtual browser");
+    // create a blank data file with information about waiting for results
+    const userScrapPath = await this.#createDataPlaceholder(sessionUser.email, session.config);
+    // fill additional command line arguments passed to browser instance
+    const browserArguments = [];
+    if (!this.#scrapConfig.browser.useSandbox) {
+      browserArguments.push("--no-sandbox");
+      browserArguments.push("--disable-setuid-sandbox");
+    }
     // open new Puppeteer virtual browser and an initial web page
+    this.#status.debug("Initializing virtual browser");
     session.browser = await puppeteer.launch({
       ...(browserPath ? { executablePath: browserPath } : {}),
       headless: "new",
+      userDataDir: path.join(path.dirname(userScrapPath), this.#scrapConfig.browser.profileDir),
+      args: browserArguments,
     });
     session.page = await session.browser.newPage();
     session.page.setDefaultTimeout(this.#scrapConfig.defaultTimeout);
@@ -101,8 +111,6 @@ export class WebScraper {
     session.id = setInterval(() => this.#scrapData(session), intervalTime);
     // store this session into active sessions map
     this.#sessions.set(sessionUser.email, session);
-    // create a blank data file with information about waiting for results
-    this.#createDataPlaceholder(sessionUser.email, session.config);
     // show status summary
     const runDetails = `user: ${sessionUser.name}, interval: ${intervalTime / 1000} seconds`;
     this.#status.info(`${WebScraper.#RUNNING_STATUS} (${runDetails})`);
@@ -155,8 +163,29 @@ export class WebScraper {
   clean(userEmail) {
     const userDataDir = path.join(this.#userConfig.path, userEmail);
     if (fs.existsSync(userDataDir)) {
-      fs.rmSync(userDataDir, { recursive: true, force: true });
-      this.#status.info(`${userEmail}: removed data.`);
+      try {
+        fs.rmSync(userDataDir, { recursive: true, force: true });
+        // for some undefined reasons profile files are saved outside user directory
+        const usersContents = fs.readdirSync(this.#userConfig.path);
+        for (const item of usersContents) {
+          const fullPath = path.join(this.#userConfig.path, item);
+          const statObj = fs.statSync(fullPath);
+          if (statObj.isFile()) {
+            fs.unlinkSync(fullPath);
+          }
+        }
+        this.#status.info(`${userEmail}: removed data.`);
+      } catch (error) {
+        const session = this.#sessions.get(userEmail);
+        if (!session.cleaning) {
+          const cleanTimeout = this.#scrapConfig.cleanErrorWait;
+          session.cleaning = setInterval(() => this.clean(userEmail), cleanTimeout);
+          this.#status.warning(`${userEmail}: cannot remove data. Retrying in ${cleanTimeout / 1_000} seconds...`);
+        } else {
+          session.cleaning = undefined;
+          this.#status.warning(`${userEmail}: failed to remove data...`);
+        }
+      }
     }
   }
 
@@ -391,6 +420,7 @@ export class WebScraper {
       fs.mkdirSync(dataDirectory, { recursive: true });
     }
     fs.writeFileSync(dataFile, JSON.stringify(dataToSave, null, 2));
+    return dataFile;
   }
 
   /**
@@ -402,7 +432,7 @@ export class WebScraper {
     const userDataFile = path.join(this.#userConfig.path, sessionUser, this.#userConfig.file);
     if (fs.existsSync(userDataFile)) {
       // if user data already exists then there's no need to create a placeholder
-      return;
+      return userDataFile;
     }
     const dataObject = [];
     config.groups.forEach((group) => {
@@ -418,7 +448,7 @@ export class WebScraper {
         })),
       });
     });
-    this.#saveData(sessionUser, dataObject);
+    return this.#saveData(sessionUser, dataObject);
   }
 
   /**
@@ -502,7 +532,7 @@ export class WebScraper {
    * @returns string with external browser path, empty string if error, or undefined if embedded browser usage
    */
   async #getExternalBrowserPath() {
-    if (!this.#scrapConfig.embeddedBrowser) {
+    if (!this.#scrapConfig.browser.useEmbedded) {
       return (await locateChrome()) || "";
     }
     return undefined;

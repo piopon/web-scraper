@@ -33,6 +33,11 @@ describe("getConfig", () => {
     expect(testConfig.scraperConfig.scrapInterval).toBe(30_000);
     expect(testConfig.scraperConfig.defaultTimeout).toBe(15_000);
     expect(testConfig.scraperConfig.timeoutAttempts).toBe(10);
+    expect(testConfig.scraperConfig.cleanErrorWait).toBe(5_000);
+    expect(testConfig.scraperConfig.browser).not.toBe(null);
+    expect(testConfig.scraperConfig.browser.useEmbedded).toBe(false);
+    expect(testConfig.scraperConfig.browser.useSandbox).toBe(true);
+    expect(testConfig.scraperConfig.browser.profileDir).toBe("_puppeteer-profile");
   });
   describe("returns correct result using environment variables", () => {
     test("for server config", () => {
@@ -74,6 +79,17 @@ describe("getConfig", () => {
       expect(testConfig.scraperConfig.scrapInterval).toBe(37_000);
       expect(testConfig.scraperConfig.defaultTimeout).toBe(15_000);
       expect(testConfig.scraperConfig.timeoutAttempts).toBe(10);
+      expect(testConfig.scraperConfig.cleanErrorWait).toBe(5_000);
+    });
+    test("for scraper browser config", () => {
+      process.env.SCRAP_BROWSER_PROFILE = "/test/path/to/chrome/profile";
+      process.env.SCRAP_BROWSER_SANDBOX = false;
+      process.env.SCRAP_BROWSER_EMBEDDED = true;
+      const testConfig = new AppConfig().getConfig();
+      expect(testConfig.scraperConfig.browser).not.toBe(null);
+      expect(testConfig.scraperConfig.browser.useEmbedded).toBe(true);
+      expect(testConfig.scraperConfig.browser.useSandbox).toBe(false);
+      expect(testConfig.scraperConfig.browser.profileDir).toBe("/test/path/to/chrome/profile");
     });
   });
 });

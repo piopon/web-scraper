@@ -14,7 +14,8 @@ export class AppConfig {
   constructor() {
     this.#currDir = path.dirname(url.fileURLToPath(import.meta.url));
     this.#rootDir = path.normalize(path.join(this.#currDir, "..", ".."));
-    if (process.env.NODE_ENV !== "production") {
+    // explicitly config environment variables when mode is NOT production and NOT test
+    if (process.env.NODE_ENV !== "production" && process.env.NODE_ENV !== "test") {
       dotenv.config();
     }
   }
@@ -57,7 +58,12 @@ export class AppConfig {
         dataExtrasType: process.env.SCRAP_EXTRAS_TYPE || "",
         defaultTimeout: 15_000,
         timeoutAttempts: 10,
-        embeddedBrowser: false,
+        cleanErrorWait: 5_000,
+        browser: {
+          useEmbedded: process.env.SCRAP_BROWSER_EMBEDDED == null ? false : process.env.SCRAP_BROWSER_EMBEDDED === "true",
+          useSandbox: process.env.SCRAP_BROWSER_SANDBOX == null ? true : !(process.env.SCRAP_BROWSER_SANDBOX === "false"),
+          profileDir: process.env.SCRAP_BROWSER_PROFILE || "_puppeteer-profile",
+        },
       },
     };
   }

@@ -11,7 +11,7 @@ import fs from "fs";
 import { jest } from "@jest/globals";
 import { Strategy } from "passport-local";
 
-const testOwner = "owner@test.com";
+const testOwner = "data_route@test.com";
 const testDataPath = `./${testOwner}/data.json`;
 
 jest.mock("jsonwebtoken");
@@ -436,6 +436,6 @@ function removeDataFile(filePath) {
   // remove parent directory (if present)
   const fileDir = path.dirname(filePath);
   if (fileDir !== ".") {
-    fs.rmdirSync(fileDir);
+    fs.rmSync(fileDir, {maxRetries: 10, retryDelay: 500, recursive: true, force: true});
   }
 }
