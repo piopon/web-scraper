@@ -180,7 +180,7 @@ export class WebScraper {
         if (!session.cleaning) {
           const cleanTimeout = this.#scrapConfig.cleanErrorWait;
           session.cleaning = setInterval(() => this.clean(userEmail), cleanTimeout);
-          this.#status.warning(`${userEmail}: cannot remove data. Retrying in ${cleanTimeout / 1_000} seconds...`);
+          this.#status.warning(`${userEmail}: cannot remove data. Retrying in ${cleanTimeout / 1_000} second(s)...`);
         } else {
           session.cleaning = undefined;
           this.#status.warning(`${userEmail}: failed to remove data...`);
