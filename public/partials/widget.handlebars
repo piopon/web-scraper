@@ -21,7 +21,7 @@
       <form method="dialog">
         {{#each (split options "|")}}
           {{#if (contains this "[text]")}}
-            <input type="text" value="initial value"/>
+            <input type="text" placeholder="input dialog value"/>
             <button type="submit" value="{{remove this "[text]"}}">{{remove this "[text]"}}</button>
           {{else}}
             <button type="submit" value="{{this}}">{{this}}</button>
