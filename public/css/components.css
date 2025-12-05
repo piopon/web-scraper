@@ -492,3 +492,19 @@ input.component-data-auxiliary {
     font-size: 1rem;
   }
 }
+
+dialog.file-source-dialog {
+  box-shadow: 0px 0px 2rem black;
+  border-radius: 0.35rem;
+  border: 3px solid black;
+  width: 50%;
+}
+
+dialog.file-source-dialog form {
+  display: grid;
+  grid-template-columns: repeat(1, 100%);
+  grid-template-rows: repeat(2, 4rem);
+  grid-gap: 1rem;
+  margin: 0.5rem;
+}
+
