@@ -157,6 +157,10 @@ export class ComponentsController {
    */
   #selectImageHandler(event) {
     const sourceDialog = document.querySelector("dialog.file-source-dialog");
+    const sourceUrlInput = sourceDialog.querySelector("input");
+    if (event.target.hasAttribute("url")) {
+      sourceUrlInput.value = event.target.getAttribute("url");
+    }
     sourceDialog.addEventListener(
       "close",
       (closeEvent) => {
@@ -165,7 +169,7 @@ export class ComponentsController {
           event.stopPropagation();
         } else if ("online URL" === sourceDialog.returnValue) {
           try {
-            const link = sourceDialog.querySelector("input").value;
+            const link = sourceUrlInput.value;
             const url = new URL(link);
             event.target.setAttribute("url", link);
             const urlPathParts = url.pathname.split("/");
