@@ -165,7 +165,12 @@ export class ComponentsController {
           event.stopPropagation();
         } else if ("online URL" === sourceDialog.returnValue) {
           const link = document.querySelector("dialog.file-source-dialog input").value;
-          console.log(link);
+          if (URL.canParse(link)) {
+            event.target.setAttribute("url", link);
+            CommonController.showToastSuccess("Added online image reference");
+          } else {
+            CommonController.showToastError("Invalid URL provided");
+          }
         }
         closeEvent.stopPropagation();
       },
