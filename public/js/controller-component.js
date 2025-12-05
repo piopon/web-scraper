@@ -167,6 +167,7 @@ export class ComponentsController {
           const link = document.querySelector("dialog.file-source-dialog input").value;
           if (URL.canParse(link)) {
             event.target.setAttribute("url", link);
+            event.target.value = link;
             CommonController.showToastSuccess("Added online image reference");
           } else {
             CommonController.showToastError("Invalid URL provided");
