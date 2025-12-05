@@ -164,12 +164,14 @@ export class ComponentsController {
           event.target.previousElementSibling.click();
           event.stopPropagation();
         } else if ("online URL" === sourceDialog.returnValue) {
-          const link = document.querySelector("dialog.file-source-dialog input").value;
-          if (URL.canParse(link)) {
+          try {
+            const link = document.querySelector("dialog.file-source-dialog input").value;
+            const url = new URL(link);
             event.target.setAttribute("url", link);
-            event.target.value = link;
+            const urlPathParts = url.pathname.split("/");
+            event.target.value = urlPathParts[urlPathParts.length - 1];
             CommonController.showToastSuccess("Added online image reference");
-          } else {
+          } catch {
             CommonController.showToastError("Invalid URL provided");
           }
         }
