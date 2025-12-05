@@ -160,11 +160,12 @@ export class ComponentsController {
     sourceDialog.addEventListener(
       "close",
       (closeEvent) => {
-        if ("local computer" === sourceDialog.returnValue) {
+        if ("file upload" === sourceDialog.returnValue) {
           event.target.previousElementSibling.click();
           event.stopPropagation();
-        } else if ("www" === sourceDialog.returnValue) {
-          console.log("selecting www image...");
+        } else if ("online URL" === sourceDialog.returnValue) {
+          const link = document.querySelector("dialog.file-source-dialog input").value;
+          console.log(link);
         }
         closeEvent.stopPropagation();
       },
