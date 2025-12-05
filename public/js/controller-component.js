@@ -156,8 +156,21 @@ export class ComponentsController {
    * @param {Event} event A listener event object
    */
   #selectImageHandler(event) {
-    event.target.previousElementSibling.click();
-    event.stopPropagation();
+    const sourceDialog = document.querySelector("dialog.file-source-dialog");
+    sourceDialog.addEventListener(
+      "close",
+      (closeEvent) => {
+        if ("local computer" === sourceDialog.returnValue) {
+          event.target.previousElementSibling.click();
+          event.stopPropagation();
+        } else if ("www" === sourceDialog.returnValue) {
+          console.log("selecting www image...");
+        }
+        closeEvent.stopPropagation();
+      },
+      { once: true }
+    );
+    sourceDialog.showModal();
   }
 
   /**
