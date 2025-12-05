@@ -165,7 +165,7 @@ export class ComponentsController {
           event.stopPropagation();
         } else if ("online URL" === sourceDialog.returnValue) {
           try {
-            const link = document.querySelector("dialog.file-source-dialog input").value;
+            const link = sourceDialog.querySelector("input").value;
             const url = new URL(link);
             event.target.setAttribute("url", link);
             const urlPathParts = url.pathname.split("/");
