@@ -174,7 +174,7 @@ export class ComponentsController {
             event.target.setAttribute("url", link);
             const urlPathParts = url.pathname.split("/");
             event.target.value = urlPathParts[urlPathParts.length - 1];
-            CommonController.showToastSuccess("Added online image reference");
+            CommonController.showToastSuccess(`Added online image URL: ${link}`);
           } catch {
             CommonController.showToastError("Invalid URL provided");
           }
