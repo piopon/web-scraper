@@ -527,6 +527,11 @@ dialog.file-source-dialog button {
   font-family: "Sedgwick Ave", cursive;
 }
 
+dialog.file-source-dialog button:hover {
+  color: white;
+  background-color: slateblue;
+}
+
 dialog.file-source-dialog input {
   text-align: center;
   height: 2rem;
