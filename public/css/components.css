@@ -508,7 +508,7 @@ dialog.file-source-dialog form {
   margin: 0.5rem;
 }
 
-dialog.file-source-dialog div {
+dialog.file-source-dialog div.file-source-text-container {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -516,6 +516,7 @@ dialog.file-source-dialog div {
   align-items: stretch;
 }
 
+div.file-source-text-container button,
 dialog.file-source-dialog button {
   text-align: center;
   font-size: 1rem;
@@ -527,12 +528,13 @@ dialog.file-source-dialog button {
   font-family: "Sedgwick Ave", cursive;
 }
 
+div.file-source-text-container button:hover,
 dialog.file-source-dialog button:hover {
   color: white;
   background-color: slateblue;
 }
 
-dialog.file-source-dialog input {
+div.file-source-text-container input {
   text-align: center;
   height: 2rem;
   font-size: 0.75rem;
