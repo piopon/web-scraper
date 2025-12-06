@@ -153,6 +153,7 @@ export class ComponentsController {
 
   /**
    * Handler used to be called when image select button was clicked
+   * @note It displays a dialog with option to select image from URL or local file upload
    * @param {Event} event A listener event object
    */
   #selectImageHandler(event) {
