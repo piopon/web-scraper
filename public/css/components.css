@@ -492,3 +492,55 @@ input.component-data-auxiliary {
     font-size: 1rem;
   }
 }
+
+dialog.file-source-dialog {
+  box-shadow: 0px 0px 2rem black;
+  border-radius: 0.35rem;
+  border: 3px solid black;
+  width: 50%;
+}
+
+dialog.file-source-dialog form {
+  display: grid;
+  grid-template-columns: repeat(1, 100%);
+  grid-template-rows: repeat(2, 4rem);
+  grid-gap: 1rem;
+  margin: 0.5rem;
+}
+
+dialog.file-source-dialog div.file-source-text-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: stretch;
+}
+
+div.file-source-text-container button,
+dialog.file-source-dialog button {
+  text-align: center;
+  font-size: 1rem;
+  height: 100%;
+  color: black;
+  background-color: #efefef;
+  border: 1px solid black;
+  border-radius: 5px;
+  font-family: "Sedgwick Ave", cursive;
+}
+
+div.file-source-text-container button:hover,
+dialog.file-source-dialog button:hover {
+  color: white;
+  background-color: slateblue;
+}
+
+div.file-source-text-container input {
+  text-align: center;
+  height: 2rem;
+  font-size: 0.75rem;
+  color: black;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin-bottom: 0.2rem;
+}

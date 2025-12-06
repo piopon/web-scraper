@@ -153,11 +153,38 @@ export class ComponentsController {
 
   /**
    * Handler used to be called when image select button was clicked
+   * @note It displays a dialog with option to select image from URL or local file upload
    * @param {Event} event A listener event object
    */
   #selectImageHandler(event) {
-    event.target.previousElementSibling.click();
-    event.stopPropagation();
+    const sourceDialog = document.querySelector("dialog.file-source-dialog");
+    const sourceUrlInput = sourceDialog.querySelector("input");
+    if (event.target.hasAttribute("url")) {
+      sourceUrlInput.value = event.target.getAttribute("url");
+    }
+    sourceDialog.addEventListener(
+      "close",
+      (closeEvent) => {
+        if ("file upload" === sourceDialog.returnValue) {
+          event.target.previousElementSibling.click();
+          event.stopPropagation();
+        } else if ("online URL" === sourceDialog.returnValue) {
+          try {
+            const link = sourceUrlInput.value;
+            const url = new URL(link);
+            event.target.setAttribute("url", link);
+            const urlPathParts = url.pathname.split("/");
+            event.target.value = urlPathParts[urlPathParts.length - 1];
+            CommonController.showToastSuccess(`Added online image URL: ${link}`);
+          } catch {
+            CommonController.showToastError("Invalid URL provided");
+          }
+        }
+        closeEvent.stopPropagation();
+      },
+      { once: true }
+    );
+    sourceDialog.showModal();
   }
 
   /**
