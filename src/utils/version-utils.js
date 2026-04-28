@@ -8,7 +8,7 @@ export class VersionUtils {
 
   /**
    * Method used to retrieve a runtime application version string.
-   * Priority: git short SHA + package.json version, then VERSION file content.
+   * Priority: package.json version + git short SHA, then VERSION file content.
    * @returns runtime version string in "version+sha" format
    */
   static getRuntimeVersion() {
