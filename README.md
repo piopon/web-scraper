@@ -96,6 +96,15 @@ CI_USER=[STRING]                 # CI user email
 CI_PASS=[STRING]                 # CI user password
 ```
 
+Additionally, keep a top-level `VERSION` file in repository root.
+This file should contain the full runtime version string in format `version+sha`.
+Default value in repository is used as fallback when git metadata is unavailable.
+
+To update `VERSION` from current `package.json` version and git commit SHA, use:
+```
+npm run version:sync
+```
+
 ### Usage 💻
 
 There are two supported ways to run web-scraper service:
