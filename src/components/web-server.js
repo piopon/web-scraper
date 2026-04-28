@@ -9,6 +9,7 @@ import { RequestLogger } from "../middleware/request-logger.js";
 import { ViewRouter } from "../routes/view/view-router.js";
 import { StatusRouter } from "../routes/api/status-router.js";
 import { SettingsRouter } from "../routes/api/settings-router.js";
+import { VersionUtils } from "../utils/version-utils.js";
 
 import cors from "cors";
 import express from "express";
@@ -95,6 +96,7 @@ export class WebServer {
     server.use(passport.initialize());
     server.use(passport.session());
     server.locals.passport = this.#authConfig.configure();
+    server.locals.appVersion = VersionUtils.getRuntimeVersion();
     // setup web server routes
     const routes = new Map([
       ["/", new ViewRouter(this.#setupConfig)],
