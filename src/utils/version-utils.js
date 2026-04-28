@@ -27,6 +27,22 @@ export class VersionUtils {
   }
 
   /**
+   * Method used to synchronize VERSION file with current package.json version and git short SHA.
+   * @returns synchronized version string in "version+sha" format
+   */
+  static syncVersionFile() {
+    const appVersion = this.#readPackageVersion();
+    const gitSha = this.#readGitCommitSha();
+    if (!gitSha) {
+      throw new Error("Unable to synchronize VERSION: git short SHA is unavailable.");
+    }
+    const syncedVersion = `${appVersion}+${gitSha}`;
+    const versionPath = path.join(this.#ROOT_PATH, "VERSION");
+    fs.writeFileSync(versionPath, `${syncedVersion}\n`, "utf8");
+    return syncedVersion;
+  }
+
+  /**
    * Method used to read application semantic version from package.json file.
    * @returns package version string or "0.0.0" when unavailable
    */
