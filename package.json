@@ -8,7 +8,7 @@
     "start": "node src/index",
     "dev": "nodemon src/index",
     "test": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js --silent --coverage",
-    "version:sync": "node -e \"const fs=require('fs');const cp=require('child_process');const p=require('./package.json');const sha=cp.execSync('git rev-parse --short HEAD',{encoding:'utf8'}).trim();fs.writeFileSync('VERSION',`${p.version}+${sha}\\n`);\""
+    "version:sync": "node scripts/version-sync.js"
   },
   "repository": {
     "type": "git",
