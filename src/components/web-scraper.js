@@ -160,31 +160,33 @@ export class WebScraper {
    * Method used to clean retrieved data for specified user
    * @param {String} userEmail The email of the user which data we want to clean
    */
-  clean(userEmail) {
+  async clean(userEmail) {
     const userDataDir = path.join(this.#userConfig.path, userEmail);
-    if (fs.existsSync(userDataDir)) {
+    if (!fs.existsSync(userDataDir)) {
+      return true;
+    }
+    const maxAttempts = 3;
+    const cleanTimeout = this.#scrapConfig.cleanErrorWait;
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
       try {
-        fs.rmSync(userDataDir, { recursive: true, force: true });
-        // for some undefined reasons profile files are saved outside user directory
-        const usersContents = fs.readdirSync(this.#userConfig.path);
-        for (const item of usersContents) {
-          const fullPath = path.join(this.#userConfig.path, item);
-          const statObj = fs.statSync(fullPath);
-          if (statObj.isFile()) {
-            fs.unlinkSync(fullPath);
-          }
-        }
+        await fs.promises.rm(userDataDir, {
+          recursive: true,
+          force: true,
+          maxRetries: 10,
+          retryDelay: 200,
+        });
         this.#status.info(`${userEmail}: removed data.`);
+        return true;
       } catch (error) {
-        const session = this.#sessions.get(userEmail);
-        if (!session.cleaning) {
-          const cleanTimeout = this.#scrapConfig.cleanErrorWait;
-          session.cleaning = setInterval(() => this.clean(userEmail), cleanTimeout);
-          this.#status.warning(`${userEmail}: cannot remove data. Retrying in ${cleanTimeout / 1_000} second(s)...`);
-        } else {
-          session.cleaning = undefined;
-          this.#status.warning(`${userEmail}: failed to remove data...`);
+        if (attempt < maxAttempts) {
+          this.#status.warning(
+            `${userEmail}: cannot remove data. Retrying in ${cleanTimeout / 1_000} second(s)... [${attempt}/${maxAttempts}]`,
+          );
+          await new Promise((resolve) => setTimeout(resolve, cleanTimeout));
+          continue;
         }
+        this.#status.warning(`${userEmail}: failed to remove data... (${error.message})`);
+        return false;
       }
     }
   }

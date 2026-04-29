@@ -138,19 +138,25 @@ export class AuthRouter {
       const temporaryUser = request.user?.hostUser ? request.user : undefined;
       request.logout(async (err) => {
         if (err) return next(err);
-        if (!request.remoteLogout) {
-          response.redirect("/auth/login");
-        }
-        if (userWithChallenge) {
-          userWithChallenge.challenge = undefined;
-          await userWithChallenge.save();
-        }
-        if (temporaryUser) {
-          await ScrapUser.getDatabaseModel().deleteOne({ email: temporaryUser.email });
-          await ScrapConfig.getDatabaseModel().deleteOne({ user: temporaryUser._id });
-          // we should stop logout action components and clean their temporary data
-          this.#components.runComponents(ComponentType.LOGOUT, "stop", temporaryUser.email, "Demo session ended.");
-          this.#components.runComponents(ComponentType.LOGOUT, "clean", temporaryUser.email);
+        try {
+          if (userWithChallenge) {
+            userWithChallenge.challenge = undefined;
+            await userWithChallenge.save();
+          }
+          if (temporaryUser) {
+            await ScrapUser.getDatabaseModel().deleteOne({ email: temporaryUser.email });
+            await ScrapConfig.getDatabaseModel().deleteOne({ user: temporaryUser._id });
+            // stop browser first and clean files only after the process is closed
+            await this.#components.runComponents(ComponentType.LOGOUT, "stop", temporaryUser.email, "Demo session ended.");
+            await this.#components.runComponents(ComponentType.LOGOUT, "clean", temporaryUser.email);
+          }
+          if (!request.remoteLogout) {
+            return response.redirect("/auth/login");
+          }
+        } catch (error) {
+          if (!response.headersSent) {
+            return next(error);
+          }
         }
       });
     };
