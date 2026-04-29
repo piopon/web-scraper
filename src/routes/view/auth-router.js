@@ -138,9 +138,6 @@ export class AuthRouter {
       const temporaryUser = request.user?.hostUser ? request.user : undefined;
       request.logout(async (err) => {
         if (err) return next(err);
-        if (!request.remoteLogout) {
-          response.redirect("/auth/login");
-        }
         try {
           if (userWithChallenge) {
             userWithChallenge.challenge = undefined;
@@ -153,8 +150,13 @@ export class AuthRouter {
             await this.#components.runComponents(ComponentType.LOGOUT, "stop", temporaryUser.email, "Demo session ended.");
             await this.#components.runComponents(ComponentType.LOGOUT, "clean", temporaryUser.email);
           }
+          if (!request.remoteLogout) {
+            return response.redirect("/auth/login");
+          }
         } catch (error) {
-          return next(error);
+          if (!response.headersSent) {
+            return next(error);
+          }
         }
       });
     };
