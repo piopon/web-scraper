@@ -269,6 +269,45 @@ describe("update() method", () => {
   });
 });
 
+describe("clean() method", () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  test("returns true when user directory does not exist", async () => {
+    const testScraper = new WebScraper({
+      minLogLevel: LogLevel.INFO,
+      scraperConfig: { cleanErrorWait: 0, browser: { useEmbedded: true, profileDir: "_profile" } },
+      usersDataConfig: { path: testOwnerRoot, file: path.basename(testOwnerPath) },
+    });
+    const existsSpy = jest.spyOn(fs, "existsSync").mockReturnValue(false);
+
+    const result = await testScraper.clean("missing@test.com");
+
+    expect(result).toBe(true);
+    expect(existsSpy).toHaveBeenCalled();
+  });
+
+  test("retries on transient delete error and finally returns true", async () => {
+    const testScraper = new WebScraper({
+      minLogLevel: LogLevel.INFO,
+      scraperConfig: { cleanErrorWait: 0, browser: { useEmbedded: true, profileDir: "_profile" } },
+      usersDataConfig: { path: testOwnerRoot, file: path.basename(testOwnerPath) },
+    });
+    const existsSpy = jest.spyOn(fs, "existsSync").mockReturnValue(true);
+    const rmSpy = jest
+      .spyOn(fs.promises, "rm")
+      .mockRejectedValueOnce(new Error("EBUSY: resource busy"))
+      .mockResolvedValueOnce();
+
+    const result = await testScraper.clean("retry@test.com");
+
+    expect(result).toBe(true);
+    expect(existsSpy).toHaveBeenCalled();
+    expect(rmSpy).toHaveBeenCalledTimes(2);
+  });
+});
+
 function createDataFile(filePath) {
   try {
     // create parent directory (if needed)
