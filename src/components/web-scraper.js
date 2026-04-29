@@ -169,7 +169,7 @@ export class WebScraper {
     const cleanTimeout = this.#scrapConfig.cleanErrorWait;
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
       try {
-        fs.rmSync(userDataDir, {
+        await fs.promises.rm(userDataDir, {
           recursive: true,
           force: true,
           maxRetries: 10,
