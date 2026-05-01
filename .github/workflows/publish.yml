@@ -44,7 +44,8 @@ jobs:
       - name: Create release bundle
         run: |
           ARCHIVE_NAME="web-scraper-${{ github.event.release.tag_name }}.tar.gz"
-          git archive --format=tar.gz --output "$ARCHIVE_NAME" HEAD
+          ARCHIVE_PREFIX="web-scraper-${{ github.event.release.tag_name }}/"
+          git archive --format=tar.gz --prefix "$ARCHIVE_PREFIX" --output "$ARCHIVE_NAME" HEAD
           echo "ARCHIVE_NAME=$ARCHIVE_NAME" >> "$GITHUB_ENV"
       - name: Upload workflow artifact
         uses: actions/upload-artifact@v4
