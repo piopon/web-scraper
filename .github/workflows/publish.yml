@@ -1,6 +1,5 @@
 # This workflow will publish web-scraper release artifacts
 # Primary artifact: GHCR container image
-# Secondary artifact: GitHub Release archive (.tar.gz)
 
 name: CD web-scraper
 
@@ -10,7 +9,10 @@ on:
 
 jobs:
   build:
+    name: Publish Release Artifacts
     runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: ghcr.io/${{ github.repository }}
     permissions:
       contents: write
       packages: write
@@ -30,5 +32,5 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}:${{ github.event.release.tag_name }}
-            ghcr.io/${{ github.repository }}:latest
+            ${{ env.IMAGE_NAME }}:${{ github.event.release.tag_name }}
+            ${{ env.IMAGE_NAME }}:latest
