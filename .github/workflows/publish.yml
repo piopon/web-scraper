@@ -52,6 +52,7 @@ jobs:
         with:
           name: web-scraper-${{ github.event.release.tag_name }}
           path: ${{ env.ARCHIVE_NAME }}
+          retention-days: 14
           if-no-files-found: error
       - name: Attach archive to GitHub release
         uses: softprops/action-gh-release@v2
