@@ -43,14 +43,17 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
       - name: Create release bundle
         run: |
-          ARCHIVE_NAME="web-scraper-${{ github.event.release.tag_name }}.tar.gz"
-          ARCHIVE_PREFIX="web-scraper-${{ github.event.release.tag_name }}/"
+          RAW_TAG="${{ github.event.release.tag_name }}"
+          SAFE_TAG="$(echo "$RAW_TAG" | sed -E 's#[^A-Za-z0-9._-]#-#g')"
+          ARCHIVE_NAME="web-scraper-${SAFE_TAG}.tar.gz"
+          ARCHIVE_PREFIX="web-scraper-${SAFE_TAG}/"
           git archive --format=tar.gz --prefix "$ARCHIVE_PREFIX" --output "$ARCHIVE_NAME" HEAD
+          echo "BUNDLE_TAG=$SAFE_TAG" >> "$GITHUB_ENV"
           echo "ARCHIVE_NAME=$ARCHIVE_NAME" >> "$GITHUB_ENV"
       - name: Upload workflow artifact
         uses: actions/upload-artifact@v4
         with:
-          name: web-scraper-${{ github.event.release.tag_name }}
+          name: web-scraper-${{ env.BUNDLE_TAG }}
           path: ${{ env.ARCHIVE_NAME }}
           retention-days: 14
           if-no-files-found: error
