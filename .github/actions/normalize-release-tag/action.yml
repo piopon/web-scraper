@@ -1,0 +1,33 @@
+name: Normalize Release Tag
+description: Normalize a release tag into a Docker-compatible, collision-resistant value.
+inputs:
+  rawTag:
+    description: Raw release tag value.
+    required: true
+outputs:
+  normalizedTag:
+    description: Normalized tag value safe for Docker tags and file naming.
+    value: ${{ steps.normalize.outputs.normalizedTag }}
+runs:
+  using: composite
+  steps:
+    - name: Normalize tag
+      id: normalize
+      shell: bash
+      run: |
+        RAW_TAG="${{ inputs.rawTag }}"
+        SAFE_BASE="$(echo "$RAW_TAG" | sed -E 's#[^A-Za-z0-9._-]#-#g')"
+        SAFE_BASE="$(echo "$SAFE_BASE" | sed -E 's#^[.-]+##')"
+        if [ -z "$SAFE_BASE" ]; then
+          SAFE_BASE="r"
+        fi
+        if ! [[ "$SAFE_BASE" =~ ^[A-Za-z0-9_] ]]; then
+          SAFE_BASE="r-$SAFE_BASE"
+        fi
+
+        TAG_HASH="$(printf '%s' "$RAW_TAG" | sha256sum | cut -c1-8)"
+        MAX_BASE_LEN=119
+        SAFE_BASE="${SAFE_BASE:0:$MAX_BASE_LEN}"
+        NORMALIZED_TAG="${SAFE_BASE}-${TAG_HASH}"
+
+        echo "normalizedTag=$NORMALIZED_TAG" >> "$GITHUB_OUTPUT"

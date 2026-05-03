@@ -1,0 +1,33 @@
+name: Create Release Bundle
+description: Create a versioned release tarball from tracked files and upload it as a workflow artifact.
+inputs:
+  bundleTag:
+    description: Normalized tag value used in bundle file and directory names.
+    required: true
+  retentionDays:
+    description: Retention period for the workflow artifact in days.
+    required: false
+    default: "14"
+outputs:
+  archiveName:
+    description: Name of the generated archive file.
+    value: ${{ steps.bundle.outputs.archiveName }}
+runs:
+  using: composite
+  steps:
+    - name: Create tar.gz bundle
+      id: bundle
+      shell: bash
+      run: |
+        ARCHIVE_NAME="web-scraper-${{ inputs.bundleTag }}.tar.gz"
+        ARCHIVE_PREFIX="web-scraper-${{ inputs.bundleTag }}/"
+        git ls-files -z | tar --null -T - --transform "s#^#${ARCHIVE_PREFIX}#" -czf "$ARCHIVE_NAME"
+        echo "archiveName=$ARCHIVE_NAME" >> "$GITHUB_OUTPUT"
+
+    - name: Upload workflow artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: web-scraper-${{ inputs.bundleTag }}
+        path: ${{ steps.bundle.outputs.archiveName }}
+        retention-days: ${{ inputs.retentionDays }}
+        if-no-files-found: error
