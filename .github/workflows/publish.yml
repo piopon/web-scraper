@@ -27,13 +27,18 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Prepare safe release tag
+        run: |
+          RAW_TAG="${{ github.event.release.tag_name }}"
+          SAFE_TAG="$(echo "$RAW_TAG" | sed -E 's#[^A-Za-z0-9._-]#-#g')"
+          echo "IMAGE_TAG=$SAFE_TAG" >> "$GITHUB_ENV"
       - name: Resolve image tags
         id: meta
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=${{ github.event.release.tag_name }}
+            type=raw,value=${{ env.IMAGE_TAG }}
             type=raw,value=latest,enable=${{ github.event.release.prerelease == false }}
       - name: Build and push image
         uses: docker/build-push-action@v6
