@@ -19,6 +19,10 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Log in to GHCR
@@ -54,6 +58,8 @@ jobs:
           tags: |
             type=raw,value=${{ env.IMAGE_TAG }}
             type=raw,value=latest,enable=${{ github.event.release.prerelease == false }}
+      - name: Sync VERSION for release artifacts
+        run: npm run version:sync
       - name: Build and push image
         uses: docker/build-push-action@v6
         with:
@@ -64,7 +70,7 @@ jobs:
         run: |
           ARCHIVE_NAME="web-scraper-${{ env.BUNDLE_TAG }}.tar.gz"
           ARCHIVE_PREFIX="web-scraper-${{ env.BUNDLE_TAG }}/"
-          git archive --format=tar.gz --prefix "$ARCHIVE_PREFIX" --output "$ARCHIVE_NAME" HEAD
+          git ls-files -z | tar --null -T - --transform "s#^#${ARCHIVE_PREFIX}#" -czf "$ARCHIVE_NAME"
           echo "ARCHIVE_NAME=$ARCHIVE_NAME" >> "$GITHUB_ENV"
       - name: Upload workflow artifact
         uses: actions/upload-artifact@v4
