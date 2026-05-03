@@ -30,8 +30,22 @@ jobs:
       - name: Prepare safe release tag
         run: |
           RAW_TAG="${{ github.event.release.tag_name }}"
-          SAFE_TAG="$(echo "$RAW_TAG" | sed -E 's#[^A-Za-z0-9._-]#-#g')"
-          echo "IMAGE_TAG=$SAFE_TAG" >> "$GITHUB_ENV"
+          SAFE_BASE="$(echo "$RAW_TAG" | sed -E 's#[^A-Za-z0-9._-]#-#g')"
+          SAFE_BASE="$(echo "$SAFE_BASE" | sed -E 's#^[.-]+##')"
+          if [ -z "$SAFE_BASE" ]; then
+            SAFE_BASE="r"
+          fi
+          if ! [[ "$SAFE_BASE" =~ ^[A-Za-z0-9_] ]]; then
+            SAFE_BASE="r-$SAFE_BASE"
+          fi
+
+          TAG_HASH="$(printf '%s' "$RAW_TAG" | sha256sum | cut -c1-8)"
+          MAX_BASE_LEN=119
+          SAFE_BASE="${SAFE_BASE:0:$MAX_BASE_LEN}"
+          NORMALIZED_TAG="${SAFE_BASE}-${TAG_HASH}"
+
+          echo "IMAGE_TAG=$NORMALIZED_TAG" >> "$GITHUB_ENV"
+          echo "BUNDLE_TAG=$NORMALIZED_TAG" >> "$GITHUB_ENV"
       - name: Resolve image tags
         id: meta
         uses: docker/metadata-action@v5
@@ -48,12 +62,9 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
       - name: Create release bundle
         run: |
-          RAW_TAG="${{ github.event.release.tag_name }}"
-          SAFE_TAG="$(echo "$RAW_TAG" | sed -E 's#[^A-Za-z0-9._-]#-#g')"
-          ARCHIVE_NAME="web-scraper-${SAFE_TAG}.tar.gz"
-          ARCHIVE_PREFIX="web-scraper-${SAFE_TAG}/"
+          ARCHIVE_NAME="web-scraper-${{ env.BUNDLE_TAG }}.tar.gz"
+          ARCHIVE_PREFIX="web-scraper-${{ env.BUNDLE_TAG }}/"
           git archive --format=tar.gz --prefix "$ARCHIVE_PREFIX" --output "$ARCHIVE_NAME" HEAD
-          echo "BUNDLE_TAG=$SAFE_TAG" >> "$GITHUB_ENV"
           echo "ARCHIVE_NAME=$ARCHIVE_NAME" >> "$GITHUB_ENV"
       - name: Upload workflow artifact
         uses: actions/upload-artifact@v4
