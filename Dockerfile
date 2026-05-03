@@ -15,5 +15,5 @@ RUN npm install
 COPY --chown=node:node . .
 EXPOSE $SERVER_PORT
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
-  CMD wget -qO- "http://127.0.0.1:${SERVER_PORT}/api/v1/status" | node -e "let b='';process.stdin.on('data',c=>b+=c);process.stdin.on('end',()=>{try{const arr=JSON.parse(b);const ok=Array.isArray(arr)&&arr.length>0&&arr.every(x=>x.status==='running');process.exit(ok?0:1);}catch{process.exit(1);}})" || exit 1
+  CMD node ./scripts/healthcheck-status.js "http://127.0.0.1:${SERVER_PORT}/api/v1/status" || exit 1
 CMD ["npm", "run", "start"]
