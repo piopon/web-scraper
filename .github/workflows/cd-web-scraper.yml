@@ -52,20 +52,13 @@ jobs:
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
-      - name: Create release bundle
-        run: |
-          ARCHIVE_NAME="web-scraper-${{ steps.tag.outputs.normalizedTag }}.tar.gz"
-          ARCHIVE_PREFIX="web-scraper-${{ steps.tag.outputs.normalizedTag }}/"
-          git ls-files -z | tar --null -T - --transform "s#^#${ARCHIVE_PREFIX}#" -czf "$ARCHIVE_NAME"
-          echo "ARCHIVE_NAME=$ARCHIVE_NAME" >> "$GITHUB_ENV"
-      - name: Upload workflow artifact
-        uses: actions/upload-artifact@v4
+      - name: Create release bundle and upload workflow artifact
+        id: bundle
+        uses: ./.github/actions/create-release-bundle
         with:
-          name: web-scraper-${{ steps.tag.outputs.normalizedTag }}
-          path: ${{ env.ARCHIVE_NAME }}
-          retention-days: 14
-          if-no-files-found: error
+          bundleTag: ${{ steps.tag.outputs.normalizedTag }}
+          retentionDays: 14
       - name: Attach archive to GitHub release
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ env.ARCHIVE_NAME }}
+          files: ${{ steps.bundle.outputs.archiveName }}
