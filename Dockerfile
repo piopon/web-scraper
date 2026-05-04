@@ -1,5 +1,6 @@
 FROM node:22-slim
 ARG SERVER_PORT=5000
+ENV SERVER_PORT=${SERVER_PORT}
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 RUN apt-get update && apt-get install gnupg wget -y && \
   wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/trusted.gpg.d/google-archive.gpg && \
