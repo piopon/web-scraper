@@ -16,5 +16,5 @@ RUN npm install
 COPY --chown=node:node . .
 EXPOSE $SERVER_PORT
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
-  CMD node ./scripts/healthcheck-status.js "http://127.0.0.1:${SERVER_PORT}/api/v1/status" || exit 1
+  CMD node ./scripts/healthcheck-status.js "http://127.0.0.1:${SERVER_PORT:-5000}/api/v1/status" || exit 1
 CMD ["npm", "run", "start"]
