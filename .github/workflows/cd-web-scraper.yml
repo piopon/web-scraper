@@ -9,8 +9,28 @@ on:
     types: [published]
 
 jobs:
+  validate:
+    name: Validate Release Runtime
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - name: Install dependencies
+        run: npm ci
+      - name: Run test suite
+        run: npm test
+      - name: Build Docker image (smoke check)
+        run: docker build --tag web-scraper:smoke .
+
   build:
     name: Publish Release Artifacts
+    needs: validate
     runs-on: ubuntu-latest
     env:
       IMAGE_NAME: ghcr.io/${{ github.repository }}
