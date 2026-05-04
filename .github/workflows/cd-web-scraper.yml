@@ -115,6 +115,7 @@ jobs:
         uses: ./.github/actions/create-release-bundle
         with:
           bundleTag: ${{ steps.tag.outputs.normalizedTag }}
+          allowlistFile: .github/release-bundle-files.txt
           retentionDays: 14
       - name: Attach release assets to GitHub release
         uses: softprops/action-gh-release@v2

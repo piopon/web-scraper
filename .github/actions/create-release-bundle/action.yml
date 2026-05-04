@@ -4,6 +4,10 @@ inputs:
   bundleTag:
     description: Normalized tag value used in bundle file and directory names.
     required: true
+  allowlistFile:
+    description: Path to release bundle allowlist file.
+    required: false
+    default: ".github/release-bundle-files.txt"
   retentionDays:
     description: Retention period for the workflow artifact in days.
     required: false
@@ -21,7 +25,34 @@ runs:
       run: |
         ARCHIVE_NAME="web-scraper-${{ inputs.bundleTag }}.tar.gz"
         ARCHIVE_PREFIX="web-scraper-${{ inputs.bundleTag }}/"
-        git ls-files -z | tar --null -T - --transform "s#^#${ARCHIVE_PREFIX}#" -czf "$ARCHIVE_NAME"
+
+        ALLOWLIST_FILE="${{ inputs.allowlistFile }}"
+        if [ ! -f "$ALLOWLIST_FILE" ]; then
+          echo "Release bundle allowlist file not found: $ALLOWLIST_FILE"
+          exit 1
+        fi
+
+        grep -vE '^[[:space:]]*($|#)' "$ALLOWLIST_FILE" > .release-bundle-files.txt
+        if [ ! -s .release-bundle-files.txt ]; then
+          echo "Release bundle allowlist is empty: $ALLOWLIST_FILE"
+          exit 1
+        fi
+
+        MISSING=0
+        while IFS= read -r entry; do
+          if [ ! -e "$entry" ]; then
+            echo "Missing allowlisted entry: $entry"
+            MISSING=1
+          fi
+        done < .release-bundle-files.txt
+        if [ "$MISSING" -ne 0 ]; then
+          exit 1
+        fi
+
+        tar --create --gzip \
+          --file "$ARCHIVE_NAME" \
+          --transform "s#^#${ARCHIVE_PREFIX}#" \
+          --files-from .release-bundle-files.txt
         echo "archiveName=$ARCHIVE_NAME" >> "$GITHUB_OUTPUT"
 
     - name: Upload workflow artifact
