@@ -1,0 +1,76 @@
+name: Runtime Smoke Check
+description: Start MongoDB and app containers, wait for app healthcheck, and always clean up.
+inputs:
+  imageName:
+    description: Docker image to run for smoke validation.
+    required: true
+  timeoutSeconds:
+    description: Max seconds to wait for healthy status.
+    required: false
+    default: "120"
+runs:
+  using: composite
+  steps:
+    - name: Run runtime smoke validation
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        NETWORK_NAME="smoke-net"
+        MONGO_NAME="smoke-mongo"
+        APP_NAME="smoke-app"
+
+        cleanup() {
+          docker rm -f "$APP_NAME" "$MONGO_NAME" >/dev/null 2>&1 || true
+          docker network rm "$NETWORK_NAME" >/dev/null 2>&1 || true
+        }
+        trap cleanup EXIT
+
+        docker network create "$NETWORK_NAME" >/dev/null
+
+        docker run -d --name "$MONGO_NAME" --network "$NETWORK_NAME" \
+          -e MONGO_INITDB_ROOT_USERNAME=smoke \
+          -e MONGO_INITDB_ROOT_PASSWORD=smoke \
+          mongo >/dev/null
+
+        docker run -d --name "$APP_NAME" --network "$NETWORK_NAME" \
+          -e SERVER_PORT=5000 \
+          -e DB_ADDRESS="$MONGO_NAME" \
+          -e DB_PORT=27017 \
+          -e DB_NAME=web-scraper \
+          -e DB_USER=smoke \
+          -e DB_PASSWORD=smoke \
+          -e DEMO_BASE=base@demo.com \
+          -e DEMO_PASS=demo-pass \
+          -e CI_USER=ci@test.local \
+          -e CI_PASS=ci-pass \
+          -e JWT_SECRET=smoke-jwt \
+          -e SESSION_SHA=smoke-session \
+          -e CHALLENGE_PREFIX=smoke \
+          -e CHALLENGE_JOIN=- \
+          -e CHALLENGE_EOL_MINS=10 \
+          -e CHALLENGE_EOL_SEPARATOR=@ \
+          "${{ inputs.imageName }}" >/dev/null
+
+        ATTEMPTS=$(( ${{ inputs.timeoutSeconds }} / 2 ))
+        if [ "$ATTEMPTS" -lt 1 ]; then
+          ATTEMPTS=1
+        fi
+
+        for attempt in $(seq 1 "$ATTEMPTS"); do
+          status=$(docker inspect --format='{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' "$APP_NAME")
+          if [ "$status" = "healthy" ]; then
+            echo "Runtime smoke check passed."
+            exit 0
+          fi
+          if [ "$status" = "unhealthy" ]; then
+            echo "Runtime smoke check failed: container reported unhealthy."
+            docker logs "$APP_NAME"
+            exit 1
+          fi
+          sleep 2
+        done
+
+        echo "Runtime smoke check timed out waiting for healthy status."
+        docker logs "$APP_NAME"
+        exit 1

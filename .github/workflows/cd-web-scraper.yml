@@ -27,54 +27,11 @@ jobs:
         run: npm test
       - name: Build Docker image (smoke check)
         run: docker build --tag web-scraper:smoke .
-      - name: Start runtime smoke environment
-        run: |
-          docker network create smoke-net
-          docker run -d --name smoke-mongo --network smoke-net \
-            -e MONGO_INITDB_ROOT_USERNAME=smoke \
-            -e MONGO_INITDB_ROOT_PASSWORD=smoke \
-            mongo
-          docker run -d --name smoke-app --network smoke-net \
-            -e SERVER_PORT=5000 \
-            -e DB_ADDRESS=smoke-mongo \
-            -e DB_PORT=27017 \
-            -e DB_NAME=web-scraper \
-            -e DB_USER=smoke \
-            -e DB_PASSWORD=smoke \
-            -e DEMO_BASE=base@demo.com \
-            -e DEMO_PASS=demo-pass \
-            -e CI_USER=ci@test.local \
-            -e CI_PASS=ci-pass \
-            -e JWT_SECRET=smoke-jwt \
-            -e SESSION_SHA=smoke-session \
-            -e CHALLENGE_PREFIX=smoke \
-            -e CHALLENGE_JOIN=- \
-            -e CHALLENGE_EOL_MINS=10 \
-            -e CHALLENGE_EOL_SEPARATOR=@ \
-            web-scraper:smoke
-      - name: Wait for runtime healthcheck
-        run: |
-          for attempt in {1..60}; do
-            status=$(docker inspect --format='{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' smoke-app)
-            if [ "$status" = "healthy" ]; then
-              echo "Runtime smoke check passed."
-              exit 0
-            fi
-            if [ "$status" = "unhealthy" ]; then
-              echo "Runtime smoke check failed: container reported unhealthy."
-              docker logs smoke-app
-              exit 1
-            fi
-            sleep 2
-          done
-          echo "Runtime smoke check timed out waiting for healthy status."
-          docker logs smoke-app
-          exit 1
-      - name: Teardown runtime smoke environment
-        if: ${{ always() }}
-        run: |
-          docker rm -f smoke-app smoke-mongo || true
-          docker network rm smoke-net || true
+      - name: Run runtime smoke check
+        uses: ./.github/actions/runtime-smoke-check
+        with:
+          imageName: web-scraper:smoke
+          timeoutSeconds: 120
 
   build:
     name: Publish Release Artifacts
