@@ -1,4 +1,5 @@
 const DEFAULT_URL = "http://127.0.0.1:5000/api/v1/status";
+const FORBIDDEN_COMPONENT_KEYS = new Set(["__proto__", "prototype", "constructor"]);
 const DEFAULT_COMPONENT_STATES = {
   "web-database": ["running"],
   "web-scraper": ["running", "stopped"],
@@ -7,11 +8,14 @@ const DEFAULT_COMPONENT_STATES = {
 };
 
 function normalizeStateMap(stateMap) {
-  const normalizedMap = {};
+  const normalizedMap = Object.create(null);
   for (const [componentName, acceptedStates] of Object.entries(stateMap)) {
     const normalizedName = String(componentName).trim();
     if (normalizedName.length === 0) {
       continue;
+    }
+    if (FORBIDDEN_COMPONENT_KEYS.has(normalizedName)) {
+      throw new Error(`Invalid component name in HEALTHCHECK_COMPONENT_STATES: ${normalizedName}`);
     }
     const normalizedStates = Array.isArray(acceptedStates)
       ? acceptedStates.map((state) => String(state).trim().toLowerCase()).filter((state) => state.length > 0)

@@ -108,7 +108,7 @@ Docker image healthcheck notes:
 
 Optional advanced override is available by setting the `HEALTHCHECK_COMPONENT_STATES` environment variable as a JSON object where key is component name and value is list of accepted states:
 ```
-HEALTHCHECK_COMPONENT_STATES={"web-database":["running"],"web-scraper":["running"],"web-components":["running"],"web-server":["running"]}
+HEALTHCHECK_COMPONENT_STATES='{"web-database":["running"],"web-scraper":["running"],"web-components":["running"],"web-server":["running"]}'
 ```
 
 Additionally, keep a top-level `VERSION` file in repository root.
