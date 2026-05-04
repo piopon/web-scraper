@@ -23,6 +23,8 @@ runs:
       id: bundle
       shell: bash
       run: |
+        set -euo pipefail
+
         ARCHIVE_NAME="web-scraper-${{ inputs.bundleTag }}.tar.gz"
         ARCHIVE_PREFIX="web-scraper-${{ inputs.bundleTag }}/"
 

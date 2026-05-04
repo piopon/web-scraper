@@ -4,6 +4,10 @@ inputs:
   imageName:
     description: Docker image to run for smoke validation.
     required: true
+  mongoImage:
+    description: MongoDB image used for runtime smoke validation.
+    required: false
+    default: "mongo:7.0"
   timeoutSeconds:
     description: Max seconds to wait for healthy status.
     required: false
@@ -31,7 +35,7 @@ runs:
         docker run -d --name "$MONGO_NAME" --network "$NETWORK_NAME" \
           -e MONGO_INITDB_ROOT_USERNAME=smoke \
           -e MONGO_INITDB_ROOT_PASSWORD=smoke \
-          mongo >/dev/null
+          "${{ inputs.mongoImage }}" >/dev/null
 
         docker run -d --name "$APP_NAME" --network "$NETWORK_NAME" \
           -e SERVER_PORT=5000 \

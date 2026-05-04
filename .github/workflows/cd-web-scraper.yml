@@ -25,6 +25,8 @@ jobs:
         run: npm ci
       - name: Run test suite
         run: npm test
+      - name: Sync VERSION for smoke validation
+        run: npm run version:sync
       - name: Build Docker image (smoke check)
         run: docker build --tag web-scraper:smoke .
       - name: Run runtime smoke check
