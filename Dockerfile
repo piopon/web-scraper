@@ -1,5 +1,6 @@
 FROM node:22-slim
 ARG SERVER_PORT=5000
+ENV SERVER_PORT=${SERVER_PORT}
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 RUN apt-get update && apt-get install gnupg wget -y && \
   wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/trusted.gpg.d/google-archive.gpg && \
@@ -14,4 +15,6 @@ USER node
 RUN npm install
 COPY --chown=node:node . .
 EXPOSE $SERVER_PORT
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+  CMD node ./scripts/healthcheck-status.js "http://127.0.0.1:${SERVER_PORT:-5000}/api/v1/status"
 CMD ["npm", "run", "start"]
