@@ -96,6 +96,21 @@ CI_USER=[STRING]                 # CI user email
 CI_PASS=[STRING]                 # CI user password
 ```
 
+Docker image healthcheck notes:
+- No extra configuration is required by default.
+- The container healthcheck calls `/api/v1/status` and validates component states.
+  - Default accepted states: `web-database=running`.
+  - Default accepted states: `web-components=running`.
+  - Default accepted states: `web-server=running`.
+  - Default accepted states: `web-scraper=running|stopped`.
+
+> Component names received from status endpoint are trimmed before matching (to support padded logger names).
+
+Optional advanced override is available by setting the `HEALTHCHECK_COMPONENT_STATES` environment variable as a JSON object where key is component name and value is list of accepted states:
+```
+HEALTHCHECK_COMPONENT_STATES={"web-database":["running"],"web-scraper":["running"],"web-components":["running"],"web-server":["running"]}
+```
+
 Additionally, keep a top-level `VERSION` file in repository root.
 This file should contain the full runtime version string in format `version+sha`.
 Default value in repository is used as fallback when git metadata is unavailable.
