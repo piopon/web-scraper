@@ -1,14 +1,50 @@
 const DEFAULT_URL = "http://127.0.0.1:5000/api/v1/status";
-const DEFAULT_COMPONENTS = ["web-database", "web-scraper", "web-components", "web-server"];
+const DEFAULT_COMPONENT_STATES = {
+  "web-database": ["running"],
+  "web-scraper": ["running", "stopped"],
+  "web-components": ["running"],
+  "web-server": ["running"],
+};
 
-function getExpectedComponents() {
-  if (!process.env.HEALTHCHECK_COMPONENTS) {
-    return DEFAULT_COMPONENTS;
+function normalizeStateMap(stateMap) {
+  const normalizedMap = {};
+  for (const [componentName, acceptedStates] of Object.entries(stateMap)) {
+    const normalizedName = String(componentName).trim();
+    if (normalizedName.length === 0) {
+      continue;
+    }
+    const normalizedStates = Array.isArray(acceptedStates)
+      ? acceptedStates.map((state) => String(state).trim().toLowerCase()).filter((state) => state.length > 0)
+      : [];
+    if (normalizedStates.length === 0) {
+      continue;
+    }
+    normalizedMap[normalizedName] = normalizedStates;
+  }
+  return normalizedMap;
+}
+
+function getExpectedComponentStates() {
+  if (!process.env.HEALTHCHECK_COMPONENT_STATES) {
+    return normalizeStateMap(DEFAULT_COMPONENT_STATES);
   }
 
-  return process.env.HEALTHCHECK_COMPONENTS.split(",")
-    .map((name) => name.trim())
-    .filter((name) => name.length > 0);
+  let parsedMap;
+  try {
+    parsedMap = JSON.parse(process.env.HEALTHCHECK_COMPONENT_STATES);
+  } catch (error) {
+    throw new Error(`Invalid HEALTHCHECK_COMPONENT_STATES JSON: ${error.message}`);
+  }
+
+  if (parsedMap == null || typeof parsedMap !== "object" || Array.isArray(parsedMap)) {
+    throw new Error("HEALTHCHECK_COMPONENT_STATES must be a JSON object");
+  }
+
+  const normalizedMap = normalizeStateMap(parsedMap);
+  if (Object.keys(normalizedMap).length === 0) {
+    throw new Error("HEALTHCHECK_COMPONENT_STATES must define at least one component with accepted states");
+  }
+  return normalizedMap;
 }
 
 async function main() {
@@ -40,9 +76,10 @@ async function main() {
     process.exit(1);
   }
 
-  const expectedComponents = getExpectedComponents();
+  const expectedComponentStates = getExpectedComponentStates();
+  const expectedComponents = Object.keys(expectedComponentStates);
   const componentStatus = new Map(
-    payload.map((entry) => [String(entry?.name ?? "").trim(), String(entry?.status ?? "").trim()]),
+    payload.map((entry) => [String(entry?.name ?? "").trim(), String(entry?.status ?? "").trim().toLowerCase()]),
   );
 
   const missingComponents = expectedComponents.filter((name) => !componentStatus.has(name));
@@ -51,9 +88,17 @@ async function main() {
     process.exit(1);
   }
 
-  const notRunningComponents = expectedComponents.filter((name) => componentStatus.get(name) !== "running");
-  if (notRunningComponents.length > 0) {
-    process.stderr.write(`Healthcheck components not running: ${notRunningComponents.join(", ")}\n`);
+  const invalidStateComponents = expectedComponents.filter((name) => {
+    const acceptedStates = expectedComponentStates[name];
+    return !acceptedStates.includes(componentStatus.get(name));
+  });
+  if (invalidStateComponents.length > 0) {
+    const details = invalidStateComponents.map((name) => {
+      const actualState = componentStatus.get(name);
+      const acceptedStates = expectedComponentStates[name].join("|");
+      return `${name}=${actualState} (accepted: ${acceptedStates})`;
+    });
+    process.stderr.write(`Healthcheck components in invalid state: ${details.join(", ")}\n`);
     process.exit(1);
   }
 }
