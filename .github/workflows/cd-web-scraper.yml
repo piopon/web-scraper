@@ -33,6 +33,7 @@ jobs:
         uses: ./.github/actions/runtime-smoke-check
         with:
           imageName: web-scraper:smoke
+          mongoImage: mongo:4.4.29-focal
           timeoutSeconds: 120
 
   build:

@@ -34,7 +34,7 @@ runs:
           exit 1
         fi
 
-        grep -vE '^[[:space:]]*($|#)' "$ALLOWLIST_FILE" > .release-bundle-files.txt
+        grep -vE '^[[:space:]]*($|#)' "$ALLOWLIST_FILE" > .release-bundle-files.txt || true
         if [ ! -s .release-bundle-files.txt ]; then
           echo "Release bundle allowlist is empty: $ALLOWLIST_FILE"
           exit 1
