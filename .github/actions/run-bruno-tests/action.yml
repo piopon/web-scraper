@@ -138,14 +138,23 @@ runs:
         COLLECTION_PATH="${{ inputs.collectionPath }}"
         COLLECTION_PATH="${COLLECTION_PATH%/}"
         ENV_FILE_PATH="${{ inputs.environmentFile }}"
-        if [[ "$ENV_FILE_PATH" == "$COLLECTION_PATH/"* ]]; then
-          ENV_FILE_PATH="${ENV_FILE_PATH#"$COLLECTION_PATH/"}"
+
+        if [[ "$COLLECTION_PATH" = /* ]]; then
+          COLLECTION_PATH_ABS="$COLLECTION_PATH"
+        else
+          COLLECTION_PATH_ABS="$PWD/$COLLECTION_PATH"
         fi
 
-        npx --yes @usebruno/cli@3.3.0 run "." \
+        if [[ "$ENV_FILE_PATH" = /* ]]; then
+          ENV_FILE_PATH_ABS="$ENV_FILE_PATH"
+        else
+          ENV_FILE_PATH_ABS="$PWD/$ENV_FILE_PATH"
+        fi
+
+        npx --yes @usebruno/cli@3.3.0 -- run "." \
           -r \
-          --workspace-path "$COLLECTION_PATH" \
-          --env-file "$ENV_FILE_PATH" \
+          --workspace-path "$COLLECTION_PATH_ABS" \
+          --env-file "$ENV_FILE_PATH_ABS" \
           --env-var "config-token=$BRUNO_CONFIG_TOKEN" \
           --env-var "data-token=$BRUNO_DATA_TOKEN" \
           --tests-only \
