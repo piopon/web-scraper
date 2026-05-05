@@ -9,8 +9,36 @@ on:
     types: [published]
 
 jobs:
+  validate:
+    name: Validate Release Runtime
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - name: Install dependencies
+        run: npm ci
+      - name: Run test suite
+        run: npm test
+      - name: Sync VERSION for smoke validation
+        run: npm run version:sync
+      - name: Build Docker image (smoke check)
+        run: docker build --tag web-scraper:smoke .
+      - name: Run runtime smoke check
+        uses: ./.github/actions/runtime-smoke-check
+        with:
+          imageName: web-scraper:smoke
+          mongoImage: mongo:4.4.29-focal
+          timeoutSeconds: 120
+
   build:
     name: Publish Release Artifacts
+    needs: validate
     runs-on: ubuntu-latest
     env:
       IMAGE_NAME: ghcr.io/${{ github.repository }}
@@ -47,18 +75,54 @@ jobs:
       - name: Sync VERSION for release artifacts
         run: npm run version:sync
       - name: Build and push image
+        id: image
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
+      - name: Prepare digest-first image references
+        run: |
+          IMAGE_DIGEST="${{ steps.image.outputs.digest }}"
+          if [ -z "$IMAGE_DIGEST" ]; then
+            echo "Missing image digest output from build step."
+            exit 1
+          fi
+
+          IMMUTABLE_IMAGE_REF="${{ env.IMAGE_NAME }}@${IMAGE_DIGEST}"
+          VERSION_TAG_REF="${{ env.IMAGE_NAME }}:${{ steps.tag.outputs.normalizedTag }}"
+          LATEST_TAG_REF="${{ env.IMAGE_NAME }}:latest"
+
+          {
+            echo "Immutable image reference (recommended for production):"
+            echo "$IMMUTABLE_IMAGE_REF"
+            echo
+            echo "Tag references:"
+            echo "$VERSION_TAG_REF"
+            if [ "${{ github.event.release.prerelease }}" = "false" ]; then
+              echo "$LATEST_TAG_REF"
+            fi
+          } > image-references.txt
+
+          {
+            echo "### Container Image References"
+            echo ""
+            echo "- Recommended (immutable): \`$IMMUTABLE_IMAGE_REF\`"
+            echo "- Version tag: \`$VERSION_TAG_REF\`"
+            if [ "${{ github.event.release.prerelease }}" = "false" ]; then
+              echo "- Convenience tag: \`$LATEST_TAG_REF\`"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
       - name: Create release bundle and upload workflow artifact
         id: bundle
         uses: ./.github/actions/create-release-bundle
         with:
           bundleTag: ${{ steps.tag.outputs.normalizedTag }}
+          allowlistFile: .github/release-bundle-files.txt
           retentionDays: 14
-      - name: Attach archive to GitHub release
+      - name: Attach release assets to GitHub release
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ steps.bundle.outputs.archiveName }}
+          files: |
+            ${{ steps.bundle.outputs.archiveName }}
+            image-references.txt

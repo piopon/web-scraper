@@ -1,0 +1,14 @@
+# Runtime release bundle allowlist
+# Only listed entries are packaged in the release tarball.
+
+Dockerfile
+docker-compose.yml
+package.json
+package-lock.json
+VERSION
+README.md
+LICENSE
+src
+public
+docs/json
+scripts/healthcheck-status.js
