@@ -1,0 +1,144 @@
+name: Run Bruno API Tests
+description: Start MongoDB and app containers, wait for readiness, execute Bruno requests with secret tokens, and clean up.
+inputs:
+  imageName:
+    description: Docker image to run for Bruno validation.
+    required: true
+  mongoImage:
+    description: MongoDB image used for Bruno validation.
+    required: false
+    default: "mongo:4.4.29-focal"
+  timeoutSeconds:
+    description: Max seconds to wait for healthy status.
+    required: false
+    default: "180"
+  collectionPath:
+    description: Path to Bruno collection folder.
+    required: false
+    default: "docs/requests"
+  environmentFile:
+    description: Path to Bruno environment file (.bru or .json).
+    required: false
+    default: "docs/requests/environments/web-scraper.bru"
+  configToken:
+    description: JWT token used by config API requests.
+    required: true
+  dataToken:
+    description: JWT token used by data API requests.
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Run Bruno API validation
+      shell: bash
+      env:
+        BRUNO_CONFIG_TOKEN: ${{ inputs.configToken }}
+        BRUNO_DATA_TOKEN: ${{ inputs.dataToken }}
+      run: |
+        set -euo pipefail
+
+        NETWORK_NAME="bruno-net"
+        MONGO_NAME="bruno-mongo"
+        APP_NAME="bruno-app"
+
+        cleanup() {
+          docker rm -f "$APP_NAME" "$MONGO_NAME" >/dev/null 2>&1 || true
+          docker network rm "$NETWORK_NAME" >/dev/null 2>&1 || true
+        }
+        trap cleanup EXIT
+
+        docker network create "$NETWORK_NAME" >/dev/null
+
+        docker run -d --name "$MONGO_NAME" --network "$NETWORK_NAME" \
+          -e MONGO_INITDB_ROOT_USERNAME=smoke \
+          -e MONGO_INITDB_ROOT_PASSWORD=smoke \
+          "${{ inputs.mongoImage }}" >/dev/null
+
+        MONGO_SHELL=""
+        if docker exec "$MONGO_NAME" sh -c 'command -v mongosh >/dev/null 2>&1'; then
+          MONGO_SHELL="mongosh"
+        elif docker exec "$MONGO_NAME" sh -c 'command -v mongo >/dev/null 2>&1'; then
+          MONGO_SHELL="mongo"
+        else
+          echo "MongoDB test image does not provide mongosh or mongo shell; cannot run readiness probe."
+          docker logs "$MONGO_NAME"
+          exit 1
+        fi
+
+        echo "Using MongoDB shell for readiness probe: $MONGO_SHELL"
+
+        MONGO_READY_ATTEMPTS=$(( ${{ inputs.timeoutSeconds }} / 2 ))
+        if [ "$MONGO_READY_ATTEMPTS" -lt 1 ]; then
+          MONGO_READY_ATTEMPTS=1
+        fi
+
+        for attempt in $(seq 1 "$MONGO_READY_ATTEMPTS"); do
+          if docker exec "$MONGO_NAME" "$MONGO_SHELL" --quiet \
+              --username smoke \
+              --password smoke \
+              --authenticationDatabase admin \
+              --eval 'db.runCommand({ ping: 1 }).ok' admin >/dev/null 2>&1; then
+            echo "MongoDB is ready."
+            break
+          fi
+
+          if [ "$attempt" -eq "$MONGO_READY_ATTEMPTS" ]; then
+            echo "MongoDB readiness check timed out."
+            docker logs "$MONGO_NAME"
+            exit 1
+          fi
+
+          sleep 2
+        done
+
+        docker run -d --name "$APP_NAME" --network "$NETWORK_NAME" \
+          -e SERVER_PORT=5000 \
+          -e DB_TIMEOUT=30000 \
+          -e DB_ADDRESS="$MONGO_NAME" \
+          -e DB_PORT=27017 \
+          -e DB_NAME=web-scraper \
+          -e DB_USER=smoke \
+          -e DB_PASSWORD=smoke \
+          -e DEMO_BASE=base@demo.com \
+          -e DEMO_PASS=demo-pass \
+          -e CI_USER=ci@test.local \
+          -e CI_PASS=ci-pass \
+          -e JWT_SECRET=smoke-jwt \
+          -e SESSION_SHA=smoke-session \
+          -e CHALLENGE_PREFIX=smoke \
+          -e CHALLENGE_JOIN=- \
+          -e CHALLENGE_EOL_MINS=10 \
+          -e CHALLENGE_EOL_SEPARATOR=@ \
+          "${{ inputs.imageName }}" >/dev/null
+
+        APP_READY_ATTEMPTS=$(( ${{ inputs.timeoutSeconds }} / 2 ))
+        if [ "$APP_READY_ATTEMPTS" -lt 1 ]; then
+          APP_READY_ATTEMPTS=1
+        fi
+
+        for attempt in $(seq 1 "$APP_READY_ATTEMPTS"); do
+          status=$(docker inspect --format='{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' "$APP_NAME")
+          if [ "$status" = "healthy" ]; then
+            echo "Runtime is healthy. Running Bruno tests."
+            break
+          fi
+          if [ "$status" = "unhealthy" ]; then
+            echo "Bruno validation failed: app container reported unhealthy."
+            docker logs "$APP_NAME"
+            exit 1
+          fi
+          if [ "$attempt" -eq "$APP_READY_ATTEMPTS" ]; then
+            echo "Bruno validation timed out waiting for app healthy status."
+            docker logs "$APP_NAME"
+            exit 1
+          fi
+          sleep 2
+        done
+
+        npx --yes @usebruno/cli@3.3.0 run "${{ inputs.collectionPath }}" \
+          -r \
+          --env-file "${{ inputs.environmentFile }}" \
+          --env-var "config-token=$BRUNO_CONFIG_TOKEN" \
+          --env-var "data-token=$BRUNO_DATA_TOKEN" \
+          --tests-only \
+          --reporter-junit bruno-results.xml

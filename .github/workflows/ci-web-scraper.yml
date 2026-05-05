@@ -34,3 +34,31 @@ jobs:
       run: sudo chmod 4755 /opt/google/chrome/chrome-sandbox
     - name: Run CI tests for project
       run: npm test
+
+  bruno:
+    name: Bruno API tests
+    needs: build
+    runs-on: ubuntu-latest
+    if: ${{ secrets.BRUNO_CONFIG_TOKEN != '' && secrets.BRUNO_DATA_TOKEN != '' }}
+    steps:
+    - name: Checkout the project repository
+      uses: actions/checkout@v4
+    - name: Setup Node.js 22.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22.x
+        cache: npm
+    - name: Sync VERSION for Bruno validation
+      run: npm run version:sync
+    - name: Build Docker image (Bruno check)
+      run: docker build --tag web-scraper:bruno .
+    - name: Run Bruno API checks
+      uses: ./.github/actions/run-bruno-tests
+      with:
+        imageName: web-scraper:bruno
+        mongoImage: mongo:4.4.29-focal
+        timeoutSeconds: 180
+        collectionPath: docs/requests
+        environmentFile: docs/requests/environments/web-scraper.bru
+        configToken: ${{ secrets.BRUNO_CONFIG_TOKEN }}
+        dataToken: ${{ secrets.BRUNO_DATA_TOKEN }}
