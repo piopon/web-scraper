@@ -34,3 +34,50 @@ jobs:
       run: sudo chmod 4755 /opt/google/chrome/chrome-sandbox
     - name: Run CI tests for project
       run: npm test
+
+  bruno:
+    name: Bruno API tests
+    needs: build
+    runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.head.repo.fork == false }}
+    env:
+      BRUNO_CONFIG_TOKEN: ${{ secrets.BRUNO_CONFIG_TOKEN }}
+      BRUNO_DATA_TOKEN: ${{ secrets.BRUNO_DATA_TOKEN }}
+    steps:
+    - name: Checkout the project repository
+      uses: actions/checkout@v4
+    - name: Setup Node.js 22.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22.x
+        cache: npm
+    - name: Sync VERSION for Bruno validation
+      run: npm run version:sync
+    - name: Build Docker image (Bruno check)
+      run: docker build --tag web-scraper:bruno .
+    - name: Validate Bruno secrets
+      run: |
+        if [ -z "$BRUNO_CONFIG_TOKEN" ] || [ -z "$BRUNO_DATA_TOKEN" ]; then
+          echo "Missing required Bruno secrets: BRUNO_CONFIG_TOKEN and/or BRUNO_DATA_TOKEN"
+          exit 1
+        fi
+    - name: Run Bruno API checks
+      uses: ./.github/actions/run-bruno-tests
+      with:
+        imageName: web-scraper:bruno
+        mongoImage: mongo:4.4.29-focal
+        timeoutSeconds: 180
+        collectionPath: docs/requests
+        environmentFile: docs/requests/environments/web-scraper.bru
+        configToken: ${{ env.BRUNO_CONFIG_TOKEN }}
+        dataToken: ${{ env.BRUNO_DATA_TOKEN }}
+    - name: Upload Bruno artifacts
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: bruno-results
+        path: |
+          bruno-run.log
+          bruno-results.xml
+          bruno-results.json
+        if-no-files-found: warn
