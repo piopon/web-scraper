@@ -1,5 +1,5 @@
 name: Create Release Bundle
-description: Create a versioned release tarball from tracked files and upload it as a workflow artifact.
+description: Create a versioned release tarball from an allowlist, verify entries are tracked files, and upload it as a workflow artifact.
 inputs:
   bundleTag:
     description: Normalized tag value used in bundle file and directory names.
@@ -44,6 +44,12 @@ runs:
         while IFS= read -r entry; do
           if [ ! -e "$entry" ]; then
             echo "Missing allowlisted entry: $entry"
+            MISSING=1
+            continue
+          fi
+
+          if ! git ls-files --error-unmatch -- "$entry" >/dev/null 2>&1; then
+            echo "Allowlisted entry is not tracked by git: $entry"
             MISSING=1
           fi
         done < .release-bundle-files.txt
