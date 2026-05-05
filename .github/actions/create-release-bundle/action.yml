@@ -41,6 +41,7 @@ runs:
         fi
 
         MISSING=0
+        : > .release-bundle-tracked-files.zlist
         while IFS= read -r entry; do
           if [ ! -e "$entry" ]; then
             echo "Missing allowlisted entry: $entry"
@@ -48,19 +49,31 @@ runs:
             continue
           fi
 
-          if ! git ls-files --error-unmatch -- "$entry" >/dev/null 2>&1; then
-            echo "Allowlisted entry is not tracked by git: $entry"
+          git ls-files -z -- "$entry" > .release-bundle-entry-files.zlist
+          if [ ! -s .release-bundle-entry-files.zlist ]; then
+            echo "Allowlisted entry has no tracked files: $entry"
             MISSING=1
+            continue
           fi
+
+          cat .release-bundle-entry-files.zlist >> .release-bundle-tracked-files.zlist
         done < .release-bundle-files.txt
         if [ "$MISSING" -ne 0 ]; then
           exit 1
         fi
 
+        if [ ! -s .release-bundle-tracked-files.zlist ]; then
+          echo "Resolved tracked file list is empty."
+          exit 1
+        fi
+
+        sort -zu .release-bundle-tracked-files.zlist -o .release-bundle-tracked-files.zlist
+
         tar --create --gzip \
           --file "$ARCHIVE_NAME" \
           --transform "s#^#${ARCHIVE_PREFIX}#" \
-          --files-from .release-bundle-files.txt
+          --null \
+          --files-from .release-bundle-tracked-files.zlist
         echo "archiveName=$ARCHIVE_NAME" >> "$GITHUB_OUTPUT"
 
     - name: Upload workflow artifact
