@@ -135,9 +135,17 @@ runs:
           sleep 2
         done
 
-        npx --yes @usebruno/cli@3.3.0 run "${{ inputs.collectionPath }}" \
+        COLLECTION_PATH="${{ inputs.collectionPath }}"
+        COLLECTION_PATH="${COLLECTION_PATH%/}"
+        ENV_FILE_PATH="${{ inputs.environmentFile }}"
+        if [[ "$ENV_FILE_PATH" == "$COLLECTION_PATH/"* ]]; then
+          ENV_FILE_PATH="${ENV_FILE_PATH#"$COLLECTION_PATH/"}"
+        fi
+
+        npx --yes @usebruno/cli@3.3.0 run "." \
           -r \
-          --env-file "${{ inputs.environmentFile }}" \
+          --workspace-path "$COLLECTION_PATH" \
+          --env-file "$ENV_FILE_PATH" \
           --env-var "config-token=$BRUNO_CONFIG_TOKEN" \
           --env-var "data-token=$BRUNO_DATA_TOKEN" \
           --tests-only \
