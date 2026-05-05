@@ -39,7 +39,9 @@ jobs:
     name: Bruno API tests
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ secrets.BRUNO_CONFIG_TOKEN != '' && secrets.BRUNO_DATA_TOKEN != '' }}
+    env:
+      BRUNO_CONFIG_TOKEN: ${{ secrets.BRUNO_CONFIG_TOKEN }}
+      BRUNO_DATA_TOKEN: ${{ secrets.BRUNO_DATA_TOKEN }}
     steps:
     - name: Checkout the project repository
       uses: actions/checkout@v4
@@ -52,7 +54,11 @@ jobs:
       run: npm run version:sync
     - name: Build Docker image (Bruno check)
       run: docker build --tag web-scraper:bruno .
+    - name: Skip Bruno API checks when secrets are missing
+      if: ${{ env.BRUNO_CONFIG_TOKEN == '' || env.BRUNO_DATA_TOKEN == '' }}
+      run: echo "Skipping Bruno API checks because BRUNO_CONFIG_TOKEN or BRUNO_DATA_TOKEN is not available in this workflow context."
     - name: Run Bruno API checks
+      if: ${{ env.BRUNO_CONFIG_TOKEN != '' && env.BRUNO_DATA_TOKEN != '' }}
       uses: ./.github/actions/run-bruno-tests
       with:
         imageName: web-scraper:bruno
@@ -60,5 +66,5 @@ jobs:
         timeoutSeconds: 180
         collectionPath: docs/requests
         environmentFile: docs/requests/environments/web-scraper.bru
-        configToken: ${{ secrets.BRUNO_CONFIG_TOKEN }}
-        dataToken: ${{ secrets.BRUNO_DATA_TOKEN }}
+        configToken: ${{ env.BRUNO_CONFIG_TOKEN }}
+        dataToken: ${{ env.BRUNO_DATA_TOKEN }}
