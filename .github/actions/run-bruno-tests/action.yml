@@ -151,11 +151,33 @@ runs:
           ENV_FILE_PATH_ABS="$PWD/$ENV_FILE_PATH"
         fi
 
+        REPORT_DIR="${GITHUB_WORKSPACE:-$PWD}"
+        REPORT_JUNIT="$REPORT_DIR/bruno-results.xml"
+        REPORT_JSON="$REPORT_DIR/bruno-results.json"
+        REPORT_LOG="$REPORT_DIR/bruno-run.log"
+
+        pushd "$COLLECTION_PATH_ABS" >/dev/null
+
         npx --yes @usebruno/cli@3.3.0 -- run "." \
           -r \
-          --workspace-path "$COLLECTION_PATH_ABS" \
           --env-file "$ENV_FILE_PATH_ABS" \
           --env-var "config-token=$BRUNO_CONFIG_TOKEN" \
           --env-var "data-token=$BRUNO_DATA_TOKEN" \
           --tests-only \
-          --reporter-junit bruno-results.xml
+          --verbose \
+          --reporter-junit "$REPORT_JUNIT" \
+          --output "$REPORT_JSON" 2>&1 | tee "$REPORT_LOG"
+
+        BRUNO_EXIT=${PIPESTATUS[0]}
+        popd >/dev/null
+        echo "Bruno CLI exit code: $BRUNO_EXIT"
+
+        if [ "$BRUNO_EXIT" -ne 0 ]; then
+          echo "Bruno tests failed (non-zero CLI exit code)."
+          exit "$BRUNO_EXIT"
+        fi
+
+        if [ -f "$REPORT_JUNIT" ] && grep -Eq '<failure|<error' "$REPORT_JUNIT"; then
+          echo "Bruno tests reported failures/errors in JUnit report."
+          exit 1
+        fi
