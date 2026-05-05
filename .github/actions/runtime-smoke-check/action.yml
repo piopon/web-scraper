@@ -37,11 +37,18 @@ runs:
           -e MONGO_INITDB_ROOT_PASSWORD=smoke \
           "${{ inputs.mongoImage }}" >/dev/null
 
-        if ! docker exec "$MONGO_NAME" sh -c 'command -v mongosh >/dev/null 2>&1'; then
-          echo "MongoDB smoke image does not provide mongosh; cannot run readiness probe."
+        MONGO_SHELL=""
+        if docker exec "$MONGO_NAME" sh -c 'command -v mongosh >/dev/null 2>&1'; then
+          MONGO_SHELL="mongosh"
+        elif docker exec "$MONGO_NAME" sh -c 'command -v mongo >/dev/null 2>&1'; then
+          MONGO_SHELL="mongo"
+        else
+          echo "MongoDB smoke image does not provide mongosh or mongo shell; cannot run readiness probe."
           docker logs "$MONGO_NAME"
           exit 1
         fi
+
+        echo "Using MongoDB shell for readiness probe: $MONGO_SHELL"
 
         MONGO_READY_ATTEMPTS=$(( ${{ inputs.timeoutSeconds }} / 2 ))
         if [ "$MONGO_READY_ATTEMPTS" -lt 1 ]; then
@@ -49,7 +56,7 @@ runs:
         fi
 
         for attempt in $(seq 1 "$MONGO_READY_ATTEMPTS"); do
-          if docker exec "$MONGO_NAME" mongosh --quiet \
+          if docker exec "$MONGO_NAME" "$MONGO_SHELL" --quiet \
               --username smoke \
               --password smoke \
               --authenticationDatabase admin \
