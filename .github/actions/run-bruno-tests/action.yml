@@ -20,12 +20,30 @@ inputs:
     description: Path to Bruno environment file (.bru or .json).
     required: false
     default: "docs/requests/environments/web-scraper.bru"
+  jwtSecret:
+    description: JWT secret used by the test app and generated Bruno tokens.
+    required: false
+    default: "smoke-jwt"
+  ciUserName:
+    description: Name of the seeded CI user used in generated Bruno tokens.
+    required: false
+    default: "bruno"
+  ciUserEmail:
+    description: Email of the seeded CI user used in generated Bruno tokens.
+    required: false
+    default: "ci@test.local"
+  tokenMode:
+    description: JWT source for protected API requests: generated or provided.
+    required: false
+    default: "generated"
   configToken:
-    description: JWT token used by config API requests.
-    required: true
+    description: Optional JWT token used by config API requests (generated automatically when omitted).
+    required: false
+    default: ""
   dataToken:
-    description: JWT token used by data API requests.
-    required: true
+    description: Optional JWT token used by data API requests (generated automatically when omitted).
+    required: false
+    default: ""
 runs:
   using: composite
   steps:
@@ -34,6 +52,10 @@ runs:
       env:
         BRUNO_CONFIG_TOKEN: ${{ inputs.configToken }}
         BRUNO_DATA_TOKEN: ${{ inputs.dataToken }}
+        JWT_SIGN_SECRET: ${{ inputs.jwtSecret }}
+        CI_BRUNO_NAME: ${{ inputs.ciUserName }}
+        CI_BRUNO_EMAIL: ${{ inputs.ciUserEmail }}
+        TOKEN_MODE: ${{ inputs.tokenMode }}
       run: |
         set -euo pipefail
 
@@ -102,9 +124,9 @@ runs:
           -e DB_PASSWORD=smoke \
           -e DEMO_BASE=base@demo.com \
           -e DEMO_PASS=demo-pass \
-          -e CI_USER=ci@test.local \
+          -e CI_USER="$CI_BRUNO_EMAIL" \
           -e CI_PASS=ci-pass \
-          -e JWT_SECRET=smoke-jwt \
+          -e JWT_SECRET="$JWT_SIGN_SECRET" \
           -e SESSION_SHA=smoke-session \
           -e CHALLENGE_PREFIX=smoke \
           -e CHALLENGE_JOIN=- \
@@ -136,6 +158,23 @@ runs:
           sleep 2
         done
 
+        GENERATED_BRUNO_TOKEN=$(node -e "const jwt = require('jsonwebtoken'); const payload = { name: process.env.CI_BRUNO_NAME, email: process.env.CI_BRUNO_EMAIL, password: 'ci' }; process.stdout.write(jwt.sign(payload, process.env.JWT_SIGN_SECRET));")
+        EFFECTIVE_CONFIG_TOKEN=""
+        EFFECTIVE_DATA_TOKEN=""
+        if [ "$TOKEN_MODE" = "provided" ]; then
+          if [ -z "$BRUNO_CONFIG_TOKEN" ] || [ -z "$BRUNO_DATA_TOKEN" ]; then
+            echo "tokenMode=provided requires both configToken and dataToken inputs."
+            exit 1
+          fi
+          EFFECTIVE_CONFIG_TOKEN="$BRUNO_CONFIG_TOKEN"
+          EFFECTIVE_DATA_TOKEN="$BRUNO_DATA_TOKEN"
+          echo "Using provided config/data tokens."
+        else
+          EFFECTIVE_CONFIG_TOKEN="$GENERATED_BRUNO_TOKEN"
+          EFFECTIVE_DATA_TOKEN="$GENERATED_BRUNO_TOKEN"
+          echo "Using generated config/data tokens aligned with runtime JWT secret."
+        fi
+
         COLLECTION_PATH="${{ inputs.collectionPath }}"
         COLLECTION_PATH="${COLLECTION_PATH%/}"
         ENV_FILE_PATH="${{ inputs.environmentFile }}"
@@ -162,8 +201,8 @@ runs:
         npx --yes @usebruno/cli@3.3.0 run "." \
           -r \
           --env-file "$ENV_FILE_PATH_ABS" \
-          --env-var "config-token=$BRUNO_CONFIG_TOKEN" \
-          --env-var "data-token=$BRUNO_DATA_TOKEN" \
+          --env-var "config-token=$EFFECTIVE_CONFIG_TOKEN" \
+          --env-var "data-token=$EFFECTIVE_DATA_TOKEN" \
           --tests-only \
           --verbose \
           --reporter-junit "$REPORT_JUNIT" \
