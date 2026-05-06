@@ -33,7 +33,7 @@ inputs:
     required: false
     default: "ci@test.local"
   tokenMode:
-    description: JWT source for protected API requests: generated or provided.
+    description: "JWT source for protected API requests: generated or provided."
     required: false
     default: "generated"
   configToken:
