@@ -7,7 +7,7 @@ inputs:
   mongoImage:
     description: MongoDB image used for runtime smoke validation.
     required: false
-    default: "mongo:7.0"
+    default: "mongo:4.4.29-focal"
   timeoutSeconds:
     description: Max seconds to wait for healthy status.
     required: false
@@ -75,6 +75,7 @@ runs:
         done
 
         docker run -d --name "$APP_NAME" --network "$NETWORK_NAME" \
+          -p 5000:5000 \
           -e SERVER_PORT=5000 \
           -e DB_TIMEOUT=30000 \
           -e DB_ADDRESS="$MONGO_NAME" \
@@ -83,9 +84,12 @@ runs:
           -e DB_USER=smoke \
           -e DB_PASSWORD=smoke \
           -e DEMO_BASE=base@demo.com \
+          -e DEMO_USER=demo@test.local \
           -e DEMO_PASS=demo-pass \
           -e CI_USER=ci@test.local \
           -e CI_PASS=ci-pass \
+          -e GOOGLE_CLIENT_ID=smoke-google-client-id \
+          -e GOOGLE_CLIENT_SECRET=smoke-google-client-secret \
           -e JWT_SECRET=smoke-jwt \
           -e SESSION_SHA=smoke-session \
           -e CHALLENGE_PREFIX=smoke \
@@ -94,12 +98,12 @@ runs:
           -e CHALLENGE_EOL_SEPARATOR=@ \
           "${{ inputs.imageName }}" >/dev/null
 
-        ATTEMPTS=$(( ${{ inputs.timeoutSeconds }} / 2 ))
-        if [ "$ATTEMPTS" -lt 1 ]; then
-          ATTEMPTS=1
+        APP_READY_ATTEMPTS=$(( ${{ inputs.timeoutSeconds }} / 2 ))
+        if [ "$APP_READY_ATTEMPTS" -lt 1 ]; then
+          APP_READY_ATTEMPTS=1
         fi
 
-        for attempt in $(seq 1 "$ATTEMPTS"); do
+        for attempt in $(seq 1 "$APP_READY_ATTEMPTS"); do
           status=$(docker inspect --format='{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' "$APP_NAME")
           if [ "$status" = "healthy" ]; then
             echo "Runtime smoke check passed."
@@ -110,9 +114,10 @@ runs:
             docker logs "$APP_NAME"
             exit 1
           fi
+          if [ "$attempt" -eq "$APP_READY_ATTEMPTS" ]; then
+            echo "Runtime smoke check timed out waiting for healthy status."
+            docker logs "$APP_NAME"
+            exit 1
+          fi
           sleep 2
         done
-
-        echo "Runtime smoke check timed out waiting for healthy status."
-        docker logs "$APP_NAME"
-        exit 1
