@@ -161,7 +161,7 @@ runs:
           sleep 2
         done
 
-        GENERATED_BRUNO_TOKEN=$(node -e "const crypto = require('node:crypto'); const b64u = (value) => Buffer.from(value).toString('base64').replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_'); const header = b64u(JSON.stringify({ alg: 'HS256', typ: 'JWT' })); const payload = b64u(JSON.stringify({ name: process.env.CI_BRUNO_NAME, email: process.env.CI_BRUNO_EMAIL, password: 'ci', iat: Math.floor(Date.now() / 1000) })); const signature = crypto.createHmac('sha256', process.env.JWT_SIGN_SECRET).update(`${header}.${payload}`).digest('base64').replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_'); process.stdout.write(`${header}.${payload}.${signature}`);")
+        GENERATED_BRUNO_TOKEN=$(node -e "const crypto = require('node:crypto'); const b64u = (value) => Buffer.from(value).toString('base64').replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_'); const header = b64u(JSON.stringify({ alg: 'HS256', typ: 'JWT' })); const payload = b64u(JSON.stringify({ name: process.env.CI_BRUNO_NAME, email: process.env.CI_BRUNO_EMAIL, password: 'ci', iat: Math.floor(Date.now() / 1000) })); const body = header + '.' + payload; const signature = crypto.createHmac('sha256', process.env.JWT_SIGN_SECRET).update(body).digest('base64').replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_'); process.stdout.write(body + '.' + signature);")
         EFFECTIVE_CONFIG_TOKEN=""
         EFFECTIVE_DATA_TOKEN=""
         if [ "$TOKEN_MODE" = "provided" ]; then
