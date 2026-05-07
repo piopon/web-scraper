@@ -9,11 +9,11 @@ function toBase64Url(value) {
 }
 
 const secret = process.env.JWT_SIGN_SECRET;
-const name = process.env.CI_BRUNO_NAME;
 const email = process.env.CI_BRUNO_EMAIL;
+const name = 'bruno';
 
-if (!secret || !name || !email) {
-  console.error('Missing required env vars: JWT_SIGN_SECRET, CI_BRUNO_NAME, CI_BRUNO_EMAIL');
+if (!secret || !email) {
+  console.error('Missing required env vars: JWT_SIGN_SECRET, CI_BRUNO_EMAIL');
   process.exit(1);
 }
 

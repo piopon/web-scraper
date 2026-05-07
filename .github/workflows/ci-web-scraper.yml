@@ -61,7 +61,6 @@ jobs:
         collectionPath: docs/requests
         environmentFile: docs/requests/environments/web-scraper.bru
         jwtSecret: smoke-jwt
-        ciUserName: bruno
         ciUserEmail: ci@test.local
     - name: Upload Bruno artifacts
       if: ${{ always() }}

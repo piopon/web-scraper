@@ -24,10 +24,6 @@ inputs:
     description: JWT secret used by the test app and generated Bruno tokens.
     required: false
     default: "smoke-jwt"
-  ciUserName:
-    description: Name of the seeded CI user used in generated Bruno tokens.
-    required: false
-    default: "bruno"
   ciUserEmail:
     description: Email of the seeded CI user used in generated Bruno tokens.
     required: false
@@ -67,7 +63,6 @@ runs:
       shell: bash
       env:
         JWT_SIGN_SECRET: ${{ inputs.jwtSecret }}
-        CI_BRUNO_NAME: ${{ inputs.ciUserName }}
         CI_BRUNO_EMAIL: ${{ inputs.ciUserEmail }}
       run: |
         set -euo pipefail
