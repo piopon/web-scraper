@@ -35,24 +35,38 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Compute runtime resource names
+      id: runtime-names
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        RAW_SUFFIX="${GITHUB_RUN_ID:-local}-${GITHUB_RUN_ATTEMPT:-1}-${GITHUB_JOB:-job}-${RANDOM}"
+        SAFE_SUFFIX=$(echo "$RAW_SUFFIX" | tr '[:upper:]' '[:lower:]' | tr -cs 'a-z0-9' '-' | sed 's/^-*//; s/-*$//')
+        SAFE_SUFFIX="${SAFE_SUFFIX:0:50}"
+
+        echo "networkName=bruno-net-$SAFE_SUFFIX" >> "$GITHUB_OUTPUT"
+        echo "mongoName=bruno-mongo-$SAFE_SUFFIX" >> "$GITHUB_OUTPUT"
+        echo "appName=bruno-app-$SAFE_SUFFIX" >> "$GITHUB_OUTPUT"
+
     - name: Ensure Docker network exists
       uses: ./.github/actions/create-docker-network
       with:
-        networkName: bruno-net
+        networkName: ${{ steps.runtime-names.outputs.networkName }}
     - name: Start MongoDB and wait
       uses: ./.github/actions/start-mongo-and-wait
       with:
-        networkName: bruno-net
-        mongoName: bruno-mongo
+        networkName: ${{ steps.runtime-names.outputs.networkName }}
+        mongoName: ${{ steps.runtime-names.outputs.mongoName }}
         mongoImage: ${{ inputs.mongoImage }}
         timeoutSeconds: ${{ inputs.timeoutSeconds }}
         contextLabel: test
     - name: Start app and wait for health
       uses: ./.github/actions/start-app-and-optionally-wait
       with:
-        networkName: bruno-net
-        mongoName: bruno-mongo
-        appName: bruno-app
+        networkName: ${{ steps.runtime-names.outputs.networkName }}
+        mongoName: ${{ steps.runtime-names.outputs.mongoName }}
+        appName: ${{ steps.runtime-names.outputs.appName }}
         imageName: ${{ inputs.imageName }}
         timeoutSeconds: ${{ inputs.timeoutSeconds }}
         waitForHealth: "true"
@@ -135,5 +149,5 @@ runs:
       if: ${{ always() }}
       shell: bash
       run: |
-        docker rm -f bruno-app bruno-mongo >/dev/null 2>&1 || true
-        docker network rm bruno-net >/dev/null 2>&1 || true
+        docker rm -f "${{ steps.runtime-names.outputs.appName }}" "${{ steps.runtime-names.outputs.mongoName }}" >/dev/null 2>&1 || true
+        docker network rm "${{ steps.runtime-names.outputs.networkName }}" >/dev/null 2>&1 || true
