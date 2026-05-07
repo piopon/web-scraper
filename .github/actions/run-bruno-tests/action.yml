@@ -93,6 +93,7 @@ runs:
 
         pushd "$COLLECTION_PATH_ABS" >/dev/null
 
+        set +e
         npx --yes @usebruno/cli@3.3.0 run "." \
           -r \
           --env-file "$ENV_FILE_PATH_ABS" \
@@ -104,6 +105,7 @@ runs:
           --output "$REPORT_JSON" 2>&1 | tee "$REPORT_LOG"
 
         BRUNO_EXIT=${PIPESTATUS[0]}
+        set -e
         popd >/dev/null
         echo "Bruno CLI exit code: $BRUNO_EXIT"
 
