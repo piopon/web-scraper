@@ -49,16 +49,7 @@ runs:
         set -euo pipefail
 
         STATUS_URL="http://127.0.0.1:5000/api/v1/status"
-        STATUS_BODY_FILE="$(mktemp)"
-
-        STATUS_CODE=$(curl -sS -o "$STATUS_BODY_FILE" -w "%{http_code}" "$STATUS_URL")
-        if [ "$STATUS_CODE" != "200" ]; then
-          echo "Runtime smoke check failed: status endpoint returned HTTP $STATUS_CODE"
-          cat "$STATUS_BODY_FILE" || true
-          exit 1
-        fi
-
-        node scripts/validate-status-response.js "$STATUS_BODY_FILE"
+        node scripts/healthcheck-status.js "$STATUS_URL"
 
         echo "Runtime smoke check passed."
     - name: Cleanup smoke runtime
