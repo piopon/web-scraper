@@ -60,6 +60,7 @@ jobs:
         timeoutSeconds: 180
         collectionPath: docs/requests
         environmentFile: docs/requests/environments/web-scraper.bru
+        appHostPort: ${{ steps.app-port.outputs.appHostPort }}
         jwtSecret: smoke-jwt
         ciUserEmail: ci@test.local
     - name: Upload Bruno artifacts

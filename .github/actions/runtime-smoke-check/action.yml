@@ -8,6 +8,10 @@ inputs:
     description: MongoDB image used for runtime smoke validation.
     required: false
     default: "mongo:4.4.29-focal"
+  appHostPort:
+    description: Host port where the app container is published for smoke checks.
+    required: false
+    default: "5000"
   timeoutSeconds:
     description: Max seconds to wait for healthy status.
     required: false
@@ -39,6 +43,7 @@ runs:
         mongoName: ${{ steps.runtime-names.outputs.mongoName }}
         appName: ${{ steps.runtime-names.outputs.appName }}
         imageName: ${{ inputs.imageName }}
+        hostPort: ${{ inputs.appHostPort }}
         timeoutSeconds: ${{ inputs.timeoutSeconds }}
         waitForHealth: "true"
         jwtSecret: smoke-jwt

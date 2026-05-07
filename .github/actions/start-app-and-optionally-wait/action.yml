@@ -13,6 +13,10 @@ inputs:
   imageName:
     description: App Docker image to start.
     required: true
+  hostPort:
+    description: Host port to publish container port 5000 on.
+    required: false
+    default: "5000"
   timeoutSeconds:
     description: Max seconds to wait for healthy status.
     required: false
@@ -40,9 +44,10 @@ runs:
         NETWORK_NAME="${{ inputs.networkName }}"
         MONGO_NAME="${{ inputs.mongoName }}"
         APP_NAME="${{ inputs.appName }}"
+        HOST_PORT="${{ inputs.hostPort }}"
 
         docker run -d --name "$APP_NAME" --network "$NETWORK_NAME" \
-          -p 5000:5000 \
+          -p "$HOST_PORT:5000" \
           -e SERVER_PORT=5000 \
           -e DB_TIMEOUT=30000 \
           -e DB_ADDRESS="$MONGO_NAME" \

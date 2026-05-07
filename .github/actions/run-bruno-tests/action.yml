@@ -20,6 +20,10 @@ inputs:
     description: Path to Bruno environment file (.bru or .json).
     required: false
     default: "docs/requests/environments/web-scraper.bru"
+  appHostPort:
+    description: Host port where the app container is published for Bruno requests.
+    required: false
+    default: "5000"
   jwtSecret:
     description: JWT secret used by the test app and generated Bruno tokens.
     required: false
@@ -55,6 +59,7 @@ runs:
         mongoName: ${{ steps.runtime-names.outputs.mongoName }}
         appName: ${{ steps.runtime-names.outputs.appName }}
         imageName: ${{ inputs.imageName }}
+        hostPort: ${{ inputs.appHostPort }}
         timeoutSeconds: ${{ inputs.timeoutSeconds }}
         waitForHealth: "true"
         jwtSecret: ${{ inputs.jwtSecret }}

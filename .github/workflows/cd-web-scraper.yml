@@ -34,6 +34,7 @@ jobs:
         with:
           imageName: web-scraper:smoke
           mongoImage: mongo:4.4.29-focal
+          appHostPort: ${{ steps.app-port.outputs.appHostPort }}
           timeoutSeconds: 120
 
   build:
