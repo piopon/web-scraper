@@ -52,6 +52,14 @@ jobs:
       run: npm run version:sync
     - name: Build Docker image (Bruno check)
       run: docker build --tag web-scraper:bruno .
+    - name: Resolve app host port
+      id: app-port
+      run: |
+        set -euo pipefail
+        RAW_SEED="${GITHUB_RUN_ID:-0}-${GITHUB_RUN_ATTEMPT:-1}-${GITHUB_JOB:-job}"
+        PORT_SEED=$(printf "%s" "$RAW_SEED" | cksum | awk '{ print $1 }')
+        APP_HOST_PORT=$((20000 + (PORT_SEED % 40000)))
+        echo "appHostPort=$APP_HOST_PORT" >> "$GITHUB_OUTPUT"
     - name: Run Bruno API checks
       uses: ./.github/actions/run-bruno-tests
       with:
