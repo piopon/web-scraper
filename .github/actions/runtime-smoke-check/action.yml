@@ -48,6 +48,18 @@ runs:
       run: |
         set -euo pipefail
 
+        STATUS_URL="http://127.0.0.1:5000/api/v1/status"
+        STATUS_BODY_FILE="$(mktemp)"
+
+        STATUS_CODE=$(curl -sS -o "$STATUS_BODY_FILE" -w "%{http_code}" "$STATUS_URL")
+        if [ "$STATUS_CODE" != "200" ]; then
+          echo "Runtime smoke check failed: status endpoint returned HTTP $STATUS_CODE"
+          cat "$STATUS_BODY_FILE" || true
+          exit 1
+        fi
+
+        node -e "const fs=require('node:fs'); const file=process.argv[1]; let payload; try { payload=JSON.parse(fs.readFileSync(file,'utf8')); } catch (err) { console.error('Runtime smoke check failed: status response is not valid JSON.'); process.exit(1); } if (!payload || typeof payload !== 'object') { console.error('Runtime smoke check failed: status payload is not an object.'); process.exit(1); } if (!('app' in payload)) { console.error('Runtime smoke check failed: status payload is missing app field.'); process.exit(1); } if (!('version' in payload)) { console.error('Runtime smoke check failed: status payload is missing version field.'); process.exit(1); } if (!Array.isArray(payload.components)) { console.error('Runtime smoke check failed: status payload is missing components array.'); process.exit(1); }" "$STATUS_BODY_FILE"
+
         echo "Runtime smoke check passed."
     - name: Cleanup smoke runtime
       if: ${{ always() }}
