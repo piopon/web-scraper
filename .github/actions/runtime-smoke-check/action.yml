@@ -43,14 +43,10 @@ runs:
       run: |
         set -euo pipefail
 
-        NETWORK_NAME="smoke-net"
-        MONGO_NAME="smoke-mongo"
-        APP_NAME="smoke-app"
-
-        cleanup() {
-          docker rm -f "$APP_NAME" "$MONGO_NAME" >/dev/null 2>&1 || true
-          docker network rm "$NETWORK_NAME" >/dev/null 2>&1 || true
-        }
-        trap cleanup EXIT
-
         echo "Runtime smoke check passed."
+    - name: Cleanup smoke runtime
+      if: ${{ always() }}
+      shell: bash
+      run: |
+        docker rm -f smoke-app smoke-mongo >/dev/null 2>&1 || true
+        docker network rm smoke-net >/dev/null 2>&1 || true

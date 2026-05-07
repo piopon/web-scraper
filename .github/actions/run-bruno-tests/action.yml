@@ -67,16 +67,6 @@ runs:
       run: |
         set -euo pipefail
 
-        NETWORK_NAME="bruno-net"
-        MONGO_NAME="bruno-mongo"
-        APP_NAME="bruno-app"
-
-        cleanup() {
-          docker rm -f "$APP_NAME" "$MONGO_NAME" >/dev/null 2>&1 || true
-          docker network rm "$NETWORK_NAME" >/dev/null 2>&1 || true
-        }
-        trap cleanup EXIT
-
         GENERATED_BRUNO_TOKEN=$(node -e "const crypto = require('node:crypto'); const b64u = (value) => Buffer.from(value).toString('base64').replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_'); const header = b64u(JSON.stringify({ alg: 'HS256', typ: 'JWT' })); const payload = b64u(JSON.stringify({ name: process.env.CI_BRUNO_NAME, email: process.env.CI_BRUNO_EMAIL, password: 'ci', iat: Math.floor(Date.now() / 1000) })); const body = header + '.' + payload; const signature = crypto.createHmac('sha256', process.env.JWT_SIGN_SECRET).update(body).digest('base64').replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_'); process.stdout.write(body + '.' + signature);")
         echo "Using generated config/data tokens aligned with runtime JWT secret."
 
@@ -141,3 +131,9 @@ runs:
           echo "Bruno tests reported failures/errors in JUnit report."
           exit 1
         fi
+    - name: Cleanup Bruno runtime
+      if: ${{ always() }}
+      shell: bash
+      run: |
+        docker rm -f bruno-app bruno-mongo >/dev/null 2>&1 || true
+        docker network rm bruno-net >/dev/null 2>&1 || true
