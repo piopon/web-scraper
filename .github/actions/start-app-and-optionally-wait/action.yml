@@ -1,0 +1,95 @@
+name: Start App And Optionally Wait
+description: Start the app container on a Docker network and optionally wait for healthy status.
+inputs:
+  networkName:
+    description: Docker network where the app should run.
+    required: true
+  mongoName:
+    description: MongoDB container name used by the app.
+    required: true
+  appName:
+    description: App container name.
+    required: true
+  imageName:
+    description: App Docker image to start.
+    required: true
+  timeoutSeconds:
+    description: Max seconds to wait for healthy status.
+    required: false
+    default: "180"
+  waitForHealth:
+    description: Whether to wait for app health status (true/false).
+    required: false
+    default: "true"
+  jwtSecret:
+    description: JWT secret used by the app runtime.
+    required: false
+    default: "smoke-jwt"
+  ciUserEmail:
+    description: CI user email injected into app runtime.
+    required: false
+    default: "ci@test.local"
+runs:
+  using: composite
+  steps:
+    - name: Start app container
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        NETWORK_NAME="${{ inputs.networkName }}"
+        MONGO_NAME="${{ inputs.mongoName }}"
+        APP_NAME="${{ inputs.appName }}"
+
+        docker run -d --name "$APP_NAME" --network "$NETWORK_NAME" \
+          -p 5000:5000 \
+          -e SERVER_PORT=5000 \
+          -e DB_TIMEOUT=30000 \
+          -e DB_ADDRESS="$MONGO_NAME" \
+          -e DB_PORT=27017 \
+          -e DB_NAME=web-scraper \
+          -e DB_USER=smoke \
+          -e DB_PASSWORD=smoke \
+          -e DEMO_BASE=base@demo.com \
+          -e DEMO_USER=demo@test.local \
+          -e DEMO_PASS=demo-pass \
+          -e CI_USER="${{ inputs.ciUserEmail }}" \
+          -e CI_PASS=ci-pass \
+          -e GOOGLE_CLIENT_ID=smoke-google-client-id \
+          -e GOOGLE_CLIENT_SECRET=smoke-google-client-secret \
+          -e JWT_SECRET="${{ inputs.jwtSecret }}" \
+          -e SESSION_SHA=smoke-session \
+          -e CHALLENGE_PREFIX=smoke \
+          -e CHALLENGE_JOIN=- \
+          -e CHALLENGE_EOL_MINS=10 \
+          -e CHALLENGE_EOL_SEPARATOR=@ \
+          "${{ inputs.imageName }}" >/dev/null
+
+        if [ "${{ inputs.waitForHealth }}" != "true" ]; then
+          echo "App started; skipping health wait because waitForHealth is not true."
+          exit 0
+        fi
+
+        APP_READY_ATTEMPTS=$(( ${{ inputs.timeoutSeconds }} / 2 ))
+        if [ "$APP_READY_ATTEMPTS" -lt 1 ]; then
+          APP_READY_ATTEMPTS=1
+        fi
+
+        for attempt in $(seq 1 "$APP_READY_ATTEMPTS"); do
+          status=$(docker inspect --format='{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' "$APP_NAME")
+          if [ "$status" = "healthy" ]; then
+            echo "Runtime is healthy."
+            exit 0
+          fi
+          if [ "$status" = "unhealthy" ]; then
+            echo "App validation failed: app container reported unhealthy."
+            docker logs "$APP_NAME"
+            exit 1
+          fi
+          if [ "$attempt" -eq "$APP_READY_ATTEMPTS" ]; then
+            echo "App validation timed out waiting for app healthy status."
+            docker logs "$APP_NAME"
+            exit 1
+          fi
+          sleep 2
+        done
