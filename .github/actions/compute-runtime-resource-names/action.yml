@@ -1,0 +1,33 @@
+name: Compute Runtime Resource Names
+description: Compute unique, sanitized runtime resource names for network, MongoDB, and app containers.
+inputs:
+  prefix:
+    description: Prefix used for generated resource names.
+    required: true
+outputs:
+  networkName:
+    description: Computed Docker network name.
+    value: ${{ steps.compute.outputs.networkName }}
+  mongoName:
+    description: Computed MongoDB container name.
+    value: ${{ steps.compute.outputs.mongoName }}
+  appName:
+    description: Computed app container name.
+    value: ${{ steps.compute.outputs.appName }}
+runs:
+  using: composite
+  steps:
+    - name: Compute unique runtime names
+      id: compute
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        PREFIX="${{ inputs.prefix }}"
+        RAW_SUFFIX="${GITHUB_RUN_ID:-local}-${GITHUB_RUN_ATTEMPT:-1}-${GITHUB_JOB:-job}-${RANDOM}"
+        SAFE_SUFFIX=$(echo "$RAW_SUFFIX" | tr '[:upper:]' '[:lower:]' | tr -cs 'a-z0-9' '-' | sed 's/^-*//; s/-*$//')
+        SAFE_SUFFIX="${SAFE_SUFFIX:0:50}"
+
+        echo "networkName=$PREFIX-net-$SAFE_SUFFIX" >> "$GITHUB_OUTPUT"
+        echo "mongoName=$PREFIX-mongo-$SAFE_SUFFIX" >> "$GITHUB_OUTPUT"
+        echo "appName=$PREFIX-app-$SAFE_SUFFIX" >> "$GITHUB_OUTPUT"

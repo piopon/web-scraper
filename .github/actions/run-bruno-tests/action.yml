@@ -37,18 +37,9 @@ runs:
   steps:
     - name: Compute runtime resource names
       id: runtime-names
-      shell: bash
-      run: |
-        set -euo pipefail
-
-        RAW_SUFFIX="${GITHUB_RUN_ID:-local}-${GITHUB_RUN_ATTEMPT:-1}-${GITHUB_JOB:-job}-${RANDOM}"
-        SAFE_SUFFIX=$(echo "$RAW_SUFFIX" | tr '[:upper:]' '[:lower:]' | tr -cs 'a-z0-9' '-' | sed 's/^-*//; s/-*$//')
-        SAFE_SUFFIX="${SAFE_SUFFIX:0:50}"
-
-        echo "networkName=bruno-net-$SAFE_SUFFIX" >> "$GITHUB_OUTPUT"
-        echo "mongoName=bruno-mongo-$SAFE_SUFFIX" >> "$GITHUB_OUTPUT"
-        echo "appName=bruno-app-$SAFE_SUFFIX" >> "$GITHUB_OUTPUT"
-
+      uses: ./.github/actions/compute-runtime-resource-names
+      with:
+        prefix: bruno
     - name: Ensure Docker network exists
       uses: ./.github/actions/create-docker-network
       with:
