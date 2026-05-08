@@ -72,6 +72,14 @@ runs:
       run: |
         set -euo pipefail
 
+        TEMP_BRUNO_COLLECTION_DIR=""
+        cleanup_tmp_collection() {
+          if [ -n "$TEMP_BRUNO_COLLECTION_DIR" ] && [ -d "$TEMP_BRUNO_COLLECTION_DIR" ]; then
+            rm -rf "$TEMP_BRUNO_COLLECTION_DIR"
+          fi
+        }
+        trap cleanup_tmp_collection EXIT
+
         GENERATED_BRUNO_TOKEN=$(node scripts/generate-ci-jwt.js)
         echo "Using generated config/data tokens aligned with runtime JWT secret."
 
@@ -99,9 +107,10 @@ runs:
         APP_HOST_PORT="${{ inputs.appHostPort }}"
         BRUNO_COLLECTION_PATH_ABS="$COLLECTION_PATH_ABS"
         if [ "$APP_HOST_PORT" != "5000" ]; then
-          BRUNO_COLLECTION_PATH_ABS="$(mktemp -d)"
+          TEMP_BRUNO_COLLECTION_DIR="$(mktemp -d)"
+          BRUNO_COLLECTION_PATH_ABS="$TEMP_BRUNO_COLLECTION_DIR"
           cp -R "$COLLECTION_PATH_ABS/." "$BRUNO_COLLECTION_PATH_ABS/"
-          find "$BRUNO_COLLECTION_PATH_ABS" -type f -name "*.bru" -print0 | xargs -0 sed -i "s|http://localhost:5000|http://localhost:$APP_HOST_PORT|g"
+          find "$BRUNO_COLLECTION_PATH_ABS" -type f -name "*.bru" -print0 | xargs -0 -r sed -i "s|http://localhost:5000|http://localhost:$APP_HOST_PORT|g"
           echo "Bruno collection URLs rewritten to use host port $APP_HOST_PORT"
         fi
 
