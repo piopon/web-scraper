@@ -53,7 +53,7 @@ runs:
       run: |
         set -euo pipefail
 
-        STATUS_URL="http://127.0.0.1:5000/api/v1/status"
+        STATUS_URL="http://127.0.0.1:${{ inputs.appHostPort }}/api/v1/status"
         node scripts/healthcheck-status.js "$STATUS_URL"
 
         echo "Runtime smoke check passed."
