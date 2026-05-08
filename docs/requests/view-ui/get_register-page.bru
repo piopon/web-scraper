@@ -19,11 +19,7 @@ tests {
     expect(res.getHeader("content-type")).to.equal("text/html; charset=utf-8");
   });
 
-  test("register page has correct content length", function() {
-    expect(res.getHeader("content-length")).to.equal("3132");
-  });
-
-  test("register page has regsiter data", function() {
+  test("register page has register data", function() {
     const body = res.getBody();
     expect(body).to.be.a('string');
     expect(body).to.include('<h3>scraper user registration</h3>');

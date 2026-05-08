@@ -1,0 +1,22 @@
+name: Create Docker Network
+description: Ensure a Docker network exists for test containers.
+inputs:
+  networkName:
+    description: Name of the Docker network to create.
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Ensure Docker network exists
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        NETWORK_NAME="${{ inputs.networkName }}"
+
+        if docker network inspect "$NETWORK_NAME" >/dev/null 2>&1; then
+          echo "Docker network already exists: $NETWORK_NAME"
+        else
+          docker network create "$NETWORK_NAME" >/dev/null
+          echo "Docker network created: $NETWORK_NAME"
+        fi

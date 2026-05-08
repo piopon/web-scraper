@@ -29,11 +29,15 @@ jobs:
         run: npm run version:sync
       - name: Build Docker image (smoke check)
         run: docker build --tag web-scraper:smoke .
+      - name: Resolve app host port
+        id: app-port
+        uses: ./.github/actions/resolve-app-host-port
       - name: Run runtime smoke check
         uses: ./.github/actions/runtime-smoke-check
         with:
           imageName: web-scraper:smoke
           mongoImage: mongo:4.4.29-focal
+          appHostPort: ${{ steps.app-port.outputs.appHostPort }}
           timeoutSeconds: 120
 
   build:

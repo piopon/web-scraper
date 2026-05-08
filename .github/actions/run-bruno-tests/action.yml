@@ -1,0 +1,164 @@
+name: Run Bruno API Tests
+description: Start MongoDB and app containers, wait for readiness, execute Bruno requests with secret tokens, and clean up.
+inputs:
+  imageName:
+    description: Docker image to run for Bruno validation.
+    required: true
+  mongoImage:
+    description: MongoDB image used for Bruno validation.
+    required: false
+    default: "mongo:4.4.29-focal"
+  timeoutSeconds:
+    description: Max seconds to wait for healthy status.
+    required: false
+    default: "180"
+  collectionPath:
+    description: Path to Bruno collection folder.
+    required: false
+    default: "docs/requests"
+  environmentFile:
+    description: Path to Bruno environment file (.bru or .json).
+    required: false
+    default: "docs/requests/environments/web-scraper.bru"
+  appHostPort:
+    description: Host port where the app container is published for Bruno requests.
+    required: false
+    default: "5000"
+  jwtSecret:
+    description: JWT secret used by the test app and generated Bruno tokens.
+    required: false
+    default: "smoke-jwt"
+  ciUserEmail:
+    description: Email of the seeded CI user used in generated Bruno tokens.
+    required: false
+    default: "ci@test.local"
+runs:
+  using: composite
+  steps:
+    - name: Compute runtime resource names
+      id: runtime-names
+      uses: ./.github/actions/compute-runtime-resource-names
+      with:
+        prefix: bruno
+    - name: Ensure Docker network exists
+      uses: ./.github/actions/create-docker-network
+      with:
+        networkName: ${{ steps.runtime-names.outputs.networkName }}
+    - name: Start MongoDB and wait
+      uses: ./.github/actions/start-mongo-and-wait
+      with:
+        networkName: ${{ steps.runtime-names.outputs.networkName }}
+        mongoName: ${{ steps.runtime-names.outputs.mongoName }}
+        mongoImage: ${{ inputs.mongoImage }}
+        timeoutSeconds: ${{ inputs.timeoutSeconds }}
+        contextLabel: test
+    - name: Start app and wait for health
+      uses: ./.github/actions/start-app-and-optionally-wait
+      with:
+        networkName: ${{ steps.runtime-names.outputs.networkName }}
+        mongoName: ${{ steps.runtime-names.outputs.mongoName }}
+        appName: ${{ steps.runtime-names.outputs.appName }}
+        imageName: ${{ inputs.imageName }}
+        hostPort: ${{ inputs.appHostPort }}
+        timeoutSeconds: ${{ inputs.timeoutSeconds }}
+        waitForHealth: "true"
+        jwtSecret: ${{ inputs.jwtSecret }}
+        ciUserEmail: ${{ inputs.ciUserEmail }}
+    - name: Run Bruno API validation
+      shell: bash
+      env:
+        JWT_SECRET: ${{ inputs.jwtSecret }}
+        CI_USER: ${{ inputs.ciUserEmail }}
+      run: |
+        set -euo pipefail
+
+        TEMP_BRUNO_COLLECTION_DIR=""
+        cleanup_tmp_collection() {
+          if [ -n "$TEMP_BRUNO_COLLECTION_DIR" ] && [ -d "$TEMP_BRUNO_COLLECTION_DIR" ]; then
+            rm -rf "$TEMP_BRUNO_COLLECTION_DIR"
+          fi
+        }
+        trap cleanup_tmp_collection EXIT
+
+        GENERATED_BRUNO_TOKEN=$(node scripts/generate-ci-jwt.js)
+        echo "Using generated config/data tokens aligned with runtime JWT secret."
+
+        COLLECTION_PATH="${{ inputs.collectionPath }}"
+        COLLECTION_PATH="${COLLECTION_PATH%/}"
+        ENV_FILE_PATH="${{ inputs.environmentFile }}"
+
+        if [[ "$COLLECTION_PATH" = /* ]]; then
+          COLLECTION_PATH_ABS="$COLLECTION_PATH"
+        else
+          COLLECTION_PATH_ABS="$PWD/$COLLECTION_PATH"
+        fi
+
+        if [[ "$ENV_FILE_PATH" = /* ]]; then
+          ENV_FILE_PATH_ABS="$ENV_FILE_PATH"
+        else
+          ENV_FILE_PATH_ABS="$PWD/$ENV_FILE_PATH"
+        fi
+
+        REPORT_DIR="${GITHUB_WORKSPACE:-$PWD}"
+        REPORT_JUNIT="$REPORT_DIR/bruno-results.xml"
+        REPORT_JSON="$REPORT_DIR/bruno-results.json"
+        REPORT_LOG="$REPORT_DIR/bruno-run.log"
+
+        APP_HOST_PORT="${{ inputs.appHostPort }}"
+        BRUNO_COLLECTION_PATH_ABS="$COLLECTION_PATH_ABS"
+        if [ "$APP_HOST_PORT" != "5000" ]; then
+          TEMP_BRUNO_COLLECTION_DIR="$(mktemp -d)"
+          BRUNO_COLLECTION_PATH_ABS="$TEMP_BRUNO_COLLECTION_DIR"
+          cp -R "$COLLECTION_PATH_ABS/." "$BRUNO_COLLECTION_PATH_ABS/"
+          find "$BRUNO_COLLECTION_PATH_ABS" -type f -name "*.bru" -print0 | xargs -0 -r sed -i "s|http://localhost:5000|http://localhost:$APP_HOST_PORT|g"
+          echo "Bruno collection URLs rewritten to use host port $APP_HOST_PORT"
+        fi
+
+        pushd "$BRUNO_COLLECTION_PATH_ABS" >/dev/null
+
+        set +e
+        npx --yes @usebruno/cli@3.3.0 run "." \
+          -r \
+          --env-file "$ENV_FILE_PATH_ABS" \
+          --env-var "config-token=$GENERATED_BRUNO_TOKEN" \
+          --env-var "data-token=$GENERATED_BRUNO_TOKEN" \
+          --tests-only \
+          --verbose \
+          --reporter-junit "$REPORT_JUNIT" \
+          --output "$REPORT_JSON" 2>&1 | tee "$REPORT_LOG"
+
+        BRUNO_EXIT=${PIPESTATUS[0]}
+        set -e
+        popd >/dev/null
+        echo "Bruno CLI exit code: $BRUNO_EXIT"
+
+        if [ "$BRUNO_EXIT" -ne 0 ]; then
+          echo "Bruno tests failed (non-zero CLI exit code)."
+          exit "$BRUNO_EXIT"
+        fi
+
+        if [ ! -s "$REPORT_LOG" ]; then
+          echo "Bruno log file is missing or empty: $REPORT_LOG"
+          exit 1
+        fi
+
+        if [ ! -s "$REPORT_JUNIT" ]; then
+          echo "Bruno JUnit report is missing or empty: $REPORT_JUNIT"
+          exit 1
+        fi
+
+        if [ ! -s "$REPORT_JSON" ]; then
+          echo "Bruno JSON report is missing or empty: $REPORT_JSON"
+          exit 1
+        fi
+
+        if [ -f "$REPORT_JUNIT" ] && grep -Eq '<failure|<error' "$REPORT_JUNIT"; then
+          echo "Bruno tests reported failures/errors in JUnit report."
+          exit 1
+        fi
+    - name: Cleanup Bruno runtime
+      if: ${{ always() }}
+      shell: bash
+      run: |
+        docker rm -f "${{ steps.runtime-names.outputs.appName }}" "${{ steps.runtime-names.outputs.mongoName }}" >/dev/null 2>&1 || true
+        docker network rm "${{ steps.runtime-names.outputs.networkName }}" >/dev/null 2>&1 || true
