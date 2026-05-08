@@ -1,0 +1,21 @@
+name: Resolve App Host Port
+description: Resolve a deterministic app host port from workflow run metadata.
+outputs:
+  appHostPort:
+    description: Resolved host port for publishing app container port 5000.
+    value: ${{ steps.resolve.outputs.appHostPort }}
+runs:
+  using: composite
+  steps:
+    - name: Resolve app host port
+      id: resolve
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        RAW_SEED="${GITHUB_RUN_ID:-0}-${GITHUB_RUN_ATTEMPT:-1}-${GITHUB_JOB:-job}"
+        PORT_SEED=$(printf "%s" "$RAW_SEED" | cksum | awk '{ print $1 }')
+        APP_HOST_PORT=$((20000 + (PORT_SEED % 40000)))
+
+        echo "Resolved app host port: $APP_HOST_PORT"
+        echo "appHostPort=$APP_HOST_PORT" >> "$GITHUB_OUTPUT"
