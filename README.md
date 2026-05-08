@@ -145,6 +145,13 @@ There are two supported ways to run web-scraper service:
   docker logs scraper
   ```
 
+Docker log rotation is configured for both `app` and `mongodb` services through `docker-compose.yml`:
+- Logging driver: `json-file`
+- Max single log file size: `10m`
+- Max retained log files: `5`
+
+These Docker logging driver settings keep container logs from growing without limits. To adjust log rotation, update `max-size` and `max-file` values in `docker-compose.yml` under `x-logging`.
+
 After the service is up and running the next steps are as follows:
 
 1. Open the web-browser and navigate to the configured `IP:PORT` address.<br>
