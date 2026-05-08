@@ -67,8 +67,8 @@ runs:
     - name: Run Bruno API validation
       shell: bash
       env:
-        JWT_SIGN_SECRET: ${{ inputs.jwtSecret }}
-        CI_BRUNO_EMAIL: ${{ inputs.ciUserEmail }}
+        JWT_SECRET: ${{ inputs.jwtSecret }}
+        CI_USER: ${{ inputs.ciUserEmail }}
       run: |
         set -euo pipefail
 

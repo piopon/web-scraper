@@ -48,6 +48,8 @@ jobs:
       with:
         node-version: 22.x
         cache: npm
+    - name: Install dependencies for Bruno validation
+      run: npm ci
     - name: Sync VERSION for Bruno validation
       run: npm run version:sync
     - name: Build Docker image (Bruno check)
