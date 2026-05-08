@@ -1,5 +1,11 @@
 name: "web-scraper"
 
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "5"
+
 services:
   mongodb:
     # pin MongoDB to 4.4.29-focal for compatibility, including CPUs without AVX support
@@ -14,6 +20,7 @@ services:
       - $DB_PORT:$DB_PORT
     volumes:
       - mongodb_data:/data/db
+    logging: *default-logging
   app:
     container_name: scraper
     restart: unless-stopped
@@ -30,6 +37,7 @@ services:
       - $SERVER_PORT:$SERVER_PORT
     depends_on:
       - mongodb
+    logging: *default-logging
 
 volumes:
   mongodb_data:
