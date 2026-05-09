@@ -91,7 +91,7 @@ export class ViewRouter {
       if (!fs.existsSync(newImageRoot)) {
         fs.mkdirSync(newImageRoot, { recursive: true });
       }
-      fileObject.mv(newImagePath);
+      await fileObject.mv(newImagePath);
       response.status(200).json({
         url: `${this.#getServerAddress()}/${request.user.email}/${fileObject.name}`,
         message: `Successfully uploaded image: ${fileObject.name}`,
