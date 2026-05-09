@@ -3,6 +3,7 @@ import { AuthRouter } from "../routes/view/auth-router.js";
 import { ComponentType } from "../config/app-types.js";
 import { ConfigRouter } from "../routes/api/config-router.js";
 import { DataRouter } from "../routes/api/data-router.js";
+import { DocsRouter } from "../routes/api/docs-router.js";
 import { ParamsParser } from "../middleware/params-parser.js";
 import { StatusLogger } from "./status-logger.js";
 import { RequestLogger } from "../middleware/request-logger.js";
@@ -105,6 +106,7 @@ export class WebServer {
       ["/api/v1/config", new ConfigRouter(this.#components)],
       ["/api/v1/status", new StatusRouter(this.#status, this.#components)],
       ["/api/v1/settings", new SettingsRouter(this.#components)],
+      ["/api/v1/docs", new DocsRouter()],
     ]);
     routes.forEach((router, url) => server.use(url, router.createRoutes()));
 
