@@ -11,6 +11,14 @@ export class DocsRouter {
     router.get("/openapi.json", (request, response) => {
       response.status(200).json(this.#createOpenApiSpec());
     });
+    router.use("/", swaggerUi.serve);
+    router.get(
+      "/",
+      swaggerUi.setup(this.#createOpenApiSpec(), {
+        explorer: true,
+        customSiteTitle: "web-scraper API docs",
+      })
+    );
     return router;
   }
 
