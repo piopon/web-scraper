@@ -32,7 +32,8 @@ export class DocsRouter {
       info: {
         title: "web-scraper API",
         version: "1.0.0",
-        description: "OpenAPI documentation for web-scraper service endpoints",
+        description:
+          "OpenAPI documentation for web-scraper service endpoints. [Go to web-scraper homepage](/)",
       },
       tags: [
         { name: "status", description: "Service and components status endpoints" },
