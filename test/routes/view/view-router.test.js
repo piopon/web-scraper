@@ -5,6 +5,7 @@ import { Strategy } from "passport-local";
 import { engine } from "express-handlebars";
 import { jest } from "@jest/globals";
 import fs from "fs";
+import nodeFs from "node:fs";
 import path from "path";
 import supertest from "supertest";
 import passport from "passport";
@@ -163,6 +164,7 @@ describe("created view POST routes", () => {
     await testAgent.post("/auth/login").send(mockAuth);
   });
   afterEach(() => {
+    cleanupTestArtifacts();
     jest.clearAllMocks();
     jest.resetAllMocks();
     jest.restoreAllMocks();
@@ -328,4 +330,9 @@ function removeDataFile(filePath) {
   if (fileDir !== ".") {
     fs.rmdirSync(fileDir);
   }
+}
+
+function cleanupTestArtifacts() {
+  const tempFiles = ["testfile.json", "testfile0.png", "testfile1.png", "testfile2.png", "testfile3.png"];
+  tempFiles.forEach((filePath) => nodeFs.rmSync(filePath, { force: true }));
 }
