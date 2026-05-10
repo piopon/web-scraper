@@ -31,7 +31,7 @@ describe("created docs routes", () => {
     );
     expect(response.body.paths["/api/v1/config/groups/observers/components"].get.parameters).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ name: "source", in: "query" }),
+        expect.objectContaining({ name: "source", in: "query", required: true }),
         expect.objectContaining({ name: "interval", in: "query" }),
         expect.objectContaining({ name: "selector", in: "query" }),
         expect.objectContaining({ name: "attribute", in: "query" }),

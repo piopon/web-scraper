@@ -332,7 +332,7 @@ export class DocsRouter {
               {
                 name: "source",
                 in: "query",
-                required: false,
+                required: true,
                 schema: ScrapComponent.getRequestParamsSchema("GET").properties.source,
               },
               {

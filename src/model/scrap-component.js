@@ -70,6 +70,7 @@ export class ScrapComponent {
         attribute: { type: "string", minLength: 1 },
         auxiliary: { type: "string", minLength: 1 },
       },
+      required: ["source"],
     };
   }
 
