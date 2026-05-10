@@ -1,4 +1,5 @@
 import { DocsRouter } from "../../../src/routes/api/docs-router.js";
+import { VersionUtils } from "../../../src/utils/version-utils.js";
 
 import express from "express";
 import supertest from "supertest";
@@ -14,6 +15,7 @@ describe("created docs routes", () => {
     expect(response.statusCode).toBe(200);
     expect(response.body.openapi).toBe("3.0.3");
     expect(response.body.info.title).toBe("web-scraper API");
+    expect(response.body.info.version).toBe(VersionUtils.getRuntimeVersion());
     expect(response.body.paths["/api/v1/docs/openapi.json"]).toBeDefined();
   });
 

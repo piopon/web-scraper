@@ -1,5 +1,6 @@
 import express from "express";
 import swaggerUi from "swagger-ui-express";
+import { VersionUtils } from "../../utils/version-utils.js";
 
 export class DocsRouter {
   /**
@@ -77,7 +78,7 @@ export class DocsRouter {
       openapi: "3.0.3",
       info: {
         title: "web-scraper API",
-        version: "1.0.0",
+        version: VersionUtils.getRuntimeVersion(),
         description:
           "OpenAPI documentation for web-scraper service endpoints. [Go to web-scraper homepage](/)",
       },
