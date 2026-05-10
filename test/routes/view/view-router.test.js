@@ -187,6 +187,33 @@ describe("created view POST routes", () => {
       removeDataFile(testDataPath);
     });
     describe("with an image file provided", () => {
+      test("and logged user identifier is invalid", async () => {
+        const isolatedPassport = new passport.Passport();
+        const isolatedApp = express();
+        isolatedApp.engine("handlebars", engine({ helpers: helpers() }));
+        isolatedApp.set("view engine", "handlebars");
+        isolatedApp.set("views", "./public");
+        isolatedApp.use(express.static("./public"));
+        isolatedApp.use(express.json());
+        isolatedApp.use(express.urlencoded({ extended: false }));
+        isolatedApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
+        isolatedApp.use(fileUpload({ abortOnLimit: true, limits: { fileSize: 10_000_000 } }));
+        isolatedApp.use(isolatedPassport.initialize());
+        isolatedApp.use(isolatedPassport.session());
+        isolatedApp.use("/view", testRouter.createRoutes());
+        isolatedApp.use("/auth", createMockAuthRouter(isolatedPassport, "..\\evil", "mock-login-invalid"));
+
+        const isolatedAgent = supertest.agent(isolatedApp);
+        const mockAuth = { mail: "test@mail.com", pass: "test-secret" };
+        await isolatedAgent.post("/auth/login").send(mockAuth);
+
+        const testImagePath = path.join(".", "testfile-invalid.png");
+        createDataFile(testImagePath);
+        const response = await isolatedAgent.post("/view/image").attach("auxiliary-file", testImagePath);
+        expect(response.statusCode).toBe(400);
+        expect(response.body).toBe("Invalid user identifier provided");
+        removeDataFile(testImagePath);
+      });
       test("and no server nor port defined", async () => {
         const testImagePath = path.join(".", "testfile1.png");
         createDataFile(testImagePath);
@@ -236,21 +263,20 @@ describe("created view POST routes", () => {
   });
 });
 
-function createMockAuthRouter() {
+function createMockAuthRouter(passportInstance = passport, userMail = "test@mail.c", strategyName = "mock-login") {
   const router = express.Router();
   const configId = 123;
   const userName = "test-name";
-  const userMail = "test@mail.c";
   // configure mocked login logic
   const options = { usernameField: "mail", passwordField: "pass" };
   const verify = (_user, _pass, done) => done(null, { id: 1, config: configId, name: userName });
-  passport.use("mock-login", new Strategy(options, verify));
-  passport.serializeUser((user, done) => done(null, user.id));
-  passport.deserializeUser((userId, done) =>
+  passportInstance.use(strategyName, new Strategy(options, verify));
+  passportInstance.serializeUser((user, done) => done(null, user.id));
+  passportInstance.deserializeUser((userId, done) =>
     done(null, { id: userId, config: configId, name: userName, email: userMail })
   );
   // use passport mock login in tests
-  router.post("/login", passport.authenticate("mock-login"));
+  router.post("/login", passportInstance.authenticate(strategyName));
   return router;
 }
 
@@ -332,7 +358,14 @@ function removeDataFile(filePath) {
 }
 
 function cleanupTestArtifacts() {
-  const tempFiles = ["testfile.json", "testfile0.png", "testfile1.png", "testfile2.png", "testfile3.png"];
+  const tempFiles = [
+    "testfile.json",
+    "testfile0.png",
+    "testfile1.png",
+    "testfile2.png",
+    "testfile3.png",
+    "testfile-invalid.png",
+  ];
   const actualFs = jest.requireActual("fs");
   tempFiles.forEach((filePath) => actualFs.rmSync(filePath, { force: true }));
 }
