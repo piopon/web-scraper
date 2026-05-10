@@ -1,4 +1,5 @@
 import { ComponentType } from "../../config/app-types.js";
+import { AccessChecker } from "../../middleware/access-checker.js";
 import { ScrapConfig } from "../../model/scrap-config.js";
 
 import Ajv from "ajv";
@@ -36,7 +37,7 @@ export class SettingsRouter {
       };
       response.status(200).json(outputData);
     });
-    router.post("/import", async (request, response) => {
+    router.post("/import", AccessChecker.canReceiveData, async (request, response) => {
       const validationResult = this.#validateQueryParams(request.query);
       if (!validationResult.valid) {
         response.status(400).json(validationResult.cause);
