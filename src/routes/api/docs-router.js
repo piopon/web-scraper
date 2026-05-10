@@ -207,12 +207,30 @@ export class DocsRouter {
             tags: ["config"],
             summary: "Edit group",
             security: [{ bearerAuth: [] }],
+            parameters: [
+              {
+                name: "name",
+                in: "query",
+                required: true,
+                schema: { type: "string", minLength: 1 },
+                description: "Group name identifier used to select the group to edit",
+              },
+            ],
             responses: { 200: { description: "Group updated" } },
           },
           delete: {
             tags: ["config"],
             summary: "Delete group",
             security: [{ bearerAuth: [] }],
+            parameters: [
+              {
+                name: "name",
+                in: "query",
+                required: true,
+                schema: { type: "string", minLength: 1 },
+                description: "Group name identifier used to select the group to delete",
+              },
+            ],
             responses: { 200: { description: "Group deleted" } },
           },
         },
