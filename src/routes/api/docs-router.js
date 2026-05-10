@@ -87,6 +87,7 @@ export class DocsRouter {
           "OpenAPI documentation for web-scraper service endpoints. [Go to web-scraper homepage](/)",
       },
       tags: [
+        { name: "docs", description: "Documentation endpoints" },
         { name: "status", description: "Service and components status endpoints" },
         { name: "data", description: "Scraped data endpoints" },
         { name: "config", description: "Scraper configuration endpoints" },
@@ -104,7 +105,7 @@ export class DocsRouter {
       paths: {
         "/api/v1/docs/openapi.json": {
           get: {
-            tags: ["status"],
+            tags: ["docs"],
             summary: "Get OpenAPI definition",
             responses: {
               200: {

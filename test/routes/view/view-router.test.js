@@ -5,7 +5,6 @@ import { Strategy } from "passport-local";
 import { engine } from "express-handlebars";
 import { jest } from "@jest/globals";
 import fs from "fs";
-import nodeFs from "node:fs";
 import path from "path";
 import supertest from "supertest";
 import passport from "passport";
@@ -334,5 +333,6 @@ function removeDataFile(filePath) {
 
 function cleanupTestArtifacts() {
   const tempFiles = ["testfile.json", "testfile0.png", "testfile1.png", "testfile2.png", "testfile3.png"];
-  tempFiles.forEach((filePath) => nodeFs.rmSync(filePath, { force: true }));
+  const actualFs = jest.requireActual("fs");
+  tempFiles.forEach((filePath) => actualFs.rmSync(filePath, { force: true }));
 }
