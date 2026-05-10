@@ -1,5 +1,9 @@
 import express from "express";
 import swaggerUi from "swagger-ui-express";
+import { ScrapComponent } from "../../model/scrap-component.js";
+import { ScrapConfig } from "../../model/scrap-config.js";
+import { ScrapGroup } from "../../model/scrap-group.js";
+import { ScrapObserver } from "../../model/scrap-observer.js";
 import { VersionUtils } from "../../utils/version-utils.js";
 
 export class DocsRouter {
@@ -201,6 +205,14 @@ export class DocsRouter {
             tags: ["config"],
             summary: "Add new group",
             security: [{ bearerAuth: [] }],
+            requestBody: {
+              required: true,
+              content: {
+                "application/json": {
+                  schema: ScrapGroup.getRequestBodySchema(),
+                },
+              },
+            },
             responses: { 200: { description: "Group added" } },
           },
           put: {
@@ -216,6 +228,14 @@ export class DocsRouter {
                 description: "Group name identifier used to select the group to edit",
               },
             ],
+            requestBody: {
+              required: true,
+              content: {
+                "application/json": {
+                  schema: ScrapGroup.getRequestBodySchema(),
+                },
+              },
+            },
             responses: { 200: { description: "Group updated" } },
           },
           delete: {
@@ -245,18 +265,61 @@ export class DocsRouter {
             tags: ["config"],
             summary: "Add new observer",
             security: [{ bearerAuth: [] }],
+            parameters: [
+              {
+                name: "parent",
+                in: "query",
+                required: true,
+                schema: { type: "string", minLength: 1 },
+                description: "Group name identifier used as parent for the new observer",
+              },
+            ],
+            requestBody: {
+              required: true,
+              content: {
+                "application/json": {
+                  schema: ScrapObserver.getRequestBodySchema(),
+                },
+              },
+            },
             responses: { 200: { description: "Observer added" } },
           },
           put: {
             tags: ["config"],
             summary: "Edit observer",
             security: [{ bearerAuth: [] }],
+            parameters: [
+              {
+                name: "name",
+                in: "query",
+                required: true,
+                schema: { type: "string", minLength: 1 },
+                description: "Observer name identifier used to select the observer to edit",
+              },
+            ],
+            requestBody: {
+              required: true,
+              content: {
+                "application/json": {
+                  schema: ScrapObserver.getRequestBodySchema(),
+                },
+              },
+            },
             responses: { 200: { description: "Observer updated" } },
           },
           delete: {
             tags: ["config"],
             summary: "Delete observer",
             security: [{ bearerAuth: [] }],
+            parameters: [
+              {
+                name: "name",
+                in: "query",
+                required: true,
+                schema: { type: "string", minLength: 1 },
+                description: "Observer name identifier used to select the observer to delete",
+              },
+            ],
             responses: { 200: { description: "Observer deleted" } },
           },
         },
@@ -265,6 +328,38 @@ export class DocsRouter {
             tags: ["config"],
             summary: "Get observers source or target components",
             security: [{ bearerAuth: [] }],
+            parameters: [
+              {
+                name: "source",
+                in: "query",
+                required: false,
+                schema: ScrapComponent.getRequestParamsSchema("GET").properties.source,
+              },
+              {
+                name: "interval",
+                in: "query",
+                required: false,
+                schema: ScrapComponent.getRequestParamsSchema("GET").properties.interval,
+              },
+              {
+                name: "selector",
+                in: "query",
+                required: false,
+                schema: ScrapComponent.getRequestParamsSchema("GET").properties.selector,
+              },
+              {
+                name: "attribute",
+                in: "query",
+                required: false,
+                schema: ScrapComponent.getRequestParamsSchema("GET").properties.attribute,
+              },
+              {
+                name: "auxiliary",
+                in: "query",
+                required: false,
+                schema: ScrapComponent.getRequestParamsSchema("GET").properties.auxiliary,
+              },
+            ],
             responses: { 200: { description: "Observer components" } },
           },
         },
@@ -280,6 +375,14 @@ export class DocsRouter {
             tags: ["settings"],
             summary: "Import settings configuration",
             security: [{ bearerAuth: [] }],
+            requestBody: {
+              required: true,
+              content: {
+                "application/json": {
+                  schema: ScrapConfig.getRequestBodySchema(),
+                },
+              },
+            },
             responses: { 200: { description: "Configuration imported" } },
           },
         },
