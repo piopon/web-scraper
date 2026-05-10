@@ -86,15 +86,36 @@ export class ViewRouter {
       if (!imageMimeRegex.test(fileObject.mimetype)) {
         return response.status(400).json("Provided file is NOT an image file");
       }
-      const newImagePath = path.join(this.#uploadPath, request.user.email, fileObject.name);
+      const userSegment = request.user?.email;
+      const invalidUserSegment =
+        !userSegment ||
+        typeof userSegment !== "string" ||
+        /[\\/]/.test(userSegment) ||
+        [".", ".."].includes(userSegment) ||
+        path.normalize(userSegment) !== userSegment;
+      if (invalidUserSegment) {
+        return response.status(400).json("Invalid user identifier provided");
+      }
+      const originalName = fileObject.name;
+      const safeName = path.basename(originalName);
+      const hasPathSeparators = /[\\/]/.test(originalName);
+      const invalidName = hasPathSeparators || !safeName || [".", ".."].includes(safeName);
+      if (invalidName) {
+        return response.status(400).json("Invalid file name provided");
+      }
+      const newImagePath = path.join(this.#uploadPath, userSegment, safeName);
       const newImageRoot = path.dirname(newImagePath);
       if (!fs.existsSync(newImageRoot)) {
         fs.mkdirSync(newImageRoot, { recursive: true });
       }
-      fileObject.mv(newImagePath);
+      try {
+        await fileObject.mv(newImagePath);
+      } catch (_error) {
+        return response.status(500).json("Could not upload image file");
+      }
       response.status(200).json({
-        url: `${this.#getServerAddress()}/${request.user.email}/${fileObject.name}`,
-        message: `Successfully uploaded image: ${fileObject.name}`,
+        url: `${this.#getServerAddress()}/${userSegment}/${safeName}`,
+        message: `Successfully uploaded image: ${safeName}`,
       });
     });
   }

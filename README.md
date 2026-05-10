@@ -20,6 +20,8 @@ The tool is designed to handle a range of web scraping scenarios, from simple da
   Configure scraped data thresholds and notifiers in supplementary monitor
 - <ins>**REST API**</ins><br>
   Output data can be retrieved remotely by sending a request to appropriate REST API endpoint
+- <ins>**OpenAPI documentation**</ins><br>
+  Interactive Swagger UI is available at `/api/v1/docs` and raw OpenAPI JSON at `/api/v1/docs/openapi.json`
 - <ins>**Error handling**</ins><br>
   Built-in mechanisms to manage failed requests and handle dynamic content
 

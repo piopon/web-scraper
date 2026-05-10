@@ -162,6 +162,19 @@ describe("created config GET routes", () => {
     });
   });
   describe("returns correct result using /config/groups/observers/components endpoint with", () => {
+    test("missing required source query parameter", async () => {
+      const response = await testAgent.get("/config/groups/observers/components").query({ interval: "5m" });
+      expect(response.statusCode).toBe(400);
+      expect(response.body).toStrictEqual([
+        {
+          instancePath: "",
+          keyword: "required",
+          message: "must have required property 'source'",
+          params: { missingProperty: "source" },
+          schemaPath: "#/required",
+        },
+      ]);
+    });
     it.each([
       ["source: title, filter: NONE", "title", undefined],
       ["source: image, filter: NONE", "image", undefined],

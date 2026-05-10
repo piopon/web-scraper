@@ -24,13 +24,23 @@
     <div id="page">
       {{!-- page header --}}
       <header id="main-header">
-        <a href="/">
-          <span class='logo'></span>
+        <div class="brand-link">
+          <a href="/" class="brand-icon" title="homepage">
+            <span class='logo'></span>
+          </a>
           <div class="logo-text">
-            <h1>web-scraper</h1>
-            <span class="app-version">{{appVersion}}</span>
+            <a href="/" class="brand-title" title="homepage">
+              <h1>web-scraper</h1>
+            </a>
+            <span class="app-version">
+              {{#if user}}
+              <a href="/api/v1/docs" class="app-docs-link" title="show API docs" target="_self">docs</a>
+              <span class="app-version-separator">|</span>
+              {{/if}}
+              <span class="app-version-value">{{appVersion}}</span>
+            </span>
           </div>
-        </a>
+        </div>
       </header>
       {{!-- page content --}}
       <div id="main-content">
