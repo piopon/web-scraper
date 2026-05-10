@@ -17,6 +17,52 @@ export class DocsRouter {
       swaggerUi.setup(this.#createOpenApiSpec(), {
         explorer: true,
         customSiteTitle: "web-scraper API docs",
+        customJsStr: `
+          const forceHomepageSameTab = () => {
+            document.querySelectorAll(".information-container a").forEach((link) => {
+              try {
+                const parsed = new URL(link.getAttribute("href") || link.href, window.location.origin);
+                const isHomepage = parsed.origin === window.location.origin && parsed.pathname === "/";
+                if (!isHomepage) {
+                  return;
+                }
+                link.setAttribute("target", "_self");
+                link.removeAttribute("rel");
+              } catch (_error) {
+                // ignore non-URL href values
+              }
+            });
+          };
+
+          document.addEventListener(
+            "click",
+            (event) => {
+              const link = event.target.closest(".information-container a");
+              if (!link) {
+                return;
+              }
+              try {
+                const parsed = new URL(link.getAttribute("href") || link.href, window.location.origin);
+                const isHomepage = parsed.origin === window.location.origin && parsed.pathname === "/";
+                if (!isHomepage) {
+                  return;
+                }
+                event.preventDefault();
+                event.stopPropagation();
+                window.location.assign(parsed.pathname + parsed.search + parsed.hash);
+              } catch (_error) {
+                // ignore non-URL href values
+              }
+            },
+            true
+          );
+
+          forceHomepageSameTab();
+          new MutationObserver(forceHomepageSameTab).observe(document.body, {
+            childList: true,
+            subtree: true,
+          });
+        `,
       })
     );
     return router;
