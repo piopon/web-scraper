@@ -156,7 +156,7 @@ header#main-header .app-docs-link {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 0.5rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0px;
   color: black;
   opacity: 0.8;
 }
@@ -173,18 +173,18 @@ header#main-header .app-version-separator {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 0.5rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0px;
   opacity: 0.8;
 }
 
 header#main-header .app-version {
-  margin-left: 0rem;
+  margin-left: 2rem;
   position: relative;
   display: inline-block;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 0.5rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0px;
   opacity: 0.8;
 }
 
@@ -200,14 +200,17 @@ header#main-header .app-version-value {
   header#main-header .app-version {
     margin-left: 3.5rem;
     font-size: 0.55rem;
+    letter-spacing: 0.04em;
   }
 
   header#main-header .app-docs-link {
     font-size: 0.55rem;
+    letter-spacing: 0.04em;
   }
 
   header#main-header .app-version-separator {
     font-size: 0.55rem;
+    letter-spacing: 0.04em;
   }
 }
 
