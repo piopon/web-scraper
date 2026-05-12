@@ -3,6 +3,10 @@
 
 name: CI web-scraper
 
+permissions:
+  contents: read
+  id-token: write
+
 on:
   push:
     branches: 'main'
