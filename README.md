@@ -1,6 +1,6 @@
 # ![web-scraper logo](./public/img/logo/logo-32_45deg.png "web-scraper") web-scraper
 
-[![CI web-scraper](https://github.com/piopon/web-scraper/actions/workflows/ci-web-scraper.yml/badge.svg)](https://github.com/piopon/web-scraper/actions/workflows/ci-web-scraper.yml) [![CD web-scraper](https://github.com/piopon/web-scraper/actions/workflows/cd-web-scraper.yml/badge.svg)](https://github.com/piopon/web-scraper/actions/workflows/cd-web-scraper.yml) [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
+[![CI web-scraper](https://github.com/piopon/web-scraper/actions/workflows/ci-web-scraper.yml/badge.svg)](https://github.com/piopon/web-scraper/actions/workflows/ci-web-scraper.yml) [![CD web-scraper](https://github.com/piopon/web-scraper/actions/workflows/cd-web-scraper.yml/badge.svg)](https://github.com/piopon/web-scraper/actions/workflows/cd-web-scraper.yml) [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-orange.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html) [![Latest Release](https://img.shields.io/github/v/release/piopon/web-scraper?sort=semver)](https://github.com/piopon/web-scraper/releases)
 
 A versatile web scraping application built to efficiently gather data from a variety of websites.<br>
 This project is ideal for automating data extraction tasks and transforming raw HTML data into structured formats.
