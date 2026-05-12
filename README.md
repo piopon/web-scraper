@@ -1,5 +1,7 @@
 # ![web-scraper logo](./public/img/logo/logo-32_45deg.png "web-scraper") web-scraper
 
+[![CI web-scraper](https://github.com/piopon/web-scraper/actions/workflows/ci-web-scraper.yml/badge.svg)](https://github.com/piopon/web-scraper/actions/workflows/ci-web-scraper.yml)
+
 A versatile web scraping application built to efficiently gather data from a variety of websites.<br>
 This project is ideal for automating data extraction tasks and transforming raw HTML data into structured formats.
 
