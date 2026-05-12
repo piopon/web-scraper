@@ -4,6 +4,8 @@
 name: CI web-scraper
 
 on:
+  push:
+    branches: 'main'
   pull_request:
     branches: 'main'
 
