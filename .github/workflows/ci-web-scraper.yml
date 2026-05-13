@@ -14,7 +14,6 @@ on:
 
 env:
   CHROME_DEVEL_SANDBOX: /opt/google/chrome/chrome-sandbox
-  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
 jobs:
   build:
@@ -40,11 +39,22 @@ jobs:
       run: sudo chmod 4755 /opt/google/chrome/chrome-sandbox
     - name: Run CI tests for project
       run: npm test
+    - name: Check Codecov token availability
+      id: codecov-token
+      if: runner.os == 'Linux' && matrix.node-version == '22.x' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false)
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      run: |
+        if [ -n "$CODECOV_TOKEN" ]; then
+          echo "present=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "present=false" >> "$GITHUB_OUTPUT"
+        fi
     - name: Upload coverage to Codecov
-      if: runner.os == 'Linux' && matrix.node-version == '22.x' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false) && env.CODECOV_TOKEN != ''
+      if: runner.os == 'Linux' && matrix.node-version == '22.x' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false) && steps.codecov-token.outputs.present == 'true'
       uses: codecov/codecov-action@v5
       with:
-        token: ${{ env.CODECOV_TOKEN }}
+        token: ${{ secrets.CODECOV_TOKEN }}
         files: ./coverage/coverage-final.json
         flags: unit
         fail_ci_if_error: false
