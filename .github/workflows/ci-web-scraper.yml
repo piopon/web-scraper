@@ -40,7 +40,7 @@ jobs:
     - name: Run CI tests for project
       run: npm test
     - name: Upload coverage to Codecov
-      if: runner.os == 'Linux' && matrix.node-version == '22.x'
+      if: runner.os == 'Linux' && matrix.node-version == '22.x' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false) && secrets.CODECOV_TOKEN != ''
       uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
