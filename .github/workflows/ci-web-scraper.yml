@@ -14,6 +14,7 @@ on:
 
 env:
   CHROME_DEVEL_SANDBOX: /opt/google/chrome/chrome-sandbox
+  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
 jobs:
   build:
@@ -40,10 +41,10 @@ jobs:
     - name: Run CI tests for project
       run: npm test
     - name: Upload coverage to Codecov
-      if: runner.os == 'Linux' && matrix.node-version == '22.x' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false) && secrets.CODECOV_TOKEN != ''
+      if: runner.os == 'Linux' && matrix.node-version == '22.x' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false) && env.CODECOV_TOKEN != ''
       uses: codecov/codecov-action@v5
       with:
-        token: ${{ secrets.CODECOV_TOKEN }}
+        token: ${{ env.CODECOV_TOKEN }}
         files: ./coverage/coverage-final.json
         flags: unit
         fail_ci_if_error: false
