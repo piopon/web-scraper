@@ -3,7 +3,12 @@
 
 name: CI web-scraper
 
+permissions:
+  contents: read
+
 on:
+  push:
+    branches: 'main'
   pull_request:
     branches: 'main'
 
@@ -34,12 +39,31 @@ jobs:
       run: sudo chmod 4755 /opt/google/chrome/chrome-sandbox
     - name: Run CI tests for project
       run: npm test
+    - name: Check Codecov token availability
+      id: codecov-token
+      if: runner.os == 'Linux' && matrix.node-version == '22.x' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false)
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      run: |
+        if [ -n "$CODECOV_TOKEN" ]; then
+          echo "present=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "present=false" >> "$GITHUB_OUTPUT"
+        fi
+    - name: Upload coverage to Codecov
+      if: runner.os == 'Linux' && matrix.node-version == '22.x' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false) && steps.codecov-token.outputs.present == 'true'
+      uses: codecov/codecov-action@v5
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./coverage/coverage-final.json
+        flags: unit
+        fail_ci_if_error: false
 
   bruno:
     name: Bruno API tests
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ github.event.pull_request.head.repo.fork == false }}
+    if: ${{ github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false) }}
     steps:
     - name: Checkout the project repository
       uses: actions/checkout@v4
