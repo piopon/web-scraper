@@ -63,7 +63,7 @@ jobs:
     name: Bruno API tests
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ github.event.pull_request.head.repo.fork == false }}
+    if: ${{ github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false) }}
     steps:
     - name: Checkout the project repository
       uses: actions/checkout@v4
