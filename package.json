@@ -31,7 +31,6 @@
     "express-flash": "^0.0.2",
     "express-handlebars": "^8.0.1",
     "express-session": "^1.18.1",
-    "handlebars-helpers": "^0.10.0",
     "jsonwebtoken": "^9.0.2",
     "locate-chrome": "^0.1.1",
     "moment": "^2.30.1",
