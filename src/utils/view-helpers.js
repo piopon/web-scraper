@@ -10,6 +10,7 @@ function toArray(value, separator = "|") {
 
 export function createViewHelpers() {
   return {
+    year: () => new Date().getFullYear(),
     append: (...args) => args.slice(0, -1).join(""),
     and: (...args) => args.slice(0, -1).every(Boolean),
     or: (...args) => args.slice(0, -1).some(Boolean),
