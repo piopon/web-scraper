@@ -11,10 +11,10 @@ import passport from "passport";
 import express from "express";
 import flash from "express-flash";
 import session from "express-session";
-import helpers from "handlebars-helpers";
 import jsonwebtoken from "jsonwebtoken";
 import { jest } from "@jest/globals";
 import { engine } from "express-handlebars";
+import { createViewHelpers } from "../../../src/utils/view-helpers.js";
 
 jest.mock("../../../src/model/scrap-config.js");
 jest.mock("../../../src/model/scrap-user.js");
@@ -237,7 +237,7 @@ function configureTestSever(testRouter) {
   const authConfig = new AuthConfig(passport, components);
   // initial test server configuration
   const testApp = express();
-  testApp.engine("handlebars", engine({ helpers: helpers() }));
+  testApp.engine("handlebars", engine({ helpers: createViewHelpers() }));
   testApp.set("view engine", "handlebars");
   testApp.set("views", "./public");
   testApp.use(express.static("./public"));
