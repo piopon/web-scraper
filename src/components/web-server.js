@@ -19,7 +19,7 @@ import flash from "express-flash";
 import session from "express-session";
 import fileUpload from "express-fileupload";
 import { engine } from "express-handlebars";
-import { createViewHelpers } from "../utils/view-helpers.js";
+import { ViewUtils } from "../utils/view-utils.js";
 
 export class WebServer {
   static #LOGGER_NAME = "web-server    ";
@@ -79,7 +79,7 @@ export class WebServer {
     // create web server object
     const server = express();
     // setup web server template engine and all options for UI
-    server.engine("handlebars", engine({ helpers: createViewHelpers() }));
+    server.engine("handlebars", engine({ helpers: ViewUtils.createViewHelpers() }));
     server.set("view engine", "handlebars");
     server.set("views", "./public");
     server.use(express.static("./public"));
