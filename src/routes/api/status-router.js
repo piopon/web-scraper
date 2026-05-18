@@ -29,7 +29,7 @@ export class StatusRouter {
         response.status(400).json(validationResult.cause);
         return;
       }
-      const showHistory = request.query.history ? request.query.history : false;
+      const showHistory = request.query.history === true || request.query.history === "true";
       // check inner components status
       const outputData = this.#components
         .getComponents()
@@ -73,7 +73,12 @@ export class StatusRouter {
       additionalProperties: false,
       properties: {
         name: { type: "string" },
-        history: { type: "boolean" },
+        history: {
+          anyOf: [
+            { type: "boolean" },
+            { type: "string", enum: ["true", "false"] },
+          ],
+        },
       },
     });
     return { valid: queryValidation(params), cause: queryValidation.errors };
