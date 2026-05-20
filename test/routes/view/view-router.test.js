@@ -11,7 +11,7 @@ import passport from "passport";
 import express from "express";
 import session from "express-session";
 import fileUpload from "express-fileupload";
-import helpers from "handlebars-helpers";
+import { ViewUtils } from "../../../src/utils/view-utils.js";
 
 jest.mock("fs");
 jest.mock("path");
@@ -53,7 +53,7 @@ describe("created view GET routes", () => {
   jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
   // configue test express app server
   const testApp = express();
-  testApp.engine("handlebars", engine({ helpers: helpers() }));
+  testApp.engine("handlebars", engine({ helpers: ViewUtils.createViewHelpers() }));
   testApp.set("view engine", "handlebars");
   testApp.set("views", "./public");
   testApp.use(express.static("./public"));
@@ -144,7 +144,7 @@ describe("created view POST routes", () => {
   });
   // configue test express app server
   const testApp = express();
-  testApp.engine("handlebars", engine({ helpers: helpers() }));
+  testApp.engine("handlebars", engine({ helpers: ViewUtils.createViewHelpers() }));
   testApp.set("view engine", "handlebars");
   testApp.set("views", "./public");
   testApp.use(express.static("./public"));
@@ -190,7 +190,7 @@ describe("created view POST routes", () => {
       test("and logged user identifier is invalid", async () => {
         const isolatedPassport = new passport.Passport();
         const isolatedApp = express();
-        isolatedApp.engine("handlebars", engine({ helpers: helpers() }));
+        isolatedApp.engine("handlebars", engine({ helpers: ViewUtils.createViewHelpers() }));
         isolatedApp.set("view engine", "handlebars");
         isolatedApp.set("views", "./public");
         isolatedApp.use(express.static("./public"));
