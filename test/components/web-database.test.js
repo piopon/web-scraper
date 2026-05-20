@@ -91,7 +91,7 @@ describe("start() method", () => {
     // invoke the core test logic
     const result = await testDatabase.start();
     expect(result).toBe(true);
-    expect(mongooseConnectSpyOn).toBeCalledWith(expectedUrl, expectedObj);
+    expect(mongooseConnectSpyOn).toHaveBeenCalledWith(expectedUrl, expectedObj);
   });
   test("creates base demo user when not found", async () => {
     // prepare post-start maintenance logic to semi-impactless (go through demo user logic)
@@ -111,7 +111,7 @@ describe("start() method", () => {
     // invoke the core test logic
     const result = await testDatabase.start();
     expect(result).toBe(true);
-    expect(mongooseConnectSpyOn).toBeCalledWith(expectedUrl, expectedObj);
+    expect(mongooseConnectSpyOn).toHaveBeenCalledWith(expectedUrl, expectedObj);
   });
   test("creates CI user when not found", async () => {
     // prepare post-start maintenance logic to semi-impactless (go through demo user logic)
@@ -131,7 +131,7 @@ describe("start() method", () => {
     // invoke the core test logic
     const result = await testDatabase.start();
     expect(result).toBe(true);
-    expect(mongooseConnectSpyOn).toBeCalledWith(expectedUrl, expectedObj);
+    expect(mongooseConnectSpyOn).toHaveBeenCalledWith(expectedUrl, expectedObj);
   });
   test("creates CI data when not present", async () => {
     // prepare post-start maintenance logic to be as impactless as possible
@@ -146,7 +146,7 @@ describe("start() method", () => {
     // invoke the core test logic
     const result = await testDatabase.start();
     expect(result).toBe(true);
-    expect(mongooseConnectSpyOn).toBeCalledWith(expectedUrl, expectedObj);
+    expect(mongooseConnectSpyOn).toHaveBeenCalledWith(expectedUrl, expectedObj);
   });
   test("performs configs maintenance when dangling", async () => {
     // prepare post-start maintenance logic to be as impactless as possible
@@ -164,7 +164,7 @@ describe("start() method", () => {
     // invoke the core test logic
     const result = await testDatabase.start();
     expect(result).toBe(true);
-    expect(mongooseConnectSpyOn).toBeCalledWith(expectedUrl, expectedObj);
+    expect(mongooseConnectSpyOn).toHaveBeenCalledWith(expectedUrl, expectedObj);
   });
   test("fails with invalid input data", async () => {
     const testDatabase = new WebDatabase({ minLogLevel: LogLevel.INFO });
