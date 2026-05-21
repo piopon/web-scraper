@@ -1,6 +1,7 @@
 import { WebServer } from "../../src/components/web-server.js";
 import { WebComponents } from "../../src/components/web-components.js";
 import { ComponentType, LogLevel } from "../../src/config/app-types.js";
+import { jest } from "@jest/globals";
 
 const TEST_PORT = 1234;
 
@@ -84,5 +85,29 @@ describe("shutdown() method", () => {
     const components = new WebComponents(config);
     const testServer = new WebServer(config, components);
     testServer.shutdown();
+  });
+
+  test("stops registered components in close callback", async () => {
+    const config = {
+      usersDataConfig: { upload: "" },
+      minLogLevel: LogLevel.INFO,
+      serverConfig: { port: TEST_PORT },
+      scraperConfig: { dataExtrasType: "CURRENCIES" },
+    };
+    const stopMock = jest.fn(() => true);
+    const components = new WebComponents(config);
+    components.addComponent({
+      getName: () => "init-component",
+      getInfo: () => ({ types: [ComponentType.INIT], initWait: true }),
+      start: () => true,
+      stop: stopMock,
+    });
+    const testServer = new WebServer(config, components);
+
+    await testServer.run();
+    testServer.shutdown();
+    await new Promise((resolve) => setTimeout(resolve, 25));
+
+    expect(stopMock).toHaveBeenCalled();
   });
 });
