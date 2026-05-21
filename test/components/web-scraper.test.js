@@ -142,6 +142,38 @@ describe("start() method", () => {
     expect(result).toBe(true);
     await testScraper.stop(testOwnerMail);
   }, 15_000);
+
+  test("returns early when session for user is already initialized", async () => {
+    const userConfig = {
+      user: "ID",
+      groups: [
+        {
+          name: "test",
+          domain: "www.google.com",
+          observers: {
+            name: "logo",
+            path: "info",
+            data: { selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
+          },
+        },
+      ],
+    };
+    const sessionUser = { name: testOwnerName, email: testOwnerMail, config: userConfig };
+    const localScraper = new WebScraper({
+      minLogLevel: LogLevel.DEBUG,
+      scraperConfig: { scrapInterval: 60_000, defaultTimeout: 10, browser: { useEmbedded: true, profileDir: "_profile" } },
+      usersDataConfig: { path: testOwnerRoot, file: path.basename(testOwnerPath) },
+    });
+    const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
+
+    const firstResult = await localScraper.start(sessionUser);
+    const secondResult = await localScraper.start(sessionUser);
+
+    expect(firstResult).toBe(true);
+    expect(secondResult).toBe(undefined);
+    await localScraper.stop(sessionUser.email);
+  }, 15_000);
 });
 
 describe("stop() method", () => {
