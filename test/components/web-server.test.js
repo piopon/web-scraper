@@ -19,6 +19,7 @@ describe("run() method", () => {
     const components = new WebComponents(config);
     const testServer = new WebServer(config, components);
     const result = await testServer.run();
+    await new Promise((resolve) => setTimeout(resolve, 25));
     testServer.shutdown();
     expect(result).toBe(true);
   });
