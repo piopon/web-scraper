@@ -1,6 +1,7 @@
 import { WebScraper } from "../../src/components/web-scraper.js";
 import { ComponentStatus, ComponentType, LogLevel } from "../../src/config/app-types.js";
 import { ScrapConfig } from "../../src/model/scrap-config.js";
+import { ScrapUser } from "../../src/model/scrap-user.js";
 
 import path from "path";
 import fs from "fs";
@@ -46,6 +47,31 @@ test("getMaster() returns correct result", () => {
   expect(masterObject.name).toBe("web-database");
   expect(masterObject.actions).not.toBe(undefined);
   expect(masterObject.actions.afterInit).not.toBe(undefined);
+});
+
+test("getMaster().afterInit() starts only recently active users", async () => {
+  const now = new Date();
+  const recent = { email: "recent@test.com", lastLogin: new Date(now.getTime() - 24 * 60 * 60 * 1000) };
+  const old = { email: "old@test.com", lastLogin: new Date(now.getTime() - 40 * 24 * 60 * 60 * 1000) };
+
+  const testScraper = new WebScraper({
+    minLogLevel: LogLevel.INFO,
+    scraperConfig: {
+      loginInterval: 30,
+      defaultTimeout: 10,
+      browser: { useEmbedded: true, profileDir: "_profile" },
+    },
+    usersDataConfig: { path: testOwnerRoot, file: path.basename(testOwnerPath) },
+  });
+  const startSpy = jest.spyOn(testScraper, "start").mockResolvedValue(true);
+  jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => ({
+    find: async () => [recent, old],
+  }));
+
+  await testScraper.getMaster().actions.afterInit();
+
+  expect(startSpy).toHaveBeenCalledTimes(1);
+  expect(startSpy).toHaveBeenCalledWith(recent);
 });
 
 describe("start() method", () => {
