@@ -139,4 +139,83 @@ describe("getRuntimeVersion", () => {
     );
     expect(writeFileSyncMock).not.toHaveBeenCalled();
   });
+
+  test("returns fallback version when package version is not a string", async () => {
+    const readFileSyncMock = jest.fn((filePath) => {
+      if (String(filePath).endsWith("package.json")) {
+        return JSON.stringify({ version: 246 });
+      }
+      throw new Error("Unexpected file path");
+    });
+    const execSyncMock = jest.fn(() => "abc1234\n");
+
+    jest.unstable_mockModule("fs", () => ({
+      default: {
+        readFileSync: readFileSyncMock,
+      },
+    }));
+    jest.unstable_mockModule("child_process", () => ({
+      execSync: execSyncMock,
+    }));
+
+    const { VersionUtils } = await import("../../src/utils/version-utils.js");
+
+    expect(VersionUtils.getRuntimeVersion()).toStrictEqual("0.0.0+abc1234");
+  });
+
+  test("returns fallback version when package file cannot be read", async () => {
+    const readFileSyncMock = jest.fn((filePath) => {
+      if (String(filePath).endsWith("package.json")) {
+        throw new Error("package not readable");
+      }
+      if (String(filePath).endsWith("VERSION")) {
+        throw new Error("VERSION missing");
+      }
+      throw new Error("Unexpected file path");
+    });
+    const execSyncMock = jest.fn(() => {
+      throw new Error("git not available");
+    });
+
+    jest.unstable_mockModule("fs", () => ({
+      default: {
+        readFileSync: readFileSyncMock,
+      },
+    }));
+    jest.unstable_mockModule("child_process", () => ({
+      execSync: execSyncMock,
+    }));
+
+    const { VersionUtils } = await import("../../src/utils/version-utils.js");
+
+    expect(VersionUtils.getRuntimeVersion()).toStrictEqual("0.0.0");
+  });
+
+  test("falls back to package version when VERSION file is empty", async () => {
+    const readFileSyncMock = jest.fn((filePath) => {
+      if (String(filePath).endsWith("package.json")) {
+        return JSON.stringify({ version: "2.4.6" });
+      }
+      if (String(filePath).endsWith("VERSION")) {
+        return "   \n";
+      }
+      throw new Error("Unexpected file path");
+    });
+    const execSyncMock = jest.fn(() => {
+      throw new Error("git not available");
+    });
+
+    jest.unstable_mockModule("fs", () => ({
+      default: {
+        readFileSync: readFileSyncMock,
+      },
+    }));
+    jest.unstable_mockModule("child_process", () => ({
+      execSync: execSyncMock,
+    }));
+
+    const { VersionUtils } = await import("../../src/utils/version-utils.js");
+
+    expect(VersionUtils.getRuntimeVersion()).toStrictEqual("2.4.6");
+  });
 });
