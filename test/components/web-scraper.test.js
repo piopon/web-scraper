@@ -306,6 +306,22 @@ describe("clean() method", () => {
     expect(existsSpy).toHaveBeenCalled();
     expect(rmSpy).toHaveBeenCalledTimes(2);
   });
+
+  test("returns false when delete fails for all retry attempts", async () => {
+    const testScraper = new WebScraper({
+      minLogLevel: LogLevel.INFO,
+      scraperConfig: { cleanErrorWait: 0, browser: { useEmbedded: true, profileDir: "_profile" } },
+      usersDataConfig: { path: testOwnerRoot, file: path.basename(testOwnerPath) },
+    });
+    const existsSpy = jest.spyOn(fs, "existsSync").mockReturnValue(true);
+    const rmSpy = jest.spyOn(fs.promises, "rm").mockRejectedValue(new Error("EACCES: permission denied"));
+
+    const result = await testScraper.clean("failed@test.com");
+
+    expect(result).toBe(false);
+    expect(existsSpy).toHaveBeenCalled();
+    expect(rmSpy).toHaveBeenCalledTimes(3);
+  });
 });
 
 function createDataFile(filePath) {
