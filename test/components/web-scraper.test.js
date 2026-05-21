@@ -267,6 +267,28 @@ describe("update() method", () => {
     expect(result[result.length - 1].message).not.toBe("Invalid internal state: session not updated");
     await testScraper.stop(sessionUser.email);
   });
+
+  test("does not log update error when missing session belongs to DEMO_BASE", async () => {
+    const testScraper = new WebScraper({
+      minLogLevel: LogLevel.INFO,
+      scraperConfig: { defaultTimeout: 10, browser: { useEmbedded: true, profileDir: "_profile" } },
+      usersDataConfig: { path: testOwnerRoot, file: path.basename(testOwnerPath) },
+    });
+    const originalDemoBase = process.env.DEMO_BASE;
+    const demoEmail = "demo-base@test.com";
+    try {
+      process.env.DEMO_BASE = demoEmail;
+
+      testScraper.update({ name: "demo", email: demoEmail }, { config: "value" });
+      const result = testScraper.getHistory({ email: demoEmail });
+
+      expect(result.length).toBe(1);
+      expect(result[0].type).toBe("info");
+      expect(result[0].message).toBe("Created");
+    } finally {
+      process.env.DEMO_BASE = originalDemoBase;
+    }
+  });
 });
 
 describe("clean() method", () => {
