@@ -169,6 +169,18 @@ describe("created auth POST routes", () => {
     expect(response.statusCode).toBe(200);
     expect(response.text).toBe(JSON.stringify({ token: "mocked.jwt.token", challenge: {} }));
   });
+  test("returns correct result using /token endpoint with demo credentials", async () => {
+    isAuthenticatedResult = false;
+    jest.spyOn(passport, "authenticate").mockImplementation((strategy, options, callback) => {
+      return (req, res, next) => {
+        return callback(undefined, { name: "test", email: "mail", password: "pass" }, {});
+      };
+    });
+    const payload = { "demo-user": "email", "demo-pass": "pass" };
+    const response = await testAgent.post("/auth/token").send(payload);
+    expect(response.statusCode).toBe(200);
+    expect(response.text).toBe(JSON.stringify({ token: "mocked.jwt.token", challenge: {} }));
+  });
   test("returns info message error using /token endpoint", async () => {
     isAuthenticatedResult = false;
     const expectedErrorMsg = "Cannot find user with challenge";
