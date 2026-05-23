@@ -121,6 +121,17 @@ describe("start() method", () => {
     const result = await testScraper.start({ name: testOwnerName, email: testOwnerMail, config: userConfig });
     expect(result).toBe(false);
   }, 15_000);
+
+  test("fails when configuration document is not found by id", async () => {
+    const userConfig = { user: "ID", groups: [] };
+    const mockResult = { findById: async () => null };
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
+
+    const result = await testScraper.start({ name: testOwnerName, email: testOwnerMail, config: userConfig });
+
+    expect(result).toBe(false);
+  }, 15_000);
+
   test("succeeds when specified user configuration is found", async () => {
     const userConfig = {
       user: "ID",
