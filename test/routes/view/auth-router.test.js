@@ -24,6 +24,8 @@ jest.mock("bcrypt");
 
 let isAuthenticatedResult = false;
 let requestUserSave = () => {};
+let requestUserChallenge = "testchallenge";
+let requestUserHostUser = 1;
 
 process.env.JWT_SECRET = "test_secret";
 process.env.DEMO_USER = "test_user";
@@ -265,6 +267,21 @@ describe("created auth POST routes", () => {
       requestUserSave = () => {};
     }
   });
+
+  test("returns redirect using /logout endpoint when user has no challenge and is not temporary", async () => {
+    isAuthenticatedResult = true;
+    requestUserChallenge = undefined;
+    requestUserHostUser = undefined;
+
+    try {
+      const response = await testAgent.post("/auth/logout");
+      expect(response.statusCode).toBe(302);
+      expect(response.headers.location).toBe("/auth/login");
+    } finally {
+      requestUserChallenge = "testchallenge";
+      requestUserHostUser = 1;
+    }
+  });
 });
 
 function configureTestSever(testRouter) {
@@ -303,13 +320,13 @@ function configureTestSever(testRouter) {
   testApp.use((req, res, next) => {
     req.isAuthenticated = () => isAuthenticatedResult;
     req.user = {
-      hostUser: 1,
+      hostUser: requestUserHostUser,
       toJSON: () => ({
         name: "Test User",
         email: "test@example.com",
         password: "supersecret",
       }),
-      challenge: "testchallenge",
+      challenge: requestUserChallenge,
       save: () => requestUserSave(),
     };
     next();
