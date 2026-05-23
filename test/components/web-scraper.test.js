@@ -14,6 +14,7 @@ const testOwnerName = "scraper";
 const testOwnerRoot = ".";
 const testOwnerMail = "scraper@test.com";
 const testOwnerPath = `${testOwnerRoot}/${testOwnerMail}/data.json`;
+let isolationCounter = 0;
 
 beforeAll(() => {
   createDataFile(testOwnerPath);
@@ -21,6 +22,11 @@ beforeAll(() => {
 
 afterAll(() => {
   removeDataFile(testOwnerPath);
+});
+
+afterEach(() => {
+  // Keep cross-test state isolated before adding deeper scraper-branch tests.
+  jest.restoreAllMocks();
 });
 
 test("getName() returns correct result", () => {
@@ -89,7 +95,8 @@ describe("start() method", () => {
     expect(result).toBe(false);
   }, 15_000);
   test("fails when no session user is provided", async () => {
-    const result = await testScraper.start();
+    const isolated = createIsolatedScraperTestContext();
+    const result = await isolated.scraper.start();
     expect(result).toBe(false);
   }, 15_000);
   test("fails when session user has invalid type", async () => {
@@ -496,6 +503,23 @@ function createDataFile(filePath) {
   } catch (err) {
     console.error(`Could not create data file: ${err}`);
   }
+}
+
+function createIsolatedScraperTestContext(logLevel = LogLevel.INFO, scraperOverrides = {}) {
+  isolationCounter += 1;
+  const suffix = `${Date.now()}_${isolationCounter}`;
+  return {
+    email: `scraper+${suffix}@test.com`,
+    scraper: new WebScraper({
+      minLogLevel: logLevel,
+      scraperConfig: {
+        defaultTimeout: 10,
+        browser: { useEmbedded: true, profileDir: `_profile_${suffix}` },
+        ...scraperOverrides,
+      },
+      usersDataConfig: { path: testOwnerRoot, file: path.basename(testOwnerPath) },
+    }),
+  };
 }
 
 function removeDataFile(filePath) {
