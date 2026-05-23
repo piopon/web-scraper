@@ -275,6 +275,48 @@ describe("getHistory() returns correct result", () => {
     expect(result[0].type).toBe("info");
     expect(result[0].message).toBe("Created");
   });
+
+  test("without session user returns global history", () => {
+    const result = testScraper.getHistory();
+    expect(result.length).toBeGreaterThan(0);
+    expect(result[0].type).toBe("info");
+    expect(result[0].message).toBe("Created");
+  });
+
+  test("stops running session when current status is error", async () => {
+    const userConfig = {
+      user: "ID",
+      groups: [
+        {
+          name: "test",
+          domain: "www.google.com",
+          observers: {
+            name: "logo",
+            path: "info",
+            data: { selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
+          },
+        },
+      ],
+    };
+    const sessionUser = { name: testOwnerName, email: testOwnerMail, config: userConfig };
+    const localScraper = new WebScraper({
+      minLogLevel: LogLevel.INFO,
+      scraperConfig: { defaultTimeout: 10, browser: { useEmbedded: true, profileDir: "_profile" } },
+      usersDataConfig: { path: testOwnerRoot, file: path.basename(testOwnerPath) },
+    });
+    const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
+
+    await localScraper.start(sessionUser);
+    localScraper.update({ name: "other", email: "other@test.com" }, { config: "value" });
+
+    const stopSpy = jest.spyOn(localScraper, "stop").mockResolvedValueOnce(true);
+    localScraper.getHistory(sessionUser);
+
+    expect(stopSpy).toHaveBeenCalledWith(sessionUser.email, "Invalid internal state");
+    stopSpy.mockRestore();
+    await localScraper.stop(sessionUser.email);
+  }, 15_000);
 });
 
 describe("getStatus() returns correct result", () => {
