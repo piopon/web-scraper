@@ -23,6 +23,7 @@ jest.mock("passport");
 jest.mock("bcrypt");
 
 let isAuthenticatedResult = false;
+let requestUserSave = () => {};
 
 process.env.JWT_SECRET = "test_secret";
 process.env.DEMO_USER = "test_user";
@@ -227,6 +228,20 @@ describe("created auth POST routes", () => {
     expect(response.text).toBe("Found. Redirecting to /auth/login");
     expect(response.headers.location).toBe("/auth/login");
   });
+
+  test("returns server error using /logout endpoint when user cleanup fails", async () => {
+    isAuthenticatedResult = true;
+    requestUserSave = () => {
+      throw new Error("forced user save failure");
+    };
+
+    try {
+      const response = await testAgent.post("/auth/logout");
+      expect(response.statusCode).toBe(500);
+    } finally {
+      requestUserSave = () => {};
+    }
+  });
 });
 
 function configureTestSever(testRouter) {
@@ -272,7 +287,7 @@ function configureTestSever(testRouter) {
         password: "supersecret",
       }),
       challenge: "testchallenge",
-      save: () => {},
+      save: () => requestUserSave(),
     };
     next();
   });
