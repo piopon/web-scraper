@@ -26,6 +26,7 @@ let isAuthenticatedResult = false;
 let requestUserSave = () => {};
 let requestUserChallenge = "testchallenge";
 let requestUserHostUser = 1;
+let requestLogoutError = undefined;
 
 process.env.JWT_SECRET = "test_secret";
 process.env.DEMO_USER = "test_user";
@@ -282,6 +283,18 @@ describe("created auth POST routes", () => {
       requestUserHostUser = 1;
     }
   });
+
+  test("returns server error using /logout endpoint when logout callback returns error", async () => {
+    isAuthenticatedResult = true;
+    requestLogoutError = new Error("forced logout callback error");
+
+    try {
+      const response = await testAgent.post("/auth/logout");
+      expect(response.statusCode).toBe(500);
+    } finally {
+      requestLogoutError = undefined;
+    }
+  });
 });
 
 function configureTestSever(testRouter) {
@@ -319,6 +332,7 @@ function configureTestSever(testRouter) {
   // mock request user and authenticated logic
   testApp.use((req, res, next) => {
     req.isAuthenticated = () => isAuthenticatedResult;
+    req.logout = (callback) => callback(requestLogoutError);
     req.user = {
       hostUser: requestUserHostUser,
       toJSON: () => ({
