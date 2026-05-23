@@ -206,6 +206,18 @@ describe("created auth POST routes", () => {
     expect(response.statusCode).toBe(400);
     expect(response.text).toBe(JSON.stringify(expectedErrorMsg));
   });
+  test("returns default token retrieval error when info message is missing", async () => {
+    isAuthenticatedResult = false;
+    jest.spyOn(passport, "authenticate").mockImplementation((strategy, options, callback) => {
+      return (req, res, next) => {
+        return callback(undefined, undefined, {});
+      };
+    });
+    const payload = { email: "email", password: "pass" };
+    const response = await testAgent.post("/auth/token").send(payload);
+    expect(response.statusCode).toBe(400);
+    expect(response.text).toBe(JSON.stringify("Token retrieval error"));
+  });
   test("returns invalid token access fields error using /token endpoint", async () => {
     isAuthenticatedResult = false;
     jest.spyOn(passport, "authenticate").mockImplementation((strategy, options, callback) => {
