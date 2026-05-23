@@ -5,6 +5,7 @@ import { ScrapUser } from "../../src/model/scrap-user.js";
 
 import path from "path";
 import fs from "fs";
+import puppeteer from "puppeteer";
 import { jest } from "@jest/globals";
 
 jest.mock("../../src/model/scrap-config.js");
@@ -232,6 +233,32 @@ describe("stop() method", () => {
     const result = testScraper.getHistory(sessionUser);
     expect(result[result.length - 1].type).toBe("info");
     expect(result[result.length - 1].message).toBe(`${testOwnerMail}: Error message`);
+  }, 15_000);
+
+  test("logs warning when page close throws during stop", async () => {
+    const pageCloseError = new Error("close failed");
+    const pageMock = {
+      setDefaultTimeout: jest.fn(),
+      setUserAgent: jest.fn(async () => true),
+      close: jest.fn(async () => {
+        throw pageCloseError;
+      }),
+    };
+    const browserMock = {
+      newPage: jest.fn(async () => pageMock),
+      close: jest.fn(async () => true),
+    };
+    const launchSpy = jest.spyOn(puppeteer, "launch").mockResolvedValueOnce(browserMock);
+    const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
+
+    await testScraper.start(sessionUser);
+    await testScraper.stop(sessionUser.email);
+
+    const result = testScraper.getHistory(sessionUser);
+    expect(result[result.length - 1].type).toBe("warning");
+    expect(result[result.length - 1].message).toBe(`Stop issue: ${pageCloseError.message}`);
+    launchSpy.mockRestore();
   }, 15_000);
 });
 
