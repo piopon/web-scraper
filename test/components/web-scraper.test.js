@@ -15,18 +15,22 @@ const testOwnerRoot = ".";
 const testOwnerMail = "scraper@test.com";
 const testOwnerPath = `${testOwnerRoot}/${testOwnerMail}/data.json`;
 let isolationCounter = 0;
+const isolatedTestEmails = new Set();
 
 beforeAll(() => {
+  cleanupIsolatedScraperDataDirs();
   createDataFile(testOwnerPath);
 });
 
 afterAll(() => {
   removeDataFile(testOwnerPath);
+  cleanupIsolatedScraperDataDirs();
 });
 
 afterEach(() => {
   // Keep cross-test state isolated before adding deeper scraper-branch tests.
   jest.restoreAllMocks();
+  cleanupIsolatedScraperDataDirs();
 });
 
 test("getName() returns correct result", () => {
@@ -855,8 +859,10 @@ function createDataFile(filePath) {
 function createIsolatedScraperTestContext(logLevel = LogLevel.INFO, scraperOverrides = {}) {
   isolationCounter += 1;
   const suffix = `${Date.now()}_${isolationCounter}`;
+  const email = `scraper+${suffix}@test.com`;
+  isolatedTestEmails.add(email);
   return {
-    email: `scraper+${suffix}@test.com`,
+    email,
     scraper: new WebScraper({
       minLogLevel: logLevel,
       scraperConfig: {
@@ -867,6 +873,26 @@ function createIsolatedScraperTestContext(logLevel = LogLevel.INFO, scraperOverr
       usersDataConfig: { path: testOwnerRoot, file: path.basename(testOwnerPath) },
     }),
   };
+}
+
+function cleanupIsolatedScraperDataDirs() {
+  // Remove known generated directories for this test process.
+  for (const email of isolatedTestEmails) {
+    const userDataDir = path.join(testOwnerRoot, email);
+    if (fs.existsSync(userDataDir)) {
+      fs.rmSync(userDataDir, { maxRetries: 10, retryDelay: 500, recursive: true, force: true });
+    }
+  }
+  isolatedTestEmails.clear();
+
+  // Also remove stale generated directories from previous interrupted runs.
+  const dirPattern = /^scraper\+\d+_\d+@test\.com$/;
+  for (const entry of fs.readdirSync(testOwnerRoot, { withFileTypes: true })) {
+    if (entry.isDirectory() && dirPattern.test(entry.name)) {
+      const staleDir = path.join(testOwnerRoot, entry.name);
+      fs.rmSync(staleDir, { maxRetries: 10, retryDelay: 500, recursive: true, force: true });
+    }
+  }
 }
 
 function removeDataFile(filePath) {
