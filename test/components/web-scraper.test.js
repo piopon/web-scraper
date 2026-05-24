@@ -88,9 +88,13 @@ describe("start() method", () => {
     usersDataConfig: { path: testOwnerRoot, file: path.basename(testOwnerPath) },
   });
   test("fails when external browser cannot be found", async () => {
-    const result = await new WebScraper({
+    jest.resetModules();
+    jest.unstable_mockModule("locate-chrome", () => ({ default: async () => "" }));
+    const { WebScraper: IsolatedWebScraper } = await import("../../src/components/web-scraper.js");
+    const result = await new IsolatedWebScraper({
       minLogLevel: LogLevel.INFO,
       scraperConfig: { defaultTimeout: 10, browser: { useEmbedded: false } },
+      usersDataConfig: { path: testOwnerRoot, file: path.basename(testOwnerPath) },
     }).start();
     expect(result).toBe(false);
   }, 15_000);
