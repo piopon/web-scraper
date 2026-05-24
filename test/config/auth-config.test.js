@@ -372,6 +372,23 @@ describe("auth object with remote-login strategy", () => {
         await testVerify(mockRequest, doneMock);
         expect(doneMock).toHaveBeenCalledWith(null, false, { message: expectedErr });
       });
+      test("due to explicit validation branch", async () => {
+        doneMock = jest.fn();
+        const expectedErr = "Explicit remote validation branch failed.";
+        jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
+          find: (_) => {
+            const mockError = Object.create(MongooseError.prototype);
+            Object.defineProperty(mockError, "name", { value: "ValidationError", configurable: true });
+            Object.defineProperty(mockError, "message", { value: "ERR", configurable: true });
+            mockError.errors = {
+              "test-path": { properties: { message: expectedErr } },
+            };
+            throw mockError;
+          },
+        }));
+        await testVerify(mockRequest, doneMock);
+        expect(doneMock).toHaveBeenCalledWith(null, false, { message: expectedErr });
+      });
     });
   });
 });
