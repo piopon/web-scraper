@@ -309,6 +309,30 @@ describe("created auth POST routes", () => {
       requestThrowAfterRedirect = false;
     }
   });
+
+  test("logout callback does not redirect when remote logout is requested", async () => {
+    const createdRoutes = testRouter.createRoutes();
+    const logoutRoute = createdRoutes.stack.find((layer) => {
+      return layer.route && layer.route.path === "/logout" && layer.route.methods.post;
+    });
+    const logoutHandler = logoutRoute.route.stack[1].handle;
+    const request = {
+      remoteLogout: true,
+      user: {
+        challenge: undefined,
+        hostUser: undefined,
+      },
+      logout: (callback) => callback(undefined),
+    };
+    const response = { redirect: jest.fn(), headersSent: false };
+    const next = jest.fn();
+
+    await logoutHandler(request, response, next);
+    await Promise.resolve();
+
+    expect(response.redirect).not.toHaveBeenCalled();
+    expect(next).not.toHaveBeenCalled();
+  });
 });
 
 function configureTestSever(testRouter) {
