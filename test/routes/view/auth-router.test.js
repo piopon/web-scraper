@@ -27,6 +27,7 @@ let requestUserSave = () => {};
 let requestUserChallenge = "testchallenge";
 let requestUserHostUser = 1;
 let requestLogoutError = undefined;
+let requestThrowAfterRedirect = false;
 
 process.env.JWT_SECRET = "test_secret";
 process.env.DEMO_USER = "test_user";
@@ -295,6 +296,19 @@ describe("created auth POST routes", () => {
       requestLogoutError = undefined;
     }
   });
+
+  test("returns redirect using /logout endpoint when error occurs after redirect is sent", async () => {
+    isAuthenticatedResult = true;
+    requestThrowAfterRedirect = true;
+
+    try {
+      const response = await testAgent.post("/auth/logout");
+      expect(response.statusCode).toBe(302);
+      expect(response.headers.location).toBe("/auth/login");
+    } finally {
+      requestThrowAfterRedirect = false;
+    }
+  });
 });
 
 function configureTestSever(testRouter) {
@@ -331,6 +345,13 @@ function configureTestSever(testRouter) {
   testApp.locals.passport = authConfig.configure();
   // mock request user and authenticated logic
   testApp.use((req, res, next) => {
+    if (requestThrowAfterRedirect) {
+      const defaultRedirect = res.redirect.bind(res);
+      res.redirect = (...args) => {
+        const result = defaultRedirect(...args);
+        throw new Error("forced error after redirect");
+      };
+    }
     req.isAuthenticated = () => isAuthenticatedResult;
     req.logout = (callback) => callback(requestLogoutError);
     req.user = {
