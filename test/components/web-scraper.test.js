@@ -905,6 +905,71 @@ describe("scrap iteration flow", () => {
       await isolated.scraper.clean(sessionUser.email);
     }
   }, 15_000);
+
+  test("marks observer as error when scraped data value is ambiguous", async () => {
+    const isolated = createIsolatedScraperTestContext(LogLevel.INFO, { scrapInterval: 60_000 });
+    const sessionUser = { name: testOwnerName, email: isolated.email, config: "cfg-id" };
+    const userConfig = {
+      user: "ID",
+      groups: [
+        {
+          name: "test",
+          category: "$$$",
+          domain: "https://example.com",
+          observers: [
+            {
+              name: "logo",
+              path: "/",
+              target: "load",
+              history: "off",
+              container: "body",
+              data: { interval: "1m", selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
+              title: { interval: "1m", selector: "body p", attribute: "innerText", auxiliary: "title" },
+              image: { interval: "1m", selector: "img", attribute: "src", auxiliary: "icon" },
+            },
+          ],
+        },
+      ],
+    };
+    const mockResult = { findById: async () => ({ toJSON: () => userConfig }) };
+    const pageMock = {
+      setDefaultTimeout: jest.fn(),
+      setUserAgent: jest.fn(async () => true),
+      goto: jest.fn(async () => true),
+      waitForSelector: jest.fn(async () => true),
+      evaluate: jest.fn(async () => ({ status: "OK", name: "Item", icon: "icon.png", data: "1 PLN 2 PLN", extra: "PLN" })),
+      close: jest.fn(async () => true),
+    };
+    const browserMock = {
+      newPage: jest.fn(async () => pageMock),
+      close: jest.fn(async () => true),
+    };
+    let intervalCallback = undefined;
+    const setIntervalSpy = jest.spyOn(global, "setInterval").mockImplementation((callback) => {
+      intervalCallback = callback;
+      return 782;
+    });
+    const launchSpy = jest.spyOn(puppeteer, "launch").mockResolvedValueOnce(browserMock);
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
+
+    try {
+      const started = await isolated.scraper.start(sessionUser);
+      expect(started).toBe(true);
+      expect(typeof intervalCallback).toBe("function");
+
+      await intervalCallback();
+
+      const savedPath = path.join(testOwnerRoot, isolated.email, path.basename(testOwnerPath));
+      const savedData = JSON.parse(fs.readFileSync(savedPath, "utf8"));
+      expect(savedData[0].items[0].status).toBe("ERROR");
+      expect(savedData[0].items[0].reason).toBe("Invalid scraped data: Incorrect data value for Item");
+    } finally {
+      setIntervalSpy.mockRestore();
+      launchSpy.mockRestore();
+      await isolated.scraper.stop(sessionUser.email);
+      await isolated.scraper.clean(sessionUser.email);
+    }
+  }, 15_000);
 });
 
 function createDataFile(filePath) {
