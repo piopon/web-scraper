@@ -104,6 +104,111 @@ describe("start() method", () => {
     }).start();
     expect(result).toBe(false);
   }, 15_000);
+
+  test("starts with external browser path and sandbox enabled", async () => {
+    jest.resetModules();
+
+    const externalBrowserPath = "C:/tools/chrome/chrome.exe";
+    const userConfig = {
+      user: "ID",
+      groups: [
+        {
+          name: "test",
+          category: "$$$",
+          domain: "https://example.com",
+          observers: [
+            {
+              name: "logo",
+              path: "/",
+              target: "load",
+              history: "off",
+              container: "body",
+              data: { interval: "1m", selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
+              title: { interval: "1m", selector: "body p", attribute: "innerText", auxiliary: "title" },
+              image: { interval: "1m", selector: "img", attribute: "src", auxiliary: "icon" },
+            },
+          ],
+        },
+      ],
+    };
+
+    const pageMock = {
+      setDefaultTimeout: jest.fn(),
+      setUserAgent: jest.fn(async () => true),
+      close: jest.fn(async () => true),
+    };
+    const browserMock = {
+      newPage: jest.fn(async () => pageMock),
+      close: jest.fn(async () => true),
+    };
+    const launchMock = jest.fn(async () => browserMock);
+
+    jest.unstable_mockModule("locate-chrome", () => ({ default: async () => externalBrowserPath }));
+    jest.unstable_mockModule("puppeteer", () => ({
+      default: { launch: launchMock },
+      TimeoutError: class TimeoutError extends Error {},
+    }));
+    jest.unstable_mockModule("../../src/model/scrap-config.js", () => ({
+      ScrapConfig: class ScrapConfig {
+        constructor(config) {
+          Object.assign(this, config);
+        }
+        static getDatabaseModel() {
+          return { findById: async () => ({ toJSON: () => userConfig }) };
+        }
+      },
+    }));
+    jest.unstable_mockModule("../../src/model/scrap-validator.js", () => ({
+      ScrapValidator: class ScrapValidator {
+        constructor(config) {
+          this.config = config;
+        }
+        validate() {
+          return this.config;
+        }
+      },
+    }));
+    jest.unstable_mockModule("../../src/model/scrap-user.js", () => ({
+      ScrapUser: class ScrapUser {
+        static getDatabaseModel() {
+          return { find: async () => [] };
+        }
+      },
+    }));
+
+    const intervalSpy = jest.spyOn(global, "setInterval").mockImplementation(() => 790);
+    const clearIntervalSpy = jest.spyOn(global, "clearInterval").mockImplementation(() => undefined);
+    const { WebScraper: IsolatedWebScraper } = await import("../../src/components/web-scraper.js");
+
+    const isolatedEmail = `external+${Date.now()}@test.com`;
+    isolatedTestEmails.add(isolatedEmail);
+    const isolatedScraper = new IsolatedWebScraper({
+      minLogLevel: LogLevel.INFO,
+      scraperConfig: {
+        scrapInterval: 60_000,
+        defaultTimeout: 10,
+        browser: { useEmbedded: false, useSandbox: true, profileDir: "_profile" },
+      },
+      usersDataConfig: { path: testOwnerRoot, file: path.basename(testOwnerPath) },
+    });
+
+    try {
+      const started = await isolatedScraper.start({ name: testOwnerName, email: isolatedEmail, config: "cfg-id" });
+
+      expect(started).toBe(true);
+      expect(launchMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          executablePath: externalBrowserPath,
+          args: [],
+        })
+      );
+    } finally {
+      await isolatedScraper.stop(isolatedEmail);
+      intervalSpy.mockRestore();
+      clearIntervalSpy.mockRestore();
+    }
+  }, 15_000);
+
   test("fails when no session user is provided", async () => {
     const isolated = createIsolatedScraperTestContext();
     const result = await isolated.scraper.start();
