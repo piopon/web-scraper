@@ -1,7 +1,9 @@
 import { WebScraper } from "../../src/components/web-scraper.js";
 import { ComponentStatus, ComponentType, LogLevel } from "../../src/config/app-types.js";
 import { ScrapConfig } from "../../src/model/scrap-config.js";
+import { ScrapWarning } from "../../src/model/scrap-exception.js";
 import { ScrapUser } from "../../src/model/scrap-user.js";
+import { ScrapValidator } from "../../src/model/scrap-validator.js";
 
 import path from "path";
 import fs from "fs";
@@ -1082,6 +1084,76 @@ describe("scrap iteration flow", () => {
       expect(typeof intervalCallback).toBe("function");
 
       isolated.scraper.update(sessionUser, { user: "ID" });
+      const iterationResult = await intervalCallback();
+
+      expect(iterationResult).toBe(false);
+      const history = isolated.scraper.getHistory({ email: isolated.email });
+      expect(
+        history.some(
+          (entry) => entry.type === "error" && entry.message === "Invalid internal state: Missing scrap configuration"
+        )
+      ).toBe(true);
+    } finally {
+      setIntervalSpy.mockRestore();
+      launchSpy.mockRestore();
+      await isolated.scraper.stop(sessionUser.email);
+      await isolated.scraper.clean(sessionUser.email);
+    }
+  }, 15_000);
+
+  test("stops iteration when startup warning keeps malformed config reference", async () => {
+    const isolated = createIsolatedScraperTestContext(LogLevel.INFO, { scrapInterval: 60_000 });
+    const sessionUser = { name: testOwnerName, email: isolated.email, config: "cfg-id" };
+    const userConfig = {
+      user: "ID",
+      groups: [
+        {
+          name: "test",
+          category: "$$$",
+          domain: "https://example.com",
+          observers: [
+            {
+              name: "logo",
+              data: { auxiliary: "PLN" },
+            },
+          ],
+        },
+      ],
+    };
+    const configCandidate = {
+      ...userConfig,
+      toJSON: () => userConfig,
+    };
+    const mockResult = { findById: async () => configCandidate };
+    const pageMock = {
+      setDefaultTimeout: jest.fn(),
+      setUserAgent: jest.fn(async () => true),
+      goto: jest.fn(async () => true),
+      waitForSelector: jest.fn(async () => true),
+      evaluate: jest.fn(async () => ({ status: "OK", name: "Item", icon: "icon.png", data: "123 PLN", extra: "PLN" })),
+      close: jest.fn(async () => true),
+    };
+    const browserMock = {
+      newPage: jest.fn(async () => pageMock),
+      close: jest.fn(async () => true),
+    };
+    let intervalCallback = undefined;
+    const setIntervalSpy = jest.spyOn(global, "setInterval").mockImplementation((callback) => {
+      intervalCallback = callback;
+      return 789;
+    });
+    const launchSpy = jest.spyOn(puppeteer, "launch").mockResolvedValueOnce(browserMock);
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
+    jest.spyOn(ScrapValidator.prototype, "validate").mockImplementationOnce(() => {
+      throw new ScrapWarning("forced warning for test");
+    });
+
+    try {
+      const started = await isolated.scraper.start(sessionUser);
+      expect(started).toBe(true);
+      expect(typeof intervalCallback).toBe("function");
+
+      configCandidate.groups = undefined;
       const iterationResult = await intervalCallback();
 
       expect(iterationResult).toBe(false);
