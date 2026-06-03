@@ -252,6 +252,20 @@ describe("stop() method", () => {
     expect(result[result.length - 1].message).toBe(`${testOwnerMail}: Error message`);
   }, 15_000);
 
+  test("does not duplicate stop info when reason equals current status message", async () => {
+    const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
+
+    await testScraper.start(sessionUser);
+    const historyBeforeStop = testScraper.getHistory(sessionUser);
+    const previousStatusMessage = historyBeforeStop[historyBeforeStop.length - 1].message;
+
+    await testScraper.stop(sessionUser.email, previousStatusMessage);
+
+    const historyAfterStop = testScraper.getHistory(sessionUser);
+    expect(historyAfterStop[historyAfterStop.length - 1].message).toBe(previousStatusMessage);
+  }, 15_000);
+
   test("logs warning when page close throws during stop", async () => {
     const pageCloseError = new Error("close failed");
     const pageMock = {
