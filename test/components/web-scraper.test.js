@@ -944,6 +944,92 @@ describe("scrap iteration flow", () => {
     }
   }, 15_000);
 
+  test("uses auxiliary values when selector or attribute is missing", async () => {
+    const isolated = createIsolatedScraperTestContext(LogLevel.INFO, { scrapInterval: 60_000 });
+    const sessionUser = { name: testOwnerName, email: isolated.email, config: "cfg-id" };
+    const userConfig = {
+      user: "ID",
+      groups: [
+        {
+          name: "test",
+          category: "$$$",
+          domain: "https://example.com",
+          observers: [
+            {
+              name: "logo",
+              path: "/",
+              target: "load",
+              history: "off",
+              container: "body",
+              data: { interval: "1m", selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
+              title: { interval: "1m", selector: "", attribute: "", auxiliary: "fallback-title" },
+              image: { interval: "1m", selector: "", attribute: "", auxiliary: "fallback-icon" },
+            },
+          ],
+        },
+      ],
+    };
+    const mockResult = { findById: async () => ({ toJSON: () => userConfig }) };
+    const originalDocument = global.document;
+    const pageMock = {
+      setDefaultTimeout: jest.fn(),
+      setUserAgent: jest.fn(async () => true),
+      goto: jest.fn(async () => true),
+      waitForSelector: jest.fn(async () => true),
+      evaluate: jest.fn(async (evaluateFn, observer) => {
+        const dataContainer = {
+          querySelector: (selector) => {
+            if (selector === observer.data.selector) {
+              return { innerHTML: "123 PLN" };
+            }
+            return null;
+          },
+        };
+        global.document = {
+          querySelector: (selector) => (selector === observer.container ? dataContainer : null),
+        };
+        try {
+          return evaluateFn(observer);
+        } finally {
+          global.document = originalDocument;
+        }
+      }),
+      close: jest.fn(async () => true),
+    };
+    const browserMock = {
+      newPage: jest.fn(async () => pageMock),
+      close: jest.fn(async () => true),
+    };
+    let intervalCallback = undefined;
+    const setIntervalSpy = jest.spyOn(global, "setInterval").mockImplementation((callback) => {
+      intervalCallback = callback;
+      return 787;
+    });
+    const launchSpy = jest.spyOn(puppeteer, "launch").mockResolvedValueOnce(browserMock);
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
+
+    try {
+      const started = await isolated.scraper.start(sessionUser);
+      expect(started).toBe(true);
+      expect(typeof intervalCallback).toBe("function");
+
+      await intervalCallback();
+
+      const savedPath = path.join(testOwnerRoot, isolated.email, path.basename(testOwnerPath));
+      const savedData = JSON.parse(fs.readFileSync(savedPath, "utf8"));
+      expect(savedData[0].items[0].status).toBe("OK");
+      expect(savedData[0].items[0].name).toBe("fallback-title");
+      expect(savedData[0].items[0].icon).toBe("fallback-icon");
+      expect(savedData[0].items[0].data).toBe("123");
+    } finally {
+      global.document = originalDocument;
+      setIntervalSpy.mockRestore();
+      launchSpy.mockRestore();
+      await isolated.scraper.stop(sessionUser.email);
+      await isolated.scraper.clean(sessionUser.email);
+    }
+  }, 15_000);
+
   test("applies updated config before next scrape iteration", async () => {
     const isolated = createIsolatedScraperTestContext(LogLevel.INFO, { scrapInterval: 60_000 });
     const sessionUser = { name: testOwnerName, email: isolated.email, config: "cfg-id" };
