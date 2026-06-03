@@ -1,4 +1,5 @@
 import { WebScraper } from "../../src/components/web-scraper.js";
+import { StatusLogger } from "../../src/components/status-logger.js";
 import { ComponentStatus, ComponentType, LogLevel } from "../../src/config/app-types.js";
 import { ScrapConfig } from "../../src/model/scrap-config.js";
 import { ScrapWarning } from "../../src/model/scrap-exception.js";
@@ -1573,6 +1574,77 @@ describe("scrap iteration flow", () => {
       expect(pageMock.screenshot).toHaveBeenCalledTimes(1);
       expect(fs.existsSync(captureDirectory)).toBe(true);
     } finally {
+      setIntervalSpy.mockRestore();
+      launchSpy.mockRestore();
+      await isolated.scraper.stop(sessionUser.email);
+      await isolated.scraper.clean(sessionUser.email);
+    }
+  }, 15_000);
+
+  test("skips timeout screenshot when status type is empty", async () => {
+    const isolated = createIsolatedScraperTestContext(LogLevel.INFO, { scrapInterval: 60_000, timeoutAttempts: 1 });
+    const sessionUser = { name: testOwnerName, email: isolated.email, config: "cfg-id" };
+    const userConfig = {
+      user: "ID",
+      groups: [
+        {
+          name: "test",
+          category: "$$$",
+          domain: "https://example.com",
+          observers: [
+            {
+              name: "logo",
+              path: "/",
+              target: "load",
+              history: "off",
+              container: "body",
+              data: { interval: "1m", selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
+              title: { interval: "1m", selector: "body p", attribute: "innerText", auxiliary: "title" },
+              image: { interval: "1m", selector: "img", attribute: "src", auxiliary: "-" },
+            },
+          ],
+        },
+      ],
+    };
+    const mockResult = { findById: async () => ({ toJSON: () => userConfig }) };
+    const pageMock = {
+      setDefaultTimeout: jest.fn(),
+      setUserAgent: jest.fn(async () => true),
+      goto: jest.fn(async () => true),
+      waitForSelector: jest.fn(async () => {
+        throw new TimeoutError("forced timeout");
+      }),
+      evaluate: jest.fn(async () => ({ status: "OK", name: "Item", icon: "icon.png", data: "123 PLN", extra: "PLN" })),
+      screenshot: jest.fn(async () => true),
+      close: jest.fn(async () => true),
+    };
+    const browserMock = {
+      newPage: jest.fn(async () => pageMock),
+      close: jest.fn(async () => true),
+    };
+    let intervalCallback = undefined;
+    const setIntervalSpy = jest.spyOn(global, "setInterval").mockImplementation((callback) => {
+      intervalCallback = callback;
+      return 792;
+    });
+    const launchSpy = jest.spyOn(puppeteer, "launch").mockResolvedValueOnce(browserMock);
+    const statusSpy = jest.spyOn(StatusLogger.prototype, "getStatus").mockReturnValue({
+      type: "",
+      message: "",
+      timestamp: "2000-01-01 00:00:00",
+    });
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
+
+    try {
+      const started = await isolated.scraper.start(sessionUser);
+      expect(started).toBe(true);
+      expect(typeof intervalCallback).toBe("function");
+
+      await intervalCallback();
+
+      expect(pageMock.screenshot).toHaveBeenCalledTimes(0);
+    } finally {
+      statusSpy.mockRestore();
       setIntervalSpy.mockRestore();
       launchSpy.mockRestore();
       await isolated.scraper.stop(sessionUser.email);
