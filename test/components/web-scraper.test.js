@@ -1030,6 +1030,75 @@ describe("scrap iteration flow", () => {
     }
   }, 15_000);
 
+  test("stops iteration safely when updated config has invalid shape", async () => {
+    const isolated = createIsolatedScraperTestContext(LogLevel.INFO, { scrapInterval: 60_000 });
+    const sessionUser = { name: testOwnerName, email: isolated.email, config: "cfg-id" };
+    const userConfig = {
+      user: "ID",
+      groups: [
+        {
+          name: "test",
+          category: "$$$",
+          domain: "https://example.com",
+          observers: [
+            {
+              name: "logo",
+              path: "/",
+              target: "load",
+              history: "off",
+              container: "body",
+              data: { interval: "1m", selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
+              title: { interval: "1m", selector: "body p", attribute: "innerText", auxiliary: "title" },
+              image: { interval: "1m", selector: "img", attribute: "src", auxiliary: "icon" },
+            },
+          ],
+        },
+      ],
+    };
+    const mockResult = { findById: async () => ({ toJSON: () => userConfig }) };
+    const pageMock = {
+      setDefaultTimeout: jest.fn(),
+      setUserAgent: jest.fn(async () => true),
+      goto: jest.fn(async () => true),
+      waitForSelector: jest.fn(async () => true),
+      evaluate: jest.fn(async () => ({ status: "OK", name: "Item", icon: "icon.png", data: "123 PLN", extra: "PLN" })),
+      close: jest.fn(async () => true),
+    };
+    const browserMock = {
+      newPage: jest.fn(async () => pageMock),
+      close: jest.fn(async () => true),
+    };
+    let intervalCallback = undefined;
+    const setIntervalSpy = jest.spyOn(global, "setInterval").mockImplementation((callback) => {
+      intervalCallback = callback;
+      return 788;
+    });
+    const launchSpy = jest.spyOn(puppeteer, "launch").mockResolvedValueOnce(browserMock);
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
+
+    try {
+      const started = await isolated.scraper.start(sessionUser);
+      expect(started).toBe(true);
+      expect(typeof intervalCallback).toBe("function");
+
+      isolated.scraper.update(sessionUser, { user: "ID" });
+      const iterationResult = await intervalCallback();
+
+      expect(iterationResult).toBe(false);
+      const history = isolated.scraper.getHistory({ email: isolated.email });
+      expect(
+        history.some(
+          (entry) => entry.type === "error" && entry.message === "Invalid internal state: Missing scrap configuration"
+        )
+      ).toBe(true);
+    } finally {
+      setIntervalSpy.mockRestore();
+      launchSpy.mockRestore();
+      await isolated.scraper.stop(sessionUser.email);
+      await isolated.scraper.clean(sessionUser.email);
+    }
+  }, 15_000);
+
   test("applies updated config before next scrape iteration", async () => {
     const isolated = createIsolatedScraperTestContext(LogLevel.INFO, { scrapInterval: 60_000 });
     const sessionUser = { name: testOwnerName, email: isolated.email, config: "cfg-id" };
