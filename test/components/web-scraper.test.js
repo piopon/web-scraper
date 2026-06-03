@@ -1652,6 +1652,158 @@ describe("scrap iteration flow", () => {
     }
   }, 15_000);
 
+  test("fails captured interval callback after stop when session mapping no longer exists", async () => {
+    const isolated = createIsolatedScraperTestContext(LogLevel.INFO, { scrapInterval: 60_000, timeoutAttempts: 1 });
+    const sessionUser = { name: testOwnerName, email: isolated.email, config: "cfg-id" };
+    const userConfig = {
+      user: "ID",
+      groups: [
+        {
+          name: "test",
+          category: "$$$",
+          domain: "https://example.com",
+          observers: [
+            {
+              name: "logo",
+              path: "/",
+              target: "load",
+              history: "off",
+              container: "body",
+              data: { interval: "1m", selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
+              title: { interval: "1m", selector: "body p", attribute: "innerText", auxiliary: "title" },
+              image: { interval: "1m", selector: "img", attribute: "src", auxiliary: "-" },
+            },
+          ],
+        },
+      ],
+    };
+    const mockResult = { findById: async () => ({ toJSON: () => userConfig }) };
+    const pageMock = {
+      setDefaultTimeout: jest.fn(),
+      setUserAgent: jest.fn(async () => true),
+      goto: jest.fn(async () => true),
+      waitForSelector: jest.fn(async () => {
+        throw new TimeoutError("forced timeout");
+      }),
+      evaluate: jest.fn(async () => ({ status: "OK", name: "Item", icon: "icon.png", data: "123 PLN", extra: "PLN" })),
+      screenshot: jest.fn(async () => true),
+      close: jest.fn(async () => true),
+    };
+    const browserMock = {
+      newPage: jest.fn(async () => pageMock),
+      close: jest.fn(async () => true),
+    };
+    let intervalCallback = undefined;
+    const setIntervalSpy = jest.spyOn(global, "setInterval").mockImplementation((callback) => {
+      intervalCallback = callback;
+      return 793;
+    });
+    const launchSpy = jest.spyOn(puppeteer, "launch").mockResolvedValueOnce(browserMock);
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
+
+    try {
+      const started = await isolated.scraper.start(sessionUser);
+      expect(started).toBe(true);
+      expect(typeof intervalCallback).toBe("function");
+
+      await isolated.scraper.stop(sessionUser.email);
+      await expect(intervalCallback()).rejects.toThrow();
+    } finally {
+      setIntervalSpy.mockRestore();
+      launchSpy.mockRestore();
+      await isolated.scraper.clean(sessionUser.email);
+    }
+  }, 15_000);
+
+  test("stale callback compares against non-matching active session id", async () => {
+    const isolated = createIsolatedScraperTestContext(LogLevel.INFO, { scrapInterval: 60_000, timeoutAttempts: 1 });
+    const sessionUserA = { name: testOwnerName, email: isolated.email, config: "cfg-id-a" };
+    const sessionUserB = { name: testOwnerName, email: `scraper+${Date.now()}_b@test.com`, config: "cfg-id-b" };
+    isolatedTestEmails.add(sessionUserB.email);
+
+    const userConfig = {
+      user: "ID",
+      groups: [
+        {
+          name: "test",
+          category: "$$$",
+          domain: "https://example.com",
+          observers: [
+            {
+              name: "logo",
+              path: "/",
+              target: "load",
+              history: "off",
+              container: "body",
+              data: { interval: "1m", selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
+              title: { interval: "1m", selector: "body p", attribute: "innerText", auxiliary: "title" },
+              image: { interval: "1m", selector: "img", attribute: "src", auxiliary: "-" },
+            },
+          ],
+        },
+      ],
+    };
+    const mockResult = { findById: async () => ({ toJSON: () => userConfig }) };
+    const pageMockA = {
+      setDefaultTimeout: jest.fn(),
+      setUserAgent: jest.fn(async () => true),
+      goto: jest.fn(async () => true),
+      waitForSelector: jest.fn(async () => {
+        throw new TimeoutError("forced timeout");
+      }),
+      evaluate: jest.fn(async () => ({ status: "OK", name: "Item", icon: "icon.png", data: "123 PLN", extra: "PLN" })),
+      screenshot: jest.fn(async () => true),
+      close: jest.fn(async () => true),
+    };
+    const pageMockB = {
+      setDefaultTimeout: jest.fn(),
+      setUserAgent: jest.fn(async () => true),
+      goto: jest.fn(async () => true),
+      waitForSelector: jest.fn(async () => true),
+      evaluate: jest.fn(async () => ({ status: "OK", name: "Item", icon: "icon.png", data: "123 PLN", extra: "PLN" })),
+      close: jest.fn(async () => true),
+    };
+    const browserMockA = {
+      newPage: jest.fn(async () => pageMockA),
+      close: jest.fn(async () => true),
+    };
+    const browserMockB = {
+      newPage: jest.fn(async () => pageMockB),
+      close: jest.fn(async () => true),
+    };
+    const launchSpy = jest
+      .spyOn(puppeteer, "launch")
+      .mockResolvedValueOnce(browserMockA)
+      .mockResolvedValueOnce(browserMockB);
+    const callbackMap = new Map();
+    let intervalId = 794;
+    const setIntervalSpy = jest.spyOn(global, "setInterval").mockImplementation((callback) => {
+      const currentId = intervalId++;
+      callbackMap.set(currentId, callback);
+      return currentId;
+    });
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockResult);
+
+    try {
+      const startedA = await isolated.scraper.start(sessionUserA);
+      const startedB = await isolated.scraper.start(sessionUserB);
+      expect(startedA).toBe(true);
+      expect(startedB).toBe(true);
+
+      const staleCallback = callbackMap.get(794);
+      expect(typeof staleCallback).toBe("function");
+
+      await isolated.scraper.stop(sessionUserA.email);
+      await expect(staleCallback()).rejects.toThrow();
+    } finally {
+      setIntervalSpy.mockRestore();
+      launchSpy.mockRestore();
+      await isolated.scraper.stop(sessionUserB.email);
+      await isolated.scraper.clean(sessionUserA.email);
+      await isolated.scraper.clean(sessionUserB.email);
+    }
+  }, 15_000);
+
   test("skips iteration when previous scrape is still active", async () => {
     const isolated = createIsolatedScraperTestContext(LogLevel.INFO, { scrapInterval: 60_000, timeoutAttempts: 1 });
     const sessionUser = { name: testOwnerName, email: isolated.email, config: "cfg-id" };
