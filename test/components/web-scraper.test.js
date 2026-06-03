@@ -577,6 +577,24 @@ describe("getStatus() returns correct result", () => {
     expect(testScraper.getStatus(sessionUser)).toBe(ComponentStatus.RUNNING);
     await testScraper.stop(sessionUser.email);
   });
+  test("when session exists but interval id is null then STOPPED", async () => {
+    const localScraper = new WebScraper({
+      minLogLevel: LogLevel.INFO,
+      scraperConfig: { defaultTimeout: 10, browser: { useEmbedded: true, profileDir: "_profile" } },
+      usersDataConfig: { path: testOwnerRoot, file: path.basename(testOwnerPath) },
+    });
+    const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
+    const setIntervalSpy = jest.spyOn(global, "setInterval").mockImplementation(() => null);
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
+
+    try {
+      await localScraper.start(sessionUser);
+      expect(localScraper.getStatus(sessionUser)).toBe(ComponentStatus.STOPPED);
+    } finally {
+      setIntervalSpy.mockRestore();
+      await localScraper.stop(sessionUser.email);
+    }
+  });
   test("when session is started but not existing provided then INITIALIZING", async () => {
     const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
