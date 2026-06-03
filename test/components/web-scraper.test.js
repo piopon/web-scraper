@@ -389,6 +389,49 @@ describe("getHistory() returns correct result", () => {
       await isolated.scraper.stop(sessionUser.email);
     }
   }, 15_000);
+
+  test("does not log invalid state when session id is null and status is not running", async () => {
+    const userConfig = {
+      user: "ID",
+      groups: [
+        {
+          name: "test",
+          category: "$$$",
+          domain: "www.google.com",
+          observers: [
+            {
+              name: "logo",
+              path: "info",
+              target: "load",
+              history: "off",
+              data: { interval: "1m", selector: "body p b", attribute: "innerHTML", auxiliary: "PLN" },
+              title: { interval: "1m", selector: "body p", attribute: "innerText", auxiliary: "logo" },
+              image: { interval: "1m", selector: "img", attribute: "src", auxiliary: "-" },
+            },
+          ],
+        },
+      ],
+    };
+    const isolated = createIsolatedScraperTestContext();
+    const sessionUser = { name: testOwnerName, email: isolated.email, config: userConfig };
+    const setIntervalSpy = jest.spyOn(global, "setInterval").mockImplementation(() => null);
+    const mockResult = { findById: () => ({ toJSON: () => userConfig }) };
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementationOnce(() => mockResult);
+
+    try {
+      const started = await isolated.scraper.start(sessionUser);
+      expect(started).toBe(true);
+
+      isolated.scraper.update({ email: "unknown@test.com" }, { config: "value" });
+      const history = isolated.scraper.getHistory(sessionUser);
+      expect(history[history.length - 1].message).toBe("Invalid internal state: session not updated");
+      expect(history[history.length - 1].message).not.toBe("Invalid internal state");
+    } finally {
+      setIntervalSpy.mockRestore();
+      await isolated.scraper.stop(sessionUser.email);
+      await isolated.scraper.clean(sessionUser.email);
+    }
+  }, 15_000);
 });
 
 describe("getStatus() returns correct result", () => {
