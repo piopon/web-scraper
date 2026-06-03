@@ -302,7 +302,7 @@ export class WebScraper {
    * @returns true if scrap logic completed with no errors, false otherwise
    */
   async #scrapData(session) {
-    if (session.config == null) {
+    if (session.config == null || !Array.isArray(session.config.groups)) {
       this.#status.error(`Invalid internal state: Missing scrap configuration`);
       return false;
     }
@@ -315,6 +315,10 @@ export class WebScraper {
     if (updatedConfig != null) {
       session.config = updatedConfig;
       this.#waitConfig.delete(session.id);
+    }
+    if (session.config == null || !Array.isArray(session.config.groups)) {
+      this.#status.error(`Invalid internal state: Missing scrap configuration`);
+      return false;
     }
     const data = [];
     session.active = true;
