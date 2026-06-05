@@ -6,6 +6,7 @@ import { jest } from "@jest/globals";
 const TEST_PORT = 1234;
 
 process.env.JWT_SECRET = "test_secret";
+process.env.SESSION_SHA = "test_session_secret";
 process.env.GOOGLE_CLIENT_ID = "test_id";
 
 describe("run() method", () => {
