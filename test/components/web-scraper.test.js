@@ -397,6 +397,30 @@ describe("stop() method", () => {
     expect(result[result.length - 1].message).toBe(`Stop issue: ${pageCloseError.message}`);
     launchSpy.mockRestore();
   }, 15_000);
+
+  test("skips page/browser close when session contains null handles", async () => {
+    const originalMapGet = Map.prototype.get;
+    const mockedSession = {
+      id: undefined,
+      active: true,
+      config: userConfig,
+      browser: null,
+      page: null,
+    };
+    const mapGetSpy = jest.spyOn(Map.prototype, "get").mockImplementation(function (key) {
+      if (key === sessionUser.email) {
+        return mockedSession;
+      }
+      return originalMapGet.call(this, key);
+    });
+
+    await testScraper.stop(sessionUser.email);
+    mapGetSpy.mockRestore();
+
+    const result = testScraper.getHistory(sessionUser);
+    expect(result[result.length - 1].type).toBe("info");
+    expect(result[result.length - 1].message).toBe(`${testOwnerMail}: Stopped.`);
+  }, 15_000);
 });
 
 describe("getHistory() returns correct result", () => {
