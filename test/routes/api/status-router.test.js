@@ -126,6 +126,18 @@ describe("created status GET routes", () => {
       expect(response.statusCode).toBe(expected.status);
       expect(response.body).toStrictEqual(expected.response);
     });
+
+    test("query requests history for top-level web component", async () => {
+      const response = await testClient.get("/status").query({ name: "web-components", history: true });
+
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toHaveLength(1);
+      expect(response.body[0].name).toBe("web-components");
+      expect(response.body[0].status).toBe("running");
+      expect(Array.isArray(response.body[0].history)).toBe(true);
+      expect(response.body[0].history.length).toBeGreaterThan(0);
+      expect(response.body[0].history[0].message).toBe("Created");
+    });
   });
 });
 

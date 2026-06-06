@@ -836,6 +836,94 @@ describe("created config DELETE routes", () => {
   });
 });
 
+describe("config relink path when user config is null", () => {
+  test("links created config id to user on successful update", async () => {
+    const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+    const localPassport = new passport.Passport();
+    const userSaveMock = jest.fn(async () => true);
+
+    const testApp = express();
+    testApp.use(express.json());
+    testApp.use(express.urlencoded({ extended: false }));
+    testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
+    testApp.use(localPassport.initialize());
+    testApp.use(localPassport.session());
+    testApp.use("/config", new ConfigRouter(components).createRoutes());
+
+    const strategyName = "mock-login-relink";
+    localPassport.use(
+      strategyName,
+      new Strategy({ usernameField: "mail", passwordField: "pass" }, (_user, _pass, done) =>
+        done(null, { id: 1, config: null, save: userSaveMock })
+      )
+    );
+    localPassport.serializeUser((user, done) => done(null, user.id));
+    localPassport.deserializeUser((userId, done) => done(null, { id: userId, config: null, save: userSaveMock }));
+    const authRouter = express.Router();
+    authRouter.post("/login", localPassport.authenticate(strategyName));
+    testApp.use("/auth", authRouter);
+
+    const configSaveMock = jest.fn(async () => true);
+    const configContent = {
+      _id: 987,
+      groups: [createGroup(true, "test1", "$$$", "test.com")],
+      save: configSaveMock,
+    };
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => ({
+      findById: async () => configContent,
+    }));
+
+    const testAgent = supertest.agent(testApp);
+    await testAgent.post("/auth/login").send({ mail: "test@mail.com", pass: "test-secret" });
+
+    const response = await testAgent
+      .post("/config/groups")
+      .send(createGroup(false, "new-group", "%%%", "new.com"));
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toBe("Added new configuration element with name = new-group");
+    expect(configSaveMock).toHaveBeenCalled();
+    expect(userSaveMock).toHaveBeenCalled();
+  });
+});
+
+describe("config update path when user config already linked", () => {
+  test("updates config without relinking user", async () => {
+    const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+    const localPassport = new passport.Passport();
+
+    const testApp = express();
+    testApp.use(express.json());
+    testApp.use(express.urlencoded({ extended: false }));
+    testApp.use(session({ secret: "unit_tests", resave: false, saveUninitialized: false }));
+    testApp.use(localPassport.initialize());
+    testApp.use(localPassport.session());
+    testApp.use("/config", new ConfigRouter(components).createRoutes());
+    testApp.use("/auth", createMockAuthRouter(localPassport, 123));
+
+    const configSaveMock = jest.fn(async () => true);
+    const configContent = {
+      _id: 123,
+      groups: [createGroup(true, "test1", "$$$", "test.com")],
+      save: configSaveMock,
+    };
+    jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => ({
+      findById: async () => configContent,
+    }));
+
+    const testAgent = supertest.agent(testApp);
+    await testAgent.post("/auth/login").send({ mail: "test@mail.com", pass: "test-secret" });
+
+    const response = await testAgent
+      .post("/config/groups")
+      .send(createGroup(false, "new-group-2", "%%%", "new.com"));
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toBe("Added new configuration element with name = new-group-2");
+    expect(configSaveMock).toHaveBeenCalled();
+  });
+});
+
 function createMockAuthRouter(passport, configId = 123) {
   const router = express.Router();
   const strategyName = `mock-login-${configId}`;

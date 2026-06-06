@@ -23,6 +23,11 @@ jest.mock("passport");
 jest.mock("bcrypt");
 
 let isAuthenticatedResult = false;
+let requestUserSave = () => {};
+let requestUserChallenge = "testchallenge";
+let requestUserHostUser = 1;
+let requestLogoutError = undefined;
+let requestThrowAfterRedirect = false;
 
 process.env.JWT_SECRET = "test_secret";
 process.env.DEMO_USER = "test_user";
@@ -169,6 +174,29 @@ describe("created auth POST routes", () => {
     expect(response.statusCode).toBe(200);
     expect(response.text).toBe(JSON.stringify({ token: "mocked.jwt.token", challenge: {} }));
   });
+  test("returns correct result using /token endpoint with demo credentials", async () => {
+    isAuthenticatedResult = false;
+    jest.spyOn(passport, "authenticate").mockImplementation((strategy, options, callback) => {
+      return (req, res, next) => {
+        return callback(undefined, { name: "test", email: "mail", password: "pass" }, {});
+      };
+    });
+    const payload = { "demo-user": "email", "demo-pass": "pass" };
+    const response = await testAgent.post("/auth/token").send(payload);
+    expect(response.statusCode).toBe(200);
+    expect(response.text).toBe(JSON.stringify({ token: "mocked.jwt.token", challenge: {} }));
+  });
+  test("returns server error using /token endpoint when authenticate callback fails", async () => {
+    isAuthenticatedResult = false;
+    jest.spyOn(passport, "authenticate").mockImplementation((strategy, options, callback) => {
+      return (req, res, next) => {
+        return callback(new Error("forced authenticate error"), undefined, undefined);
+      };
+    });
+    const payload = { email: "email", password: "pass" };
+    const response = await testAgent.post("/auth/token").send(payload);
+    expect(response.statusCode).toBe(500);
+  });
   test("returns info message error using /token endpoint", async () => {
     isAuthenticatedResult = false;
     const expectedErrorMsg = "Cannot find user with challenge";
@@ -181,6 +209,18 @@ describe("created auth POST routes", () => {
     const response = await testAgent.post("/auth/token").send(payload);
     expect(response.statusCode).toBe(400);
     expect(response.text).toBe(JSON.stringify(expectedErrorMsg));
+  });
+  test("returns default token retrieval error when info message is missing", async () => {
+    isAuthenticatedResult = false;
+    jest.spyOn(passport, "authenticate").mockImplementation((strategy, options, callback) => {
+      return (req, res, next) => {
+        return callback(undefined, undefined, {});
+      };
+    });
+    const payload = { email: "email", password: "pass" };
+    const response = await testAgent.post("/auth/token").send(payload);
+    expect(response.statusCode).toBe(400);
+    expect(response.text).toBe(JSON.stringify("Token retrieval error"));
   });
   test("returns invalid token access fields error using /token endpoint", async () => {
     isAuthenticatedResult = false;
@@ -214,6 +254,84 @@ describe("created auth POST routes", () => {
     expect(response.statusCode).toBe(302);
     expect(response.text).toBe("Found. Redirecting to /auth/login");
     expect(response.headers.location).toBe("/auth/login");
+  });
+
+  test("returns server error using /logout endpoint when user cleanup fails", async () => {
+    isAuthenticatedResult = true;
+    requestUserSave = () => {
+      throw new Error("forced user save failure");
+    };
+
+    try {
+      const response = await testAgent.post("/auth/logout");
+      expect(response.statusCode).toBe(500);
+    } finally {
+      requestUserSave = () => {};
+    }
+  });
+
+  test("returns redirect using /logout endpoint when user has no challenge and is not temporary", async () => {
+    isAuthenticatedResult = true;
+    requestUserChallenge = undefined;
+    requestUserHostUser = undefined;
+
+    try {
+      const response = await testAgent.post("/auth/logout");
+      expect(response.statusCode).toBe(302);
+      expect(response.headers.location).toBe("/auth/login");
+    } finally {
+      requestUserChallenge = "testchallenge";
+      requestUserHostUser = 1;
+    }
+  });
+
+  test("returns server error using /logout endpoint when logout callback returns error", async () => {
+    isAuthenticatedResult = true;
+    requestLogoutError = new Error("forced logout callback error");
+
+    try {
+      const response = await testAgent.post("/auth/logout");
+      expect(response.statusCode).toBe(500);
+    } finally {
+      requestLogoutError = undefined;
+    }
+  });
+
+  test("returns redirect using /logout endpoint when error occurs after redirect is sent", async () => {
+    isAuthenticatedResult = true;
+    requestThrowAfterRedirect = true;
+
+    try {
+      const response = await testAgent.post("/auth/logout");
+      expect(response.statusCode).toBe(302);
+      expect(response.headers.location).toBe("/auth/login");
+    } finally {
+      requestThrowAfterRedirect = false;
+    }
+  });
+
+  test("logout callback does not redirect when remote logout is requested", async () => {
+    const createdRoutes = testRouter.createRoutes();
+    const logoutRoute = createdRoutes.stack.find((layer) => {
+      return layer.route && layer.route.path === "/logout" && layer.route.methods.post;
+    });
+    const logoutHandler = logoutRoute.route.stack[1].handle;
+    const request = {
+      remoteLogout: true,
+      user: {
+        challenge: undefined,
+        hostUser: undefined,
+      },
+      logout: (callback) => callback(undefined),
+    };
+    const response = { redirect: jest.fn(), headersSent: false };
+    const next = jest.fn();
+
+    await logoutHandler(request, response, next);
+    await Promise.resolve();
+
+    expect(response.redirect).not.toHaveBeenCalled();
+    expect(next).not.toHaveBeenCalled();
   });
 });
 
@@ -251,16 +369,24 @@ function configureTestSever(testRouter) {
   testApp.locals.passport = authConfig.configure();
   // mock request user and authenticated logic
   testApp.use((req, res, next) => {
+    if (requestThrowAfterRedirect) {
+      const defaultRedirect = res.redirect.bind(res);
+      res.redirect = (...args) => {
+        const result = defaultRedirect(...args);
+        throw new Error("forced error after redirect");
+      };
+    }
     req.isAuthenticated = () => isAuthenticatedResult;
+    req.logout = (callback) => callback(requestLogoutError);
     req.user = {
-      hostUser: 1,
+      hostUser: requestUserHostUser,
       toJSON: () => ({
         name: "Test User",
         email: "test@example.com",
         password: "supersecret",
       }),
-      challenge: "testchallenge",
-      save: () => {},
+      challenge: requestUserChallenge,
+      save: () => requestUserSave(),
     };
     next();
   });

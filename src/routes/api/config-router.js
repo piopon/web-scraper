@@ -91,7 +91,7 @@ export class ConfigRouter {
         response,
         (configContent) => configContent.groups,
         (parent) => {
-          return parent.findIndex((item) => (request.query.name ? item.name === request.query.name : false));
+          return parent.findIndex((item) => item.name === request.query.name);
         }
       );
     });
@@ -105,7 +105,7 @@ export class ConfigRouter {
           return filtered.length > 0 ? filtered : undefined;
         },
         (parent) => {
-          return parent.findIndex((item) => (request.query.name ? item.name === request.query.name : false));
+          return parent.findIndex((item) => item.name === request.query.name);
         }
       );
     });

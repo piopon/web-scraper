@@ -161,6 +161,96 @@ describe("created settings POST routes", () => {
   });
 });
 
+describe("created settings GET routes", () => {
+  const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+  const testApp = express();
+  testApp.use(express.json());
+  testApp.use(express.urlencoded({ extended: false }));
+  testApp.use("/settings", new SettingsRouter(components).createRoutes());
+  const testClient = supertest(testApp);
+
+  const originalEnv = {
+    DEMO_USER: process.env.DEMO_USER,
+    DEMO_PASS: process.env.DEMO_PASS,
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    MONITOR_ADDRESS: process.env.MONITOR_ADDRESS,
+    DB_ADDRESS: process.env.DB_ADDRESS,
+    CHALLENGE_JOIN: process.env.CHALLENGE_JOIN,
+    CHALLENGE_EOL_MINS: process.env.CHALLENGE_EOL_MINS,
+  };
+
+  afterEach(() => {
+    process.env.DEMO_USER = originalEnv.DEMO_USER;
+    process.env.DEMO_PASS = originalEnv.DEMO_PASS;
+    process.env.GOOGLE_CLIENT_ID = originalEnv.GOOGLE_CLIENT_ID;
+    process.env.GOOGLE_CLIENT_SECRET = originalEnv.GOOGLE_CLIENT_SECRET;
+    process.env.MONITOR_ADDRESS = originalEnv.MONITOR_ADDRESS;
+    process.env.DB_ADDRESS = originalEnv.DB_ADDRESS;
+    process.env.CHALLENGE_JOIN = originalEnv.CHALLENGE_JOIN;
+    process.env.CHALLENGE_EOL_MINS = originalEnv.CHALLENGE_EOL_MINS;
+  });
+
+  test("returns validation error when features query is not empty", async () => {
+    const response = await testClient.get("/settings/features").query({ extra: "value" });
+
+    expect(response.statusCode).toBe(400);
+    expect(response.body).toStrictEqual([
+      {
+        instancePath: "",
+        keyword: "additionalProperties",
+        message: "must NOT have additional properties",
+        params: { additionalProperty: "extra" },
+        schemaPath: "#/additionalProperties",
+      },
+    ]);
+  });
+
+  test("returns all feature flags false when env values are missing", async () => {
+    process.env.DEMO_USER = "";
+    process.env.DEMO_PASS = "";
+    process.env.GOOGLE_CLIENT_ID = "";
+    process.env.GOOGLE_CLIENT_SECRET = "";
+    process.env.MONITOR_ADDRESS = "";
+    process.env.DB_ADDRESS = "";
+    process.env.CHALLENGE_JOIN = "";
+    process.env.CHALLENGE_EOL_MINS = "";
+
+    const response = await testClient.get("/settings/features");
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toStrictEqual({
+      demo: false,
+      google: false,
+      monitor: false,
+      database: "",
+      challenge: false,
+    });
+  });
+
+  test("returns all feature flags true when env values are set", async () => {
+    process.env.DEMO_USER = "demo-user";
+    process.env.DEMO_PASS = "demo-pass";
+    process.env.GOOGLE_CLIENT_ID = "google-id";
+    process.env.GOOGLE_CLIENT_SECRET = "google-secret";
+    process.env.MONITOR_ADDRESS = "monitor.local";
+    process.env.DB_ADDRESS = "db.local";
+    process.env.CHALLENGE_JOIN = ":";
+    process.env.CHALLENGE_EOL_MINS = "10";
+
+    const response = await testClient.get("/settings/features");
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toStrictEqual({
+      demo: true,
+      google: true,
+      monitor: true,
+      database: "db.local",
+      challenge: true,
+    });
+  });
+});
+
 function createMockAuthRouter(passport) {
   const router = express.Router();
   const strategyName = `mock-login-${configId}`;

@@ -2,7 +2,29 @@ import { AppConfig } from "../../src/config/app-config.js";
 import { DemoMode } from "../../src/config/app-types.js";
 import { LogLevel } from "../../src/config/app-types.js";
 
+import dotenv from "dotenv";
+import { jest } from "@jest/globals";
 import path from "path";
+
+describe("constructor", () => {
+  test("loads dotenv config outside production and test environments", () => {
+    const previousNodeEnv = process.env.NODE_ENV;
+    let dotenvSpy;
+    try {
+      process.env.NODE_ENV = "development";
+      dotenvSpy = jest.spyOn(dotenv, "config").mockImplementation(() => ({}));
+
+      new AppConfig();
+
+      expect(dotenvSpy).toHaveBeenCalledTimes(1);
+    } finally {
+      if (dotenvSpy) {
+        dotenvSpy.mockRestore();
+      }
+      process.env.NODE_ENV = previousNodeEnv;
+    }
+  });
+});
 
 describe("getConfig", () => {
   test("returns correct result with default values", () => {

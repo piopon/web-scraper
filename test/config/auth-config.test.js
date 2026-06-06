@@ -222,6 +222,34 @@ describe("auth object with local-login strategy", () => {
         await testVerify("name@te.st", "pass@test", doneMock);
         expect(doneMock).toHaveBeenCalledWith(null, false, { message: expectedErr });
       });
+      test("due to explicit validation branch", async () => {
+        doneMock = jest.fn();
+        const expectedErr = "Explicit validation branch failed.";
+        jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
+          find: (_) => {
+            const mockError = Object.create(MongooseError.prototype);
+            Object.defineProperty(mockError, "name", { value: "ValidationError", configurable: true });
+            Object.defineProperty(mockError, "message", { value: "ERR", configurable: true });
+            mockError.errors = {
+              "test-path": { properties: { message: expectedErr } },
+            };
+            throw mockError;
+          },
+        }));
+        await testVerify("name@te.st", "pass@test", doneMock);
+        expect(doneMock).toHaveBeenCalledWith(null, false, { message: expectedErr });
+      });
+      test("due to unhandled mongoose error", async () => {
+        doneMock = jest.fn();
+        const expectedErr = "Generic mongoose local-login error";
+        jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
+          find: (_) => {
+            throw new MongooseError(expectedErr);
+          },
+        }));
+        await testVerify("name@te.st", "pass@test", doneMock);
+        expect(doneMock).toHaveBeenCalledWith(null, false, { message: expectedErr });
+      });
     });
   });
   test("fails to authenticate user when config is incorrect", async () => {
@@ -355,6 +383,34 @@ describe("auth object with remote-login strategy", () => {
         await testVerify(mockRequest, doneMock);
         expect(doneMock).toHaveBeenCalledWith(null, false, { message: expectedErr });
       });
+      test("due to explicit validation branch", async () => {
+        doneMock = jest.fn();
+        const expectedErr = "Explicit remote validation branch failed.";
+        jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
+          find: (_) => {
+            const mockError = Object.create(MongooseError.prototype);
+            Object.defineProperty(mockError, "name", { value: "ValidationError", configurable: true });
+            Object.defineProperty(mockError, "message", { value: "ERR", configurable: true });
+            mockError.errors = {
+              "test-path": { properties: { message: expectedErr } },
+            };
+            throw mockError;
+          },
+        }));
+        await testVerify(mockRequest, doneMock);
+        expect(doneMock).toHaveBeenCalledWith(null, false, { message: expectedErr });
+      });
+      test("due to unhandled mongoose error", async () => {
+        doneMock = jest.fn();
+        const expectedErr = "Generic mongoose remote-login error";
+        jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
+          find: (_) => {
+            throw new MongooseError(expectedErr);
+          },
+        }));
+        await testVerify(mockRequest, doneMock);
+        expect(doneMock).toHaveBeenCalledWith(null, false, { message: expectedErr });
+      });
     });
   });
 });
@@ -423,6 +479,17 @@ describe("auth object with local-register strategy", () => {
       await testVerify(undefined, "new@usr.tst", "pass4new", doneMock);
       expect(doneMock).toHaveBeenCalledWith(null, false, { message: expectedErr });
     });
+    test("due to unhandled mongoose error", async () => {
+      doneMock = jest.fn();
+      const expectedErr = "Generic mongoose local-register error";
+      jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
+        find: (_) => {
+          throw new MongooseError(expectedErr);
+        },
+      }));
+      await testVerify(undefined, "new@usr.tst", "pass4new", doneMock);
+      expect(doneMock).toHaveBeenCalledWith(null, false, { message: expectedErr });
+    });
   });
 });
 
@@ -453,6 +520,7 @@ describe("auth object with google strategy", () => {
 describe("auth object with local-demo strategy", () => {
   describe("detects that demo feature can be initialized", () => {
     process.env.DEMO_USER = "demo@test.com";
+    process.env.DEMO_PASS = "test_pass";
     const expectedUser = { _id: 1, name: "name", email: "name@te.st", password: "pass@test", save: () => true };
     const mockUser = () => ({ find: (_) => [expectedUser] });
     const mockConfig = () => ({ findOne: () => ({ save: () => true }) });
@@ -465,6 +533,20 @@ describe("auth object with local-demo strategy", () => {
       jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(mockUser);
       jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
       await testVerify(process.env.DEMO_USER, "pass", doneMock);
+      expect(doneMock).toHaveBeenCalledWith(null, expectedUser);
+    });
+    test("with overwrite mode and exact demo credentials", async () => {
+      const components = new WebComponents({ minLogLevel: LogLevel.DEBUG });
+      const authConfig = new AuthConfig(passport, components, { hashSalt: 10, demoMode: DemoMode.OVERWRITE });
+      const authObj = authConfig.configure();
+      const testVerify = authObj._strategies["local-demo"]._verify;
+      doneMock = jest.fn();
+      const compareSpy = jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
+      jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(mockUser);
+
+      await testVerify(process.env.DEMO_USER, process.env.DEMO_PASS, doneMock);
+
+      expect(compareSpy).toHaveBeenCalledWith(process.env.DEMO_PASS, expectedUser.password);
       expect(doneMock).toHaveBeenCalledWith(null, expectedUser);
     });
     test("with duplicate mode", async () => {
@@ -554,6 +636,17 @@ describe("auth object with local-demo strategy", () => {
           const mockError = new MongooseNamespace.ValidationError(new MongooseError("ERR"));
           mockError.addError("test-path", new MongooseNamespace.ValidatorError({ message: expectedErr }));
           throw mockError;
+        },
+      }));
+      await testVerify("email", "pass", doneMock);
+      expect(doneMock).toHaveBeenCalledWith(null, false, { message: expectedErr });
+    });
+    test("due to unhandled mongoose error", async () => {
+      doneMock = jest.fn();
+      const expectedErr = "Generic mongoose local-demo error";
+      jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementationOnce(() => ({
+        find: (_) => {
+          throw new MongooseError(expectedErr);
         },
       }));
       await testVerify("email", "pass", doneMock);

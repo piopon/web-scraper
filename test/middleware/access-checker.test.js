@@ -1,4 +1,6 @@
 import { AccessChecker } from "../../src/middleware/access-checker.js";
+import { ScrapUser } from "../../src/model/scrap-user.js";
+import { jest } from "@jest/globals";
 
 describe("canReceiveData() method", () => {
   test("shouldn't do anything when authorized", async () => {
@@ -143,6 +145,83 @@ describe("canViewContent() method", () => {
     expect(invokeState.name).toBe("jwt");
     expect(invokeState.redirect).toBe("/auth/login");
     expect(invokeState.next).toBe(false);
+  });
+
+  test("should mark remote logout and attach demo user when present", async () => {
+    const invokeState = { name: "", redirect: "", nextCalls: 0 };
+    const demoUser = { email: "demo@test.com" };
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => ({
+      findOne: async () => demoUser,
+    }));
+
+    const requestObj = {
+      isAuthenticated: () => false,
+      app: {
+        locals: {
+          passport: {
+            authenticate: (name, options) => {
+              return (req, res, next) => {
+                invokeState.name = name;
+                invokeState.redirect = "/auth/login";
+              };
+            },
+          },
+        },
+      },
+      query: {},
+      url: "/logout",
+      body: {
+        "demo-user": "demo",
+        "demo-pass": "secret",
+      },
+    };
+    const mockedRes = { redirect: (input) => (invokeState.redirect = input) };
+    const mockedNext = () => (invokeState.nextCalls += 1);
+
+    await AccessChecker.canViewContent(requestObj, mockedRes, mockedNext);
+
+    expect(requestObj.remoteLogout).toBe(true);
+    expect(requestObj.user).toStrictEqual(demoUser);
+    expect(invokeState.nextCalls).toBe(1);
+    expect(invokeState.name).toBe("jwt");
+  });
+
+  test("should mark remote logout and keep user undefined when demo user missing", async () => {
+    const invokeState = { name: "", redirect: "", nextCalls: 0 };
+    jest.spyOn(ScrapUser, "getDatabaseModel").mockImplementation(() => ({
+      findOne: async () => null,
+    }));
+
+    const requestObj = {
+      isAuthenticated: () => false,
+      app: {
+        locals: {
+          passport: {
+            authenticate: (name, options) => {
+              return (req, res, next) => {
+                invokeState.name = name;
+                invokeState.redirect = "/auth/login";
+              };
+            },
+          },
+        },
+      },
+      query: {},
+      url: "/logout",
+      body: {
+        "demo-user": "demo",
+        "demo-pass": "secret",
+      },
+    };
+    const mockedRes = { redirect: (input) => (invokeState.redirect = input) };
+    const mockedNext = () => (invokeState.nextCalls += 1);
+
+    await AccessChecker.canViewContent(requestObj, mockedRes, mockedNext);
+
+    expect(requestObj.remoteLogout).toBe(true);
+    expect(requestObj.user).toBe(undefined);
+    expect(invokeState.nextCalls).toBe(1);
+    expect(invokeState.name).toBe("jwt");
   });
 });
 

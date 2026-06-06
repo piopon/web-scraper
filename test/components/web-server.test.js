@@ -1,10 +1,12 @@
 import { WebServer } from "../../src/components/web-server.js";
 import { WebComponents } from "../../src/components/web-components.js";
 import { ComponentType, LogLevel } from "../../src/config/app-types.js";
+import { jest } from "@jest/globals";
 
 const TEST_PORT = 1234;
 
 process.env.JWT_SECRET = "test_secret";
+process.env.SESSION_SHA = "test_session_secret";
 process.env.GOOGLE_CLIENT_ID = "test_id";
 
 describe("run() method", () => {
@@ -18,6 +20,7 @@ describe("run() method", () => {
     const components = new WebComponents(config);
     const testServer = new WebServer(config, components);
     const result = await testServer.run();
+    await new Promise((resolve) => setTimeout(resolve, 25));
     testServer.shutdown();
     expect(result).toBe(true);
   });
@@ -84,5 +87,29 @@ describe("shutdown() method", () => {
     const components = new WebComponents(config);
     const testServer = new WebServer(config, components);
     testServer.shutdown();
+  });
+
+  test("stops registered components in close callback", async () => {
+    const config = {
+      usersDataConfig: { upload: "" },
+      minLogLevel: LogLevel.INFO,
+      serverConfig: { port: TEST_PORT },
+      scraperConfig: { dataExtrasType: "CURRENCIES" },
+    };
+    const stopMock = jest.fn(() => true);
+    const components = new WebComponents(config);
+    components.addComponent({
+      getName: () => "init-component",
+      getInfo: () => ({ types: [ComponentType.INIT], initWait: true }),
+      start: () => true,
+      stop: stopMock,
+    });
+    const testServer = new WebServer(config, components);
+
+    await testServer.run();
+    testServer.shutdown();
+    await new Promise((resolve) => setTimeout(resolve, 25));
+
+    expect(stopMock).toHaveBeenCalled();
   });
 });

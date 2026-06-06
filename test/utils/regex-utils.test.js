@@ -78,6 +78,10 @@ describe("getIpAddress", () => {
     const result = "192.16.23.112";
     expect(RegexUtils.getIpAddress(input)).toStrictEqual(result);
   });
+  test("returns null when no IP value is present", () => {
+    const input = "there is no ip address here";
+    expect(RegexUtils.getIpAddress(input)).toBeNull();
+  });
   test("throws if input object is null", () => {
     expect(() => RegexUtils.getIpAddress(null)).toThrow(TypeError);
   });

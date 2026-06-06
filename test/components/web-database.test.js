@@ -155,7 +155,7 @@ describe("start() method", () => {
     const mockConfigResult = { countDocuments: () => 2, deleteMany: (_) => ({ deletedCount: 1 }) };
     jest.spyOn(ScrapConfig, "getDatabaseModel").mockImplementation(() => mockConfigResult);
     const mockUserResult = {
-      find: () => [],
+      find: () => [{ _id: 100 }],
       findOne: (_) => true,
       countDocuments: () => 1,
       deleteMany: (_) => ({ deletedCount: 0 }),

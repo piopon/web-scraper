@@ -214,6 +214,65 @@ describe("created view POST routes", () => {
         expect(response.body).toBe("Invalid user identifier provided");
         removeDataFile(testImagePath);
       });
+      test("and moving uploaded file fails", async () => {
+        const isolatedApp = express();
+        isolatedApp.use(express.json());
+        isolatedApp.use((req, _res, next) => {
+          req.isAuthenticated = () => true;
+          req.user = { name: "test-name", email: "test@mail.c" };
+          next();
+        });
+        isolatedApp.use((req, _res, next) => {
+          req.files = {
+            "auxiliary-file": {
+              mimetype: "image/png",
+              name: "broken.png",
+              mv: async () => {
+                throw new Error("forced mv failure");
+              },
+            },
+          };
+          next();
+        });
+        jest.spyOn(path, "join").mockImplementation((...parts) => parts.join("/"));
+        jest.spyOn(path, "dirname").mockReturnValue(".");
+        jest.spyOn(path, "basename").mockImplementation((name) => name);
+        jest.spyOn(path, "normalize").mockImplementation((value) => value);
+        jest.spyOn(fs, "existsSync").mockReturnValue(true);
+        isolatedApp.use("/view", testRouter.createRoutes());
+
+        const response = await supertest(isolatedApp).post("/view/image");
+
+        expect(response.statusCode).toBe(500);
+        expect(response.body).toBe("Could not upload image file");
+      });
+      test("and uploaded file name is invalid", async () => {
+        const isolatedApp = express();
+        isolatedApp.use(express.json());
+        isolatedApp.use((req, _res, next) => {
+          req.isAuthenticated = () => true;
+          req.user = { name: "test-name", email: "test@mail.c" };
+          next();
+        });
+        isolatedApp.use((req, _res, next) => {
+          req.files = {
+            "auxiliary-file": {
+              mimetype: "image/png",
+              name: "../evil.png",
+              mv: async () => true,
+            },
+          };
+          next();
+        });
+        jest.spyOn(path, "basename").mockImplementation((name) => name);
+        jest.spyOn(path, "normalize").mockImplementation((value) => value);
+        isolatedApp.use("/view", testRouter.createRoutes());
+
+        const response = await supertest(isolatedApp).post("/view/image");
+
+        expect(response.statusCode).toBe(400);
+        expect(response.body).toBe("Invalid file name provided");
+      });
       test("and no server nor port defined", async () => {
         const testImagePath = path.join(".", "testfile1.png");
         createDataFile(testImagePath);
