@@ -19,7 +19,7 @@
     "web scraping"
   ],
   "author": "piopon <piopon.github@gmail.com>",
-  "license": "GPL-2.0",
+  "license": "GPL-2.0-only",
   "dependencies": {
     "@piopon/web-scraper": "file:",
     "ajv": "^8.17.1",
