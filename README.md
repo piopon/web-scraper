@@ -2,7 +2,7 @@
 
 [![CI web-scraper](https://github.com/piopon/web-scraper/actions/workflows/ci-web-scraper.yml/badge.svg)](https://github.com/piopon/web-scraper/actions/workflows/ci-web-scraper.yml)
 [![CD web-scraper](https://github.com/piopon/web-scraper/actions/workflows/cd-web-scraper.yml/badge.svg)](https://github.com/piopon/web-scraper/actions/workflows/cd-web-scraper.yml)
-[![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-orange.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
+[![License: GPL-2.0-only](https://img.shields.io/badge/License-GPL--2.0--only-orange.svg)](https://spdx.org/licenses/GPL-2.0-only.html)
 [![Latest Release](https://img.shields.io/github/v/release/piopon/web-scraper?sort=semver)](https://github.com/piopon/web-scraper/releases)
 [![Coverage](https://codecov.io/gh/piopon/web-scraper/graph/badge.svg)](https://codecov.io/gh/piopon/web-scraper)
 
