@@ -2,7 +2,7 @@
 
 [![CI web-scraper](https://github.com/piopon/web-scraper/actions/workflows/ci-web-scraper.yml/badge.svg)](https://github.com/piopon/web-scraper/actions/workflows/ci-web-scraper.yml)
 [![CD web-scraper](https://github.com/piopon/web-scraper/actions/workflows/cd-web-scraper.yml/badge.svg)](https://github.com/piopon/web-scraper/actions/workflows/cd-web-scraper.yml)
-[![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-orange.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
+[![License: GPL-2.0-only](https://img.shields.io/badge/License-GPL--2.0--only-orange.svg)](https://spdx.org/licenses/GPL-2.0-only.html)
 [![Latest Release](https://img.shields.io/github/v/release/piopon/web-scraper?sort=semver)](https://github.com/piopon/web-scraper/releases)
 [![Coverage](https://codecov.io/gh/piopon/web-scraper/graph/badge.svg)](https://codecov.io/gh/piopon/web-scraper)
 
@@ -202,7 +202,7 @@ web-scraper/
 ├── CODEOWNERS             # List of code owners
 ├── docker-compose.yml     # Docker compose file for this service and MongoDB
 ├── Dockerfile             # Docker container recipe
-├── LICENSE                # GPL-2.0 license description
+├── LICENSE                # GPL-2.0-only license description
 ├── package-lock.json      # Node.js snapshot of the dependency tree
 ├── package.json           # Node.js project metadata
 └── README.md              # Top-level project description (this document)
@@ -217,7 +217,7 @@ Contributions are welcome! To contribute:
 
 ### License 📜
 
-This project is licensed under the GPL-2.0 license.
+This project is licensed under the GPL-2.0-only license.
 See the [LICENSE](./LICENSE) file for details.
 
 ### Contact 💬
